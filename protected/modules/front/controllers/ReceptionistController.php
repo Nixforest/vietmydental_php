@@ -67,6 +67,7 @@ class ReceptionistController extends Controller {
     }
     
     public function actionCreateScheduleExt() {
+        // Test commit
         $schedule = new TreatmentSchedules();
         $detail = new TreatmentScheduleDetails();
         // Temp value saved at Customers::getCustomerAjaxInfo()
