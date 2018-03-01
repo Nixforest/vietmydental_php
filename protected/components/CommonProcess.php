@@ -585,6 +585,26 @@ class CommonProcess {
     }
     
     /**
+     * Get short string (remove sign, make lowercase)
+     * @param String $str Source string
+     * @return String after remove sign, make lowercase
+     */
+    public static function getShortString($str) {
+        $retVal = strtolower($str);
+        return self::removeSign($retVal);
+    }
+
+    /**
+     * Get slug string
+     * @param String $str Source string
+     * @return Slug string
+     */
+    public static function getSlugString($str) {
+        $retVal = self::getShortString($str);
+        return str_replace(" ", "-", $retVal);
+    }
+
+    /**
      * Generate array of simple password
      * @return Array
      */

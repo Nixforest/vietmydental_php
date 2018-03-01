@@ -71,6 +71,7 @@ class CustomersController extends AdminController
 		if(isset($_POST['Customers']))
 		{
 			$model->attributes=$_POST['Customers'];
+//                        Import::importCustomer();
 			if($model->save()) {
                             if (filter_input(INPUT_POST, 'submit')) {
                                 $selectedAgent = $_POST['Customers']['agent'];

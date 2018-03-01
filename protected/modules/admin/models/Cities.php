@@ -186,6 +186,19 @@ class Cities extends BaseActiveRecord
     }
 
     //-----------------------------------------------------
+    // Static methods
+    //-----------------------------------------------------
+    public static function getModelIdByName($name) {
+        $models = self::model()->findAll();
+        foreach ($models as $model) {
+            if ($model->name === $name) {
+                return $model->id;
+            }
+        }
+        return "";
+    }
+
+    //-----------------------------------------------------
     // JSON methods
     //-----------------------------------------------------
     /**

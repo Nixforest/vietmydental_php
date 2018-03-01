@@ -177,6 +177,9 @@ class Customers extends BaseActiveRecord
             $this->date_of_birth = CommonProcess::convertDateTimeToMySqlFormat(
                         $date, DomainConst::DATE_FORMAT_4);
         }
+        if (empty($this->date_of_birth)) {
+            $this->date_of_birth = $date;
+        }
         $this->address = CommonProcess::createAddressString(
                 $this->city_id, $this->district_id,
                 $this->ward_id, $this->street_id,

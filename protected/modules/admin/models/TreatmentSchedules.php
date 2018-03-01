@@ -371,6 +371,7 @@ class TreatmentSchedules extends BaseActiveRecord
                     DomainConst::KEY_END_DATE => CommonProcess::convertDateTimeWithFormat(
                             $this->end_date),
                     DomainConst::KEY_DIAGNOSIS => $diagnosis,
+                    DomainConst::KEY_STATUS     => $this->status,
                 ));
     }
     

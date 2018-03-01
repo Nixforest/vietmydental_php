@@ -75,6 +75,7 @@ class CitiesController extends AdminController
 		if(isset($_POST['Cities']))
 		{
 			$model->attributes=$_POST['Cities'];
+//                        Import::importCities();
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}

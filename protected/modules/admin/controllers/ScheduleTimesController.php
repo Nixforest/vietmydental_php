@@ -1,6 +1,6 @@
 <?php
 
-class DistrictsController extends AdminController
+class ScheduleTimesController extends AdminController
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -18,12 +18,12 @@ class DistrictsController extends AdminController
 //			'postOnly + delete', // we only allow deletion via POST request
 //		);
 //	}
-//
-//	/**
-//	 * Specifies the access control rules.
-//	 * This method is used by the 'accessControl' filter.
-//	 * @return array access control rules
-//	 */
+
+	/**
+	 * Specifies the access control rules.
+	 * This method is used by the 'accessControl' filter.
+	 * @return array access control rules
+	 */
 //	public function accessRules()
 //	{
 //		return array(
@@ -51,10 +51,8 @@ class DistrictsController extends AdminController
 	 */
 	public function actionView($id)
 	{
-            $wards = $this->loadModel($id)->getWards($id);
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
-                        'wards' => $wards,
                         DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
 		));
 	}
@@ -65,17 +63,17 @@ class DistrictsController extends AdminController
 	 */
 	public function actionCreate()
 	{
-		$model=new Districts;
+		$model=new ScheduleTimes;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Districts']))
+		if(isset($_POST['ScheduleTimes']))
 		{
-			$model->attributes=$_POST['Districts'];
-//                        Import::importDistricts();
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			$model->attributes=$_POST['ScheduleTimes'];
+                        Import::importScheduleTime();
+//			if($model->save())
+//				$this->redirect(array('view','id'=>$model->id));
 		}
 
 		$this->render('create',array(
@@ -96,9 +94,9 @@ class DistrictsController extends AdminController
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Districts']))
+		if(isset($_POST['ScheduleTimes']))
 		{
-			$model->attributes=$_POST['Districts'];
+			$model->attributes=$_POST['ScheduleTimes'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -120,7 +118,7 @@ class DistrictsController extends AdminController
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 	}
 
 	/**
@@ -128,10 +126,14 @@ class DistrictsController extends AdminController
 	 */
 	public function actionIndex()
 	{
-		$model=new Districts('search');
+//		$dataProvider=new CActiveDataProvider('ScheduleTimes');
+//		$this->render('index',array(
+//			'dataProvider'=>$dataProvider,
+//		));
+		$model=new ScheduleTimes('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Districts']))
-			$model->attributes=$_GET['Districts'];
+		if(isset($_GET['ScheduleTimes']))
+			$model->attributes=$_GET['ScheduleTimes'];
 
 		$this->render('index',array(
 			'model'=>$model,
@@ -144,10 +146,10 @@ class DistrictsController extends AdminController
 	 */
 	public function actionAdmin()
 	{
-		$model=new Districts('search');
+		$model=new ScheduleTimes('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Districts']))
-			$model->attributes=$_GET['Districts'];
+		if(isset($_GET['ScheduleTimes']))
+			$model->attributes=$_GET['ScheduleTimes'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -159,12 +161,12 @@ class DistrictsController extends AdminController
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Districts the loaded model
+	 * @return ScheduleTimes the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Districts::model()->findByPk($id);
+		$model=ScheduleTimes::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -172,11 +174,11 @@ class DistrictsController extends AdminController
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Districts $model the model to be validated
+	 * @param ScheduleTimes $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='districts-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='schedule-times-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
