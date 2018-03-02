@@ -21,6 +21,11 @@ class Roles extends BaseActiveRecord
     const ROLE_DOCTOR               = 'ROLE_DOCTOR';
     const ROLE_ASSISTANT            = 'ROLE_ASSISTANT';
     const ROLE_RECEPTIONIST         = 'ROLE_RECEPTIONIST';
+    
+    static $arrAdminRoles                  = array(
+        self::ROLE_ADMIN,
+        self::ROLE_MANAGER,
+    );
 	/**
 	 * @return string the associated database table name
 	 */
@@ -145,5 +150,19 @@ class Roles extends BaseActiveRecord
      */
     public static function getRoleByName($role_name) {
         return self::model()->find('LOWER(role_name)="'.  strtolower($role_name).'"');
+    }
+    
+    /**
+     * Check if a role id is in array admin roles
+     * @param String $roleId Id of role
+     * @return boolean True if role id is in array admin roles, False otherwise
+     */
+    public static function isAdminRole($roleId) {
+        foreach (self::$arrAdminRoles as $roleName) {
+            if (self::getRoleByName($roleName)->id == $roleId) {
+                return true;
+            }
+        }
+        return false;
     }
 }

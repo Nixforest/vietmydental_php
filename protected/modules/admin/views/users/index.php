@@ -61,6 +61,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 //		'temp_password',
 //		'last_name',
 		'address',
+		'code_account',
 		/*
 		'code_account',
 		'address',

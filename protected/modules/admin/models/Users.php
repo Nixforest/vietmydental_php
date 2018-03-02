@@ -197,6 +197,14 @@ class Users extends BaseActiveRecord
 		$criteria->compare('last_logged_in',$this->last_logged_in,true);
 		$criteria->compare('ip_address',$this->ip_address,true);
 		$criteria->compare('role_id',$this->role_id);
+                if (CommonProcess::isUserAdmin()) {
+                    // Root admin
+                    
+                } else {
+                    // The other roles
+                    $criteria->addCondition('t.role_id !=' . Roles::getRoleByName(Roles::ROLE_ADMIN)->id);
+                    $criteria->addCondition('t.role_id !=' . Roles::getRoleByName(Roles::ROLE_MANAGER)->id);
+                }
 		$criteria->compare('application_id',$this->application_id);
 		$criteria->compare('status',$this->status);
 		$criteria->compare('gender',$this->gender,true);
@@ -208,6 +216,9 @@ class Users extends BaseActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'pagination' => array(
+                            'pageSize' => Settings::getListPageSize(),
+                        ),
 		));
 	}
 
