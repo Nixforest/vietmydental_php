@@ -84,8 +84,10 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'value'=> '!empty($data->parent_id) ? $data->rMenu->name : ""',
                     'filter'=>Menus::loadItems(),
                 ),
-		array(
-			'class'=>'CButtonColumn',
-		),
+                array(
+                    'header' => DomainConst::CONTENT00239,
+                    'class'=>'CButtonColumn',
+                    'template'=> $this->createActionButtons()
+                ),
 	),
 )); ?>

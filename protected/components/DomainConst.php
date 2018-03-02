@@ -1156,4 +1156,5 @@ class DomainConst {
     const CONTENT00235  = 'Xin vui lòng nhập Ngày điều trị';
     const CONTENT00237  = 'Triệu chứng';
     const CONTENT00238  = 'Mốc thời gian';
+    const CONTENT00239  = 'Actions';
 }

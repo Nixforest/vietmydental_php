@@ -63,8 +63,10 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'visible' => CommonProcess::isUserAdmin(),
                     'filter'=> TreatmentScheduleProcess::getStatus(true),
 		),
-		array(
-			'class'=>'CButtonColumn',
-		),
+                array(
+                    'header' => DomainConst::CONTENT00239,
+                    'class'=>'CButtonColumn',
+                    'template'=> $this->createActionButtons()
+                ),
 	),
 )); ?>

@@ -112,8 +112,18 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                         )
                     ),
 		),
-		array(
-			'class'=>'CButtonColumn',
-		),
+                array(
+                    'header' => 'Actions',
+                    'class'=>'CButtonColumn',
+                    'template'=> $this->createActionButtons(),
+//                    'buttons'=>array(
+//                        'update'=>array(
+//                            'visible'=> '$data->canUpdate()',
+//                        ),
+//                        'delete'=>array(
+//                            'visible'=> '$data->canDelete()',
+//                        ),
+//                    ),
+                ),
 	),
 )); ?>

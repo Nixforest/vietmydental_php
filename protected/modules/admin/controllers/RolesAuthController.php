@@ -92,6 +92,13 @@ class RolesAuthController extends AdminController {
         try {
             // Get role object to take it's name
             $mGroup = Roles::model()->findByPk($id);
+            if (CommonProcess::isUserAdmin()) {
+                
+            } else {
+                if (Roles::isAdminRole($id)) {
+                    return;
+                }
+            }
             // Set page title
             $this->pageTitle = 'Phân Quyền cho Nhóm thành viên: ' . $mGroup->role_short_name;
             // Start handle save

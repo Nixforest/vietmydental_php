@@ -63,21 +63,6 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'headerHtmlOptions' => array('width' => '30px','style' => 'text-align:center;'),
                     'htmlOptions' => array('style' => 'text-align:center;')
                 ),
-		'role_name',
-		'role_short_name',
-		array(
-                    'name'=>'application_id',
-                    'htmlOptions' => array('style' => 'text-align:center;'),
-                    'value'=> '!empty($data->application_id) ? $data->application->name : ""',
-                    'filter'=>Applications::loadItems(),
-                ),
-		
-                array(
-                    'name'=>'status',
-                    'type' => 'Status',
-                    'htmlOptions' => array('style' => 'text-align:center;'),
-		), 
-		
                 array(
                     'header' => DomainConst::CONTENT00036,
                     'class'=>'CButtonColumn',
@@ -93,8 +78,36 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                         )
                     ),
 		),
+//		'role_name',
+                array(
+                    'name' => 'role_name',
+                    'value' => '$data->role_name',
+                    'visible' => CommonProcess::isUserAdmin(),
+                ),
+		'role_short_name',
 		array(
-			'class'=>'CButtonColumn',
+                    'name'=>'application_id',
+                    'htmlOptions' => array('style' => 'text-align:center;'),
+                    'value'=> '!empty($data->application_id) ? $data->application->name : ""',
+                    'filter'=>Applications::loadItems(),
+                    'visible' => CommonProcess::isUserAdmin(),
+                ),
+		
+                array(
+                    'name'=>'status',
+                    'type' => 'Status',
+                    'htmlOptions' => array('style' => 'text-align:center;'),
+                    'visible' => CommonProcess::isUserAdmin(),
 		),
+                array(
+                    'header' => DomainConst::CONTENT00239,
+                    'class'=>'CButtonColumn',
+                    'template'=> $this->createActionButtons(),
+                    'visible' => CommonProcess::isUserAdmin(),
+                ),
+//		array(
+//			'class'=>'CButtonColumn',
+//                        'visible' => CommonProcess::isUserAdmin(),
+//		),
 	),
 )); ?>

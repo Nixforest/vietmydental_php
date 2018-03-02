@@ -99,6 +99,12 @@ class Roles extends BaseActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('role_name',$this->role_name,true);
+                if (CommonProcess::isUserAdmin()) {
+                    
+                } else {
+                    $criteria->addCondition('t.role_name !="' . self::ROLE_ADMIN . '"');
+                    $criteria->addCondition('t.role_name !="' . self::ROLE_MANAGER . '"');
+                }
 		$criteria->compare('role_short_name',$this->role_short_name,true);
 		$criteria->compare('application_id',$this->application_id);
 		$criteria->compare('status',$this->status);

@@ -196,6 +196,11 @@ class AdminController extends CController {
         return in_array($actionLower, $listActions);
     }
     
+    /**
+     * Handle create action buttons
+     * @param type $buttons
+     * @return string
+     */
     public function createActionButtons($buttons = array('view', 'update', 'delete')) {
         $retVal = '';
         foreach ($buttons as $key => $button) {
