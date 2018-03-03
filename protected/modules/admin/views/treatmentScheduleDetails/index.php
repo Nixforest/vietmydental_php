@@ -45,6 +45,12 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'htmlOptions' => array('style' => 'text-align:center;')
                 ),
 		'schedule_id',
+		array(
+                    'name'=>'time_id',
+                    'htmlOptions' => array('style' => 'text-align:center;'),
+                    'value'=> 'isset($data->rTime) ? $data->rTime->name : ""',
+                    'filter'=> ScheduleTimes::loadItems(),
+                ),
 		'start_date',
 		'end_date',
 		'teeth_id',

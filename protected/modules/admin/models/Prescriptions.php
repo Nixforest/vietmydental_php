@@ -60,6 +60,11 @@ class Prescriptions extends BaseActiveRecord
 		return array(
                     'rProcess' => array(self::BELONGS_TO, 'TreatmentScheduleProcess', 'process_id'),
                     'rDoctor' => array(self::BELONGS_TO, 'Users', 'doctor_id'),
+                    'rDetail' => array(
+                        self::HAS_MANY, 'PrescriptionDetails', 'prescription_id',
+                        'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
+                        'order' => 'id DESC',
+                    ),
 		);
 	}
 
@@ -118,5 +123,17 @@ class Prescriptions extends BaseActiveRecord
             
         }
         return parent::beforeSave();
+    }
+    
+    /**
+     * Override before delete method
+     */
+    public function beforeDelete() {
+        if (isset($this->rDetail)) {
+            foreach ($this->rDetail as $detail) {
+                $detail->delete();
+            }
+        }
+        return parent::beforeDelete();
     }
 }

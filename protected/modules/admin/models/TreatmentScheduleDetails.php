@@ -6,6 +6,7 @@
  * The followings are the available columns in table 'treatment_schedule_details':
  * @property string $id
  * @property string $schedule_id
+ * @property integer $time_id
  * @property string $start_date
  * @property string $end_date
  * @property integer $teeth_id
@@ -55,13 +56,13 @@ class TreatmentScheduleDetails extends BaseActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('schedule_id, start_date', 'required'),
-			array('teeth_id, diagnosis_id, treatment_type_id, status', 'numerical', 'integerOnly'=>true),
+			array('schedule_id, time_id, start_date', 'required'),
+			array('time_id, teeth_id, diagnosis_id, treatment_type_id, status', 'numerical', 'integerOnly'=>true),
 			array('schedule_id', 'length', 'max'=>11),
 			array('description, type_schedule', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, schedule_id, start_date, end_date, teeth_id, diagnosis_id, treatment_type_id, status', 'safe', 'on'=>'search'),
+			array('id, schedule_id, time_id, start_date, end_date, teeth_id, diagnosis_id, treatment_type_id, description, type_schedule, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -80,6 +81,9 @@ class TreatmentScheduleDetails extends BaseActiveRecord
                         self::HAS_MANY, 'TreatmentScheduleProcess', 'detail_id',
                         'on'    => 'status = ' . DomainConst::DEFAULT_STATUS_ACTIVE,
                     ),
+                    'rTime' => array(
+                        self::BELONGS_TO, 'ScheduleTimes', 'time_id'
+                    ),
 		);
 	}
 
@@ -91,6 +95,7 @@ class TreatmentScheduleDetails extends BaseActiveRecord
 		return array(
 			'id' => 'ID',
 			'schedule_id' => DomainConst::CONTENT00144,
+			'time_id' => DomainConst::CONTENT00240,
 			'start_date' => DomainConst::CONTENT00139,
 			'end_date' => DomainConst::CONTENT00140,
 			'teeth_id' => DomainConst::CONTENT00145,
@@ -115,6 +120,7 @@ class TreatmentScheduleDetails extends BaseActiveRecord
 
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('schedule_id',$this->schedule_id,true);
+		$criteria->compare('time_id',$this->time_id);
 		$criteria->compare('start_date',$this->start_date,true);
 		$criteria->compare('end_date',$this->end_date,true);
 		$criteria->compare('teeth_id',$this->teeth_id);
@@ -167,6 +173,18 @@ class TreatmentScheduleDetails extends BaseActiveRecord
             }            
         }
         return parent::beforeSave();
+    }
+    
+    /**
+     * Override before delete method
+     */
+    public function beforeDelete() {
+        if (isset($this->rProcess)) {
+            foreach ($this->rProcess as $process) {
+                $process->delete();
+            }
+        }
+        return parent::beforeDelete();
     }
 
     //-----------------------------------------------------
@@ -286,6 +304,37 @@ class TreatmentScheduleDetails extends BaseActiveRecord
                 DomainConst::CONTENT00233,
                 $processArr);
         return $info;
+    }
+    
+    /**
+     * Get start time string
+     * @return String Time and Start date
+     */
+    public function getStartTime() {
+        $retVal = isset($this->rTime) ? $this->rTime->name : '';
+        if (!empty($retVal)) {
+            $retVal .= ' ngày ';
+        } else {
+            $retVal .= "Ngày";
+        }
+        $retVal .= CommonProcess::convertDateTime($this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_5);
+        return $retVal;
+    }
+    
+    public function getAjaxScheduleInfo() {
+        $infoSchedule = '<div class="title-2">' . DomainConst::CONTENT00177 . ': </div>';
+        $infoSchedule .= '<div class="item-search">';
+//                $infoSchedule .=    '<p>' . $mSchedule->start_date . '</p>';
+        $infoSchedule .=    '<p>' . $this->getStartTime() . '</p>';
+        $infoSchedule .=    '<p>Hình thức: ' . $this->type_schedule . '</p>';
+        $infoSchedule .=    '<p>Chi Tiết Công Việc: ' . $this->description . '</p>';
+        $infoSchedule .=    '<p>Bác sĩ: ' . $this->getDoctor() . '</p>';
+        $infoSchedule .= '</div>';
+        $infoSchedule .= '<div class="group-btn">';
+        $infoSchedule .=    '<a style="cursor: pointer;"'
+                . ' onclick="{updateSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}">' . DomainConst::CONTENT00178 . '</a>';
+        $infoSchedule .= '</div>';
+        return $infoSchedule;
     }
 
     //-----------------------------------------------------

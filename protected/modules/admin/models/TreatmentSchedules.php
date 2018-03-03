@@ -6,6 +6,7 @@
  * The followings are the available columns in table 'treatment_schedules':
  * @property string $id
  * @property string $record_id
+ * @property integer $time_id
  * @property string $start_date
  * @property string $end_date
  * @property integer $diagnosis_id
@@ -55,12 +56,12 @@ class TreatmentSchedules extends BaseActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('record_id, start_date, doctor_id', 'required'),
-			array('diagnosis_id, pathological_id, status', 'numerical', 'integerOnly'=>true),
+			array('record_id, time_id, start_date, doctor_id', 'required'),
+			array('time_id, diagnosis_id, pathological_id, status', 'numerical', 'integerOnly'=>true),
 			array('record_id, doctor_id', 'length', 'max'=>11),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, record_id, start_date, end_date, diagnosis_id, pathological_id, doctor_id, status', 'safe', 'on'=>'search'),
+			array('id, record_id, time_id, start_date, end_date, diagnosis_id, pathological_id, doctor_id, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -85,6 +86,9 @@ class TreatmentSchedules extends BaseActiveRecord
                         'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
                         'order' => 'id DESC',
                     ),
+                    'rTime' => array(
+                        self::BELONGS_TO, 'ScheduleTimes', 'time_id'
+                    ),
 		);
 	}
 
@@ -96,6 +100,7 @@ class TreatmentSchedules extends BaseActiveRecord
 		return array(
 			'id' => 'ID',
 			'record_id' => DomainConst::CONTENT00138,
+			'time_id' => DomainConst::CONTENT00240,
 			'start_date' => DomainConst::CONTENT00139,
 			'end_date' => DomainConst::CONTENT00140,
 			'diagnosis_id' => DomainConst::CONTENT00121,
@@ -118,6 +123,7 @@ class TreatmentSchedules extends BaseActiveRecord
 
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('record_id',$this->record_id,true);
+		$criteria->compare('time_id',$this->time_id);
 		$criteria->compare('start_date',$this->start_date,true);
 		$criteria->compare('end_date',$this->end_date,true);
 		$criteria->compare('diagnosis_id',$this->diagnosis_id);
@@ -178,6 +184,11 @@ class TreatmentSchedules extends BaseActiveRecord
      */
     public function beforeDelete() {
         OneMany::deleteAllOldRecords($this->id, OneMany::TYPE_TREATMENT_SCHEDULES_PATHOLOGICAL);
+        if (isset($this->rDetail)) {
+            foreach ($this->rDetail as $detail) {
+                $detail->delete();
+            }
+        }
         return parent::beforeDelete();
     }
 
@@ -236,20 +247,12 @@ class TreatmentSchedules extends BaseActiveRecord
     }
     
     /**
-     * Create TreatmentScheduleDetails model by Receiptionist
-     * @return boolean True if create success, False otherwise
+     * Get start time string
+     * @return String Time and Start date
      */
-    public function createDetailByReceiptionist() {
-        $retVal = false;
-        $detail = new TreatmentScheduleDetails();
-        $detail->schedule_id = $this->id;
-        $detail->start_date = $this->start_date;
-        $detail->end_date = $this->end_date;
-//        $detail->status = TreatmentSchedules::STATUS_SCHEDULE;
-        $retVal = $detail->save();
-        if (!$retVal) {
-            CommonProcess::dumpVariable($detail->getErrors());
-        }
+    public function getStartTime() {
+        $retVal = isset($this->rTime) ? $this->rTime->name : '';
+        $retVal .= CommonProcess::convertDateTime($this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_3);
         return $retVal;
     }
 

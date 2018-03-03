@@ -50,6 +50,12 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'value'=> 'CommonProcess::generateID(DomainConst::MEDICAL_RECORD_ID_PREFIX, $data->record_id)',
                 ),
 		array(
+                    'name'=>'time_id',
+                    'htmlOptions' => array('style' => 'text-align:center;'),
+                    'value'=> 'isset($data->rTime) ? $data->rTime->name : ""',
+                    'filter'=> ScheduleTimes::loadItems(),
+                ),
+		array(
                     'name'=>'start_date',
                     'htmlOptions' => array('style' => 'text-align:center;'),
                     'value'=> 'CommonProcess::convertDateTime($data->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_8)',

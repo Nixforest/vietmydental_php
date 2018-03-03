@@ -218,6 +218,9 @@
                         else
                         {
                             $('#dialogUpdateSchedule div.divForFormUpdateSchedule').html(data.div);
+                            $('#right_page_title').html('Thông tin bệnh nhân');
+                            $('#right-content').html(data.rightContent);
+                            $('.left-page .info-content .info-result .content').html(data.infoSchedule);
                             setTimeout(\"$('#dialogUpdateSchedule').dialog('close') \",1000);
                         }
 

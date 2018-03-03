@@ -18,6 +18,10 @@ $this->createMenu('view', $model);
                            $model->record_id),
                 ),
 		array(
+                   'name'=>'time_id',
+                   'value'=> isset($model->rTime) ? $model->rTime->name : '',
+                ),
+		array(
                    'name'=>'start_date',
                    'value'=> CommonProcess::convertDateTimeWithFormat($model->start_date),
                 ),

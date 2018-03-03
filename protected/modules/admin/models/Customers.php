@@ -154,6 +154,7 @@ class Customers extends BaseActiveRecord
 		$criteria->compare('characteristics',$this->characteristics,true);
 		$criteria->compare('created_by',$this->created_by,true);
 		$criteria->compare('created_date',$this->created_date,true);
+                $criteria->order = 'created_date DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -457,7 +458,8 @@ class Customers extends BaseActiveRecord
             if ($mSchedule) {
                 $infoSchedule = '<div class="title-2">' . DomainConst::CONTENT00177 . ': </div>';
                 $infoSchedule .= '<div class="item-search">';
-                $infoSchedule .=    '<p>' . $mSchedule->start_date . '</p>';
+//                $infoSchedule .=    '<p>' . $mSchedule->start_date . '</p>';
+                $infoSchedule .=    '<p>' . $mSchedule->getStartTime() . '</p>';
                 $infoSchedule .=    '<p>Hình thức: ' . $mSchedule->type_schedule . '</p>';
                 $infoSchedule .=    '<p>Chi Tiết Công Việc: ' . $mSchedule->description . '</p>';
                 $infoSchedule .=    '<p>Bác sĩ: ' . $mSchedule->getDoctor() . '</p>';
@@ -585,7 +587,8 @@ class Customers extends BaseActiveRecord
     public function apiList($root, $mUser) {
         $criteria = new CDbCriteria();
         $criteria->compare('t.status', DomainConst::DEFAULT_STATUS_ACTIVE);
-        $criteria->order = 't.id DESC';
+//        $criteria->order = 't.id DESC';
+        $criteria->order = 't.created_date DESC';
         // Set condition
         $retVal = new CActiveDataProvider(
                 $this,

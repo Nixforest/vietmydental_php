@@ -1157,4 +1157,5 @@ class DomainConst {
     const CONTENT00237  = 'Triệu chứng';
     const CONTENT00238  = 'Mốc thời gian';
     const CONTENT00239  = 'Actions';
+    const CONTENT00240  = 'Giờ hẹn';
 }

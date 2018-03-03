@@ -140,6 +140,7 @@ class ReceptionistController extends Controller {
             if ($schedule->save()) {
                 // Save detail field
                 $detail->schedule_id = $schedule->id;
+                $detail->time_id = $schedule->time_id;
                 $detail->start_date = $schedule->start_date;
                 $detail->end_date   = $schedule->end_date;
                 // Save success, start create detail
@@ -201,6 +202,7 @@ class ReceptionistController extends Controller {
                         $customer = $model->rSchedule->rMedicalRecord->rCustomer;
                         $rightContent = $customer->getCustomerAjaxInfo();
                         $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
+//                        $infoSchedule = $model->getAjaxScheduleInfo();
                     }
                     echo CJSON::encode(array(
                         DomainConst::KEY_STATUS => 'success',
@@ -225,7 +227,29 @@ class ReceptionistController extends Controller {
     }
     
     public function actionBirthday() {
+        $criteria = new CDbCriteria();
+        $currentM = CommonProcess::convertDateTime(
+                CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3),
+                DomainConst::DATE_FORMAT_3, 'm');
+        $currentD = CommonProcess::convertDateTime(
+                CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3),
+                DomainConst::DATE_FORMAT_3, 'd');
+        $models = Customers::model()->findAll($criteria);
+        $retVal = array();
+        foreach ($models as $model) {
+            $month = CommonProcess::convertDateTime(
+                $model->date_of_birth,
+                DomainConst::DATE_FORMAT_4, 'm');
+            $day = CommonProcess::convertDateTime(
+                $model->date_of_birth,
+                DomainConst::DATE_FORMAT_4, 'd');
+            if (($currentD === $day)
+                    && ($currentM === $month)) {
+                $retVal[$model->id] = $model;
+            }
+        }
         $this->render('birthday', array(
+            'model' => $retVal,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }

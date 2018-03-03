@@ -36,6 +36,12 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'time_id'); ?>
+		<?php echo $form->dropDownList($model,'time_id', ScheduleTimes::loadItems(true)); ?>
+		<?php echo $form->error($model,'time_id'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'start_date'); ?>
 		<?php
                 if ($model->isNewRecord) {

@@ -100,6 +100,7 @@ class MedicalRecords extends BaseActiveRecord
 		$criteria->compare('record_number',$this->record_number,true);
 		$criteria->compare('created_date',$this->created_date,true);
 		$criteria->compare('status',$this->status);
+                $criteria->order = 'created_date DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -134,6 +135,11 @@ class MedicalRecords extends BaseActiveRecord
      */
     public function beforeDelete() {
         OneMany::deleteAllOldRecords($this->id, OneMany::TYPE_MEDICAL_RECORD_PATHOLOGICAL);
+        if (isset($this->rTreatmentSchedule)) {
+            foreach ($this->rTreatmentSchedule as $treatment) {
+                $treatment->delete();
+            }
+        }
         return parent::beforeDelete();
     }
 

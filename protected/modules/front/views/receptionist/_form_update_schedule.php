@@ -20,6 +20,8 @@
     <div class="row">
         <label for="TreatmentScheduleDetails_start_date" class="required"><?php echo DomainConst::CONTENT00208; ?> <span class="required">*</span></label>
         <?php // echo $form->labelEx($model,'start_date'); ?>
+        <?php echo $form->dropDownList($model,'time_id', ScheduleTimes::loadItems(true)); ?>
+        <?php echo $form->error($model,'time_id'); ?>
         <?php echo $form->dateField($model, 'start_date'); ?>
         <?php echo $form->error($model,'start_date'); ?>
     </div>

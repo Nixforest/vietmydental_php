@@ -147,7 +147,19 @@ class TreatmentScheduleProcess extends BaseActiveRecord
             
         }
         return parent::beforeSave();
-    }    
+    }
+    
+    /**
+     * Override before delete method
+     */
+    public function beforeDelete() {
+        if (isset($this->rPrescription)) {
+            foreach ($this->rPrescription as $prescription) {
+                $prescription->delete();
+            }
+        }
+        return parent::beforeDelete();
+    }
 
     //-----------------------------------------------------
     // Utility methods
