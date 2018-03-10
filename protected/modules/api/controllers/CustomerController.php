@@ -75,6 +75,8 @@ class CustomerController extends APIController
     const ITEM_DESCRIPTION                  = '31';
     /** Item id: Time id */
     const ITEM_TIME_ID                      = '32';
+    /** Item id: Time id */
+    const ITEM_TIME                         = '33';
     
     
     /**
@@ -388,7 +390,8 @@ class CustomerController extends APIController
      * - parameter:
      *  + token:                Token
      *  + schedule_id:          Id treatment schedule
-     *  + time:                 Schedule time (format: dd/MM/yyyy hh:mm:ss)
+     *  + time:                 Id of schedule time
+     *  + date:                 Schedule date (format: yyy/MM/dd)
      *  + teeth_id:             Id of teeth
      *  + diagnosis_id:         Id of diagnosis
      *  + treatment_type_id:    Id of treatment type
@@ -408,6 +411,7 @@ class CustomerController extends APIController
                 DomainConst::KEY_TOKEN,
                 DomainConst::KEY_SCHEDULE_ID,
                 DomainConst::KEY_TIME,
+                DomainConst::KEY_DATE,
                 DomainConst::KEY_TEETH_ID,
                 DomainConst::KEY_DIAGNOSIS_ID,
                 DomainConst::KEY_TREATMENT_TYPE_ID,
@@ -794,8 +798,11 @@ class CustomerController extends APIController
     public function handleCreateTreatmentScheduleDetail($result, $root) {
         $model = new TreatmentScheduleDetails();
         $model->schedule_id         = $root->schedule_id;
-        $model->start_date          = CommonProcess::convertDateTime($root->time,
-            DomainConst::DATE_FORMAT_7, DomainConst::DATE_FORMAT_1);
+        $model->time_id             = $root->time;
+        $model->start_date          = CommonProcess::convertDateTime(
+                $root->date,
+                DomainConst::DATE_FORMAT_6,
+                DomainConst::DATE_FORMAT_1);
         $model->end_date            = $model->start_date;
         $model->teeth_id            = $root->teeth_id;
         $model->diagnosis_id        = $root->diagnosis_id;
@@ -812,7 +819,7 @@ class CustomerController extends APIController
                         $model->getJsonInfo());
             ApiModule::sendResponse($result, $this);
         }
-        $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00214;
+        $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00214 . '<br>' . CommonProcess::json_encode_unicode($model->getErrors());
         ApiModule::sendResponse($result, $this);
     }
     

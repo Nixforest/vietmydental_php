@@ -231,6 +231,14 @@ class TreatmentScheduleDetails extends BaseActiveRecord
     }
     
     /**
+     * Get timer name
+     * @return String Timer name
+     */
+    public function getTimer() {
+        return isset($this->rTime) ? $this->rTime->name : '';
+    }
+    
+    /**
      * Get teeth name
      * @return String Teeth name
      */
@@ -247,6 +255,14 @@ class TreatmentScheduleDetails extends BaseActiveRecord
         $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_ID,
                 DomainConst::CONTENT00003,
                 $this->id);
+        $info[] = CommonProcess::createConfigJson(
+                CustomerController::ITEM_TIME,
+                DomainConst::CONTENT00240,
+                $this->getTimer());
+        $info[] = CommonProcess::createConfigJson(
+                CustomerController::ITEM_TIME_ID,
+                '',
+                $this->time_id);
         $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_START_DATE,
                 DomainConst::CONTENT00139,
                 CommonProcess::convertDateTime($this->start_date,
@@ -313,7 +329,7 @@ class TreatmentScheduleDetails extends BaseActiveRecord
     public function getStartTime() {
         $retVal = isset($this->rTime) ? $this->rTime->name : '';
         if (!empty($retVal)) {
-            $retVal .= ' ngày ';
+            $retVal .= ', ';
         } else {
             $retVal .= "Ngày";
         }
