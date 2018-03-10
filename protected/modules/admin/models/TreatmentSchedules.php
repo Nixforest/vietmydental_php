@@ -260,6 +260,32 @@ class TreatmentSchedules extends BaseActiveRecord
         $retVal .= CommonProcess::convertDateTime($this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_5);
         return $retVal;
     }
+    
+    /**
+     * Get status of treatment schedule
+     * @return STATUS_COMPLETED in case all treatment schedule details are
+     * Completed or Inactive, False otherwise
+     */
+    public function getCurrentStatus() {
+        $retVal = $this->status;
+        $isCompleted = true;
+        if (isset($this->rDetail)) {
+            foreach ($this->rDetail as $key => $value) {
+                if (($value->status != TreatmentScheduleDetails::STATUS_COMPLETED)
+                        && ($value->status != TreatmentScheduleDetails::STATUS_INACTIVE)) {
+                    $isCompleted = false;
+                    break;
+                }
+            }
+        } else {
+            $isCompleted = false;
+        }
+        if ($isCompleted) {
+            $retVal = strval(TreatmentSchedules::STATUS_COMPLETED);
+        }
+        
+        return $retVal;
+    }
 
     //-----------------------------------------------------
     // Static methods
@@ -384,7 +410,8 @@ class TreatmentSchedules extends BaseActiveRecord
                     DomainConst::KEY_END_DATE => CommonProcess::convertDateTimeWithFormat(
                             $this->end_date),
                     DomainConst::KEY_DIAGNOSIS => $diagnosis,
-                    DomainConst::KEY_STATUS     => $this->status,
+//                    DomainConst::KEY_STATUS     => $this->status,
+                    DomainConst::KEY_STATUS     => $this->getCurrentStatus(),
                 ));
     }
     

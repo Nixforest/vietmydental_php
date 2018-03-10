@@ -179,8 +179,8 @@ class CreateResponse {
                 DomainConst::CONTENT00201,
                 $mCustomer->getTreatmentHistory());
         $result[DomainConst::KEY_DATA] = array(
-            $treatment,
             $medicalRecord,
+            $treatment,
         );
         ApiModule::sendResponse($result, $objController);
     }
