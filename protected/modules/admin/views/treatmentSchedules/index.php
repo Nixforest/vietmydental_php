@@ -58,7 +58,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		array(
                     'name'=>'start_date',
                     'htmlOptions' => array('style' => 'text-align:center;'),
-                    'value'=> 'CommonProcess::convertDateTime($data->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_8)',
+                    'value'=> 'CommonProcess::convertDateTime($data->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_BACK_END)',
                 ),  
 		array(
                     'name'=>'end_date',

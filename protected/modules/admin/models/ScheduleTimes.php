@@ -117,4 +117,27 @@ class ScheduleTimes extends CActiveRecord
         }
         return $_items;
     }
+
+    //-----------------------------------------------------
+    // JSON methods
+    //-----------------------------------------------------
+    /**
+     * Get json list object
+     * @return Array
+     * [
+     *      {
+     *          id:"1",
+     *          name:"8:00",
+     *      },
+     *      ...
+     * ]
+     */
+    public static function getJsonList() {
+        $retVal = array();
+        foreach (self::model()->findAll() as $key => $value) {
+            $retVal[] = CommonProcess::createConfigJson($key, $value->name);
+        }
+        
+        return $retVal;
+    }
 }

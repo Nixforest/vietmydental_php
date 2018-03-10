@@ -194,6 +194,17 @@ class ReceptionistController extends Controller {
             if (isset($_POST['TreatmentScheduleDetails'])) {
                 $model->attributes = $_POST['TreatmentScheduleDetails'];
                 if ($model->save()) {
+                    // Update treatment schedule info
+                    if (isset($model->rSchedule)) {
+                        $schedule = $model->rSchedule;
+                        // Schedule have only 1 detail
+                        if (isset($schedule->rDetail) && count($schedule->rDetail) == 1) {
+                            // Update time and start date of treatment schedule
+                            $schedule->time_id = $model->time_id;
+                            $schedule->start_date = $model->start_date;
+                            $schedule->save();
+                        }
+                    }
                     $rightContent = '';
                     $infoSchedule = '';
                     if (isset($model->rSchedule)

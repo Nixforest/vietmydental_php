@@ -1,6 +1,6 @@
 <?php
-/* @var $this ApiRequestLogsController */
-/* @var $model ApiRequestLogs */
+/* @var $this ReceiptsController */
+/* @var $model Receipts */
 
 $this->createMenu('index', $model);
 
@@ -10,7 +10,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#api-request-logs-grid').yiiGridView('update', {
+	$('#receipts-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -21,16 +21,10 @@ $('.search-form form').submit(function(){
 <h1><?php echo $this->pageTitle; ?></h1>
 
 <p>
-    <a class="delete" title="Xoá tất cả" href="<?php echo Yii::app()->createAbsoluteUrl("api/apiRequestLogs/deleteAll"); ?>">
-    <!--<img src="/assets/400dd419/gridview/delete.png" alt="Delete">-->
-    Xoá tất cả
-</a>
-
-<p>
 You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
 or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
 </p>
-</p>
+
 <?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
@@ -39,7 +33,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 </div><!-- search-form -->
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'api-request-logs-grid',
+	'id'=>'receipts-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
@@ -50,34 +44,18 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'headerHtmlOptions' => array('width' => '30px','style' => 'text-align:center;'),
                     'htmlOptions' => array('style' => 'text-align:center;')
                 ),
-		'ip_address',
-		'country',
-//		'user_id',
-		array(
-                    'name'=>'user_id',
-                    'htmlOptions' => array('style' => 'text-align:center;'),
-                    'value'=> 'isset($data->rUser) ? $data->rUser->username : ""',
-                    'filter'=>Users::loadItems(),
-                ),
-		'method',
-                'content',
-//		array(
-//                    'name'=>'content',
-////                    'htmlOptions' => array('style' => 'text-align:center;'),
-//                    'value'=> 'CommonProcess::formatJson($data->content)',
+		'detail_id',
+		'process_date',
+//                array(
+//                    'name' => 'process_date'
+//                    'value' => 'CommonProcess::convertDateTimeWithFormat($data->process_date, DomainConst::DATE_FORMAT_BACK_END)',
 //                ),
-//		'response',
+		'discount',
+		'need_approve',
+		'customer_confirm',
+		'status',
 		array(
-                    'name'=>'response',
-//                    'htmlOptions' => array('style' => 'text-align:center;'),
-                    'value'=> '$data->getResponse()',
-                ),
-		'created_date',
-		'responsed_date',
-                array(
-                    'header' => 'Actions',
-                    'class'=>'CButtonColumn',
-                    'template'=> $this->createActionButtons(),
-                ),
+			'class'=>'CButtonColumn',
+		),
 	),
 )); ?>

@@ -118,6 +118,11 @@ class Users extends BaseActiveRecord
                         self::HAS_MANY, 'OneMany', 'many_id',
                         'on'    => 'type = ' . OneMany::TYPE_AGENT_USER,
                     ),
+                    'rTreatmentSchedule' => array(
+                        self::HAS_MANY, 'TreatmentSchedules', 'doctor_id',
+                        'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
+                        'order' => 'id DESC',
+                    ),
 		);
 	}
 
@@ -410,6 +415,33 @@ class Users extends BaseActiveRecord
         if ($this->status == Users::STATUS_NEED_CHANGE_PASS) {
             $retVal = DomainConst::NUMBER_ONE_VALUE;
         }
+        return $retVal;
+    }
+    
+    /**
+     * Get list customer of doctor
+     * @return Array Array of customer id
+     */
+    public function getListCustomerOfDoctor() {
+        $retVal = array();
+        // Check relation rTreatmentSchedule is set
+        if (isset($this->rTreatmentSchedule)) {
+            // Loop for all treatment schedule
+            foreach ($this->rTreatmentSchedule as $treatmentSchedule) {
+                // Check relation rMedicalRecord is set
+                if (isset($treatmentSchedule->rMedicalRecord)) {
+                    $medicalRecord = $treatmentSchedule->rMedicalRecord;
+                    // Check relation rCustomer is set
+                    if (isset($medicalRecord->rCustomer)) {
+                        $customer = $medicalRecord->rCustomer;
+                        if ($customer->status != DomainConst::DEFAULT_STATUS_INACTIVE) {
+                            $retVal[] = $customer->id;
+                        }
+                    }
+                }
+            }
+        }
+        
         return $retVal;
     }
 

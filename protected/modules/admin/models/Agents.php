@@ -78,6 +78,10 @@ class Agents extends BaseActiveRecord
                         self::HAS_MANY, 'OneMany', 'one_id',
                         'on'    => 'type = ' . OneMany::TYPE_AGENT_USER,
                     ),
+                    'rJoinCustomer' => array(
+                        self::HAS_MANY, 'OneMany', 'one_id',
+                        'on'    => 'type = ' . OneMany::TYPE_AGENT_CUSTOMER,
+                    ),
 		);
 	}
 

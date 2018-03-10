@@ -548,7 +548,7 @@ class Customers extends BaseActiveRecord
             $mMedicalRecord = $this->rMedicalRecord;
             if (isset($mMedicalRecord->rTreatmentSchedule)) {
                 foreach ($mMedicalRecord->rTreatmentSchedule as $schedule) {
-                    $pathological = isset($schedule->rPathological) ? $schedule->rPathological->name : '';
+//                    $pathological = isset($schedule->rPathological) ? $schedule->rPathological->name : '';
 //                    $diagnosis = isset($schedule->rDiagnosis) ? $schedule->rDiagnosis->name : '';
 //                    $retVal[] = CommonProcess::createConfigJson(
 //                            $schedule->id,
@@ -590,6 +590,18 @@ class Customers extends BaseActiveRecord
 //        $criteria->order = 't.id DESC';
         $criteria->order = 't.created_date DESC';
         // Set condition
+        $roleName = isset($mUser->rRole) ? $mUser->rRole->role_name : '';
+        switch ($roleName) {
+            case Roles::ROLE_DOCTOR:
+                // Get list customers assign at doctor
+                $criteria->addInCondition('t.id', $mUser->getListCustomerOfDoctor());
+                break;
+
+            default:
+                break;
+        }
+        
+        // Get return value
         $retVal = new CActiveDataProvider(
                 $this,
                 array(

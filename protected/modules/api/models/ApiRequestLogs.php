@@ -123,4 +123,24 @@ class ApiRequestLogs extends BaseActiveRecord
         
         return parent::beforeSave();
     }
+
+    //-----------------------------------------------------
+    // Utility methods
+    //-----------------------------------------------------
+    public function getResponse() {
+        // strip tags to avoid breaking any html
+        $string = strip_tags($this->response);
+        if (strlen($string) > 500) {
+
+            // truncate string
+            $stringCut = substr($string, 0, 500);
+            $endPoint = strrpos($stringCut, ' ');
+
+            //if the string doesn't contain any space then it will cut without word basis.
+            $string = $endPoint? substr($stringCut, 0, $endPoint):substr($stringCut, 0);
+//            $string .= '... <a href="' . Yii::app()->createAbsoluteUrl("api/apiRequestLogs/view", array('id' => $this->id)) . '">Read More</a>';
+            $string .= '...[Xem thêm]';
+        }
+        return $string;
+    }
 }

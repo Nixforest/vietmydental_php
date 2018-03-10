@@ -37,6 +37,7 @@ class CreateResponse {
 //            DomainConst::KEY_STATUS_TREATMENT_DETAIL    => TreatmentScheduleDetails::getJsonListStatus(),
 //            DomainConst::KEY_STATUS_TREATMENT_PROCESS   => TreatmentScheduleProcess::getJsonListStatus(),
             DomainConst::KEY_TEETH              => CommonProcess::getListConfigTeeth(),
+            DomainConst::KEY_TIMER              => ScheduleTimes::getJsonList(),
         );
         ApiModule::sendResponse($result, $objController);
     }

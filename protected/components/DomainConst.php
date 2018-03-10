@@ -63,7 +63,7 @@ class DomainConst {
     /** Date format main */
     const DATE_FORMAT_VIEW                              = self::DATE_FORMAT_5;
     /** Date format backend */
-    const DATE_FORMAT_BACK_END                          = self::DATE_FORMAT_2;
+    const DATE_FORMAT_BACK_END                          = self::DATE_FORMAT_3;
     /** Date format */
     const DATE_FORMAT_1                                 = 'Y-m-d H:i:s';
     /** Date format */
@@ -223,6 +223,8 @@ class DomainConst {
     const KEY_DIAGNOSIS_ID                  = 'diagnosis_id';
     /** teeth */
     const KEY_TEETH                         = 'teeth';
+    /** timer */
+    const KEY_TIMER                         = 'timer';
     /** treatment */
     const KEY_TREATMENT                     = 'treatment';
     /** pathological */
@@ -952,7 +954,7 @@ class DomainConst {
     const CONTENT00031  = 'Khác';
     const CONTENT00032  = 'Allow';
     const CONTENT00033  = 'Deny';
-    const CONTENT00034  = 'STT';
+    const CONTENT00034  = '#';
     const CONTENT00035  = 'Cập nhật thành công';
     const CONTENT00036  = 'Phân quyền';
     const CONTENT00037  = 'Bạn không có quyền truy cập hoặc trang yêu cầu không tồn tại';
@@ -1158,4 +1160,8 @@ class DomainConst {
     const CONTENT00238  = 'Mốc thời gian';
     const CONTENT00239  = 'Actions';
     const CONTENT00240  = 'Giờ hẹn';
+    const CONTENT00241  = 'Ngày lập';
+    const CONTENT00242  = 'Giảm';
+    const CONTENT00243  = 'Cần xác nhận từ cấp trên';
+    const CONTENT00244  = 'Khách hàng xác nhận';
 }

@@ -22,6 +22,8 @@ class OneMany extends BaseActiveRecord
     const TYPE_AGENT_USER                               = DomainConst::NUMBER_TWO_VALUE;
     /** 1 [agents] has many [customers] */
     const TYPE_AGENT_CUSTOMER                           = '3';
+    /** 1 [agents] has many [receipt] */
+    const TYPE_AGENT_RECEIPT                            = '4';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -83,6 +85,11 @@ class OneMany extends BaseActiveRecord
                     'rCustomer' => array(
                         self::BELONGS_TO,
                         'Customers',
+                        'many_id',
+                    ),
+                    'rReceipt' => array(
+                        self::BELONGS_TO,
+                        'Receipts',
                         'many_id',
                     ),
 		);

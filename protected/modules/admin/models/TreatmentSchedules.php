@@ -252,7 +252,12 @@ class TreatmentSchedules extends BaseActiveRecord
      */
     public function getStartTime() {
         $retVal = isset($this->rTime) ? $this->rTime->name : '';
-        $retVal .= CommonProcess::convertDateTime($this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_3);
+        if (!empty($retVal)) {
+            $retVal .= ' ngày ';
+        } else {
+            $retVal .= "Ngày";
+        }
+        $retVal .= CommonProcess::convertDateTime($this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_5);
         return $retVal;
     }
 
@@ -369,8 +374,13 @@ class TreatmentSchedules extends BaseActiveRecord
                 $this->id,
                 $pathological,
                 array(
-                    DomainConst::KEY_START_DATE => CommonProcess::convertDateTimeWithFormat(
-                            $this->start_date),
+//                    DomainConst::KEY_START_DATE => CommonProcess::convertDateTimeWithFormat(
+//                            $this->start_date),
+//                    DomainConst::KEY_START_DATE => $this->getStartTime(),
+                    DomainConst::KEY_START_DATE => CommonProcess::convertDateTime(
+                            $this->start_date,
+                            DomainConst::DATE_FORMAT_1,
+                            DomainConst::DATE_FORMAT_VIEW),
                     DomainConst::KEY_END_DATE => CommonProcess::convertDateTimeWithFormat(
                             $this->end_date),
                     DomainConst::KEY_DIAGNOSIS => $diagnosis,
@@ -485,7 +495,8 @@ class TreatmentSchedules extends BaseActiveRecord
 //                        DomainConst::CONTENT00233,
 //                        $processArr);
                 $details[] = CommonProcess::createConfigJson(
-                        CommonProcess::convertDateTimeWithFormat($detail->start_date),
+//                        CommonProcess::convertDateTimeWithFormat($detail->start_date),
+                        $detail->getStartTime(),
                         $detail->getTreatment(),
                         $detail->getJsonInfo());
             }
@@ -497,7 +508,7 @@ class TreatmentSchedules extends BaseActiveRecord
         $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_START_DATE,
                 DomainConst::CONTENT00139,
 //                CommonProcess::convertDateTimeWithFormat($this->start_date));
-                CommonProcess::convertDateTime($this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_8));
+                CommonProcess::convertDateTime($this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_VIEW));
         $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_END_DATE,
                 DomainConst::CONTENT00140,
                 CommonProcess::convertDateTimeWithFormat($this->end_date));

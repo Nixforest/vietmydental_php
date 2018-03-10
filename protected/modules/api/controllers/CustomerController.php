@@ -73,6 +73,8 @@ class CustomerController extends APIController
     const ITEM_TREATMENT_TYPE_ID            = '30';
     /** Item id: Description */
     const ITEM_DESCRIPTION                  = '31';
+    /** Item id: Time id */
+    const ITEM_TIME_ID                      = '32';
     
     
     /**
@@ -278,7 +280,8 @@ class CustomerController extends APIController
      * - parameter:
      *  + token:            Token
      *  + customer_id:      Id of customer
-     *  + time:             Schedule time (format: dd/MM/yyyy hh:mm:ss)
+     *  + time:             Id of schedule time
+     *  + date:             Schedule date (format: yyy/MM/dd)
      *  + doctor_id:        Id of doctor
      *  + type:             Type of schedule
      *  + note:             Description of schedule
@@ -295,6 +298,7 @@ class CustomerController extends APIController
                 DomainConst::KEY_TOKEN,
                 DomainConst::KEY_CUSTOMER_ID,
                 DomainConst::KEY_TIME,
+                DomainConst::KEY_DATE,
                 DomainConst::KEY_DOCTOR_ID,
                 DomainConst::KEY_TYPE,
                 DomainConst::KEY_NOTE
@@ -715,8 +719,11 @@ class CustomerController extends APIController
         $detail     = new TreatmentScheduleDetails();
         $schedule->record_id    = $mMedicalRecord->id;
         $schedule->status       = TreatmentSchedules::STATUS_SCHEDULE;
-        $schedule->start_date   = CommonProcess::convertDateTime($root->time,
-            DomainConst::DATE_FORMAT_7, DomainConst::DATE_FORMAT_1);
+        $schedule->time_id      = $root->time;
+        $schedule->start_date   = CommonProcess::convertDateTime(
+                $root->date,
+                DomainConst::DATE_FORMAT_6,
+                DomainConst::DATE_FORMAT_1);
         $schedule->doctor_id    = $root->doctor_id;
         $mDoctor = Users::model()->findByPk($root->doctor_id);
         if (!$mDoctor || $mDoctor->status == DomainConst::DEFAULT_STATUS_INACTIVE) {
@@ -726,6 +733,7 @@ class CustomerController extends APIController
         if ($schedule->save()) {
             // Save detail field
             $detail->schedule_id    = $schedule->id;
+            $detail->time_id        = $root->time;
             $detail->start_date     = $schedule->start_date;
             $detail->end_date       = $schedule->end_date;
             $detail->type_schedule  = $root->type;

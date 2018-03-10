@@ -1,12 +1,12 @@
 <?php
 
-class ApiRequestLogsController extends AdminController
+class ReceiptsController extends AdminController
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout='//layouts/column1';
+	public $layout='//layouts/column2';
 
 	/**
 	 * @return array action filters
@@ -18,12 +18,12 @@ class ApiRequestLogsController extends AdminController
 //			'postOnly + delete', // we only allow deletion via POST request
 //		);
 //	}
-//
-//	/**
-//	 * Specifies the access control rules.
-//	 * This method is used by the 'accessControl' filter.
-//	 * @return array access control rules
-//	 */
+
+	/**
+	 * Specifies the access control rules.
+	 * This method is used by the 'accessControl' filter.
+	 * @return array access control rules
+	 */
 //	public function accessRules()
 //	{
 //		return array(
@@ -63,16 +63,22 @@ class ApiRequestLogsController extends AdminController
 	 */
 	public function actionCreate()
 	{
-		$model=new ApiRequestLogs;
+		$model=new Receipts;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['ApiRequestLogs']))
+		if(isset($_POST['Receipts']))
 		{
-			$model->attributes=$_POST['ApiRequestLogs'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			$model->attributes=$_POST['Receipts'];
+			if($model->save()) {
+                            if (filter_input(INPUT_POST, 'submit')) {
+                                $selectedAgent = $_POST['Receipts']['agent'];
+                                OneMany::insertOne($selectedAgent, $model->id,
+                                        OneMany::TYPE_AGENT_RECEIPT);
+                            }
+                            $this->redirect(array('view','id'=>$model->id));
+                        }
 		}
 
 		$this->render('create',array(
@@ -93,11 +99,20 @@ class ApiRequestLogsController extends AdminController
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['ApiRequestLogs']))
+		if(isset($_POST['Receipts']))
 		{
-			$model->attributes=$_POST['ApiRequestLogs'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			$model->attributes=$_POST['Receipts'];
+			if($model->save()) {
+                            if (filter_input(INPUT_POST, 'submit')) {
+                                // Remove old record
+                                OneMany::deleteAllManyOldRecords($model->id,
+                                        OneMany::TYPE_AGENT_RECEIPT);
+                                $selectedAgent = $_POST['Receipts']['agent'];
+                                OneMany::insertOne($selectedAgent, $model->id,
+                                        OneMany::TYPE_AGENT_RECEIPT);
+                            }
+                            $this->redirect(array('view','id'=>$model->id));
+                        }
 		}
 
 		$this->render('update',array(
@@ -119,27 +134,20 @@ class ApiRequestLogsController extends AdminController
 		if(!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 	}
-        
-        public function actionDeleteAll() {
-            ApiRequestLogs::model()->deleteAll();
-//            // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-//		if(!isset($_GET['ajax']))
-//			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-        }
 
 	/**
 	 * Lists all models.
 	 */
 	public function actionIndex()
 	{
-//		$dataProvider=new CActiveDataProvider('ApiRequestLogs');
+//		$dataProvider=new CActiveDataProvider('Receipts');
 //		$this->render('index',array(
 //			'dataProvider'=>$dataProvider,
 //		));
-		$model=new ApiRequestLogs('search');
+		$model=new Receipts('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['ApiRequestLogs']))
-			$model->attributes=$_GET['ApiRequestLogs'];
+		if(isset($_GET['Receipts']))
+			$model->attributes=$_GET['Receipts'];
 
 		$this->render('index',array(
 			'model'=>$model,
@@ -152,10 +160,10 @@ class ApiRequestLogsController extends AdminController
 	 */
 	public function actionAdmin()
 	{
-		$model=new ApiRequestLogs('search');
+		$model=new Receipts('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['ApiRequestLogs']))
-			$model->attributes=$_GET['ApiRequestLogs'];
+		if(isset($_GET['Receipts']))
+			$model->attributes=$_GET['Receipts'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -167,12 +175,12 @@ class ApiRequestLogsController extends AdminController
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return ApiRequestLogs the loaded model
+	 * @return Receipts the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=ApiRequestLogs::model()->findByPk($id);
+		$model=Receipts::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -180,11 +188,11 @@ class ApiRequestLogsController extends AdminController
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param ApiRequestLogs $model the model to be validated
+	 * @param Receipts $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='api-request-logs-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='receipts-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
