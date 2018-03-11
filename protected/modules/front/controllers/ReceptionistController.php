@@ -237,25 +237,15 @@ class ReceptionistController extends Controller {
         }
     }
     
+    /**
+     * Action get all customer has birthday is today
+     */
     public function actionBirthday() {
         $criteria = new CDbCriteria();
-        $currentM = CommonProcess::convertDateTime(
-                CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3),
-                DomainConst::DATE_FORMAT_3, 'm');
-        $currentD = CommonProcess::convertDateTime(
-                CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3),
-                DomainConst::DATE_FORMAT_3, 'd');
         $models = Customers::model()->findAll($criteria);
         $retVal = array();
         foreach ($models as $model) {
-            $month = CommonProcess::convertDateTime(
-                $model->date_of_birth,
-                DomainConst::DATE_FORMAT_4, 'm');
-            $day = CommonProcess::convertDateTime(
-                $model->date_of_birth,
-                DomainConst::DATE_FORMAT_4, 'd');
-            if (($currentD === $day)
-                    && ($currentM === $month)) {
+            if (DateTimeExt::isBirthday($model->date_of_birth, DomainConst::DATE_FORMAT_4)) {
                 $retVal[$model->id] = $model;
             }
         }

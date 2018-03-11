@@ -764,7 +764,7 @@ class CustomerController extends APIController
      */
     public function handleUpdateTreatmentSchedule($result, $root) {
         $mTreatmentSchedule = TreatmentSchedules::model()->findByPk($root->id);
-        if ($mTreatmentSchedule) {            
+        if ($mTreatmentSchedule) {
             $mTreatmentSchedule->diagnosis_id    = $root->diagnosis_id;
             $mTreatmentSchedule->pathological_id = $root->pathological_id;
             $mTreatmentSchedule->status          = $root->status;
@@ -839,6 +839,9 @@ class CustomerController extends APIController
 //            $model->type_schedule       = $root->type;
 //            $model->description         = $root->note;
             $model->status              = $root->status;
+            if ($model->status == TreatmentScheduleDetails::STATUS_COMPLETED) {
+                $model->end_date        = CommonProcess::getCurrentDateTimeWithMySqlFormat();
+            }
 //            $aUpdate = array('start_date', 'end_date', 'teeth_id',
             $aUpdate = array('teeth_id',
                 'diagnosis_id', 'treatment_type_id',
