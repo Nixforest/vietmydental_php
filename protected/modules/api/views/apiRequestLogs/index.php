@@ -22,7 +22,6 @@ $('.search-form form').submit(function(){
 
 <p>
     <a class="delete" title="Xoá tất cả" href="<?php echo Yii::app()->createAbsoluteUrl("api/apiRequestLogs/deleteAll"); ?>">
-    <!--<img src="/assets/400dd419/gridview/delete.png" alt="Delete">-->
     Xoá tất cả
 </a>
 

@@ -220,6 +220,17 @@ class TreatmentScheduleDetails extends BaseActiveRecord
     }
     
     /**
+     * Get customer id
+     * @return string
+     */
+    public function getCustomer() {
+        if (isset($this->rSchedule)) {
+            return $this->rSchedule->getCustomer();
+        }
+        return '';
+    }
+    
+    /**
      * Get teeth name
      * @return String Teeth name
      */
@@ -337,6 +348,10 @@ class TreatmentScheduleDetails extends BaseActiveRecord
         return $retVal;
     }
     
+    /**
+     * Get ajax schedule information
+     * @return string
+     */
     public function getAjaxScheduleInfo() {
         $infoSchedule = '<div class="title-2">' . DomainConst::CONTENT00177 . ': </div>';
         $infoSchedule .= '<div class="item-search">';
@@ -380,6 +395,25 @@ class TreatmentScheduleDetails extends BaseActiveRecord
             return $model->teeth_id;
         }
         return '0';
+    }
+    
+    /**
+     * Get list all customersn have schedule in today
+     * @return array
+     */
+    public static function getListCustomerIdHaveScheduleToday() {
+        $retVal = array();
+        $arrModel = self::model()->findAll();
+        foreach ($arrModel as $value) {
+            if ($value->status == self::STATUS_SCHEDULE
+                    && DateTimeExt::isToday($value->start_date, DomainConst::DATE_FORMAT_1)) {
+                $customerId = $value->getCustomer();
+                if (!empty($customerId)) {
+                    $retVal[] = $customerId;
+                }
+            }
+        }
+        return $retVal;
     }
 
     //-----------------------------------------------------

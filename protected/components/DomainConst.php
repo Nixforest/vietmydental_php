@@ -243,6 +243,8 @@ class DomainConst {
     const KEY_DOCTOR                        = 'doctor';
     /** doctor_id */
     const KEY_DOCTOR_ID                     = 'doctor_id';
+    /** customer_confirm */
+    const KEY_CUSTOMER_CONFIRM              = 'customer_confirm';
     /** schedule_id */
     const KEY_SCHEDULE_ID                   = 'schedule_id';
     /** teeth_id */
@@ -1164,4 +1166,5 @@ class DomainConst {
     const CONTENT00242  = 'Giảm';
     const CONTENT00243  = 'Cần xác nhận từ cấp trên';
     const CONTENT00244  = 'Khách hàng xác nhận';
+    const CONTENT00245  = 'Tạo phiếu thu thành công';
 }

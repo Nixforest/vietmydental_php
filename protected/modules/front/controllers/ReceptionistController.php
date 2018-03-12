@@ -139,10 +139,11 @@ class ReceptionistController extends Controller {
             // Try to save Schedule
             if ($schedule->save()) {
                 // Save detail field
-                $detail->schedule_id = $schedule->id;
-                $detail->time_id = $schedule->time_id;
-                $detail->start_date = $schedule->start_date;
-                $detail->end_date   = $schedule->end_date;
+                $detail->schedule_id    = $schedule->id;
+                $detail->time_id        = $schedule->time_id;
+                $detail->start_date     = $schedule->start_date;
+                $detail->end_date       = $schedule->end_date;
+                $detail->status         = TreatmentScheduleDetails::STATUS_SCHEDULE;
                 // Save success, start create detail
                 if ($detail->save()) {
                     $rightContent = '';
@@ -238,7 +239,7 @@ class ReceptionistController extends Controller {
     }
     
     /**
-     * Action get all customer has birthday is today
+     * Action get all customers have birthday is today
      */
     public function actionBirthday() {
         $criteria = new CDbCriteria();
@@ -254,9 +255,28 @@ class ReceptionistController extends Controller {
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }
-    
+
+    /**
+     * Action get all customers have schedule on today
+     */
     public function actionSchedule() {
+        $arrCustomerId = TreatmentScheduleDetails::getListCustomerIdHaveScheduleToday();
+        $criteria = new CDbCriteria();
+        $criteria->addInCondition('id', $arrCustomerId);
+        $models = Customers::model()->findAll($criteria);
+        
         $this->render('schedule', array(
+            'model' => $models,
+            'array' => $arrCustomerId,
+            DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+        ));
+    }
+    
+    /**
+     * Action handle receipt
+     */
+    public function actionReceipt() {
+        $this->render('receipt', array(
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }

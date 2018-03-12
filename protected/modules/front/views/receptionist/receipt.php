@@ -10,7 +10,7 @@
 )); ?>
     
 <div class="maincontent clearfix">
-    <div class="left-page">
+<!--    <div class="left-page">
         <div class="title-1">
            Bộ lọc Tìm kiếm
         </div>
@@ -22,42 +22,15 @@
                            id="customer_find">
                 </form>
             </div>
-            <div class="info-result" id="customer_info_schedule">
-                <div class="group-btn" id="create_customer">
-                    
-                </div>
-                <div class="content"></div>
-            </div>
         </div>
-    </div>
+    </div>-->
     <div class="right-page">
         <div class="title-1" id="right_page_title">
-            Danh sách Bệnh nhân có lịch hẹn vào hôm nay
+            Danh sách Bệnh nhân có sinh nhật vào hôm nay
         </div>
         <div class="info-content">
             <div id="right-content">
-                <div class="scroll-table">
-                    <table id="customer-info">
-                        <thead>
-                            <tr>
-                                <th><?php echo DomainConst::CONTENT00100; ?></th>
-                                <th><?php echo DomainConst::CONTENT00170; ?></th>
-                                <th><?php echo DomainConst::CONTENT00101; ?></th>
-                                <th class="col-4"><?php echo DomainConst::CONTENT00045; ?></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($model as $customer) :?>
-                            <tr id="<?php echo $customer->id; ?>" class="customer-info-tr">
-                                <td><?php echo $customer->name ?></td>
-                                <td><?php echo $customer->phone ?></td>
-                                <td><?php echo $customer->date_of_birth ?></td>
-                                <td><?php echo $customer->address ?></td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
+                
             </div>
         </div>
     </div>

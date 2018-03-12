@@ -69,6 +69,9 @@ class Receipts extends CActiveRecord
                         self::HAS_MANY, 'OneMany', 'many_id',
                         'on'    => 'type = ' . OneMany::TYPE_AGENT_RECEIPT,
                     ),
+                    'rUser' => array(
+                        self::BELONGS_TO, 'Users', 'created_by'
+                    )
 		);
 	}
 
@@ -117,4 +120,26 @@ class Receipts extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+        
+    //-----------------------------------------------------
+    // Parent override methods
+    //-----------------------------------------------------
+    /**
+     * Override before save method
+     * @return Parent result
+     */
+    public function beforeSave() {
+        $userId = isset(Yii::app()->user) ? Yii::app()->user->id : '';
+        if ($this->isNewRecord) {   // Add
+            // Handle created by
+            if (empty($this->created_by)) {
+                $this->created_by = $userId;
+            }
+            // Handle created date
+            $this->created_date = CommonProcess::getCurrentDateTime();
+        } else {                    // Update
+            
+        }
+        return parent::beforeSave();
+    }
 }

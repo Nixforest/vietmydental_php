@@ -533,7 +533,7 @@ class CustomerController extends APIController
      *  + teeth_id:             Id of teeth
      *  + name:                 Name of process
      *  + content:              Content of process
-     *  + doctor_id:            Id of doctor
+     *  + doctor_id:            Id of doctor (remove)
      *  + status:               Status
      *  + note:                 Note
      */
@@ -809,7 +809,7 @@ class CustomerController extends APIController
         $model->treatment_type_id   = $root->treatment_type_id;
 //        $model->type_schedule       = $root->type;
 //        $model->description         = $root->note;
-        $model->status              = TreatmentScheduleDetails::STATUS_ACTIVE;
+        $model->status              = TreatmentScheduleDetails::STATUS_SCHEDULE;
         if ($model->save()) {
             $result = ApiModule::$defaultSuccessResponse;
             $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00225;
@@ -928,6 +928,82 @@ class CustomerController extends APIController
             $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00228;
             ApiModule::sendResponse($result, $this);
         }
+    }
+    
+    /**
+     * P0020_CreateReceipt_API
+     * Create new receipt for customer
+     * - url:   api/customer/createReceipt
+     * - parameter:
+     *  + token:            Token
+     *  + detail_id:        Id of Treatment schedule detail
+     *  + date:             Date (format: yyy/MM/dd)
+     *  + discount:         Discount
+     *  + customer_confirm: Customer confirm
+     *  + note:             Note
+     * 
+     */
+    public function actionCreateReceipt() {
+        try {
+            $result = ApiModule::$defaultFailedResponse;
+            // Check format of request
+            $this->checkRequest();
+            // Parse json
+            $root = json_decode(filter_input(INPUT_POST, DomainConst::KEY_ROOT_REQUEST));
+            // Check required parameters
+            $this->checkRequiredParam($root, array(
+                DomainConst::KEY_TOKEN,
+                DomainConst::KEY_DETAIL_ID,
+                DomainConst::KEY_DATE,
+                DomainConst::KEY_DISCOUNT,
+                DomainConst::KEY_CUSTOMER_CONFIRM,
+                DomainConst::KEY_NOTE
+            ));
+            // Get user
+            $mUser          = $this->getUserByToken($result, $root->token);
+            // Check treatment schedule id
+            $isValid        = (new TreatmentScheduleDetails())->isIdActiveExist($root->detail_id);
+            if (!$isValid) {
+                $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00226;
+                ApiModule::sendResponse($result, $this);
+            }
+            // Check date
+            if (empty($root->date)) {
+                $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00234;
+                ApiModule::sendResponse($result, $this);
+            }
+            $this->handleCreateReceipt($result, $mUser, $root);
+        } catch (Exception $exc) {
+            ApiModule::catchError($exc, $this);
+        }
+    }
+
+    /**
+     * Handle create receipt
+     * @param type $result
+     * @param type $mUser
+     * @param type $root
+     */
+    public function handleCreateReceipt($result, $mUser, $root) {
+        $model   = new Receipts();
+        $model->detail_id           = $root->detail_id;
+        $model->process_date        = CommonProcess::convertDateTime(
+                $root->date,
+                DomainConst::DATE_FORMAT_6,
+                DomainConst::DATE_FORMAT_3);
+        $model->discount            = $root->discount;
+        $model->customer_confirm    = $root->customer_confirm;
+        $model->description         = $root->note;
+        $model->created_by          = $mUser->id;
+        if ($model->save()) {
+            $result = ApiModule::$defaultSuccessResponse;
+            $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00245;
+            ApiModule::sendResponse($result, $this);
+        }
+        $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00214
+                . '<br>'
+                . CommonProcess::json_encode_unicode($model->getErrors());
+        ApiModule::sendResponse($result, $this);
     }
 
     // Uncomment the following methods and override them if needed

@@ -286,6 +286,17 @@ class TreatmentSchedules extends BaseActiveRecord
         
         return $retVal;
     }
+    
+    /**
+     * Get customer id
+     * @return string Customer id, empty string if failed
+     */
+    public function getCustomer() {
+        if (isset($this->rMedicalRecord) && isset($this->rMedicalRecord->rCustomer)) {
+            return $this->rMedicalRecord->rCustomer->id;
+        }
+        return '';
+    }
 
     //-----------------------------------------------------
     // Static methods
