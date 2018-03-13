@@ -84,6 +84,9 @@ class TreatmentScheduleDetails extends BaseActiveRecord
                     'rTime' => array(
                         self::BELONGS_TO, 'ScheduleTimes', 'time_id'
                     ),
+                    'rReceipt' => array(
+                        self::HAS_ONE, 'Receipts', 'detail_id'
+                    ),
 		);
 	}
 

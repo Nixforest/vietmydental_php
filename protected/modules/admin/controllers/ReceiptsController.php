@@ -74,8 +74,9 @@ class ReceiptsController extends AdminController
 			if($model->save()) {
                             if (filter_input(INPUT_POST, 'submit')) {
                                 $selectedAgent = $_POST['Receipts']['agent'];
-                                OneMany::insertOne($selectedAgent, $model->id,
-                                        OneMany::TYPE_AGENT_RECEIPT);
+//                                OneMany::insertOne($selectedAgent, $model->id,
+//                                        OneMany::TYPE_AGENT_RECEIPT);
+                                $model->connectAgent($selectedAgent);
                             }
                             $this->redirect(array('view','id'=>$model->id));
                         }

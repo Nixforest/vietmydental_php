@@ -985,7 +985,13 @@ class CustomerController extends APIController
      * @param type $root
      */
     public function handleCreateReceipt($result, $mUser, $root) {
-        $model   = new Receipts();
+        $mDetail = TreatmentScheduleDetails::model()->findByPk($root->detail_id);
+        if ($mDetail && isset($mDetail->rReceipt)) {
+            $model = $mDetail->rReceipt;
+        } else {
+            $model   = new Receipts();
+        }
+        
         $model->detail_id           = $root->detail_id;
         $model->process_date        = CommonProcess::convertDateTime(
                 $root->date,
@@ -995,6 +1001,10 @@ class CustomerController extends APIController
         $model->customer_confirm    = $root->customer_confirm;
         $model->description         = $root->note;
         $model->created_by          = $mUser->id;
+        
+        // Handle agent
+        $model->connectAgent($mUser->getAgentId());
+        
         if ($model->save()) {
             $result = ApiModule::$defaultSuccessResponse;
             $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00245;

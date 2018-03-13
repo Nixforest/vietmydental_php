@@ -142,4 +142,16 @@ class Receipts extends CActiveRecord
         }
         return parent::beforeSave();
     }
+
+    //-----------------------------------------------------
+    // Utility methods
+    //-----------------------------------------------------
+    /**
+     * Connect receipt with current agent
+     * @param String $agentId Id of agent
+     */
+    public function connectAgent($agentId) {
+        OneMany::deleteAllManyOldRecords($this->id, OneMany::TYPE_AGENT_RECEIPT);
+        OneMany::insertOne($agentId, $this->id, OneMany::TYPE_AGENT_RECEIPT);
+    }
 }
