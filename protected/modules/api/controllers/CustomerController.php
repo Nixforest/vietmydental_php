@@ -940,6 +940,7 @@ class CustomerController extends APIController
      *  + date:             Date (format: yyy/MM/dd)
      *  + discount:         Discount
      *  + customer_confirm: Customer confirm
+     *  + receiptionist_id: Id of receiptionist
      *  + note:             Note
      * 
      */
@@ -957,6 +958,7 @@ class CustomerController extends APIController
                 DomainConst::KEY_DATE,
                 DomainConst::KEY_DISCOUNT,
                 DomainConst::KEY_CUSTOMER_CONFIRM,
+                DomainConst::KEY_RECEIPTIONIST_ID,
                 DomainConst::KEY_NOTE
             ));
             // Get user
@@ -1001,6 +1003,8 @@ class CustomerController extends APIController
         $model->customer_confirm    = $root->customer_confirm;
         $model->description         = $root->note;
         $model->created_by          = $mUser->id;
+        $model->created_date        = CommonProcess::getCurrentDateTime();
+        $model->receiptionist_id    = $root->receiptionist_id;
         
         // Handle agent
         $model->connectAgent($mUser->getAgentId());
@@ -1010,6 +1014,8 @@ class CustomerController extends APIController
             $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00245;
             ApiModule::sendResponse($result, $this);
         }
+        
+        // Finnaly send failed response with error detail
         $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00214
                 . '<br>'
                 . CommonProcess::json_encode_unicode($model->getErrors());

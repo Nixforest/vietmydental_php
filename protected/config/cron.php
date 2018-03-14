@@ -13,8 +13,12 @@ return array(
     'preload'=>array('log'),
  
     'import'=>array(
-        'application.components.*',
         'application.models.*',
+        'application.components.*',
+        'application.modules.admin.models.*',
+        'application.modules.api.models.*',
+        'application.modules.api.components.*',
+        'application.extensions.yii-mail.*',
     ),
     // We'll log cron messages to the separate files
     'components'=>array(

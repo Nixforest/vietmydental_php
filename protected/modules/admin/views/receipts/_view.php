@@ -41,6 +41,10 @@
 	<?php echo CHtml::encode($data->created_by); ?>
 	<br />
 
+	<b><?php echo CHtml::encode($data->getAttributeLabel('receiptionist_id')); ?>:</b>
+	<?php echo CHtml::encode($data->receiptionist_id); ?>
+	<br />
+
 	<b><?php echo CHtml::encode($data->getAttributeLabel('status')); ?>:</b>
 	<?php echo CHtml::encode($data->status); ?>
 	<br />

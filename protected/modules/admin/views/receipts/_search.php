@@ -57,6 +57,11 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->label($model,'receiptionist_id'); ?>
+		<?php echo $form->textField($model,'receiptionist_id',array('size'=>11,'maxlength'=>11)); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->label($model,'status'); ?>
 		<?php echo $form->textField($model,'status'); ?>
 	</div>

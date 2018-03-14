@@ -13,6 +13,7 @@
  * @property string $description
  * @property string $created_date
  * @property string $created_by
+ * @property string $receiptionist_id
  * @property integer $status
  */
 class Receipts extends CActiveRecord
@@ -45,11 +46,11 @@ class Receipts extends CActiveRecord
 		return array(
 			array('detail_id, process_date, created_date, created_by', 'required'),
 			array('need_approve, customer_confirm, status', 'numerical', 'integerOnly'=>true),
-			array('detail_id, discount, created_by', 'length', 'max'=>11),
+			array('detail_id, discount, created_by, receiptionist_id', 'length', 'max'=>11),
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, detail_id, process_date, discount, need_approve, customer_confirm, description, created_date, created_by, status', 'safe', 'on'=>'search'),
+			array('id, detail_id, process_date, discount, need_approve, customer_confirm, description, created_date, created_by, receiptionist_id, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -90,6 +91,7 @@ class Receipts extends CActiveRecord
 			'description' => DomainConst::CONTENT00062,
 			'created_date' => DomainConst::CONTENT00010,
 			'created_by' => DomainConst::CONTENT00054,
+			'receiptionist_id' => DomainConst::CONTENT00246,
 			'status' => DomainConst::CONTENT00026,
 		);
 	}
@@ -114,6 +116,7 @@ class Receipts extends CActiveRecord
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('created_date',$this->created_date,true);
 		$criteria->compare('created_by',$this->created_by,true);
+		$criteria->compare('receiptionist_id',$this->receiptionist_id,true);
 		$criteria->compare('status',$this->status);
 
 		return new CActiveDataProvider($this, array(
@@ -130,6 +133,12 @@ class Receipts extends CActiveRecord
      */
     public function beforeSave() {
         $userId = isset(Yii::app()->user) ? Yii::app()->user->id : '';
+        
+        // Format start date value
+        $date = $this->process_date;
+        $this->process_date = CommonProcess::convertDateTimeToMySqlFormat(
+                $date, DomainConst::DATE_FORMAT_3);
+        
         if ($this->isNewRecord) {   // Add
             // Handle created by
             if (empty($this->created_by)) {

@@ -64,6 +64,12 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'receiptionist_id'); ?>
+		<?php echo $form->textField($model,'receiptionist_id',array('size'=>11,'maxlength'=>11)); ?>
+		<?php echo $form->error($model,'receiptionist_id'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'status'); ?>
 		<?php echo $form->textField($model,'status'); ?>
 		<?php echo $form->error($model,'status'); ?>

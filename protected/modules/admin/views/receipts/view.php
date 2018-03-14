@@ -30,6 +30,7 @@ $this->menu=array(
 		'description',
 		'created_date',
 		'created_by',
+		'receiptionist_id',
 		'status',
 	),
 )); ?>
