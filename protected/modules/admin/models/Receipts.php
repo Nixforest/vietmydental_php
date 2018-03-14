@@ -18,6 +18,13 @@
  */
 class Receipts extends CActiveRecord
 {
+    //-----------------------------------------------------
+    // Constants
+    //-----------------------------------------------------
+    const STATUS_INACTIVE               = 0;
+    const STATUS_ACTIVE                 = 1;
+    const STATUS_DOCTOR                 = 2;
+    const STATUS_RECEIPTIONIST          = 3;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -72,6 +79,9 @@ class Receipts extends CActiveRecord
                     ),
                     'rUser' => array(
                         self::BELONGS_TO, 'Users', 'created_by'
+                    ),
+                    'rReceiptionist' => array(
+                        self::BELONGS_TO, 'Users', 'receiptionist_id'
                     )
 		);
 	}
@@ -162,5 +172,39 @@ class Receipts extends CActiveRecord
     public function connectAgent($agentId) {
         OneMany::deleteAllManyOldRecords($this->id, OneMany::TYPE_AGENT_RECEIPT);
         OneMany::insertOne($agentId, $this->id, OneMany::TYPE_AGENT_RECEIPT);
+    }
+    
+    /**
+     * Set status base on created user role
+     * @param String $roleName Name of role (can empty)
+     */
+    public function setStatusByCreatedUserRole($roleName) {
+        switch ($roleName) {
+            case Roles::ROLE_DOCTOR:
+                $this->status = self::STATUS_DOCTOR;
+                break;
+            case Roles::ROLE_RECEPTIONIST:
+                $this->status = self::STATUS_RECEIPTIONIST;
+                break;
+            default:
+                break;
+        }
+        $this->status = self::STATUS_ACTIVE;
+    }
+
+    //-----------------------------------------------------
+    // Static methods
+    //-----------------------------------------------------
+    /**
+     * Get list status of treatment schedule detail object
+     * @return Array
+     */
+    public static function getStatus() {
+        return array(
+            self::STATUS_INACTIVE       => DomainConst::CONTENT00028,
+            self::STATUS_ACTIVE         => DomainConst::CONTENT00027,
+            self::STATUS_DOCTOR         => DomainConst::CONTENT00247,
+            self::STATUS_RECEIPTIONIST  => DomainConst::CONTENT00248,
+        );
     }
 }

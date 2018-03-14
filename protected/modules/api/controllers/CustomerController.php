@@ -1005,6 +1005,9 @@ class CustomerController extends APIController
         $model->created_by          = $mUser->id;
         $model->created_date        = CommonProcess::getCurrentDateTime();
         $model->receiptionist_id    = $root->receiptionist_id;
+        if (isset($mUser->rRole)) {
+            $model->setStatusByCreatedUserRole($mUser->rRole->role_name);
+        }
         
         // Handle agent
         $model->connectAgent($mUser->getAgentId());

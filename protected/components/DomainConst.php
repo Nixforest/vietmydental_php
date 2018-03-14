@@ -1170,4 +1170,6 @@ class DomainConst {
     const CONTENT00244  = 'Khách hàng xác nhận';
     const CONTENT00245  = 'Tạo phiếu thu thành công';
     const CONTENT00246  = 'Người thu tiền';
+    const CONTENT00247  = 'Bác sĩ xuất phiếu thu';
+    const CONTENT00248  = 'Lễ tân xuất phiếu thu';
 }
