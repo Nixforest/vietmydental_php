@@ -60,6 +60,7 @@ class MoneyAccount extends BaseActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
                     'rOwner' => array(self::BELONGS_TO, 'Users', 'owner_id'),
+                    'rMoney' => array(self::HAS_MANY, 'Money', 'account_id'),
 		);
 	}
 

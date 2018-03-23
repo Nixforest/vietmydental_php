@@ -51,7 +51,12 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'value'=> 'isset($data->rOwner) ? $data->rOwner->username : ""',
                     'filter'=> Users::loadItems(true),
                 ),
-		'balance',
+//		'balance',
+//                array(
+//                    'name'=>'balance',
+//                    'htmlOptions' => array('style' => 'text-align:center;'),
+//                    'value'=> '$data->getBalance()',
+//		),
 		'created_date',
                 array(
                     'name'=>'status',

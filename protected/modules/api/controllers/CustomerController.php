@@ -75,8 +75,16 @@ class CustomerController extends APIController
     const ITEM_DESCRIPTION                  = '31';
     /** Item id: Time id */
     const ITEM_TIME_ID                      = '32';
-    /** Item id: Time id */
+    /** Item id: Time */
     const ITEM_TIME                         = '33';
+    /** Item id: Receipt */
+    const ITEM_RECEIPT                      = '34';
+    /** Item id: Discount */
+    const ITEM_DISCOUNT                     = '35';
+    /** Item id: Need approve */
+    const ITEM_NEED_APPROVE                 = '36';
+    /** Item id: Customer confirmed */
+    const ITEM_CUSTOMER_CONFIRMED           = '37';
     
     
     /**
@@ -1015,10 +1023,10 @@ class CustomerController extends APIController
         if ($model->save()) {
             $result = ApiModule::$defaultSuccessResponse;
             $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00245;
-            ApiModule::sendResponse($result, $this);
-        }
-        
-        // Finnaly send failed response with error detail
+            $result[DomainConst::KEY_DATA] = CommonProcess::createConfigJson(
+                    CustomerController::ITEM_RECEIPT,
+                    DomainConst::CONTENT00251,
+                    $model->getJsonInfo());   se with error detail
         $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00214
                 . '<br>'
                 . CommonProcess::json_encode_unicode($model->getErrors());

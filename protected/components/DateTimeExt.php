@@ -59,4 +59,18 @@ class DateTimeExt extends DateTime {
                     && ($currentD === CommonProcess::convertDateTime($date, $format, 'd')));
         return $retVal;
     }
+    
+    /**
+     * Get year by date
+     * @param String $date Date string
+     * @param Array $needMore $needMore['format']: can be: m, d...
+     * @return type
+     */
+    public static function getYearByDate($date, $needMore = array()) {
+        $dateObj = new DateTime($date);
+        if (isset($needMore['format'])) {
+            return $dateObj->format($needMore['format']);
+        }
+        return $dateObj->format('Y');
+    }
 }

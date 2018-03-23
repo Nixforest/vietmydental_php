@@ -265,6 +265,33 @@
 		<?php echo $form->error($model,'agent'); ?>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-6">
+                <?php echo $form->labelEx($model, 'img_avatar'); ?>
+                <div class="row tb_file">
+                    <div class="float_l">
+                        <div>
+                        <a href="javascript:void(0);" class="text_under_none item_b" style="line-height:25px" onclick="fnBuildRowFile(this);">
+                            <img style="float: left;margin-right:8px;" src="<?php echo Yii::app()->theme->baseUrl;?>/img/add.png"> 
+                            Thêm Dòng
+                        </a>
+                    </div>
+                        <table>
+                            <tr>
+                                <th class="item_c">#</th>
+                                <th class="item_code item_c">
+                                    Cho phép <?php echo Files::ALLOW_DOCS_FILE_TYPE; ?>
+                                    <br>
+                                    Tên file không quá 100 ký tự
+                                </th>
+                                <th>Xoá</th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
 	<div class="row buttons">
             <div class="col-md-6">

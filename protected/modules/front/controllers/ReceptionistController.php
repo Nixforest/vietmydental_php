@@ -280,6 +280,15 @@ class ReceptionistController extends Controller {
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }
+    
+    /**
+     * Action handle test
+     */
+    public function actionTest() {
+        $this->render('test', array(
+            DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+        ));
+    }
 
     // Uncomment the following methods and override them if needed
 	/*

@@ -333,6 +333,12 @@ class TreatmentScheduleDetails extends BaseActiveRecord
         $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_DETAILS,
                 DomainConst::CONTENT00233,
                 $processArr);
+        if (isset($this->rReceipt)) {
+            $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_RECEIPT,
+                DomainConst::CONTENT00251,
+                $this->rReceipt->getJsonInfo());
+        }
+        
         return $info;
     }
     

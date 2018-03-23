@@ -615,6 +615,72 @@ class CommonProcess {
             '111111'
         );
     }
+    
+    /**
+     * Remove empty item from array
+     * @param Array $arr Array being checked
+     */
+    public static function removeEmptyItemFromArray(&$arr) {
+        foreach ($arr as $key => $value) {
+            if (is_null($value)) {
+                unset($arr[$key]);
+            }
+        }
+    }
+    
+    /**
+     * Get max file size
+     * @return Int
+     */
+    public static function getMaxFileSize() {
+        return 10 * 1024 * 1000;
+    }
+    
+    /**
+     * Get min file size
+     * @return Int
+     */
+    public static function getMinFileSize() {
+        return 2 * 1024;
+    }
+    
+    /**
+     * Make slug from text
+     * @param String $text Text value
+     * @return string
+     */
+    public static function slugify($text) {
+        // replace non letter or digits by -
+        $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
+
+        // trim
+        $text = trim($text, '-');
+
+        // transliterate
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+        // lowercase
+        $text = strtolower($text);
+
+        // remove unwanted characters
+        $text = preg_replace('~[^-\w]+~', '', $text);
+
+        if (empty($text)) {
+            return 'n-a';
+        }
+
+        return $text;
+    }
+    
+    /**
+     * Echo test string
+     * @param String $message Message
+     * @param String $data Data
+     */
+    public static function echoTest($message, $data) {
+        echo '<b>' . $message . '</b>' . '<i>' . $data . '</i>';
+        echo '<br/>';
+    }
 
     /**
      * Print to show value of variable

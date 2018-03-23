@@ -116,4 +116,45 @@ class BaseActiveRecord extends CActiveRecord {
         ));
         return !empty($data->getData());
     }
+    
+    /**
+     * Check model
+     * @param String $className Name of class
+     * @param String $moduleName Name of module
+     * @return Model object
+     * @throws CHttpException
+     */
+    public static function checkModel($className, $moduleName) {
+        $path = DirectoryHandler::getRootPath() . "/protected/$moduleName/models/$className.php";
+        if (!is_file($path)) {
+            $cUid = Yii::app()->user->id;
+            Yii::log("Class $ClassName Uid : $cUid Lỗi model không tồn tại. Important to review this error. User có thể đã chỉnh URL");
+            throw new CHttpException(404, 'The requested page does not exist.');
+        }
+        return $model = call_user_func(array($className, 'model'));
+    }
+    
+    /**
+     * Load model by class name
+     * @param type $id
+     * @param type $className
+     * @param type $moduleName
+     * @return type
+     * @throws CHttpException
+     */
+    public static function loadModelByClass($id, $className, $moduleName) {
+        try {
+            $modelObj = self::checkModel($className, $moduleName);
+            $model = $modelObj->findByPk($id);
+            if ($model === NULL) {
+                $cUid = Yii::app()->user->id;
+                Yii::log("Class $ClassName Uid : $cUid Model Bị NULL trong hàm loadModelByClass dùng hàm call_user_func.");
+                throw new CHttpException(404, 'The requested page does not exist.');
+            }
+            return $model;
+        } catch (Exception $exc) {
+            Yii::log("Exception " . print_r($e, true), 'error');
+            throw new CHttpException("Exception " . print_r($e, true));
+        }
+        }
 }

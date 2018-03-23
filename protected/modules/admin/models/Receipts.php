@@ -98,7 +98,7 @@ class Receipts extends CActiveRecord
 			'discount' => DomainConst::CONTENT00242,
 			'need_approve' => DomainConst::CONTENT00243,
 			'customer_confirm' => DomainConst::CONTENT00244,
-			'description' => DomainConst::CONTENT00062,
+			'description' => DomainConst::CONTENT00091,
 			'created_date' => DomainConst::CONTENT00010,
 			'created_by' => DomainConst::CONTENT00054,
 			'receiptionist_id' => DomainConst::CONTENT00246,
@@ -190,6 +190,32 @@ class Receipts extends CActiveRecord
                 break;
         }
         $this->status = self::STATUS_ACTIVE;
+    }
+    
+    public function getJsonInfo() {
+        $info = array();
+        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_START_DATE,
+                DomainConst::CONTENT00241,
+                CommonProcess::convertDateTime($this->process_date,
+                        DomainConst::DATE_FORMAT_4,
+                        DomainConst::DATE_FORMAT_3));
+        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_DISCOUNT,
+                DomainConst::CONTENT00242,
+                $this->discount);
+        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_NEED_APPROVE,
+                DomainConst::CONTENT00243,
+                $this->need_approve);
+        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_CUSTOMER_CONFIRMED,
+                DomainConst::CONTENT00244,
+                $this->customer_confirm);
+        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_DESCRIPTION,
+                DomainConst::CONTENT00091,
+                $this->description);
+        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_CAN_UPDATE,
+                DomainConst::CONTENT00232,
+                $this->status != self::STATUS_RECEIPTIONIST
+                ? DomainConst::NUMBER_ONE_VALUE : DomainConst::NUMBER_ZERO_VALUE);
+        return $info;
     }
 
     //-----------------------------------------------------

@@ -1172,4 +1172,8 @@ class DomainConst {
     const CONTENT00246  = 'Người thu tiền';
     const CONTENT00247  = 'Bác sĩ xuất phiếu thu';
     const CONTENT00248  = 'Lễ tân xuất phiếu thu';
+    const CONTENT00249  = 'File không phải là ảnh, không hợp lệ, chỉ cho phép JPG, JPEG, PNG. FILE IMAGE not image Invalid request ';
+    const CONTENT00250  = 'Tên filtoáne không được quá 100 ký tự, vui lòng đặt tên ngắn hơn';
+    const CONTENT00251  = 'Thanh toán';
+    const CONTENT00252  = 'Hình ảnh';
 }

@@ -167,5 +167,33 @@ class Controller extends CController {
         $aActionAllowed = array_map('strtolower', $aActionAllowed);
         return in_array(strtolower($action), $aActionAllowed);
     }
+    
+    public function mailsend($to, $from, $from_name, $subject, $message, $cc = array(), $attachment = array()) {
+        $mail = Yii::app()->Smtpmail;
+        $mail->SetFrom($from, $from_name);
+        $mail->Subject = $subject;
+        $mail->MsgHTML($this->mailTemplate($message));
+        $mail->AddAddress($to, "");
+
+        // Add CC
+        if (!empty($cc)) {
+            foreach ($cc as $email) {
+                $mail->AddCC($email);
+            }
+        }
+
+        // Add Attchments
+        if (!empty($attachment)) {
+            foreach ($attachment as $attach) {
+                $mail->AddAttachment($attach);
+            }
+        }
+
+        if (!$mail->Send()) {
+            return false; // Fail echo "Mailer Error: " . $mail->ErrorInfo;
+        } else {
+            return true; // Success
+        }
+    }
 
 }

@@ -37,6 +37,8 @@ class Users extends BaseActiveRecord
 {
     public $password_confirm, $currentpassword, $newpassword; /* for change pass in admin */
     public $agent;
+    /** Image avatar */
+    public $img_avatar;
     
     //-----------------------------------------------------
     // Autocomplete fields
@@ -156,6 +158,7 @@ class Users extends BaseActiveRecord
 			'status' => DomainConst::CONTENT00026,
 			'gender' => DomainConst::CONTENT00047,
 			'phone' => DomainConst::CONTENT00048,
+                        'img_avatar' => DomainConst::CONTENT00252,
 			'verify_code' => 'Verify Code',
 			'slug' => 'Slug',
 			'address_temp' => 'Address Temp',
@@ -523,6 +526,11 @@ class Users extends BaseActiveRecord
         return $retVal;
     }
     
+    /**
+     * Get array users by array id
+     * @param Array $aId    Array id
+     * @return type
+     */
     public static function getArrayModelByArrayId($aId) {
         $criteria = new CDbCriteria();
         if (is_array($aId)) {
