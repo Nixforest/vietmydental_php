@@ -234,6 +234,17 @@ class TreatmentScheduleDetails extends BaseActiveRecord
     }
     
     /**
+     * Get customer model
+     * @return Customer model, or NULL
+     */
+    public function getCustomerModel() {
+        if (isset($this->rSchedule)) {
+            return $this->rSchedule->getCustomerModel();
+        }
+        return NULL;
+    }
+    
+    /**
      * Get teeth name
      * @return String Teeth name
      */
@@ -253,11 +264,19 @@ class TreatmentScheduleDetails extends BaseActiveRecord
     }
     
     /**
-     * Get teeth name
-     * @return String Teeth name
+     * Get treatment name
+     * @return String Treatment name
      */
     public function getTreatment() {
         return isset($this->rTreatmentType) ? $this->rTreatmentType->name : '';
+    }
+    
+    /**
+     * Get treatment price
+     * @return String Treatment price
+     */
+    public function getTreatmentPrice() {
+        return isset($this->rTreatmentType) ? $this->rTreatmentType->price : DomainConst::NUMBER_ZERO_VALUE;
     }
     
     /**

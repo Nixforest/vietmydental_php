@@ -276,7 +276,11 @@ class ReceptionistController extends Controller {
      * Action handle receipt
      */
     public function actionReceipt() {
+        $models = Receipts::getReceiptsToday();
+//        CommonProcess::dumpVariable(count($models));
+//        Yii::log(count($models), "info");
         $this->render('receipt', array(
+            'models' => $models, 
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }

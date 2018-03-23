@@ -192,6 +192,86 @@ class Receipts extends CActiveRecord
         $this->status = self::STATUS_ACTIVE;
     }
     
+    /**
+     * Get customer model
+     * @return Customer model, or NULL
+     */
+    public function getCustomer() {
+        if (isset($this->rTreatmentScheduleDetail)) {
+            return $this->rTreatmentScheduleDetail->getCustomerModel();
+        }
+        return NULL;
+    }
+    
+    /**
+     * Get treatment type
+     * @return Treatment type model, or NULL
+     */
+    public function getTreatmentType() {
+        if (isset($this->rTreatmentScheduleDetail)) {
+            return $this->rTreatmentScheduleDetail->rTreatmentType;
+        }
+        return NULL;
+    }
+    
+    /**
+     * Get ajax information
+     * @return string
+     */
+    public function getAjaxInfo() {
+        if (isset($this->rTreatmentScheduleDetail)) {
+            $teeth = $this->rTreatmentScheduleDetail->getTeeth();
+            $diagnosis = $this->rTreatmentScheduleDetail->getDiagnosis();
+            $treatmentType = $this->rTreatmentScheduleDetail->getTreatment();
+            $money = $this->rTreatmentScheduleDetail->getTreatmentPrice();
+        }
+        $rightContent = '<div class="info-result">';
+        $rightContent .=    '<div class="title-2">' . DomainConst::CONTENT00174 . '</div>';
+        $rightContent .=    '<div class="item-search">';
+        $rightContent .=        '<table>';
+        $rightContent .=            '<tr>';
+        $rightContent .=                '<td>' . DomainConst::CONTENT00145 . ': ' . '<b>' . $teeth . '<b>' . '</td>';
+        $rightContent .=            '</tr>';
+        $rightContent .=            '<tr>';
+        $rightContent .=                '<td>' . DomainConst::CONTENT00231 . ': ' . '<b>' . $diagnosis . '<b>' . '</td>';
+        $rightContent .=            '</tr>';
+        $rightContent .=            '<tr>';
+        $rightContent .=                '<td>' . DomainConst::CONTENT00128 . ': ' . '<b>' . $treatmentType . '<b>' . '</td>';
+        $rightContent .=            '</tr>';
+//        $pathological = '';
+//        if (isset($this->rMedicalRecord)) {
+//            $pathological = $this->rMedicalRecord->generateMedicalHistory(", ");
+//            Settings::saveAjaxTempValue($this->rMedicalRecord->id);
+//        }
+//        if (!empty($pathological)) {
+//            $rightContent .=        '<tr>';
+//            $rightContent .=            '<td colspan="2">' . DomainConst::CONTENT00137 . ': ' . '<b>' . $pathological . '<b>' . '</td>';
+//            $rightContent .=        '</tr>';
+//        }                
+        $rightContent .=        '</table>';
+        $rightContent .=    '</div>';
+        $rightContent .=    '<div class="title-2">' . DomainConst::CONTENT00251 . '</div>';
+        $rightContent .=    '<div class="item-search">';                
+//        if (isset($this->rMedicalRecord) && isset($this->rMedicalRecord->rTreatmentSchedule)) {
+//            $i = count($this->rMedicalRecord->rTreatmentSchedule);
+//            foreach ($this->rMedicalRecord->rTreatmentSchedule as $schedule) {
+//                if ($schedule->rPathological) {
+//                }
+//                $i--;
+//            }
+//        }
+        $rightContent .= '<p>' . DomainConst::CONTENT00254 . ': ' . '<b>' . CommonProcess::formatCurrency($money) . '<b></p>';
+        $rightContent .= '<p>' . DomainConst::CONTENT00257 . ': ' . '<b>' . CommonProcess::formatCurrency($this->discount) . '<b></p>';
+        $rightContent .= '<p>' . DomainConst::CONTENT00258 . ': ' . '<b>' . CommonProcess::formatCurrency($money - $this->discount) . '<b></p>';
+        $rightContent .=    '</div>';
+        $rightContent .= '</div>';
+        return $rightContent;
+    }
+    
+    /**
+     * Get json information
+     * @return type String json
+     */
     public function getJsonInfo() {
         $info = array();
         $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_START_DATE,
@@ -217,6 +297,10 @@ class Receipts extends CActiveRecord
                 ? DomainConst::NUMBER_ONE_VALUE : DomainConst::NUMBER_ZERO_VALUE);
         return $info;
     }
+    
+    public function getCurrentStatus() {
+        return self::getStatus()[$this->status];
+    }
 
     //-----------------------------------------------------
     // Static methods
@@ -232,5 +316,22 @@ class Receipts extends CActiveRecord
             self::STATUS_DOCTOR         => DomainConst::CONTENT00247,
             self::STATUS_RECEIPTIONIST  => DomainConst::CONTENT00248,
         );
+    }
+    
+    /**
+     * Get list receipts on today
+     * @return array List receipts object
+     */
+    public static function getReceiptsToday() {
+        $retVal = array();
+        $models = self::model()->findAll();
+        foreach ($models as $model) {
+            if ($model->status != self::STATUS_INACTIVE
+                    && DateTimeExt::isToday($model->process_date, DomainConst::DATE_FORMAT_4)) {
+                $retVal[] = $model;
+            }
+        }
+        
+        return $retVal;
     }
 }

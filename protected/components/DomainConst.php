@@ -1173,7 +1173,13 @@ class DomainConst {
     const CONTENT00247  = 'Bác sĩ xuất phiếu thu';
     const CONTENT00248  = 'Lễ tân xuất phiếu thu';
     const CONTENT00249  = 'File không phải là ảnh, không hợp lệ, chỉ cho phép JPG, JPEG, PNG. FILE IMAGE not image Invalid request ';
-    const CONTENT00250  = 'Tên filtoáne không được quá 100 ký tự, vui lòng đặt tên ngắn hơn';
+    const CONTENT00250  = 'Tên file không được quá 100 ký tự, vui lòng đặt tên ngắn hơn';
     const CONTENT00251  = 'Thanh toán';
     const CONTENT00252  = 'Hình ảnh';
+    const CONTENT00253  = 'Danh sách phiếu thu';
+    const CONTENT00254  = 'Tổng cộng';
+    const CONTENT00255  = 'Dịch vụ';
+    const CONTENT00256  = 'Thông tin thanh toán';
+    const CONTENT00257  = 'Giảm';
+    const CONTENT00258  = 'Thành tiền';
 }

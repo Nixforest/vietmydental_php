@@ -297,6 +297,17 @@ class TreatmentSchedules extends BaseActiveRecord
         }
         return '';
     }
+    
+    /**
+     * Get customer model
+     * @return Customer model, or NULL
+     */
+    public function getCustomerModel() {
+        if (isset($this->rMedicalRecord)) {
+            return $this->rMedicalRecord->rCustomer;
+        }
+        return NULL;
+    }
 
     //-----------------------------------------------------
     // Static methods

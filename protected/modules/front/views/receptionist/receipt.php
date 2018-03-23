@@ -1,5 +1,6 @@
 <?php
 /* @var $this ReceptionistController */
+/* @var $model List receipts model */
 
 ?>
 <div class="form">
@@ -10,23 +11,48 @@
 )); ?>
     
 <div class="maincontent clearfix">
-<!--    <div class="left-page">
+    <div class="left-page">
         <div class="title-1">
-           Bộ lọc Tìm kiếm
+           <?php echo DomainConst::CONTENT00253; ?>
         </div>
         <div class="info-content">
-            <div class="box-search">
-                <form>
-                    <span class="icon-s"></span>
-                    <input type="text" class="form-control text-change"  placeholder="Tìm Kiếm Bệnh Nhân"
-                           id="customer_find">
-                </form>
+            <div id="left-content">
+                <div class="scroll-table">
+                    <table id="customer-info">
+                        <thead>
+                            <tr>
+                                <th><?php echo DomainConst::CONTENT00100; ?></th>
+                                <th><?php echo DomainConst::CONTENT00170; ?></th>
+                                <th><?php echo DomainConst::CONTENT00255; ?></th>
+                                <th><?php echo DomainConst::CONTENT00254; ?></th>
+                                <th><?php echo DomainConst::CONTENT00026; ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($models as $model) :?>
+                                <?php
+                                $mCustomer = $model->getCustomer();
+                                $mTreatmentType = $model->getTreatmentType();
+                                ?>
+                                <?php // if (isset($mCustomer) && isset($mTreatmentType)) :?>
+                                    <tr id="<?php echo $model->id; ?>" class="customer-info-tr">
+                                        <td><?php echo $mCustomer->name ?></td>
+                                        <td><?php echo $mCustomer->phone ?></td>
+                                        <td><?php echo $mTreatmentType->name; ?></td>
+                                        <td><?php echo CommonProcess::formatCurrency($mTreatmentType->price - $model->discount); ?></td>
+                                        <td><?php echo $model->getCurrentStatus(); ?></td>
+                                    </tr>
+                                <?php // endif;?>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>-->
+    </div>
     <div class="right-page">
         <div class="title-1" id="right_page_title">
-            Danh sách Bệnh nhân có sinh nhật vào hôm nay
+            <?php echo DomainConst::CONTENT00256; ?>
         </div>
         <div class="info-content">
             <div id="right-content">
@@ -90,10 +116,10 @@
     });
     $("body").on("click", "#customer-info tbody tr", function() {
         fnShowCustomerInfo(
-                "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/getCustomerInfo'); ?>",
+                "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/getReceiptInfo'); ?>",
                 "#right-content",
                 "#right_page_title",
-                "<?php echo DomainConst::CONTENT00172 ?>",
+                "<?php echo DomainConst::CONTENT00256 ?>",
                 $(this).attr('id'));
 //        alert($(this).attr('id'));
     });
