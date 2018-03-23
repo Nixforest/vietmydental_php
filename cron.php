@@ -11,5 +11,5 @@ defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL', 3);
 require_once($yii);
 // creating and running console application
 Yii::createConsoleApplication($config);
-//Settings::applySetting(); //override settings by values from database
+Settings::applySetting(); //override settings by values from database
 Yii::app()->run();

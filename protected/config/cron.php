@@ -40,6 +40,31 @@ return array(
 
         // database settings are configured in database.php
         'db'=>require(dirname(__FILE__).'/database.php'),
+
+        'mail' => array(
+            'class' => 'application.extensions.yii-mail.YiiMail',
+            'transportType'=>'smtp', /// case sensitive!
+            'transportOptions'=>array(
+                'host'=>'mail.spj.vn',
+                'username'=>'abc',
+                'password'=>'!%456!!19*&CaRe',
+                'port'=>'587',
+                'encryption'=>'tls',
+                'timeout'=>'15',
+            ),
+            'viewPath' => 'application.mail',
+            'logging' => true,
+            'dryRun' => false
+        ),
+        'Smtpmail' => array(
+            'class' => 'application.extensions.phpmailer.PHPMailer',
+            'Host' => "mail.spj.vn",
+            'Username' => 'nguyenpt@spj.vn',
+            'Password' => '593d74ITquest*',
+            'Mailer' => 'smtp',
+            'Port' => 587,
+            'SMTPAuth' => true,
+        ),
     ),
 );
 

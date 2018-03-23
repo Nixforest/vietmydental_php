@@ -58,8 +58,11 @@ class EmailHandler {
             $swiftAttachment = Swift_Attachment::fromPath($data[DomainConst::KEY_ATTACHMENT]);
             $message->attach($swiftAttachment);
         }
-        
+//        CommonProcess::dumpVariable($message->from);
+//        CommonProcess::dumpVariable(Yii::app()->mail->transportOptions[DomainConst::KEY_HOST]);
+//        CommonProcess::dumpVariable(Yii::app()->mail->class);
         return Yii::app()->mail->send($message);
+//        return Yii::app()->mail->sendSimple('nguyenpt@spj.vn', 'nixforest@live.com', 'Subject', 'Body');
     }
     
     /**
@@ -159,4 +162,33 @@ class EmailHandler {
         );
         return self::send($data);
     }
+    
+    public static function mailsend($to, $from, $from_name, $subject, $message, $cc = array(), $attachment = array()) {
+        $mail = Yii::app()->Smtpmail;
+        $mail->SetFrom($from, $from_name);
+        $mail->Subject = $subject;
+//        $mail->MsgHTML($this->mailTemplate($message));
+        $mail->AddAddress($to, "");
+
+        // Add CC
+        if (!empty($cc)) {
+            foreach ($cc as $email) {
+                $mail->AddCC($email);
+            }
+        }
+
+        // Add Attchments
+        if (!empty($attachment)) {
+            foreach ($attachment as $attach) {
+                $mail->AddAttachment($attach);
+            }
+        }
+
+        if (!$mail->Send()) {
+            return false; // Fail echo "Mailer Error: " . $mail->ErrorInfo;
+        } else {
+            return true; // Success
+        }
+    }
+
 }
