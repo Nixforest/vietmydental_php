@@ -28,7 +28,7 @@ class Controller extends CController {
      * List actions controler can access
      * @var type 
      */
-    protected $listActionsCanAccess;
+    protected $listActionsCanAccess = array();
 
     /**
      * Description of controller
@@ -196,4 +196,20 @@ class Controller extends CController {
         }
     }
 
+    
+    /**
+     * Handle create action buttons
+     * @param type $buttons
+     * @return string
+     */
+    public function createActionButtons($buttons = array('view', 'update', 'delete')) {
+        $retVal = '';
+//        CommonProcess::dumpVariable(count($buttons));
+        foreach ($buttons as $key => $button) {
+//            if (AdminController::isAccessAction($button, $this->listActionsCanAccess)) {
+                $retVal .= '&nbsp;&nbsp;{' . $button . '}';
+//            }
+        }
+        return $retVal;
+    }
 }

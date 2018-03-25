@@ -377,23 +377,23 @@ class AjaxController extends AdminController
         
     }
     
-    
-    
     /**
      * Get receipt information.
      */
     public function actionGetReceiptInfo() {
         $ajax = filter_input(INPUT_GET, AjaxController::KEY_AJAX);
 	if ($ajax == 1) {
-            $id = filter_input(INPUT_GET, AjaxController::KEY_TERM);
+            $id = $_GET[AjaxController::KEY_TERM][0];
             $model = Receipts::model()->findByPk($id);
+            $rightContent = '';
+            $infoSchedule = '';
             if ($model) {
                 $rightContent = $model->getAjaxInfo();
                 $infoSchedule = '';
             }
             $json = CJavaScript::jsonEncode(array(
                 'rightContent'  => $rightContent,
-                'infoSchedule' => $infoSchedule,
+                'infoSchedule' => $infoSchedule,x
             ));
             echo $json;
             Yii::app()->end();

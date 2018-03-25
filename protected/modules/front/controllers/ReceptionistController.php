@@ -276,13 +276,33 @@ class ReceptionistController extends Controller {
      * Action handle receipt
      */
     public function actionReceipt() {
-        $models = Receipts::getReceiptsToday();
-//        CommonProcess::dumpVariable(count($models));
-//        Yii::log(count($models), "info");
+        $arrModels = Receipts::getReceiptsToday();
+        $models=new Receipts('search');
+	$models->unsetAttributes();  // clear any default values
+        $models->process_date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
+        if(isset($_GET['Receipts']))
+			$models->attributes=$_GET['Receipts'];
         $this->render('receipt', array(
             'models' => $models, 
+            'arrModels' => $arrModels, 
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
+    }
+    
+    /**
+     * Update receipt
+     * @param String $id Id of receipt
+     */
+    public function actionUpdate($id) {
+        $model = Receipts::model()->findByPk($id);
+        if ($model) {
+            $model->status = Receipts::STATUS_RECEIPTIONIST;
+            $model->save();
+        }
+        // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+        if (!isset($_GET['ajax'])) {
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('receipt'));
+        }
     }
     
     /**

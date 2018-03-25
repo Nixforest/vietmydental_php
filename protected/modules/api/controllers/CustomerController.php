@@ -1013,9 +1013,10 @@ class CustomerController extends APIController
         $model->created_by          = $mUser->id;
         $model->created_date        = CommonProcess::getCurrentDateTime();
         $model->receiptionist_id    = $root->receiptionist_id;
-        if (isset($mUser->rRole)) {
-            $model->setStatusByCreatedUserRole($mUser->rRole->role_name);
-        }
+//        if (isset($mUser->rRole)) {
+//            $model->setStatusByCreatedUserRole($mUser->rRole->role_name);
+//        }
+        $model->status = Receipts::STATUS_DOCTOR;
         
         // Handle agent
         $model->connectAgent($mUser->getAgentId());
@@ -1026,7 +1027,11 @@ class CustomerController extends APIController
             $result[DomainConst::KEY_DATA] = CommonProcess::createConfigJson(
                     CustomerController::ITEM_RECEIPT,
                     DomainConst::CONTENT00251,
-                    $model->getJsonInfo());   se with error detail
+                    $model->getJsonInfo());
+            ApiModule::sendResponse($result, $this);
+        }
+        
+        // Finnaly send failed response with error detail
         $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00214
                 . '<br>'
                 . CommonProcess::json_encode_unicode($model->getErrors());

@@ -143,12 +143,16 @@ class Receipts extends CActiveRecord
      */
     public function beforeSave() {
         $userId = isset(Yii::app()->user) ? Yii::app()->user->id : '';
-        
+//        CommonProcess::dumpVariable($this->process_date);
         // Format start date value
         $date = $this->process_date;
         $this->process_date = CommonProcess::convertDateTimeToMySqlFormat(
                 $date, DomainConst::DATE_FORMAT_3);
         
+        if (empty($this->process_date)) {
+            $this->process_date = CommonProcess::convertDateTimeToMySqlFormat(
+                            $date, DomainConst::DATE_FORMAT_4);
+        }
         if ($this->isNewRecord) {   // Add
             // Handle created by
             if (empty($this->created_by)) {
@@ -165,6 +169,14 @@ class Receipts extends CActiveRecord
     //-----------------------------------------------------
     // Utility methods
     //-----------------------------------------------------
+    public function canUpdate() {
+        if ($this->status == self::STATUS_RECEIPTIONIST) {
+            return false;
+        }
+        
+        return true;
+    }
+
     /**
      * Connect receipt with current agent
      * @param String $agentId Id of agent
@@ -230,13 +242,13 @@ class Receipts extends CActiveRecord
         $rightContent .=    '<div class="item-search">';
         $rightContent .=        '<table>';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00145 . ': ' . '<b>' . $teeth . '<b>' . '</td>';
+        $rightContent .=                '<td>' . DomainConst::CONTENT00145 . ': ' . '<b>' . $teeth . '</b>' . '</td>';
         $rightContent .=            '</tr>';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00231 . ': ' . '<b>' . $diagnosis . '<b>' . '</td>';
+        $rightContent .=                '<td>' . DomainConst::CONTENT00231 . ': ' . '<b>' . $diagnosis . '</b>' . '</td>';
         $rightContent .=            '</tr>';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00128 . ': ' . '<b>' . $treatmentType . '<b>' . '</td>';
+        $rightContent .=                '<td>' . DomainConst::CONTENT00128 . ': ' . '<b>' . $treatmentType . '</b>' . '</td>';
         $rightContent .=            '</tr>';
 //        $pathological = '';
 //        if (isset($this->rMedicalRecord)) {
@@ -260,9 +272,9 @@ class Receipts extends CActiveRecord
 //                $i--;
 //            }
 //        }
-        $rightContent .= '<p>' . DomainConst::CONTENT00254 . ': ' . '<b>' . CommonProcess::formatCurrency($money) . '<b></p>';
-        $rightContent .= '<p>' . DomainConst::CONTENT00257 . ': ' . '<b>' . CommonProcess::formatCurrency($this->discount) . '<b></p>';
-        $rightContent .= '<p>' . DomainConst::CONTENT00258 . ': ' . '<b>' . CommonProcess::formatCurrency($money - $this->discount) . '<b></p>';
+        $rightContent .= '<p>' . DomainConst::CONTENT00254 . ': ' . '<b>' . CommonProcess::formatCurrency($money) . '</b></p>';
+        $rightContent .= '<p>' . DomainConst::CONTENT00257 . ': ' . '<b>' . CommonProcess::formatCurrency($this->discount) . '</b></p>';
+        $rightContent .= '<p>' . DomainConst::CONTENT00258 . ': ' . '<b>' . CommonProcess::formatCurrency($money - $this->discount) . '</b></p>';
         $rightContent .=    '</div>';
         $rightContent .= '</div>';
         return $rightContent;

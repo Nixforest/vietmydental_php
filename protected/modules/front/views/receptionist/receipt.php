@@ -18,7 +18,7 @@
         <div class="info-content">
             <div id="left-content">
                 <div class="scroll-table">
-                    <table id="customer-info">
+                    <table id="customer-info" style="display: none;">
                         <thead>
                             <tr>
                                 <th><?php echo DomainConst::CONTENT00100; ?></th>
@@ -29,12 +29,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($models as $model) :?>
+                            <?php foreach ($arrModels as $model) :?>
                                 <?php
                                 $mCustomer = $model->getCustomer();
                                 $mTreatmentType = $model->getTreatmentType();
                                 ?>
-                                <?php // if (isset($mCustomer) && isset($mTreatmentType)) :?>
+                                <?php if (isset($mCustomer) && isset($mTreatmentType)) :?>
                                     <tr id="<?php echo $model->id; ?>" class="customer-info-tr">
                                         <td><?php echo $mCustomer->name ?></td>
                                         <td><?php echo $mCustomer->phone ?></td>
@@ -42,11 +42,70 @@
                                         <td><?php echo CommonProcess::formatCurrency($mTreatmentType->price - $model->discount); ?></td>
                                         <td><?php echo $model->getCurrentStatus(); ?></td>
                                     </tr>
-                                <?php // endif;?>
+                                <?php endif;?>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
+                <?php $this->widget('zii.widgets.grid.CGridView', array(
+                        'id'=>'receipts-grid',
+                        'dataProvider'=>$models->search(),
+//                        'filter'=>$models,
+                        'summaryText'=>'Đang hiển thị {start} - {end} trên {count} kết quả', 
+                        'selectableRows'=>1,
+                        'selectionChanged'=>'function(id){
+                                        fnShowCustomerInfo(
+                                        "' . Yii::app()->createAbsoluteUrl('admin/ajax/getReceiptInfo') . '",
+                                        "#right-content",
+                                        "#right_page_title",
+                                        "' . DomainConst::CONTENT00256 . '",
+                                        $.fn.yiiGridView.getSelection(id));
+                        }',
+                        'columns'=>array(
+                                array(
+                                    'header' => DomainConst::CONTENT00034,
+                                    'type' => 'raw',
+                                    'value' => '$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
+                                    'headerHtmlOptions' => array('width' => '30px','style' => 'text-align:center;'),
+                                    'htmlOptions' => array('style' => 'text-align:center;')
+                                ),
+                                array(
+                                    'name' => DomainConst::CONTENT00100,
+                                    'value' => '($data->getCustomer() !== NULL) ? $data->getCustomer()->name : ""',
+                                ),
+                                array(
+                                    'name' => DomainConst::CONTENT00170,
+                                    'value' => '($data->getCustomer() !== NULL) ? $data->getCustomer()->phone : ""',
+                                ),
+                                array(
+                                    'name' => DomainConst::CONTENT00255,
+                                    'value' => '($data->getTreatmentType() !== NULL) ? $data->getTreatmentType()->name : ""',
+                                ),
+                                array(
+                                    'name' => DomainConst::CONTENT00254,
+                                    'value' => '($data->getTreatmentType() !== NULL) ? CommonProcess::formatCurrency($data->getTreatmentType()->price - $data->discount) : ""',
+                                ),
+//                                'process_date',
+//                                'discount',
+//                                'need_approve',
+//                                'customer_confirm',
+//                                'receiptionist_id',
+//                                'status',
+//                                array(
+//                                        'class'=>'CButtonColumn',
+//                                ),
+                                array(
+                                    'header' => 'Actions',
+                                    'class'=>'CButtonColumn',
+                                    'template'=> $this->createActionButtons(['update']),
+                                    'buttons'=>array(
+                                        'update'=>array(
+                                            'visible'=> '$data->canUpdate()',
+                                        ),
+                                    ),
+                                ),
+                        ),
+                )); ?>
             </div>
         </div>
     </div>
