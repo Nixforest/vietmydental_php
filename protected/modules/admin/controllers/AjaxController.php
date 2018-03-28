@@ -242,6 +242,19 @@ class AjaxController extends AdminController
     }
     
     /**
+     * Find customer by record number
+     * @param String $keyword Keyword
+     * @return List medical record objects
+     */
+    private function findCustomerByRecordNumber($keyword) {
+        $criteria = new CDbCriteria();
+        $criteria->addCondition("t.record_number like '%$keyword%'");
+        $criteria->limit = 50;
+        $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
+        return MedicalRecords::model()->findAll($criteria);
+    }
+    
+    /**
      * Search customer for receptionist
      */
     public function actionSearchCustomerReception() {
@@ -251,8 +264,17 @@ class AjaxController extends AdminController
                 $criteria = new CDbCriteria();
                 $criteria->addCondition("t.name like '%$keyword%' or t.phone like '%$keyword%'");
                 $criteria->limit = 50;
-                $criteria->compare("t.status", DomainConst::DEFAULT_STATUS_ACTIVE);
+//                $criteria->compare("t.status", DomainConst::DEFAULT_STATUS_ACTIVE);
+                $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
                 $models = Customers::model()->findAll($criteria);
+                $medicalRecords = $this->findCustomerByRecordNumber($keyword);
+                foreach ($medicalRecords as $record) {
+                    if (isset($record->rCustomer)) {
+                        if (!in_array($record->rCustomer, $models)) {
+                            array_push($models, $record->rCustomer);
+                        }
+                    }
+                }
                 $retVal = '<div class="scroll-table">';
                 $infoSchedule = '';
                 if (count($models)) {
@@ -260,16 +282,20 @@ class AjaxController extends AdminController
                     $retVal .=      '<thead>';
                     $retVal .=          '<tr>';
                     $retVal .=          '<th>' . DomainConst::CONTENT00100 . '</th>';
-                    $retVal .=          '<th>' . DomainConst::CONTENT00170 . '</th>';
+                    $retVal .=          '<th>' . DomainConst::CONTENT00170 . '<br>' . DomainConst::CONTENT00136 . '</br>' . '</th>';
                     $retVal .=          '<th>' . DomainConst::CONTENT00101 . '</th>';
                     $retVal .=          '<th class="col-4">' . DomainConst::CONTENT00045 . '</th>';
                     $retVal .=          '</tr>';
                     $retVal .=      '</thead>';
                     $retVal .=      '<tbody>';
                     foreach ($models as $model) {
+                        $recordNumber = '';
+                        if (isset($model->rMedicalRecord)) {
+                            $recordNumber = $model->rMedicalRecord->record_number;
+                        }
                         $retVal .= '<tr id="' . $model->id . '" class="customer-info-tr">';
                         $retVal .= '<td>' . $model->name . '</td>';
-                        $retVal .= '<td>' . $model->phone . '</td>';
+                        $retVal .= '<td>' . $model->phone . '<br>' . $recordNumber . '</br>' . '</td>';
                         $retVal .= '<td>' . $model->date_of_birth . '</td>';
                         $retVal .= '<td>' . $model->address . '</td>';
                         $retVal .= '</tr>';

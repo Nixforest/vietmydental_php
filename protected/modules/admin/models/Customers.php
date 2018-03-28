@@ -392,6 +392,10 @@ class Customers extends BaseActiveRecord
      * @return string
      */
     public function getCustomerAjaxInfo() {
+        $recordNumber = '';
+        if (isset($this->rMedicalRecord)) {
+            $recordNumber = $this->rMedicalRecord->record_number;
+        }
         $rightContent = '<div class="info-result">';
         $rightContent .=    '<div class="title-2">' . DomainConst::CONTENT00173 . '</div>';
         $rightContent .=    '<div class="item-search">';
@@ -408,7 +412,8 @@ class Customers extends BaseActiveRecord
         $rightContent .=                '<td colspan="2">' . DomainConst::CONTENT00045 . ': ' . '<b>' . $this->getAddress() . '<b>' . '</td>';
         $rightContent .=            '</tr>';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td colspan="2">' . '<b>' . $this->getAgentName() . '<b>' . '</td>';
+        $rightContent .=                '<td>' . '<b>' . $this->getAgentName() . '<b>' . '</td>';
+        $rightContent .=                '<td>' . DomainConst::CONTENT00136 . ': ' . '<b>' . $recordNumber . '<b>' . '</td>';
         $rightContent .=            '</tr>';
         $pathological = '';
         if (isset($this->rMedicalRecord)) {
