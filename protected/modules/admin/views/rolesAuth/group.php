@@ -40,28 +40,31 @@ $form = $this->beginWidget('CActiveForm', array(
             </th>
         </tr>
         <?php foreach($aController[DomainConst::KEY_ACTIONS] as $keyAction=>$aAction): ?>
-        <?php
-            $checkBoxName = $controller_id . '[' . $keyAction . ']';
-            $checkBoxId = $controller_id . '_' . $keyAction;
-            ?>
-        <tr>
-            <td>
-                <input
-                name="<?php echo $checkBoxName ?>"
-                value="1"
-                type="checkbox"
-                id="<?php echo $checkBoxId ?>"
+            <?php if ((CommonProcess::isUserAdmin()
+                    || (!CommonProcess::isUserAdmin() && $keyAction != DomainConst::KEY_ACTION_DELETE))): ?>
                 <?php
-                    if (in_array($keyAction, $listAllowActions)) {
-                        echo 'checked="checked"';
-                    }
-                ?>
-                >
-                <label for="<?php echo $checkBoxId ?>" >
-                <?php echo $aAction[DomainConst::KEY_ALIAS] ?>
-            </label>
-            </td>
-        </tr>
+                    $checkBoxName = $controller_id . '[' . $keyAction . ']';
+                    $checkBoxId = $controller_id . '_' . $keyAction;
+                    ?>
+                <tr>
+                    <td>
+                        <input
+                        name="<?php echo $checkBoxName ?>"
+                        value="1"
+                        type="checkbox"
+                        id="<?php echo $checkBoxId ?>"
+                        <?php
+                            if (in_array($keyAction, $listAllowActions)) {
+                                echo 'checked="checked"';
+                            }
+                        ?>
+                        >
+                        <label for="<?php echo $checkBoxId ?>" >
+                        <?php echo $aAction[DomainConst::KEY_ALIAS] ?>
+                        </label>
+                    </td>
+                </tr>
+            <?php endif; // end if (condition) ?>
         <?php endforeach; ?>   
     <?php endforeach; ?>    
 </table>

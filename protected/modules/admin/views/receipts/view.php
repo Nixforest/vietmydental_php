@@ -2,21 +2,10 @@
 /* @var $this ReceiptsController */
 /* @var $model Receipts */
 
-$this->breadcrumbs=array(
-	'Receipts'=>array('index'),
-	$model->id,
-);
-
-$this->menu=array(
-	array('label'=>'List Receipts', 'url'=>array('index')),
-	array('label'=>'Create Receipts', 'url'=>array('create')),
-	array('label'=>'Update Receipts', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete Receipts', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Receipts', 'url'=>array('admin')),
-);
+$this->createMenu('view', $model);
 ?>
 
-<h1>View Receipts #<?php echo $model->id; ?></h1>
+<h1><?php echo $this->pageTitle . ' ' . $model->id; ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
@@ -31,6 +20,10 @@ $this->menu=array(
 		'created_date',
 		'created_by',
 		'receiptionist_id',
-		'status',
+                array(
+                    'name'  => DomainConst::CONTENT00026,
+                    'htmlOptions' => array('style' => 'text-align:center;'),
+                    'value' => Receipts::getStatus()[$model->status],
+                ),
 	),
 )); ?>
