@@ -12,6 +12,8 @@
  * @property integer $diagnosis_id
  * @property integer $pathological_id
  * @property string $doctor_id
+ * @property string $created_date
+ * @property string $created_by
  * @property integer $status
  */
 class TreatmentSchedules extends BaseActiveRecord
@@ -58,10 +60,10 @@ class TreatmentSchedules extends BaseActiveRecord
 		return array(
 			array('record_id, time_id, start_date, doctor_id', 'required'),
 			array('time_id, diagnosis_id, pathological_id, status', 'numerical', 'integerOnly'=>true),
-			array('record_id, doctor_id', 'length', 'max'=>11),
+			array('record_id, doctor_id, created_by', 'length', 'max'=>11),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, record_id, time_id, start_date, end_date, diagnosis_id, pathological_id, doctor_id, status', 'safe', 'on'=>'search'),
+			array('id, record_id, time_id, start_date, end_date, diagnosis_id, pathological_id, doctor_id, created_date, created_by, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -89,6 +91,9 @@ class TreatmentSchedules extends BaseActiveRecord
                     'rTime' => array(
                         self::BELONGS_TO, 'ScheduleTimes', 'time_id'
                     ),
+                    'rCreatedBy' => array(
+                        self::BELONGS_TO, 'Users', 'created_by'
+                    ),
 		);
 	}
 
@@ -106,6 +111,8 @@ class TreatmentSchedules extends BaseActiveRecord
 			'diagnosis_id' => DomainConst::CONTENT00121,
 			'pathological_id' => DomainConst::CONTENT00141,
 			'doctor_id' => DomainConst::CONTENT00143,
+			'created_date' => DomainConst::CONTENT00010,
+			'created_by' => DomainConst::CONTENT00054,
 			'status' => DomainConst::CONTENT00026,
 		);
 	}
@@ -129,6 +136,8 @@ class TreatmentSchedules extends BaseActiveRecord
 		$criteria->compare('diagnosis_id',$this->diagnosis_id);
 		$criteria->compare('pathological_id',$this->pathological_id);
 		$criteria->compare('doctor_id',$this->doctor_id,true);
+		$criteria->compare('created_date',$this->created_date,true);
+		$criteria->compare('created_by',$this->created_by,true);
 		$criteria->compare('status',$this->status);
 
 		return new CActiveDataProvider($this, array(
@@ -144,6 +153,7 @@ class TreatmentSchedules extends BaseActiveRecord
      * @return Parent result
      */
     public function beforeSave() {
+        $userId = isset(Yii::app()->user) ? Yii::app()->user->id : '';
         // Format start date value
         $date = $this->start_date;
         $this->start_date = CommonProcess::convertDateTimeToMySqlFormat(
@@ -169,7 +179,12 @@ class TreatmentSchedules extends BaseActiveRecord
             $this->end_date = $this->start_date;
         }
         if ($this->isNewRecord) {   // Add
-            
+            // Handle created by
+            if (empty($this->created_by)) {
+                $this->created_by = $userId;
+            }
+            // Handle created date
+            $this->created_date = CommonProcess::getCurrentDateTime();
         } else {                    // Update
             if ($this->status == self::STATUS_COMPLETED) {
                 $this->end_date = CommonProcess::getCurrentDateTimeWithMySqlFormat();

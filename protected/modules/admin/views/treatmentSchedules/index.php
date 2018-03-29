@@ -89,6 +89,12 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'value'=> 'isset($data->rDoctor) ? $data->rDoctor->getFullName() : ""',
                     'filter'=> Users::loadItems(),
                 ),
+		'created_date',
+		array(
+                    'name'=>'created_by',
+                    'htmlOptions' => array('style' => 'text-align:center;'),
+                    'value'=> 'isset($data->rCreatedBy) ? $data->rCreatedBy->username : ""',
+                ),
                 array(
                     'name'=>'status',
                     'htmlOptions' => array('style' => 'text-align:center;'),

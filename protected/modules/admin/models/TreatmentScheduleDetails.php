@@ -187,6 +187,9 @@ class TreatmentScheduleDetails extends BaseActiveRecord
                 $process->delete();
             }
         }
+        if (isset($this->rReceipt)) {
+            $this->rReceipt->delete();
+        }
         return parent::beforeDelete();
     }
 

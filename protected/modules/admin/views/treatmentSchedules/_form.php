@@ -180,6 +180,25 @@
 		<?php echo $form->error($model,'doctor_id'); ?>
 	</div>
 
+        <div class="row" style="display: none">
+		<?php echo $form->labelEx($model,'created_date'); ?>
+		<?php
+                echo $form->textField(
+                        $model, 'created_date', array(
+                            'value' => date(DomainConst::DATE_FORMAT_1),
+                            'readonly' => 'true',
+                        )
+                );
+                ?>
+		<?php echo $form->error($model,'created_date'); ?>
+	</div>
+
+<!--	<div class="row">
+		<?php echo $form->labelEx($model,'created_by'); ?>
+		<?php echo $form->textField($model,'created_by',array('size'=>11,'maxlength'=>11)); ?>
+		<?php echo $form->error($model,'created_by'); ?>
+	</div>-->
+
 <!--	<div class="row">
 		<?php echo $form->labelEx($model,'status'); ?>
 		<?php echo $form->textField($model,'status'); ?>

@@ -46,6 +46,11 @@ $this->createMenu('view', $model);
                    'name'=>'doctor_id',
                    'value'=> isset($model->rDoctor) ? $model->rDoctor->getFullName() : '',
                 ),
+		'created_date',
+		array(
+                   'name'=>'created_by',
+                   'value'=> isset($model->rCreatedBy) ? $model->rCreatedBy->username : '',
+                ),
 		array(
                    'name'=>'status',
 //                   'type'=>'Status',

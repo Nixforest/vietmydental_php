@@ -13,6 +13,10 @@
 	<?php echo CHtml::encode($data->record_id); ?>
 	<br />
 
+	<b><?php echo CHtml::encode($data->getAttributeLabel('time_id')); ?>:</b>
+	<?php echo CHtml::encode($data->time_id); ?>
+	<br />
+
 	<b><?php echo CHtml::encode($data->getAttributeLabel('start_date')); ?>:</b>
 	<?php echo CHtml::encode($data->start_date); ?>
 	<br />
@@ -33,6 +37,14 @@
 	<?php echo CHtml::encode($data->doctor_id); ?>
 	<br />
 
+        <b><?php echo CHtml::encode($data->getAttributeLabel('created_date')); ?>:</b>
+	<?php echo CHtml::encode($data->created_date); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('created_by')); ?>:</b>
+	<?php echo CHtml::encode($data->created_by); ?>
+	<br />
+        
 	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('status')); ?>:</b>
 	<?php echo CHtml::encode($data->status); ?>

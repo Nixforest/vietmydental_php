@@ -248,7 +248,7 @@ class AjaxController extends AdminController
      */
     private function findCustomerByRecordNumber($keyword) {
         $criteria = new CDbCriteria();
-        $criteria->addCondition("t.record_number like '%$keyword%'");
+        $criteria->addCondition("t.record_number like '%$keyword%' or t.id like '%$keyword%'");
         $criteria->limit = 50;
         $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
         return MedicalRecords::model()->findAll($criteria);

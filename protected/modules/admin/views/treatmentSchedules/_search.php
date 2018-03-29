@@ -22,6 +22,11 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->label($model,'time_id'); ?>
+		<?php echo $form->textField($model,'time_id'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->label($model,'start_date'); ?>
 		<?php echo $form->textField($model,'start_date'); ?>
 	</div>
@@ -44,6 +49,16 @@
 	<div class="row">
 		<?php echo $form->label($model,'doctor_id'); ?>
 		<?php echo $form->textField($model,'doctor_id',array('size'=>11,'maxlength'=>11)); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'created_date'); ?>
+		<?php echo $form->textField($model,'created_date'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'created_by'); ?>
+		<?php echo $form->textField($model,'created_by',array('size'=>11,'maxlength'=>11)); ?>
 	</div>
 
 	<div class="row">
