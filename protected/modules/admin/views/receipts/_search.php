@@ -32,6 +32,11 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->label($model,'final'); ?>
+		<?php echo $form->textField($model,'final',array('size'=>10,'maxlength'=>10)); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->label($model,'need_approve'); ?>
 		<?php echo $form->textField($model,'need_approve'); ?>
 	</div>

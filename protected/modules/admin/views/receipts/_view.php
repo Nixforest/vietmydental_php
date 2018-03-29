@@ -21,6 +21,10 @@
 	<?php echo CHtml::encode($data->discount); ?>
 	<br />
 
+	<b><?php echo CHtml::encode($data->getAttributeLabel('final')); ?>:</b>
+	<?php echo CHtml::encode($data->final); ?>
+	<br />
+
 	<b><?php echo CHtml::encode($data->getAttributeLabel('need_approve')); ?>:</b>
 	<?php echo CHtml::encode($data->need_approve); ?>
 	<br />

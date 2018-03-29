@@ -766,6 +766,8 @@ class DomainConst {
     const KEY_NEXT_UPDATE_STORECARD_HGD     = 'next_time_update_storecard_hgd';
     /** Setting key: discount */
     const KEY_DISCOUNT                      = 'discount';
+    /** Setting key: final */
+    const KEY_FINAL                         = 'final';
     /** Key amount of bu vo */
     const KEY_BU_VO                         = 'bu_vo';
     /** Key amount of revenue */
@@ -1182,4 +1184,5 @@ class DomainConst {
     const CONTENT00256  = 'Thông tin thanh toán';
     const CONTENT00257  = 'Giảm';
     const CONTENT00258  = 'Thành tiền';
+    const CONTENT00259  = 'Thực thu';
 }

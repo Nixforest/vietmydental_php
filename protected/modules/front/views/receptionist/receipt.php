@@ -24,7 +24,7 @@
                                 <th><?php echo DomainConst::CONTENT00100; ?></th>
                                 <th><?php echo DomainConst::CONTENT00170; ?></th>
                                 <th><?php echo DomainConst::CONTENT00255; ?></th>
-                                <th><?php echo DomainConst::CONTENT00254; ?></th>
+                                <th><?php echo DomainConst::CONTENT00259; ?></th>
                                 <th><?php echo DomainConst::CONTENT00026; ?></th>
                             </tr>
                         </thead>
@@ -82,8 +82,8 @@
                                     'value' => '($data->getTreatmentType() !== NULL) ? $data->getTreatmentType()->name : ""',
                                 ),
                                 array(
-                                    'name' => DomainConst::CONTENT00254,
-                                    'value' => '($data->getTreatmentType() !== NULL) ? CommonProcess::formatCurrency($data->getTreatmentType()->price - $data->discount) : ""',
+                                    'name' => DomainConst::CONTENT00259,
+                                    'value' => '($data->getTreatmentType() !== NULL) ? CommonProcess::formatCurrency($data->final) : ""',
                                 ),
 //                                'process_date',
 //                                'discount',

@@ -34,6 +34,12 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'final'); ?>
+		<?php echo $form->textField($model,'final',array('size'=>10,'maxlength'=>10)); ?>
+		<?php echo $form->error($model,'final'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'need_approve'); ?>
 		<?php echo $form->textField($model,'need_approve'); ?>
 		<?php echo $form->error($model,'need_approve'); ?>

@@ -419,7 +419,7 @@ class AjaxController extends AdminController
             }
             $json = CJavaScript::jsonEncode(array(
                 'rightContent'  => $rightContent,
-                'infoSchedule' => $infoSchedule,x
+                'infoSchedule' => $infoSchedule,
             ));
             echo $json;
             Yii::app()->end();

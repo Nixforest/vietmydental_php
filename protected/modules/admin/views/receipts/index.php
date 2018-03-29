@@ -51,6 +51,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 //                    'value' => 'CommonProcess::convertDateTimeWithFormat($data->process_date, DomainConst::DATE_FORMAT_BACK_END)',
 //                ),
 		'discount',
+		'final',
 		'need_approve',
 		'customer_confirm',
 		'receiptionist_id',

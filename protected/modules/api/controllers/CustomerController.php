@@ -85,6 +85,8 @@ class CustomerController extends APIController
     const ITEM_NEED_APPROVE                 = '36';
     /** Item id: Customer confirmed */
     const ITEM_CUSTOMER_CONFIRMED           = '37';
+    /** Item id: Final */
+    const ITEM_FINAL                        = '38';
     
     
     /**
@@ -947,6 +949,7 @@ class CustomerController extends APIController
      *  + detail_id:        Id of Treatment schedule detail
      *  + date:             Date (format: yyy/MM/dd)
      *  + discount:         Discount
+     *  + final:            Final money value need to receive from customer
      *  + customer_confirm: Customer confirm
      *  + receiptionist_id: Id of receiptionist
      *  + note:             Note
@@ -965,6 +968,7 @@ class CustomerController extends APIController
                 DomainConst::KEY_DETAIL_ID,
                 DomainConst::KEY_DATE,
                 DomainConst::KEY_DISCOUNT,
+                DomainConst::KEY_FINAL,
                 DomainConst::KEY_CUSTOMER_CONFIRM,
                 DomainConst::KEY_RECEIPTIONIST_ID,
                 DomainConst::KEY_NOTE
@@ -1008,6 +1012,7 @@ class CustomerController extends APIController
                 DomainConst::DATE_FORMAT_6,
                 DomainConst::DATE_FORMAT_3);
         $model->discount            = $root->discount;
+        $model->final               = $root->final;
         $model->customer_confirm    = $root->customer_confirm;
         $model->description         = $root->note;
         $model->created_by          = $mUser->id;

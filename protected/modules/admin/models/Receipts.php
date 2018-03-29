@@ -8,6 +8,7 @@
  * @property string $detail_id
  * @property string $process_date
  * @property string $discount
+ * @property string $final
  * @property integer $need_approve
  * @property integer $customer_confirm
  * @property string $description
@@ -51,13 +52,14 @@ class Receipts extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('detail_id, process_date, created_date, created_by', 'required'),
+			array('detail_id, process_date, final, created_date, created_by', 'required'),
 			array('need_approve, customer_confirm, status', 'numerical', 'integerOnly'=>true),
 			array('detail_id, discount, created_by, receiptionist_id', 'length', 'max'=>11),
+			array('final', 'length', 'max'=>10),
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, detail_id, process_date, discount, need_approve, customer_confirm, description, created_date, created_by, receiptionist_id, status', 'safe', 'on'=>'search'),
+			array('id, detail_id, process_date, discount, final, need_approve, customer_confirm, description, created_date, created_by, receiptionist_id, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -96,6 +98,7 @@ class Receipts extends CActiveRecord
 			'detail_id' => DomainConst::CONTENT00146,
 			'process_date' => DomainConst::CONTENT00241,
 			'discount' => DomainConst::CONTENT00242,
+			'final' => DomainConst::CONTENT00259,
 			'need_approve' => DomainConst::CONTENT00243,
 			'customer_confirm' => DomainConst::CONTENT00244,
 			'description' => DomainConst::CONTENT00091,
@@ -121,6 +124,7 @@ class Receipts extends CActiveRecord
 		$criteria->compare('detail_id',$this->detail_id,true);
 		$criteria->compare('process_date',$this->process_date,true);
 		$criteria->compare('discount',$this->discount,true);
+		$criteria->compare('final',$this->final,true);
 		$criteria->compare('need_approve',$this->need_approve);
 		$criteria->compare('customer_confirm',$this->customer_confirm);
 		$criteria->compare('description',$this->description,true);
@@ -242,39 +246,42 @@ class Receipts extends CActiveRecord
         $rightContent .=    '<div class="item-search">';
         $rightContent .=        '<table>';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00145 . ': ' . '<b>' . $teeth . '</b>' . '</td>';
+        $rightContent .=                '<td>' . DomainConst::CONTENT00145 . ': </td>';
+        $rightContent .=                '<td><b>' . $teeth . '</b>' . '</td>';
         $rightContent .=            '</tr>';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00231 . ': ' . '<b>' . $diagnosis . '</b>' . '</td>';
+        $rightContent .=                '<td>' . DomainConst::CONTENT00231 . ': </td>';
+        $rightContent .=                '<td><b>' . $diagnosis . '</b>' . '</td>';
         $rightContent .=            '</tr>';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00128 . ': ' . '<b>' . $treatmentType . '</b>' . '</td>';
+        $rightContent .=                '<td>' . DomainConst::CONTENT00128 . ': </td>';
+        $rightContent .=                '<td><b>' . $treatmentType . '</b>' . '</td>';
         $rightContent .=            '</tr>';
-//        $pathological = '';
-//        if (isset($this->rMedicalRecord)) {
-//            $pathological = $this->rMedicalRecord->generateMedicalHistory(", ");
-//            Settings::saveAjaxTempValue($this->rMedicalRecord->id);
-//        }
-//        if (!empty($pathological)) {
-//            $rightContent .=        '<tr>';
-//            $rightContent .=            '<td colspan="2">' . DomainConst::CONTENT00137 . ': ' . '<b>' . $pathological . '<b>' . '</td>';
-//            $rightContent .=        '</tr>';
-//        }                
         $rightContent .=        '</table>';
         $rightContent .=    '</div>';
         $rightContent .=    '<div class="title-2">' . DomainConst::CONTENT00251 . '</div>';
-        $rightContent .=    '<div class="item-search">';                
-//        if (isset($this->rMedicalRecord) && isset($this->rMedicalRecord->rTreatmentSchedule)) {
-//            $i = count($this->rMedicalRecord->rTreatmentSchedule);
-//            foreach ($this->rMedicalRecord->rTreatmentSchedule as $schedule) {
-//                if ($schedule->rPathological) {
-//                }
-//                $i--;
-//            }
-//        }
-        $rightContent .= '<p>' . DomainConst::CONTENT00254 . ': ' . '<b>' . CommonProcess::formatCurrency($money) . '</b></p>';
-        $rightContent .= '<p>' . DomainConst::CONTENT00257 . ': ' . '<b>' . CommonProcess::formatCurrency($this->discount) . '</b></p>';
-        $rightContent .= '<p>' . DomainConst::CONTENT00258 . ': ' . '<b>' . CommonProcess::formatCurrency($money - $this->discount) . '</b></p>';
+        $rightContent .=    '<div class="item-search">'; 
+        $rightContent .=        '<table>';
+        $rightContent .=            '<tr>';
+        $rightContent .=                '<td>' . DomainConst::CONTENT00254 . ': </td>';
+        $rightContent .=                '<td align="right"><b>' . CommonProcess::formatCurrency($money) . '</b>' . '</td>';
+        $rightContent .=            '</tr>';
+        $rightContent .=            '<tr>';
+        $rightContent .=                '<td>' . DomainConst::CONTENT00257 . ': </td>';
+        $rightContent .=                '<td align="right"><b>' . CommonProcess::formatCurrency($this->discount) . '</b>' . '</td>';
+        $rightContent .=            '</tr>';
+        $rightContent .=            '<tr>';
+        $rightContent .=                '<td>' . DomainConst::CONTENT00259 . ': </td>';
+        $rightContent .=                '<td align="right"><b>' . CommonProcess::formatCurrency($this->final) . '</b>' . '</td>';
+        $rightContent .=            '</tr>';
+        $rightContent .=            '<tr>';
+        $rightContent .=                '<td>' . DomainConst::CONTENT00091 . ': </td>';
+        $rightContent .=                '<td align="right"><b>' . $this->description . '</b>' . '</td>';
+        $rightContent .=            '</tr>';
+        $rightContent .=        '</table>';
+//        $rightContent .= '<p>' . DomainConst::CONTENT00254 . ': ' . '<b>' . CommonProcess::formatCurrency($money) . '</b></p>';
+//        $rightContent .= '<p>' . DomainConst::CONTENT00257 . ': ' . '<b>' . CommonProcess::formatCurrency($this->discount) . '</b></p>';
+//        $rightContent .= '<p>' . DomainConst::CONTENT00259 . ': ' . '<b>' . CommonProcess::formatCurrency($this->final) . '</b></p>';
         $rightContent .=    '</div>';
         $rightContent .= '</div>';
         return $rightContent;
@@ -294,6 +301,9 @@ class Receipts extends CActiveRecord
         $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_DISCOUNT,
                 DomainConst::CONTENT00242,
                 $this->discount);
+        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_FINAL,
+                DomainConst::CONTENT00259,
+                $this->final);
         $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_NEED_APPROVE,
                 DomainConst::CONTENT00243,
                 $this->need_approve);
