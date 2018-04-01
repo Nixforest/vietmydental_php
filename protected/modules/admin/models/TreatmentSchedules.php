@@ -614,6 +614,9 @@ class TreatmentSchedules extends BaseActiveRecord
         $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_HEALTHY,
                 DomainConst::CONTENT00142,
                 $this->generateJsonHealthy());
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_INSURRANCE,
+            DomainConst::CONTENT00260,
+                $this->getInsurrance());
         $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_STATUS,
                 DomainConst::CONTENT00026,
                 $this->status);

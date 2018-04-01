@@ -87,6 +87,8 @@ class CustomerController extends APIController
     const ITEM_CUSTOMER_CONFIRMED           = '37';
     /** Item id: Final */
     const ITEM_FINAL                        = '38';
+    /** Item id: Insurrance */
+    const ITEM_INSURRANCE                   = '39';
     
     
     /**
