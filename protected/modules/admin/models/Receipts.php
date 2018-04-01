@@ -240,6 +240,9 @@ class Receipts extends CActiveRecord
             $diagnosis = $this->rTreatmentScheduleDetail->getDiagnosis();
             $treatmentType = $this->rTreatmentScheduleDetail->getTreatment();
             $money = $this->rTreatmentScheduleDetail->getTreatmentPrice();
+            if (isset($this->rTreatmentScheduleDetail->rSchedule)) {
+                $insurance = $this->rTreatmentScheduleDetail->rSchedule->getInsurrance();
+            }
         }
         $rightContent = '<div class="info-result">';
         $rightContent .=    '<div class="title-2">' . DomainConst::CONTENT00174 . '</div>';
@@ -274,6 +277,12 @@ class Receipts extends CActiveRecord
         $rightContent .=                '<td>' . DomainConst::CONTENT00259 . ': </td>';
         $rightContent .=                '<td align="right"><b>' . CommonProcess::formatCurrency($this->final) . '</b>' . '</td>';
         $rightContent .=            '</tr>';
+        if (!empty($insurance)) {
+            $rightContent .=            '<tr>';
+            $rightContent .=                '<td>' . DomainConst::CONTENT00260 . ': </td>';
+            $rightContent .=                '<td align="right"><b>' . $insurance . '</b>' . '</td>';
+            $rightContent .=            '</tr>';
+        }
         $rightContent .=            '<tr>';
         $rightContent .=                '<td>' . DomainConst::CONTENT00091 . ': </td>';
         $rightContent .=                '<td align="right"><b>' . $this->description . '</b>' . '</td>';
