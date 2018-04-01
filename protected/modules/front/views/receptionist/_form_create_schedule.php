@@ -70,10 +70,16 @@
     </div>
 
     <div class="row">
+            <?php echo $form->labelEx($schedule,'insurrance'); ?>
+            <?php echo $form->textField($schedule,'insurrance',array('size'=>10,'maxlength'=>10)); ?>
+            <?php echo $form->error($schedule,'insurrance'); ?>
+    </div>
+
+<!--    <div class="row">
         <?php echo $form->labelEx($detail,'type_schedule'); ?>
         <?php echo $form->textArea($detail,'type_schedule',array('rows'=>6, 'cols'=>50)); ?>
         <?php echo $form->error($detail,'type_schedule'); ?>
-    </div>
+    </div>-->
 
     <div class="row">
         <?php echo $form->labelEx($detail,'description'); ?>

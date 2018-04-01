@@ -47,6 +47,11 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->label($model,'insurrance'); ?>
+		<?php echo $form->textField($model,'insurrance',array('size'=>10,'maxlength'=>10)); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->label($model,'doctor_id'); ?>
 		<?php echo $form->textField($model,'doctor_id',array('size'=>11,'maxlength'=>11)); ?>
 	</div>

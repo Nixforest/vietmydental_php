@@ -11,6 +11,7 @@
  * @property string $end_date
  * @property integer $diagnosis_id
  * @property integer $pathological_id
+ * @property string $insurrance
  * @property string $doctor_id
  * @property string $created_date
  * @property string $created_by
@@ -61,9 +62,10 @@ class TreatmentSchedules extends BaseActiveRecord
 			array('record_id, time_id, start_date, doctor_id', 'required'),
 			array('time_id, diagnosis_id, pathological_id, status', 'numerical', 'integerOnly'=>true),
 			array('record_id, doctor_id, created_by', 'length', 'max'=>11),
+			array('insurrance', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, record_id, time_id, start_date, end_date, diagnosis_id, pathological_id, doctor_id, created_date, created_by, status', 'safe', 'on'=>'search'),
+			array('id, record_id, time_id, start_date, end_date, diagnosis_id, pathological_id, insurrance, doctor_id, created_date, created_by, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -110,6 +112,7 @@ class TreatmentSchedules extends BaseActiveRecord
 			'end_date' => DomainConst::CONTENT00140,
 			'diagnosis_id' => DomainConst::CONTENT00121,
 			'pathological_id' => DomainConst::CONTENT00141,
+			'insurrance' => DomainConst::CONTENT00260,
 			'doctor_id' => DomainConst::CONTENT00143,
 			'created_date' => DomainConst::CONTENT00010,
 			'created_by' => DomainConst::CONTENT00054,
@@ -135,6 +138,7 @@ class TreatmentSchedules extends BaseActiveRecord
 		$criteria->compare('end_date',$this->end_date,true);
 		$criteria->compare('diagnosis_id',$this->diagnosis_id);
 		$criteria->compare('pathological_id',$this->pathological_id);
+		$criteria->compare('insurrance',$this->insurrance,true);
 		$criteria->compare('doctor_id',$this->doctor_id,true);
 		$criteria->compare('created_date',$this->created_date,true);
 		$criteria->compare('created_by',$this->created_by,true);
@@ -322,6 +326,14 @@ class TreatmentSchedules extends BaseActiveRecord
             return $this->rMedicalRecord->rCustomer;
         }
         return NULL;
+    }
+    
+    /**
+     * Get insurrance
+     * @return Insurrance in currency format
+     */
+    public function getInsurrance() {
+        return CommonProcess::formatCurrency($this->insurrance);
     }
 
     //-----------------------------------------------------

@@ -33,6 +33,10 @@
 	<?php echo CHtml::encode($data->pathological_id); ?>
 	<br />
 
+	<b><?php echo CHtml::encode($data->getAttributeLabel('insurrance')); ?>:</b>
+	<?php echo CHtml::encode($data->insurrance); ?>
+	<br />
+
 	<b><?php echo CHtml::encode($data->getAttributeLabel('doctor_id')); ?>:</b>
 	<?php echo CHtml::encode($data->doctor_id); ?>
 	<br />

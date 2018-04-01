@@ -187,17 +187,19 @@ class ReceptionistController extends Controller {
         // Temp value saved at Customers::getCustomerAjaxScheduleInfo()
         $detailId = Settings::getAjaxTempValue();
         $model = TreatmentScheduleDetails::model()->findByPk($detailId);
-        $model->start_date = CommonProcess::convertDateTime(
-                $model->start_date,
-                DomainConst::DATE_FORMAT_1,
-                DomainConst::DATE_FORMAT_4);
         if ($model) {
-            if (isset($_POST['TreatmentScheduleDetails'])) {
+            $model->start_date = CommonProcess::convertDateTime(
+                    $model->start_date,
+                    DomainConst::DATE_FORMAT_1,
+                    DomainConst::DATE_FORMAT_4);
+            $schedule = $model->rSchedule;
+            if (isset($_POST['TreatmentScheduleDetails']) && isset($_POST['TreatmentSchedules'])) {
                 $model->attributes = $_POST['TreatmentScheduleDetails'];
+                $schedule->attributes = $_POST['TreatmentSchedules'];
                 if ($model->save()) {
                     // Update treatment schedule info
                     if (isset($model->rSchedule)) {
-                        $schedule = $model->rSchedule;
+//                        $schedule = $model->rSchedule;
                         // Schedule have only 1 detail
                         if (isset($schedule->rDetail) && count($schedule->rDetail) == 1) {
                             // Update time and start date of treatment schedule
@@ -230,6 +232,7 @@ class ReceptionistController extends Controller {
                 'div' => $this->renderPartial('_form_update_schedule',
                         array(
                             'model' => $model,
+                            'schedule' => $schedule,
                             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
                         ),
                         true)

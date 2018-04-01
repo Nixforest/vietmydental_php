@@ -161,6 +161,12 @@
         </div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'insurrance'); ?>
+		<?php echo $form->textField($model,'insurrance',array('size'=>10,'maxlength'=>10)); ?>
+		<?php echo $form->error($model,'insurrance'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'doctor_id'); ?>
 		<?php echo $form->hiddenField($model, 'doctor_id', array('class' => '')); ?>
                 <?php

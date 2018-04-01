@@ -465,7 +465,7 @@ class Customers extends BaseActiveRecord
                 $infoSchedule .= '<div class="item-search">';
 //                $infoSchedule .=    '<p>' . $mSchedule->start_date . '</p>';
                 $infoSchedule .=    '<p>' . $mSchedule->getStartTime() . '</p>';
-                $infoSchedule .=    '<p>Hình thức: ' . $mSchedule->type_schedule . '</p>';
+                $infoSchedule .=    '<p>' . DomainConst::CONTENT00260 . ': ' . $mSchedule->rSchedule->getInsurrance() . '</p>';
                 $infoSchedule .=    '<p>Chi Tiết Công Việc: ' . $mSchedule->description . '</p>';
                 $infoSchedule .=    '<p>Bác sĩ: ' . $mSchedule->getDoctor() . '</p>';
                 $infoSchedule .= '</div>';

@@ -1185,4 +1185,5 @@ class DomainConst {
     const CONTENT00257  = 'Giảm';
     const CONTENT00258  = 'Thành tiền';
     const CONTENT00259  = 'Thực thu';
+    const CONTENT00260  = 'Bảo hiểm có thể chi trả';
 }

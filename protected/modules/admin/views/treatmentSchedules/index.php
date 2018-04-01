@@ -78,6 +78,12 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'filter'=>Pathological::loadItems(),
                 ),
 		array(
+                    'header' => DomainConst::CONTENT00260,
+                    'type' => 'html',
+                    'htmlOptions' => array('style' => 'text-align:left;'),
+                    'value'=> 'isset($data->insurrance) ? CommonProcess::formatCurrency($data->insurrance) : "0"',
+                ),
+		array(
                     'header' => DomainConst::CONTENT00142,
                     'type' => 'html',
                     'htmlOptions' => array('style' => 'text-align:left;'),

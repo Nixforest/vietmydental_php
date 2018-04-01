@@ -17,20 +17,26 @@
 	<?php echo DomainConst::CONTENT00081; ?>
 
 	<?php echo $form->errorSummary($model); ?>
+        <div class="row">
+            <label for="TreatmentScheduleDetails_start_date" class="required"><?php echo DomainConst::CONTENT00208; ?> <span class="required">*</span></label>
+            <?php // echo $form->labelEx($model,'start_date'); ?>
+            <?php echo $form->dropDownList($model,'time_id', ScheduleTimes::loadItems(true)); ?>
+            <?php echo $form->error($model,'time_id'); ?>
+            <?php echo $form->dateField($model, 'start_date'); ?>
+            <?php echo $form->error($model,'start_date'); ?>
+        </div>
+
     <div class="row">
-        <label for="TreatmentScheduleDetails_start_date" class="required"><?php echo DomainConst::CONTENT00208; ?> <span class="required">*</span></label>
-        <?php // echo $form->labelEx($model,'start_date'); ?>
-        <?php echo $form->dropDownList($model,'time_id', ScheduleTimes::loadItems(true)); ?>
-        <?php echo $form->error($model,'time_id'); ?>
-        <?php echo $form->dateField($model, 'start_date'); ?>
-        <?php echo $form->error($model,'start_date'); ?>
+            <?php echo $form->labelEx($schedule,'insurrance'); ?>
+            <?php echo $form->textField($schedule,'insurrance',array('size'=>10,'maxlength'=>10)); ?>
+            <?php echo $form->error($schedule,'insurrance'); ?>
     </div>
 
-	<div class="row">
+<!--	<div class="row">
 		<?php echo $form->labelEx($model,'type_schedule'); ?>
 		<?php echo $form->textArea($model,'type_schedule',array('rows'=>6, 'cols'=>50)); ?>
 		<?php echo $form->error($model,'type_schedule'); ?>
-	</div>
+	</div>-->
 
         <div class="row">
 		<?php echo $form->labelEx($model,'description'); ?>
