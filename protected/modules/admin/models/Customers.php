@@ -598,8 +598,14 @@ class Customers extends BaseActiveRecord
         $roleName = isset($mUser->rRole) ? $mUser->rRole->role_name : '';
         switch ($roleName) {
             case Roles::ROLE_DOCTOR:
+                $from = $root->date_from;
+                $to = $root->date_to;
+                if ($mUser->isTestUser()) {
+                    $from = '2018/01/01';
+                    $to = '2018/12/01';
+                }
                 // Get list customers assign at doctor
-                $criteria->addInCondition('t.id', $mUser->getListCustomerOfDoctor());
+                $criteria->addInCondition('t.id', $mUser->getListCustomerOfDoctor($from, $to));
                 break;
 
             default:

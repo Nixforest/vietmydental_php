@@ -425,24 +425,45 @@ class Users extends BaseActiveRecord
      * Get list customer of doctor
      * @return Array Array of customer id
      */
-    public function getListCustomerOfDoctor() {
+    public function getListCustomerOfDoctor($from, $to) {
         $retVal = array();
         // Check relation rTreatmentSchedule is set
         if (isset($this->rTreatmentSchedule)) {
             // Loop for all treatment schedule
             foreach ($this->rTreatmentSchedule as $treatmentSchedule) {
-                // Check relation rMedicalRecord is set
-                if (isset($treatmentSchedule->rMedicalRecord)) {
-                    $medicalRecord = $treatmentSchedule->rMedicalRecord;
-                    // Check relation rCustomer is set
-                    if (isset($medicalRecord->rCustomer)) {
-                        $customer = $medicalRecord->rCustomer;
-                        if ($customer->status != DomainConst::DEFAULT_STATUS_INACTIVE) {
-                            $retVal[] = $customer->id;
+                $date = CommonProcess::convertDateTime($treatmentSchedule->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
+                $compareFrom = DateTimeExt::compare($date, $from);
+                $compareTo = DateTimeExt::compare($date, $to);
+                // Check if treatment schedule is between date range
+                if (($compareFrom == 1 || $compareFrom == 0)
+                        && ($compareTo == 0 || $compareTo == -1)) {
+                    // Check relation rMedicalRecord is set
+                    if (isset($treatmentSchedule->rMedicalRecord)) {
+                        $medicalRecord = $treatmentSchedule->rMedicalRecord;
+                        // Check relation rCustomer is set
+                        if (isset($medicalRecord->rCustomer)) {
+                            $customer = $medicalRecord->rCustomer;
+                            if ($customer->status != DomainConst::DEFAULT_STATUS_INACTIVE) {
+                                $retVal[] = $customer->id;
+                            }
                         }
                     }
                 }
             }
+        }
+        
+        return $retVal;
+    }
+    
+    /**
+     * Check if a user is a test user
+     * @return boolean True if user have username is appletest, False otherwise
+     */
+    public function isTestUser() {
+        $retVal = false;
+        
+        if (strtolower($this->username) == 'appletest') {
+            $retVal = true;
         }
         
         return $retVal;

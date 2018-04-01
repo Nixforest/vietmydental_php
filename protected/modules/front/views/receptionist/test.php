@@ -11,15 +11,22 @@
     
 <div class="maincontent clearfix">
     <?php
+    // Test compare date
+    $date1 = "2018/03/23";
+    $date2 = "2018-03-23 23:09:27";
+    $date2 = CommonProcess::convertDateTime($date2, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
+    CommonProcess::echoTest("Compare date '$date1' - '$date2': ", DateTimeExt::compare($date1, $date2, ''));
+    CommonProcess::echoTest("strtotime($date1): ", strtotime($date1));
+    CommonProcess::echoTest("strtotime($date2): ", strtotime($date2));
     // Test DirectoryHandler
     CommonProcess::echoTest('Yii::app()->createAbsoluteUrl(DIRECTORY_SEPARATOR): ', Yii::app()->createAbsoluteUrl(DIRECTORY_SEPARATOR));
     CommonProcess::echoTest('Yii::app()->baseUrl: ', Yii::app()->baseUrl);
-    CommonProcess::echoTest('Create path from array: ', DirectoryHandler::createPath(array(
-        DirectoryHandler::getRootPath(),
-        'a',
-        'b',
-        'c'
-    )));
+//    CommonProcess::echoTest('Create path from array: ', DirectoryHandler::createPath(array(
+//        DirectoryHandler::getRootPath(),
+//        'a',
+//        'b',
+//        'c'
+//    )));
     CommonProcess::echoTest('Yii root path: ', DirectoryHandler::getRootPath());
     CommonProcess::echoTest('Current date time: ', CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3));
     ?>

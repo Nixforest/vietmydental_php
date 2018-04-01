@@ -94,8 +94,10 @@ class CustomerController extends APIController
      * Get list customer
      * - url:   api/customer/list
      * - parameter:
-     *  + token:    Token
-     *  + page:     Index of page
+     *  + token:        Token
+     *  + page:         Index of page
+     *  + date_from:    From date (format yyyy/MM/dd)
+     *  + date_to:      To date (format yyyy/MM/dd)
      */
     public function actionList() {
         try {
@@ -107,7 +109,9 @@ class CustomerController extends APIController
             // Check if parameters are exist
             $this->checkRequiredParam($root, array(
                 DomainConst::KEY_TOKEN,
-                DomainConst::KEY_PAGE
+                DomainConst::KEY_PAGE,
+                DomainConst::KEY_DATE_FROM,
+                DomainConst::KEY_DATE_TO
             ));
             // Get user by token value
             $mUser = $this->getUserByToken($resultFailed, $root->token);

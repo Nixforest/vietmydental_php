@@ -73,4 +73,15 @@ class DateTimeExt extends DateTime {
         }
         return $dateObj->format('Y');
     }
+    
+    /**
+     * Compare 2 date value
+     * @param String $date1 Date value 1
+     * @param String $date2 Date value 2
+     * @param String $format Format date
+     * @return True if 
+     */
+    public static function compare($date1, $date2, $format = "") {
+        return strtotime($date1) > strtotime($date2) ? '1' : (strtotime($date1) == strtotime($date2) ? '0' : '-1');
+    }
 }
