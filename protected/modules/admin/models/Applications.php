@@ -46,9 +46,9 @@ class Applications extends BaseActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-                    'role'  => array(self::HAS_MANY, 'Roles', 'application_id'),
-                    'rUser'  => array(self::HAS_MANY, 'Users', 'application_id'),
-                    'rMenu'  => array(self::HAS_MANY, 'Menus', 'application_id'),
+                    'role'      => array(self::HAS_MANY, 'Roles', 'application_id'),
+                    'rUser'     => array(self::HAS_MANY, 'Users', 'application_id'),
+                    'rMenu'     => array(self::HAS_MANY, 'Menus', 'application_id'),
 		);
 	}
 
@@ -90,6 +90,9 @@ class Applications extends BaseActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'pagination' => array(
+                            'pageSize' => Settings::getListPageSize(),
+                        ),
 		));
 	}
 

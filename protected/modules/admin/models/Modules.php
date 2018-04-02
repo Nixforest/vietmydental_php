@@ -40,7 +40,8 @@ class Modules extends BaseActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-                    'rController' => array(self::HAS_MANY, 'Controllers', 'module_id'),
+                    'rController'   => array(self::HAS_MANY, 'Controllers', 'module_id'),
+                    'rMenu'         => array(self::HAS_MANY, 'Menus', 'module_id'),
 		);
 	}
 
@@ -78,6 +79,9 @@ class Modules extends BaseActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'pagination' => array(
+                            'pageSize' => Settings::getListPageSize(),
+                        ),
 		));
 	}
 
@@ -91,6 +95,28 @@ class Modules extends BaseActiveRecord
 	{
 		return parent::model($className);
 	}
+        
+    //-----------------------------------------------------
+    // Parent override methods
+    //-----------------------------------------------------
+    /**
+     * Override before delete method
+     * @return Parent result
+     */
+    protected function beforeDelete() {
+        $retVal = true;
+        // Check foreign table controllers
+        $controllers = Controllers::model()->findByAttributes(array('module_id' => $this->id));
+        if (count($controllers) > 0) {
+            $retVal = false;
+        }
+        // Check foreign table menus
+        $menus = Menus::model()->findByAttributes(array('module_id' => $this->id));
+        if (count($menus) > 0) {
+            $retVal = false;
+        }
+        return $retVal;
+    }
         
     //-----------------------------------------------------
     // Utility methods
