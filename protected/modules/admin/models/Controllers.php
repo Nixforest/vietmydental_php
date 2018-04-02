@@ -45,10 +45,10 @@ class Controllers extends BaseActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
                     'rModule' => array(self::BELONGS_TO, 'Modules', 'module_id'),
-                    'controllers_actions' => array(self::HAS_MANY, 'ControllersActions', 'controller_id'),
                     'rActionsRole'  => array(self::HAS_MANY, 'ActionsRoles', 'controller_id'),
                     'rActionsUser'  => array(self::HAS_MANY, 'ActionsUsers', 'controller_id'),
                     'rConrollersActtion'  => array(self::HAS_MANY, 'ControllersActions', 'controller_id'),
+                    'rMenu' => array(self::HAS_MANY, 'Menus', 'controller_id'),
 		);
 	}
 
@@ -90,6 +90,9 @@ class Controllers extends BaseActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'pagination' => array(
+                            'pageSize' => Settings::getListPageSize(),
+                        ),
 		));
 	}
 
@@ -102,7 +105,39 @@ class Controllers extends BaseActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
-	}   
+	}
+        
+    //-----------------------------------------------------
+    // Parent override methods
+    //-----------------------------------------------------
+    /**
+     * Override before delete method
+     * @return Parent result
+     */
+    protected function beforeDelete() {
+        $retVal = true;
+        // Check foreign table action_roles
+        $roles = ActionsRoles::model()->findByAttributes(array('controller_id' => $this->id));
+        if (count($roles) > 0) {
+            $retVal = false;
+        }
+        // Check foreign table action_users
+        $users = ActionsUsers::model()->findByAttributes(array('controller_id' => $this->id));
+        if (count($users) > 0) {
+            $retVal = false;
+        }
+        // Check foreign table controller_actions
+        $actions = ControllersActions::model()->findByAttributes(array('controller_id' => $this->id));
+        if (count($actions) > 0) {
+            $retVal = false;
+        }
+        // Check foreign table menus
+        $menus = Menus::model()->findByAttributes(array('controller_id' => $this->id));
+        if (count($menus) > 0) {
+            $retVal = false;
+        }
+        return $retVal;
+    }
 
     //-----------------------------------------------------
     // Utility methods

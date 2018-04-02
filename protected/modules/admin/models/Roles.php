@@ -62,6 +62,8 @@ class Roles extends BaseActiveRecord
                     'application'   => array(self::BELONGS_TO, 'Applications', 'application_id'),
                     'rUser'         => array(self::HAS_MANY, 'Users', 'role_id'),
                     'rActionsRole'  => array(self::HAS_MANY, 'ActionsRoles', 'role_id'),
+                    'rApiUserToken'  => array(self::HAS_MANY, 'ApiUserTokens', 'role_id'),
+                    'rLoginLog'  => array(self::HAS_MANY, 'LoginLogs', 'role_id'),
 		);
 	}
 
@@ -111,6 +113,9 @@ class Roles extends BaseActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'pagination' => array(
+                            'pageSize' => Settings::getListPageSize(),
+                        ),
 		));
 	}
 
@@ -124,6 +129,28 @@ class Roles extends BaseActiveRecord
 	{
 		return parent::model($className);
 	}
+        
+    //-----------------------------------------------------
+    // Parent override methods
+    //-----------------------------------------------------
+    /**
+     * Override before delete method
+     * @return Parent result
+     */
+    protected function beforeDelete() {
+        $retVal = true;
+        // Check foreign table action_roles
+        $roles = ActionsRoles::model()->findByAttributes(array('role_id' => $this->id));
+        if (count($roles) > 0) {
+            $retVal = false;
+        }
+        // Check foreign table users
+        $users = Users::model()->findByAttributes(array('role_id' => $this->id));
+        if (count($users) > 0) {
+            $retVal = false;
+        }
+        return $retVal;
+    }
 
     //-----------------------------------------------------
     // Utility methods
