@@ -265,12 +265,16 @@ class Users extends BaseActiveRecord
             $this->temp_password = CommonProcess::generateTempPassword();
             $this->password_hash = CommonProcess::hashPassword(
                             $this->password_hash, $this->temp_password);
+            
+            // Handle username
+            $this->username = self::generateUsername($this->first_name);
             // Handle created by
             if (empty($this->created_by)) {
                 $this->created_by = $userId;
             }
             // Handle created date
             $this->created_date = CommonProcess::getCurrentDateTimeWithMySqlFormat();
+            
         } else {                    // Update
             
         }
@@ -566,5 +570,37 @@ class Users extends BaseActiveRecord
 //        $criteria->compare("t.status", DomainConst::DEFAULT_STATUS_ACTIVE);
         $criteria->addCondition("t.status!=" . DomainConst::DEFAULT_STATUS_INACTIVE);
         return Users::model()->findAll($criteria);
+    }
+    
+    /**
+     * Get list user have username start with parameter $username
+     * @param String $username Username value
+     * @return Array user models
+     */
+    public static function getListUserHaveUsernameStartWith($username) {
+        $criteria = new CDbCriteria();
+        $criteria->addCondition("t.username like '%$username%'");
+        $models = Users::model()->findAll($criteria);
+        $retVal = array();
+        foreach ($models as $model) {
+            if (CommonProcess::getUsernameFromFullName($model->first_name) === $username) {
+                $retVal[] = $model;
+            }
+        }
+        return $retVal;
+    }
+    
+    /**
+     * Generate username string from fullname and database
+     * @param String $fullName
+     * @return String
+     */
+    public static function generateUsername($fullName) {
+        $username = CommonProcess::getUsernameFromFullName($fullName);
+        $arrUser = self::getListUserHaveUsernameStartWith($username);
+        if (empty($arrUser)) {
+            return $username;
+        }
+        return $username . count($arrUser);
     }
 }

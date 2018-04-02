@@ -48,6 +48,7 @@ class Applications extends BaseActiveRecord
 		return array(
                     'role'  => array(self::HAS_MANY, 'Roles', 'application_id'),
                     'rUser'  => array(self::HAS_MANY, 'Users', 'application_id'),
+                    'rMenu'  => array(self::HAS_MANY, 'Menus', 'application_id'),
 		);
 	}
 
@@ -122,6 +123,11 @@ class Applications extends BaseActiveRecord
         if (count($users) > 0) {
             $retVal = false;
         }
+        // Check foreign table menus
+        $menus = Menus::model()->findByAttributes(array('application_id' => $this->id));
+        if (count($menus) > 0) {
+            $retVal = false;
+        }
         return $retVal;
     }
 
@@ -159,6 +165,8 @@ class Applications extends BaseActiveRecord
         Roles::model()->deleteAllByAttributes(array('application_id' => $this->id));
         // Delete foreign table Users
         Users::model()->deleteAllByAttributes(array('application_id' => $this->id));
+        // Delete foreign table Menus
+        Menus::model()->deleteAllByAttributes(array('application_id' => $this->id));
         // Delete table Applications
         if ($this->delete()) {
             Yii::log("Delete record id = " . $model->id);
@@ -172,5 +180,4 @@ class Applications extends BaseActiveRecord
         $this->is_delete = DomainConst::NUMBER_ONE_VALUE;
         $this->update();
     }
-
 }

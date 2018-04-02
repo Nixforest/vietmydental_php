@@ -11,6 +11,14 @@
     
 <div class="maincontent clearfix">
     <?php
+    // Test username
+    $fullName = "Phạm Trung Nguyên";
+    $fullName1 = "Ngô Quang Phục";
+    // Test generate username
+    CommonProcess::echoTest("Username of '$fullName': ", Users::generateUsername($fullName));
+    CommonProcess::echoTest("Username of '$fullName1': ", Users::generateUsername($fullName1));
+    CommonProcess::echoTest("Username converted from '$fullName': ", CommonProcess::getUsernameFromFullName($fullName));
+    CommonProcess::echoTest("Username converted from '$fullName1': ", CommonProcess::getUsernameFromFullName($fullName1));
     // Test compare date
     $date1 = "2018/03/23";
     $date2 = "2018-03-23 23:09:27";

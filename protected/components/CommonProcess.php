@@ -603,6 +603,34 @@ class CommonProcess {
         $retVal = self::getShortString($str);
         return str_replace(" ", "-", $retVal);
     }
+    
+    /**
+     * Get username from fullname
+     * @param String $fullName
+     * @return type
+     */
+    public static function getUsernameFromFullName($fullName) {
+        // Remove sign and make lower case
+        $retVal = self::getShortString($fullName);
+        
+        // Split all words to array
+        $arrStr = explode(" ", $retVal);
+        // Get length of array
+        $len = count($arrStr);
+        // Check if full name have up to 2 words
+        if ($len > 1) {
+            // Get name word
+            $name = $arrStr[$len - 1];
+            $retVal = $name;
+            // Loop for all first name and sub name
+            for ($index = 0; $index < $len - 1; $index++) {
+                // Take first character and append to return value
+                $retVal .= $arrStr[$index][0];
+            }
+        }
+        
+        return $retVal;
+    }
 
     /**
      * Generate array of simple password
