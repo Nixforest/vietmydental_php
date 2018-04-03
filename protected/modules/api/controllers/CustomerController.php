@@ -112,8 +112,8 @@ class CustomerController extends APIController
             $this->checkRequiredParam($root, array(
                 DomainConst::KEY_TOKEN,
                 DomainConst::KEY_PAGE,
-                DomainConst::KEY_DATE_FROM,
-                DomainConst::KEY_DATE_TO
+//                DomainConst::KEY_DATE_FROM,
+//                DomainConst::KEY_DATE_TO
             ));
             // Get user by token value
             $mUser = $this->getUserByToken($resultFailed, $root->token);

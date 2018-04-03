@@ -11,6 +11,8 @@
     
 <div class="maincontent clearfix">
     <?php
+    CommonProcess::echoTest("CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4): ", CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4));
+    CommonProcess::echoTest("CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_6): ", CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_6));
     // Test username
     $fullName = "Phạm Trung Nguyên";
     $fullName1 = "Ngô Quang Phục";

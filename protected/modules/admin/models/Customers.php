@@ -598,8 +598,9 @@ class Customers extends BaseActiveRecord
         $roleName = isset($mUser->rRole) ? $mUser->rRole->role_name : '';
         switch ($roleName) {
             case Roles::ROLE_DOCTOR:
-                $from = $root->date_from;
-                $to = $root->date_to;
+                $today = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_6);
+                $from = isset($root->date_from) ? $root->date_from : $today;
+                $to = isset($root->date_to) ? $root->date_to : $today;
                 if ($mUser->isTestUser()) {
                     $from = '2018/01/01';
                     $to = '2018/12/01';
