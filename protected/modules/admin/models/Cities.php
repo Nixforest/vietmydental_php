@@ -64,6 +64,14 @@ class Cities extends BaseActiveRecord
                         'on' => 'status = 1',
                         'order' => 'name ASC',
                         ),
+                    'rAgent' => array(self::HAS_MANY, 'Agents', 'city_id',
+                        'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
+                        'order' => 'name ASC',
+                        ),
+                    'rCustomer' => array(self::HAS_MANY, 'Customers', 'city_id',
+                        'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
+                        'order' => 'name ASC',
+                        ),
 		);
 	}
 
