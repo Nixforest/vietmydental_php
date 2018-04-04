@@ -74,6 +74,7 @@ class Agents extends BaseActiveRecord
                     'rWard' => array(self::BELONGS_TO, 'Wards', 'ward_id'),
                     'rStreet' => array(self::BELONGS_TO, 'Streets', 'street_id'),
                     'rCreatedBy' => array(self::BELONGS_TO, 'Users', 'created_by'),
+                    /** Join relation */
                     'rJoinUser' => array(
                         self::HAS_MANY, 'OneMany', 'one_id',
                         'on'    => 'type = ' . OneMany::TYPE_AGENT_USER,
@@ -81,6 +82,10 @@ class Agents extends BaseActiveRecord
                     'rJoinCustomer' => array(
                         self::HAS_MANY, 'OneMany', 'one_id',
                         'on'    => 'type = ' . OneMany::TYPE_AGENT_CUSTOMER,
+                    ),
+                    'rJoinReceipt' => array(
+                        self::HAS_MANY, 'OneMany', 'one_id',
+                        'on'    => 'type = ' . OneMany::TYPE_AGENT_RECEIPT,
                     ),
 		);
 	}
@@ -138,6 +143,9 @@ class Agents extends BaseActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'pagination' => array(
+                            'pageSize' => Settings::getListPageSize(),
+                        ),
 		));
 	}
         
@@ -179,6 +187,8 @@ class Agents extends BaseActiveRecord
      */
     public function beforeDelete() {
         OneMany::deleteAllOldRecords($this->id, OneMany::TYPE_AGENT_USER);
+        OneMany::deleteAllOldRecords($this->id, OneMany::TYPE_AGENT_CUSTOMER);
+        OneMany::deleteAllOldRecords($this->id, OneMany::TYPE_AGENT_RECEIPT);
         return parent::beforeDelete();
     }
 

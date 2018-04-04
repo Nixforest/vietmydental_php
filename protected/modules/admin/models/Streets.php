@@ -58,6 +58,18 @@ class Streets extends BaseActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
                     'rCity' => array(self::BELONGS_TO, 'Cities', 'city_id'),
+                    'rUsers' => array(self::HAS_MANY, 'Users', 'street_id',
+                        'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
+                        'order' => 'name ASC',
+                        ),
+                    'rAgent' => array(self::HAS_MANY, 'Agents', 'street_id',
+                        'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
+                        'order' => 'name ASC',
+                        ),
+                    'rCustomer' => array(self::HAS_MANY, 'Customers', 'street_id',
+                        'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
+                        'order' => 'name ASC',
+                        ),
 		);
 	}
 
@@ -96,8 +108,38 @@ class Streets extends BaseActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'pagination' => array(
+                            'pageSize' => Settings::getListPageSize(),
+                        ),
 		));
 	}
+        
+    //-----------------------------------------------------
+    // Parent override methods
+    //-----------------------------------------------------
+    /**
+     * Override before delete method
+     * @return Parent result
+     */
+    protected function beforeDelete() {
+        $retVal = true;
+        // Check foreign table agents
+        $agents = Agents::model()->findByAttributes(array('street_id' => $this->id));
+        if (count($agents) > 0) {
+            $retVal = false;
+        }
+        // Check foreign table customers
+        $customers = Customers::model()->findByAttributes(array('street_id' => $this->id));
+        if (count($customers) > 0) {
+            $retVal = false;
+        }
+        // Check foreign table users
+        $users = Users::model()->findByAttributes(array('street_id' => $this->id));
+        if (count($users) > 0) {
+            $retVal = false;
+        }
+        return $retVal;
+    }
 
     //-----------------------------------------------------
     // Utility methods
