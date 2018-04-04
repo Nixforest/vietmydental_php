@@ -100,12 +100,33 @@ class Cities extends BaseActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'pagination' => array(
+                            'pageSize' => Settings::getListPageSize(),
+                        ),
 		));
 	}
         
     //-----------------------------------------------------
     // Parent override methods
     //-----------------------------------------------------
+    /**
+     * Override before delete method
+     * @return Parent result
+     */
+    protected function beforeDelete() {
+        $retVal = true;
+        // Check foreign table districts
+        $districts = Districts::model()->findByAttributes(array('city_id' => $this->id));
+        if (count($districts) > 0) {
+            $retVal = false;
+        }
+        // Check foreign table streets
+        $streets = Streets::model()->findByAttributes(array('city_id' => $this->id));
+        if (count($streets) > 0) {
+            $retVal = false;
+        }
+        return $retVal;
+    }
 
     //-----------------------------------------------------
     // Utility methods
