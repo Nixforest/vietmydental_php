@@ -67,6 +67,10 @@ class Medicines extends BaseActiveRecord
                     'rUnit' => array(self::BELONGS_TO, 'Units', 'unit_id'),
                     'rUse' => array(self::BELONGS_TO, 'MedicineUses', 'use_id'),
                     'rType' => array(self::BELONGS_TO, 'MedicineTypes', 'type_id'),
+                    'rPrescriptionDetails' => array(self::HAS_MANY, 'PrescriptionDetails', 'medicine_id',
+                        'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
+                        'order' => 'name ASC',
+                        ),
 		);
 	}
 
@@ -117,8 +121,28 @@ class Medicines extends BaseActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'pagination' => array(
+                            'pageSize' => Settings::getListPageSize(),
+                        ),
 		));
 	}
+        
+    //-----------------------------------------------------
+    // Parent override methods
+    //-----------------------------------------------------
+    /**
+     * Override before delete method
+     * @return Parent result
+     */
+    protected function beforeDelete() {
+        $retVal = true;
+        // Check foreign table prescription details
+        $prescriptionDetails = PrescriptionDetails::model()->findByAttributes(array('medicine_id' => $this->id));
+        if (count($prescriptionDetails) > 0) {
+            $retVal = false;
+        }
+        return $retVal;
+    }
 
     //-----------------------------------------------------
     // Utility methods
