@@ -72,6 +72,10 @@ class Cities extends BaseActiveRecord
                         'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
                         'order' => 'name ASC',
                         ),
+                    'rUsers' => array(self::HAS_MANY, 'Users', 'province_id',
+                        'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
+                        'order' => 'name ASC',
+                        ),
 		);
 	}
 
@@ -131,6 +135,21 @@ class Cities extends BaseActiveRecord
         // Check foreign table streets
         $streets = Streets::model()->findByAttributes(array('city_id' => $this->id));
         if (count($streets) > 0) {
+            $retVal = false;
+        }
+        // Check foreign table agents
+        $agents = Agents::model()->findByAttributes(array('city_id' => $this->id));
+        if (count($agents) > 0) {
+            $retVal = false;
+        }
+        // Check foreign table customers
+        $customers = Customers::model()->findByAttributes(array('city_id' => $this->id));
+        if (count($customers) > 0) {
+            $retVal = false;
+        }
+        // Check foreign table users
+        $users = Users::model()->findByAttributes(array('province_id' => $this->id));
+        if (count($users) > 0) {
             $retVal = false;
         }
         return $retVal;

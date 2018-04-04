@@ -58,7 +58,22 @@ class Districts extends BaseActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
                     'rCity' => array(self::BELONGS_TO, 'Cities', 'city_id'),
-                    'rWard' => array(self::HAS_MANY, 'Wards', 'district_id'),
+                    'rWard' => array(self::HAS_MANY, 'Wards', 'district_id',
+                        'on' => 'status = 1',
+                        'order' => 'name ASC',
+                        ),
+                    'rUsers' => array(self::HAS_MANY, 'Users', 'district_id',
+                        'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
+                        'order' => 'name ASC',
+                        ),
+                    'rAgent' => array(self::HAS_MANY, 'Agents', 'district_id',
+                        'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
+                        'order' => 'name ASC',
+                        ),
+                    'rCustomer' => array(self::HAS_MANY, 'Customers', 'district_id',
+                        'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
+                        'order' => 'name ASC',
+                        ),
 		);
 	}
 
@@ -97,8 +112,43 @@ class Districts extends BaseActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'pagination' => array(
+                            'pageSize' => Settings::getListPageSize(),
+                        ),
 		));
 	}
+        
+    //-----------------------------------------------------
+    // Parent override methods
+    //-----------------------------------------------------
+    /**
+     * Override before delete method
+     * @return Parent result
+     */
+    protected function beforeDelete() {
+        $retVal = true;
+        // Check foreign table wards
+        $wards = Wards::model()->findByAttributes(array('district_id' => $this->id));
+        if (count($wards) > 0) {
+            $retVal = false;
+        }
+        // Check foreign table agents
+        $agents = Agents::model()->findByAttributes(array('district_id' => $this->id));
+        if (count($agents) > 0) {
+            $retVal = false;
+        }
+        // Check foreign table customers
+        $customers = Customers::model()->findByAttributes(array('district_id' => $this->id));
+        if (count($customers) > 0) {
+            $retVal = false;
+        }
+        // Check foreign table users
+        $users = Users::model()->findByAttributes(array('district_id' => $this->id));
+        if (count($users) > 0) {
+            $retVal = false;
+        }
+        return $retVal;
+    }
 
     //-----------------------------------------------------
     // Utility methods
