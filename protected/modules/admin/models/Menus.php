@@ -56,6 +56,7 @@ class Menus extends BaseActiveRecord
                     'rController' => array(self::BELONGS_TO, 'Controllers', 'controller_id'),
                     'rApplication' => array(self::BELONGS_TO, 'Applications', 'application_id'),
                     'rMenu' => array(self::BELONGS_TO, 'Menus', 'parent_id'),
+                    'rChildren' => array(self::HAS_MANY, 'Menus', 'parent_id'),
 		);
 	}
 

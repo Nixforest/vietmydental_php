@@ -60,6 +60,14 @@ class Diagnosis extends BaseActiveRecord
 		return array(
                     'rParent' => array(self::BELONGS_TO, 'Diagnosis', 'parent_id'),
                     'rChildren' => array(self::HAS_MANY, 'Diagnosis', 'parent_id'),
+                    'rTreatmentSchedules' => array(self::HAS_MANY, 'TreatmentSchedules', 'diagnosis_id',
+                        'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
+                        'order' => 'name ASC',
+                        ),
+                    'rTreatmentScheduleDetails' => array(self::HAS_MANY, 'TreatmentScheduleDetails', 'diagnosis_id',
+                        'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
+                        'order' => 'name ASC',
+                        ),
 		);
 	}
 
@@ -98,8 +106,33 @@ class Diagnosis extends BaseActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'pagination' => array(
+                            'pageSize' => Settings::getListPageSize(),
+                        ),
 		));
 	}
+        
+    //-----------------------------------------------------
+    // Parent override methods
+    //-----------------------------------------------------
+    /**
+     * Override before delete method
+     * @return Parent result
+     */
+    protected function beforeDelete() {
+        $retVal = true;
+        // Check foreign table treatment_schedules
+        $treatmentSchedules = TreatmentSchedules::model()->findByAttributes(array('diagnosis_id' => $this->id));
+        if (count($treatmentSchedules) > 0) {
+            $retVal = false;
+        }
+        // Check foreign table treatment_schedule_details
+        $treatmentScheduleDetails = TreatmentScheduleDetails::model()->findByAttributes(array('diagnosis_id' => $this->id));
+        if (count($treatmentScheduleDetails) > 0) {
+            $retVal = false;
+        }
+        return $retVal;
+    }
 
     //-----------------------------------------------------
     // Utility methods
