@@ -209,6 +209,7 @@ class Customers extends BaseActiveRecord
         if (isset($this->rMedicalRecord)) {
             $this->rMedicalRecord->delete();
         }
+        OneMany::deleteAllManyOldRecords($this->id, OneMany::TYPE_AGENT_CUSTOMER);
         return parent::beforeDelete();
     }
 

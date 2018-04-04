@@ -83,6 +83,9 @@ class CustomerTypes extends BaseActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'pagination' => array(
+                            'pageSize' => Settings::getListPageSize(),
+                        ),
 		));
 	}
 
@@ -96,6 +99,23 @@ class CustomerTypes extends BaseActiveRecord
 	{
 		return parent::model($className);
 	}
+        
+    //-----------------------------------------------------
+    // Parent override methods
+    //-----------------------------------------------------
+    /**
+     * Override before delete method
+     * @return Parent result
+     */
+    protected function beforeDelete() {
+        $retVal = true;
+        // Check foreign table customers
+        $customers = Customers::model()->findByAttributes(array('type_id' => $this->id));
+        if (count($customers) > 0) {
+            $retVal = false;
+        }
+        return $retVal;
+    }
         
     //-----------------------------------------------------
     // Utility methods
