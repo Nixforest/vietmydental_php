@@ -57,6 +57,13 @@ class SettingsController extends AdminController
                     
                 ),                
             ),
+            // SMS setting
+            Settings::KEY_SMS_SETTINGS      => array(
+                DomainConst::KEY_ALIAS      => DomainConst::CONTENT00261,
+                DomainConst::KEY_CHILDREN   => array(
+                    Settings::KEY_SMS_SERVER_URL,
+                ),
+            ),
             // TODO: Add more group here
         );
 

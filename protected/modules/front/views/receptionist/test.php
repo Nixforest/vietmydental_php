@@ -11,6 +11,10 @@
     
 <div class="maincontent clearfix">
     <?php
+     SMSHandler::sendSMS('smsbrand_gas24h', '147a@258', 'HUONGMINH', 0,
+             '84976994876', 'Gas24h', 'bulksms',
+             'DH ADMIN TEST. Gia BB: 20,657 - Gia B12: 291,000 INDUSTRIAL001-Cong ty TNHH ',
+             0);
     CommonProcess::echoTest("CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4): ", CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4));
     CommonProcess::echoTest("CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_6): ", CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_6));
     // Test username

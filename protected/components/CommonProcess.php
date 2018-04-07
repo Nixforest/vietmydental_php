@@ -701,6 +701,22 @@ class CommonProcess {
     }
     
     /**
+     * Call soap function
+     * @param Array $userParam Parameter list
+     * @param String $functionCall Function name
+     * @param String $url Server url
+     * @return \SoapClient
+     */
+    public static function callSoapFunction($userParam, $functionCall, $url) {
+        $client = new SoapClient($url, array(
+            "soap_version"  => SOAP_1_1,
+            "trace"         => 1
+        ));
+        $client->__soapCall($functionCall, array($userParam));
+        return $client;
+    }
+    
+    /**
      * Echo test string
      * @param String $message Message
      * @param String $data Data

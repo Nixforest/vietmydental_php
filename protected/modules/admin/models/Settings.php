@@ -21,6 +21,8 @@ class Settings extends BaseActiveRecord
     const KEY_APP_SETTINGS                      = 'app_settings';
     /** Key Mail setting */
     const KEY_MAIL_SETTINGS                     = 'mail_settings';
+    /** Key SMS setting */
+    const KEY_SMS_SETTINGS                      = 'sms_settings';
     
     /* --- General settings --- */
     /** Key website title */
@@ -59,6 +61,10 @@ class Settings extends BaseActiveRecord
     /* --- Others settings --- */
     /** Key Ajax template value */
     const KEY_AJAX_TEMPLATE_VALUE               = 'AJAX_TEMPLATE_VALUE';
+    
+    /* --- SMS settings --- */
+    /** Key SMS server url */
+    const KEY_SMS_SERVER_URL                    = 'SMS_SERVER_URL';
     
 	/**
 	 * @return string the associated database table name
@@ -192,6 +198,8 @@ class Settings extends BaseActiveRecord
      * @param String $value Value string
      */
     public static function saveSetting($key, $value) {
+        // TODO: Update data to cache
+        
         $criteria = new CDbCriteria();
         $criteria->compare('t.key', $key, true);
         $model = self::model()->find($criteria);
@@ -215,6 +223,7 @@ class Settings extends BaseActiveRecord
      * @return string Value of key
      */
     public static function getItem($key) {
+        // TODO: Get data from cache
         $arrModel = Settings::loadItems();
         if (isset($arrModel[$key])) {
             return $arrModel[$key]->value;
@@ -301,5 +310,17 @@ class Settings extends BaseActiveRecord
             return $retVal;
         }
         return 50;
+    }
+    
+    /**
+     * Get SMS server url.
+     * @return string SMS server url
+     */
+    public static function getSMSServerUrl() {
+        $retVal = Settings::getItem(Settings::KEY_SMS_SERVER_URL);
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return "";
     }
 }

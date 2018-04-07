@@ -12,16 +12,21 @@
  * @author NguyenPT
  */
 class SendScheduleEmailCommand extends CConsoleCommand {
+    /**
+     * Run command
+     * @param type $arg
+     */
     public function run($arg) {
         try {
-            echo "Run send schedule email command success";
-//            die;
-//            SendScheduleEmailCommand::doRun();
+            SendScheduleEmailCommand::doRun();
         } catch (Exception $ex) {
             CommonProcess::dumpVariable($ex->getMessage());
         }
     }
     
+    /**
+     * Run command
+     */
     public static function doRun() {
         $countSend = 0;
         ScheduleEmail::sendEmail($countSend, ScheduleEmail::MAIL_NORMAL);

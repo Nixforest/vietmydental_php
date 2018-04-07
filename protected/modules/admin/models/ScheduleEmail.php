@@ -169,11 +169,11 @@ class ScheduleEmail extends BaseActiveRecord
     
     /**
      * Prepare data for send email
-     * @param type $aScheduleEmail
-     * @param type $aIdScheduleEmail
-     * @param type $aUsers
-     * @param type $aIdUsers
-     * @param type $type
+     * @param Array $aScheduleEmail Array object schedule_email find in db
+     * @param Array $aIdScheduleEmail
+     * @param Array $aUsers
+     * @param Array $aIdUsers
+     * @param Array $type
      */
     public static function prepareData(&$aScheduleEmail,
             &$aIdScheduleEmail,

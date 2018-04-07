@@ -2,15 +2,7 @@
 /* @var $this EmailTemplatesController */
 /* @var $model EmailTemplates */
 
-$this->breadcrumbs=array(
-	'Email Templates'=>array('index'),
-	'Manage',
-);
-
-$this->menu=array(
-	array('label'=>'List EmailTemplates', 'url'=>array('index')),
-	array('label'=>'Create EmailTemplates', 'url'=>array('create')),
-);
+$this->createMenu('index', $model);
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
@@ -26,7 +18,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Manage Email Templates</h1>
+<h1><?php echo $this->pageTitle; ?></h1>
 
 <p>
 You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
@@ -45,7 +37,13 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'id',
+                array(
+                    'header' => DomainConst::CONTENT00034,
+                    'type' => 'raw',
+                    'value' => '$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
+                    'headerHtmlOptions' => array('width' => '30px','style' => 'text-align:center;'),
+                    'htmlOptions' => array('style' => 'text-align:center;')
+                ),
 		'subject',
 		'body',
 		'param_description',

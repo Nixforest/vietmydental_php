@@ -55,6 +55,7 @@ class EmailTemplates extends BaseActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    'rScheduleEmail' => array(self::HAS_MANY, 'ScheduleEmail', 'template_id'),
 		);
 	}
 
@@ -91,6 +92,26 @@ class EmailTemplates extends BaseActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'pagination' => array(
+                            'pageSize' => Settings::getListPageSize(),
+                        ),
 		));
 	}
+        
+    //-----------------------------------------------------
+    // Parent override methods
+    //-----------------------------------------------------
+    /**
+     * Override before delete method
+     * @return Parent result
+     */
+    protected function beforeDelete() {
+        $retVal = true;
+        // Check foreign table schedule_email
+        $emails = ScheduleEmail::model()->findByAttributes(array('template_id' => $this->id));
+        if (count($emails) > 0) {
+            $retVal = false;
+        }
+        return $retVal;
+    }
 }

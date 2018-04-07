@@ -66,6 +66,10 @@ class ReceptionistController extends Controller {
         exit;
     }
     
+    /**
+     * Action create schedule extend
+     * Deleted
+     */
     public function actionCreateScheduleExt() {
         // Test commit
         $schedule = new TreatmentSchedules();
@@ -126,6 +130,7 @@ class ReceptionistController extends Controller {
         $schedule = new TreatmentSchedules();
         $detail = new TreatmentScheduleDetails();
         // Temp value saved at Customers::getCustomerAjaxInfo()
+        $schedule->start_date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
         $recordId = Settings::getAjaxTempValue();
         $schedule->record_id = $recordId;
         $mMedicalRecord = MedicalRecords::model()->findByPk($recordId);
