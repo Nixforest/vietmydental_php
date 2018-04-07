@@ -38,14 +38,18 @@ $('.search-form form').submit(function(){
                     'headerHtmlOptions' => array('width' => '30px','style' => 'text-align:center;'),
                     'htmlOptions' => array('style' => 'text-align:center;')
                 ),
+		'created_date',
+                array(
+                    'name' => 'level',
+                    'value' => 'Loggers::LOG_LEVELS[$data->level]',
+                    'filter' => Loggers::LOG_LEVELS,
+                ),
+		'message',
+		'description',
+		'category',
 		'ip_address',
 		'country',
-		'message',
-		'created_date',
-		'description',
-		'level',
 		'logtime',
-		'category',
                 array(
                     'header' => 'Actions',
                     'class'=>'CButtonColumn',

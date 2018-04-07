@@ -11,6 +11,11 @@
     
 <div class="maincontent clearfix">
     <?php
+//     for ($index = 0; $index < 10000; $index++) {
+//         Loggers::insertOne("Test message $index", "Test description $index", Loggers::LOG_LEVEL_INFO, get_class());
+//     }
+//     Loggers::insertOne("Test message", "Test description", Loggers::LOG_LEVEL_INFO, get_class());
+//    Loggers::checkLog();
      SMSHandler::sendSMS('smsbrand_gas24h', '147a@258', 'HUONGMINH', 0,
              '84976994876', 'Gas24h', 'bulksms',
              'DH ADMIN TEST. Gia BB: 20,657 - Gia B12: 291,000 INDUSTRIAL001-Cong ty TNHH ',

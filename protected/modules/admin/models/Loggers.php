@@ -16,6 +16,18 @@
  */
 class Loggers extends CActiveRecord
 {
+    //-----------------------------------------------------
+    // Constants
+    //-----------------------------------------------------
+    const LOG_LEVEL_INFO                    = '0';
+    const LOG_LEVEL_WARNING                 = '1';
+    const LOG_LEVEL_ERROR                   = '2';
+    
+    const LOG_LEVELS = array(
+        self::LOG_LEVEL_INFO        => 'Info',
+        self::LOG_LEVEL_WARNING     => 'Warning',
+        self::LOG_LEVEL_ERROR       => 'Error'
+    );
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -103,6 +115,7 @@ class Loggers extends CActiveRecord
 		$criteria->compare('level',$this->level,true);
 		$criteria->compare('logtime',$this->logtime);
 		$criteria->compare('category',$this->category,true);
+                $criteria->order = 'logtime DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -111,4 +124,87 @@ class Loggers extends CActiveRecord
                         ),
 		));
 	}
+        
+    //-----------------------------------------------------
+    // Parent override methods
+    //-----------------------------------------------------
+    /**
+     * Override before save method
+     * @return Parent result
+     */
+    public function beforeSave() {
+        $this->ip_address = CommonProcess::getUserIP();
+        $this->country = CommonProcess::getUserCountry($this->ip_address);
+        if ($this->isNewRecord) {   // Add
+            // Handle created date
+            $this->created_date = CommonProcess::getCurrentDateTime();
+        } else {                    // Update
+            
+        }
+        return parent::beforeSave();
+    }
+    
+    //-----------------------------------------------------
+    // Static methods
+    //-----------------------------------------------------
+    /**
+     * Insert record
+     * @param String $message
+     * @param String $description
+     * @param String $level
+     * @param String $category
+     */
+    public static function insertOne($message, $description, $level, $category) {
+        $model = new Loggers();
+        $model->message = $message;
+        $model->description = $description;
+        $model->level = $level;
+        $model->logtime = time();
+        $model->category = $category;
+        $model->save();
+    }
+    
+    /**
+     * Log info
+     * @param String $message
+     * @param String $description
+     * @param String $category
+     */
+    public static function info($message, $description, $category) {
+        self::insertOne($message, $description, self::LOG_LEVEL_INFO, $category);
+    }
+    
+    /**
+     * Log warning
+     * @param String $message
+     * @param String $description
+     * @param String $category
+     */
+    public static function warning($message, $description, $category) {
+        self::insertOne($message, $description, self::LOG_LEVEL_WARNING, $category);
+    }
+    
+    /**
+     * Log error
+     * @param String $message
+     * @param String $description
+     * @param String $category
+     */
+    public static function error($message, $description, $category) {
+        self::insertOne($message, $description, self::LOG_LEVEL_ERROR, $category);
+    }
+    
+    /**
+     * Check and remove log if over number
+     */
+    public static function checkLog() {
+        $tblName = self::model()->tableName();
+        $model = new Loggers();
+        $count = $model->getDbConnection()->createCommand('SELECT COUNT(*) FROM '.$tblName)->queryScalar();
+        if ($count >= 1000) {
+            $query = "DELETE FROM $tblName limit 200";
+            $command = Yii::app()->db->createCommand($query);
+            $command->execute();
+        }
+    }
 }
