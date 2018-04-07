@@ -1,6 +1,6 @@
 <?php
-/* @var $this ApiRequestLogsController */
-/* @var $model ApiRequestLogs */
+/* @var $this LoggersController */
+/* @var $model Loggers */
 
 $this->createMenu('index', $model);
 
@@ -10,7 +10,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#api-request-logs-grid').yiiGridView('update', {
+	$('#loggers-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -21,13 +21,13 @@ $('.search-form form').submit(function(){
 <h1><?php echo $this->pageTitle; ?></h1>
 
 <p>
-    <a class="delete" title="<?php echo DomainConst::CONTENT00262; ?>" href="<?php echo Yii::app()->createAbsoluteUrl("api/apiRequestLogs/deleteAll"); ?>">
+    <a class="delete" title="<?php echo DomainConst::CONTENT00262; ?>" href="<?php echo Yii::app()->createAbsoluteUrl("admin/loggers/deleteAll"); ?>">
         <?php echo DomainConst::CONTENT00262; ?>
     </a>
 <p>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'api-request-logs-grid',
+	'id'=>'loggers-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
@@ -40,28 +40,12 @@ $('.search-form form').submit(function(){
                 ),
 		'ip_address',
 		'country',
-//		'user_id',
-		array(
-                    'name'=>'user_id',
-                    'htmlOptions' => array('style' => 'text-align:center;'),
-                    'value'=> 'isset($data->rUser) ? $data->rUser->username : ""',
-                    'filter'=>Users::loadItems(),
-                ),
-		'method',
-                'content',
-//		array(
-//                    'name'=>'content',
-////                    'htmlOptions' => array('style' => 'text-align:center;'),
-//                    'value'=> 'CommonProcess::formatJson($data->content)',
-//                ),
-//		'response',
-		array(
-                    'name'=>'response',
-//                    'htmlOptions' => array('style' => 'text-align:center;'),
-                    'value'=> '$data->getResponse()',
-                ),
+		'message',
 		'created_date',
-		'responsed_date',
+		'description',
+		'level',
+		'logtime',
+		'category',
                 array(
                     'header' => 'Actions',
                     'class'=>'CButtonColumn',

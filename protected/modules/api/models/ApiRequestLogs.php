@@ -107,6 +107,9 @@ class ApiRequestLogs extends BaseActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'pagination' => array(
+                            'pageSize' => Settings::getListPageSize(),
+                        ),
 		));
 	}
         
@@ -127,6 +130,10 @@ class ApiRequestLogs extends BaseActiveRecord
     //-----------------------------------------------------
     // Utility methods
     //-----------------------------------------------------
+    /**
+     * Get response value
+     * @return string
+     */
     public function getResponse() {
         // strip tags to avoid breaking any html
         $string = strip_tags($this->response);
