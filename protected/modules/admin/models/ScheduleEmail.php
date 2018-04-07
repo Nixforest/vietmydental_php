@@ -160,8 +160,6 @@ class ScheduleEmail extends BaseActiveRecord
             
             self::deleteByArrayId($aIdScheduleEmail);
             $to = time();
-            $second = $to - $from;
-            
         } catch (Exception $ex) {
             CommonProcess::dumpVariable($ex->getMessage());
         }
@@ -209,5 +207,13 @@ class ScheduleEmail extends BaseActiveRecord
         $sParamsIn = implode(',', $aIdScheduleEmail);
         $criteria->addCondition("id IN ($sParamsIn)");
         self::model()->deleteAll($criteria);
+    }
+    
+    public static function handleEmailResetPass() {
+        // Check if current hour < 2h -> Not run this
+        if (date("H") < 2) {
+            return;
+        }
+        $from = time();
     }
 }

@@ -45,7 +45,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'htmlOptions' => array('style' => 'text-align:center;')
                 ),
 		'subject',
-		'body',
+		'body:html',
 		'param_description',
 		'type',
                 array(

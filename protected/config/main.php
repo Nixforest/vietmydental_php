@@ -30,12 +30,12 @@ return array(
 
 	'modules'=>array(
 		// uncomment the following to enable the Gii tool
-		'gii'=>array(
-			'class'=>'system.gii.GiiModule',
-			'password'=>'123',
-			// If removed, Gii defaults to localhost only. Edit carefully to taste.
-			'ipFilters'=>array('127.0.0.1','::1'),
-		),
+//		'gii'=>array(
+//			'class'=>'system.gii.GiiModule',
+//			'password'=>'123',
+//			// If removed, Gii defaults to localhost only. Edit carefully to taste.
+//			'ipFilters'=>array('127.0.0.1','::1'),
+//		),
                 'admin',            // Admin module
                 'api',              // API module
                 'front',            // Front-end module
@@ -114,7 +114,11 @@ return array(
 	// application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']
 	'params'=>array(
-		// this is used in contact page
-		'adminEmail'=>'webmaster@example.com',
+            'adminEmail'=>'webmaster@example.com',              // this is used in contact page
+            'niceditor_list_buttons' => array(
+                'xhtml','bold','italic','underline','indent','outdent','ol',
+                'ul','fontSize','left','center','right','justify','forecolor',
+                'bgcolor','image','upload'
+            ),
 	),
 );

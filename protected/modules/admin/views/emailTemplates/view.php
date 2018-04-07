@@ -12,7 +12,7 @@ $this->createMenu('view', $model);
 	'attributes'=>array(
 		'id',
 		'subject',
-		'body',
+		'body:html',
 		'param_description',
 		'type',
 	),

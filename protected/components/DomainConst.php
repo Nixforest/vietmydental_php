@@ -97,6 +97,10 @@ class DomainConst {
     /** Prefix of medical record id string */
     const MEDICAL_RECORD_ID_PREFIX                      = 'HS';
     
+    /** Editor width */
+    const EDITOR_WIDTH                                  = '800px';
+    /** Editor height */
+    const EDITOR_HEIGHT                                 = '500px';
     
     //-----------------------------------------------------
     // Keys setting 

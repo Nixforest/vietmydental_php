@@ -23,7 +23,20 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'body'); ?>
-		<?php echo $form->textArea($model,'body',array('rows'=>6, 'cols'=>50)); ?>
+		<?php // echo $form->textArea($model,'body',array('rows'=>6, 'cols'=>50)); ?>
+                <div style="padding-left:141px;">
+                    <?php
+                    $this->widget('ext.niceditor.nicEditorWidget', array(
+                        "model" => $model, // Data-Model
+                        "attribute" => 'body', // Attribute in the Data-Model        
+                        "config" => array(
+                            "buttonList" => Yii::app()->params['niceditor_list_buttons'],
+                        ),
+                        "width" => DomainConst::EDITOR_WIDTH,           // Optional default to 100%
+                        "height" => DomainConst::EDITOR_HEIGHT,   // Optional default to 150px
+                    ));
+                    ?>                                
+                </div>
 		<?php echo $form->error($model,'body'); ?>
 	</div>
 

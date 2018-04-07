@@ -12,6 +12,10 @@
  */
 class EmailTemplates extends BaseActiveRecord
 {
+    //-----------------------------------------------------
+    // Constants
+    //-----------------------------------------------------
+    const TEMPLATE_ID_RESET_PASSWORD                   = 1;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
