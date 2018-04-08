@@ -722,8 +722,34 @@ class CommonProcess {
      * @param String $data Data
      */
     public static function echoTest($message, $data) {
-        echo '<b>' . $message . '</b>' . '<i>' . $data . '</i>';
+        if (is_array($data)) {
+            $sData = '[' . implode(", ", $data) . ']';
+            echo '<b>' . $message . '</b>' . '<i>' . $sData . '</i>';
+        } else {
+            echo '<b>' . $message . '</b>' . '<i>' . $data . '</i>';
+        }
         echo '<br/>';
+    }
+    
+    /**
+     * Echo test string
+     * @param String $message Message
+     * @param String $data Data
+     */
+    public static function echoArrayKeyValue($message, $data) {
+        if (is_array($data)) {
+            $aData = array();
+            foreach ($data as $key => $value) {
+                if (is_array($value)) {
+                    
+                } else {
+                    $aData[] = '(' . $key . ' - ' . $value . ')';
+                }
+            }
+            $sData = '[' . implode(", ", $aData) . ']';
+            echo '<b>' . $message . '</b>' . '<i>' . $sData . '</i>';
+            echo '<br/>';
+        }
     }
 
     /**

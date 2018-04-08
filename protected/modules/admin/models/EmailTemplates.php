@@ -118,4 +118,20 @@ class EmailTemplates extends BaseActiveRecord
         }
         return $retVal;
     }
+    
+    /**
+     * Create email content (subject and body) by data array
+     * @param Array $data Array data
+     * @return Array
+     */
+    public static function createEmailContent($data) {
+        $retVal = array();
+        $key = 'TS';
+        $cnt = 1;
+        foreach ($data as $value) {
+            $retVal['{' . $key . $cnt . '}'] = $value;
+            $cnt++;
+        }
+        return $retVal;
+    }
 }

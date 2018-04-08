@@ -29,6 +29,8 @@ class SendScheduleEmailCommand extends CConsoleCommand {
      */
     public static function doRun() {
         $countSend = 0;
+        // Reset pass
+        ScheduleEmail::handleEmailResetPass();
         ScheduleEmail::sendEmail($countSend, ScheduleEmail::MAIL_NORMAL);
     }
 }

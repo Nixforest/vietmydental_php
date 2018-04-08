@@ -11,15 +11,33 @@
     
 <div class="maincontent clearfix">
     <?php
-//     for ($index = 0; $index < 10000; $index++) {
-//         Loggers::insertOne("Test message $index", "Test description $index", Loggers::LOG_LEVEL_INFO, get_class());
-//     }
-//     Loggers::insertOne("Test message", "Test description", Loggers::LOG_LEVEL_INFO, get_class());
-//    Loggers::checkLog();
-     SMSHandler::sendSMS('smsbrand_gas24h', '147a@258', 'HUONGMINH', 0,
-             '84976994876', 'Gas24h', 'bulksms',
-             'DH ADMIN TEST. Gia BB: 20,657 - Gia B12: 291,000 INDUSTRIAL001-Cong ty TNHH ',
-             0);
+    CommonProcess::echoTest("Test email reset pass: ", ScheduleEmail::handleEmailResetPass());
+    
+    $from = time();
+    // Test email content
+    $user = Users::model()->findByAttributes(array(
+        'username' => 'nguyenpt',
+    ));
+    if ($user) {
+        CommonProcess::echoTest("Test email: ", $user->first_name);
+        $date = date('d-m-Y');
+        CommonProcess::echoTest("&nbsp;&nbsp;&nbsp;&nbsp;Current date: ", $date);
+        $data = array($date, $user->first_name, $user->temp_password, 'nkvietmy.com');
+        CommonProcess::echoTest("&nbsp;&nbsp;&nbsp;&nbsp;Data array: ", $data);
+        $content = EmailTemplates::createEmailContent($data);
+        CommonProcess::echoArrayKeyValue("&nbsp;&nbsp;&nbsp;&nbsp;Content array: ", $content);
+        CommonProcess::echoTest("&nbsp;&nbsp;&nbsp;&nbsp;Email: ", $user->email);
+//        $emailData = EmailHandler::sendTemplateMail(EmailTemplates::TEMPLATE_ID_RESET_PASSWORD, $content, $content, $user->email);
+//        CommonProcess::echoArrayKeyValue("&nbsp;&nbsp;&nbsp;&nbsp;Email data: ", $emailData);
+//        CommonProcess::echoTest("&nbsp;&nbsp;&nbsp;&nbsp;Body: ", $emailData);
+    } else {
+        CommonProcess::echoTest("Can not find user", '');
+    }
+    
+//     SMSHandler::sendSMS('smsbrand_gas24h', '147a@258', 'HUONGMINH', 0,
+//             '84976994876', 'Gas24h', 'bulksms',
+//             'DH ADMIN TEST. Gia BB: 20,657 - Gia B12: 291,000 INDUSTRIAL001-Cong ty TNHH ',
+//             0);
     CommonProcess::echoTest("CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4): ", CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4));
     CommonProcess::echoTest("CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_6): ", CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_6));
     // Test username
@@ -48,6 +66,8 @@
 //    )));
     CommonProcess::echoTest('Yii root path: ', DirectoryHandler::getRootPath());
     CommonProcess::echoTest('Current date time: ', CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3));
+    $to = time();
+    ScheduleEmail::logInfo($from, $to, __METHOD__, 5);
     ?>
 </div>
 <?php $this->endWidget(); ?>

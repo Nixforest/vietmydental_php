@@ -128,44 +128,6 @@ class ScheduleEmail extends BaseActiveRecord
     // Static methods
     //-----------------------------------------------------
     /**
-     * Send email
-     * @param Int $countSent Number of email was sent
-     * @param String $type Type of email
-     */
-    public static function sendEmail(&$countSent, $type) {
-        try {
-            $from = time();
-            $aScheduleEmail     = array();
-            $aIdScheduleEmail   = array();
-            $aUsers             = array();
-            $aIdUsers           = array();
-            ScheduleEmail::prepareData($aScheduleEmail, $aIdScheduleEmail,
-                    $aUsers, $aIdUsers, '');
-            $countSent = count($aIdUsers);
-            if ($countSent < 1) {
-                return;
-            }
-            $aIdDelete = array();
-            foreach ($aScheduleEmail as $key => $mScheduleEmail) {
-                switch ($mScheduleEmail->type) {
-                    case self::MAIL_NORMAL:
-                        $aIdDelete[] = $mScheduleEmail->id;
-                        EmailHandler::sendBuiltEmail($mScheduleEmail);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-            
-            self::deleteByArrayId($aIdScheduleEmail);
-            $to = time();
-        } catch (Exception $ex) {
-            CommonProcess::dumpVariable($ex->getMessage());
-        }
-    }
-    
-    /**
      * Prepare data for send email
      * @param Array $aScheduleEmail Array object schedule_email find in db
      * @param Array $aIdScheduleEmail
@@ -195,6 +157,45 @@ class ScheduleEmail extends BaseActiveRecord
     }
     
     /**
+     * Send email
+     * @param Int $countSent Number of email was sent
+     * @param String $type Type of email
+     */
+    public static function sendEmail(&$countSent, $type) {
+        try {
+            $from = time();
+            $aScheduleEmail     = array();
+            $aIdScheduleEmail   = array();
+            $aUsers             = array();
+            $aIdUsers           = array();
+            ScheduleEmail::prepareData($aScheduleEmail, $aIdScheduleEmail,
+                    $aUsers, $aIdUsers, '');
+            $countSent = count($aIdUsers);
+            if ($countSent > 0) {
+                $aIdDelete = array();
+                foreach ($aScheduleEmail as $key => $mScheduleEmail) {
+                    switch ($mScheduleEmail->type) {
+                        case self::MAIL_NORMAL:
+                            $aIdDelete[] = $mScheduleEmail->id;
+                            EmailHandler::sendBuiltEmail($mScheduleEmail);
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                self::deleteByArrayId($aIdDelete);
+            }
+            
+            $to = time();
+            self::logInfo($from, $to, __METHOD__, $countSent);
+        } catch (Exception $ex) {
+            CommonProcess::dumpVariable($ex->getMessage());
+        }
+    }
+    
+    /**
      * Delete by array id
      * @param Array $aIdScheduleEmail Array id
      * @return type
@@ -209,11 +210,53 @@ class ScheduleEmail extends BaseActiveRecord
         self::model()->deleteAll($criteria);
     }
     
+    /**
+     * Handle send email for reset password
+     * @return Null
+     */
     public static function handleEmailResetPass() {
         // Check if current hour < 2h -> Not run this
         if (date("H") < 2) {
-            return;
+            if (!YII_DEBUG) {
+                return;
+            }
         }
         $from = time();
+        $aScheduleEmail     = array();
+        $aIdScheduleEmail   = array();
+        $aUsers             = array();
+        $aIdUsers           = array();
+        ScheduleEmail::prepareData($aScheduleEmail, $aIdScheduleEmail,
+                    $aUsers, $aIdUsers, EmailTemplates::TEMPLATE_ID_RESET_PASSWORD);
+        $countSent = count($aIdUsers);
+        if ($countSent > 0) {
+            foreach ($aUsers as $user) {
+                // TODO: Reset password
+                // Send email
+                $date = date('d-m-Y');
+                $data = array($date, $user->first_name, $user->temp_password, 'nkvietmy.com');
+                $content = EmailTemplates::createEmailContent($data);
+                EmailHandler::sendTemplateMail(EmailTemplates::TEMPLATE_ID_RESET_PASSWORD, $content, $content, $user->email);
+            }
+            self::deleteByArrayId($aIdScheduleEmail);
+        }
+        
+        $to = time();
+        self::logInfo($from, $to, __METHOD__, $countSent);
+    }
+    
+    /**
+     * Log information
+     * @param Int $from
+     * @param Int $to
+     * @param String $method
+     * @param Int $count
+     */
+    public static function logInfo($from, $to, $method, $count) {
+        $second = $to - $from;
+        Loggers::info(
+                "CRON Mail $method",
+                $count . ' done in: ' . $second . ' second = ' . round($second / 60, 2) . ' minute',
+                get_class());
     }
 }
