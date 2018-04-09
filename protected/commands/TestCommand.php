@@ -24,9 +24,9 @@ class TestCommand extends CConsoleCommand {
 
     public static function doRun() {
         // Test send email
-        EmailHandler::sendManual('Subject', 'Body', 'nixforest@live.com');
+//        EmailHandler::sendManual('Subject', 'Body', 'nixforest@live.com');
 //        $controller = new Controller();
 //        $controller->mailsend('nixforest@live.com', 'nguyenpt@spj.vn', 'NguyenPT', 'Subject', 'Bory');
-//        EmailHandler::mailsend('nixforest@live.com', 'nguyenpt@spj.vn', 'NguyenPT', 'Subject', 'Bory');
+        EmailHandler::mailsend('nixforest@live.com', 'nguyenpt@spj.vn', 'NguyenPT', 'Subject', 'Bory');
     }
 }

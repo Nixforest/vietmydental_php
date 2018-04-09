@@ -199,8 +199,8 @@ class Loggers extends CActiveRecord
      */
     public static function checkLog() {
         $tblName = self::model()->tableName();
-        $model = new Loggers();
-        $count = $model->getDbConnection()->createCommand('SELECT COUNT(*) FROM '.$tblName)->queryScalar();
+//        $model = new Loggers();
+        $count = self::model()->getDbConnection()->createCommand('SELECT COUNT(*) FROM '.$tblName)->queryScalar();
         if ($count >= 1000) {
             $query = "DELETE FROM $tblName limit 200";
             $command = Yii::app()->db->createCommand($query);

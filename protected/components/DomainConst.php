@@ -60,6 +60,7 @@ class DomainConst {
     
     /** Constant of splitter */
     const SPLITTER_TYPE_1                               = ', ';
+    const SPLITTER_TYPE_2                               = ',';
     /** Date format main */
     const DATE_FORMAT_VIEW                              = self::DATE_FORMAT_5;
     /** Date format backend */
@@ -1192,4 +1193,5 @@ class DomainConst {
     const CONTENT00260  = 'Bảo hiểm có thể chi trả';
     const CONTENT00261  = 'Cài đặt SMS';
     const CONTENT00262  = 'Xoá tất cả';
+    const CONTENT00263  = 'Exception occurred';
 }

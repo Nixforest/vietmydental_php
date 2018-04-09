@@ -11,7 +11,25 @@
     
 <div class="maincontent clearfix">
     <?php
-    CommonProcess::echoTest("Test email reset pass: ", ScheduleEmail::handleEmailResetPass());
+     require 'PHPMailer.php';
+    $mail = new PHPMailer;
+    $mail->setFrom('from@example.com', 'Your Name');
+    $mail->addAddress('myfriend@example.net', 'My Friend');
+    $mail->Subject  = 'First PHPMailer Message';
+    $mail->Body     = 'Hi! This is my first e-mail sent through PHPMailer.';
+    if(!$mail->send()) {
+      echo 'Message was not sent.';
+      echo 'Mailer error: ' . $mail->ErrorInfo;
+    } else {
+      echo 'Message has been sent.';
+    }
+//    $listUser = Users::getListUserEmail();
+//    $listUser = ScheduleEmail::handleBuildEmailResetPass();
+//    CommonProcess::echoTest("Test list user's emails: ", count($listUser));
+//    foreach ($listUser as $user) {
+//        CommonProcess::echoTest("&nbsp;&nbsp;&nbsp;&nbsp;User: ", "($user->first_name) - ($user->email)");
+//    }
+//    CommonProcess::echoTest("Test email reset pass: ", ScheduleEmail::handleRunEmailResetPass());
     
     $from = time();
     // Test email content
@@ -64,7 +82,7 @@
 //        'b',
 //        'c'
 //    )));
-    CommonProcess::echoTest('Yii root path: ', DirectoryHandler::getRootPath());
+//    CommonProcess::echoTest('Yii root path: ', DirectoryHandler::getRootPath());
     CommonProcess::echoTest('Current date time: ', CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3));
     $to = time();
     ScheduleEmail::logInfo($from, $to, __METHOD__, 5);

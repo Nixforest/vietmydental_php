@@ -22,9 +22,14 @@ class Roles extends BaseActiveRecord
     const ROLE_ASSISTANT            = 'ROLE_ASSISTANT';
     const ROLE_RECEPTIONIST         = 'ROLE_RECEPTIONIST';
     
-    static $arrAdminRoles                  = array(
+    static $arrAdminRoles           = array(
         self::ROLE_ADMIN,
         self::ROLE_MANAGER,
+    );
+    static $arrRolesNotResetPass    = array(
+        self::ROLE_MANAGER,
+        self::ROLE_ADMIN,
+        self::ROLE_CUSTOMER
     );
 	/**
 	 * @return string the associated database table name

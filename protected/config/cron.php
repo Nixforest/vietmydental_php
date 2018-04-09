@@ -19,6 +19,7 @@ return array(
         'application.modules.api.models.*',
         'application.modules.api.components.*',
         'application.extensions.yii-mail.*',
+        'application.extensions.phpmailer.*',
     ),
     // We'll log cron messages to the separate files
     'components'=>array(
@@ -48,9 +49,9 @@ return array(
                 'host'=>'mail.spj.vn',
                 'username'=>'abc',
                 'password'=>'!%456!!19*&CaRe',
-                'port'=>'587',
-                'encryption'=>'tls',
-                'timeout'=>'15',
+                'port'=>'465',
+                'encryption'=>'ssl',
+                'timeout'=>'120',
             ),
             'viewPath' => 'application.mail',
             'logging' => true,

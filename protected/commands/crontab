@@ -1,0 +1,4 @@
+# Build email reset pass - At 00:00
+0 0 * * * root /usr/bin/php /var/www/vietmy.immortal.vn/web/cron.php BuildEmailResetPass
+# Send Email - At 02:00
+0 2 * * * root /usr/bin/php /var/www/vietmy.immortal.vn/web/cron.php SendScheduleEmail

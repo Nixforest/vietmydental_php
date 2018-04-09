@@ -191,7 +191,8 @@ class ScheduleEmail extends BaseActiveRecord
             $to = time();
             self::logInfo($from, $to, __METHOD__, $countSent);
         } catch (Exception $ex) {
-            CommonProcess::dumpVariable($ex->getMessage());
+//            CommonProcess::dumpVariable($ex->getMessage());
+            Loggers::info(DomainConst::CONTENT00263, $ex->getMessage(), get_class());
         }
     }
     
@@ -214,35 +215,81 @@ class ScheduleEmail extends BaseActiveRecord
      * Handle send email for reset password
      * @return Null
      */
-    public static function handleEmailResetPass() {
-        // Check if current hour < 2h -> Not run this
-        if (date("H") < 2) {
-            if (!YII_DEBUG) {
-                return;
+    public static function handleRunEmailResetPass() {
+        Loggers::info(__METHOD__, __LINE__, __CLASS__);
+        try {
+            // Check if current hour < 2h -> Not run this
+            if (date("H") < 2) {
+                if (!YII_DEBUG) {
+                    return;
+                }
             }
+            $from = time();
+            $aScheduleEmail     = array();
+            $aIdScheduleEmail   = array();
+            $aUsers             = array();
+            $aIdUsers           = array();
+            ScheduleEmail::prepareData($aScheduleEmail, $aIdScheduleEmail,
+                        $aUsers, $aIdUsers, EmailTemplates::TEMPLATE_ID_RESET_PASSWORD);
+            $countSent = count($aIdUsers);
+            if ($countSent > 0) {
+                foreach ($aUsers as $user) {
+                    // TODO: Reset password
+                    // Send email
+                    $date = date('d-m-Y');
+                    $data = array($date, $user->first_name, $user->temp_password, 'nkvietmy.com');
+                    $content = EmailTemplates::createEmailContent($data);
+                    EmailHandler::sendTemplateMail(EmailTemplates::TEMPLATE_ID_RESET_PASSWORD, $content, $content, $user->email);
+                }
+                self::deleteByArrayId($aIdScheduleEmail);
+            }
+
+            $to = time();
+            self::logInfo($from, $to, __METHOD__, $countSent);
+        } catch (Exception $ex) {
+            Loggers::info(DomainConst::CONTENT00263, $ex->getMessage(), get_class());
         }
-        $from = time();
-        $aScheduleEmail     = array();
-        $aIdScheduleEmail   = array();
-        $aUsers             = array();
-        $aIdUsers           = array();
-        ScheduleEmail::prepareData($aScheduleEmail, $aIdScheduleEmail,
-                    $aUsers, $aIdUsers, EmailTemplates::TEMPLATE_ID_RESET_PASSWORD);
-        $countSent = count($aIdUsers);
-        if ($countSent > 0) {
-            foreach ($aUsers as $user) {
-                // TODO: Reset password
-                // Send email
-                $date = date('d-m-Y');
-                $data = array($date, $user->first_name, $user->temp_password, 'nkvietmy.com');
-                $content = EmailTemplates::createEmailContent($data);
-                EmailHandler::sendTemplateMail(EmailTemplates::TEMPLATE_ID_RESET_PASSWORD, $content, $content, $user->email);
-            }
-            self::deleteByArrayId($aIdScheduleEmail);
+    }
+    
+    /**
+     * Create reset pass row by user
+     * @param Model $user
+     * @return String
+     */
+    public static function createResetPassRow($user) {
+        $type = EmailTemplates::TEMPLATE_ID_RESET_PASSWORD;
+        $template_id = EmailTemplates::TEMPLATE_ID_RESET_PASSWORD;
+        return "('$type','$template_id','$user->id','$user->email')";
+    }
+    
+    /**
+     * Lấy toàn bộ những user có email và insert vào bảng chờ gửi (ScheduleEmail)
+     * lúc 1h, sau đó 2h sẽ chạy cron send. Cron send sẽ luôn chạy 1 lần every 10 phút
+     * nhưng trong hàm send reset pass mình kiểm tra nếu giờ nhỏ hơn 2 thì return luôn
+     * vì lúc 1h mới có list reset password 
+     */
+    public static function handleBuildEmailResetPass() {
+        // TODO: Get list except id from setting
+        $aExceptIds = array();
+        $aExceptRoles = array();
+        foreach (Roles::$arrRolesNotResetPass as $value) {
+            $aExceptRoles[] = Roles::getRoleByName($value)->id;
         }
         
-        $to = time();
-        self::logInfo($from, $to, __METHOD__, $countSent);
+        $listUsers = Users::getListUserEmail(array(
+            'ids'   => $aExceptIds,
+            'roles' => $aExceptRoles,
+        ));
+        $aRowInsert = array();
+        foreach ($listUsers as $user) {
+            $aRowInsert[] = self::createResetPassRow($user);
+        }
+        $tblName = self::model()->tableName();
+        $sql = "insert into $tblName (type, template_id, user_id, email)"
+                . " values " . implode(DomainConst::SPLITTER_TYPE_2, $aRowInsert);
+        if (count($aRowInsert) > 0) {
+            Yii::app()->db->createCommand($sql)->execute();
+        }
     }
     
     /**

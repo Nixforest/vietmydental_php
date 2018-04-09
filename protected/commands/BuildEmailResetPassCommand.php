@@ -7,18 +7,18 @@
  */
 
 /**
- * Description of SendScheduleEmailCommand
+ * Description of BuildEmailResetPassCommand
  *
- * @author NguyenPT
+ * @author nguyenpt
  */
-class SendScheduleEmailCommand extends CConsoleCommand {
+class BuildEmailResetPassCommand extends CConsoleCommand {
     /**
      * Run command
      * @param type $arg
      */
     public function run($arg) {
         try {
-            SendScheduleEmailCommand::doRun();
+            self::doRun();
         } catch (Exception $ex) {
             CommonProcess::dumpVariable($ex->getMessage());
         }
@@ -29,9 +29,7 @@ class SendScheduleEmailCommand extends CConsoleCommand {
      */
     public static function doRun() {
         Loggers::info(__METHOD__, __LINE__, get_class());
-        $countSend = 0;
         // Reset pass
-        ScheduleEmail::handleRunEmailResetPass();
-        ScheduleEmail::sendEmail($countSend, ScheduleEmail::MAIL_NORMAL);
+        ScheduleEmail::handleBuildEmailResetPass();
     }
 }

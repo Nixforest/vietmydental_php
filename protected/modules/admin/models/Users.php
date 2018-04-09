@@ -603,4 +603,27 @@ class Users extends BaseActiveRecord
         }
         return $username . count($arrUser);
     }
+    
+    /**
+     * Get list of user's emails
+     * @param Array $except List of exception condition
+     * @return Array List of users
+     */
+    public static function getListUserEmail($except = array()) {
+        $criteria = new CDbCriteria();
+        $criteria->addCondition('t.status=' . Users::STATUS_ACTIVE . ' AND role_id<>' . Roles::getRoleByName(Roles::ROLE_CUSTOMER)->id);
+        if (isset($except['roles'])) {
+            $sParamsIn = implode(DomainConst::SPLITTER_TYPE_2, $except['roles']);
+            $criteria->addCondition("t.role_id NOT IN($sParamsIn)");
+        }
+        if (isset($except['ids'])) {
+            $sParamsIn = implode(DomainConst::SPLITTER_TYPE_2, $except['ids']);
+            if (!empty($sParamsIn)) {
+                $criteria->addCondition("t.id NOT IN ($sParamsIn)");
+            }
+        }
+        $criteria->addCondition('t.email <> "" AND t.email IS NOT NULL');
+        
+        return Users::model()->findAll($criteria);
+    }
 }
