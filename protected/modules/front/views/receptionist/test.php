@@ -8,21 +8,40 @@
 	'id'=>'medical-records-form',
 	'enableAjaxValidation'=>false,
 )); ?>
-    
+    <div class="group-btn" id="create_customer">
+        <?php
+            echo CHtml::link("Open dialog", '#', array(
+                'style' => 'cursor: pointer;',
+                'onclick' =>''
+                . 'createPrintDialog();'
+                . ' $("#dialog").dialog("open");'
+                . ' return false;',
+            ));
+        ?>
+    </div>
+    <!-- Create new dialog -->
+    <?php
+        $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
+            'id'    => 'dialog',
+            'options' => array(
+                'title' => "In phiếu thu",
+                'autoOpen'  => true,
+                'modal'     => true,
+                'position'  => array(
+                    'my'    => 'top',
+                    'at'    => 'top',
+                ),
+                'width'     => 1300,
+                'heigh'     => 670,
+                'close'     => 'js:function() { }',
+            ),
+        ));
+    ?>
+    <div class="divForForm"></div>
+    <?php $this->endWidget('zii.widgets.jui.CJuiDialog');?>
+    <input type="button" onclick="window.print()"/>
 <div class="maincontent clearfix">
     <?php
-     require 'PHPMailer.php';
-    $mail = new PHPMailer;
-    $mail->setFrom('from@example.com', 'Your Name');
-    $mail->addAddress('myfriend@example.net', 'My Friend');
-    $mail->Subject  = 'First PHPMailer Message';
-    $mail->Body     = 'Hi! This is my first e-mail sent through PHPMailer.';
-    if(!$mail->send()) {
-      echo 'Message was not sent.';
-      echo 'Mailer error: ' . $mail->ErrorInfo;
-    } else {
-      echo 'Message has been sent.';
-    }
 //    $listUser = Users::getListUserEmail();
 //    $listUser = ScheduleEmail::handleBuildEmailResetPass();
 //    CommonProcess::echoTest("Test list user's emails: ", count($listUser));
@@ -91,72 +110,13 @@
 <?php $this->endWidget(); ?>
 </div><!-- form -->
 
-<!-- Create customer dialog -->
-<?php
-    $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
-        'id'    => 'dialogCreateCustomer',
-        'options' => array(
-            'title' => DomainConst::CONTENT00176,
-            'autoOpen'  => false,
-            'modal'     => true,
-            'position'  => array(
-                'my'    => 'top',
-                'at'    => 'top',
-            ),
-            'width'     => 700,
-            'heigh'     => 470,
-            'close'     => 'js:function() { }',
-        ),
-    ));
-?>
-<div class="divForForm"></div>
-<?php $this->endWidget('zii.widgets.jui.CJuiDialog');?>
 
-<!-- Create/Update treatment schedule dialog -->
-<?php
-    $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
-        'id'    => 'dialogUpdateSchedule',
-        'options' => array(
-            'title' => DomainConst::CONTENT00182,
-            'autoOpen'  => false,
-            'modal'     => true,
-            'position'  => array(
-                'my'    => 'top',
-                'at'    => 'top',
-            ),
-            'width'     => 700,
-            'heigh'     => 470,
-            'close'     => 'js:function() { }',
-        ),
-    ));
-?>
-<div class="divForFormUpdateSchedule"></div>
-<?php $this->endWidget('zii.widgets.jui.CJuiDialog');?>
-
-<script>
-    $(function(){
-        fnHandleTextChange(
-                "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/searchCustomerReception'); ?>",
-                "#right-content",
-                "#right_page_title",
-                "<?php echo DomainConst::CONTENT00171 ?>");
-    });
-    $("body").on("click", "#customer-info tbody tr", function() {
-        fnShowCustomerInfo(
-                "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/getCustomerInfo'); ?>",
-                "#right-content",
-                "#right_page_title",
-                "<?php echo DomainConst::CONTENT00172 ?>",
-                $(this).attr('id'));
-//        alert($(this).attr('id'));
-    });
-</script>
 <script type="text/javascript">
     /**
      * Create customer dialog
      * @returns {Boolean}
      */
-    function createCustomer() {
+    function createPrintDialog() {
         $("<link/>", {
             id: "form_ccs",
             rel: "stylesheet",
@@ -165,7 +125,7 @@
          }).appendTo("head");
         <?php
         echo CHtml::ajax(array(
-            'url' => Yii::app()->createAbsoluteUrl('front/receptionist/createCustomer'),
+            'url' => Yii::app()->createAbsoluteUrl('front/receptionist/printReceipt'),
             'data' => "js:$(this).serialize()",
             'type' => 'post',
             'dataType' => 'json',
@@ -173,93 +133,14 @@
                     {
                         if (data.status == 'failure')
                         {
-                            $('#dialogCreateCustomer div.divForForm').html(data.div);
+                            $('#dialog div.divForForm').html(data.div);
                                   // Here is the trick: on submit-> once again this function!
-                            $('#dialogCreateCustomer div.divForForm form').submit(createCustomer);
+                            $('#dialog div.divForForm form').submit(createPrintDialog);
                         }
                         else
                         {
-                            $('#dialogCreateCustomer div.divForForm').html(data.div);
-                            $('#right_page_title').html('Thông tin bệnh nhân');
-                            $('#right-content').html(data.rightContent);
-                            $('.left-page .info-content .info-result .content').html(data.infoSchedule);
-                            setTimeout(\"$('#dialogCreateCustomer').dialog('close') \",1000);
-                        }
-
-                    } ",
-        ))
-        ?>;
-        return false;
-    }
-    
-    /**
-     * Create schedule
-     * @returns {Boolean}
-     */
-    function createSchedule() {
-        $("<link/>", {
-            id: "form_ccs",
-            rel: "stylesheet",
-            type: "text/css",
-            href: "<?php echo Yii::app()->theme->baseUrl . '/css/form.css'; ?>"
-         }).appendTo("head");
-         <?php
-        echo CHtml::ajax(array(
-            'url' => Yii::app()->createAbsoluteUrl('front/receptionist/createSchedule'),
-            'data' => "js:$(this).serialize()",
-            'type' => 'post',
-            'dataType' => 'json',
-            'success' => "function(data)
-                    {
-                        if (data.status == 'failure')
-                        {
-                            $('#dialogUpdateSchedule div.divForFormUpdateSchedule').html(data.div);
-                                  // Here is the trick: on submit-> once again this function!
-                            $('#dialogUpdateSchedule div.divForFormUpdateSchedule form').submit(createSchedule);
-                        }
-                        else
-                        {
-                            $('#dialogUpdateSchedule div.divForFormUpdateSchedule').html(data.div);
-                            $('#right_page_title').html('Thông tin bệnh nhân');
-                            $('#right-content').html(data.rightContent);
-                            $('.left-page .info-content .info-result .content').html(data.infoSchedule);
-                            setTimeout(\"$('#dialogUpdateSchedule').dialog('close') \",1000);
-                        }
-                    } ",
-        ))
-        ?>;
-        return false;
-    }
-    
-    /**
-     * Update treatment schedule
-     * @returns {Boolean}
-     */
-    function updateSchedule() {
-        $("<link/>", {
-            id: "form_ccs",
-            rel: "stylesheet",
-            type: "text/css",
-            href: "<?php echo Yii::app()->theme->baseUrl . '/css/form.css'; ?>"
-         }).appendTo("head");
-        <?php
-        echo CHtml::ajax(array(
-            'url' => Yii::app()->createAbsoluteUrl('front/receptionist/updateSchedule'),
-            'data' => "js:$(this).serialize()",
-            'type' => 'post',
-            'dataType' => 'json',
-            'success' => "function(data)
-                    {
-                        if (data.status == 'failure')
-                        {
-                            $('#dialogUpdateSchedule div.divForFormUpdateSchedule').html(data.div);
-                                  // Here is the trick: on submit-> once again this function!
-                            $('#dialogUpdateSchedule div.divForFormUpdateSchedule form').submit(updateSchedule);
-                        }
-                        else
-                        {
-                            $('#dialogUpdateSchedule div.divForFormUpdateSchedule').html(data.div);
-                            setTimeout(\"$('#dialogUpdateSchedule').dialog('close') \",1000);
+                            $('#dialog div.divForForm').html(data.div);
+                            setTimeout(\"$('#dialog').dialog('close') \",1000);
                         }
 
                     } ",

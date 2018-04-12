@@ -247,7 +247,7 @@ class Receipts extends CActiveRecord
         $rightContent = '<div class="info-result">';
         $rightContent .=    '<div class="title-2">' . DomainConst::CONTENT00174 . '</div>';
         $rightContent .=    '<div class="item-search">';
-        $rightContent .=        '<table>';
+        $rightContent .=        '<table class="table table-borderless">';
         $rightContent .=            '<tr>';
         $rightContent .=                '<td>' . DomainConst::CONTENT00145 . ': </td>';
         $rightContent .=                '<td><b>' . $teeth . '</b>' . '</td>';
@@ -292,6 +292,25 @@ class Receipts extends CActiveRecord
 //        $rightContent .= '<p>' . DomainConst::CONTENT00257 . ': ' . '<b>' . CommonProcess::formatCurrency($this->discount) . '</b></p>';
 //        $rightContent .= '<p>' . DomainConst::CONTENT00259 . ': ' . '<b>' . CommonProcess::formatCurrency($this->final) . '</b></p>';
         $rightContent .=    '</div>';
+        
+        $rightContent .=        '<table>';
+        $rightContent .=            '<tr>';
+        $rightContent .=                '<td>';
+        $rightContent .=                    '<div class="group-btn">';
+        $rightContent .=                        '<a style="cursor: pointer;"'
+                                                    . ' onclick="{handleConfirmReceipt();}">' . DomainConst::CONTENT00265 . '</a>';
+        $rightContent .=                    '</div>';
+        $rightContent .=                '</td>';
+        $rightContent .=                '<td>';
+        $rightContent .=                    '<div class="group-btn">';
+//        $rightContent .=                        '<a style="cursor: pointer;"'
+//                                                    . ' onclick="{createPrintDialog(); $(\'#dialog\').dialog(\'open\');}">' . DomainConst::CONTENT00264 . '</a>';
+        $rightContent .=                        '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("front/receptionist/printReceipt") . '">' . DomainConst::CONTENT00264 . '</a>';
+        $rightContent .=                    '</div>';
+        $rightContent .=                '</td>';
+        $rightContent .=            '</tr>';
+        $rightContent .=        '</table>';
+        
         $rightContent .= '</div>';
         return $rightContent;
     }

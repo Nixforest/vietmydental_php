@@ -1194,4 +1194,6 @@ class DomainConst {
     const CONTENT00261  = 'Cài đặt SMS';
     const CONTENT00262  = 'Xoá tất cả';
     const CONTENT00263  = 'Exception occurred';
+    const CONTENT00264  = 'In phiếu thu';
+    const CONTENT00265  = 'Xác nhận thu';
 }

@@ -32,6 +32,8 @@ header.header {
 
 .box-login a {
 	background: url(../img/icon-1.png) no-repeat left center;
+	/*background: url(../img/logo.png) no-repeat left center;*/
+        /*background-size:     cover;*/
 	font-size: 18px;
 	color: #fff;
 	padding-left: 33px;
@@ -593,4 +595,13 @@ th.col-4 {
 		display: block;
 	}
 
+}
+
+.table-borderless > tbody > tr > td,
+.table-borderless > tbody > tr > th,
+.table-borderless > tfoot > tr > td,
+.table-borderless > tfoot > tr > th,
+.table-borderless > thead > tr > td,
+.table-borderless > thead > tr > th {
+    border: none !important;
 }

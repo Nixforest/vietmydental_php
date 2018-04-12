@@ -115,7 +115,7 @@ class Loggers extends CActiveRecord
 		$criteria->compare('level',$this->level,true);
 		$criteria->compare('logtime',$this->logtime);
 		$criteria->compare('category',$this->category,true);
-                $criteria->order = 'logtime DESC';
+                $criteria->order = 'id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

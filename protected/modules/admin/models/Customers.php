@@ -472,7 +472,7 @@ class Customers extends BaseActiveRecord
                 $infoSchedule .= '</div>';
                 $infoSchedule .= '<div class="group-btn">';
                 $infoSchedule .=    '<a style="cursor: pointer;"'
-                        . ' onclick="{updateSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}">' . DomainConst::CONTENT00178 . '</a>';
+                        . ' onclick="{updateSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}">' . DomainConst::CONTENT00264 . '</a>';
                 $infoSchedule .= '</div>';
             }
         }

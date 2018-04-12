@@ -284,6 +284,7 @@ class ReceptionistController extends Controller {
      * Action handle receipt
      */
     public function actionReceipt() {
+        Loggers::info("Load receipt", "actionReceipt", __CLASS__);
         $arrModels = Receipts::getReceiptsToday();
         $models=new Receipts('search');
 	$models->unsetAttributes();  // clear any default values
@@ -302,10 +303,12 @@ class ReceptionistController extends Controller {
      * @param String $id Id of receipt
      */
     public function actionUpdate($id) {
+        Loggers::info("Update receipt with id = $id", "actionUpdate", __CLASS__);
         $model = Receipts::model()->findByPk($id);
         if ($model) {
             $model->status = Receipts::STATUS_RECEIPTIONIST;
             $model->save();
+            Loggers::info("Update receipt with id = $id", "save()", __CLASS__);
         }
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax'])) {
@@ -318,6 +321,32 @@ class ReceptionistController extends Controller {
      */
     public function actionTest() {
         $this->render('test', array(
+            DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+        ));
+    }
+    
+    
+
+    /**
+     * Handle print receipt.
+     */
+    public function actionPrintReceipt() {
+        $lay
+        // Temp value saved at AjaxController::actionGetReceiptInfo
+        $receiptId = Settings::getAjaxTempValue();
+        $model = Receipts::model()->findByPk($receiptId);
+//        echo CJSON::encode(array(
+//            DomainConst::KEY_STATUS => 'failure',
+//            'div' => $this->renderPartial('_form_print_receipt',
+//                    array(
+//                        'model' => $model,
+//                        DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+//                    ),
+//                    true)
+//        ));
+//        exit;
+        $this->render('printReceipt', array(
+            'model' => $model,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }

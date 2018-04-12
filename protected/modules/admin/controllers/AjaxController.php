@@ -414,6 +414,8 @@ class AjaxController extends AdminController
             $rightContent = '';
             $infoSchedule = '';
             if ($model) {
+                // Save ajax temp value for print receipt
+                Settings::saveAjaxTempValue($id);
                 $rightContent = $model->getAjaxInfo();
                 $infoSchedule = '';
             }
