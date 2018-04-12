@@ -305,7 +305,7 @@ class Receipts extends CActiveRecord
         $rightContent .=                    '<div class="group-btn">';
 //        $rightContent .=                        '<a style="cursor: pointer;"'
 //                                                    . ' onclick="{createPrintDialog(); $(\'#dialog\').dialog(\'open\');}">' . DomainConst::CONTENT00264 . '</a>';
-        $rightContent .=                        '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("front/receptionist/printReceipt") . '">' . DomainConst::CONTENT00264 . '</a>';
+        $rightContent .=                        '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("front/receptionist/printReceipt", array("id" => $this->id)) . '">' . DomainConst::CONTENT00264 . '</a>';
         $rightContent .=                    '</div>';
         $rightContent .=                '</td>';
         $rightContent .=            '</tr>';

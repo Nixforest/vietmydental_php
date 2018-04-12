@@ -40,7 +40,7 @@
             <!--Row Title-->
             <tr>
                 <td colspan="13"></td>
-                <td colspan="10" class="align-middle"><b>PHIẾU THU (RECEIPTS)</b></td>
+                <td colspan="10" class="align-middle"><font size="6">PHIẾU THU (RECEIPTS)</font></td>
                 <td colspan="8">Số/ID: 027757</td>
             </tr>
             <!--Row Patient information-->
@@ -192,8 +192,6 @@
 <script type="text/javascript">
 </script>
 <style>
-    
-
 .table-borderless > tbody > tr > td,
 .table-borderless > tbody > tr > th,
 .table-borderless > tfoot > tr > td,

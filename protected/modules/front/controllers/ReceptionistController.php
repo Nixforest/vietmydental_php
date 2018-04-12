@@ -330,21 +330,9 @@ class ReceptionistController extends Controller {
     /**
      * Handle print receipt.
      */
-    public function actionPrintReceipt() {
-        $lay
-        // Temp value saved at AjaxController::actionGetReceiptInfo
-        $receiptId = Settings::getAjaxTempValue();
-        $model = Receipts::model()->findByPk($receiptId);
-//        echo CJSON::encode(array(
-//            DomainConst::KEY_STATUS => 'failure',
-//            'div' => $this->renderPartial('_form_print_receipt',
-//                    array(
-//                        'model' => $model,
-//                        DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-//                    ),
-//                    true)
-//        ));
-//        exit;
+    public function actionPrintReceipt($id) {
+        $this->layout = '//layouts/front/print';
+        $model = Receipts::model()->findByPk($id);
         $this->render('printReceipt', array(
             'model' => $model,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
