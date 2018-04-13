@@ -82,6 +82,7 @@ class ControllersActions extends BaseActiveRecord
 		$criteria->compare('controller_id',$this->controller_id);
 		$criteria->compare('action',$this->action,true);
 		$criteria->compare('name',$this->name,true);
+                $criteria->order = "id DESC";
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

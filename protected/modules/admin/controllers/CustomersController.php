@@ -76,6 +76,11 @@ class CustomersController extends AdminController
                             if (filter_input(INPUT_POST, 'submit')) {
                                 $selectedAgent = $_POST['Customers']['agent'];
                                 OneMany::insertOne($selectedAgent, $model->id, OneMany::TYPE_AGENT_CUSTOMER);
+                                $referCode = $_POST['Customers']['referCode'];
+                                // Handle save refer code
+                                if (!empty($referCode)) {
+                                    ReferCodes::connect($referCode, $model->id, ReferCodes::TYPE_CUSTOMER);
+                                }
                             }
                             $this->redirect(array('view','id'=>$model->id));
                         }
@@ -109,6 +114,11 @@ class CustomersController extends AdminController
                                 OneMany::deleteAllManyOldRecords($model->id, OneMany::TYPE_AGENT_CUSTOMER);
                                 $selectedAgent = $_POST['Customers']['agent'];
                                 OneMany::insertOne($selectedAgent, $model->id, OneMany::TYPE_AGENT_CUSTOMER);
+                                $referCode = $_POST['Customers']['referCode'];
+                                // Handle save refer code
+                                if (!empty($referCode)) {
+                                    ReferCodes::connect($referCode, $model->id, ReferCodes::TYPE_CUSTOMER);
+                                }
                             }
                             $this->redirect(array('view','id'=>$model->id));
                         }

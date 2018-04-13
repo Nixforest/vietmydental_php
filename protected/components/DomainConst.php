@@ -1204,4 +1204,7 @@ class DomainConst {
     const CONTENT00267  = 'Chưa thu';
     const CONTENT00268  = 'Mã này đã được sử dụng';
     const CONTENT00269  = 'Mã này chưa được tạo xin vui lòng tạo thêm mã trước';
+    const CONTENT00270  = 'Xem thêm';
+    const CONTENT00271  = 'QR code';
+    const CONTENT00272  = 'Cập nhật thông tin';
 }

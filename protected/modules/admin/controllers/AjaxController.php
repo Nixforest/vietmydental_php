@@ -428,6 +428,32 @@ class AjaxController extends AdminController
         }
         
     }
+    /**
+     * action search refer code
+     * @throws CHttpException
+     * @return JSON Json object
+     */
+    public function actionSearchReferCode() {
+        $retVal = array();
+        if (!isset($_GET[AjaxController::KEY_TERM])) {
+            throw new CHttpException(404, "Uid: " . Yii::app()->user->id . " cố gắng truy cập link không phải ajax");
+        }
+        $criteria = new CDbCriteria();
+        $criteria->addSearchCondition('t.code', trim($_GET['term']), true);  // true => LIKE '%...%'
+        $criteria->addCondition('t.type = ' . ReferCodes::TYPE_NOT_SELECTED_YET);
+        $criteria->limit = 20;
+        $models = ReferCodes::model()->findAll($criteria);
+        foreach ($models as $model) {
+            $label = $model->code;
+            $retVal[] = array(      // Key tương ứng với giá trị ui.item
+                'label' => $label,
+                'value' => $label,
+                'id'    => $model->code,
+            );
+        }
+        echo CJSON::encode($retVal);
+        Yii::app()->end();
+    }
     
     // Uncomment the following methods and override them if needed
 	/*

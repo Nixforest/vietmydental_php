@@ -29,6 +29,8 @@ class Customers extends BaseActiveRecord
     public $autocomplete_name_user;
     public $autocomplete_name_street;
     public $agent;
+    public $referCode;
+    public $autocomplete_name_refercode;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -125,6 +127,7 @@ class Customers extends BaseActiveRecord
 			'created_by' => DomainConst::CONTENT00054,
 			'created_date' => DomainConst::CONTENT00010,
                         'agent' => DomainConst::CONTENT00199,
+                        'referCode' => DomainConst::CONTENT00271,
 		);
 	}
 
@@ -199,6 +202,7 @@ class Customers extends BaseActiveRecord
             }
             // Handle created date
             $this->created_date = CommonProcess::getCurrentDateTime();
+            
         } else {                    // Update
             
         }
@@ -411,7 +415,9 @@ class Customers extends BaseActiveRecord
             $recordNumber = $this->rMedicalRecord->record_number;
         }
         $rightContent = '<div class="info-result">';
-        $rightContent .=    '<div class="title-2">' . DomainConst::CONTENT00173 . '</div>';
+        $rightContent .=    '<div class="title-2">';
+        $rightContent .=        DomainConst::CONTENT00173;
+        $rightContent .=    '</div>';
         $rightContent .=    '<div class="item-search">';
         $rightContent .=        '<table>';
         $rightContent .=            '<tr>';
@@ -428,6 +434,11 @@ class Customers extends BaseActiveRecord
         $rightContent .=            '<tr>';
         $rightContent .=                '<td>' . '<b>' . $this->getAgentName() . '<b>' . '</td>';
         $rightContent .=                '<td>' . DomainConst::CONTENT00136 . ': ' . '<b>' . $recordNumber . '<b>' . '</td>';
+        $rightContent .=            '</tr>';
+        $rightContent .=            '<tr>';
+        $rightContent .=                '<td>';
+        $rightContent .=                    '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/customers/update", array("id" => $this->id)) . '">' . DomainConst::CONTENT00272 . '</a>';;
+        $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
         $pathological = '';
         if (isset($this->rMedicalRecord)) {

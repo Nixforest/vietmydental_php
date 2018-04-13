@@ -109,6 +109,7 @@ class Menus extends BaseActiveRecord
 		$criteria->compare('place_holder_id',$this->place_holder_id);
 		$criteria->compare('application_id',$this->application_id);
 		$criteria->compare('parent_id',$this->parent_id);
+                $criteria->order = "id DESC";
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

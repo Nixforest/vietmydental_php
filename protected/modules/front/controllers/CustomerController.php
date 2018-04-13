@@ -8,9 +8,13 @@ class CustomerController extends Controller {
         $referCode = ReferCodes::model()->findByAttributes(array(
             'code' => $code,
         ));
-        $customer = new Customers();
         if ($referCode) {
             $customer = $referCode->rCustomer;
+        } else {
+            $customer = Customers::model()->findByPk($code);
+            if (!$customer) {
+                $customer = new Customers();
+            }
         }
         $this->render('view', array(
             'model' => $customer,
