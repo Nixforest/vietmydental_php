@@ -1198,4 +1198,6 @@ class DomainConst {
     const CONTENT00263  = 'Exception occurred';
     const CONTENT00264  = 'In phiếu thu';
     const CONTENT00265  = 'Xác nhận thu';
+    const CONTENT00266  = 'Đã thu';
+    const CONTENT00267  = 'Chưa thu';
 }

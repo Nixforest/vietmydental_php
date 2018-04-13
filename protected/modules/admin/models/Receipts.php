@@ -297,12 +297,14 @@ class Receipts extends CActiveRecord
         
         $rightContent .=        '<table>';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>';
-        $rightContent .=                    '<div class="group-btn">';
-        $rightContent .=                        '<a style="cursor: pointer;"'
-                                                    . ' onclick="{handleConfirmReceipt();}">' . DomainConst::CONTENT00265 . '</a>';
-        $rightContent .=                    '</div>';
-        $rightContent .=                '</td>';
+        if ($this->status == self::STATUS_DOCTOR) {
+            $rightContent .=                '<td>';
+            $rightContent .=                    '<div class="group-btn">';
+            $rightContent .=                        '<a href="' . Yii::app()->createAbsoluteUrl("front/receptionist/update", array("id" => $this->id)) . '">' . DomainConst::CONTENT00265 . '</a>';
+            $rightContent .=                    '</div>';
+            $rightContent .=                '</td>';
+        }
+        
         $rightContent .=                '<td>';
         $rightContent .=                    '<div class="group-btn">';
 //        $rightContent .=                        '<a style="cursor: pointer;"'

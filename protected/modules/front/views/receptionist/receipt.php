@@ -95,6 +95,10 @@
 //                                        'class'=>'CButtonColumn',
 //                                ),
                                 array(
+                                    'header' => DomainConst::CONTENT00026,
+                                    'value' => '($data->status == Receipts::STATUS_RECEIPTIONIST) ? DomainConst::CONTENT00266 : DomainConst::CONTENT00267',
+                                ),
+                                array(
                                     'header' => 'Actions',
                                     'class'=>'CButtonColumn',
                                     'template'=> $this->createActionButtons(['update']),
