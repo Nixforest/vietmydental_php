@@ -1207,4 +1207,5 @@ class DomainConst {
     const CONTENT00270  = 'Xem thêm';
     const CONTENT00271  = 'QR code';
     const CONTENT00272  = 'Cập nhật thông tin';
+    const CONTENT00273  = 'Tên website';
 }

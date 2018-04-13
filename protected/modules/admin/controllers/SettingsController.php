@@ -18,6 +18,7 @@ class SettingsController extends AdminController
                 DomainConst::KEY_ALIAS      => DomainConst::CONTENT00160,
                 DomainConst::KEY_CHILDREN   => array(
                     Settings::KEY_TITLE,
+                    Settings::KEY_DOMAIN,
                     Settings::KEY_LIST_PAGE_SIZE,
                     Settings::KEY_PASSWORD_LEN_MIN,
                     Settings::KEY_PASSWORD_LEN_MAX,

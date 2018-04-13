@@ -127,9 +127,10 @@ class ReferCodes extends CActiveRecord
      * @return String
      */
     public function generateURL() {
+        $url = '';
         switch ($this->type) {
             case self::TYPE_CUSTOMER:
-                $url = '' . $this->code;
+                $url = 'http://' . Settings::getDomain() . "/index.php/front/customer/view/code/" . $this->code;
 
                 break;
 

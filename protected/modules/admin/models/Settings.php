@@ -33,6 +33,8 @@ class Settings extends BaseActiveRecord
     const KEY_PASSWORD_LEN_MIN                  = 'PASSWORD_LEN_MIN';
     /** Key Max of password length */
     const KEY_PASSWORD_LEN_MAX                  = 'PASSWORD_LEN_MAX';
+    /** Key Domain */
+    const KEY_DOMAIN                            = 'DOMAIN';
     
     /* --- App settings --- */
     /** Key Mobile app version iOS */
@@ -318,6 +320,30 @@ class Settings extends BaseActiveRecord
      */
     public static function getSMSServerUrl() {
         $retVal = Settings::getItem(Settings::KEY_SMS_SERVER_URL);
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return "";
+    }
+    
+    /**
+     * Get name of website
+     * @return string
+     */
+    public static function getWebsiteName() {
+        $retVal = Settings::getItem(Settings::KEY_TITLE);
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return DomainConst::CONTENT00273;
+    }
+    
+    /**
+     * Get domain of website
+     * @return string
+     */
+    public static function getDomain() {
+        $retVal = Settings::getItem(Settings::KEY_DOMAIN);
         if (!empty($retVal)) {
             return $retVal;
         }

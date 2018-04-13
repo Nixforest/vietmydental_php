@@ -121,7 +121,7 @@ Yii::app()->clientscript
 
                     <div class="containerX">
                         <div class="dropdownX" style="line-height: 18px;">
-                            <a href="<?php echo Yii::app()->createAbsoluteUrl(''); ?>"><?php echo Yii::app()->name ?></a>
+                            <a href="<?php echo Yii::app()->createAbsoluteUrl(''); ?>"><?php echo Settings::getWebsiteName() ?></a>
                         </div>
                         <?php
                         $menu = new AdminMenuManager();

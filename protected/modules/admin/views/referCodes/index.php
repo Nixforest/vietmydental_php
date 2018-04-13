@@ -42,6 +42,10 @@ $('.search-form form').submit(function(){
                     'htmlOptions' => array('style' => 'text-align:center;')
                 ),
 		'code',
+                array(
+                    'header' => DomainConst::CONTENT00271,
+                    'value' => '$data->generateURL()',
+                ),
 		'object_id',
 		'status',
 		'type',
