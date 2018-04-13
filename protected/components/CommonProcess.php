@@ -47,6 +47,25 @@ class CommonProcess {
     }
     
     /**
+     * Generate uniq id
+     * @param Int $len Length of return value
+     * @return String
+     */
+    public static function generateUniqId($len = 13) {
+        $retVal = '';
+        if (function_exists("random_bytes")) {
+            $bytes = random_bytes(ceil($len / 2));
+        } else if (function_exists("openssl_random_pseudo_bytes")) {
+            $bytes = openssl_random_pseudo_bytes(ceil($len / 2));
+        } else {
+            $retVal = self::generateTempPassword();
+        }
+        
+        $retVal = substr(bin2hex($bytes), 0, $len);
+        return strtoupper($retVal);
+    }
+    
+    /**
      * Get string of status: Active and Inactive
      * @param boolean $emptyOption Flag need add empty selection to return value
      * @return array Array string of status

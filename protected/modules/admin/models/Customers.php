@@ -92,6 +92,10 @@ class Customers extends BaseActiveRecord
                         self::HAS_MANY, 'OneMany', 'many_id',
                         'on'    => 'type = ' . OneMany::TYPE_AGENT_CUSTOMER,
                     ),
+                    'rReferCode' => array(
+                        self::HAS_ONE, 'ReferCodes', 'object_id',
+                        'on'    => 'type = ' . ReferCodes::TYPE_CUSTOMER,
+                    ),
 		);
 	}
 

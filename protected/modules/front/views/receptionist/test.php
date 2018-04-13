@@ -8,40 +8,12 @@
 	'id'=>'medical-records-form',
 	'enableAjaxValidation'=>false,
 )); ?>
-    <div class="group-btn" id="create_customer">
-        <?php
-            echo CHtml::link("Open dialog", '#', array(
-                'style' => 'cursor: pointer;',
-                'onclick' =>''
-                . 'createPrintDialog();'
-                . ' $("#dialog").dialog("open");'
-                . ' return false;',
-            ));
-        ?>
-    </div>
-    <!-- Create new dialog -->
-    <?php
-        $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
-            'id'    => 'dialog',
-            'options' => array(
-                'title' => "In phiếu thu",
-                'autoOpen'  => true,
-                'modal'     => true,
-                'position'  => array(
-                    'my'    => 'top',
-                    'at'    => 'top',
-                ),
-                'width'     => 1300,
-                'heigh'     => 670,
-                'close'     => 'js:function() { }',
-            ),
-        ));
-    ?>
-    <div class="divForForm"></div>
-    <?php $this->endWidget('zii.widgets.jui.CJuiDialog');?>
-    <input type="button" onclick="window.print()"/>
 <div class="maincontent clearfix">
     <?php
+     for ($index = 0; $index < 30 ; $index++) {
+         CommonProcess::echoTest('Unique id: ', CommonProcess::generateUniqId());
+     }
+//        CommonProcess::echoTest('Unique id: ', CommonProcess::generateUniqId());
 //    $listUser = Users::getListUserEmail();
 //    $listUser = ScheduleEmail::handleBuildEmailResetPass();
 //    CommonProcess::echoTest("Test list user's emails: ", count($listUser));
@@ -110,6 +82,38 @@
 <?php $this->endWidget(); ?>
 </div><!-- form -->
 
+    <div class="group-btn" id="create_customer">
+        <?php
+            echo CHtml::link("Open dialog", '#', array(
+                'style' => 'cursor: pointer;',
+                'onclick' =>''
+                . 'createPrintDialog();'
+                . ' $("#dialog").dialog("open");'
+                . ' return false;',
+            ));
+        ?>
+    </div>
+    <!-- Create new dialog -->
+    <?php
+        $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
+            'id'    => 'dialog',
+            'options' => array(
+                'title' => "In phiếu thu",
+                'autoOpen'  => false,
+                'modal'     => true,
+                'position'  => array(
+                    'my'    => 'top',
+                    'at'    => 'top',
+                ),
+                'width'     => 1300,
+                'heigh'     => 670,
+                'close'     => 'js:function() { }',
+            ),
+        ));
+    ?>
+    <div class="divForForm"></div>
+    <?php $this->endWidget('zii.widgets.jui.CJuiDialog');?>
+    <input type="button" onclick="window.print()"/>
 
 <script type="text/javascript">
     /**

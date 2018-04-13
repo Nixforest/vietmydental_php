@@ -99,6 +99,8 @@ class DomainConst {
     const MEDICAL_RECORD_ID_PREFIX                      = 'HS';
     /** Prefix of receipt id string */
     const RECEIPT_ID_PREFIX                             = 'PT';
+    /** Prefix of refer code id string */
+    const REFER_CODE_ID_PREFIX                          = 'QR';
     
     /** Editor width */
     const EDITOR_WIDTH                                  = '800px';
@@ -1200,4 +1202,6 @@ class DomainConst {
     const CONTENT00265  = 'Xác nhận thu';
     const CONTENT00266  = 'Đã thu';
     const CONTENT00267  = 'Chưa thu';
+    const CONTENT00268  = 'Mã này đã được sử dụng';
+    const CONTENT00269  = 'Mã này chưa được tạo xin vui lòng tạo thêm mã trước';
 }
