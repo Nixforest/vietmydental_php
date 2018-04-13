@@ -284,6 +284,15 @@ class Customers extends BaseActiveRecord
     }
     
     /**
+     * Get value of id
+     * @return String
+     */
+    public function getId() {
+        $retVal = CommonProcess::generateID(DomainConst::CUSTOMER_ID_PREFIX, $this->id);
+        return $retVal;
+    }
+    
+    /**
      * Get name of agent
      * @return Name of agent
      */

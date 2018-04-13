@@ -94,9 +94,11 @@ class DomainConst {
     /** Prefix of order id string */
     const ORDER_ID_PREFIX                               = 'ĐH';
     /** Prefix of customer id string */
-    const CUSTOMER_ID_PREFIX                            = 'KH';
+    const CUSTOMER_ID_PREFIX                            = 'BN';
     /** Prefix of medical record id string */
     const MEDICAL_RECORD_ID_PREFIX                      = 'HS';
+    /** Prefix of receipt id string */
+    const RECEIPT_ID_PREFIX                             = 'PT';
     
     /** Editor width */
     const EDITOR_WIDTH                                  = '800px';

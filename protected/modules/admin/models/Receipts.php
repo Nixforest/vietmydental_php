@@ -165,7 +165,9 @@ class Receipts extends CActiveRecord
             // Handle created date
             $this->created_date = CommonProcess::getCurrentDateTime();
         } else {                    // Update
-            
+            if (Yii::app()->user->role_name == Roles::ROLE_RECEPTIONIST) {
+                $this->receiptionist_id = $userId;
+            }
         }
         return parent::beforeSave();
     }
@@ -348,8 +350,37 @@ class Receipts extends CActiveRecord
         return $info;
     }
     
+    /**
+     * Get current status
+     * @return String
+     */
     public function getCurrentStatus() {
         return self::getStatus()[$this->status];
+    }
+    
+    /**
+     * Get value of id
+     * @return String
+     */
+    public function getId() {
+        $retVal = CommonProcess::generateID(DomainConst::RECEIPT_ID_PREFIX, $this->id);
+        return $retVal;
+    }
+    
+    /**
+     * Get discount value
+     * @return String
+     */
+    public function getDiscount() {
+        return CommonProcess::formatCurrency($this->discount) . ' ' . DomainConst::CONTENT00134;
+    }
+    
+    /**
+     * Get final value
+     * @return String
+     */
+    public function getFinal() {
+        return CommonProcess::formatCurrency($this->final) . ' ' . DomainConst::CONTENT00134;
     }
 
     //-----------------------------------------------------

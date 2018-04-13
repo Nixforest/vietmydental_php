@@ -24,15 +24,15 @@
                         <tr><td colspan="2">NHA KHOA VIỆT MỸ</td></tr>
                         <tr>
                             <td>Địa chỉ/Address:</td>
-                            <td>128 Huỳnh Tấn Phát P. Phú Mỹ, Quận 7, TP HCM</td>
+                            <td><i>128 Huỳnh Tấn Phát P. Phú Mỹ, Quận 7, TP HCM</i></td>
                         </tr>
                         <tr>
                             <td>Sđt/Phone:</td>
-                            <td>028.3785.8989</td>
+                            <td><i>028.3785.8989</i></td>
                         </tr>
                         <tr>
                             <td>Website:</td>
-                            <td>nhakhoavietmy.com.vn</td>
+                            <td><i>nhakhoavietmy.com.vn</i></td>
                         </tr>
                     </table>
                 </td>
@@ -41,7 +41,7 @@
             <tr>
                 <td colspan="13"></td>
                 <td colspan="10" class="align-middle"><font size="6">PHIẾU THU (RECEIPTS)</font></td>
-                <td colspan="8">Số/ID: 027757</td>
+                <td colspan="8">Số/ID: <?php echo $model->getId();?></td>
             </tr>
             <!--Row Patient information-->
             <tr>
@@ -51,27 +51,47 @@
                     <table class="table table-borderless">
                         <tr>
                             <td colspan="5">Ngày/Date:</td>
-                            <td colspan="10"><?php echo CommonProcess::convertDateTime(
+                            <td colspan="10">
+                                <i>
+                                    <?php echo CommonProcess::convertDateTime(
                                     $model->process_date, DomainConst::DATE_FORMAT_4,
-                                    DomainConst::DATE_FORMAT_3); ?></td>
+                                    DomainConst::DATE_FORMAT_3); ?>
+                                </i>
+                            </td>
                             <td colspan="5">Hình thức/Type:</td>
-                            <td colspan="8">Tiền mặt/Cash</td>
+                            <td colspan="8"><i>Tiền mặt/Cash</i></td>
                         </tr>
                         <tr>
+                            <?php
+                            if ($model->getCustomer() != NULL) {
+                                $customer = $model->getCustomer();
+                                $customerName = $customer->name;
+                                $customerId = $customer->getId();
+                                $customerPhone = $customer->getPhone();
+                                $customerEmail = $customer->getEmail();
+                                $customerAddress = $customer->getAddress();
+                            }
+                            ?>
                             <td colspan="5">Bệnh nhân/Patient:</td>
-                            <td colspan="10">Lê Thị Bích Hoà</td>
+                            <td colspan="10">
+                                <i>
+                                    <?php echo $customerName; ?>
+                                </i>
+                            </td>
                             <td colspan="5">Mã/Patient code:</td>
-                            <td colspan="8">017050</td>
+                            <td colspan="8">
+                                <i><?php echo $customerId; ?></i>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="5">Điện thoại/Tel:</td>
-                            <td colspan="10">0908336449</td>
+                            <td colspan="10"><i><?php echo $customerPhone; ?></i></td>
                             <td colspan="5">Email:</td>
-                            <td colspan="8">abc123@gmail.com</td>
+                            <td colspan="8"><i><?php echo $customerEmail; ?></i></td>
                         </tr>
                         <tr>
                             <td colspan="5">Địa chỉ/Address:</td>
-                            <td colspan="23">2C72 Chung cư Phú Mỹ, P.Phú Mỹ, Quận 7, TP HCM</td>
+                            <td colspan="23"><i><?php echo $customerAddress; ?></i></td>
                         </tr>
                     </table>
                 </td>
@@ -107,29 +127,30 @@
                             (Actual cost)
                         </td>
                     </tr>
+                    <?php
+                    $treatment = $model->getTreatmentType();
+                    if ($treatment != NULL) {
+                        $treatmentName = $treatment->name;
+                        $price = $treatment->getPrice();
+                        $money = $treatment->price - $model->discount;
+                    }
+                    $discount = $model->getDiscount();
+                    $final = $model->getFinal();
+                    ?>
                     <tr>
                         <td>1</td>
-                        <td>Trám răng thường</td>
-                        <td>2</td>
-                        <td>120,000đ</td>
-                        <td>40,000đ</td>
-                        <td>200,000đ</td>
-                        <td>200,000đ</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Răng sứ Ziconia</td>
+                        <td><?php echo $treatmentName; ?></td>
                         <td>1</td>
-                        <td>4,000,000đ</td>
-                        <td>1,300,000đ</td>
-                        <td>2,700,000đ</td>
-                        <td>2,700,000đ</td>
+                        <td><?php echo $price; ?></td>
+                        <td><?php echo $discount; ?></td>
+                        <td><?php echo CommonProcess::formatCurrency($money) . ' ' . DomainConst::CONTENT00134; ?></td>
+                        <td><?php echo $final; ?></td>
                     </tr>
                     <tr>
                         <td colspan="4"></td>
                         <td><b>Tổng cộng/Total:</b></td>
-                        <td>2,900,000đ</td>
-                        <td>2,900,000đ</td>
+                        <td><?php echo CommonProcess::formatCurrency($money) . ' ' . DomainConst::CONTENT00134; ?></td>
+                        <td><?php echo $final; ?></td>
                     </tr>
                     <tr>
                         <td colspan="4"></td>
@@ -140,7 +161,7 @@
                     <tr>
                         <td colspan="4"></td>
                         <td><b>Nợ cũ/Old Debt:</b></td>
-                        <td>900,000đ</td>
+                        <td>0đ</td>
                         <td></td>
                     </tr>
                 </table>
@@ -169,9 +190,15 @@
                         <tr>
                             <td colspan="5"></td>
                         </tr>
+                        <?php
+                        $user = Users::model()->findByPk(Yii::app()->user->id);
+                        if ($user) {
+                            $userName = $user->first_name;
+                        }
+                        ?>
                         <tr>
-                            <td>Lê Thị Bích Hoà</td>
-                            <td>Nguyễn Thị Vân Anh</td>
+                            <td><?php echo $customerName; ?></td>
+                            <td><?php echo $userName; ?></td>
                             <td></td>
                             <td></td>
                             <td></td>
