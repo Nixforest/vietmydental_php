@@ -2,7 +2,7 @@
 /* @var $this ReferCodesController */
 /* @var $model ReferCodes */
 
-//$this->createMenu('index', $model);
+$this->createMenu('index', $model);
 
 $this->breadcrumbs=array(
 	'Danh sách Thẻ phát hành'=>array('index'),
@@ -46,11 +46,27 @@ $('.search-form form').submit(function(){
                     'header' => DomainConst::CONTENT00271,
                     'value' => '$data->generateURL()',
                 ),
+//                array(
+//                    'header' => DomainConst::CONTENT00271,
+//                    'value' => '$this->grid->controller->widget("application.extensions.qrcode.QRCodeGenerator",array(
+//                        "data" => "application.extensions.qrcode.QRCodeGenerator",
+//                        "subfolderVar" => false,
+//                        "matrixPointSize" => 5,
+//                        "displayImage"=>true, // default to true, if set to false display a URL path
+//                        "errorCorrectionLevel"=>"L", // available parameter is L,M,Q,H
+//                        "matrixPointSize"=>4, // 1 to 10 only
+//                        "filePath" => DirectoryHandler::getRootPath() . "/uploads",
+//                        "filename" => "temp",
+//                    ), true)',
+//                    'type' => 'html',
+//                ),
 		'object_id',
 		'status',
 		'type',
-		array(
-			'class'=>'CButtonColumn',
-		),
+                array(
+                    'header' => DomainConst::CONTENT00239,
+                    'class'=>'CButtonColumn',
+                    'template'=> $this->createActionButtons()
+                ),
 	),
 )); ?>

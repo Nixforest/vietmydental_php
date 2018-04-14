@@ -8,6 +8,16 @@
 	'id'=>'medical-records-form',
 	'enableAjaxValidation'=>false,
 )); ?>
+    <?php $this->widget('application.extensions.qrcode.QRCodeGenerator',array(
+    'data' => 'http://vietmy.immortal.vn/index.php/front/customer/view/code/2526821586D9E',
+    'subfolderVar' => false,
+    'matrixPointSize' => 5,
+    'displayImage'=>true, // default to true, if set to false display a URL path
+    'errorCorrectionLevel'=>'L', // available parameter is L,M,Q,H
+    'matrixPointSize'=>4, // 1 to 10 only
+    'filePath' => DirectoryHandler::getRootPath() . '/uploads',
+    'filename' => 'temp',
+)) ?>
 <div class="maincontent clearfix">
     <?php
      for ($index = 0; $index < 30 ; $index++) {
