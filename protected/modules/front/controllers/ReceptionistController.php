@@ -34,6 +34,13 @@ class ReceptionistController extends Controller {
                 OneMany::insertOne(
                         Yii::app()->user->agent_id,
                         $customer->id, OneMany::TYPE_AGENT_CUSTOMER);
+                // Handle save social network information
+                foreach (SocialNetworks::TYPE_NETWORKS as $key => $value) {
+                    $value = $_POST['Customers']["social_network_$key"];
+                    if (!empty($value)) {
+                        SocialNetworks::insertOne($value, $customer->id, SocialNetworks::TYPE_CUSTOMER, $key);
+                    }
+                }
                 // Save success -> start create medical record
                 $medicalRecord->customer_id = $customer->id;
                 
