@@ -1208,4 +1208,7 @@ class DomainConst {
     const CONTENT00271  = 'QR code';
     const CONTENT00272  = 'Cập nhật thông tin';
     const CONTENT00273  = 'Tên website';
+    const CONTENT00274  = 'Facebook';
+    const CONTENT00275  = 'Zalo';
+    const CONTENT00276  = 'Thông tin liên lạc';
 }

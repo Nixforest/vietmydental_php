@@ -54,7 +54,13 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		),
 		'date_of_birth',
 		'phone',
-		'email',
+//		'email',
+                array(
+                    'header' => DomainConst::CONTENT00276,
+                    'value' => '$data->getSocialNetworkInfo()',
+                    'type'=>'html',
+                    'htmlOptions' => array('style' => 'width:200px;'),
+                ),
 //		'city_id',
 //		'district_id',
 //		'ward_id',
@@ -77,12 +83,12 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 //                    'value'=> 'isset($data->rCareer) ? $data->rCareer->name : ""',
 //                    'filter'=>Careers::loadItems(),
 //                ),
-		array(
-                    'name'=>'user_id',
-                    'htmlOptions' => array('style' => 'text-align:center;'),
-                    'value'=> 'isset($data->rUser) ? $data->rUser->username : ""',
-                    'filter'=>Users::loadItems(),
-                ),
+//		array(
+//                    'name'=>'user_id',
+//                    'htmlOptions' => array('style' => 'text-align:center;'),
+//                    'value'=> 'isset($data->rUser) ? $data->rUser->username : ""',
+//                    'filter'=>Users::loadItems(),
+//                ),
 //		'characteristics',
 //		array(
 //                    'name'=>'created_by',
@@ -90,7 +96,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 //                    'value'=> 'isset($data->rCreatedBy) ? $data->rCreatedBy->username : ""',
 //                    'filter'=>Users::loadItems(),
 //                ),
-		'created_date',
+//		'created_date',
                 array(
                     'name'=>'status',
                     'type' => 'Status',

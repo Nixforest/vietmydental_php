@@ -72,7 +72,7 @@ Yii::app()->clientscript
 						<a href="#">Đăng Nhập</a>
 					</div>-->
                                     <div class="box-login">
-                                        <a href="<?php echo Yii::app()->createAbsoluteUrl(''); ?>"><?php echo CHtml::encode(Yii::app()->name); ?></a>
+                                        <a href="<?php echo Yii::app()->createAbsoluteUrl(''); ?>"><?php echo CHtml::encode(Settings::getWebsiteName()); ?></a>
                                     </div>
 				</div>
 			</header>

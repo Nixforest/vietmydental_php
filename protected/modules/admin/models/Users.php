@@ -125,6 +125,10 @@ class Users extends BaseActiveRecord
                         'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
                         'order' => 'id DESC',
                     ),
+                    'rSocialNetwork' => array(
+                        self::HAS_MANY, 'SocialNetworks', 'object_id',
+                        'on'    => 'type = ' . SocialNetworks::TYPE_USER,
+                    ),
 		);
 	}
 
@@ -287,6 +291,24 @@ class Users extends BaseActiveRecord
      */
     public function beforeValidate() {
         return parent::beforeValidate();
+    }
+    
+    /**
+     * Override before delete method
+     * @return Parent result
+     */
+    public function beforeDelete() {
+        // Check foreign table treatment_schedules
+        $treatmentSchedules = TreatmentSchedules::model()->findByAttributes(array('doctor_id' => $this->id));
+        if (count($treatmentSchedules) > 0) {
+            return false;
+        }
+        // Handle Agent relation
+        OneMany::deleteAllManyOldRecords($this->id, OneMany::TYPE_AGENT_USER);
+        // Handle Social network relation
+        SocialNetworks::deleteAllOldRecord($this->id, SocialNetworks::TYPE_USER);
+        
+        return parent::beforeDelete();
     }
 
     //-----------------------------------------------------
@@ -471,6 +493,37 @@ class Users extends BaseActiveRecord
         }
         
         return $retVal;
+    }
+    
+    /**
+     * Get social network information
+     * @return String
+     */
+    public function getSocialNetworkInfo() {
+        $retVal = array();
+//        $retVal[] = "Điện thoại: " . $this->getPhone();
+        if (isset($this->rSocialNetwork)) {
+            foreach ($this->rSocialNetwork as $value) {
+                $retVal[] = SocialNetworks::TYPE_NETWORKS[$value->type_network] . ": $value->value";
+            }
+        }
+        return implode('<br>', $retVal);
+    }
+    
+    /**
+     * Get social network value
+     * @param Int $type_network Network type
+     * @return String
+     */
+    public function getSocialNetwork($type_network) {
+        if (isset($this->rSocialNetwork)) {
+            foreach ($this->rSocialNetwork as $value) {
+                if ($value->type_network == $type_network) {
+                    return $value->value;
+                }
+            }
+        }
+        return '';
     }
 
     //-----------------------------------------------------

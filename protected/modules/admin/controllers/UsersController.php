@@ -75,6 +75,14 @@ class UsersController extends AdminController
                             if (filter_input(INPUT_POST, 'submit')) {
                                 $selectedAgent = $_POST['Users']['agent'];
                                 OneMany::insertOne($selectedAgent, $model->id, OneMany::TYPE_AGENT_USER);
+                                
+                                // Handle save social network information
+                                foreach (SocialNetworks::TYPE_NETWORKS as $key => $value) {
+                                    $value = $_POST['Users']["social_network_$key"];
+                                    if (!empty($value)) {
+                                        SocialNetworks::insertOne($value, $model->id, SocialNetworks::TYPE_USER, $key);
+                                    }
+                                }
                             }
                             $this->redirect(array('view','id'=>$model->id));
                         }
@@ -107,6 +115,15 @@ class UsersController extends AdminController
                                 OneMany::deleteAllManyOldRecords($model->id, OneMany::TYPE_AGENT_USER);
                                 $selectedAgent = $_POST['Users']['agent'];
                                 OneMany::insertOne($selectedAgent, $model->id, OneMany::TYPE_AGENT_USER);
+                                
+                                // Handle save social network information
+                                SocialNetworks::deleteAllOldRecord($model->id, SocialNetworks::TYPE_USER);
+                                foreach (SocialNetworks::TYPE_NETWORKS as $key => $value) {
+                                    $value = $_POST['Users']["social_network_$key"];
+                                    if (!empty($value)) {
+                                        SocialNetworks::insertOne($value, $model->id, SocialNetworks::TYPE_USER, $key);
+                                    }
+                                }
                             }
                             $this->redirect(array('view','id'=>$model->id));
                         }

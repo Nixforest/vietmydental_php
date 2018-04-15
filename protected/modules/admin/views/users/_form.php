@@ -265,7 +265,7 @@
 		<?php echo $form->error($model,'agent'); ?>
             </div>
         </div>
-        <div class="row">
+<!--        <div class="row">
             <div class="col-md-6">
                 <?php echo $form->labelEx($model, 'img_avatar'); ?>
                 <div class="row tb_file">
@@ -290,8 +290,35 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
+        <?php
+            $count = 0;
+        ?>
+        <?php foreach (SocialNetworks::TYPE_NETWORKS as $key => $value): ?>
+            <?php
+                $id = "Users_social_network_$key";
+                $name = "Users[social_network_$key]";
+            ?>
+            <?php if ($count % 2 == 0): ?>
+            <div class="row">
+            <?php endif; // end if ($count % 2 == 0) ?>
+            
+                <div class="col-md-6">
+                    <label for="<?php echo $id; ?>"><?php echo $value; ?></label>
+                    <input size="60" maxlength="255" name="<?php echo $name; ?>" id="<?php echo $id; ?>" type="text" placeholder="<?php echo $value ?>" value="<?php echo $model->getSocialNetwork($key); ?>">
+                </div>
+            
+            <?php if ($count % 2 != 0): ?>
+            </div>
+            <?php endif; // end if ($count % 2 != 0) ?>
+            <?php
+                $count++;
+            ?>
+        <?php endforeach; // end foreach (SocialNetworks::TYPE_NETWORKS as $network) ?>
 
+        <?php if ($count % 2 != 0): ?>
+        </div>
+        <?php endif; // end if ($count % 2 == 0) ?>
 
 	<div class="row buttons">
             <div class="col-md-6">

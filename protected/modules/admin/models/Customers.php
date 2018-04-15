@@ -98,6 +98,10 @@ class Customers extends BaseActiveRecord
                         self::HAS_ONE, 'ReferCodes', 'object_id',
                         'on'    => 'type = ' . ReferCodes::TYPE_CUSTOMER,
                     ),
+                    'rSocialNetwork' => array(
+                        self::HAS_MANY, 'SocialNetworks', 'object_id',
+                        'on'    => 'type = ' . SocialNetworks::TYPE_CUSTOMER,
+                    ),
 		);
 	}
 
@@ -214,10 +218,15 @@ class Customers extends BaseActiveRecord
      * @return Parent result
      */
     public function beforeDelete() {
+        // Handle relation
         if (isset($this->rMedicalRecord)) {
             $this->rMedicalRecord->delete();
         }
+        // Handle Agent relation
         OneMany::deleteAllManyOldRecords($this->id, OneMany::TYPE_AGENT_CUSTOMER);
+        // Handle Social network relation
+        SocialNetworks::deleteAllOldRecord($this->id, SocialNetworks::TYPE_CUSTOMER);
+        
         return parent::beforeDelete();
     }
 
@@ -501,6 +510,37 @@ class Customers extends BaseActiveRecord
             }
         }
         return $infoSchedule;
+    }
+    
+    /**
+     * Get social network information
+     * @return String
+     */
+    public function getSocialNetworkInfo() {
+        $retVal = array();
+//        $retVal[] = "Điện thoại: " . $this->getPhone();
+        if (isset($this->rSocialNetwork)) {
+            foreach ($this->rSocialNetwork as $value) {
+                $retVal[] = SocialNetworks::TYPE_NETWORKS[$value->type_network] . ": $value->value";
+            }
+        }
+        return implode('<br>', $retVal);
+    }
+    
+    /**
+     * Get social network value
+     * @param Int $type_network Network type
+     * @return String
+     */
+    public function getSocialNetwork($type_network) {
+        if (isset($this->rSocialNetwork)) {
+            foreach ($this->rSocialNetwork as $value) {
+                if ($value->type_network == $type_network) {
+                    return $value->value;
+                }
+            }
+        }
+        return '';
     }
 
     //-----------------------------------------------------

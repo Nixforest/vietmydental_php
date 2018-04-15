@@ -81,6 +81,13 @@ class CustomersController extends AdminController
                                 if (!empty($referCode)) {
                                     ReferCodes::connect($referCode, $model->id, ReferCodes::TYPE_CUSTOMER);
                                 }
+                                // Handle save social network information
+                                foreach (SocialNetworks::TYPE_NETWORKS as $key => $value) {
+                                    $value = $_POST['Customers']["social_network_$key"];
+                                    if (!empty($value)) {
+                                        SocialNetworks::insertOne($value, $model->id, SocialNetworks::TYPE_CUSTOMER, $key);
+                                    }
+                                }
                             }
                             $this->redirect(array('view','id'=>$model->id));
                         }
@@ -118,6 +125,14 @@ class CustomersController extends AdminController
                                 // Handle save refer code
                                 if (!empty($referCode)) {
                                     ReferCodes::connect($referCode, $model->id, ReferCodes::TYPE_CUSTOMER);
+                                }
+                                // Handle save social network information
+                                SocialNetworks::deleteAllOldRecord($model->id, SocialNetworks::TYPE_CUSTOMER);
+                                foreach (SocialNetworks::TYPE_NETWORKS as $key => $value) {
+                                    $value = $_POST['Customers']["social_network_$key"];
+                                    if (!empty($value)) {
+                                        SocialNetworks::insertOne($value, $model->id, SocialNetworks::TYPE_CUSTOMER, $key);
+                                    }
                                 }
                             }
                             $this->redirect(array('view','id'=>$model->id));

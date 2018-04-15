@@ -9,6 +9,7 @@ $this->createMenu('view', $model);
 <?php
 $url = $model->generateURL();
 CommonProcess::echoTest('URL: ', $url);
+CommonProcess::echoTest('Code: ', $model->code);
 if (!empty($url)) {
     $this->widget('application.extensions.qrcode.QRCodeGenerator', array(
     'data' => $url,

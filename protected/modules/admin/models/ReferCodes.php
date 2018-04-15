@@ -102,6 +102,7 @@ class ReferCodes extends CActiveRecord
 		$criteria->compare('object_id',$this->object_id,true);
 		$criteria->compare('status',$this->status);
 		$criteria->compare('type',$this->type);
+                $criteria->order = 'id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -130,6 +131,10 @@ class ReferCodes extends CActiveRecord
         $url = '';
         switch ($this->type) {
             case self::TYPE_CUSTOMER:
+                $url = 'http://' . Settings::getDomain() . "/index.php/front/customer/view/code/" . $this->code;
+
+                break;
+            case self::TYPE_NOT_SELECTED_YET:
                 $url = 'http://' . Settings::getDomain() . "/index.php/front/customer/view/code/" . $this->code;
 
                 break;
@@ -172,6 +177,9 @@ class ReferCodes extends CActiveRecord
                 $model->object_id = $object_id;
                 $model->type = $type;
                 $model->save();
+            } else if (($model->type != self::TYPE_NOT_SELECTED_YET)
+                    && ($model->object_id == $object_id)) {
+                return;
             } else {
                 throw new Exception(DomainConst::CONTENT00268);
             }

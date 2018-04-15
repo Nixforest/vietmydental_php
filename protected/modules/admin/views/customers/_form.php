@@ -68,26 +68,13 @@
 		<?php echo $form->error($model,'phone'); ?>
             </div>
 	</div>
-
-	<div class="row">
-            <div class="col-md-6">
-		<?php echo $form->labelEx($model,'email'); ?>
-		<?php
-                echo $form->emailField($model, 'email', array(
-                    'size' => 60,
-                    'maxlength' => 80,
-                    'oninvalid' => "this.setCustomValidity('". DomainConst::CONTENT00066 ."')",
-                ));
-                ?>
-		<?php echo $form->error($model,'email'); ?>
-            </div>
-            
-            <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-12">
                 <?php echo $form->labelEx($model,'characteristics'); ?>
-		<?php echo $form->textArea($model,'characteristics',array('rows'=>6, 'cols'=>50)); ?>
+		<?php echo $form->textField($model,'characteristics',array('size'=>60,'maxlength'=>200)); ?>
 		<?php echo $form->error($model,'characteristics'); ?>
             </div>
-	</div>
+        </div>
 
 	<div class="row">            
             <div class="col-md-6">
@@ -245,6 +232,34 @@
                 <?php echo $form->error($model,'referCode'); ?>
             </div>
         </div>
+        <?php
+            $count = 0;
+        ?>
+        <?php foreach (SocialNetworks::TYPE_NETWORKS as $key => $value): ?>
+            <?php
+                $id = "Customers_social_network_$key";
+                $name = "Customers[social_network_$key]";
+            ?>
+            <?php if ($count % 2 == 0): ?>
+            <div class="row">
+            <?php endif; // end if ($count % 2 == 0) ?>
+            
+                <div class="col-md-6">
+                    <label for="<?php echo $id; ?>"><?php echo $value; ?></label>
+                    <input size="60" maxlength="255" name="<?php echo $name; ?>" id="<?php echo $id; ?>" type="text" placeholder="<?php echo $value ?>" value="<?php echo $model->getSocialNetwork($key); ?>">
+                </div>
+            
+            <?php if ($count % 2 != 0): ?>
+            </div>
+            <?php endif; // end if ($count % 2 != 0) ?>
+            <?php
+                $count++;
+            ?>
+        <?php endforeach; // end foreach (SocialNetworks::TYPE_NETWORKS as $network) ?>
+
+        <?php if ($count % 2 != 0): ?>
+        </div>
+        <?php endif; // end if ($count % 2 == 0) ?>
 
 	<div class="row buttons">
             <div class="col-md-6">

@@ -25,7 +25,13 @@ $this->createMenu('view', $model);
 	'attributes'=>array(
 //		'id',
 		'username',
-		'email',
+//		'email',
+                array(
+                    'name' => DomainConst::CONTENT00276,
+                    'value' => $model->getSocialNetworkInfo(),
+                    'type'=>'html',
+                    'htmlOptions' => array('style' => 'width:200px;'),
+                ),
 //		'password_hash',
                 array(
                     'name'=>'password_hash',
