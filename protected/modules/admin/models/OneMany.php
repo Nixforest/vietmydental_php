@@ -24,6 +24,8 @@ class OneMany extends BaseActiveRecord
     const TYPE_AGENT_CUSTOMER                           = '3';
     /** 1 [agents] has many [receipt] */
     const TYPE_AGENT_RECEIPT                            = '4';
+    /** 1 [warranties] has many [teeth] */
+    const TYPE_WARRANTY_TEETH                           = '5';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -91,6 +93,11 @@ class OneMany extends BaseActiveRecord
                         self::BELONGS_TO,
                         'Receipts',
                         'many_id',
+                    ),
+                    'rWarranty' => array(
+                        self::BELONGS_TO,
+                        'Warranties',
+                        'one_id',
                     ),
 		);
 	}

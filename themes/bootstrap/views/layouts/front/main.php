@@ -52,7 +52,11 @@ Yii::app()->clientscript
         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/bootstrap-responsive.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/style.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/bootstrap.min.css" />        
-             
+        <style>
+        body {
+           padding-top: 0px;
+        }
+        </style>
 <!--        <link href="css/plugin.css" rel="stylesheet" />
         <link href="css/main.css" rel="stylesheet" />      -->
       

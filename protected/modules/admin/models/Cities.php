@@ -236,6 +236,11 @@ class Cities extends BaseActiveRecord
     //-----------------------------------------------------
     // Static methods
     //-----------------------------------------------------
+    /**
+     * Get model id by name
+     * @param type $name Name of model
+     * @return string
+     */
     public static function getModelIdByName($name) {
         $models = self::model()->findAll();
         foreach ($models as $model) {

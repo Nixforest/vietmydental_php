@@ -247,12 +247,12 @@ class CommonProcess {
                 $i = 4;
                 $n = $index - 23;
             }
-            $retVal[$index] = "Răng " . $i . " - " . $n;
+            $retVal[$index] = DomainConst::CONTENT00284 . $i . " - " . $n;
         }
         
-        $retVal[32] = "Hàm trên";
-        $retVal[33] = "Hàm dưới";
-        $retVal[34] = "Cả 2 hàm";
+        $retVal[32] = DomainConst::CONTENT00285;
+        $retVal[33] = DomainConst::CONTENT00286;
+        $retVal[34] = DomainConst::CONTENT00287;
         return $retVal;
     }
     
@@ -285,11 +285,12 @@ class CommonProcess {
                 $i = 4;
                 $n = $index - 23;
             }
-            $retVal[] = CommonProcess::createConfigJson($index, "Răng " . $i . " - " . $n);
+            $retVal[] = CommonProcess::createConfigJson($index,
+                    DomainConst::CONTENT00284 . $i . " - " . $n);
         }
-        $retVal[] = CommonProcess::createConfigJson(32, "Hàm trên");
-        $retVal[] = CommonProcess::createConfigJson(33, "Hàm dưới");
-        $retVal[] = CommonProcess::createConfigJson(34, "Cả 2 hàm");
+        $retVal[] = CommonProcess::createConfigJson(32, DomainConst::CONTENT00285);
+        $retVal[] = CommonProcess::createConfigJson(33, DomainConst::CONTENT00286);
+        $retVal[] = CommonProcess::createConfigJson(34, DomainConst::CONTENT00287);
         return $retVal;
     }
 

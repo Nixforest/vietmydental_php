@@ -102,6 +102,10 @@ class Customers extends BaseActiveRecord
                         self::HAS_MANY, 'SocialNetworks', 'object_id',
                         'on'    => 'type = ' . SocialNetworks::TYPE_CUSTOMER,
                     ),
+                    'rWarranty' => array(self::HAS_MANY, 'Warranties', 'customer_id',
+                        'on' => 'status!=' . DomainConst::DEFAULT_STATUS_INACTIVE,
+                        'order' => 'id ASC',
+                        ),
 		);
 	}
 

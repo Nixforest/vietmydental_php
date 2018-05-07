@@ -1218,4 +1218,11 @@ class DomainConst {
     const CONTENT00281  = 'Lịch điều trị';
     const CONTENT00282  = 'Bắt đầu';
     const CONTENT00283  = 'Kết thúc';
+    const CONTENT00284  = 'Răng ';
+    const CONTENT00285  = 'Hàm trên';
+    const CONTENT00286  = 'Hàm dưới';
+    const CONTENT00287  = 'Cả 2 hàm';
+    const CONTENT00288  = 'Tên loại phục hình';
+    const CONTENT00289  = 'Thời gian bảo hành (ngày)';
+    const CONTENT00290  = 'Loại phục hình';
 }
