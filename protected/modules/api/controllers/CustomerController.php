@@ -708,7 +708,9 @@ class CustomerController extends APIController
     public function handleUpdateMedicalRecord($result, $mCustomer, $root) {
         $mMedicalRecord = $mCustomer->rMedicalRecord;
         if ($mMedicalRecord) {
-            $mMedicalRecord->record_number = $root->record_number;
+            if (empty($mMedicalRecord->record_number)) {
+                $mMedicalRecord->record_number = $root->record_number;
+            }
             $aUpdate = array(
                 'record_number'
             );

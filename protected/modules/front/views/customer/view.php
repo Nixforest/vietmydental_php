@@ -5,7 +5,7 @@
 ?>
 <div class="maincontent-2 clearfix">
     <div class="title-1">
-        <span class="icon10"></span> Hồ sơ bệnh án
+        <span class="icon10"></span> <?php echo DomainConst::CONTENT00138; ?>
     </div>
     <div class="profile__info">
         <div class="row">
@@ -18,90 +18,91 @@
                         <div class="p-item">
                             <span class="icon-p icon-11"></span>
                             <span class="p-info">
-                                <strong>Bệnh Nhân:</strong> Phạm Hoàng Nam</span>
+                                <strong><?php echo DomainConst::CONTENT00100; ?>:</strong> <?php echo $model->name; ?></span>
                         </div>
                         <div class="p-item">
                             <span class="icon-p icon-12"></span>
                             <span class="p-info">
-                                <strong>Ngày Sinh:</strong> 19/03/1991</span>
+                                <strong><?php echo DomainConst::CONTENT00101; ?>:</strong> <?php echo $model->getBirthday(); ?></span>
                         </div>
                         <div class="p-item">
                             <span class="icon-p icon-13"></span>
                             <span class="p-info">
-                                <strong>Giới Tính:</strong> Nam</span>
+                                <strong><?php echo DomainConst::CONTENT00047; ?>:</strong> <?php echo CommonProcess::getGender()[$model->gender]; ?></span>
                         </div>
                         <div class="p-item">
                             <span class="icon-p icon-14"></span>
                             <span class="p-info">
-                                <strong>Mã Số Hồ Sơ:</strong>19870</span>
+                                <strong><?php echo DomainConst::CONTENT00277; ?>:</strong> <?php echo $model->getMedicalRecordNumber(); ?></span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-8">
                 <div class="title-1">
-                    <span class="icon15"></span> Thông tin liên lạc
+                    <span class="icon15"></span> <?php echo DomainConst::CONTENT00276; ?>
                 </div>
                 <div class="p-add-info">
                     <div class="p-item">
                         <span class="icon-p icon-16"></span>
                         <span class="p-info">
-                            <strong>Địa Chỉ:</strong> Số 1288 Huỳnh Tấn Phát, Phú Mỹ, Quận 7, TP Hồ Chí Minh</span>
+                            <strong><?php echo DomainConst::CONTENT00045; ?>:</strong> <?php echo $model->getAddress(); ?></span>
                     </div>
                     <div class="p-item">
                         <span class="icon-p icon-17"></span>
                         <span class="p-info">
-                            <strong>Số Điện Thoại: </strong> 0981 819 143</span>
+                            <strong><?php echo DomainConst::CONTENT00048; ?>: </strong> <?php echo $model->getPhone(); ?></span>
                     </div>
                     <div class="p-item">
                         <span class="icon-p icon-18"></span>
                         <span class="p-info">
-                            <strong>Email:</strong> namph@gmail.com </span>
-                        <a href="#">(Xem Thêm)</a>
+                            <strong><?php echo DomainConst::CONTENT00175; ?>:</strong> <?php echo $model->getEmail(); ?></span>
+                        <!--<a href="#">(Xem Thêm)</a>-->
                     </div>
                 </div>
                 <div class="p-add-g clearfix">
                     <div class="p-add-1">
                         <div class="title-1">
-                            <span class="icon19"></span> Thông tin tiền sử
+                            <span class="icon19"></span> <?php echo DomainConst::CONTENT00202; ?>
                         </div>
                         <div class="p-add-info">
-                            <div class="p-item">
-                                <span class="icon-p icon-20"></span>
-                                <span class="p-info">Cao Huyết Áp</span>
-                            </div>
-                            <div class="p-item">
-                                <span class="icon-p icon-20"></span>
-                                <span class="p-info">Sỏi Thận</span>
-                            </div>
-                            <div class="p-item">
-                                <span class="icon-p icon-20"></span>
-                                <span class="p-info">Viêm Gan Siêu Vi B </span>
-                            </div>
-                            <a href="#">(Xem Thêm)</a>
+                            <?php if (isset($model->rMedicalRecord)): ?>
+                                <?php foreach ($model->rMedicalRecord->rJoinPathological as $value): ?>
+                                <?php if (isset($value->rPathological)): ?>
+                                <div class="p-item">
+                                    <span class="icon-p icon-20"></span>
+                                    <span class="p-info"><?php echo $value->rPathological->name; ?></span>
+                                </div>
+                                <?php endif; // end if ($value->rPathological) ?>
+                                <?php endforeach; // end foreach ($model->rMedicalRecord->rJoinPathological as $value) ?>
+                            <?php endif; // end if (isset($model->rMedicalRecord)) ?>
+                            <!--<a href="#">(Xem Thêm)</a>-->
                         </div>
                     </div>
                     <div class="p-add-1">
                         <div class="title-1">
-                            <span class="icon21"></span> Thông tin liên quan
+                            <span class="icon21"></span> <?php echo DomainConst::CONTENT00278; ?>
                         </div>
                         <div class="p-add-info">
                             <div class="p-item">
                                 <span class="icon-p icon-22"></span>
                                 <span class="p-info">
-                                    <strong>Bác Sĩ Điều Trị:</strong> Đỗ Tấn Khoa</span>
+                                    <strong><?php echo DomainConst::CONTENT00143; ?>:</strong> <?php echo $schedule->getDoctor(); ?></span>
                             </div>
+                            <?php if ($schedule->getSale() != NULL): ?>
                             <div class="p-item">
                                 <span class="icon-p icon-23"></span>
                                 <span class="p-info">
-                                    <strong>Kinh Doanh:</strong> Phạm Đức Trường</span>
+                                    <strong><?php echo DomainConst::CONTENT00279; ?>:</strong> <?php echo $schedule->getSale()->getFullname(); ?></span>
                             </div>
+                            <?php endif; // end if (isset($schedule->getSale())) ?>
+                            
                             <div class="p-item">
                                 <span class="icon-p icon-24"></span>
                                 <span class="p-info">
-                                    <strong>Chi Nhánh:</strong> Nha Khoa Việt Mỹ Quận 7 </span>
+                                    <strong><?php echo DomainConst::CONTENT00199; ?>:</strong> <?php echo $model->getAgentName(); ?> </span>
                             </div>
-                            <a href="#">(Xem Thêm)</a>
+                            <!--<a href="#">(Xem Thêm)</a>-->
                         </div>
                     </div>
                 </div>
@@ -112,64 +113,21 @@
         <div class="col-md-6">
             <div class="list__2">
                 <div class="title-1">
-                    <span class="icon25"></span> Danh sách điều trị
+                    <span class="icon25"></span> <?php echo DomainConst::CONTENT00280; ?>
                 </div>
-                <div class="list__2__info">
-                    <div class="list__2__des">
+                <div class="list__2__info" id="treatment_schedule-info">
+                    <?php foreach ($treatment as $value): ?>
+                    <div class="list__2__des" id="<?php echo $value->id; ?>">
                         <div class="list__2__item">
                             <span class="icon26 icon-list"></span>
                             <p>
-                                <strong>Cạo Vôi Răng - Đánh Bóng 2 Hàm</strong>
+                                <strong><?php echo $value->getTreatmentInfo(); ?></strong>
                             </p>
-                            <p>Ngày Thực Hiện: 26/03/2018</p>
+                            <p><?php echo $value->getStartTime(); ?></p>
                         </div>
                     </div>
-                    <div class="list__2__des">
-                        <div class="list__2__item">
-                            <span class="icon26 icon-list"></span>
-                            <p>
-                                <strong>Cạo Vôi Răng - Đánh Bóng 2 Hàm</strong>
-                            </p>
-                            <p>Ngày Thực Hiện: 26/03/2018</p>
-                        </div>
-                    </div>
-                    <div class="list__2__des">
-                        <div class="list__2__item">
-                            <span class="icon26 icon-list"></span>
-                            <p>
-                                <strong>Cạo Vôi Răng - Đánh Bóng 2 Hàm</strong>
-                            </p>
-                            <p>Ngày Thực Hiện: 26/03/2018</p>
-                        </div>
-                    </div>
-                    <div class="list__2__des">
-                        <div class="list__2__item">
-                            <span class="icon26 icon-list"></span>
-                            <p>
-                                <strong>Cạo Vôi Răng - Đánh Bóng 2 Hàm</strong>
-                            </p>
-                            <p>Ngày Thực Hiện: 26/03/2018</p>
-                        </div>
-                    </div>
-                    <div class="list__2__des">
-                        <div class="list__2__item">
-                            <span class="icon26 icon-list"></span>
-                            <p>
-                                <strong>Cạo Vôi Răng - Đánh Bóng 2 Hàm</strong>
-                            </p>
-                            <p>Ngày Thực Hiện: 26/03/2018</p>
-                        </div>
-                    </div>
-                    <div class="list__2__des">
-                        <div class="list__2__item">
-                            <span class="icon26 icon-list"></span>
-                            <p>
-                                <strong>Cạo Vôi Răng - Đánh Bóng 2 Hàm</strong>
-                            </p>
-                            <p>Ngày Thực Hiện: 26/03/2018</p>
-                        </div>
-                    </div>
-                    <a href="#">(Xem Thêm)</a>
+                    <?php endforeach; // end foreach ($treatment as $value) ?>
+                    <!--<a href="#">(Xem Thêm)</a>-->
                 </div>
             </div>
 
@@ -177,9 +135,9 @@
         <div class="col-md-6">
             <div class="list__2">
                 <div class="title-1">
-                    <span class="icon27"></span> Chi tiết điều
+                    <span class="icon27"></span> <?php echo DomainConst::CONTENT00174; ?>
                 </div>
-                <div class="list__2__info">
+                <div class="list__2__info" id="treatment_schedule_detail-info">
                     <div class="list__2__des">
                         <div class="list__2__item">
                             <span class="icon28 icon-list"></span>
@@ -372,3 +330,13 @@
         </div>
     </div>
 </div>
+<script>
+    $("body").on("click", "#treatment_schedule-info .list__2__des", function() {
+//        alert($(this).attr('id'));
+        fnShowTreatmentScheduleDetailInfo(
+                "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/getTreatmentScheduleDetailInfo'); ?>",
+                $(this).attr('id'),
+                "#treatment_schedule_detail-info"
+                );
+    });
+</script>

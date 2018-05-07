@@ -1109,7 +1109,7 @@ class DomainConst {
     const CONTENT00171  = 'Danh sách bệnh nhân';
     const CONTENT00172  = 'Thông tin bệnh nhân';
     const CONTENT00173  = 'Hồ sơ bệnh nhân:';
-    const CONTENT00174  = 'Chi tiết điều trị:';
+    const CONTENT00174  = 'Chi tiết điều trị';
     const CONTENT00175  = 'Email';
     const CONTENT00176  = 'Tạo Mới Bệnh Nhân';
     const CONTENT00177  = 'Lịch hẹn';
@@ -1211,4 +1211,11 @@ class DomainConst {
     const CONTENT00274  = 'Facebook';
     const CONTENT00275  = 'Zalo';
     const CONTENT00276  = 'Thông tin liên lạc';
+    const CONTENT00277  = 'Mã số hồ sơ';
+    const CONTENT00278  = 'Thông tin liên quan';
+    const CONTENT00279  = 'Nhân viên kinh doanh';
+    const CONTENT00280  = 'Danh sách điều trị';
+    const CONTENT00281  = 'Lịch điều trị';
+    const CONTENT00282  = 'Bắt đầu';
+    const CONTENT00283  = 'Kết thúc';
 }

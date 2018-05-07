@@ -165,8 +165,10 @@ class Receipts extends CActiveRecord
             // Handle created date
             $this->created_date = CommonProcess::getCurrentDateTime();
         } else {                    // Update
-            if (Yii::app()->user->role_name == Roles::ROLE_RECEPTIONIST) {
-                $this->receiptionist_id = $userId;
+            if (isset(Yii::app()->user->role_name)) {
+                if (Yii::app()->user->role_name == Roles::ROLE_RECEPTIONIST) {
+                    $this->receiptionist_id = $userId;
+                }
             }
         }
         return parent::beforeSave();

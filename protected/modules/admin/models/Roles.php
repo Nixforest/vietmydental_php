@@ -21,6 +21,7 @@ class Roles extends BaseActiveRecord
     const ROLE_DOCTOR               = 'ROLE_DOCTOR';
     const ROLE_ASSISTANT            = 'ROLE_ASSISTANT';
     const ROLE_RECEPTIONIST         = 'ROLE_RECEPTIONIST';
+    const ROLE_SALE                 = 'ROLE_SALE';
     
     static $arrAdminRoles           = array(
         self::ROLE_ADMIN,

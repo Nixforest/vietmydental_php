@@ -221,14 +221,38 @@ class CommonProcess {
         }
     }
     
+    /**
+     * Get list of teeth
+     * @param type $emptyOption
+     * @return string
+     */
     public static function getListTeeth($emptyOption = false) {
         $retVal = array();
         if ($emptyOption) {
             $retVal[''] = '';
         }
         for ($index = 0; $index < 32; $index++) {
-            $retVal[$index] = "Răng số " . $index;
+//            $retVal[$index] = "Răng số " . $index;
+            if ($index >= 0 && $index <= 7) {
+                $i = 1;
+                $n = 8 - $index;
+                
+            } else if ($index >= 8 && $index <= 15) {
+                $i = 2;
+                $n = $index - 7;
+            } else if ($index >= 16 && $index <= 23) {
+                $i = 3;
+                $n = 8 - $index % 8;
+            } else {
+                $i = 4;
+                $n = $index - 23;
+            }
+            $retVal[$index] = "Răng " . $i . " - " . $n;
         }
+        
+        $retVal[32] = "Hàm trên";
+        $retVal[33] = "Hàm dưới";
+        $retVal[34] = "Cả 2 hàm";
         return $retVal;
     }
     
@@ -246,8 +270,26 @@ class CommonProcess {
     public static function getListConfigTeeth() {
         $retVal = array();
         for ($index = 0; $index < 32; $index++) {
-            $retVal[] = CommonProcess::createConfigJson($index, "Răng số " . $index);
-        }        
+//            $retVal[] = CommonProcess::createConfigJson($index, "Răng số " . $index);
+            if ($index >= 0 && $index <= 7) {
+                $i = 1;
+                $n = 8 - $index;
+                
+            } else if ($index >= 8 && $index <= 15) {
+                $i = 2;
+                $n = $index - 7;
+            } else if ($index >= 16 && $index <= 23) {
+                $i = 3;
+                $n = 8 - $index % 8;
+            } else {
+                $i = 4;
+                $n = $index - 23;
+            }
+            $retVal[] = CommonProcess::createConfigJson($index, "Răng " . $i . " - " . $n);
+        }
+        $retVal[] = CommonProcess::createConfigJson(32, "Hàm trên");
+        $retVal[] = CommonProcess::createConfigJson(33, "Hàm dưới");
+        $retVal[] = CommonProcess::createConfigJson(34, "Cả 2 hàm");
         return $retVal;
     }
 

@@ -275,6 +275,18 @@ class TreatmentScheduleDetails extends BaseActiveRecord
     }
     
     /**
+     * Get treatment information, if treatment type is empty, return 'Lịch hẹn'
+     * @return String
+     */
+    public function getTreatmentInfo() {
+        $retVal = $this->getTreatment();
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return DomainConst::CONTENT00177;
+    }
+    
+    /**
      * Get treatment price
      * @return String Treatment price
      */
@@ -397,6 +409,48 @@ class TreatmentScheduleDetails extends BaseActiveRecord
                 . ' onclick="{updateSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}">' . DomainConst::CONTENT00178 . '</a>';
         $infoSchedule .= '</div>';
         return $infoSchedule;
+    }
+    
+    public function getAjaxScheduleInfo_1() {
+        $detail = '<div class="list__2__des">';
+        $detail .=      '<div class="list__2__item">';
+        $detail .=      '<span class="icon28 icon-list"></span>';
+        $detail .=      '<p>';
+        $detail .=          '<strong>' . DomainConst::CONTENT00281 . '</strong>';
+        $detail .=      '</p>';
+        $detail .=      '<p>';
+        $detail .=          DomainConst::CONTENT00282 . ': ' . $this->getStartTime();
+        $detail .=          '<br/>';
+        $detail .=          DomainConst::CONTENT00283 . ': ' . CommonProcess::convertDateTime($this->end_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_5);
+        $detail .=      '</p>';
+        $detail .=      '</div>';
+        $detail .= '</div>';
+        if (!empty($this->getTeeth())) {
+            $detail .= '<div class="list__2__des">';
+            $detail .=      '<div class="list__2__item">';
+            $detail .=      '<span class="icon29 icon-list"></span>';
+            $detail .=      '<p>';
+            $detail .=          '<strong>' . $this->getTeeth() . '</strong>';
+            $detail .=      '</p>';
+            $detail .=      '</div>';
+            $detail .= '</div>';
+        }
+        
+        return $detail;
+    }
+    
+    /**
+     * Get sale model
+     * @return User model, can be NULL
+     */
+    public function getSale() {
+        if (isset($this->rSchedule) && isset($this->rSchedule->rCreatedBy)) {
+            $user = $this->rSchedule->rCreatedBy;
+            if ($user->rRole->role_name == Roles::ROLE_SALE) {
+                return $user;
+            }
+        }
+        return NULL;
     }
 
     //-----------------------------------------------------

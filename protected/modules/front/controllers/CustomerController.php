@@ -16,8 +16,19 @@ class CustomerController extends Controller {
                 $customer = new Customers();
             }
         }
+        $scheduleId = $customer->getSchedule(false);
+        if (!empty($scheduleId)) {
+            $schedule = TreatmentScheduleDetails::model()->findByPk($scheduleId);
+        } else {
+            $schedule = new TreatmentScheduleDetails();
+        }
+        
+        $arrTreatmentSchedule = $customer->getListTreatmentSchedule();
+        
         $this->render('view', array(
             'model' => $customer,
+            'schedule' => $schedule,
+            'treatment' => $arrTreatmentSchedule,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }

@@ -313,6 +313,7 @@ class ReceptionistController extends Controller {
         Loggers::info("Update receipt with id = $id", "actionUpdate", __CLASS__);
         $model = Receipts::model()->findByPk($id);
         if ($model) {
+//            $model->receiptionist_id = isset(Yii::app()->user) ? Yii::app()->user->id : '';
             $model->status = Receipts::STATUS_RECEIPTIONIST;
             $model->save();
             Loggers::info("Update receipt with id = $id", "save()", __CLASS__);

@@ -198,6 +198,15 @@ function fnSearchCustomerReception(_url, outputId, _titleId, _titleVal) {
     }
 }
 
+/**
+ * Show customer information
+ * @param {type} _url
+ * @param {type} _outputId
+ * @param {type} _titleId
+ * @param {type} _titleVal
+ * @param {type} _customerId
+ * @returns {undefined}
+ */
 function fnShowCustomerInfo(_url, _outputId, _titleId, _titleVal, _customerId) {
     $.ajax({
         url: _url,
@@ -208,6 +217,21 @@ function fnShowCustomerInfo(_url, _outputId, _titleId, _titleVal, _customerId) {
             $(_outputId).html(data['rightContent']);
             $(_titleId).html(_titleVal);
             $('.left-page .info-content .info-result .content').html(data['infoSchedule']);
+        }
+    });
+}
+
+function fnShowTreatmentScheduleDetailInfo(_url, _id, _outputId) {
+    $.ajax({
+        url: _url,
+        data: {
+            ajax: 1,
+            term: _id
+        },
+        type: "get",
+        dataType: 'json',
+        success: function(data){
+            $(_outputId).html(data['data']);
         }
     });
 }

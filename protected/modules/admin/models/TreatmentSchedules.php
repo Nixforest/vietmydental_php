@@ -143,9 +143,13 @@ class TreatmentSchedules extends BaseActiveRecord
 		$criteria->compare('created_date',$this->created_date,true);
 		$criteria->compare('created_by',$this->created_by,true);
 		$criteria->compare('status',$this->status);
+                $criteria->order = 'id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'pagination' => array(
+                            'pageSize' => Settings::getListPageSize(),
+                        ),
 		));
 	}
         
@@ -228,6 +232,18 @@ class TreatmentSchedules extends BaseActiveRecord
      */
     public function getPathological() {
         return isset($this->rPathological) ? $this->rPathological->name : '';
+    }
+    
+    /**
+     * Get pathological
+     * @return String Pathological information, if empty, return 'Lịch hẹn'
+     */
+    public function getPathologicalInfo() {
+        $pathological = $this->getPathological();
+        if (empty($pathological)) {
+            $pathological = DomainConst::CONTENT00177;
+        }
+        return $pathological;
     }
 
     /**
@@ -669,6 +685,81 @@ class TreatmentSchedules extends BaseActiveRecord
                         $item->rPathological->name);
             }
         }
+        return $retVal;
+    }
+    
+    public function getHtmlTreatmentDetail() {
+        $retVal = array();
+        $details = '';
+        foreach ($this->rDetail as $detail) {
+            if ($detail->status != DomainConst::DEFAULT_STATUS_INACTIVE) {
+                $details[] = CommonProcess::createConfigJson(
+//                        CommonProcess::convertDateTimeWithFormat($detail->start_date),
+                        $detail->getStartTime(),
+                        $detail->getTreatment(),
+                        $detail->getJsonInfo());
+                $detail .= '<div class="list__2__des">';
+                $detail .=      '<div class="list__2__item">';
+                $detail .=      '<span class="icon28 icon-list"></span>';
+                $detail .=      '<p>';
+                $detail .=      '<p>';
+                $detail .=      '</div>';
+                $detail .= '</div>';
+            }
+        }
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_START_DATE,
+                DomainConst::CONTENT00139,
+//                CommonProcess::convertDateTimeWithFormat($this->start_date));
+                CommonProcess::convertDateTime($this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_VIEW));
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_END_DATE,
+                DomainConst::CONTENT00140,
+                CommonProcess::convertDateTimeWithFormat($this->end_date));
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_PATHOLOGICAL,
+                DomainConst::CONTENT00237,
+                $this->getPathological());
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_PATHOLOGICAL_ID,
+                '',
+                $this->pathological_id);
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_DIAGNOSIS,
+                DomainConst::CONTENT00231,
+                $this->getDiagnosis());
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_DIAGNOSIS_ID,
+                '',
+                $this->diagnosis_id);
+        
+        switch ($role) {
+            case Roles::ROLE_DOCTOR:
+                break;
+            default:
+                $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_DOCTOR,
+                DomainConst::CONTENT00143,
+                isset($this->rDoctor) ? $this->rDoctor->getFullName() : '');
+                break;
+        }
+        
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_HEALTHY,
+                DomainConst::CONTENT00142,
+                $this->generateJsonHealthy());
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_INSURRANCE,
+            DomainConst::CONTENT00260,
+                $this->getInsurrance());
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_STATUS,
+                DomainConst::CONTENT00026,
+                $this->status);
+        if (empty($details)) {
+            $detail = new TreatmentScheduleDetails();
+            $details[] = CommonProcess::createConfigJson(
+                        CommonProcess::convertDateTimeWithFormat($detail->start_date),
+                        $detail->getTreatment(),
+                        $detail->getJsonInfo());
+        }
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_DETAILS,
+                DomainConst::CONTENT00146,
+                $details);
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_CAN_UPDATE,
+                DomainConst::CONTENT00232,
+                $this->status != TreatmentSchedules::STATUS_COMPLETED
+                ? DomainConst::NUMBER_ONE_VALUE : DomainConst::NUMBER_ZERO_VALUE);
         return $retVal;
     }
 }

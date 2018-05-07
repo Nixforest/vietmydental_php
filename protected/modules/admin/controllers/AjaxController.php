@@ -400,7 +400,6 @@ class AjaxController extends AdminController
             echo $json;
             Yii::app()->end();
         }
-        
     }
     
     /**
@@ -453,6 +452,26 @@ class AjaxController extends AdminController
         }
         echo CJSON::encode($retVal);
         Yii::app()->end();
+    }
+    
+    /**
+     * Get customer information.
+     */
+    public function actionGetTreatmentScheduleDetailInfo() {
+        $ajax = filter_input(INPUT_GET, AjaxController::KEY_AJAX);
+	if ($ajax == 1) {
+            $id = filter_input(INPUT_GET, AjaxController::KEY_TERM);
+            $model = TreatmentScheduleDetails::model()->findByPk($id);
+            if ($model) {
+                $retVal = $model->getAjaxScheduleInfo_1();
+            }
+            $json = CJavaScript::jsonEncode(array(
+                'data'  => $retVal,
+            ));
+            echo $json;
+            Yii::app()->end();
+        }
+        
     }
     
     // Uncomment the following methods and override them if needed

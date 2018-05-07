@@ -267,7 +267,7 @@ class Customers extends BaseActiveRecord
      * Check if customer have schedule date
      * @return Id of treatment schedule (have not detail data), empty otherwise
      */
-    public function getSchedule() {
+    public function getSchedule($isActive = true) {
         $retVal = '';
         // Get medical record info and treatment schedule info
         if (isset($this->rMedicalRecord) && isset($this->rMedicalRecord->rTreatmentSchedule)) {
@@ -277,8 +277,10 @@ class Customers extends BaseActiveRecord
             } else { // #0
                 // Get newest record
                 $schedule = $this->rMedicalRecord->rTreatmentSchedule[0];
-                // Status of schedule is Completed
-                if ($schedule->status == TreatmentSchedules::STATUS_COMPLETED) {
+                if ($isActive
+                        && ($schedule->status == TreatmentSchedules::STATUS_COMPLETED)) {
+//                // Status of schedule is Completed
+//                if ($schedule->status == TreatmentSchedules::STATUS_COMPLETED) {
                     $retVal = '';
                 } else {
                     if (isset($schedule->rDetail)) {
@@ -379,7 +381,16 @@ class Customers extends BaseActiveRecord
      * @return String
      */
     public function getEmail() {
-        return isset($this->email) ? $this->email : '';
+//        return isset($this->email) ? $this->email : '';
+        if (isset($this->rSocialNetwork)) {
+            foreach ($this->rSocialNetwork as $value) {
+                if ($value->type_network == SocialNetworks::TYPE_NETWORK_EMAIL) {
+                    return $value->value;
+                }
+                $retVal[] = SocialNetworks::TYPE_NETWORKS[$value->type_network] . ": $value->value";
+            }
+        }
+        return '';
     }
     
     /**
@@ -505,7 +516,7 @@ class Customers extends BaseActiveRecord
                 $infoSchedule .= '</div>';
                 $infoSchedule .= '<div class="group-btn">';
                 $infoSchedule .=    '<a style="cursor: pointer;"'
-                        . ' onclick="{updateSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}">' . DomainConst::CONTENT00264 . '</a>';
+                        . ' onclick="{updateSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}">' . DomainConst::CONTENT00178 . '</a>';
                 $infoSchedule .= '</div>';
             }
         }
@@ -541,6 +552,43 @@ class Customers extends BaseActiveRecord
             }
         }
         return '';
+    }
+    
+    /**
+     * Get medical history html
+     * @return type
+     */
+    public function getMedicalHistoryHtml() {
+        $retVal = array();
+        if (isset($this->rMedicalRecord)) {
+            foreach ($this->rMedicalRecord->rJoinPathological as $item) {
+                if (isset($item->rPathological)) {
+                    $retVal[] = CommonProcess::createConfigJson(
+                            $item->rPathological->id,
+                            $item->rPathological->name);
+                }
+            }
+        }
+        return $retVal;
+    }
+    
+    /**
+     * Get list of customer's treatment schedule
+     * @return Array List of customer's treatment schedule
+     */
+    public function getListTreatmentSchedule() {
+        $retVal = array();
+        if (isset($this->rMedicalRecord) && isset($this->rMedicalRecord->rTreatmentSchedule)) {
+            foreach ($this->rMedicalRecord->rTreatmentSchedule as $schedule) {
+                if (isset($schedule->rDetail)) {
+                    foreach ($schedule->rDetail as $detail) {
+                        $retVal[] = $detail;
+                    }
+                }
+            }
+//            return $this->rMedicalRecord->rTreatmentSchedule;
+        }
+        return $retVal;
     }
 
     //-----------------------------------------------------
