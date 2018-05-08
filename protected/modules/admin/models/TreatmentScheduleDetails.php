@@ -87,6 +87,10 @@ class TreatmentScheduleDetails extends BaseActiveRecord
                     'rReceipt' => array(
                         self::HAS_ONE, 'Receipts', 'detail_id'
                     ),
+                    'rJoinTeeth' => array(
+                        self::HAS_MANY, 'OneMany', 'one_id',
+                        'on'    => 'type = ' . OneMany::TYPE_TREATMENT_DETAIL_TEETH,
+                    ),
 		);
 	}
 
@@ -132,6 +136,7 @@ class TreatmentScheduleDetails extends BaseActiveRecord
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('type_schedule',$this->type_schedule,true);
 		$criteria->compare('status',$this->status);
+                $criteria->order = 'id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -324,6 +329,7 @@ class TreatmentScheduleDetails extends BaseActiveRecord
         $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_TEETH_ID,
                 '',
                 $this->teeth_id);
+        $info[] = $this->getListConfigTeethInfo();
         $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_DIAGNOSIS,
                 DomainConst::CONTENT00231,
                 $this->getDiagnosis());
@@ -451,6 +457,34 @@ class TreatmentScheduleDetails extends BaseActiveRecord
             }
         }
         return NULL;
+    }
+    /**
+     * Generate List teeth information string
+     * @return String list teeth information string
+     */
+    public function generateTeethInfo($spliter = "<br>") {
+        $array = array();
+        foreach ($this->rJoinTeeth as $item) {
+            $array[] = CommonProcess::getListTeeth()[$item->many_id];
+        }        
+        return implode($spliter, $array);
+    }
+    
+    /**
+     * Get list config teeth information
+     * @return type Config object
+     */
+    public function getListConfigTeethInfo() {
+        $data = array();
+        Loggers::info(count($this->rJoinTeeth), __FUNCTION__, __LINE__);
+        foreach ($this->rJoinTeeth as $item) {
+            $data[] = CommonProcess::createConfigJson(
+                    $item->many_id, 
+                    CommonProcess::getListTeeth()[$item->many_id]);
+        } 
+        return CommonProcess::createConfigJson(
+                CustomerController::ITEM_TEETH_INFO,
+                DomainConst::CONTENT00145, $data);
     }
 
     //-----------------------------------------------------

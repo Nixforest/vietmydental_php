@@ -57,7 +57,12 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'value'=> 'CommonProcess::convertDateTime($data->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_BACK_END)',
                 ),  
 		'end_date',
-		'teeth_id',
+		array(
+                    'header' => DomainConst::CONTENT00284,
+                    'type' => 'html',
+                    'htmlOptions' => array('style' => 'text-align:left;'),
+                    'value'=> 'isset($data->rJoinTeeth) ? $data->generateTeethInfo() : ""',
+                ),
 		array(
                     'name'=>'diagnosis_id',
                     'htmlOptions' => array('style' => 'text-align:center;'),

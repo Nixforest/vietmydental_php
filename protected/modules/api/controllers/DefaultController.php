@@ -143,4 +143,70 @@ class DefaultController extends APIController
             ApiModule::catchError($exc, $this);
         }
     }
+    
+    /**
+     * P0021_CreatePathological_API
+     * Create pathological
+     * - url:   api/default/createPathological
+     * - parameter:
+     *  + token:            Token
+     *  + name:             Name
+     *  + description:      Description
+     */
+    public function actionCreatePathological() {
+        try {
+            $result = ApiModule::$defaultFailedResponse;
+            // Check format of request
+            $this->checkRequest();
+            // Parse request to json
+            $root = json_decode($_POST[DomainConst::KEY_ROOT_REQUEST]);
+            // Check if parameters are exist
+            $this->checkRequiredParam($root, array(
+                DomainConst::KEY_TOKEN,
+                DomainConst::KEY_NAME,
+                DomainConst::KEY_DESCRIPTION
+            ));
+            // Get user by token value
+            $mUser = $this->getUserByToken($result, $root->token);
+            // Check version
+            $this->checkVersion($root, $mUser);
+            
+            $this->handleCreatePathological($result, $mUser, $root);
+        } catch (Exception $exc) {
+            ApiModule::catchError($exc, $this);
+        }
+    }
+    
+    /**
+     * Handle create pathological
+     * @param type $result
+     * @param type $mUser
+     * @param type $root
+     */
+    public function handleCreatePathological($result, $mUser, $root) {
+        $name = $root->name;
+        if (!Pathological::isNameExist($name)) {
+            $model = new Pathological();
+            $model->name = $name;
+            $model->description = $root->description;
+            if ($model->save()) {
+                // Success
+                $result = ApiModule::$defaultSuccessResponse;
+                $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00292;
+                $result[DomainConst::KEY_DATA] = CommonProcess::createConfigJson(
+                        $model->id, $name);
+                ApiModule::sendResponse($result, $this);
+            } else {
+                // Finnaly send failed response with error detail
+                $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00214
+                        . '<br>'
+                        . CommonProcess::json_encode_unicode($model->getErrors());
+                ApiModule::sendResponse($result, $this);
+            }
+        } else {
+            // Pathological is exist -> can not create
+            $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00291;
+            ApiModule::sendResponse($result, $this);
+        }
+    }
 }

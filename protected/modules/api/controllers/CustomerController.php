@@ -89,6 +89,8 @@ class CustomerController extends APIController
     const ITEM_FINAL                        = '38';
     /** Item id: Insurrance */
     const ITEM_INSURRANCE                   = '39';
+    /** Item id: Teeth information */
+    const ITEM_TEETH_INFO                   = '40';
     
     
     /**
@@ -408,7 +410,8 @@ class CustomerController extends APIController
      *  + schedule_id:          Id treatment schedule
      *  + time:                 Id of schedule time
      *  + date:                 Schedule date (format: yyy/MM/dd)
-     *  + teeth_id:             Id of teeth
+     *  + teeth_id:             Id of teeth [removed]
+     *  + teeth_info:           List id of teeth
      *  + diagnosis_id:         Id of diagnosis
      *  + treatment_type_id:    Id of treatment type
      *  + note:                 Description of schedule [removed]
@@ -428,7 +431,7 @@ class CustomerController extends APIController
                 DomainConst::KEY_SCHEDULE_ID,
                 DomainConst::KEY_TIME,
                 DomainConst::KEY_DATE,
-                DomainConst::KEY_TEETH_ID,
+//                DomainConst::KEY_TEETH_ID,
                 DomainConst::KEY_DIAGNOSIS_ID,
                 DomainConst::KEY_TREATMENT_TYPE_ID,
 //                DomainConst::KEY_NOTE,
@@ -449,10 +452,10 @@ class CustomerController extends APIController
                 ApiModule::sendResponse($result, $this);
             }
             // Check teeth id
-            if (!array_key_exists($root->teeth_id, CommonProcess::getListTeeth())) {
-                $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00223;
-                ApiModule::sendResponse($result, $this);
-            }
+//            if (!array_key_exists($root->teeth_id, CommonProcess::getListTeeth())) {
+//                $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00223;
+//                ApiModule::sendResponse($result, $this);
+//            }
             // Check diagnosis id
             $isValid        = (new Diagnosis())->isIdExist($root->diagnosis_id);
             if (!$isValid) {
@@ -483,7 +486,8 @@ class CustomerController extends APIController
      *  + token:                Token
      *  + id:                   Id treatment schedule detail
      *  + time:                 Schedule time (format: dd/MM/yyyy hh:mm:ss) [removed]
-     *  + teeth_id:             Id of teeth
+     *  + teeth_id:             Id of teeth [removed]
+     *  + teeth_info:           List id of teeth
      *  + diagnosis_id:         Id of diagnosis
      *  + treatment_type_id:    Id of treatment type
      *  + note:                 Description of schedule [removed]
@@ -502,7 +506,7 @@ class CustomerController extends APIController
                 DomainConst::KEY_TOKEN,
                 DomainConst::KEY_ID,
 //                DomainConst::KEY_TIME,
-                DomainConst::KEY_TEETH_ID,
+//                DomainConst::KEY_TEETH_ID,
                 DomainConst::KEY_DIAGNOSIS_ID,
                 DomainConst::KEY_TREATMENT_TYPE_ID,
 //                DomainConst::KEY_NOTE,
@@ -512,10 +516,10 @@ class CustomerController extends APIController
             // Get user
             $mUser          = $this->getUserByToken($result, $root->token);
             // Check teeth id
-            if ($root->teeth_id != 0 && !array_key_exists($root->teeth_id, CommonProcess::getListTeeth())) {
-                $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00223;
-                ApiModule::sendResponse($result, $this);
-            }
+//            if ($root->teeth_id != 0 && !array_key_exists($root->teeth_id, CommonProcess::getListTeeth())) {
+//                $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00223;
+//                ApiModule::sendResponse($result, $this);
+//            }
             // Check diagnosis id
             $isValid        = (new Diagnosis())->isIdExist($root->diagnosis_id);
             if (!$isValid) {
@@ -822,13 +826,18 @@ class CustomerController extends APIController
                 DomainConst::DATE_FORMAT_6,
                 DomainConst::DATE_FORMAT_1);
         $model->end_date            = $model->start_date;
-        $model->teeth_id            = $root->teeth_id;
+//        $model->teeth_id            = $root->teeth_id;
         $model->diagnosis_id        = $root->diagnosis_id;
         $model->treatment_type_id   = $root->treatment_type_id;
 //        $model->type_schedule       = $root->type;
 //        $model->description         = $root->note;
         $model->status              = TreatmentScheduleDetails::STATUS_SCHEDULE;
         if ($model->save()) {
+            if (isset($root->teeth_info)) {
+                foreach ($root->teeth_info as $teeth) {
+                    OneMany::insertOne($model->id, $teeth, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+                }
+            }
             $result = ApiModule::$defaultSuccessResponse;
             $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00225;
             $result[DomainConst::KEY_DATA] = CommonProcess::createConfigJson(
@@ -851,7 +860,7 @@ class CustomerController extends APIController
         if ($model) {
 //            $model->start_date          = $root->time;
 //            $model->end_date            = $model->start_date;
-            $model->teeth_id            = $root->teeth_id;
+//            $model->teeth_id            = $root->teeth_id;
             $model->diagnosis_id        = $root->diagnosis_id;
             $model->treatment_type_id   = $root->treatment_type_id;
 //            $model->type_schedule       = $root->type;
@@ -867,6 +876,13 @@ class CustomerController extends APIController
 //                'description',
                 'status');
             if ($model->update($aUpdate)) {
+                // Remove old records
+                OneMany::deleteAllOldRecords($model->id, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+                if (isset($root->teeth_info)) {
+                    foreach ($root->teeth_info as $teeth) {
+                        OneMany::insertOne($model->id, $teeth, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+                    }
+                }
                 $result = ApiModule::$defaultSuccessResponse;
                 $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00035;
                 $result[DomainConst::KEY_DATA] = $model->getJsonInfo();

@@ -14,7 +14,11 @@ $this->createMenu('view', $model);
 		'schedule_id',
 		'start_date',
 		'end_date',
-		'teeth_id',
+		array(
+                    'label' => DomainConst::CONTENT00284,
+                    'type'=>'html',
+                    'value'=> isset($model->rJoinTeeth) ? $model->generateTeethInfo() : '',
+                ),
 		array(
                    'name'=>'diagnosis_id',
                    'value'=> isset($model->rDiagnosis) ? $model->rDiagnosis->name : '',

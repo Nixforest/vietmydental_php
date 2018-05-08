@@ -1225,4 +1225,6 @@ class DomainConst {
     const CONTENT00288  = 'Tên loại phục hình';
     const CONTENT00289  = 'Thời gian bảo hành (ngày)';
     const CONTENT00290  = 'Loại phục hình';
+    const CONTENT00291  = 'Bệnh lý đã có sẵn không thể tạo mới';
+    const CONTENT00292  = 'Tạo Bệnh lý thành công';
 }

@@ -26,6 +26,8 @@ class OneMany extends BaseActiveRecord
     const TYPE_AGENT_RECEIPT                            = '4';
     /** 1 [warranties] has many [teeth] */
     const TYPE_WARRANTY_TEETH                           = '5';
+    /** 1 [treatment_schedule_details] has many [teeth] */
+    const TYPE_TREATMENT_DETAIL_TEETH                   = '6';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.

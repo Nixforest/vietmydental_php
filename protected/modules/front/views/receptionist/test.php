@@ -22,6 +22,9 @@
             ?>
 <div class="maincontent clearfix">
     <?php
+    $name = "gan Thận";
+    $isExist = Pathological::isNameExist($name);
+                CommonProcess::echoTest("Bệnh lý [$name] ", $isExist ? "đã có." : "chưa có.");
     for ($index = 0; $index < 4 ; $index++) {
        CommonProcess::echoTest("$index / 2 = ", $index / 2);
         CommonProcess::echoTest("$index % 2 = ", $index % 2);

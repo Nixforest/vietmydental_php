@@ -128,6 +128,19 @@ class Pathological extends BaseActiveRecord
         }
         return $_items;
     }
+    
+    /**
+     * Check if a name is exist in database
+     * @param type $name Name value to check
+     * @return boolean True if found name in database, False otherwise
+     */
+    public static function isNameExist($name) {
+        $arr = self::model()->findAll('LOWER(name)="' . strtolower($name) . '"');
+        if ($arr && !empty($arr)) {
+            return true;
+        }
+        return false;
+    }
 
     //-----------------------------------------------------
     // JSON methods

@@ -71,8 +71,19 @@ class TreatmentScheduleDetailsController extends AdminController
 		if(isset($_POST['TreatmentScheduleDetails']))
 		{
 			$model->attributes=$_POST['TreatmentScheduleDetails'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()) {
+                            if (filter_input(INPUT_POST, 'submit')) {
+                                $index = 0;
+                                foreach (CommonProcess::getListTeeth() as $teeth) {
+                                    if (isset($_POST['teeth'][$index])
+                                            && ($_POST['teeth'][$index] == DomainConst::CHECKBOX_STATUS_CHECKED)) {
+                                        OneMany::insertOne($model->id, $index, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+                                    }
+                                    $index++;
+                                }
+                            }
+                            $this->redirect(array('view','id'=>$model->id));
+                        }
 		}
 
 		$this->render('create',array(
@@ -96,8 +107,19 @@ class TreatmentScheduleDetailsController extends AdminController
 		if(isset($_POST['TreatmentScheduleDetails']))
 		{
 			$model->attributes=$_POST['TreatmentScheduleDetails'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()) {
+                                // Remove old record
+                                OneMany::deleteAllOldRecords($model->id, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+                                $index = 0;
+                                foreach (CommonProcess::getListTeeth() as $teeth) {
+                                    if (isset($_POST['teeth'][$index])
+                                            && ($_POST['teeth'][$index] == DomainConst::CHECKBOX_STATUS_CHECKED)) {
+                                        OneMany::insertOne($model->id, $index, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+                                    }
+                                    $index++;
+                                }
+                            $this->redirect(array('view','id'=>$model->id));
+                        }
 		}
 
 		$this->render('update',array(
