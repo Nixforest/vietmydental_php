@@ -13,6 +13,7 @@
 	// There is a call to performAjaxValidation() commented in generated controller code.
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
+		'htmlOptions' => array('enctype' => 'multipart/form-data'),
 ));
 ?>
 
@@ -265,10 +266,21 @@
 		<?php echo $form->error($model,'agent'); ?>
             </div>
         </div>
-<!--        <div class="row">
+        <div class="row">
             <div class="col-md-6">
                 <?php echo $form->labelEx($model, 'img_avatar'); ?>
-                <div class="row tb_file">
+                
+                <?php // echo $form->fileField($model, 'img_avatar'); ?>
+                <?php echo CHtml::activeFileField($model, 'img_avatar'); ?><br>
+                <?php echo $form->error($model, 'img_avatar'); ?>
+                <?php if (!empty($model->img_avatar)): ?>
+                    <p>
+                        <a rel="group1" class="gallery" href="<?php echo $model->getImageAvatarUrl();?>"> 
+                            <img width="100" height="70" src="<?php echo $model->getImageAvatarUrl();?>">
+                        </a>
+                    </p>
+                <?php endif; ?>
+<!--                <div class="row tb_file">
                     <div class="float_l">
                         <div>
                         <a href="javascript:void(0);" class="text_under_none item_b" style="line-height:25px" onclick="fnBuildRowFile(this);">
@@ -276,7 +288,7 @@
                             Thêm Dòng
                         </a>
                     </div>
-                        <table>
+                        <table class="border">
                             <tr>
                                 <th class="item_c">#</th>
                                 <th class="item_code item_c">
@@ -286,11 +298,12 @@
                                 </th>
                                 <th>Xoá</th>
                             </tr>
+                            <tr></tr>
                         </table>
                     </div>
-                </div>
+                </div>-->
             </div>
-        </div>-->
+        </div>
         <?php
             $count = 0;
         ?>

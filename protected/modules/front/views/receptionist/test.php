@@ -22,6 +22,13 @@
             ?>
 <div class="maincontent clearfix">
     <?php
+    $model = Users::model()->findByPk(1038264);
+    if ($model) {
+        CommonProcess::echoTest('DirectoryHandler::getRootPath() . $model->getImageAvatarPath() = ', DirectoryHandler::getRootPath() . $model->getImageAvatarPath());
+//        CommonProcess::echoTest('DirectoryHandler::getRootPath() . $source = ', DirectoryHandler::getRootPath() . $model->getImageAvatarPath());
+//        DirectoryHandler::deleteFile($model->getImageAvatarPath());
+    }
+    
     $name = "gan Thận";
     $isExist = Pathological::isNameExist($name);
                 CommonProcess::echoTest("Bệnh lý [$name] ", $isExist ? "đã có." : "chưa có.");
@@ -86,13 +93,16 @@
     // Test DirectoryHandler
     CommonProcess::echoTest('Yii::app()->createAbsoluteUrl(DIRECTORY_SEPARATOR): ', Yii::app()->createAbsoluteUrl(DIRECTORY_SEPARATOR));
     CommonProcess::echoTest('Yii::app()->baseUrl: ', Yii::app()->baseUrl);
+    CommonProcess::echoTest('Yii::getPathOfAlias("webroot"): ', Yii::getPathOfAlias("webroot"));
+    CommonProcess::echoTest('Yii root path: ', DirectoryHandler::getRootPath() . '/upload/admin/users/img_avatar_1038265.png');
+    
 //    CommonProcess::echoTest('Create path from array: ', DirectoryHandler::createPath(array(
 //        DirectoryHandler::getRootPath(),
 //        'a',
 //        'b',
 //        'c'
 //    )));
-//    CommonProcess::echoTest('Yii root path: ', DirectoryHandler::getRootPath());
+    CommonProcess::echoTest('Yii root path: ', DirectoryHandler::getRootPath());
     CommonProcess::echoTest('Current date time: ', CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3));
     $to = time();
     ScheduleEmail::logInfo($from, $to, __METHOD__, 5);

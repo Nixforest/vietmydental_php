@@ -12,6 +12,7 @@
  * @property string $first_name
  * @property string $last_name
  * @property string $code_account
+ * @property string $img_avatar
  * @property string $address
  * @property string $address_vi
  * @property string $house_numbers
@@ -37,8 +38,6 @@ class Users extends BaseActiveRecord
 {
     public $password_confirm, $currentpassword, $newpassword; /* for change pass in admin */
     public $agent;
-    /** Image avatar */
-    public $img_avatar;
     
     //-----------------------------------------------------
     // Autocomplete fields
@@ -52,6 +51,7 @@ class Users extends BaseActiveRecord
     const STATUS_ACTIVE                 = 1;
     const STATUS_NEED_CHANGE_PASS       = 2;
 //    const STATUS_COMPLETED              = 3;
+    const UPLOAD_FOLDER                 = 'upload/admin/users/';
 	/**
 	 * @return string the associated database table name
 	 */
@@ -74,7 +74,7 @@ class Users extends BaseActiveRecord
 			array('email', 'length', 'max'=>80),
 			array('first_name', 'length', 'max'=>150),
 			array('code_account, ip_address', 'length', 'max'=>30),
-			array('address_vi', 'length', 'max'=>255),
+			array('img_avatar, address_vi', 'length', 'max'=>255),
 			array('gender', 'length', 'max'=>6),
 			array('phone', 'length', 'max'=>200),
 			array('verify_code', 'length', 'max'=>100),
@@ -98,6 +98,7 @@ class Users extends BaseActiveRecord
                             'on'=>'resetPassword'),
                         array('password_confirm', 'compare', 'compareAttribute'=>'newpassword','message'=>'Xác nhận mật khẩu mới không đúng.' ,'on'=>'resetPassword'),
                         array('first_name, province_id, district_id, house_numbers', 'required','on'=>'updateProfile'),
+                        array('img_avatar', 'file', 'types'=>'jpg, gif, png', 'allowEmpty'=>true, 'safe' => true),
 		);
 	}
 
@@ -197,6 +198,7 @@ class Users extends BaseActiveRecord
 		$criteria->compare('first_name',$this->first_name,true);
 		$criteria->compare('last_name',$this->last_name,true);
 		$criteria->compare('code_account',$this->code_account,true);
+		$criteria->compare('img_avatar',$this->img_avatar,true);
 		$criteria->compare('address',$this->address,true);
 		$criteria->compare('address_vi',$this->address_vi,true);
 		$criteria->compare('house_numbers',$this->house_numbers,true);
@@ -225,6 +227,7 @@ class Users extends BaseActiveRecord
 		$criteria->compare('slug',$this->slug,true);
 		$criteria->compare('address_temp',$this->address_temp,true);
 		$criteria->compare('created_by',$this->created_by,true);
+                $criteria->order = 'id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -524,6 +527,22 @@ class Users extends BaseActiveRecord
             }
         }
         return '';
+    }
+    
+    /**
+     * Get image avatar path
+     * @return String upload/admin/user/filename/png
+     */
+    public function getImageAvatarPath() {
+        return self::UPLOAD_FOLDER . $this->img_avatar;
+    }
+    
+    /**
+     * Get full image url
+     * @return String http://hostname/upload/admin/user/filename/png
+     */
+    public function getImageAvatarUrl() {
+        return CommonProcess::getHostUrl() . $this->getImageAvatarPath();
     }
 
     //-----------------------------------------------------

@@ -84,6 +84,8 @@ class UsersController extends AdminController
                                     }
                                 }
                             }
+                            // Save image avatar
+                            $this->saveImage($model);
                             $this->redirect(array('view','id'=>$model->id));
                         }
 		}
@@ -108,6 +110,7 @@ class UsersController extends AdminController
                 $model->agent = $model->getAgentId();
 		if(isset($_POST['Users']))
 		{
+                    $currentImgAvatar = $model->getImageAvatarPath();
 			$model->attributes=$_POST['Users'];
 			if($model->save()) {                            
                             if (filter_input(INPUT_POST, 'submit')) {
@@ -125,6 +128,8 @@ class UsersController extends AdminController
                                     }
                                 }
                             }
+                            // Save image avatar
+                            $this->saveImage($model);
                             $this->redirect(array('view','id'=>$model->id));
                         }
 		}
@@ -134,6 +139,18 @@ class UsersController extends AdminController
                         DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
 		));
 	}
+        
+        public function saveImage($model) {
+            $imgAvatarPath = ImageHandler::saveImage($model, 'img_avatar', Users::UPLOAD_FOLDER);
+            if (!empty($imgAvatarPath)) {
+                $model->img_avatar = $imgAvatarPath;
+                if ($model->save()) {
+                    Loggers::info('Saved url', $imgAvatarPath, __LINE__);
+                } else {
+                    Loggers::info('Saved url failed', $imgAvatarPath, __LINE__);
+                }
+            }
+        }
 
 	/**
 	 * Deletes a particular model.

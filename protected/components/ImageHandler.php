@@ -360,4 +360,26 @@ class ImageHandler {
             throw new Exception(inConst::CONTENT00249 . '2');
         }
     }
+    
+    /**
+     * Save image when upload image for model
+     * @param Model $model Model object
+     * @param String $fieldName Field name
+     * @param String $path Path to save image
+     * @return String Image name after save success
+     */
+    public static function saveImage($model, $fieldName, $path) {
+        $imgUploaded = CUploadedFile::getInstance($model, $fieldName);
+        $fileName = "$fieldName" . "_" . $model->id . ".png";
+        DirectoryHandler::createDirectoryByPath($path);
+        if ($imgUploaded !== NULL) {
+            if (ImageHandler::getImageUrl($path)) {
+                
+            }
+            $imgUploaded->saveAs($path . DIRECTORY_SEPARATOR . $fileName);
+            return $fileName;
+        }
+        
+        return '';
+    }
 }

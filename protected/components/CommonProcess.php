@@ -314,6 +314,14 @@ class CommonProcess {
     }
     
     /**
+     * Get host url
+     * @return string Current host url
+     */
+    public static function getHostUrl() {
+        return str_replace("index.php", "", Yii::app()->createAbsoluteUrl(DIRECTORY_SEPARATOR));
+    }
+    
+    /**
      * Check if current user is admin
      * @return boolean True if role name of current user is ROLE_ADMIN, False otherwise
      */

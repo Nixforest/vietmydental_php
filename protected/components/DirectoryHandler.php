@@ -68,7 +68,7 @@ class DirectoryHandler {
      * @return bool True on success or false on failure.
      */
     public static function deleteFile($source) {
-        $path = DirectoryHandler::getRootPath() . $source;
+        $path = DirectoryHandler::getRootPath() . DIRECTORY_SEPARATOR . $source;
         if (file_exists($path)) {
             return unlink($path);
         }
