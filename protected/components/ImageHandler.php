@@ -15,9 +15,9 @@ class ImageHandler {
     //-----------------------------------------------------
     // Properties
     //-----------------------------------------------------
-    private $folder = 'upload';
-    private $file = '';
-    private $thumbs = array();
+    public $folder = 'upload';
+    public $file = '';
+    public $thumbs = array();
     public $createFullImage = false;        // True if you need to create full size image after resize
     public $aRGB = array(255, 255, 255);    // Full image background
     
@@ -63,6 +63,7 @@ class ImageHandler {
                     . $this->folder . DIRECTORY_SEPARATOR;
             // Get file path
             $pathFile = $rootPath . $this->file;
+            Loggers::info($pathFile, __FUNCTION__, __LINE__);
             // Check path is not exist or file is empty
             if (!file_exists($pathFile) || empty($this->file)) {
                 return false;
@@ -80,9 +81,13 @@ class ImageHandler {
                     $thumb = new EPhpThumb($this->folder);
                     $thumb->init();
                     $thumPath = $rootPath . $folderThumb . DIRECTORY_SEPARATOR . $this->file;
-                    $thumb->create($pathFile)
+                    if ($thumb->create($pathFile)
                             ->resize($width, $height)
-                            ->save($thumPath);
+                            ->save($thumPath)) {
+                        Loggers::info('Create thumb success', __FUNCTION__, __LINE__);
+                    } else {
+                        Loggers::info('Create thumb failed', __FUNCTION__, __LINE__);
+                    }
                     self::createNoImage($width, $height);
                     // Create full image
                     if ($this->createFullImage) {
@@ -303,10 +308,15 @@ class ImageHandler {
      * @return String Return absolute url by relative path. If no image exist. It will return noimage url
      */
     public static function bindImage($path, $width, $height) {
-        $baseUrl = Yii::app()->createAbsoluteUrl(DIRECTORY_SEPARATOR);
+        $baseUrl = CommonProcess::getHostUrl();
+        Loggers::info($baseUrl, __FUNCTION__, __LINE__);
         $noImagePath = self::NO_IMAGE_PATH . $width . self::SIZE_SPLITTER . $height . self::IMG_EXT_JPG;
         $rootPath = DirectoryHandler::getRootPath();
+        
+        Loggers::info($rootPath . $path, __FUNCTION__, __LINE__);
         if (!file_exists($rootPath . $path)) {
+            
+            Loggers::info("file_exists no exist", __FUNCTION__, __LINE__);
             if (!file_exists($rootPath . $noImagePath)) {
                 return Yii::app()->createAbsoluteUrl(DIRECTORY_SEPARATOR)
                         . self::NO_IMAGE_PATH . self::NO_IMAGE_NAME;
@@ -314,6 +324,7 @@ class ImageHandler {
                 return Yii::app()->baseUrl . $noImagePath;
             }
         }
+        Loggers::info($baseUrl . $path, __FUNCTION__, __LINE__);
         return $baseUrl . $path;
     }
     
@@ -327,8 +338,16 @@ class ImageHandler {
      */
     public static function bindImageByModel($model, $width = null, $height = null, $customField = array()) {
         $className = get_class($model);
-        if ($className == '') {
-            
+        if ($className == 'Files' && !empty($model->file_name) && !empty($model->created_date)) {
+            Loggers::info('$className == Files', __FUNCTION__, __LINE__);
+            $aDate = explode('-', $model->created_date);
+            $pathUpload = Files::UPLOAD_PATH . "/$aDate[0]/$aDate[1]";
+            Loggers::info($pathUpload, __FUNCTION__, __LINE__);
+            $path = DIRECTORY_SEPARATOR . $pathUpload . '/size128x96' . DIRECTORY_SEPARATOR . $model->file_name;
+            if (isset($customField['size'])) {
+                $path = DIRECTORY_SEPARATOR . $pathUpload . DIRECTORY_SEPARATOR . $customField['size'] . DIRECTORY_SEPARATOR . $model->file_name;
+            }
+            return self::bindImage($path, $width, $height);
         } else {
             $path = '/upload/settings/noimage';
             return self::bindImage($path, $width, $height);

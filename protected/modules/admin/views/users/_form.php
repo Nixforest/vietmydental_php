@@ -271,37 +271,63 @@
                 <?php echo $form->labelEx($model, 'img_avatar'); ?>
                 
                 <?php // echo $form->fileField($model, 'img_avatar'); ?>
-                <?php echo CHtml::activeFileField($model, 'img_avatar'); ?><br>
-                <?php echo $form->error($model, 'img_avatar'); ?>
-                <?php if (!empty($model->img_avatar)): ?>
-                    <p>
-                        <a rel="group1" class="gallery" href="<?php echo $model->getImageAvatarUrl();?>"> 
-                            <img width="100" height="70" src="<?php echo $model->getImageAvatarUrl();?>">
-                        </a>
-                    </p>
-                <?php endif; ?>
-<!--                <div class="row tb_file">
-                    <div class="float_l">
-                        <div>
-                        <a href="javascript:void(0);" class="text_under_none item_b" style="line-height:25px" onclick="fnBuildRowFile(this);">
-                            <img style="float: left;margin-right:8px;" src="<?php echo Yii::app()->theme->baseUrl;?>/img/add.png"> 
-                            Thêm Dòng
-                        </a>
-                    </div>
-                        <table class="border">
+                <?php // echo CHtml::activeFileField($model, 'img_avatar'); ?>
+                <table class="table table-bordered">
+                        <thead>
                             <tr>
-                                <th class="item_c">#</th>
                                 <th class="item_code item_c">
-                                    Cho phép <?php echo Files::ALLOW_DOCS_FILE_TYPE; ?>
+                                    Cho phép <?php echo Files::ALLOW_IMAGE_FILE_TYPE; ?>
                                     <br>
                                     Tên file không quá 100 ký tự
                                 </th>
                                 <th>Xoá</th>
                             </tr>
-                            <tr></tr>
+                        </thead>
+                        <tbody>
+                            <?php if (isset($model->rImgAvatarFile)): ?>
+                            <tr class="materials_row">
+                                <td class="item_l w-400">
+                                    <img>
+                                    <?php echo $model->rImgAvatarFile->getViewImage(); ?>
+                                </td>
+                                <td class="item_c last">
+                                    <input type="checkbox" name="delete_file[]" value="<?php echo $model->rImgAvatarFile->id;?>">
+                                </td>
+                            </tr>
+                            <?php endif; ?>
+                            
+                            <tr>
+                                <td>
+                                    <?php echo $form->fileField($model,'file_name[]',array('class'=>'input_file', 'accept'=>'image/*')); ?>
+                                </td>
+                                <!--<td class="item_c last"><span class="remove_icon_only"></span></td>-->
+                                <td class="item_c last"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                
+                <?php echo $form->error($model, 'img_avatar'); ?>
+                <?php // if (!empty($model->img_avatar)): ?>
+<!--                <p>
+                    <a rel="group1" class="gallery" href="<?php echo $model->getImageAvatarUrl();?>"> 
+                        <img width="100" height="70" src="<?php echo $model->getImageAvatarUrl();?>">
+                    </a>
+                </p>-->
+                <?php // endif; ?>
+                
+                <div class="row tb_file">
+                    <div class="float_l">
+<!--                        <div>
+                            <a href="javascript:void(0);" class="text_under_none item_b" style="line-height:25px" onclick="fnBuildRowFile(this);">
+                                <img style="float: left;margin-right:8px;" src="<?php echo Yii::app()->theme->baseUrl;?>/img/add.png"> 
+                                Thêm Dòng
+                            </a>
+                        </div>-->
+                        <table class="table table-bordered">
+                            
                         </table>
                     </div>
-                </div>-->
+                </div>
             </div>
         </div>
         <?php
@@ -370,6 +396,7 @@
              }    
             }
        });
+       fnBindRemoveActionUploadFile();
     });
     $(function(){
         fnBindChangeCity(

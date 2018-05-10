@@ -130,6 +130,11 @@ class Users extends BaseActiveRecord
                         self::HAS_MANY, 'SocialNetworks', 'object_id',
                         'on'    => 'type = ' . SocialNetworks::TYPE_USER,
                     ),
+                    'rImgAvatarFile' => array(
+                        self::HAS_ONE, 'Files', 'belong_id',
+                        'on' => 'type=' . Files::TYPE_1_USER_AVATAR,
+                        'order' => 'id DESC',
+                    ),
 		);
 	}
 

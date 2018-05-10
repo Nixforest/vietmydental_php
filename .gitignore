@@ -9,3 +9,4 @@ themes/classic/views/
 /protected/.htaccess
 /db/
 /upload/admin/
+/upload/all_file/

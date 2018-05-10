@@ -38,7 +38,7 @@ class Files extends CActiveRecord
     
     // Array type => Model's name
     public static $TYPE_ARRAY = array(
-        self::TYPE_1        => 'Users',
+        self::TYPE_1_USER_AVATAR        => 'Users',
     );
     
     // Array of type need resize image before save
@@ -72,7 +72,6 @@ class Files extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id', 'required'),
 			array('type, order_number', 'numerical', 'integerOnly'=>true),
 			array('id, belong_id', 'length', 'max'=>11),
 			array('file_name, created_date', 'safe'),
@@ -196,10 +195,7 @@ class Files extends CActiveRecord
         if (empty($this->file_name) && !in_array($this->type, self::$TYPE_RESIZE_IMAGE)) {
              return '';
         }
-        $str = "<a class='gallery' href='" . Yii::app()->createAbsoluteUrl('admin/ajax/viewImageProfileHs', array(
-            'id'    => $this->id,
-            'model' => 'Files'
-        )) . "'>"
+        $str = "<a class='gallery' href='" . ImageHandler::bindImageByModel($this,'','',array('size'=>'size1024x900')) . "'>"
                 . "<img width='80' height='60' src='" . ImageHandler::bindImageByModel($this, '', '', array('size' => 'size128x96')) . "'>"
                 . "</a>";
         return $str;
@@ -216,10 +212,13 @@ class Files extends CActiveRecord
     public static function validateFile($mBelongTo, $needMore = array()) {
         $className = get_class($mBelongTo);
         if (isset($_POST[$className][self::KEY_FILE_NAME]) && count($_POST[$className][self::KEY_FILE_NAME])) {
-            foreach ($_POST[$class][self::KEY_FILE_NAME] as $key => $item) {
+            foreach ($_POST[$className][self::KEY_FILE_NAME] as $key => $item) {
                 $mFile = new Files('UploadFile');
                 $mFile->file_name = CUploadedFile::getInstance($mBelongTo, self::KEY_FILE_NAME . '[' . $key . ']');
-                $mFile->validate();
+                if ($mFile->file_name !== NULL) {
+                    $mFile->validate();
+                }
+                
                 if (!is_null($mFile->file_name) && !$mFile->hasErrors()) {
                     ImageHandler::isImageFile($_FILES[$className]['tmp_name'][self::KEY_FILE_NAME][$key]);
                     $fileName = CommonProcess::removeSign($mFile->file_name->getName());
@@ -243,6 +242,7 @@ class Files extends CActiveRecord
     public static function saveRecordFile($mBelongTo, $type) {
         $className = get_class($mBelongTo);
         $mBelongTo = BaseActiveRecord::loadModelByClass($mBelongTo->id, $className, 'admin');
+        Loggers::info($className, __FUNCTION__, __CLASS__);
         set_time_limit(7200);
         if (isset($_POST[$className][self::KEY_FILE_NAME]) && count($_POST[$className][self::KEY_FILE_NAME])) {
             foreach ($_POST[$className][self::KEY_FILE_NAME] as $key => $item) {
@@ -253,11 +253,17 @@ class Files extends CActiveRecord
                 $mFile->created_date = $created_date[0];
                 $mFile->order_number = $key + 1;
                 $mFile->file_name = CUploadedFile::getInstance($mBelongTo, self::KEY_FILE_NAME . '[' . $key . ']');
+                Loggers::info($mFile->file_name, __FUNCTION__, __CLASS__);
                 if (!is_null($mFile->file_name)) {
+                    Loggers::info('!is_null($mFile->file_name', __FUNCTION__, __CLASS__);
                     $mFile->file_name = self::saveFile($mFile, 'file_name', $key);
-                    $mFile->save();
-                    if (in_array($type, self::$TYPE_RESIZE_IMAGE)) {
-                        self::resizeImage($mFile, 'file_name');
+                    if ($mFile->save()) {
+                        Loggers::info('$mFile->save success', __FUNCTION__, __LINE__);
+                        if (in_array($type, self::$TYPE_RESIZE_IMAGE)) {
+                            self::resizeImage($mFile, 'file_name');
+                        }
+                    } else {
+                        Loggers::info(CommonProcess::json_encode_unicode($mFile->getErrors()), __FUNCTION__, __LINE__);
                     }
                 }
             }
@@ -279,18 +285,23 @@ class Files extends CActiveRecord
         $month = DateTimeExt::getYearByDate($model->created_date, array('format' => 'm'));
         $pathUpload = self::UPLOAD_PATH . "/$year/$month";
         $ext = strtolower($model->$fieldName->getExtensionName());
-        if (in_array($model->type, $model->getTypeNotSlugName())) {
-            $fileName = time();
-            $fileName .=  "-" . CommonProcess::randString() . $count . '.' . $ext;
-        } else {
+//        if (in_array($model->type, $model->getTypeNotSlugName())) {
+//            $fileName = time();
+//            $fileName .=  "-" . CommonProcess::randString() . $count . '.' . $ext;
+//        } else {
             $fileNameClient = strtolower(CommonProcess::removeSign($model->$fieldName->getName()));
             $fileNameClient = str_replace($ext, "", $fileNameClient);
             $fileName = time() . "$count-" . CommonProcess::slugify($fileNameClient) . '.' . $ext;
-        }
+//        }
         DirectoryHandler::createDirectoryByPath($pathUpload);
-        $model->$fieldName->saveAs($pathUpload. DIRECTORY_SEPARATOR . $fileName);
-        
-        return $fileName;
+        Loggers::info($pathUpload. DIRECTORY_SEPARATOR . $fileName, __FUNCTION__, __LINE__);
+        if ($model->$fieldName->saveAs($pathUpload. DIRECTORY_SEPARATOR . $fileName)) {
+            Loggers::info("Save image success", __FUNCTION__, __LINE__);
+            return $fileName;
+        } else {
+            Loggers::info("Save image failed", __FUNCTION__, __LINE__);
+        }
+        return '';
     }
     
     /**
@@ -299,8 +310,8 @@ class Files extends CActiveRecord
      * @param type $fieldName
      */
     public static function resizeImage($model, $fieldName) {
-        $year = DateTimeExt::getYearByDate($model->created_name);
-        $month = DateTimeExt::getYearByDate($model->created_name, array('format' => 'm'));
+        $year = DateTimeExt::getYearByDate($model->created_date);
+        $month = DateTimeExt::getYearByDate($model->created_date, array('format' => 'm'));
         $pathUpload = self::UPLOAD_PATH . "/$year/$month";
         $imageHandler = new ImageHandler();
         $imageHandler->folder = DIRECTORY_SEPARATOR . $pathUpload;
@@ -308,6 +319,7 @@ class Files extends CActiveRecord
         $imageHandler->aRGB = array(0, 0, 0);   // Full black background
         $imageHandler->thumbs = self::IMAGE_SIZES;
         $imageHandler->createThumbs();
+        Loggers::info("Delete file: " . $imageHandler->folder . DIRECTORY_SEPARATOR . $model->$fieldName, __FUNCTION__, __LINE__);
         DirectoryHandler::deleteFile($imageHandler->folder . DIRECTORY_SEPARATOR . $model->$fieldName);
     }
     
@@ -321,6 +333,7 @@ class Files extends CActiveRecord
         $pathUpload = self::UPLOAD_PATH . "/$aDate[0]/$aDate[1]";
         $imageHandler = new ImageHandler();
         $imageHandler->folder = DIRECTORY_SEPARATOR . $pathUpload;
+        Loggers::info($imageHandler->folder . DIRECTORY_SEPARATOR . $modelRemove->$fieldName, __FUNCTION__, __LINE__);
         DirectoryHandler::deleteFile($imageHandler->folder . DIRECTORY_SEPARATOR . $modelRemove->$fieldName);
         foreach (self::IMAGE_SIZES as $key => $value) {
             DirectoryHandler::deleteFile($imageHandler->folder . DIRECTORY_SEPARATOR . $key . DIRECTORY_SEPARATOR . $modelRemove->$fieldName);
@@ -419,10 +432,13 @@ class Files extends CActiveRecord
      * @param type $mBelongTo
      */
     public static function deleteFileInUpdate($mBelongTo) {
+        Loggers::info(isset($_POST['delete_file']) . "", __FUNCTION__, __LINE__);
+//        Loggers::info(CommonProcess::json_encode_unicode($_POST['delete_file']), __FUNCTION__, __LINE__);
         if (isset($_POST['delete_file']) && is_array($_POST['delete_file']) && count($_POST['delete_file'])) {
+            Loggers::info('Start delete file', __FUNCTION__, __LINE__);
             $criteria = new CDbCriteria;
             $criteria->compare('t.belong_id', $mBelongTo->id);
-            $sParamsIn = implode(',', $_POST['delete_id']);
+            $sParamsIn = implode(',', $_POST['delete_file']);
             $criteria->addCondition("t.id IN ($sParamsIn)");
             $models = self::model()->findAll($criteria);
             foreach ($models as $model) {

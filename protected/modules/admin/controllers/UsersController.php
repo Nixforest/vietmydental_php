@@ -71,11 +71,11 @@ class UsersController extends AdminController
 		if(isset($_POST['Users']))
 		{
 			$model->attributes=$_POST['Users'];
-			if($model->save()) {
+                        if($model->save()) {
                             if (filter_input(INPUT_POST, 'submit')) {
                                 $selectedAgent = $_POST['Users']['agent'];
                                 OneMany::insertOne($selectedAgent, $model->id, OneMany::TYPE_AGENT_USER);
-                                
+
                                 // Handle save social network information
                                 foreach (SocialNetworks::TYPE_NETWORKS as $key => $value) {
                                     $value = $_POST['Users']["social_network_$key"];
@@ -86,6 +86,7 @@ class UsersController extends AdminController
                             }
                             // Save image avatar
                             $this->saveImage($model);
+                            Files::saveRecordFile($model, Files::TYPE_1_USER_AVATAR);
                             $this->redirect(array('view','id'=>$model->id));
                         }
 		}
@@ -112,26 +113,35 @@ class UsersController extends AdminController
 		{
                     $currentImgAvatar = $model->getImageAvatarPath();
 			$model->attributes=$_POST['Users'];
-			if($model->save()) {                            
-                            if (filter_input(INPUT_POST, 'submit')) {
-                                // Remove old record
-                                OneMany::deleteAllManyOldRecords($model->id, OneMany::TYPE_AGENT_USER);
-                                $selectedAgent = $_POST['Users']['agent'];
-                                OneMany::insertOne($selectedAgent, $model->id, OneMany::TYPE_AGENT_USER);
-                                
-                                // Handle save social network information
-                                SocialNetworks::deleteAllOldRecord($model->id, SocialNetworks::TYPE_USER);
-                                foreach (SocialNetworks::TYPE_NETWORKS as $key => $value) {
-                                    $value = $_POST['Users']["social_network_$key"];
-                                    if (!empty($value)) {
-                                        SocialNetworks::insertOne($value, $model->id, SocialNetworks::TYPE_USER, $key);
+//                        Files::validateFile($model);
+                        
+                        if (!$model->hasErrors()) {
+                            Files::deleteFileInUpdate($model);
+                            if($model->save()) {                            
+                                if (filter_input(INPUT_POST, 'submit')) {
+                                    // Remove old record
+                                    OneMany::deleteAllManyOldRecords($model->id, OneMany::TYPE_AGENT_USER);
+                                    $selectedAgent = $_POST['Users']['agent'];
+                                    OneMany::insertOne($selectedAgent, $model->id, OneMany::TYPE_AGENT_USER);
+
+                                    // Handle save social network information
+                                    SocialNetworks::deleteAllOldRecord($model->id, SocialNetworks::TYPE_USER);
+                                    foreach (SocialNetworks::TYPE_NETWORKS as $key => $value) {
+                                        $value = $_POST['Users']["social_network_$key"];
+                                        if (!empty($value)) {
+                                            SocialNetworks::insertOne($value, $model->id, SocialNetworks::TYPE_USER, $key);
+                                        }
                                     }
                                 }
+                                // Save image avatar
+                                $this->saveImage($model);
+                                Files::saveRecordFile($model, Files::TYPE_1_USER_AVATAR);
+                                $this->redirect(array('view','id'=>$model->id));
                             }
-                            // Save image avatar
-                            $this->saveImage($model);
-                            $this->redirect(array('view','id'=>$model->id));
+                        } else {
+                            Loggers::info(CommonProcess::json_encode_unicode($model->getErrors()), __FUNCTION__, __LINE__);
                         }
+			
 		}
 
 		$this->render('update',array(

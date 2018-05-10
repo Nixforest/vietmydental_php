@@ -60,6 +60,7 @@ class DirectoryHandler {
         if (!is_dir($path)) {
             return mkdir($path);
         }
+        return true;
     }
     
     /**
@@ -69,6 +70,7 @@ class DirectoryHandler {
      */
     public static function deleteFile($source) {
         $path = DirectoryHandler::getRootPath() . DIRECTORY_SEPARATOR . $source;
+        Loggers::info($path, __FUNCTION__, __LINE__);
         if (file_exists($path)) {
             return unlink($path);
         }

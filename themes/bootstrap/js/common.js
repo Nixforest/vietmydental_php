@@ -221,6 +221,13 @@ function fnShowCustomerInfo(_url, _outputId, _titleId, _titleVal, _customerId) {
     });
 }
 
+/**
+ * Show treatment schedule detail information
+ * @param {type} _url
+ * @param {type} _id
+ * @param {type} _outputId
+ * @returns {undefined}
+ */
 function fnShowTreatmentScheduleDetailInfo(_url, _id, _outputId) {
     $.ajax({
         url: _url,
@@ -235,5 +242,86 @@ function fnShowTreatmentScheduleDetailInfo(_url, _id, _outputId) {
         }
     });
 }
+function validateNumber(){     
+//    console.log('Bind event input number');
+    $(".number_only_v1").each(function(){
+            $(this).unbind("keydown");
+            $(this).bind("keydown",function(event){
+                if( !(event.keyCode === 8                                // backspace
+                    || event.keyCode === 46                              // delete
+                    || event.keyCode === 110                              // dấu chám bên bàn phím nhỏ
+                    || event.keyCode === 9							// tab
+                    || event.keyCode === 190							// dấu chấm (point) 
+                    || (event.keyCode >= 35 && event.keyCode <= 40)     // arrow keys/home/end
+                    || (event.keyCode >= 48 && event.keyCode <= 57)     // numbers on keyboard
+                    || (event.keyCode >= 96 && event.keyCode <= 105))   // number on keypad
+                    ) {
+                        event.preventDefault();     // Prevent character input
+                    }
+            });
+    });
 
+    return;
+    $(".number_only").each(function(){
+            $(this).unbind("keydown");
+            $(this).bind("keydown",function(event){
+                if( !(event.keyCode === 8                                // backspace
+                    || event.keyCode === 46                              // delete
+                    || event.keyCode === 9							// tab
+                    || event.keyCode === 190							// dấu chấm (point) 
+                    || (event.keyCode >= 35 && event.keyCode <= 40)     // arrow keys/home/end
+                    || (event.keyCode >= 48 && event.keyCode <= 57)     // numbers on keyboard
+                    || (event.keyCode >= 96 && event.keyCode <= 105))   // number on keypad
+                    ) {
+                        event.preventDefault();     // Prevent character input
+                    }
+            });
+    });
+}
+
+/**
+ * Function handle BEFORE user click on remove icon at Upload file form
+ * Override when use
+ * @param {type} this_
+ * @returns {undefined}
+ */
+function fnBeforeRemoveActionUploadFile(this_) {}
+
+/**
+ * Function handle AFTER user click on remove icon at Upload file form
+ * Override when use
+ * @returns {undefined}
+ */
+function fnAfterRemoveActionUploadFile() {}
+
+/**
+ * Refesh order number after change number of row
+ * @returns {undefined}
+ */
+function fnRefreshOrderNumber() {
+    validateNumber();
+    $('.upload_files_table').each(function() {
+        var index = 1;
+        $(this).find('.order_no').each(function() {
+            $(this).text(index++);
+        });
+    });
+}
+
+/**
+ * Handle bind remove action on upload file table
+ * @returns {undefined}
+ */
+function fnBindRemoveActionUploadFile() {
+    $('.remove_icon_only').live('click', function() {
+        if (confirm("Bạn chắc chắn muốn xóa?")) {
+            fnBeforeRemoveActionUploadFile($(this));
+            $(this).closest('tr').remove();
+            fnRefreshOrderNumber();
+            fnAfterRemoveActionUploadFile();
+        }
+    });
+}
+
+f
 

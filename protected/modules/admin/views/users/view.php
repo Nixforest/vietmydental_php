@@ -38,11 +38,11 @@ $this->createMenu('view', $model);
                     'type'=>'raw',
                     'value'=>CHtml::link('Đặt lại mật khẩu', Yii::app()->createAbsoluteUrl('admin/users/resetPassword', array('user_id' => $model->id))),
                 ),
-                array(
-                    'name' => 'img_avatar',
-                    'type' => 'html',
-                    'value' => CHtml::image($model->getImageAvatarUrl(), "", array("style"=>"width:250px;height:250px;")),
-                ),
+//                array(
+//                    'name' => 'img_avatar',
+//                    'type' => 'html',
+//                    'value' => CHtml::image($model->getImageAvatarUrl(), "", array("style"=>"width:250px;height:250px;")),
+//                ),
 //		'temp_password',
 		'last_name',
 		'first_name',
@@ -86,3 +86,6 @@ $this->createMenu('view', $model);
 		'created_by',
 	),
 )); ?>
+<a rel="group1" class="gallery" href="<?php echo ImageHandler::bindImageByModel($model->rImgAvatarFile,'','',array('size'=>'size1024x900'));?>"> 
+    <img width="100" height="70" src="<?php echo ImageHandler::bindImageByModel($model->rImgAvatarFile,'','',array('size'=>'size128x96'));?>">
+</a>

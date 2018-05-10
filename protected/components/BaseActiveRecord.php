@@ -125,7 +125,8 @@ class BaseActiveRecord extends CActiveRecord {
      * @throws CHttpException
      */
     public static function checkModel($className, $moduleName) {
-        $path = DirectoryHandler::getRootPath() . "/protected/$moduleName/models/$className.php";
+        $path = DirectoryHandler::getRootPath() . "/protected/modules/$moduleName/models/$className.php";
+        Loggers::info($path, __FUNCTION__, __CLASS__);
         if (!is_file($path)) {
             $cUid = Yii::app()->user->id;
             Yii::log("Class $ClassName Uid : $cUid Lỗi model không tồn tại. Important to review this error. User có thể đã chỉnh URL");
