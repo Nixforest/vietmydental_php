@@ -1227,4 +1227,10 @@ class DomainConst {
     const CONTENT00290  = 'Loại phục hình';
     const CONTENT00291  = 'Bệnh lý đã có sẵn không thể tạo mới';
     const CONTENT00292  = 'Tạo Bệnh lý thành công';
+    const CONTENT00293  = 'Thêm dòng ( Phím tắt F8 )';
+    const CONTENT00294  = 'Cho phép ';
+    const CONTENT00295  = 'Tên file không quá 100 ký tự';
+    const CONTENT00296  = 'Xoá';
+    const CONTENT00297  = 'Thứ tự';
+    const CONTENT00298  = 'Hình ảnh X Quang';
 }

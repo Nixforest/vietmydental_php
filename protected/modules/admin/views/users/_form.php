@@ -276,11 +276,11 @@
                         <thead>
                             <tr>
                                 <th class="item_code item_c">
-                                    Cho phép <?php echo Files::ALLOW_IMAGE_FILE_TYPE; ?>
+                                    <?php echo DomainConst::CONTENT00294 . Files::ALLOW_IMAGE_FILE_TYPE; ?>
                                     <br>
-                                    Tên file không quá 100 ký tự
+                                    <?php echo DomainConst::CONTENT00295; ?>
                                 </th>
-                                <th>Xoá</th>
+                                <th><?php echo DomainConst::CONTENT00296; ?></th>
                             </tr>
                         </thead>
                         <tbody>

@@ -127,6 +127,31 @@ class TreatmentScheduleDetailsController extends AdminController
                         DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
 		));
 	}
+        
+        /**
+         * Handle update image XRay
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id the ID of the model to be updated
+         */
+        public function actionUpdateImageXRay($id) {
+		$model=$this->loadModel($id);
+//                $mImageXRayFile = new Files();
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+		if(isset($_POST['TreatmentScheduleDetails']))
+		{
+//			$model->attributes=$_POST['TreatmentScheduleDetails'];
+//                        $mImageXRayFile->attributes = $_POST['Files'];
+                        Files::deleteFileInUpdateNotIn($model);
+                        Files::saveRecordFile($model, Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY);
+			$this->redirect(array('view','id'=>$model->id));
+		}
+
+		$this->render('updateImageXRay',array(
+			'model'=>$model,
+                        DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+		));
+        }
 
 	/**
 	 * Deletes a particular model.

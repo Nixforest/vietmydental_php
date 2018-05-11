@@ -14,6 +14,7 @@
  * @property integer $treatment_type_id
  * @property string $description
  * @property string $type_schedule
+ * @property string $created_date
  * @property integer $status
  */
 class TreatmentScheduleDetails extends BaseActiveRecord
@@ -22,6 +23,7 @@ class TreatmentScheduleDetails extends BaseActiveRecord
     // Autocomplete fields
     //-----------------------------------------------------
     public $autocomplete_medical_record;
+    public $order_number;
     
     //-----------------------------------------------------
     // Constants
@@ -91,6 +93,11 @@ class TreatmentScheduleDetails extends BaseActiveRecord
                         self::HAS_MANY, 'OneMany', 'one_id',
                         'on'    => 'type = ' . OneMany::TYPE_TREATMENT_DETAIL_TEETH,
                     ),
+                    'rImgXRayFile' => array(
+                        self::HAS_MANY, 'Files', 'belong_id',
+                        'on' => 'type=' . Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY,
+                        'order' => 'id DESC',
+                    ),
 		);
 	}
 
@@ -110,6 +117,7 @@ class TreatmentScheduleDetails extends BaseActiveRecord
 			'treatment_type_id' => DomainConst::CONTENT00128,
 			'description' => DomainConst::CONTENT00207,
 			'type_schedule' => DomainConst::CONTENT00206,
+			'created_date' => DomainConst::CONTENT00010,
 			'status' => DomainConst::CONTENT00026,
 		);
 	}
@@ -135,6 +143,7 @@ class TreatmentScheduleDetails extends BaseActiveRecord
 		$criteria->compare('treatment_type_id',$this->treatment_type_id);
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('type_schedule',$this->type_schedule,true);
+		$criteria->compare('created_date',$this->created_date,true);
 		$criteria->compare('status',$this->status);
                 $criteria->order = 'id DESC';
 
@@ -174,7 +183,8 @@ class TreatmentScheduleDetails extends BaseActiveRecord
             $this->end_date = $this->start_date;
         }
         if ($this->isNewRecord) {   // Add
-            
+            // Handle created date
+            $this->created_date = CommonProcess::getCurrentDateTime();
         } else {                    // Update
             if ($this->status == self::STATUS_COMPLETED) {
                 $this->end_date = CommonProcess::getCurrentDateTimeWithMySqlFormat();

@@ -619,3 +619,6 @@ img{
     height: 100%;*/
     object-fit: contain;
 }
+.display_none {
+    display: none;
+}

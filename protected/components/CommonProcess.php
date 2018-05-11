@@ -771,6 +771,19 @@ class CommonProcess {
     }
     
     /**
+     * Build order number array
+     * @param Int $size Array size
+     * @return Array
+     */
+    public static function buildOrderNumberArray($size) {
+        $retVal = array();
+        for ($i = 1; $i <= $size; $i++) {
+            $retVal[$i] = $i;
+        }
+        return $retVal;
+    }
+    
+    /**
      * Call soap function
      * @param Array $userParam Parameter list
      * @param String $functionCall Function name

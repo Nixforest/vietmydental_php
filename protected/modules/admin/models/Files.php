@@ -16,14 +16,19 @@ class Files extends CActiveRecord
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
-    const TYPE_1_USER_AVATAR            = 1;
+    const TYPE_1_USER_AVATAR                        = 1;
+    const TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY     = 2;
+    
     const ALLOW_IMAGE_FILE_TYPE         = 'jpg,jpeg,png';
     const ALLOW_DOCS_FILE_TYPE          = 'pdf,xls,xlsx,jpg,jpeg,png';
     const UPLOAD_PATH                   = 'upload/all_file';
+    const MAX_UPLOAD                    = 50;
+    const MAX_UPLOAD_SHOW               = 10;
     
     const KEY_FILE_NAME                 = 'file_name';
     const KEY_NAME                      = 'name';
     const KEY_TMP_NAME                  = 'tmp_name';
+    const KEY_CLASS_NAME                = 'Files';
     
     const IMAGE_SIZES                   = array(
         'size128x96'    =>  array(          // Small size
@@ -38,12 +43,14 @@ class Files extends CActiveRecord
     
     // Array type => Model's name
     public static $TYPE_ARRAY = array(
-        self::TYPE_1_USER_AVATAR        => 'Users',
+        self::TYPE_1_USER_AVATAR                        => 'Users',
+        self::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY     => 'TreatmentScheduleDetails',
     );
     
     // Array of type need resize image before save
     public static $TYPE_RESIZE_IMAGE = array(
         self::TYPE_1_USER_AVATAR,
+        self::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY
     );
     
 	/**
@@ -195,7 +202,7 @@ class Files extends CActiveRecord
         if (empty($this->file_name) && !in_array($this->type, self::$TYPE_RESIZE_IMAGE)) {
              return '';
         }
-        $str = "<a class='gallery' href='" . ImageHandler::bindImageByModel($this,'','',array('size'=>'size1024x900')) . "'>"
+        $str = "<a class='gallery' target='_blank' href='" . ImageHandler::bindImageByModel($this,'','',array('size'=>'size1024x900')) . "'>"
                 . "<img width='80' height='60' src='" . ImageHandler::bindImageByModel($this, '', '', array('size' => 'size128x96')) . "'>"
                 . "</a>";
         return $str;
@@ -245,6 +252,7 @@ class Files extends CActiveRecord
         Loggers::info($className, __FUNCTION__, __CLASS__);
         set_time_limit(7200);
         if (isset($_POST[$className][self::KEY_FILE_NAME]) && count($_POST[$className][self::KEY_FILE_NAME])) {
+            Loggers::info('isset($_POST[$className][self::KEY_FILE_NAME])', __FUNCTION__, __CLASS__);
             foreach ($_POST[$className][self::KEY_FILE_NAME] as $key => $item) {
                 $mFile = new Files();
                 $mFile->type = $type;
@@ -439,7 +447,29 @@ class Files extends CActiveRecord
             $criteria = new CDbCriteria;
             $criteria->compare('t.belong_id', $mBelongTo->id);
             $sParamsIn = implode(',', $_POST['delete_file']);
+            Loggers::info($sParamsIn, __FUNCTION__, __LINE__);
             $criteria->addCondition("t.id IN ($sParamsIn)");
+            $models = self::model()->findAll($criteria);
+            foreach ($models as $model) {
+                $model->delete();
+            }
+        }
+    }
+    
+    /**
+     * Delete file in update action (with not in array param)
+     * @param type $mBelongTo
+     */
+    public static function deleteFileInUpdateNotIn($mBelongTo) {
+        Loggers::info(isset($_POST['delete_file']) . "", __FUNCTION__, __LINE__);
+//        Loggers::info(CommonProcess::json_encode_unicode($_POST['delete_file']), __FUNCTION__, __LINE__);
+        if (isset($_POST['delete_file']) && is_array($_POST['delete_file']) && count($_POST['delete_file'])) {
+            Loggers::info('Start delete file', __FUNCTION__, __LINE__);
+            $criteria = new CDbCriteria;
+            $criteria->compare('t.belong_id', $mBelongTo->id);
+            $sParamsIn = implode(',', $_POST['delete_file']);
+            Loggers::info($sParamsIn, __FUNCTION__, __LINE__);
+            $criteria->addCondition("t.id NOT IN ($sParamsIn)");
             $models = self::model()->findAll($criteria);
             foreach ($models as $model) {
                 $model->delete();
