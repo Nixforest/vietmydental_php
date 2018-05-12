@@ -231,28 +231,39 @@ class CommonProcess {
         if ($emptyOption) {
             $retVal[''] = '';
         }
-        for ($index = 0; $index < 32; $index++) {
+        for ($index = 0; $index < 52; $index++) {
 //            $retVal[$index] = "Răng số " . $index;
             if ($index >= 0 && $index <= 7) {
                 $i = 1;
                 $n = 8 - $index;
-                
             } else if ($index >= 8 && $index <= 15) {
                 $i = 2;
                 $n = $index - 7;
             } else if ($index >= 16 && $index <= 23) {
                 $i = 3;
                 $n = 8 - $index % 8;
-            } else {
+            } else if ($index >= 24 && $index <= 31) {
                 $i = 4;
                 $n = $index - 23;
+            } else if ($index >= 32 && $index <= 36) {
+                $i = 5;
+                $n = 37 - $index;
+            } else if ($index >= 37 && $index <= 41) {
+                $i = 6;
+                $n = $index - 36;
+            } else if ($index >= 42 && $index <= 46) {
+                $i = 7;
+                $n = 5 - ($index - 32) % 5;
+            } else {
+                $i = 8;
+                $n = $index - 46;
             }
             $retVal[$index] = DomainConst::CONTENT00284 . $i . " - " . $n;
         }
         
-        $retVal[32] = DomainConst::CONTENT00285;
-        $retVal[33] = DomainConst::CONTENT00286;
-        $retVal[34] = DomainConst::CONTENT00287;
+//        $retVal[52] = DomainConst::CONTENT00285;
+//        $retVal[53] = DomainConst::CONTENT00286;
+//        $retVal[54] = DomainConst::CONTENT00287;
         return $retVal;
     }
     
@@ -269,7 +280,7 @@ class CommonProcess {
      */
     public static function getListConfigTeeth() {
         $retVal = array();
-        for ($index = 0; $index < 32; $index++) {
+        for ($index = 0; $index < 52; $index++) {
 //            $retVal[] = CommonProcess::createConfigJson($index, "Răng số " . $index);
             if ($index >= 0 && $index <= 7) {
                 $i = 1;
@@ -281,16 +292,28 @@ class CommonProcess {
             } else if ($index >= 16 && $index <= 23) {
                 $i = 3;
                 $n = 8 - $index % 8;
-            } else {
+            } else if ($index >= 24 && $index <= 31) {
                 $i = 4;
                 $n = $index - 23;
+            } else if ($index >= 32 && $index <= 36) {
+                $i = 5;
+                $n = 37 - $index;
+            } else if ($index >= 37 && $index <= 41) {
+                $i = 6;
+                $n = $index - 36;
+            } else if ($index >= 42 && $index <= 46) {
+                $i = 7;
+                $n = 5 - ($index - 32) % 5;
+            } else {
+                $i = 8;
+                $n = $index - 46;
             }
             $retVal[] = CommonProcess::createConfigJson($index,
                     DomainConst::CONTENT00284 . $i . " - " . $n);
         }
-        $retVal[] = CommonProcess::createConfigJson(32, DomainConst::CONTENT00285);
-        $retVal[] = CommonProcess::createConfigJson(33, DomainConst::CONTENT00286);
-        $retVal[] = CommonProcess::createConfigJson(34, DomainConst::CONTENT00287);
+//        $retVal[] = CommonProcess::createConfigJson(52, DomainConst::CONTENT00285);
+//        $retVal[] = CommonProcess::createConfigJson(53, DomainConst::CONTENT00286);
+//        $retVal[] = CommonProcess::createConfigJson(54, DomainConst::CONTENT00287);
         return $retVal;
     }
 
