@@ -1233,4 +1233,5 @@ class DomainConst {
     const CONTENT00296  = 'Xoá';
     const CONTENT00297  = 'Thứ tự';
     const CONTENT00298  = 'Hình ảnh X Quang';
+    const CONTENT00299  = 'Mã này chưa được in thẻ';
 }

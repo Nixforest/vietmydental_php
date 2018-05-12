@@ -12,9 +12,9 @@ class CustomerController extends Controller {
             $customer = $referCode->rCustomer;
         } else {
             $customer = Customers::model()->findByPk($code);
-            if (!$customer) {
-                $customer = new Customers();
-            }
+        }
+        if (!$customer) {
+            $customer = new Customers();
         }
         $scheduleId = $customer->getSchedule(false);
         if (!empty($scheduleId)) {

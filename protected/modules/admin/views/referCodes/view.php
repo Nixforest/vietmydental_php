@@ -24,3 +24,4 @@ if (!empty($url)) {
 }
 
 ?>
+<!--<img src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=<?php echo $model->generateURL(); ?>&choe=UTF-8" title="Link to Google.com" />-->

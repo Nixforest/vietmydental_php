@@ -3,15 +3,10 @@
 /* @var $model ReferCodes */
 
 $this->createMenu('index', $model);
-
-$this->breadcrumbs=array(
-	'Danh sách Thẻ phát hành'=>array('index'),
-);
-
-$this->menu=array(
-	array('label'=>'Danh sách Thẻ phát hành', 'url'=>array('index')),
-	array('label'=>'Tạo mới Thẻ phát hành', 'url'=>array('referCodes/create/count/1000')),
-);
+$this->menu[] = array(
+    'label' => $this->getPageTitleByAction('downloadExcel'),
+    'url' => array('downloadExcel')
+    );
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){

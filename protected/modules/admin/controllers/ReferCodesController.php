@@ -142,6 +142,24 @@ class ReferCodesController extends AdminController
                         DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
 		));
 	}
+        
+        /**
+         * Action download excel
+         */
+        public function actionDownloadExcel() {
+            $criteria = new CDbCriteria();
+            $criteria->compare('t.type', ReferCodes::TYPE_NOT_SELECTED_YET);
+            $criteria->limit = Settings::getItem(Settings::KEY_NUM_QRCODE_DOWNLOAD_MAX);
+            Loggers::info(Settings::getItem(Settings::KEY_NUM_QRCODE_DOWNLOAD_MAX), __FUNCTION__, __LINE__);
+            $referCodes = ReferCodes::model()->findAll($criteria);
+            if ($referCodes) {
+                Loggers::info(count($referCodes), __FUNCTION__, __LINE__);
+                ExcelHandler::saveQRCode($referCodes);
+            }
+            $this->render('downloadExcel',array(
+                        DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+		));
+        }
 
 	/**
 	 * Manages all models.

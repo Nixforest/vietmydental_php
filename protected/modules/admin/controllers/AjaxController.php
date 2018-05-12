@@ -439,7 +439,7 @@ class AjaxController extends AdminController
         }
         $criteria = new CDbCriteria();
         $criteria->addSearchCondition('t.code', trim($_GET['term']), true);  // true => LIKE '%...%'
-        $criteria->addCondition('t.type = ' . ReferCodes::TYPE_NOT_SELECTED_YET);
+        $criteria->addCondition('t.type = ' . ReferCodes::TYPE_PRINTED);
         $criteria->limit = 20;
         $models = ReferCodes::model()->findAll($criteria);
         foreach ($models as $model) {

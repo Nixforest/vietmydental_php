@@ -35,6 +35,8 @@ class Settings extends BaseActiveRecord
     const KEY_PASSWORD_LEN_MAX                  = 'PASSWORD_LEN_MAX';
     /** Key Domain */
     const KEY_DOMAIN                            = 'DOMAIN';
+    /** Key Max number download file QR code */
+    const KEY_NUM_QRCODE_DOWNLOAD_MAX           = 'NUM_QRCODE_DOWNLOAD_MAX';
     
     /* --- App settings --- */
     /** Key Mobile app version iOS */

@@ -15,9 +15,10 @@ class ReferCodes extends CActiveRecord
     //-----------------------------------------------------
     // Type of relation
     //-----------------------------------------------------
-    const TYPE_NOT_SELECTED_YET      = DomainConst::NUMBER_ZERO_VALUE;
+    const TYPE_NOT_SELECTED_YET     = DomainConst::NUMBER_ZERO_VALUE;
+    const TYPE_PRINTED              = DomainConst::NUMBER_TWO_VALUE;
     /** 1 [customer] has 1 [refer code] */
-    const TYPE_CUSTOMER              = DomainConst::NUMBER_ONE_VALUE;
+    const TYPE_CUSTOMER             = DomainConst::NUMBER_ONE_VALUE;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -140,6 +141,7 @@ class ReferCodes extends CActiveRecord
                 break;
 
             default:
+                $url = 'http://' . Settings::getDomain() . "/index.php/front/customer/view/code/" . $this->code;
                 break;
         }
         return $url;
@@ -173,12 +175,14 @@ class ReferCodes extends CActiveRecord
             'code' => $code,
         ));
         if ($model) {
-            if ($model->type == self::TYPE_NOT_SELECTED_YET) {
+            // Connect
+            if ($model->type == self::TYPE_PRINTED) {
                 $model->object_id = $object_id;
                 $model->type = $type;
                 $model->save();
-            } else if (($model->type != self::TYPE_NOT_SELECTED_YET)
-                    && ($model->object_id == $object_id)) {
+            } else if ($model->type == self::TYPE_NOT_SELECTED_YET) {
+                throw new Exception(DomainConst::CONTENT00299);
+            } else if ($model->object_id == $object_id) {
                 return;
             } else {
                 throw new Exception(DomainConst::CONTENT00268);
