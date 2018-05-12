@@ -481,8 +481,23 @@ class Customers extends BaseActiveRecord
         if (isset($this->rMedicalRecord) && isset($this->rMedicalRecord->rTreatmentSchedule)) {
             $i = count($this->rMedicalRecord->rTreatmentSchedule);
             foreach ($this->rMedicalRecord->rTreatmentSchedule as $schedule) {
-                if ($schedule->rPathological) {
-                    $rightContent .= '<p>Đợt ' . $i . ': ' . $schedule->rPathological->name . '</p>';
+                if (isset($schedule->rDetail)) {
+                    if ($schedule->rPathological) {
+                        $rightContent .= '<p>Đợt ' . $i . ': [' . $schedule->getStartTime() . '] - ' . $schedule->rPathological->name . '</p>';
+                    } else {
+                        $rightContent .= '<p>Đợt ' . $i . ': [' . $schedule->getStartTime() . ']</p>';
+                    }
+                    $detailIdx = count($schedule->rDetail);
+                    foreach ($schedule->rDetail as $detail) {
+                        $updateTag = '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/updateImageXRay", array("id" => $detail->id)) . '">' . DomainConst::CONTENT00272 . '</a>';;
+                        if ($detail->rDiagnosis) {
+                            $rightContent .= '<p>- Lần ' . $detailIdx . ': ' . $detail->rDiagnosis->name . ' - [' . $updateTag . ']</p>';
+                        } else {
+                            $rightContent .= '<p>- Lần ' . $detailIdx . ': ' . DomainConst::CONTENT00177 . ' - [' . $updateTag . ']</p>';
+                        }
+//                            $rightContent .= 
+                        $detailIdx--;
+                    }
                 }
                 $i--;
             }
