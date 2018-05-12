@@ -368,10 +368,19 @@ class TreatmentScheduleDetails extends BaseActiveRecord
                         $process->id, $process->name, $process->getJsonInfo());
             }
         }
+        // Init can update flag
+        $canUpdate = DomainConst::NUMBER_ONE_VALUE;
+        // Check if this detail was receipted
+        if (isset($this->rReceipt)) {
+            if ($this->rReceipt->status === Receipts::STATUS_RECEIPTIONIST) {
+                $canUpdate = DomainConst::NUMBER_ZERO_VALUE;
+            }
+        }
         $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_CAN_UPDATE,
             DomainConst::CONTENT00232,
-            $this->status != TreatmentScheduleDetails::STATUS_COMPLETED
-            ? DomainConst::NUMBER_ONE_VALUE : DomainConst::NUMBER_ZERO_VALUE);
+//            $this->status != TreatmentScheduleDetails::STATUS_COMPLETED
+//            ? DomainConst::NUMBER_ONE_VALUE : DomainConst::NUMBER_ZERO_VALUE);
+            $canUpdate);
         
         if (empty($processArr)) {
             $process = new TreatmentScheduleProcess();

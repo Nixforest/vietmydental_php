@@ -1081,7 +1081,8 @@ class DomainConst {
     const CONTENT00143  = 'Bác sĩ';
     const CONTENT00144  = 'Mã Đợt điều trị';
     const CONTENT00145  = 'Răng số';
-    const CONTENT00146  = 'Chi tiết đợt điều trị';
+//    const CONTENT00146  = 'Chi tiết đợt điều trị';
+    const CONTENT00146  = 'Lần điều trị';
     const CONTENT00147  = 'Ngày thực hiện';
     const CONTENT00148  = 'Công việc';
     const CONTENT00149  = 'Mã tiến trình điều trị';
@@ -1109,7 +1110,8 @@ class DomainConst {
     const CONTENT00171  = 'Danh sách bệnh nhân';
     const CONTENT00172  = 'Thông tin bệnh nhân';
     const CONTENT00173  = 'Hồ sơ bệnh nhân:';
-    const CONTENT00174  = 'Chi tiết điều trị';
+//    const CONTENT00174  = 'Chi tiết điều trị';
+    const CONTENT00174  = 'Lần điều trị';
     const CONTENT00175  = 'Email';
     const CONTENT00176  = 'Tạo Mới Bệnh Nhân';
     const CONTENT00177  = 'Lịch hẹn';
@@ -1160,8 +1162,10 @@ class DomainConst {
     const CONTENT00222  = 'Trạng thái không hợp lệ';
     const CONTENT00223  = 'Số răng không hợp lệ';
     const CONTENT00224  = 'Mã loại điều trị không hợp lệ';
-    const CONTENT00225  = 'Tạo chi tiết điều trị thành công';
-    const CONTENT00226  = 'Mã Chi tiết điều trị không hợp lệ';
+//    const CONTENT00225  = 'Tạo chi tiết điều trị thành công';
+    const CONTENT00225  = 'Tạo Lần điều trị thành công';
+//    const CONTENT00226  = 'Mã Chi tiết điều trị không hợp lệ';
+    const CONTENT00226  = 'Mã Lần điều trị không hợp lệ';
     const CONTENT00227  = 'Tạo tiến trình điều trị thành công';
     const CONTENT00228  = 'Mã tiến trình điều trị không hợp lệ';
     const CONTENT00229  = 'Cập nhật thông tin';

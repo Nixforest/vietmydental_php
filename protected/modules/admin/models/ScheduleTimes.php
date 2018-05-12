@@ -86,6 +86,7 @@ class ScheduleTimes extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('status',$this->status);
+                $criteria->order = 'name ASC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -110,7 +111,7 @@ class ScheduleTimes extends CActiveRecord
             $_items[""] = "";
         }
         $models = self::model()->findAll(array(
-            'order' => 'id ASC',
+            'order' => 'name ASC',
         ));
         foreach ($models as $model) {
             $_items[$model->id] = $model->name;
@@ -134,7 +135,9 @@ class ScheduleTimes extends CActiveRecord
      */
     public static function getJsonList() {
         $retVal = array();
-        foreach (self::model()->findAll() as $key => $value) {
+        $criteria=new CDbCriteria;
+        $criteria->order = 'name ASC';
+        foreach (self::model()->findAll($criteria) as $key => $value) {
             $retVal[] = CommonProcess::createConfigJson($key, $value->name);
         }
         
