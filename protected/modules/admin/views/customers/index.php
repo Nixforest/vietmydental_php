@@ -98,6 +98,11 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 //                ),
 //		'created_date',
                 array(
+                    'name' => 'debt',
+                    'htmlOptions' => array('style' => 'text-align:right;'),
+                    'value' => 'CommonProcess::formatCurrency($data->debt)',
+                ),
+                array(
                     'name'=>'status',
                     'type' => 'Status',
                     'htmlOptions' => array('style' => 'text-align:center;'),

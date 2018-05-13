@@ -315,8 +315,14 @@ class ReceptionistController extends Controller {
         if ($model) {
 //            $model->receiptionist_id = isset(Yii::app()->user) ? Yii::app()->user->id : '';
             $model->status = Receipts::STATUS_RECEIPTIONIST;
-            $model->save();
-            Loggers::info("Update receipt with id = $id", "save()", __CLASS__);
+            if ($model->save()) {
+                Loggers::info("Update receipt with id = $id", "save()", __CLASS__);
+                // Update customer's debt
+                $model->updateCustomerDebt();
+            } else {
+                Loggers::info("Update receipt failed: " . CommonProcess::json_encode_unicode($model->getErrors()),
+                        __FUNCTION__, __CLASS__);
+            }
         }
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax'])) {

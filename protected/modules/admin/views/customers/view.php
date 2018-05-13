@@ -47,6 +47,11 @@ $this->createMenu('view', $model);
                    'name'=>'user_id',
                    'value'=> isset($model->rUser) ? $model->rUser->username : '',
                 ),
+                array(
+                    'name' => 'debt',
+                    'htmlOptions' => array('style' => 'text-align:right;'),
+                    'value' => CommonProcess::formatCurrency($model->debt),
+                ),
 		'characteristics',
 		array(
                    'name'=>'created_by',

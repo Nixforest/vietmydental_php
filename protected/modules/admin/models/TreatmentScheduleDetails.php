@@ -87,7 +87,8 @@ class TreatmentScheduleDetails extends BaseActiveRecord
                         self::BELONGS_TO, 'ScheduleTimes', 'time_id'
                     ),
                     'rReceipt' => array(
-                        self::HAS_ONE, 'Receipts', 'detail_id'
+                        self::HAS_ONE, 'Receipts', 'detail_id',
+                        'on' => 'status !=' . Receipts::STATUS_INACTIVE,
                     ),
                     'rJoinTeeth' => array(
                         self::HAS_MANY, 'OneMany', 'one_id',

@@ -121,6 +121,22 @@ class ReceiptsController extends AdminController
                         DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
 		));
 	}
+        
+        /**
+         * Cancel this receipt
+         */
+        public function actionCancel($id) {
+            $model = $this->loadModel($id);
+            $model->status = Receipts::STATUS_INACTIVE;
+            if ($model->save()) {
+                // Rollback customer debt
+                $model->rollbackCustomerDebt();
+            }
+            $this->render('view',array(
+                    'model' => $model,
+                    DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+            ));
+        }
 
 	/**
 	 * Deletes a particular model.

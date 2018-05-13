@@ -19,6 +19,7 @@
  * @property integer $type_id
  * @property integer $career_id
  * @property string $user_id
+ * @property string $debt
  * @property integer $status
  * @property string $characteristics
  * @property string $created_by
@@ -62,6 +63,7 @@ class Customers extends BaseActiveRecord
 			array('name, house_numbers', 'length', 'max'=>255),
 			array('phone, email', 'length', 'max'=>200),
 			array('street_id, user_id, created_by', 'length', 'max'=>11),
+			array('debt', 'length', 'max'=>10),
 			array('address, characteristics', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -130,6 +132,7 @@ class Customers extends BaseActiveRecord
 			'type_id' => DomainConst::CONTENT00107,
 			'career_id' => DomainConst::CONTENT00099,
 			'user_id' => DomainConst::CONTENT00008,
+			'debt' => DomainConst::CONTENT00300,
 			'status' => DomainConst::CONTENT00026,
 			'characteristics' => DomainConst::CONTENT00108,
 			'created_by' => DomainConst::CONTENT00054,
@@ -165,6 +168,7 @@ class Customers extends BaseActiveRecord
 		$criteria->compare('type_id',$this->type_id);
 		$criteria->compare('career_id',$this->career_id);
 		$criteria->compare('user_id',$this->user_id,true);
+		$criteria->compare('debt',$this->debt,true);
 		$criteria->compare('status',$this->status);
 		$criteria->compare('characteristics',$this->characteristics,true);
 		$criteria->compare('created_by',$this->created_by,true);
@@ -608,6 +612,14 @@ class Customers extends BaseActiveRecord
 //            return $this->rMedicalRecord->rTreatmentSchedule;
         }
         return $retVal;
+    }
+    
+    /**
+     * Get debt information
+     * @return String
+     */
+    public function getDebt() {
+        return CommonProcess::formatCurrency($this->debt) . ' ' . DomainConst::CONTENT00134;
     }
 
     //-----------------------------------------------------

@@ -21,18 +21,33 @@
                 <!--Agent information-->
                 <td colspan="23">
                     <table class="table table-borderless">
-                        <tr><td colspan="2">NHA KHOA VIỆT MỸ</td></tr>
+                        <?php
+                            $address = "128 Huỳnh Tấn Phát P. Phú Mỹ, Quận 7, TP HCM";
+                            $phone = "028.3785.8989";
+                            $website = "http://nhakhoavietmy.com.vn";
+                            $agentName = "";
+                            if (isset($model->rJoinAgent) && isset($model->rJoinAgent->rAgent)) {
+                                $address = $model->rJoinAgent->rAgent->address;
+                                $phone = $model->rJoinAgent->rAgent->phone;
+                                $agentName = " - " . $model->rJoinAgent->rAgent->name;
+                            }
+                        ?>
+                        <tr><td colspan="2">NHA KHOA VIỆT MỸ<?php echo $agentName; ?></td></tr>
                         <tr>
-                            <td>Địa chỉ/Address:</td>
-                            <td><i>128 Huỳnh Tấn Phát P. Phú Mỹ, Quận 7, TP HCM</i></td>
+                            <td><?php echo DomainConst::CONTENT00308; ?></td>
+                                <td>
+                                    <i>
+                                        <?php echo $address; ?>
+                                    </i>
+                                </td>
                         </tr>
                         <tr>
-                            <td>Sđt/Phone:</td>
-                            <td><i>028.3785.8989</i></td>
+                            <td><?php echo DomainConst::CONTENT00307; ?></td>
+                            <td><i><?php echo $phone; ?></i></td>
                         </tr>
                         <tr>
-                            <td>Website:</td>
-                            <td><i>nhakhoavietmy.com.vn</i></td>
+                            <td><?php echo DomainConst::CONTENT00312; ?>:</td>
+                            <td><i><?php echo $website; ?></i></td>
                         </tr>
                     </table>
                 </td>
@@ -40,7 +55,7 @@
             <!--Row Title-->
             <tr>
                 <td colspan="13"></td>
-                <td colspan="10" class="align-middle"><font size="6">PHIẾU THU (RECEIPTS)</font></td>
+                <td colspan="10" class="align-middle"><font size="6"><?php echo DomainConst::CONTENT00301; ?></font></td>
                 <td colspan="8">Số/ID: <?php echo $model->getId();?></td>
             </tr>
             <!--Row Patient information-->
@@ -50,7 +65,7 @@
                     <!--Table patient information-->
                     <table class="table table-borderless">
                         <tr>
-                            <td colspan="5">Ngày/Date:</td>
+                            <td colspan="5"><?php echo DomainConst::CONTENT00302; ?></td>
                             <td colspan="10">
                                 <i>
                                     <?php echo CommonProcess::convertDateTime(
@@ -58,8 +73,8 @@
                                     DomainConst::DATE_FORMAT_3); ?>
                                 </i>
                             </td>
-                            <td colspan="5">Hình thức/Type:</td>
-                            <td colspan="8"><i>Tiền mặt/Cash</i></td>
+                            <td colspan="5"><?php echo DomainConst::CONTENT00303; ?></td>
+                            <td colspan="8"><i><?php echo DomainConst::CONTENT00304; ?></i></td>
                         </tr>
                         <tr>
                             <?php
@@ -70,27 +85,28 @@
                                 $customerPhone = $customer->getPhone();
                                 $customerEmail = $customer->getEmail();
                                 $customerAddress = $customer->getAddress();
+                                $oldDebt = $customer->debt;
                             }
                             ?>
-                            <td colspan="5">Bệnh nhân/Patient:</td>
+                            <td colspan="5"><?php echo DomainConst::CONTENT00305; ?></td>
                             <td colspan="10">
                                 <i>
                                     <?php echo $customerName; ?>
                                 </i>
                             </td>
-                            <td colspan="5">Mã/Patient code:</td>
+                            <td colspan="5"><?php echo DomainConst::CONTENT00306; ?></td>
                             <td colspan="8">
                                 <i><?php echo $customerId; ?></i>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="5">Điện thoại/Tel:</td>
+                            <td colspan="5"><?php echo DomainConst::CONTENT00307; ?></td>
                             <td colspan="10"><i><?php echo $customerPhone; ?></i></td>
-                            <td colspan="5">Email:</td>
+                            <td colspan="5"><?php echo DomainConst::CONTENT00175; ?>:</td>
                             <td colspan="8"><i><?php echo $customerEmail; ?></i></td>
                         </tr>
                         <tr>
-                            <td colspan="5">Địa chỉ/Address:</td>
+                            <td colspan="5"><?php echo DomainConst::CONTENT00308; ?></td>
                             <td colspan="23"><i><?php echo $customerAddress; ?></i></td>
                         </tr>
                     </table>
@@ -103,32 +119,33 @@
                     <tr>
                         <td><b>#</b></td>
                         <td>
-                            <b>Dịch vụ</b><br>
-                            (Services)
+                            <b><?php echo DomainConst::CONTENT00309; ?></b><br>
+                            (<?php echo DomainConst::CONTENT00310; ?>)
                         </td>
                         <td>
-                            <b>SL</b><br>
-                            (Qty)
+                            <b><?php echo DomainConst::CONTENT00313; ?></b><br>
+                            (<?php echo DomainConst::CONTENT00314; ?>)
                         </td>
                         <td>
-                            <b>Đơn giá</b><br>
-                            (Unit Price)
+                            <b><?php echo DomainConst::CONTENT00315; ?></b><br>
+                            (<?php echo DomainConst::CONTENT00316; ?>)
                         </td>
                         <td>
-                            <b>Giảm giá</b><br>
-                            (Discount)
+                            <b><?php echo DomainConst::CONTENT00317; ?></b><br>
+                            (<?php echo DomainConst::CONTENT00318; ?>)
                         </td>
                         <td>
-                            <b>Thành tiền</b><br>
-                            (After discount)
+                            <b><?php echo DomainConst::CONTENT00319; ?></b><br>
+                            (<?php echo DomainConst::CONTENT00320; ?>)
                         </td>
                         <td>
-                            <b>Thực thu</b><br>
-                            (Actual cost)
+                            <b><?php echo DomainConst::CONTENT00259; ?></b><br>
+                            (<?php echo DomainConst::CONTENT00321; ?>)
                         </td>
                     </tr>
                     <?php
                     $treatment = $model->getTreatmentType();
+                    $money = 0;
                     if ($treatment != NULL) {
                         $treatmentName = $treatment->name;
                         $price = $treatment->getPrice();
@@ -136,6 +153,11 @@
                     }
                     $discount = $model->getDiscount();
                     $final = $model->getFinal();
+                    $currentDebt = $model->final - $money;
+                    // If receptionist accept this receipt before, must rollback value of old debt
+                    if ($model->status == Receipts::STATUS_RECEIPTIONIST) {
+                        $oldDebt = $oldDebt + $currentDebt;
+}
                     ?>
                     <tr>
                         <td>1</td>
@@ -148,20 +170,20 @@
                     </tr>
                     <tr>
                         <td colspan="4"></td>
-                        <td><b>Tổng cộng/Total:</b></td>
+                        <td><b><?php echo DomainConst::CONTENT00322; ?></b></td>
                         <td><?php echo CommonProcess::formatCurrency($money) . ' ' . DomainConst::CONTENT00134; ?></td>
                         <td><?php echo $final; ?></td>
                     </tr>
                     <tr>
                         <td colspan="4"></td>
-                        <td><b>Còn nợ/Debt:</b></td>
-                        <td>0đ</td>
+                        <td><b><?php echo ($currentDebt <= 0) ? DomainConst::CONTENT00323 : DomainConst::CONTENT00324 ?></b></td>
+                        <td><?php echo CommonProcess::formatCurrency(abs($currentDebt)) . ' ' . DomainConst::CONTENT00134; ?></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td colspan="4"></td>
-                        <td><b>Nợ cũ/Old Debt:</b></td>
-                        <td>0đ</td>
+                        <td><b><?php echo DomainConst::CONTENT00325; ?></b></td>
+                        <td><?php echo CommonProcess::formatCurrency($oldDebt) . ' ' . DomainConst::CONTENT00134;; ?></td>
                         <td></td>
                     </tr>
                 </table>
@@ -171,18 +193,18 @@
                 <td colspan="31">
                     <table class="table table-borderless">
                         <tr>
-                            <td><b>Bệnh nhân/Patient</b></td>
-                            <td><b>Người lập/Creator</b></td>
-                            <td><b>Kế toán/Accountant</b></td>
-                            <td><b>Thủ quỹ/Cashier</b></td>
-                            <td><b>Thủ trưởng/Authorised</b></td>
+                            <td><b><?php echo DomainConst::CONTENT00326; ?></b></td>
+                            <td><b><?php echo DomainConst::CONTENT00327; ?></b></td>
+                            <td><b><?php echo DomainConst::CONTENT00328; ?></b></td>
+                            <td><b><?php echo DomainConst::CONTENT00329; ?></b></td>
+                            <td><b><?php echo DomainConst::CONTENT00330; ?></b></td>
                         </tr>
                         <tr>
-                            <td>(Ký tên/Signature)</td>
-                            <td>(Ký tên/Signature)</td>
-                            <td>(Ký tên/Signature)</td>
-                            <td>(Ký tên/Signature)</td>
-                            <td>(Ký tên/Signature)</td>
+                            <td><?php echo DomainConst::CONTENT00331; ?></td>
+                            <td><?php echo DomainConst::CONTENT00331; ?></td>
+                            <td><?php echo DomainConst::CONTENT00331; ?></td>
+                            <td><?php echo DomainConst::CONTENT00331; ?></td>
+                            <td><?php echo DomainConst::CONTENT00331; ?></td>
                         </tr>
                         <tr>
                             <td colspan="5"></td>

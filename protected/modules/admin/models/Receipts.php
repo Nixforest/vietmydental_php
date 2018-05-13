@@ -76,7 +76,7 @@ class Receipts extends CActiveRecord
                         'detail_id'
                     ),
                     'rJoinAgent' => array(
-                        self::HAS_MANY, 'OneMany', 'many_id',
+                        self::HAS_ONE, 'OneMany', 'many_id',
                         'on'    => 'type = ' . OneMany::TYPE_AGENT_RECEIPT,
                     ),
                     'rUser' => array(
@@ -385,6 +385,42 @@ class Receipts extends CActiveRecord
      */
     public function getFinal() {
         return CommonProcess::formatCurrency($this->final) . ' ' . DomainConst::CONTENT00134;
+    }
+    
+    /**
+     * Update customer debt
+     */
+    public function updateCustomerDebt() {
+        $money = 0;                 // Money after discount
+        $final = $this->final;      // Final money doctor decide take from customer
+        $treatment = $this->getTreatmentType();
+        if ($treatment != NULL) {
+            $money = $treatment->price - $this->discount;
+        }
+        $debt = $money - $final;
+        $customer = $this->getCustomer();
+        if ($customer != NULL) {
+            $customer->debt = $customer->debt + $debt;
+            $customer->save();
+        }
+    }
+    
+    /**
+     * Rollback customer debt
+     */
+    public function rollbackCustomerDebt() {
+        $money = 0;                 // Money after discount
+        $final = $this->final;      // Final money doctor decide take from customer
+        $treatment = $this->getTreatmentType();
+        if ($treatment != NULL) {
+            $money = $treatment->price - $this->discount;
+        }
+        $debt = $money - $final;
+        $customer = $this->getCustomer();
+        if ($customer != NULL) {
+            $customer->debt = $customer->debt - $debt;
+            $customer->save();
+        }
     }
 
     //-----------------------------------------------------

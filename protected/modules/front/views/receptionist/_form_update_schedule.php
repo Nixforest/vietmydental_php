@@ -25,6 +25,15 @@
             <?php echo $form->dateField($model, 'start_date'); ?>
             <?php echo $form->error($model,'start_date'); ?>
         </div>
+    <div class="row">
+        <?php echo $form->labelEx($schedule,'doctor_id'); ?>
+        <?php echo $form->dropDownList($schedule,'doctor_id',
+                Users::getListUser(
+                        Roles::getRoleByName(Roles::ROLE_DOCTOR)->id,
+                        Yii::app()->user->agent_id)
+                ); ?>
+        <?php echo $form->error($schedule,'doctor_id'); ?>
+    </div>
 
     <div class="row">
             <?php echo $form->labelEx($schedule,'insurrance'); ?>
