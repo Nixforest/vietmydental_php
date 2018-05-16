@@ -22,6 +22,7 @@
             ?>
 <div class="maincontent clearfix">
     <?php
+                CommonProcess::echoTest("Previous month: ", CommonProcess::getPreviousMonth());
     $model = Users::model()->findByPk(1038264);
     if ($model) {
         CommonProcess::echoTest('DirectoryHandler::getRootPath() . $model->getImageAvatarPath() = ', DirectoryHandler::getRootPath() . $model->getImageAvatarPath());

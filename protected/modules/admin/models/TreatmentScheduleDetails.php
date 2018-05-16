@@ -341,6 +341,7 @@ class TreatmentScheduleDetails extends BaseActiveRecord
                 '',
                 $this->teeth_id);
         $info[] = $this->getListConfigTeethInfo();
+        $info[] = $this->getListImageXRayInfo();
         $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_DIAGNOSIS,
                 DomainConst::CONTENT00231,
                 $this->getDiagnosis());
@@ -362,6 +363,13 @@ class TreatmentScheduleDetails extends BaseActiveRecord
         $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_TYPE,
                 DomainConst::CONTENT00206,
                 $this->type_schedule);
+        $debt = 0;
+        if ($this->getCustomerModel() != NULL) {
+            $debt = $this->getCustomerModel()->getDebt();
+        }
+        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_CUSTOMER_DEBT,
+                DomainConst::CONTENT00300,
+                $debt);
         $processArr = array();
         foreach ($this->rProcess as $process) {
             if ($process->status != DomainConst::DEFAULT_STATUS_INACTIVE) {
@@ -390,9 +398,9 @@ class TreatmentScheduleDetails extends BaseActiveRecord
                     isset($process->name) ? $process->name : '',
                     $process->getJsonInfo());
         }
-        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_DETAILS,
-                DomainConst::CONTENT00233,
-                $processArr);
+//        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_DETAILS,
+//                DomainConst::CONTENT00233,
+//                $processArr);
         if (isset($this->rReceipt)) {
             $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_RECEIPT,
                 DomainConst::CONTENT00251,
@@ -506,6 +514,23 @@ class TreatmentScheduleDetails extends BaseActiveRecord
                 CustomerController::ITEM_TEETH_INFO,
                 DomainConst::CONTENT00145, $data);
     }
+    
+    /**
+     * Get list image XRay information
+     * @return type
+     */
+    public function getListImageXRayInfo() {
+        $data = array();
+        $index = 0;
+        foreach ($this->rImgXRayFile as $image) {
+            $data[] = CommonProcess::createConfigJson(
+                    '' . $index++,
+                    ImageHandler::bindImageByModel($image, '', '', array('size' => 'size1')),
+                    ImageHandler::bindImageByModel($image, '', '', array('size' => 'size2')));
+        }
+        return CommonProcess::createConfigJson(CustomerController::ITEM_IMAGE,
+                DomainConst::CONTENT00298, $data);
+    }
 
     //-----------------------------------------------------
     // Static methods
@@ -544,7 +569,7 @@ class TreatmentScheduleDetails extends BaseActiveRecord
         $retVal = array();
         $arrModel = self::model()->findAll();
         foreach ($arrModel as $value) {
-            if ($value->status == self::STATUS_SCHEDULE
+            if ($value->status != self::STATUS_INACTIVE
                     && DateTimeExt::isToday($value->start_date, DomainConst::DATE_FORMAT_1)) {
                 $customerId = $value->getCustomer();
                 if (!empty($customerId)) {
