@@ -19,7 +19,7 @@ class FirebaseHandler {
     public static function sendCloudMessageToAndroid($deviceToken = "", $title = "", $body = "", $message = "",
             $push_data = array()) {
         $url = 'https://fcm.googleapis.com/fcm/send';
-        $serverKey = 'AIzaSyBQi7f8YUgk8U78RDW3tOSDN9mbTPiTUYQ';
+        $serverKey = '';
         $msg = array(
             DomainConst::KEY_MESSAGE   => $message,
             DomainConst::KEY_DATA      => $push_data,
