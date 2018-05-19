@@ -176,11 +176,11 @@ function fnSearchCustomerReception(_url, outputId, _titleId, _titleVal) {
             type: "get",
             dataType: 'json',
             success: function(data) {
+                // Show list customers
+                $(outputId).html(data['rightContent']);
+                // Change title
+                $(_titleId).html(_titleVal);
                 if (data['count'] != 0) {
-                    // Show list customers
-                    $(outputId).html(data['rightContent']);
-                    // Change title
-                    $(_titleId).html(_titleVal);
                     // Hide create customer button
                     $('.info-content .info-result #create_customer').css({ display: "none"});
                 } else {

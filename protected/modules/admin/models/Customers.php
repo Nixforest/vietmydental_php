@@ -362,6 +362,17 @@ class Customers extends BaseActiveRecord
     }
     
     /**
+     * Get birth year
+     * @return String Birthday with format {2018}
+     */
+    public function getBirthYear() {
+        $date = CommonProcess::convertDateTime($this->date_of_birth,
+                            DomainConst::DATE_FORMAT_4,
+                            'Y');
+        return $date;
+    }
+    
+    /**
      * Get age of customer
      * $return String Age of customer
      */

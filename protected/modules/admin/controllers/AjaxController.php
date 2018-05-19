@@ -255,39 +255,91 @@ class AjaxController extends AdminController
     }
     
     /**
+     * Find customer by keyword
+     * @param String $keyword Keyword
+     * @return List Customer object
+     */
+    private function findCustomerByKeyword($keyword) {
+        $criteria = new CDbCriteria();
+        $criteria->addCondition("t.name like '%$keyword%' or t.phone like '%$keyword%' or YEAR(t.date_of_birth) like '%$keyword%'");
+        $criteria->limit = 50;
+        $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
+        $models = Customers::model()->findAll($criteria);
+
+        $medicalRecords = $this->findCustomerByRecordNumber($keyword);
+        foreach ($medicalRecords as $record) {
+            if (isset($record->rCustomer)) {
+                if (!in_array($record->rCustomer, $models)) {
+                    array_push($models, $record->rCustomer);
+                }
+            }
+        }
+        return $models;
+    }
+    
+    /**
      * Search customer for receptionist
      */
     public function actionSearchCustomerReception() {
 	if (isset($_GET[AjaxController::KEY_AJAX]) && $_GET[AjaxController::KEY_AJAX] == 1) {
             if (isset($_GET[AjaxController::KEY_TERM])) {
                 $keyword = trim($_GET[AjaxController::KEY_TERM]);
-                $criteria = new CDbCriteria();
-                $criteria->addCondition("t.name like '%$keyword%' or t.phone like '%$keyword%'");
-                $criteria->limit = 50;
-//                $criteria->compare("t.status", DomainConst::DEFAULT_STATUS_ACTIVE);
-                $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
-                $models = Customers::model()->findAll($criteria);
-                $medicalRecords = $this->findCustomerByRecordNumber($keyword);
-                foreach ($medicalRecords as $record) {
-                    if (isset($record->rCustomer)) {
-                        if (!in_array($record->rCustomer, $models)) {
-                            array_push($models, $record->rCustomer);
+                $arrKeyword = explode(",", $keyword);
+                $models = array();
+                if (is_array($arrKeyword) && count($arrKeyword) > 1) {
+                    // Loop for all keyword
+//                    foreach ($arrKeyword as $keyVal) {
+//                        array_push($models, findCustomerByKeyword(trim($keyVal)));
+//                    }
+                    $keyVal1 = trim($arrKeyword[0]);
+                    $keyVal2 = trim($arrKeyword[1]);
+                    $criteria = new CDbCriteria();
+                    $criteria->addCondition("t.name like '%$keyVal1%' and YEAR(t.date_of_birth) like '%$keyVal2%'");
+                    $criteria->limit = 50;
+                    $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
+                    $models = Customers::model()->findAll($criteria);
+
+                    $medicalRecords = $this->findCustomerByRecordNumber($keyword);
+                    foreach ($medicalRecords as $record) {
+                        if (isset($record->rCustomer)) {
+                            if (!in_array($record->rCustomer, $models)) {
+                                array_push($models, $record->rCustomer);
+                            }
+                        }
+                    }
+                } else {
+                    $criteria = new CDbCriteria();
+//                    $criteria->addCondition("t.name like '%$keyword%' or t.phone like '%$keyword%'");
+                    $criteria->addCondition("t.name like '%$keyword%' or t.phone like '%$keyword%' or YEAR(t.date_of_birth) like '%$keyword%'");
+                    $criteria->limit = 50;
+    //                $criteria->compare("t.status", DomainConst::DEFAULT_STATUS_ACTIVE);
+                    $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
+                    $models = Customers::model()->findAll($criteria);
+
+                    $medicalRecords = $this->findCustomerByRecordNumber($keyword);
+                    foreach ($medicalRecords as $record) {
+                        if (isset($record->rCustomer)) {
+                            if (!in_array($record->rCustomer, $models)) {
+                                array_push($models, $record->rCustomer);
+                            }
                         }
                     }
                 }
                 $retVal = '<div class="scroll-table">';
                 $infoSchedule = '';
+                
+                $retVal .= '<table id="customer-info">';
+                $retVal .=      '<thead>';
+                $retVal .=          '<tr>';
+                $retVal .=          '<th>' . DomainConst::CONTENT00100 . '</th>';
+                $retVal .=          '<th>' . DomainConst::CONTENT00170 . '<br>' . DomainConst::CONTENT00136 . '</br>' . '</th>';
+                $retVal .=          '<th>' . DomainConst::CONTENT00101 . '</th>';
+                $retVal .=          '<th class="col-4">' . DomainConst::CONTENT00045 . '</th>';
+                $retVal .=          '</tr>';
+                $retVal .=      '</thead>';
+                $retVal .=      '<tbody>';
+                
                 if (count($models)) {
-                    $retVal .= '<table id="customer-info">';
-                    $retVal .=      '<thead>';
-                    $retVal .=          '<tr>';
-                    $retVal .=          '<th>' . DomainConst::CONTENT00100 . '</th>';
-                    $retVal .=          '<th>' . DomainConst::CONTENT00170 . '<br>' . DomainConst::CONTENT00136 . '</br>' . '</th>';
-                    $retVal .=          '<th>' . DomainConst::CONTENT00101 . '</th>';
-                    $retVal .=          '<th class="col-4">' . DomainConst::CONTENT00045 . '</th>';
-                    $retVal .=          '</tr>';
-                    $retVal .=      '</thead>';
-                    $retVal .=      '<tbody>';
                     foreach ($models as $model) {
                         $recordNumber = '';
                         if (isset($model->rMedicalRecord)) {
@@ -300,9 +352,11 @@ class AjaxController extends AdminController
                         $retVal .= '<td>' . $model->address . '</td>';
                         $retVal .= '</tr>';
                     }
-                    $retVal .=      '</tbody>';
-                    $retVal .= '</table>';
+                } else {
+                    
                 }
+                $retVal .=          '</tbody>';
+                $retVal .=      '</table>';
                 $retVal .= '</div>';
                 $json = CJavaScript::jsonEncode(array(
                     'rightContent'  => $retVal,

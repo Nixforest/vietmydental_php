@@ -10,15 +10,27 @@
     ));
     ?>
     <?php
-    FirebaseHandler::sendCloudMessageToAndroid('cLZvo3RR_L4:APA91bGf3XOzajLs8hmVO87YHpYPD6eH4XrKwpW4dwC-21vK-MsPaSjsJNZSbbAom2g80iL5cwYxOeE1vN_t0zQFX11kNQpTF96f7gX_TL_jqWFBU1G5CCVwYUrIZQywm9eyxAFzpM3V',
-    Settings::getWebsiteName(),
-            'Có bệnh nhân mới: Phạm Nam Kha',
-            "Có bệnh nhân mới đang chờ điều trị",
-            array(
-                'category'  => FirebaseHandler::NOTIFY_CATEGORY_NEW_TREATMENT_SCHEDULE,
-                'id'        => '1',
-                'object_id' => '16905',
-            ));
+        $keyword = "nam, 1993";
+//        $keyword = "nam";
+        $arrKeywords = explode(",", $keyword);
+        if (is_array($arrKeywords) && count($arrKeywords) > 1) {
+            CommonProcess::echoTest("Is array = true", '.');
+        }
+    
+        $customer = Customers::model()->findByPk(9);
+        if ($customer) {
+            CommonProcess::echoTest("Year of birth: ", $customer->getBirthYear());
+        }
+        
+//    FirebaseHandler::sendCloudMessageToAndroid('cLZvo3RR_L4:APA91bGf3XOzajLs8hmVO87YHpYPD6eH4XrKwpW4dwC-21vK-MsPaSjsJNZSbbAom2g80iL5cwYxOeE1vN_t0zQFX11kNQpTF96f7gX_TL_jqWFBU1G5CCVwYUrIZQywm9eyxAFzpM3V',
+//    Settings::getWebsiteName(),
+//            'Có bệnh nhân mới: Phạm Nam Kha',
+//            "Có bệnh nhân mới đang chờ điều trị",
+//            array(
+//                'category'  => FirebaseHandler::NOTIFY_CATEGORY_NEW_TREATMENT_SCHEDULE,
+//                'id'        => '1',
+//                'object_id' => '16905',
+//            ));
             
     
 //    $this->widget('application.extensions.qrcode.QRCodeGenerator',array(
@@ -44,6 +56,7 @@
         $model = Users::model()->findByPk(1038264);
         if ($model) {
             CommonProcess::echoTest('DirectoryHandler::getRootPath() . $model->getImageAvatarPath() = ', DirectoryHandler::getRootPath() . $model->getImageAvatarPath());
+            
 //        CommonProcess::echoTest('DirectoryHandler::getRootPath() . $source = ', DirectoryHandler::getRootPath() . $model->getImageAvatarPath());
 //        DirectoryHandler::deleteFile($model->getImageAvatarPath());
         }
