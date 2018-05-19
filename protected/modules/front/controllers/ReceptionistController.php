@@ -163,6 +163,9 @@ class ReceptionistController extends Controller {
                     if (isset($mMedicalRecord->rCustomer)) {
                         $rightContent = $mMedicalRecord->rCustomer->getCustomerAjaxInfo();
                         $infoSchedule = $mMedicalRecord->rCustomer->getCustomerAjaxScheduleInfo();
+                        FirebaseHandler::notifyNewSchedule(
+                                $mMedicalRecord->rCustomer,
+                                $schedule->rDoctor);
                     }
                     echo CJavaScript::jsonEncode(array(
                         DomainConst::KEY_STATUS => 'success',

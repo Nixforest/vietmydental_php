@@ -230,6 +230,8 @@ class DomainConst {
     const KEY_DIAGNOSIS                     = 'diagnosis';
     /** diagnosis_id */
     const KEY_DIAGNOSIS_ID                  = 'diagnosis_id';
+    /** diagnosis_other_id */
+    const KEY_DIAGNOSIS_OTHER_ID            = 'diagnosis_other_id';
     /** teeth */
     const KEY_TEETH                         = 'teeth';
     /** timer */
@@ -372,6 +374,10 @@ class DomainConst {
     const KEY_RATING_NOTE                   = 'rating_note';
     /** Other information */
     const KEY_OTHER_INFO                    = 'OtherInfo';
+    /** Key category */
+    const KEY_CATEGORY                      = 'category';
+    /** Key object_id */
+    const KEY_OBJECT_ID_NEW                 = 'object_id';
     /** Uphold last id */
     const KEY_UPHOLD_ID_LASTEST             = 'uphold_id_lastest';
     /** Need change pass */
@@ -1270,4 +1276,7 @@ class DomainConst {
     const CONTENT00329  = 'Thủ quỹ/Cashier';
     const CONTENT00330  = 'Thủ trưởng/Authorised';
     const CONTENT00331  = '(Ký tên/Signature)';
+    const CONTENT00332  = 'Chẩn đoán đã có sẵn không thể tạo mới';
+    const CONTENT00333  = 'Chưa có nhóm Chẩn đoán "Khác"';
+    const CONTENT00334  = 'Tạo Chẩn đoán thành công';
 }

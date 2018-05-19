@@ -459,12 +459,41 @@ class TreatmentScheduleDetails extends BaseActiveRecord
         $detail .=      '</p>';
         $detail .=      '</div>';
         $detail .= '</div>';
-        if (!empty($this->getTeeth())) {
+        if (isset($this->rJoinTeeth) && !empty($this->rJoinTeeth)) {
             $detail .= '<div class="list__2__des">';
             $detail .=      '<div class="list__2__item">';
             $detail .=      '<span class="icon29 icon-list"></span>';
             $detail .=      '<p>';
-            $detail .=          '<strong>' . $this->getTeeth() . '</strong>';
+            $detail .=          '<strong>' . DomainConst::CONTENT00284 . '</strong>';
+            $detail .=      '</p>';
+            $detail .=      '<p> ';
+            $detail .=          $this->generateTeethInfo(", ");
+            $detail .=      '</p>';
+            $detail .=      '</div>';
+            $detail .= '</div>';
+        }
+        if (!empty($this->getDiagnosis())) {
+            $detail .= '<div class="list__2__des">';
+            $detail .=      '<div class="list__2__item">';
+            $detail .=      '<span class="icon31 icon-list"></span>';
+            $detail .=      '<p>';
+            $detail .=          '<strong>' . DomainConst::CONTENT00231 . '</strong>';
+            $detail .=      '</p>';
+            $detail .=      '<p>';
+            $detail .=          $this->getDiagnosis();
+            $detail .=      '</p>';
+            $detail .=      '</div>';
+            $detail .= '</div>';
+        }
+        if (!empty($this->getTreatment())) {
+            $detail .= '<div class="list__2__des">';
+            $detail .=      '<div class="list__2__item">';
+            $detail .=      '<span class="icon32 icon-list"></span>';
+            $detail .=      '<p>';
+            $detail .=          '<strong>' . DomainConst::CONTENT00128 . '</strong>';
+            $detail .=      '</p>';
+            $detail .=      '<p>';
+            $detail .=          $this->getTreatment();
             $detail .=      '</p>';
             $detail .=      '</div>';
             $detail .= '</div>';

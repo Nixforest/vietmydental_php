@@ -224,6 +224,34 @@ class Diagnosis extends BaseActiveRecord
         return $_items;
     }
     
+    /**
+     * Check if a name is exist in database
+     * @param type $name Name value to check
+     * @return boolean True if found name in database, False otherwise
+     */
+    public static function isNameExist($name) {
+        $arr = self::model()->findAll('LOWER(name)="' . strtolower($name) . '"');
+        if ($arr && !empty($arr)) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Get other diagnosis id
+     * @return String id
+     */
+    public static function getOtherDiagnosisId() {
+        $retVal = "";
+        $criteria = new CDbCriteria;
+        $criteria->compare('name', "Khác");
+        $criteria->compare('parent_id', DomainConst::DEFAULT_PARENT_VALUE);
+        $model = self::model()->find($criteria);
+        if ($model) {
+            $retVal = $model->id;
+        }
+        return $retVal;
+    }
 
     //-----------------------------------------------------
     // JSON methods

@@ -5,15 +5,20 @@ class CustomerController extends Controller {
      * Handle receiving patient in agent.
      */
     public function actionView($code) {
+        // Get refer code object
         $referCode = ReferCodes::model()->findByAttributes(array(
             'code' => $code,
         ));
         if ($referCode) {
+            // Get customer stick with refer code
             $customer = $referCode->rCustomer;
         } else {
+            // If refer code was not found, find by customer id
             $customer = Customers::model()->findByPk($code);
         }
+        // If customer was not found
         if (!$customer) {
+            // Add customer empty data
             $customer = new Customers();
         }
         $scheduleId = $customer->getSchedule(false);

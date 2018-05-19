@@ -209,4 +209,71 @@ class DefaultController extends APIController
             ApiModule::sendResponse($result, $this);
         }
     }
+    
+    /**
+     * P0022_CreateDiagnosis_API
+     * Create diagnosis
+     * - url:   api/default/createDiagnosis
+     * - parameter:
+     *  + token:            Token
+     *  + name:             Name
+     *  + description:      Description
+     */
+    public function actionCreateDiagnosis() {
+        try {
+            $result = ApiModule::$defaultFailedResponse;
+            // Check format of request
+            $this->checkRequest();
+            // Parse request to json
+            $root = json_decode($_POST[DomainConst::KEY_ROOT_REQUEST]);
+            // Check if parameters are exist
+            $this->checkRequiredParam($root, array(
+                DomainConst::KEY_TOKEN,
+                DomainConst::KEY_NAME,
+                DomainConst::KEY_DESCRIPTION
+            ));
+            // Get user by token value
+            $mUser = $this->getUserByToken($result, $root->token);
+            // Check version
+            $this->checkVersion($root, $mUser);
+            
+            $this->handleCreateDiagnosis($result, $mUser, $root);
+        } catch (Exception $exc) {
+            ApiModule::catchError($exc, $this);
+        }
+    }
+    
+    /**
+     * Handle create diagnosis.
+     * @param type $result
+     * @param type $mUser
+     * @param type $root
+     */
+    public function handleCreateDiagnosis($result, $mUser, $root) {
+        $name = CommonProcess::getValueFromJson($root, DomainConst::KEY_NAME);
+        $otherGroupId = Diagnosis::getOtherDiagnosisId();
+        if (!Diagnosis::isNameExist($name) && !empty($otherGroupId)) {
+            $model = new Diagnosis();
+            $model->code = "-";
+            $model->name = $name;
+            $model->name_en = $name;
+            $model->description = $name;
+            $model->parent_id = $otherGroupId;
+            if ($model->save()) {
+                // Success
+                $result = ApiModule::$defaultSuccessResponse;
+                $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00334;
+                $result[DomainConst::KEY_DATA] = CommonProcess::createConfigJson(
+                        $model->id, $name);
+                ApiModule::sendResponse($result, $this);
+            }
+        } else if (Diagnosis::isNameExist($name)) {
+            // Diagnosis is exist -> can not create
+            $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00332;
+            ApiModule::sendResponse($result, $this);
+        } else if (empty($otherGroupId)) {
+            $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00333;
+            ApiModule::sendResponse($result, $this);
+        }
+    }
 }

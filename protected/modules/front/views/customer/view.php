@@ -4,6 +4,7 @@
 //echo $model->name;
 ?>
 <div class="maincontent-2 clearfix">
+    <!-- Medical record -->
     <div class="title-1">
         <span class="icon10"></span> <?php echo DomainConst::CONTENT00138; ?>
     </div>
@@ -109,6 +110,8 @@
             </div>
         </div>
     </div>
+    <!-- End Medical record -->
+    <!-- List of treatment -->
     <div class="row list__1">
         <div class="col-md-6">
             <div class="list__2">
@@ -138,7 +141,7 @@
                     <span class="icon27"></span> <?php echo DomainConst::CONTENT00174; ?>
                 </div>
                 <div class="list__2__info" id="treatment_schedule_detail-info">
-                    <div class="list__2__des">
+<!--                    <div class="list__2__des">
                         <div class="list__2__item">
                             <span class="icon28 icon-list"></span>
                             <p>
@@ -194,12 +197,13 @@
                         </div>
                     </div>
 
-                    <a href="#">(Xem Thêm)</a>
+                    <a href="#">(Xem Thêm)</a>-->
                 </div>
             </div>
 
         </div>
     </div>
+    <!-- End List of treatment -->
     <div class="row list__5">
         <div class="col-md-6">
 

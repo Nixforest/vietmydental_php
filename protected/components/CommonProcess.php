@@ -833,6 +833,19 @@ class CommonProcess {
     }
     
     /**
+     * Get value from json object root
+     * @param Array $root Root json object
+     * @param String $fieldName Field name
+     * @return String
+     */
+    public static function getValueFromJson($root, $fieldName) {
+        if (isset($root->$fieldName)) {
+            return $root->$fieldName;
+        }
+        return "";
+    }
+    
+    /**
      * Echo test string
      * @param String $message Message
      * @param String $data Data

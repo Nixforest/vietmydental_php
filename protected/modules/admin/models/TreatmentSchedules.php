@@ -296,6 +296,10 @@ class TreatmentSchedules extends BaseActiveRecord
         return $retVal;
     }
     
+//    public function getStartDate() {
+//        return "Ngayf"
+//    }
+    
     /**
      * Get status of treatment schedule
      * @return STATUS_COMPLETED in case all treatment schedule details are

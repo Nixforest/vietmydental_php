@@ -135,6 +135,10 @@ class Users extends BaseActiveRecord
                         'on' => 'type=' . Files::TYPE_1_USER_AVATAR,
                         'order' => 'id DESC',
                     ),
+                    'rToken' => array(
+                        self::HAS_MANY, 'ApiUserTokens', 'user_id',
+                        'order' => 'id DESC',
+                    ),
 		);
 	}
 
@@ -548,6 +552,18 @@ class Users extends BaseActiveRecord
      */
     public function getImageAvatarUrl() {
         return CommonProcess::getHostUrl() . $this->getImageAvatarPath();
+    }
+    
+    /**
+     * Get last token
+     * @return ApiUserTokens object, empty if failed
+     */
+    public function getLastToken() {
+        if (isset($this->rToken)
+                && count($this->rToken) > 0) {
+            return $this->rToken[0]->gcm_device_token;
+        }
+        return "";
     }
 
     //-----------------------------------------------------
