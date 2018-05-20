@@ -94,7 +94,9 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 //		'last_logged_in',
                 array(
                     'name' => 'agent',
-                    'value' => '$data->getAgentName()',
+                    'type' => 'html',
+//                    'value' => '$data->getAgentName()',
+                    'value' => '$data->getAgentNameTest()',
                 ),
 		array(
                     'name'=>'role_id',

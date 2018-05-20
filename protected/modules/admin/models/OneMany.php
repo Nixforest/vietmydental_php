@@ -148,6 +148,7 @@ class OneMany extends BaseActiveRecord
      * @param String $type  Type of relation
      */
     public static function insertOne($one_id, $many_id, $type) {
+        Loggers::info("Write one_many record: (one_id = $one_id, many_id = $many_id, type = $type)", __FUNCTION__, __LINE__);
         $model = new OneMany();
         $model->one_id = $one_id;
         $model->many_id = $many_id;

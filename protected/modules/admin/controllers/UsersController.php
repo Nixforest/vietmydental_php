@@ -73,6 +73,8 @@ class UsersController extends AdminController
 			$model->attributes=$_POST['Users'];
                         if($model->save()) {
                             if (filter_input(INPUT_POST, 'submit')) {
+                                // Remove old record
+                                OneMany::deleteAllManyOldRecords($model->id, OneMany::TYPE_AGENT_USER);
                                 $selectedAgent = $_POST['Users']['agent'];
                                 OneMany::insertOne($selectedAgent, $model->id, OneMany::TYPE_AGENT_USER);
 

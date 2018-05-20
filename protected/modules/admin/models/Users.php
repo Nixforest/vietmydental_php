@@ -120,6 +120,7 @@ class Users extends BaseActiveRecord
                     'rJoinAgent' => array(
                         self::HAS_MANY, 'OneMany', 'many_id',
                         'on'    => 'type = ' . OneMany::TYPE_AGENT_USER,
+                        'order' => 'id DESC',
                     ),
                     'rTreatmentSchedule' => array(
                         self::HAS_MANY, 'TreatmentSchedules', 'doctor_id',
@@ -430,6 +431,22 @@ class Users extends BaseActiveRecord
             if (isset($this->rJoinAgent[0]->rAgent)) {
                 return $this->rJoinAgent[0]->rAgent->name;
             }
+        }
+        return '';
+    }
+    
+    /**
+     * Get name of agent
+     * @return Name of agent
+     */
+    public function getAgentNameTest() {
+        if (isset($this->rJoinAgent) && count($this->rJoinAgent) > 0) {
+//            return count($this->rJoinAgent);
+            $retVal = "";
+            foreach ($this->rJoinAgent as $agent) {
+                $retVal .= $agent->rAgent->name . "<br>";
+            }
+            return $retVal;
         }
         return '';
     }
