@@ -10,6 +10,39 @@
     ));
     ?>
     <?php
+        $detail = TreatmentScheduleDetails::model()->findByPk(22);
+        if ($detail) {
+            CommonProcess::echoTest("Star time raw value: ", $detail->getStartTimeRawValue());
+        }
+        $user = Users::model()->findByPk(6);
+        if ($user) {
+            $today = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_6);
+            $lastMonth = CommonProcess::getPreviousMonth(DomainConst::DATE_FORMAT_6);
+            $from = $lastMonth;
+            $to = $today;
+                CommonProcess::echoTest("List customer: ", "<br?");
+//            foreach ($user->getListCustomerOfDoctor($from, $to) as $value) {
+//                CommonProcess::echoTest("Customer: ", $value->name);
+//            }
+                $result = TreatmentScheduleDetails::getListCustomerByDoctor($user->id, $from, $to);
+//            foreach (sort($result) as $key => $value) {
+            foreach ($result as $key => $value) {
+                CommonProcess::echoTest("Customer: ", "$key - $value->name");
+            }
+            CommonProcess::echoTest("List customer after sort: ", "<br?");
+//            sort($result);
+//            sort($result, SORT_DESC | SORT_STRING);
+            uksort($result, 'strcasecmp');
+            foreach ($result as $key => $value) {
+              CommonProcess::echoTest("Customer: ", "$key - $value->name");
+            }
+            CommonProcess::echoTest("List customer after reverse: ", "<br?");
+            foreach (array_reverse($result) as $key => $value) {
+              CommonProcess::echoTest("Customer: ", "$key - $value->name");
+            }
+//            CommonProcess::echoArrayKeyValue("List customer: ", TreatmentScheduleDetails::getListCustomerByDoctor($user->id, $from, $to));
+        }
+    
         $keyword = "nam, 1993";
 //        $keyword = "nam";
         $arrKeywords = explode(",", $keyword);

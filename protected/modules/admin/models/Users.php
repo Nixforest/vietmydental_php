@@ -469,6 +469,35 @@ class Users extends BaseActiveRecord
         if (isset($this->rTreatmentSchedule)) {
             // Loop for all treatment schedule
             foreach ($this->rTreatmentSchedule as $treatmentSchedule) {
+//                if (isset($treatmentSchedule->rDetail)) {
+//                    // Loop for all treatment schedule detail
+//                    foreach ($treatmentSchedule->rDetail as $detail) {
+//                        if ($detail->status == TreatmentScheduleDetails::STATUS_SCHEDULE) {
+//                            $date = CommonProcess::convertDateTime($detail,
+//                                    DomainConst::DATE_FORMAT_1,
+//                                    DomainConst::DATE_FORMAT_4);
+//                            $compareFrom = DateTimeExt::compare($date, $from);
+//                            $compareTo = DateTimeExt::compare($date, $to);
+//                            // Check if treatment schedule is between date range
+//                            if (($compareFrom == 1 || $compareFrom == 0)
+//                                    && ($compareTo == 0 || $compareTo == -1)) {
+//                                // Check relation rMedicalRecord is set
+//                                if (isset($treatmentSchedule->rMedicalRecord)) {
+//                                    $medicalRecord = $treatmentSchedule->rMedicalRecord;
+//                                    // Check relation rCustomer is set
+//                                    if (isset($medicalRecord->rCustomer)) {
+//                                        $customer = $medicalRecord->rCustomer;
+//                                        if ($customer->status != DomainConst::DEFAULT_STATUS_INACTIVE) {
+//            //                                $retVal[] = $customer->id;
+//                                            $retVal[] = $customer;
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        
+//                    }
+//                }
                 $date = CommonProcess::convertDateTime($treatmentSchedule->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
                 $compareFrom = DateTimeExt::compare($date, $from);
                 $compareTo = DateTimeExt::compare($date, $to);
@@ -482,7 +511,8 @@ class Users extends BaseActiveRecord
                         if (isset($medicalRecord->rCustomer)) {
                             $customer = $medicalRecord->rCustomer;
                             if ($customer->status != DomainConst::DEFAULT_STATUS_INACTIVE) {
-                                $retVal[] = $customer->id;
+//                                $retVal[] = $customer->id;
+                                $retVal[] = $customer;
                             }
                         }
                     }

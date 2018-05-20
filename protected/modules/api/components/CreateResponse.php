@@ -117,13 +117,14 @@ class CreateResponse {
      * @param Object $mUser User model
      * @param Object $objController Controller
      */
-    public static function customerListResp($root, $mUser, $objController) {
+    public static function customerListResp($root, $mDoctor, $objController) {
         $result = ApiModule::$defaultSuccessResponse;
         $mCustomer = new Customers();
-        $data = $mCustomer->apiList($root, $mUser);
-        $pagination = $data->pagination;
+        $data = $mCustomer->apiList($root, $mDoctor);
+//        $pagination = $data->pagination;
         $list = array();
-        foreach ($data->data as $customer) {
+//        foreach ($data->data as $customer) {
+        foreach ($data as $key => $customer) {
 //            $list[] = CommonProcess::createConfigJson(
 //                    $customer->id,
 //                    $customer->name);
@@ -137,8 +138,10 @@ class CreateResponse {
             );
         }
         $result[DomainConst::KEY_DATA] = array(
-            DomainConst::KEY_TOTAL_RECORD => $pagination->itemCount,
-            DomainConst::KEY_TOTAL_PAGE => $pagination->pageCount,
+//            DomainConst::KEY_TOTAL_RECORD => $pagination->itemCount,
+//            DomainConst::KEY_TOTAL_PAGE => $pagination->pageCount,
+            DomainConst::KEY_TOTAL_RECORD => count($data),
+            DomainConst::KEY_TOTAL_PAGE => '1',
             DomainConst::KEY_LIST => $list,
         );
         ApiModule::sendResponse($result, $objController);

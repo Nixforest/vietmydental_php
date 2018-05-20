@@ -242,6 +242,17 @@ class TreatmentScheduleDetails extends BaseActiveRecord
     }
     
     /**
+     * Get id of doctor
+     * @return string
+     */
+    public function getDoctorId() {
+        if (isset($this->rSchedule) && isset($this->rSchedule->rDoctor)) {
+            return $this->rSchedule->rDoctor->id;
+        }
+        return '';
+    }
+    
+    /**
      * Get customer id
      * @return string
      */
@@ -422,6 +433,23 @@ class TreatmentScheduleDetails extends BaseActiveRecord
             $retVal .= "Ngày";
         }
         $retVal .= CommonProcess::convertDateTime($this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_5);
+        return $retVal;
+    }
+    
+    /**
+     * Get start time raw value
+     * Example: 
+     */
+    public function getStartTimeRawValue() {
+        $retVal = isset($this->rTime) ? $this->rTime->name : '';
+        $day = CommonProcess::convertDateTime($this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
+        if (!empty($retVal)) {
+            $retVal = $day . ' ' . $retVal . ':00';
+            $retVal = CommonProcess::convertDateTime($retVal, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_9);
+        } else {
+            $retVal = $day;
+            $retVal = CommonProcess::convertDateTime($retVal, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_10);
+        }
         return $retVal;
     }
     
@@ -607,6 +635,27 @@ class TreatmentScheduleDetails extends BaseActiveRecord
             }
         }
         return $retVal;
+    }
+    
+    /**
+     * Get list all customersn have schedule in today
+     * @return array
+     */
+    public static function getListCustomerByDoctor($doctorId, $from, $to) {
+        $retVal = array();
+        $arrModel = self::model()->findAll();
+        foreach (array_reverse($arrModel) as $value) {
+            if ($value->status != self::STATUS_INACTIVE
+                    && ($value->getDoctorId() == $doctorId)) {
+                $customer = $value->getCustomerModel();
+                if ($customer != NULL && !in_array($customer, $retVal)) {
+                    $retVal[$value->getStartTimeRawValue()] = $customer;
+                }
+            }
+        }
+        uksort($retVal, 'strcasecmp');
+        return array_reverse($retVal);
+//        return $retVal;
     }
 
     //-----------------------------------------------------

@@ -82,6 +82,10 @@ class DomainConst {
     /** Date format */
     const DATE_FORMAT_8                                 = 'H:i\, d \t\h\g m\, Y';
     /** Date format */
+    const DATE_FORMAT_9                                 = 'YmdHis';
+    /** Date format */
+    const DATE_FORMAT_10                                = 'Ymd';
+    /** Date format */
     const DEFAULT_TIMEZONE                              = 'Asia/Ho_Chi_Minh';
     /** Default IP address */
     const DEFAULT_IP_ADDRESS                            = '192.168.1.1';

@@ -846,6 +846,18 @@ class CommonProcess {
     }
     
     /**
+     * Breakdown and array by page
+     * @param Array $array Array value
+     * @param Int $page Page index
+     * @return array Array after breakdown
+     */
+    public static function breakArray($array, $page) {
+        $retVal = array();
+        $retVal = array_splice($array, $page * Settings::getApiListPageSize(), Settings::getApiListPageSize());
+        return $retVal;
+    }
+    
+    /**
      * Echo test string
      * @param String $message Message
      * @param String $data Data
