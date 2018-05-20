@@ -208,4 +208,22 @@ class Districts extends BaseActiveRecord
 //        }
 //        return  CHtml::listData(self::model()->findAll($criteria),'id','name');
 //    }
+
+    //-----------------------------------------------------
+    // Static methods
+    //-----------------------------------------------------
+    /**
+     * Get model id by name
+     * @param type $name Name of model
+     * @return string
+     */
+    public static function getModelIdByName($name) {
+        $models = self::model()->findAll();
+        foreach ($models as $model) {
+            if ($model->name === $name) {
+                return $model->id;
+            }
+        }
+        return "";
+    }
 }

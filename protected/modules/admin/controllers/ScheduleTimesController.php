@@ -71,9 +71,9 @@ class ScheduleTimesController extends AdminController
 		if(isset($_POST['ScheduleTimes']))
 		{
 			$model->attributes=$_POST['ScheduleTimes'];
-                        Import::importScheduleTime();
-//			if($model->save())
-//				$this->redirect(array('view','id'=>$model->id));
+//                        Import::importScheduleTime();
+			if($model->save())
+				$this->redirect(array('view','id'=>$model->id));
 		}
 
 		$this->render('create',array(

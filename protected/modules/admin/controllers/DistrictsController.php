@@ -74,6 +74,8 @@ class DistrictsController extends AdminController
 		{
 			$model->attributes=$_POST['Districts'];
 //                        Import::importDistricts();
+//                        Import::importDistrictsInCity();
+//                        Import::importStreet();
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
