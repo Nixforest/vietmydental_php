@@ -1214,7 +1214,7 @@ class DomainConst {
     const CONTENT00263  = 'Exception occurred';
     const CONTENT00264  = 'In phiếu thu';
     const CONTENT00265  = 'Xác nhận thu';
-    const CONTENT00266  = 'Đã thu';
+    const CONTENT00266  = 'đã thu';
     const CONTENT00267  = 'Chưa thu';
     const CONTENT00268  = 'Mã này đã được sử dụng';
     const CONTENT00269  = 'Mã này chưa được tạo xin vui lòng tạo thêm mã trước';
@@ -1283,4 +1283,6 @@ class DomainConst {
     const CONTENT00332  = 'Chẩn đoán đã có sẵn không thể tạo mới';
     const CONTENT00333  = 'Chưa có nhóm Chẩn đoán "Khác"';
     const CONTENT00334  = 'Tạo Chẩn đoán thành công';
+    const CONTENT00335  = 'Tổng đã thu';
+    const CONTENT00336  = 'Tổng chưa thu';
 }

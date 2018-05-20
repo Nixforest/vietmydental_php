@@ -224,6 +224,32 @@ class Receipts extends CActiveRecord
     }
     
     /**
+     * Get receptionist name
+     * @return type
+     */
+    public function getReceptionist() {
+        if ($this->status == self::STATUS_RECEIPTIONIST) {
+            if (isset($this->rReceiptionist)) {
+                return $this->rReceiptionist->getFullName();
+            }
+        }
+        return '';
+    }
+    
+    /**
+     * Get receptionist status
+     * @return type
+     */
+    public function getReceptionistStatus() {
+        if ($this->status == self::STATUS_RECEIPTIONIST) {
+            if (isset($this->rReceiptionist)) {
+                return $this->rReceiptionist->getFullName() . " " . DomainConst::CONTENT00266;
+            }
+        }
+        return DomainConst::CONTENT00267;
+    }
+    
+    /**
      * Get treatment type
      * @return Treatment type model, or NULL
      */

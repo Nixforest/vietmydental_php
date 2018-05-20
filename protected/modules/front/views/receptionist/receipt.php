@@ -46,6 +46,40 @@
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+                    <table id="customer-info">
+                        <thead>
+                            <tr>
+                                <th><?php echo DomainConst::CONTENT00254; ?></th>
+                                <th><?php echo DomainConst::CONTENT00335; ?></th>
+                                <th><?php echo DomainConst::CONTENT00336; ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                $total = 0;
+                                $totalCollected = 0;
+                                $totalDebit = 0;
+                            ?>
+                            <?php foreach ($arrModels as $model) :?>
+                                <?php
+                                $total += $model->final;
+                                if ($model->status == Receipts::STATUS_RECEIPTIONIST) {
+                                    $totalCollected += $model->final;
+                                } else {
+                                    $totalDebit += $model->final;
+                                }
+                                ?>
+                                <?php if (isset($mCustomer) && isset($mTreatmentType)) :?>
+                                    
+                                <?php endif;?>
+                            <?php endforeach; ?>
+                            <tr>
+                                <td style="text-align: right"><?php echo CommonProcess::formatCurrency($total); ?></td>
+                                <td style="text-align: right"><?php echo CommonProcess::formatCurrency($totalCollected); ?></td>
+                                <td style="text-align: right"><?php echo CommonProcess::formatCurrency($totalDebit); ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <?php $this->widget('zii.widgets.grid.CGridView', array(
                         'id'=>'receipts-grid',
@@ -83,6 +117,7 @@
                                 ),
                                 array(
                                     'name' => DomainConst::CONTENT00259,
+                                    'htmlOptions' => array('style' => 'text-align:right;'),
                                     'value' => '($data->getTreatmentType() !== NULL) ? CommonProcess::formatCurrency($data->final) : ""',
                                 ),
 //                                'process_date',
@@ -96,18 +131,19 @@
 //                                ),
                                 array(
                                     'header' => DomainConst::CONTENT00026,
-                                    'value' => '($data->status == Receipts::STATUS_RECEIPTIONIST) ? DomainConst::CONTENT00266 : DomainConst::CONTENT00267',
+//                                    'value' => '($data->status == Receipts::STATUS_RECEIPTIONIST) ? DomainConst::CONTENT00266 : DomainConst::CONTENT00267',
+                                    'value' => '$data->getReceptionistStatus()',
                                 ),
-                                array(
-                                    'header' => 'Actions',
-                                    'class'=>'CButtonColumn',
-                                    'template'=> $this->createActionButtons(['update']),
-                                    'buttons'=>array(
-                                        'update'=>array(
-                                            'visible'=> '$data->canUpdate()',
-                                        ),
-                                    ),
-                                ),
+//                                array(
+//                                    'header' => 'Actions',
+//                                    'class'=>'CButtonColumn',
+//                                    'template'=> $this->createActionButtons(['update']),
+//                                    'buttons'=>array(
+//                                        'update'=>array(
+//                                            'visible'=> '$data->canUpdate()',
+//                                        ),
+//                                    ),
+//                                ),
                         ),
                 )); ?>
             </div>
