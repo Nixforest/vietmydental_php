@@ -219,7 +219,15 @@ class Agents extends BaseActiveRecord
      * @return \CArrayDataProvider
      */
     public function getUsers() {
-        return new CArrayDataProvider($this->rJoinUser, array(
+        $arrUsers = array();
+        if (isset($this->rJoinUser)) {
+            foreach ($this->rJoinUser as $value) {
+                if (isset($value->rUser)) {
+                    $arrUsers[] = $value;
+                }
+            }
+        }
+        return new CArrayDataProvider($arrUsers, array(
             'id' => 'users',
             'sort'=>array(
                 'attributes'=>array(
@@ -237,7 +245,17 @@ class Agents extends BaseActiveRecord
      * @return \CArrayDataProvider
      */
     public function getReceipts() {
-        return new CArrayDataProvider($this->rJoinReceipt, array(
+        $arrReceipts = array();
+        if (isset($this->rJoinReceipt)) {
+            foreach ($this->rJoinReceipt as $value) {
+                if (isset($value->rReceipt)
+                        && ($value->rReceipt->status == Receipts::STATUS_DOCTOR
+                                || $value->rReceipt->status == Receipts::STATUS_RECEIPTIONIST)) {
+                    $arrReceipts[] = $value;
+                }
+            }
+        }
+        return new CArrayDataProvider($arrReceipts, array(
             'id' => 'receipts',
             'sort'=>array(
                 'attributes'=>array(

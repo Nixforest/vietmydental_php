@@ -80,6 +80,7 @@ class OneMany extends BaseActiveRecord
                         self::BELONGS_TO,
                         'Users',
                         'many_id',
+                        'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
                     ),
                     'rAgent' => array(
                         self::BELONGS_TO,
@@ -95,6 +96,7 @@ class OneMany extends BaseActiveRecord
                         self::BELONGS_TO,
                         'Receipts',
                         'many_id',
+                        'on'    => 'status != ' . Receipts::STATUS_INACTIVE,
                     ),
                     'rWarranty' => array(
                         self::BELONGS_TO,

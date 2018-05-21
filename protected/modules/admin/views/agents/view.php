@@ -137,12 +137,12 @@ $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => DomainConst::CONTENT00128,
             'htmlOptions' => array('style' => 'text-align:left;'),
-            'value' => '(isset($data->rReceipt) && ($data->rReceipt->getTreatmentType() != NULL)) ? $data->rReceipt->getTreatmentType()->name : ""',
+            'value' => '(isset($data->rReceipt) && ($data->rReceipt->getTreatmentType() != NULL)) ? $data->rReceipt->getTreatmentType()->name : DomainConst::CONTENT00344',
         ),
         array(
             'name' => DomainConst::CONTENT00129,
             'htmlOptions' => array('style' => 'text-align:right;'),
-            'value' => '(isset($data->rReceipt) && ($data->rReceipt->getTreatmentType() != NULL)) ? $data->rReceipt->getTreatmentType()->getPrice() : ""',
+            'value' => '(isset($data->rReceipt) && ($data->rReceipt->getTreatmentType() != NULL)) ? $data->rReceipt->getTreatmentType()->getPrice() : DomainConst::CONTENT00345',
         ),
     ),
 ));

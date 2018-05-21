@@ -1292,4 +1292,6 @@ class DomainConst {
     const CONTENT00341  = 'Công nợ hôm nay';
     const CONTENT00342  = 'Doanh thu tháng này';
     const CONTENT00343  = 'Ngày';
+    const CONTENT00344  = 'Khám';
+    const CONTENT00345  = 'Miễn phí';
 }
