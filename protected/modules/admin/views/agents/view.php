@@ -81,15 +81,15 @@ $this->widget('zii.widgets.grid.CGridView', array(
     <thead>
         <tr>
             <th><?php echo DomainConst::CONTENT00340; ?></th>
-            <th><?php echo DomainConst::CONTENT00341; ?></th>
+            <th><?php // echo DomainConst::CONTENT00341; ?></th>
             <th><?php echo DomainConst::CONTENT00342; ?></th>
         </tr>
     </thead>
     <tbody>
         <?php
-            $total = 0;
+            $revenueToday = Receipts::getRevenueToday($model->id);
             $totalCollected = 0;
-            $totalDebit = 0;
+            $revenueMonth = Receipts::getRevenueCurrentMonth($model->id);
         ?>
         <?php // foreach ($arrModels as $model) :?>
             <?php
@@ -105,9 +105,9 @@ $this->widget('zii.widgets.grid.CGridView', array(
             <?php // endif;?>
         <?php // endforeach; ?>
         <tr>
-            <td style="text-align: right"><?php echo CommonProcess::formatCurrency($total); ?></td>
-            <td style="text-align: right"><?php echo CommonProcess::formatCurrency($totalCollected); ?></td>
-            <td style="text-align: right"><?php echo CommonProcess::formatCurrency($totalDebit); ?></td>
+            <td style="text-align: right"><?php echo CommonProcess::formatCurrency($revenueToday); ?></td>
+            <td style="text-align: right"><?php // echo CommonProcess::formatCurrency($totalCollected); ?></td>
+            <td style="text-align: right"><?php echo CommonProcess::formatCurrency($revenueMonth); ?></td>
         </tr>
     </tbody>
 </table>
@@ -132,12 +132,12 @@ $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => DomainConst::CONTENT00100,
             'htmlOptions' => array('style' => 'text-align:left;'),
-            'value' => '(isset($data->rReceipt) && ($data->rReceipt->getCustomer() != NULL)) ? $data->rReceipt->getCustomer() ->name : ""',
+            'value' => '$data->getReceiptCustomerName()',
         ),
         array(
             'name' => DomainConst::CONTENT00128,
             'htmlOptions' => array('style' => 'text-align:left;'),
-            'value' => '(isset($data->rReceipt) && ($data->rReceipt->getTreatmentType() != NULL)) ? $data->rReceipt->getTreatmentType()->name : DomainConst::CONTENT00344',
+            'value' => '$data->getReceiptTreatmentTypeName()',
         ),
         array(
             'name' => DomainConst::CONTENT00129,

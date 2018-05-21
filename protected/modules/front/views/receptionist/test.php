@@ -10,6 +10,7 @@
     ));
     ?>
     <?php
+    CommonProcess::echoTest("First date of current month: ", CommonProcess::getFirstDateOfCurrentMonth(DomainConst::DATE_FORMAT_6));
         $detail = TreatmentScheduleDetails::model()->findByPk(22);
         if ($detail) {
             CommonProcess::echoTest("Star time raw value: ", $detail->getStartTimeRawValue());

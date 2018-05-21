@@ -434,6 +434,17 @@ class CommonProcess {
     }
     
     /**
+     * Get previous month
+     * @param String $format Date time format
+     * @return Date time string (default is DATE_FORMAT_1 - 'Y-m-d H:i:s')
+     */
+    public static function getFirstDateOfCurrentMonth($format = DomainConst::DATE_FORMAT_1) {
+        date_default_timezone_set(DomainConst::DEFAULT_TIMEZONE);
+        $formatFirst = str_replace("d", "01", $format);
+        return date($formatFirst);
+    }
+    
+    /**
      * Check if a datetime has format in param
      * @param String $datetime  Date time string
      * @param String $format    Format to check

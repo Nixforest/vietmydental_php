@@ -612,6 +612,14 @@ class Users extends BaseActiveRecord
         }
         return "";
     }
+    
+    /**
+     * Check if user is staff role
+     * @return True if user is staff, false otherwise
+     */
+    public function isStaff() {
+        return Roles::isStaff($this->role_id);
+    }
 
     //-----------------------------------------------------
     // Static methods

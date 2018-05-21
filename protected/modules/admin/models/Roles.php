@@ -32,6 +32,13 @@ class Roles extends BaseActiveRecord
         self::ROLE_ADMIN,
         self::ROLE_CUSTOMER
     );
+    static $arrRolesStaff           = array(
+        self::ROLE_DIRECTOR,
+        self::ROLE_DOCTOR,
+        self::ROLE_RECEPTIONIST,
+        self::ROLE_ASSISTANT,
+        self::ROLE_SALE,
+    );
 	/**
 	 * @return string the associated database table name
 	 */
@@ -199,6 +206,20 @@ class Roles extends BaseActiveRecord
     public static function isAdminRole($roleId) {
         foreach (self::$arrAdminRoles as $roleName) {
             if (self::getRoleByName($roleName)->id == $roleId) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Check if a role id is in array staff roles
+     * @param String $roleId Id of role
+     * @return boolean True if role id is in array staff roles, False otherwise
+     */
+    public static function isStaff($roleId) {
+        foreach (self::$arrRolesStaff as $role_name) {
+            if (self::getRoleByName($role_name)->id == $roleId) {
                 return true;
             }
         }

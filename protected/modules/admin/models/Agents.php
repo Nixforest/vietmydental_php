@@ -222,7 +222,7 @@ class Agents extends BaseActiveRecord
         $arrUsers = array();
         if (isset($this->rJoinUser)) {
             foreach ($this->rJoinUser as $value) {
-                if (isset($value->rUser)) {
+                if (isset($value->rUser) && $value->rUser->isStaff()) {
                     $arrUsers[] = $value;
                 }
             }

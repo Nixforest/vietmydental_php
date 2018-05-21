@@ -182,6 +182,10 @@ class Receipts extends CActiveRecord
     //-----------------------------------------------------
     // Utility methods
     //-----------------------------------------------------
+    /**
+     * Check model can update
+     * @return boolean
+     */
     public function canUpdate() {
         if ($this->status == self::STATUS_RECEIPTIONIST) {
             return false;
@@ -229,6 +233,18 @@ class Receipts extends CActiveRecord
     }
     
     /**
+     * Get customer name
+     * @return Customer name, or empty
+     */
+    public function getCustomerName() {
+        $model = $this->getCustomer();
+        if ($model != NULL) {
+            return $model->name;
+        }
+        return '';
+    }
+    
+    /**
      * Get receptionist name
      * @return type
      */
@@ -263,6 +279,18 @@ class Receipts extends CActiveRecord
             return $this->rTreatmentScheduleDetail->rTreatmentType;
         }
         return NULL;
+    }
+    
+    /**
+     * Get treatment type name
+     * @return Treatment type name, or empty
+     */
+    public function getTreatmentTypeName() {
+        $model = $this->getTreatmentType();
+        if ($model != NULL) {
+            return $model->name;
+        }
+        return '';
     }
     
     /**
@@ -467,9 +495,41 @@ class Receipts extends CActiveRecord
         return '';
     }
     
+    /**
+     * Get process date
+     * @return type
+     */
     public function getProcessDate() {
 //        return CommonProcess::convertDateTime($this->process_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_3);
         return $this->process_date;
+    }
+    
+    /**
+     * Check if this model is belong current user
+     * @return True if agent id match, False otherwise
+     */
+    public function isBelongCurrentUser() {
+        $agentId = isset(Yii::app()->user->agent_id) ? Yii::app()->user->agent_id : '';
+        if (isset($this->rJoinAgent)) {
+            if ($this->rJoinAgent->id == $agentId) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Check if this model is belong agent
+     * @param String agent_id Id of agent
+     * @return True if agent id match, False otherwise
+     */
+    public function isBelongAgent($agent_id) {
+        if (isset($this->rJoinAgent) && isset($this->rJoinAgent->rAgent)) {
+            if ($this->rJoinAgent->rAgent->id == $agent_id) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //-----------------------------------------------------
@@ -509,8 +569,43 @@ class Receipts extends CActiveRecord
      * Get Revenue value
      * @param Date $from From value
      * @param Date $to To value
+     * @return Final
      */
-    public static function getRevenue($from, $to) {
-        
+    public static function getRevenue($from, $to, $agent_id) {
+        Loggers::info(__FUNCTION__ . "($from, $to, $agent_id)", __FUNCTION__, __LINE__);
+        $retVal = 0;
+        foreach (self::model()->findAll() as $receipt) {
+            $date = $receipt->process_date;
+            $compareFrom = DateTimeExt::compare($date, $from);
+                $compareTo = DateTimeExt::compare($date, $to);
+                // Check if process date is between date range
+                if (($compareFrom == 1 || $compareFrom == 0)
+                        && ($compareTo == 0 || $compareTo == -1)) {
+                    if (($receipt->status != self::STATUS_INACTIVE)
+                            && $receipt->isBelongAgent($agent_id)) {
+                        $retVal += $receipt->final;
+                    }
+                }
+        }
+        return $retVal;
+    }
+    
+    /**
+     * Get revenue today
+     * @return Final
+     */
+    public static function getRevenueToday($agent_id) {
+        $today = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_6);
+        return self::getRevenue($today, $today, $agent_id);
+    }
+    
+    /**
+     * Get revenue current month
+     * @return Final
+     */
+    public static function getRevenueCurrentMonth($agent_id) {
+        $from = CommonProcess::getFirstDateOfCurrentMonth(DomainConst::DATE_FORMAT_6);
+        $today = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_6);
+        return self::getRevenue($from, $today, $agent_id);
     }
 }

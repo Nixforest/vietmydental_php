@@ -204,4 +204,33 @@ class OneMany extends BaseActiveRecord
         $criteria->compare('type', $type);
         self::model()->deleteAll($criteria);
     }
+
+    //-----------------------------------------------------
+    // Data methods: Receipt
+    //-----------------------------------------------------
+    /**
+     * Get customer name of receipt
+     * @return Customer name, or empty
+     */
+    public function getReceiptCustomerName() {
+        if (isset($this->rReceipt)) {
+            return $this->rReceipt->getCustomerName();
+        }
+        return '';
+    }
+    
+    /**
+     * Get treatment type of receipt
+     * @return Treatment type name, or "Khám"
+     */
+    public function getReceiptTreatmentTypeName() {
+        $retVal = '';
+        if (isset($this->rReceipt)) {
+            $retVal = $this->rReceipt->getTreatmentTypeName();
+        }
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return DomainConst::CONTENT00344;
+    }
 }
