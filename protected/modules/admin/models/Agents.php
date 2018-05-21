@@ -213,4 +213,40 @@ class Agents extends BaseActiveRecord
         }
         return $_items;
     }
+    
+    /**
+     * Get list users
+     * @return \CArrayDataProvider
+     */
+    public function getUsers() {
+        return new CArrayDataProvider($this->rJoinUser, array(
+            'id' => 'users',
+            'sort'=>array(
+                'attributes'=>array(
+                     'id', 'one_id', 'many_id'
+                ),
+            ),
+            'pagination'=>array(
+                'pageSize'=>Settings::getListPageSize(),
+            ),
+        ));
+    }
+    
+    /**
+     * Get list receipts
+     * @return \CArrayDataProvider
+     */
+    public function getReceipts() {
+        return new CArrayDataProvider($this->rJoinReceipt, array(
+            'id' => 'receipts',
+            'sort'=>array(
+                'attributes'=>array(
+                     'id', 'one_id', 'many_id'
+                ),
+            ),
+            'pagination'=>array(
+                'pageSize'=>Settings::getListPageSize(),
+            ),
+        ));
+    }
 }

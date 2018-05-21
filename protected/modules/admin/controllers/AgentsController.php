@@ -51,8 +51,13 @@ class AgentsController extends AdminController
 	 */
 	public function actionView($id)
 	{
+            $model = $this->loadModel($id);
+            $users = $model->getUsers();
+            $receipts = $model->getReceipts();
 		$this->render('view',array(
-			'model'=>$this->loadModel($id),
+			'model'=>$model,
+                        'users' => $users,
+                        'receipts' => $receipts,
                         DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
 		));
 	}
@@ -125,15 +130,21 @@ class AgentsController extends AdminController
 	 */
 	public function actionIndex()
 	{
-		$model=new Agents('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Agents']))
-			$model->attributes=$_GET['Agents'];
+            $agent_id = isset(Yii::app()->user->agent_id) ? Yii::app()->user->agent_id : '';
+            $role_id = isset(Yii::app()->user->role_id) ? Yii::app()->user->role_id : '';
+            
+            $model=new Agents('search');
+            $model->unsetAttributes();  // clear any default values
+            if (!Roles::isAdminRole($role_id) && !Roles::isDirectorRole($role_id)) {
+                $model->id = $agent_id;
+            }
+            if(isset($_GET['Agents']))
+                    $model->attributes=$_GET['Agents'];
 
-		$this->render('index',array(
-			'model'=>$model,
-                        DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-		));
+            $this->render('index',array(
+                    'model'=>$model,
+                    DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+            ));
 	}
 
 	/**

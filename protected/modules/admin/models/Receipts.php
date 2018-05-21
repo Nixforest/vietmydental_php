@@ -26,6 +26,7 @@ class Receipts extends CActiveRecord
     const STATUS_ACTIVE                 = 1;
     const STATUS_DOCTOR                 = 2;
     const STATUS_RECEIPTIONIST          = 3;
+    public $agent;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -132,9 +133,13 @@ class Receipts extends CActiveRecord
 		$criteria->compare('created_by',$this->created_by,true);
 		$criteria->compare('receiptionist_id',$this->receiptionist_id,true);
 		$criteria->compare('status',$this->status);
+                $criteria->order = 'id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'pagination' => array(
+                            'pageSize' => Settings::getListPageSize(),
+                        ),
 		));
 	}
         
@@ -448,6 +453,24 @@ class Receipts extends CActiveRecord
             $customer->save();
         }
     }
+    
+    /**
+     * Get name of agent
+     * @return Name of agent
+     */
+    public function getAgentName() {
+        if (isset($this->rJoinAgent)) {
+            if (isset($this->rJoinAgent->rAgent)) {
+                return $this->rJoinAgent->rAgent->name;
+            }
+        }
+        return '';
+    }
+    
+    public function getProcessDate() {
+//        return CommonProcess::convertDateTime($this->process_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_3);
+        return $this->process_date;
+    }
 
     //-----------------------------------------------------
     // Static methods
@@ -480,5 +503,14 @@ class Receipts extends CActiveRecord
         }
         
         return $retVal;
+    }
+    
+    /**
+     * Get Revenue value
+     * @param Date $from From value
+     * @param Date $to To value
+     */
+    public static function getRevenue($from, $to) {
+        
     }
 }

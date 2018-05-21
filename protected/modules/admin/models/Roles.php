@@ -204,4 +204,16 @@ class Roles extends BaseActiveRecord
         }
         return false;
     }
+    
+    /**
+     * Check if role is director
+     * @param type $roleId
+     * @return boolean
+     */
+    public static function isDirectorRole($roleId) {
+        if (self::getRoleByName(self::ROLE_DIRECTOR) == $roleId) {
+            return true;
+        }
+        return false;
+    }
 }

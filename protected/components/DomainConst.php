@@ -1285,4 +1285,11 @@ class DomainConst {
     const CONTENT00334  = 'Tạo Chẩn đoán thành công';
     const CONTENT00335  = 'Tổng đã thu';
     const CONTENT00336  = 'Tổng chưa thu';
+    const CONTENT00337  = 'Danh sách nhân sự';
+    const CONTENT00338  = 'Chức vụ';
+    const CONTENT00339  = 'Doanh thu';
+    const CONTENT00340  = 'Doanh thu hôm nay';
+    const CONTENT00341  = 'Công nợ hôm nay';
+    const CONTENT00342  = 'Doanh thu tháng này';
+    const CONTENT00343  = 'Ngày';
 }

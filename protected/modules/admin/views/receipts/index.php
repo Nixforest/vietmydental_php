@@ -56,6 +56,10 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'customer_confirm',
 		'receiptionist_id',
                 array(
+                    'name' => 'agent',
+                    'value' => '$data->getAgentName()',
+                ),
+                array(
                     'name'=>'status',
                     'value' => 'Receipts::getStatus()[$data->status]',
                     'htmlOptions' => array('style' => 'text-align:center;'),
