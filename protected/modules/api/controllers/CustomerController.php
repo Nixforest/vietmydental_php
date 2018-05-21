@@ -1051,10 +1051,10 @@ class CustomerController extends APIController
 //        }
         $model->status = Receipts::STATUS_DOCTOR;
         
+        if ($model->save()) {
         // Handle agent
         $model->connectAgent($mUser->getAgentId());
         
-        if ($model->save()) {
             $result = ApiModule::$defaultSuccessResponse;
             $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00245;
             $result[DomainConst::KEY_DATA] = CommonProcess::createConfigJson(
