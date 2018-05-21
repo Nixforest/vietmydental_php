@@ -129,22 +129,22 @@ class ReferCodes extends CActiveRecord
      * @return String
      */
     public function generateURL() {
-        $url = '';
-        switch ($this->type) {
-            case self::TYPE_CUSTOMER:
-                $url = 'http://' . Settings::getDomain() . "/index.php/front/customer/view/code/" . $this->code;
-
-                break;
-            case self::TYPE_NOT_SELECTED_YET:
-                $url = 'http://' . Settings::getDomain() . "/index.php/front/customer/view/code/" . $this->code;
-
-                break;
-
-            default:
-                $url = 'http://' . Settings::getDomain() . "/index.php/front/customer/view/code/" . $this->code;
-                break;
-        }
-        return $url;
+//        $url = '';
+//        switch ($this->type) {
+//            case self::TYPE_CUSTOMER:
+//                $url = 'http://' . Settings::getDomain() . "/index.php/front/customer/view/code/" . $this->code;
+//
+//                break;
+//            case self::TYPE_NOT_SELECTED_YET:
+//                $url = 'http://' . Settings::getDomain() . "/index.php/front/customer/view/code/" . $this->code;
+//
+//                break;
+//
+//            default:
+//                $url = 'http://' . Settings::getDomain() . "/index.php/front/customer/view/code/" . $this->code;
+//                break;
+//        }
+        return CommonProcess::generateQRCodeURL($this->code);
     }
 
     //-----------------------------------------------------

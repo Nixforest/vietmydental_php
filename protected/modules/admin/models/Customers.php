@@ -476,7 +476,15 @@ class Customers extends BaseActiveRecord
         $rightContent .=            '</tr>';
         $rightContent .=            '<tr>';
         $rightContent .=                '<td>';
-        $rightContent .=                    '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/customers/update", array("id" => $this->id)) . '">' . DomainConst::CONTENT00272 . '</a>';;
+        $rightContent .=                    '<div class="group-btn">';
+        $rightContent .=                        '<a target="_blank" href="' . CommonProcess::generateQRCodeURL($this->id) . '">' . DomainConst::CONTENT00011 . '</a>';
+        $rightContent .=                    '</div>';
+        $rightContent .=                '</td>';
+        $rightContent .=                '<td>';
+//        $rightContent .=                    '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/customers/update", array("id" => $this->id)) . '">' . DomainConst::CONTENT00272 . '</a>';
+        $rightContent .=                    '<div class="group-btn">';
+        $rightContent .=                        '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/customers/update", array("id" => $this->id)) . '">' . DomainConst::CONTENT00346  . '</a>';
+        $rightContent .=                    '</div>';
         $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
         $pathological = '';

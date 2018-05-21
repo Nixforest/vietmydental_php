@@ -869,6 +869,15 @@ class CommonProcess {
     }
     
     /**
+     * Generate URL
+     * @param String $code Code value
+     * @return String
+     */
+    public static function generateQRCodeURL($code) {
+        return 'http://' . Settings::getDomain() . "/index.php/front/customer/view/code/" . $code;
+    }
+    
+    /**
      * Echo test string
      * @param String $message Message
      * @param String $data Data

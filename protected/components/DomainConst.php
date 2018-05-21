@@ -1294,4 +1294,5 @@ class DomainConst {
     const CONTENT00343  = 'Ngày';
     const CONTENT00344  = 'Khám';
     const CONTENT00345  = 'Miễn phí';
+    const CONTENT00346  = 'Cập nhật';
 }
