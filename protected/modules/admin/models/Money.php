@@ -13,10 +13,12 @@
  * @property string $action_date
  * @property string $created_date
  * @property string $description
+ * @property integer $status
  */
 class Money extends BaseActiveRecord
 {
     public $autocomplete_name_user;
+    public $moneyType;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -44,7 +46,7 @@ class Money extends BaseActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name, isIncomming, action_date, description', 'required'),
-			array('user_id, isIncomming, account_id', 'numerical', 'integerOnly'=>true),
+			array('user_id, isIncomming, account_id, status', 'numerical', 'integerOnly'=>true),
 			array('amount', 'length', 'max'=>11),
 			array('created_date', 'safe'),
 			// The following rule is used by search().
@@ -81,6 +83,8 @@ class Money extends BaseActiveRecord
                 'action_date'   => DomainConst::CONTENT00009,
                 'created_date'  => DomainConst::CONTENT00010,
                 'description'   => DomainConst::CONTENT00011,
+		'status'        => DomainConst::CONTENT00026,
+		'moneyType'     => DomainConst::CONTENT00347,
 		);
 	}
 
@@ -104,6 +108,8 @@ class Money extends BaseActiveRecord
 		$criteria->compare('action_date',$this->action_date,true);
 		$criteria->compare('created_date',$this->created_date,true);
 		$criteria->compare('description',$this->description,true);
+		$criteria->compare('status',$this->status);
+                $criteria->order = 'action_date DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -114,6 +120,7 @@ class Money extends BaseActiveRecord
      * @return type Parent method result
      */
     protected function beforeSave() {
+        $userId = isset(Yii::app()->user) ? Yii::app()->user->id : '';
         // Format action date value
         $this->action_date = CommonProcess::convertDateTimeToMySqlFormat(
                 $this->action_date, DomainConst::DATE_FORMAT_3);
@@ -129,6 +136,12 @@ class Money extends BaseActiveRecord
         }
         // Update MoneyAccount model
         $account->save();
+        if ($this->isNewRecord) {
+            // Handle created by
+            if (empty($this->user_id)) {
+                $this->user_id = $userId;
+            }
+        }
         // Call parent method
         return parent::beforeSave();
     }

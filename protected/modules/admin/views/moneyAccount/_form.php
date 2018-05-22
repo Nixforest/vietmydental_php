@@ -41,6 +41,12 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'agent_id'); ?>
+		<?php echo $form->dropDownList($model,'agent_id', Agents::loadItems()); ?>
+		<?php echo $form->error($model,'agent_id'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'balance'); ?>
 		<?php echo $form->textField($model,'balance',array('size'=>11,'maxlength'=>11)); ?>
 		<?php echo $form->error($model,'balance'); ?>

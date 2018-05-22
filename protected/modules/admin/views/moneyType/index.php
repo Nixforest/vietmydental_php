@@ -1,6 +1,6 @@
 <?php
-/* @var $this MoneyController */
-/* @var $model Money */
+/* @var $this MoneyTypeController */
+/* @var $model MoneyType */
 
 $this->createMenu('index', $model);
 
@@ -10,7 +10,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#money-grid').yiiGridView('update', {
+	$('#money-type-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -33,11 +33,11 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 </div><!-- search-form -->
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'money-grid',
+	'id'=>'money-type-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-                array(
+		array(
                     'header' => DomainConst::CONTENT00034,
                     'type' => 'raw',
                     'value' => '$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
@@ -46,35 +46,22 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                 ),
 		'name',
 		array(
-                    'name'=>'user_id',
-                    'htmlOptions' => array('style' => 'text-align:center;'),
-                    'value'=> 'isset($data->rUser) ? $data->rUser->username : ""',
-                    'filter'=>Users::loadItems(),
-                ),
-		array(
                     'name'=>'isIncomming',
                     'htmlOptions' => array('style' => 'text-align:center;'),
                     'value'=> 'CommonProcess::getTypeOfMoney()[$data->isIncomming]',
-                    'filter'=> CommonProcess::getTypeOfMoney(),
                 ),
                 array(
                     'name' => 'amount',
                     'htmlOptions' => array('style' => 'text-align:right;'),
                     'value' => 'CommonProcess::formatCurrency($data->amount)',
                 ),
-		array(
-                    'name'=>'account_id',
-                    'htmlOptions' => array('style' => 'text-align:center;'),
-                    'value'=> 'isset($data->rAccount) ? $data->rAccount->name : ""',
-                    'filter'=>MoneyAccount::loadItems(),
-                ),
-		'action_date',
-		'created_date',
 		'description',
-                array(
-                    'header' => DomainConst::CONTENT00239,
-                    'class'=>'CButtonColumn',
-                    'template'=> $this->createActionButtons()
-                ),
+		'created_date',
+		/*
+		'status',
+		*/
+		array(
+			'class'=>'CButtonColumn',
+		),
 	),
 )); ?>

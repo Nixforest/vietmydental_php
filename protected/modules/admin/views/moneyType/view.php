@@ -1,6 +1,6 @@
 <?php
-/* @var $this MoneyAccountController */
-/* @var $model MoneyAccount */
+/* @var $this MoneyTypeController */
+/* @var $model MoneyType */
 
 $this->createMenu('view', $model);
 ?>
@@ -12,22 +12,17 @@ $this->createMenu('view', $model);
 	'attributes'=>array(
 //		'id',
 		'name',
-//		'owner_id',
 		array(
-                   'name'=>'owner_id',
-                   'value'=>isset($model->rOwner) ? $model->rOwner->getFullName() : '',
-                ),
-		array(
-                   'name'=>'agent_id',
-                   'value'=>isset($model->rAgent) ? $model->rAgent->name : '',
+                   'name'=>'isIncomming',
+                   'value'=> CommonProcess::getTypeOfMoney()[$model->isIncomming],
                 ),
                 array(
-                    'name' => 'balance',
+                    'name' => 'amount',
                     'htmlOptions' => array('style' => 'text-align:right;'),
-                    'value' => CommonProcess::formatCurrency($model->balance),
+                    'value' => CommonProcess::formatCurrency($model->amount),
                 ),
+		'description',
 		'created_date',
-//		'status',
 		array(
                    'name'=>'status',
                    'type'=>'Status',

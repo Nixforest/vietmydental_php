@@ -15,13 +15,19 @@
 
 	<?php echo $form->errorSummary($model); ?>
 
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'moneyType'); ?>
+                <?php echo $form->dropDownList($model,'moneyType', MoneyType::loadItems(true)); ?>
+		<?php echo $form->error($model,'moneyType'); ?>
+	</div>
 	<div class="row">
 		<?php echo $form->labelEx($model,'name'); ?>
 		<?php echo $form->textArea($model,'name',array('rows'=>6, 'cols'=>50)); ?>
 		<?php echo $form->error($model,'name'); ?>
 	</div>
 
-	<div class="row">
+	<div class="row" style="display: none">
 		<?php echo $form->labelEx($model,'user_id'); ?>
 		<?php echo $form->hiddenField($model, 'user_id', array('class' => '')); ?>
                 <?php
@@ -111,3 +117,23 @@
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+<script>
+    
+    $(function(){
+        $('#Money_moneyType').change(function () {
+            var type_id = $(this).val();
+            $.ajax({
+            url: "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/getMoneyTypeInfo'); ?>",
+            data: {ajax: 1, term: type_id},
+            type: "get",
+            dataType: 'json',
+            success: function (data) {
+                $('#Money_name').html(data['name']);
+                $('#Money_description').html(data['description']);
+//                $('#Money_amount').html(data['amount']);
+                $('#Money_amount').val(data['amount']);
+            }
+        });
+        });
+    });
+</script>

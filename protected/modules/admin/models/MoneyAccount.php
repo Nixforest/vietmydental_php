@@ -7,6 +7,7 @@
  * @property integer $id
  * @property string $name
  * @property string $owner_id
+ * @property string $agent_id
  * @property string $balance
  * @property string $created_date
  * @property integer $status
@@ -40,14 +41,14 @@ class MoneyAccount extends BaseActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, owner_id', 'required'),
+			array('name', 'required'),
 			array('status', 'numerical', 'integerOnly'=>true),
-			array('name, owner_id', 'length', 'max'=>32),
-			array('balance', 'length', 'max'=>11),
+			array('name', 'length', 'max'=>32),
+			array('owner_id, agent_id, balance', 'length', 'max'=>11),
 			array('created_date', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, owner_id, balance, created_date, status', 'safe', 'on'=>'search'),
+			array('id, name, owner_id, agent_id, balance, created_date, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,6 +61,7 @@ class MoneyAccount extends BaseActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
                     'rOwner' => array(self::BELONGS_TO, 'Users', 'owner_id'),
+                    'rAgent' => array(self::BELONGS_TO, 'Agents', 'agent_id'),
                     'rMoney' => array(self::HAS_MANY, 'Money', 'account_id'),
 		);
 	}
@@ -73,6 +75,7 @@ class MoneyAccount extends BaseActiveRecord
                 'id'            => DomainConst::CONTENT00003,
                 'name'          => DomainConst::CONTENT00012,
                 'owner_id'      => DomainConst::CONTENT00013,
+		'agent_id'      => DomainConst::CONTENT00199,
                 'balance'       => DomainConst::CONTENT00014,
                 'created_date'  => DomainConst::CONTENT00010,
 		'status'        => DomainConst::CONTENT00026,
@@ -93,12 +96,16 @@ class MoneyAccount extends BaseActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('owner_id',$this->owner_id,true);
+		$criteria->compare('agent_id',$this->agent_id,true);
 		$criteria->compare('balance',$this->balance,true);
 		$criteria->compare('created_date',$this->created_date,true);
 		$criteria->compare('status',$this->status);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'pagination' => array(
+                            'pageSize' => Settings::getListPageSize(),
+                        ),
 		));
 	}
         
@@ -139,5 +146,24 @@ class MoneyAccount extends BaseActiveRecord
             }
         }
         return $_items;
+    }
+    
+    /**
+     * Get current balance
+     * @return type
+     */
+    public function getBalance() {
+        $inBalance = 0;
+        $outBalance = 0;
+        if (isset($this->rMoney)) {
+            foreach ($this->rMoney as $value) {
+                if ($value->isIncomming == DomainConst::NUMBER_ONE_VALUE) {
+                    $inBalance += $value->amount;
+                } else {
+                    $outBalance += $value->amount;
+                }
+            }
+        }
+        return $inBalance - $outBalance;
     }
 }

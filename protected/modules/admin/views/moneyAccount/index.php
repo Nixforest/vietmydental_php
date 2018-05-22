@@ -48,15 +48,20 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		array(
                     'name'=>'owner_id',
                     'htmlOptions' => array('style' => 'text-align:center;'),
-                    'value'=> 'isset($data->rOwner) ? $data->rOwner->username : ""',
+                    'value'=> 'isset($data->rOwner) ? $data->rOwner->getFullName() : ""',
                     'filter'=> Users::loadItems(true),
                 ),
-//		'balance',
-//                array(
-//                    'name'=>'balance',
-//                    'htmlOptions' => array('style' => 'text-align:center;'),
-//                    'value'=> '$data->getBalance()',
-//		),
+		array(
+                    'name'=>'agent_id',
+                    'htmlOptions' => array('style' => 'text-align:center;'),
+                    'value'=> 'isset($data->rAgent) ? $data->rAgent->name : ""',
+                    'filter'=> Agents::loadItems(true),
+                ),
+                array(
+                    'name'=>'balance',
+                    'htmlOptions' => array('style' => 'text-align:center;'),
+                    'value'=> 'CommonProcess::formatCurrency($data->getBalance())',
+		),
 		'created_date',
                 array(
                     'name'=>'status',

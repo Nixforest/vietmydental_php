@@ -525,7 +525,32 @@ class AjaxController extends AdminController
             echo $json;
             Yii::app()->end();
         }
-        
+    }
+    
+    /**
+     * Get money type information
+     */
+    public function actionGetMoneyTypeInfo() {
+        if (isset($_GET[AjaxController::KEY_AJAX]) && $_GET[AjaxController::KEY_AJAX] == 1) {
+            $type_id = (int)$_GET[AjaxController::KEY_TERM];
+            $model = MoneyType::model()->findByPk($type_id);
+            $name = '';
+            $description = '';
+            $amount = '';
+            if ($model) {
+                $name = $model->name;
+                $description = $model->description;
+                $amount = $model->amount;
+            }
+            
+            $json = CJavaScript::jsonEncode(array(
+                'name'          => $name,
+                'description'   => $description,
+                'amount'        => $amount,
+            ));
+            echo $json;
+            Yii::app()->end();  
+        }
     }
     
     // Uncomment the following methods and override them if needed
