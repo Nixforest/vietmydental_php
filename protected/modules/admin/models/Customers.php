@@ -640,6 +640,31 @@ class Customers extends BaseActiveRecord
     public function getDebt() {
         return CommonProcess::formatCurrency($this->debt) . ' ' . DomainConst::CONTENT00134;
     }
+    
+    /**
+     * Get list receipt of this customer
+     * @return array
+     */
+    public function getReceipts() {
+        $retVal = array();
+        
+        if (isset($this->rMedicalRecord) && isset($this->rMedicalRecord->rTreatmentSchedule)) {
+            // Loop for all treatment schedules
+            foreach ($this->rMedicalRecord->rTreatmentSchedule as $treatmentSchedule) {
+                if (isset($treatmentSchedule->rDetail)) {
+                    // Loop for all treatment schedule details
+                    foreach ($treatmentSchedule->rDetail as $detail) {
+                        $receipt = $detail->rReceipt;
+                        if (isset($receipt) && $receipt->status != Receipts::STATUS_INACTIVE) {
+                            $retVal[] = $receipt;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return $retVal;
+    }
 
     //-----------------------------------------------------
     // JSON methods

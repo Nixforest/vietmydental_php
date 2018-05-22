@@ -212,34 +212,18 @@
                     <span class="icon34"></span> Chi Tiết Thanh Toán
                 </div>
                 <div class="list__2__info">
-                    <div class="list__2__des">
-                        <div class="list__2__item">
-                            <span class="icon26 icon-list"></span>
-                            <p>
-                                <strong>Thanh Toán Lần 1: </strong>
-                            </p>
-                            <p>5.000.000 VND (Ngày Thanh Toán: 26/03/2018)</p>
+                    <?php foreach($model->getReceipts() as $receipt): ?>
+                        <div class="list__2__des">
+                            <div class="list__2__item">
+                                <span class="icon26 icon-list"></span>
+                                <p>
+                                    <strong>Thanh Toán Lần 1: </strong>
+                                </p>
+                                <p><?php echo CommonProcess::formatCurrency($receipt->final); ?> (Ngày Thanh Toán: <?php echo $receipt->process_date; ?>)</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="list__2__des">
-                        <div class="list__2__item">
-                            <span class="icon26 icon-list"></span>
-                            <p>
-                                <strong>Thanh Toán Lần 1: </strong>
-                            </p>
-                            <p>5.000.000 VND (Ngày Thanh Toán: 26/03/2018)</p>
-                        </div>
-                    </div>
-                    <div class="list__2__des">
-                        <div class="list__2__item">
-                            <span class="icon26 icon-list"></span>
-                            <p>
-                                <strong>Thanh Toán Lần 1: </strong>
-                            </p>
-                            <p>5.000.000 VND (Ngày Thanh Toán: 26/03/2018)</p>
-                        </div>
-                    </div>
-                    <a href="#">(Xem Thêm)</a>
+                    <?php endforeach; ?>
+                    <!--<a href="#">(Xem Thêm)</a>-->
                 </div>
             </div>
         </div>
