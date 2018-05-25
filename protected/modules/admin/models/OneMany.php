@@ -218,6 +218,37 @@ class OneMany extends BaseActiveRecord
         }
         return '';
     }
+    /**
+     * Get customer name of receipt
+     * @return Customer name, or empty
+     */
+    public function getReceiptCustomerRecordNumber() {
+        if (isset($this->rReceipt)) {
+            return $this->rReceipt->getCustomerRecordNumber();
+        }
+        return '';
+    }
+    
+    /**
+     * Get total price
+     * @param type $data
+     * @return type
+     */
+    public static function getReceiptCustomerTotal($data) {
+        $arrData = $data->getData();
+        $retVal = array();
+        foreach ($arrData as $value) {
+            if (isset($value->rReceipt)) {
+                $customer = $value->rReceipt->getCustomer();
+                if ($customer != NULL) {
+                    if (!in_array($customer->id, $retVal)) {
+                        $retVal[] = $customer->id;
+                    }
+                }
+            }
+        }
+        return count($retVal) . " hồ sơ";
+    }
     
     /**
      * Get treatment type of receipt
@@ -232,5 +263,187 @@ class OneMany extends BaseActiveRecord
             return $retVal;
         }
         return DomainConst::CONTENT00344;
+    }
+    
+    /**
+     * Get treatment type's price of receipt
+     * @return Treatment type price, or "0"
+     */
+    public function getReceiptTreatmentTypePrice() {
+        $retVal = '';
+        if (isset($this->rReceipt)) {
+            $treatment = $this->rReceipt->getTreatmentType();
+            if ($treatment != NULL) {
+                $retVal = $treatment->price;
+            }
+        }
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return '0';
+    }
+    
+    /**
+     * Get treatment type's price of receipt
+     * @return Treatment type price, or "0"
+     */
+    public function getReceiptTreatmentTypePriceText() {
+        $retVal = '';
+        if (isset($this->rReceipt)) {
+            $treatment = $this->rReceipt->getTreatmentType();
+            if ($treatment != NULL) {
+                $retVal = $treatment->getPrice();
+            }
+        }
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return "0 " . DomainConst::CONTENT00134;
+    }
+    
+    /**
+     * Get total price
+     * @param type $data
+     * @return type
+     */
+    public static function getReceiptTreatmentTypePriceTotal($data) {
+        $arrData = $data->getData();
+        $retVal = 0;
+        foreach ($arrData as $value) {
+            $retVal += $value->getReceiptTreatmentTypePrice();
+        }
+        return CommonProcess::formatCurrency($retVal) . " " . DomainConst::CONTENT00134;
+    }
+    
+    /**
+     * Get discount of receipt
+     * @return Discount amount, or "0"
+     */
+    public function getReceiptDiscount() {
+        $retVal = '';
+        if (isset($this->rReceipt)) {
+            $retVal = $this->rReceipt->discount;
+        }
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return '0';
+    }
+    
+    /**
+     * Get discount of receipt
+     * @return Discount amount, or "0"
+     */
+    public function getReceiptDiscountText() {
+        $retVal = '';
+        if (isset($this->rReceipt)) {
+            $retVal = $this->rReceipt->getDiscount();
+        }
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return "0 " . DomainConst::CONTENT00134;
+    }
+    
+    /**
+     * Get total discount
+     * @param type $data
+     * @return type
+     */
+    public static function getReceiptDiscountTotal($data) {
+        $arrData = $data->getData();
+        $retVal = 0;
+        foreach ($arrData as $value) {
+            $retVal += $value->getReceiptDiscount();
+        }
+        return CommonProcess::formatCurrency($retVal) . " " . DomainConst::CONTENT00134;
+    }
+    
+    /**
+     * Get final of receipt
+     * @return Final amount, or "0"
+     */
+    public function getReceiptFinal() {
+        $retVal = '';
+        if (isset($this->rReceipt)) {
+            $retVal = $this->rReceipt->final;
+        }
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return "0";
+    }
+    
+    /**
+     * Get final of receipt
+     * @return Final amount, or "0"
+     */
+    public function getReceiptFinalText() {
+        $retVal = '';
+        if (isset($this->rReceipt)) {
+            $retVal = $this->rReceipt->getFinal();
+        }
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return "0 " . DomainConst::CONTENT00134;
+    }
+    
+    /**
+     * Get total final
+     * @param type $data
+     * @return type
+     */
+    public static function getReceiptFinalTotal($data) {
+        $arrData = $data->getData();
+        $retVal = 0;
+        foreach ($arrData as $value) {
+            $retVal += $value->getReceiptFinal();
+        }
+        return CommonProcess::formatCurrency($retVal) . " " . DomainConst::CONTENT00134;
+    }
+    
+    /**
+     * Get debit of receipt
+     * @return Debit amount, or "0"
+     */
+    public function getReceiptDebit() {
+        $retVal = '';
+        if (isset($this->rReceipt)) {
+            $retVal = $this->rReceipt->getDebit();
+        }
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return '0';
+    }
+    
+    /**
+     * Get debit of receipt
+     * @return Debit amount, or "0"
+     */
+    public function getReceiptDebitText() {
+        $retVal = '';
+        if (isset($this->rReceipt)) {
+            $retVal = $this->rReceipt->getDebitText();
+        }
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return "0 " . DomainConst::CONTENT00134;
+    }
+    
+    /**
+     * Get total debit
+     * @param type $data
+     * @return type
+     */
+    public static function getReceiptDebitTotal($data) {
+        $arrData = $data->getData();
+        $retVal = 0;
+        foreach ($arrData as $value) {
+            $retVal += $value->getReceiptDebit();
+        }
+        return CommonProcess::formatCurrency($retVal) . " " . DomainConst::CONTENT00134;
     }
 }

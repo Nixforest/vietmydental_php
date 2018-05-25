@@ -245,6 +245,20 @@ class Receipts extends CActiveRecord
     }
     
     /**
+     * Get customer record number
+     * @return Customer record number, or empty
+     */
+    public function getCustomerRecordNumber() {
+        $model = $this->getCustomer();
+        if ($model != NULL) {
+            if (isset($model->rMedicalRecord)) {
+                return $model->rMedicalRecord->record_number;
+            }
+        }
+        return '';
+    }
+    
+    /**
      * Get receptionist name
      * @return type
      */
@@ -444,6 +458,25 @@ class Receipts extends CActiveRecord
      */
     public function getFinal() {
         return CommonProcess::formatCurrency($this->final) . ' ' . DomainConst::CONTENT00134;
+    }
+    
+    public function getDebit() {
+        $money = 0;                 // Money after discount
+        $final = $this->final;      // Final money doctor decide take from customer
+        $treatment = $this->getTreatmentType();
+        if ($treatment != NULL) {
+            $money = $treatment->price - $this->discount;
+        }
+        $debt = $money - $final;
+        return $debt;
+    }
+    
+    /**
+     * Get debit (in text)
+     * @return type
+     */
+    public function getDebitText() {
+        return CommonProcess::formatCurrency($this->getDebit()) . ' ' . DomainConst::CONTENT00134;
     }
     
     /**

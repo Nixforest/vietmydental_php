@@ -87,6 +87,7 @@ class Controllers extends BaseActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('module_id',$this->module_id,true);
 		$criteria->compare('description',$this->description,true);
+                $criteria->order = 'id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -512,7 +512,20 @@ class Customers extends BaseActiveRecord
                     }
                     $detailIdx = count($schedule->rDetail);
                     foreach ($schedule->rDetail as $detail) {
-                        $updateTag = '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/updateImageXRay", array("id" => $detail->id)) . '">' . DomainConst::CONTENT00272 . '</a>';;
+                        $updateTag = '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/update",
+                                        array("id" => $detail->id)) . '">' . DomainConst::CONTENT00272 . '</a>';
+                        switch (Yii::app()->user->role_name) {
+                            case Roles::ROLE_ASSISTANT:
+                                $updateTag = '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/updateImageXRay",
+                                        array("id" => $detail->id)) . '">' . DomainConst::CONTENT00272 . '</a>';
+                                break;
+                            case Roles::ROLE_RECEPTIONIST:
+                                $updateTag = '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/update",
+                                        array("id" => $detail->id)) . '">' . DomainConst::CONTENT00272 . '</a>';
+                            default:
+                                break;
+                        }
+                        
                         if ($detail->rDiagnosis) {
                             $rightContent .= '<p>- Lần ' . $detailIdx . ': ' . $detail->rDiagnosis->name . ' - [' . $updateTag . ']</p>';
                         } else {
@@ -798,8 +811,8 @@ class Customers extends BaseActiveRecord
                 }
                 // Get list customers assign at doctor
 //                $criteria->addInCondition('t.id', $mUser->getListCustomerOfDoctor($from, $to));
-//                return $mUser->getListCustomerOfDoctor($from, $to);
-                return TreatmentScheduleDetails::getListCustomerByDoctor($mUser->id, $from, $to);
+                return $mUser->getListCustomerOfDoctor($from, $to);
+//                return TreatmentScheduleDetails::getListCustomerByDoctor($mUser->id, $from, $to);
 //                break;
 
             default:
