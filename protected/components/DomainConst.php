@@ -1296,4 +1296,5 @@ class DomainConst {
     const CONTENT00345  = 'Miễn phí';
     const CONTENT00346  = 'Cập nhật';
     const CONTENT00347  = 'Khoản chi';
+    const CONTENT00348  = 'Tạo phiếu thu';
 }

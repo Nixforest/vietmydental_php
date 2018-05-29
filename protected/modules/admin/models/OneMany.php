@@ -272,10 +272,11 @@ class OneMany extends BaseActiveRecord
     public function getReceiptTreatmentTypePrice() {
         $retVal = '';
         if (isset($this->rReceipt)) {
-            $treatment = $this->rReceipt->getTreatmentType();
-            if ($treatment != NULL) {
-                $retVal = $treatment->price;
-            }
+//            $treatment = $this->rReceipt->getTreatmentType();
+//            if ($treatment != NULL) {
+//                $retVal = $treatment->price;
+//            }
+            $retVal = $this->rReceipt->getTotal();
         }
         if (!empty($retVal)) {
             return $retVal;
@@ -290,10 +291,11 @@ class OneMany extends BaseActiveRecord
     public function getReceiptTreatmentTypePriceText() {
         $retVal = '';
         if (isset($this->rReceipt)) {
-            $treatment = $this->rReceipt->getTreatmentType();
-            if ($treatment != NULL) {
-                $retVal = $treatment->getPrice();
-            }
+//            $treatment = $this->rReceipt->getTreatmentType();
+//            if ($treatment != NULL) {
+//                $retVal = $treatment->getPrice();
+//            }
+            $retVal = CommonProcess::formatCurrency($this->rReceipt->getTotal()) . " " . DomainConst::CONTENT00134;
         }
         if (!empty($retVal)) {
             return $retVal;

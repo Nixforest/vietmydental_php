@@ -7,6 +7,7 @@
  * @property string $id
  * @property string $detail_id
  * @property string $process_date
+ * @property string $total
  * @property string $discount
  * @property string $final
  * @property integer $need_approve
@@ -53,14 +54,14 @@ class Receipts extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('detail_id, process_date, final, created_date, created_by', 'required'),
+			array('detail_id, process_date, final, created_date', 'required'),
 			array('need_approve, customer_confirm, status', 'numerical', 'integerOnly'=>true),
 			array('detail_id, discount, created_by, receiptionist_id', 'length', 'max'=>11),
-			array('final', 'length', 'max'=>10),
+			array('total, final', 'length', 'max'=>10),
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, detail_id, process_date, discount, final, need_approve, customer_confirm, description, created_date, created_by, receiptionist_id, status', 'safe', 'on'=>'search'),
+			array('id, detail_id, process_date, total, discount, final, need_approve, customer_confirm, description, created_date, created_by, receiptionist_id, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -98,6 +99,7 @@ class Receipts extends CActiveRecord
 			'id' => 'ID',
 			'detail_id' => DomainConst::CONTENT00146,
 			'process_date' => DomainConst::CONTENT00241,
+			'total' => DomainConst::CONTENT00254,
 			'discount' => DomainConst::CONTENT00242,
 			'final' => DomainConst::CONTENT00259,
 			'need_approve' => DomainConst::CONTENT00243,
@@ -124,6 +126,7 @@ class Receipts extends CActiveRecord
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('detail_id',$this->detail_id,true);
 		$criteria->compare('process_date',$this->process_date,true);
+		$criteria->compare('total',$this->total,true);
 		$criteria->compare('discount',$this->discount,true);
 		$criteria->compare('final',$this->final,true);
 		$criteria->compare('need_approve',$this->need_approve);
@@ -162,6 +165,11 @@ class Receipts extends CActiveRecord
             $this->process_date = CommonProcess::convertDateTimeToMySqlFormat(
                             $date, DomainConst::DATE_FORMAT_4);
         }
+        
+        // Calculate total money
+//        if (isset($this->rTreatmentScheduleDetail)) {
+//            $this->total = $this->rTreatmentScheduleDetail->getTotalMoney();
+//        }
         if ($this->isNewRecord) {   // Add
             // Handle created by
             if (empty($this->created_by)) {
@@ -313,10 +321,12 @@ class Receipts extends CActiveRecord
      */
     public function getAjaxInfo() {
         if (isset($this->rTreatmentScheduleDetail)) {
-            $teeth = $this->rTreatmentScheduleDetail->getTeeth();
+//            $teeth = $this->rTreatmentScheduleDetail->getTeeth();
+            $teeth = $this->rTreatmentScheduleDetail->generateTeethInfo(", ");
             $diagnosis = $this->rTreatmentScheduleDetail->getDiagnosis();
-            $treatmentType = $this->rTreatmentScheduleDetail->getTreatment();
-            $money = $this->rTreatmentScheduleDetail->getTreatmentPrice();
+            $treatmentType = $this->rTreatmentScheduleDetail->getTreatment() . " - " . $this->rTreatmentScheduleDetail->getTreatmentPriceText();
+//            $money = $this->rTreatmentScheduleDetail->getTreatmentPrice();
+            $money = $this->getTotal();
             if (isset($this->rTreatmentScheduleDetail->rSchedule)) {
                 $insurance = $this->rTreatmentScheduleDetail->rSchedule->getInsurrance();
             }
@@ -460,13 +470,33 @@ class Receipts extends CActiveRecord
         return CommonProcess::formatCurrency($this->final) . ' ' . DomainConst::CONTENT00134;
     }
     
+    /**
+     * Get total money
+     * @return Int Total money
+     */
+    public function getTotal() {
+        $retVal = 0;
+        $treatment = $this->getTreatmentType();
+        if ($this->total == 0) {
+            if ($treatment != NULL) {
+                $retVal = $treatment->price;
+            }
+        } else {
+            $retVal = $this->total;
+        }
+        return $retVal;
+    }
+    
     public function getDebit() {
-        $money = 0;                 // Money after discount
+        $money = $this->getTotal() - $this->discount;                 // Money after discount
         $final = $this->final;      // Final money doctor decide take from customer
         $treatment = $this->getTreatmentType();
         if ($treatment != NULL) {
-            $money = $treatment->price - $this->discount;
+//            $money = $treatment->price - $this->discount;
         }
+//        if (isset($this->rTreatmentScheduleDetail)) {
+//            $money = $this->rTreatmentScheduleDetail->getTotalMoney() - $this->discount;
+//        }
         $debt = $money - $final;
         return $debt;
     }
@@ -483,13 +513,7 @@ class Receipts extends CActiveRecord
      * Update customer debt
      */
     public function updateCustomerDebt() {
-        $money = 0;                 // Money after discount
-        $final = $this->final;      // Final money doctor decide take from customer
-        $treatment = $this->getTreatmentType();
-        if ($treatment != NULL) {
-            $money = $treatment->price - $this->discount;
-        }
-        $debt = $money - $final;
+        $debt = $this->getDebit();
         $customer = $this->getCustomer();
         if ($customer != NULL) {
             $customer->debt = $customer->debt + $debt;
@@ -501,13 +525,7 @@ class Receipts extends CActiveRecord
      * Rollback customer debt
      */
     public function rollbackCustomerDebt() {
-        $money = 0;                 // Money after discount
-        $final = $this->final;      // Final money doctor decide take from customer
-        $treatment = $this->getTreatmentType();
-        if ($treatment != NULL) {
-            $money = $treatment->price - $this->discount;
-        }
-        $debt = $money - $final;
+        $debt = $this->getDebit();
         $customer = $this->getCustomer();
         if ($customer != NULL) {
             $customer->debt = $customer->debt - $debt;

@@ -9,6 +9,12 @@ $this->menu[] = array(
                         'updateImageXRay',
                         'id' => $model->id
                 ));
+$this->menu[] = array(
+                    'label' => 'Tạo thêm lần điều trị',
+                    'url' => array(
+                        'create',
+                        'schedule_id' => $model->rSchedule->id
+                ));
 ?>
 
 <h1><?php echo $this->pageTitle . ' ' . $model->id; ?></h1>

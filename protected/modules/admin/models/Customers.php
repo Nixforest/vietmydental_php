@@ -522,6 +522,9 @@ class Customers extends BaseActiveRecord
                             case Roles::ROLE_RECEPTIONIST:
                                 $updateTag = '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/update",
                                         array("id" => $detail->id)) . '">' . DomainConst::CONTENT00272 . '</a>';
+                                
+//                                $updateTag .= '][<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/receipts/createReceptionist",
+//                                        array("detailId" => $detail->id)) . '">' . DomainConst::CONTENT00348 . '</a>';
                             default:
                                 break;
                         }

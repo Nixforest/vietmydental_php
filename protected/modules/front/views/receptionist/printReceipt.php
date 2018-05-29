@@ -144,12 +144,17 @@
                         </td>
                     </tr>
                     <?php
+                    $teethCount = 1;
                     $treatment = $model->getTreatmentType();
-                    $money = 0;
+                    $money = $model->getTotal() - $model->discount;
                     if ($treatment != NULL) {
                         $treatmentName = $treatment->name;
                         $price = $treatment->getPrice();
-                        $money = $treatment->price - $model->discount;
+//                        $money = $treatment->price - $model->discount;
+                    }
+                    if (isset($model->rTreatmentScheduleDetail)) {
+                        $teethCount = $model->rTreatmentScheduleDetail->getTeethCount();
+//                        $money = $model->rTreatmentScheduleDetail->getTotalMoney() - $model->discount;
                     }
                     $discount = $model->getDiscount();
                     $final = $model->getFinal();
@@ -162,7 +167,7 @@
                     <tr>
                         <td>1</td>
                         <td><?php echo $treatmentName; ?></td>
-                        <td>1</td>
+                        <td><?php echo $teethCount; ?></td>
                         <td><?php echo $price; ?></td>
                         <td><?php echo $discount; ?></td>
                         <td><?php echo CommonProcess::formatCurrency($money) . ' ' . DomainConst::CONTENT00134; ?></td>

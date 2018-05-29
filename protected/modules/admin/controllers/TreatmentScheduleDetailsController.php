@@ -64,6 +64,8 @@ class TreatmentScheduleDetailsController extends AdminController
 	public function actionCreate()
 	{
 		$model=new TreatmentScheduleDetails;
+                // Get parameter from url
+                $this->validateCreateUrl($model);
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -91,6 +93,14 @@ class TreatmentScheduleDetailsController extends AdminController
                         DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
 		));
 	}
+    
+    /**
+     * Validate create url and get parameter
+     * @param Object $model Model
+     */
+    public function validateCreateUrl(&$model) {
+        $model->schedule_id         = isset($_GET['schedule_id']) ? $_GET['schedule_id'] : '';
+    }
 
 	/**
 	 * Updates a particular model.
@@ -118,6 +128,15 @@ class TreatmentScheduleDetailsController extends AdminController
                                     }
                                     $index++;
                                 }
+                            $roleName = isset(Yii::app()->user->role_name) ? Yii::app()->user->role_name : '';
+                            switch ($roleName) {
+                                case Roles::ROLE_RECEPTIONIST:
+                                    $this->redirect(array('../admin/receipts/createReceptionist','detailId'=>$model->id));
+                                    break;
+
+                                default:
+                                    break;
+                            }
                             $this->redirect(array('view','id'=>$model->id));
                         }
 		}

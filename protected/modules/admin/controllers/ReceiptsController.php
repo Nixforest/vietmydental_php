@@ -89,6 +89,54 @@ class ReceiptsController extends AdminController
 	}
 
 	/**
+	 * Creates a new model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 */
+	public function actionCreateReceptionist($detailId)
+	{
+            $agentId = isset(Yii::app()->user->agent_id) ? Yii::app()->user->agent_id : '';
+            $userId = isset(Yii::app()->user->id) ? Yii::app()->user->id : '';
+            $mDetail = TreatmentScheduleDetails::model()->findByPk($detailId);
+            $total = 0;
+            if ($mDetail) {
+                if (isset($mDetail->rReceipt)) {
+                    $model = $mDetail->rReceipt;
+                } else {
+                    $model   = new Receipts();
+                }
+                $total = $mDetail->getTotalMoney();
+            } else {
+                $model   = new Receipts();
+            }
+//            $model = new Receipts;
+
+            // Uncomment the following line if AJAX validation is needed
+            // $this->performAjaxValidation($model);
+
+            if (isset($_POST['Receipts'])) {
+                $model->attributes = $_POST['Receipts'];
+                $model->detail_id = $detailId;
+                $model->process_date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
+                $model->need_approve = 0;
+                $model->customer_confirm = 0;
+                $model->receiptionist_id = $userId;
+                $model->status = Receipts::STATUS_DOCTOR;
+                
+                if ($model->save()) {
+                    $model->connectAgent($agentId);
+                    $this->redirect(array('view', 'id' => $model->id));
+                }
+            }
+
+            $this->render('createReceptionist', array(
+                'model' => $model,
+                'total' => $total,
+                'detail' => $mDetail,
+                DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+            ));
+        }
+
+	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated

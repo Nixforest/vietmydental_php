@@ -134,7 +134,7 @@ class TreatmentTypes extends BaseActiveRecord
         ));
         foreach ($models as $model) {
             if ($model->status == DomainConst::DEFAULT_STATUS_ACTIVE) {
-                $_items[$model->id] = $model->name;
+                $_items[$model->id] = $model->name . " - " . CommonProcess::formatCurrency($model->price);
             }
         }
         return $_items;

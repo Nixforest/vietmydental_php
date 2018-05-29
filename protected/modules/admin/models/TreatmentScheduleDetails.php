@@ -322,6 +322,14 @@ class TreatmentScheduleDetails extends BaseActiveRecord
     }
     
     /**
+     * Get treatment price
+     * @return String Treatment price
+     */
+    public function getTreatmentPriceText() {
+        return CommonProcess::formatCurrency($this->getTreatmentPrice()) . " " . DomainConst::CONTENT00134;
+    }
+    
+    /**
      * Get json information
      * @return Array
      */
@@ -587,6 +595,42 @@ class TreatmentScheduleDetails extends BaseActiveRecord
         }
         return CommonProcess::createConfigJson(CustomerController::ITEM_IMAGE,
                 DomainConst::CONTENT00298, $data);
+    }
+    
+    /**
+     * Return count of teeth
+     * @return int
+     */
+    public function getTeethCount() {
+        if (isset($this->rJoinTeeth)) {
+            return count($this->rJoinTeeth);
+        }
+        return 0;
+    }
+    
+    /**
+     * Get total money
+     * @return Int
+     */
+    public function getTotalMoney() {
+        $price = isset($this->rTreatmentType) ? $this->rTreatmentType->price : 0;
+        $teethCount = 0;
+        if (isset($this->rJoinTeeth)) {
+            $teethCount = count($this->rJoinTeeth);
+        }
+        $retVal = $price * $teethCount;
+        if ($retVal == 0) {
+            $retVal = $price;
+        }
+        return $retVal;
+    }
+    
+    /**
+     * Get total money
+     * @return Int
+     */
+    public function getTotalMoneyText() {
+        return CommonProcess::formatCurrency($this->getTotalMoney()) . " " . DomainConst::CONTENT00134;
     }
 
     //-----------------------------------------------------

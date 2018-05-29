@@ -373,7 +373,7 @@ class TreatmentSchedules extends BaseActiveRecord
             'order' => 'id ASC',
         ));
         foreach ($models as $model) {
-            if ($model->status == DomainConst::DEFAULT_STATUS_ACTIVE) {
+            if ($model->status != DomainConst::DEFAULT_STATUS_INACTIVE) {
                 $_items[$model->id] = $model->id;
             }
         }

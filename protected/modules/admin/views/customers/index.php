@@ -90,12 +90,12 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 //                    'filter'=>Users::loadItems(),
 //                ),
 //		'characteristics',
-//		array(
-//                    'name'=>'created_by',
-//                    'htmlOptions' => array('style' => 'text-align:center;'),
-//                    'value'=> 'isset($data->rCreatedBy) ? $data->rCreatedBy->username : ""',
-//                    'filter'=>Users::loadItems(),
-//                ),
+		array(
+                    'name'=>'created_by',
+                    'htmlOptions' => array('style' => 'text-align:center;'),
+                    'value'=> 'isset($data->rCreatedBy) ? $data->rCreatedBy->getFullName() : ""',
+                    'visible' => CommonProcess::isUserAdmin(),
+                ),
 //		'created_date',
                 array(
                     'name' => 'debt',
