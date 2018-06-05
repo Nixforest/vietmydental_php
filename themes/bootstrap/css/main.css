@@ -458,6 +458,9 @@ th.col-4 {
     background: linear-gradient(to bottom, rgba(205, 205, 205, 1) 0%, rgba(251, 252, 252, 1) 99%);
     /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
+.item-search .group-btn a {
+    display: block;
+}
 
 .btn-nav {
     display: none;

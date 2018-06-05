@@ -475,11 +475,11 @@ class Customers extends BaseActiveRecord
         $rightContent .=                '<td>' . DomainConst::CONTENT00136 . ': ' . '<b>' . $recordNumber . '<b>' . '</td>';
         $rightContent .=            '</tr>';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>';
+        $rightContent .=                '<td style="width: 50%;">';
         $rightContent .=                    HtmlHandler::createButton(CommonProcess::generateQRCodeURL($this->id),
                                                                     DomainConst::CONTENT00011, true);
         $rightContent .=                '</td>';
-        $rightContent .=                '<td>';
+        $rightContent .=                '<td style="width: 50%;">';
         $rightContent .=                    HtmlHandler::createButton(Yii::app()->createAbsoluteUrl("admin/customers/update", array("id" => $this->id)),
                                                                     DomainConst::CONTENT00346, true);
         $rightContent .=                '</td>';
@@ -496,7 +496,7 @@ class Customers extends BaseActiveRecord
         }                
         $rightContent .=        '</table>';
         $rightContent .=    '</div>';
-        $rightContent .=    '<div class="title-2">' . DomainConst::CONTENT00174 . '</div>';
+        $rightContent .=    '<div class="title-2">' . DomainConst::CONTENT00201 . '</div>';
         $rightContent .=    '<div class="item-search">';                
         if (isset($this->rMedicalRecord) && isset($this->rMedicalRecord->rTreatmentSchedule)) {
             $i = count($this->rMedicalRecord->rTreatmentSchedule);
