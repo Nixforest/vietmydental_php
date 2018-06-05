@@ -476,15 +476,12 @@ class Customers extends BaseActiveRecord
         $rightContent .=            '</tr>';
         $rightContent .=            '<tr>';
         $rightContent .=                '<td>';
-        $rightContent .=                    '<div class="group-btn">';
-        $rightContent .=                        '<a target="_blank" href="' . CommonProcess::generateQRCodeURL($this->id) . '">' . DomainConst::CONTENT00011 . '</a>';
-        $rightContent .=                    '</div>';
+        $rightContent .=                    HtmlHandler::createButton(CommonProcess::generateQRCodeURL($this->id),
+                                                                    DomainConst::CONTENT00011, true);
         $rightContent .=                '</td>';
         $rightContent .=                '<td>';
-//        $rightContent .=                    '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/customers/update", array("id" => $this->id)) . '">' . DomainConst::CONTENT00272 . '</a>';
-        $rightContent .=                    '<div class="group-btn">';
-        $rightContent .=                        '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/customers/update", array("id" => $this->id)) . '">' . DomainConst::CONTENT00346  . '</a>';
-        $rightContent .=                    '</div>';
+        $rightContent .=                    HtmlHandler::createButton(Yii::app()->createAbsoluteUrl("admin/customers/update", array("id" => $this->id)),
+                                                                    DomainConst::CONTENT00346, true);
         $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
         $pathological = '';
@@ -506,35 +503,49 @@ class Customers extends BaseActiveRecord
             foreach ($this->rMedicalRecord->rTreatmentSchedule as $schedule) {
                 if (isset($schedule->rDetail)) {
                     if ($schedule->rPathological) {
-                        $rightContent .= '<p>Đợt ' . $i . ': [' . $schedule->getStartTime() . '] - ' . $schedule->rPathological->name . '</p>';
+                        $rightContent .= '<p>Đợt ' . $i . ': ' . $schedule->getStartTime() . ' - ' . $schedule->rPathological->name . '</p>';
                     } else {
-                        $rightContent .= '<p>Đợt ' . $i . ': [' . $schedule->getStartTime() . ']</p>';
+                        $rightContent .= '<p>Đợt ' . $i . ': ' . $schedule->getStartTime() . '</p>';
                     }
+                    $rightContent .= HtmlHandler::createButtonWithImage(
+                            Yii::app()->createAbsoluteUrl(
+                                        "admin/treatmentScheduleDetails/create", array("schedule_id" => $schedule->id)),
+                            'Tạo mới Lần điều trị',
+                            '/img/add.png', true, '');
                     $detailIdx = count($schedule->rDetail);
                     foreach ($schedule->rDetail as $detail) {
-                        $updateTag = '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/update",
-                                        array("id" => $detail->id)) . '">' . DomainConst::CONTENT00272 . '</a>';
+//                        $updateTag = '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/update",
+//                                        array("id" => $detail->id)) . '">' . DomainConst::CONTENT00272 . '</a>';
+                        $updateTag = HtmlHandler::createButton(Yii::app()->createAbsoluteUrl(
+                                "admin/treatmentScheduleDetails/update", array("id" => $detail->id)),
+                                DomainConst::CONTENT00011, true);
+                        $btnTitle = '';
+                        if ($detail->rDiagnosis) {
+                            $btnTitle = 'Lần ' . $detailIdx . ': ' . $detail->rDiagnosis->name;
+                        } else {
+                            $btnTitle = 'Lần ' . $detailIdx . ': ' . DomainConst::CONTENT00177;
+                        }
                         switch (Yii::app()->user->role_name) {
                             case Roles::ROLE_ASSISTANT:
                                 $updateTag = '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/updateImageXRay",
                                         array("id" => $detail->id)) . '">' . DomainConst::CONTENT00272 . '</a>';
                                 break;
                             case Roles::ROLE_RECEPTIONIST:
-                                $updateTag = '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/update",
-                                        array("id" => $detail->id)) . '">' . DomainConst::CONTENT00272 . '</a>';
-                                
-//                                $updateTag .= '][<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/receipts/createReceptionist",
-//                                        array("detailId" => $detail->id)) . '">' . DomainConst::CONTENT00348 . '</a>';
+//                                $updateTag = '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/update",
+//                                        array("id" => $detail->id)) . '">' . DomainConst::CONTENT00272 . '</a>';
+                                $updateTag = HtmlHandler::createButton(Yii::app()->createAbsoluteUrl(
+                                        "admin/treatmentScheduleDetails/update", array("id" => $detail->id)),
+                                        $btnTitle, true);
                             default:
                                 break;
                         }
                         
-                        if ($detail->rDiagnosis) {
-                            $rightContent .= '<p>- Lần ' . $detailIdx . ': ' . $detail->rDiagnosis->name . ' - [' . $updateTag . ']</p>';
-                        } else {
-                            $rightContent .= '<p>- Lần ' . $detailIdx . ': ' . DomainConst::CONTENT00177 . ' - [' . $updateTag . ']</p>';
-                        }
-//                            $rightContent .= 
+//                        if ($detail->rDiagnosis) {
+//                            $rightContent .= '<p>- Lần ' . $detailIdx . ': ' . $detail->rDiagnosis->name . ' - [' . $updateTag . ']</p>';
+//                        } else {
+//                            $rightContent .= '<p>- Lần ' . $detailIdx . ': ' . DomainConst::CONTENT00177 . ' - [' . $updateTag . ']</p>';
+//                        }
+                        $rightContent .= $updateTag;
                         $detailIdx--;
                     }
                 }

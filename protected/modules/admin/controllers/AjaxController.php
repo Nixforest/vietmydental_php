@@ -378,73 +378,7 @@ class AjaxController extends AdminController
             $id = filter_input(INPUT_GET, AjaxController::KEY_TERM);
             $model = Customers::model()->findByPk($id);
             if ($model) {
-//                $rightContent = '<div class="info-result">';
-//                $rightContent .=    '<div class="title-2">' . DomainConst::CONTENT00173 . '</div>';
-//                $rightContent .=    '<div class="item-search">';
-//                $rightContent .=        '<table>';
-//                $rightContent .=            '<tr>';
-//                $rightContent .=                '<td>' . DomainConst::CONTENT00100 . ': ' . '<b>' . $model->name . '<b>' . '</td>';
-//                $rightContent .=                '<td>' . DomainConst::CONTENT00101 . ': ' . '<b>' . $model->getBirthday() . '<b>' . '</td>';
-//                $rightContent .=            '</tr>';
-//                $rightContent .=            '<tr>';
-//                $rightContent .=                '<td>' . DomainConst::CONTENT00170 . ': ' . '<b>' . $model->getPhone() . '<b>' . '</td>';
-//                $rightContent .=                '<td>' . DomainConst::CONTENT00047 . ': ' . '<b>' . CommonProcess::getGender()[$model->gender] . '<b>' . '</td>';
-//                $rightContent .=            '</tr>';
-//                $rightContent .=            '<tr>';
-//                $rightContent .=                '<td colspan="2">' . DomainConst::CONTENT00045 . ': ' . '<b>' . $model->getAddress() . '<b>' . '</td>';
-//                $rightContent .=            '</tr>';
-//                $rightContent .=            '<tr>';
-//                $rightContent .=                '<td colspan="2">' . '<b>' . $model->getAgentName() . '<b>' . '</td>';
-//                $rightContent .=            '</tr>';
-//                $pathological = '';
-//                if (isset($model->rMedicalRecord)) {
-//                    $pathological = $model->rMedicalRecord->generatePathological(", ");
-//                    Settings::saveAjaxTempValue($model->rMedicalRecord->id);
-//                }
-//                if (!empty($pathological)) {
-//                    $rightContent .=        '<tr>';
-//                    $rightContent .=            '<td colspan="2">' . DomainConst::CONTENT00137 . ': ' . '<b>' . $pathological . '<b>' . '</td>';
-//                    $rightContent .=        '</tr>';
-//                }                
-//                $rightContent .=        '</table>';
-//                $rightContent .=    '</div>';
-//                $rightContent .=    '<div class="title-2">' . DomainConst::CONTENT00174 . '</div>';
-//                $rightContent .=    '<div class="item-search">';                
-//                if (isset($model->rMedicalRecord) && isset($model->rMedicalRecord->rTreatmentSchedule)) {
-//                    $i = count($model->rMedicalRecord->rTreatmentSchedule);
-//                    foreach ($model->rMedicalRecord->rTreatmentSchedule as $schedule) {
-//                        if ($schedule->rPathological) {
-//                            $rightContent .= '<p>Đợt ' . $i . ': ' . $schedule->rPathological->name . '</p>';
-//                        }
-//                        $i--;
-//                    }
-//                }
-//                $rightContent .=    '</div>';
-//                $rightContent .= '</div>';
                 $rightContent = $model->getCustomerAjaxInfo();
-//                $infoSchedule = '';
-//                $scheduleId = $model->getSchedule();
-//                
-//                $infoSchedule .= '<div class="group-btn">';
-//                $infoSchedule .=    '<a style="cursor: pointer;"'
-//                                . ' onclick="{createSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}">' . DomainConst::CONTENT00179 . '</a>';
-//                $infoSchedule .= '</div>';
-//                if (!empty($scheduleId)) {
-//                    Settings::saveAjaxTempValue($scheduleId);
-//                    $mSchedule = TreatmentScheduleDetails::model()->findByPk($scheduleId);
-//                    if ($mSchedule) {
-//                        $infoSchedule = '<div class="title-2">' . DomainConst::CONTENT00177 . ': </div>';
-//                        $infoSchedule .= '<div class="item-search">';
-//                        $infoSchedule .=    '<p>' . $mSchedule->start_date . '</p>';
-//                        $infoSchedule .=    '<p>Hình thức: ' . $mSchedule->type_schedule . '</p>';
-//                        $infoSchedule .=    '<p>Chi Tiết Công Việc: ' . $mSchedule->description . '</p>';
-//                        $infoSchedule .= '</div>';
-//                        $infoSchedule .= '<div class="group-btn">';
-//                        $infoSchedule .=    '<a style="cursor: pointer;"'
-//                                . ' onclick="{updateSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}">' . DomainConst::CONTENT00178 . '</a>';
-//                        $infoSchedule .= '</div>';
-//                    }
-//                }
                 $infoSchedule = $model->getCustomerAjaxScheduleInfo();
             }
             $json = CJavaScript::jsonEncode(array(

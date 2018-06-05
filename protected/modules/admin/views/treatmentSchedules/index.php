@@ -50,6 +50,12 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'value'=> 'CommonProcess::generateID(DomainConst::MEDICAL_RECORD_ID_PREFIX, $data->record_id)',
                 ),
 		array(
+                    'header' => 'Số hồ sơ cũ',
+                    'type' => 'html',
+                    'htmlOptions' => array('style' => 'text-align:left;'),
+                    'value'=> 'isset($data->rMedicalRecord) ? $data->rMedicalRecord->record_number : ""',
+                ),
+		array(
                     'name'=>'time_id',
                     'htmlOptions' => array('style' => 'text-align:center;'),
                     'value'=> 'isset($data->rTime) ? $data->rTime->name : ""',

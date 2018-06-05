@@ -457,6 +457,24 @@ class CommonProcess {
         }
         return false;
     }
+    
+    /**
+     * Get first date of month
+     * @param String $date Date time value (format is DATE_FORMAT_4 - 'Y-m-d')
+     * @return Date time string (default is DATE_FORMAT_4 - 'Y-m-d')
+     */
+    public static function getFirstDateOfMonth($date) {
+        return date('Y-m-01', strtotime($date));
+    }
+    
+    /**
+     * Get last date of month
+     * @param String $date Date time value (format is DATE_FORMAT_4 - 'Y-m-d')
+     * @return Date time string (default is DATE_FORMAT_4 - 'Y-m-d')
+     */
+    public static function getLastDateOfMonth($date) {
+        return date('Y-m-t', strtotime($date));
+    }
             
     //-----------------------------------------------------
     // -- Date time process
