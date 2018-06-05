@@ -33,18 +33,21 @@
                     'value' => $total,
                     ));
                 ?>
+                <input size="11" maxlength="11" value="" id="Receipts_total_view" type="text" readonly="true">
 		<?php echo $form->error($model,'total'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'discount'); ?>
 		<?php echo $form->textField($model,'discount',array('size'=>11,'maxlength'=>11)); ?>
+                <input size="11" maxlength="11" value="" id="Receipts_discount_view" type="text" readonly="true">
 		<?php echo $form->error($model,'discount'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'final'); ?>
 		<?php echo $form->textField($model,'final',array('size'=>10,'maxlength'=>10)); ?>
+                <input size="11" maxlength="11" value="" id="Receipts_final_view" type="text" readonly="true">
 		<?php echo $form->error($model,'final'); ?>
 	</div>
 
@@ -83,3 +86,19 @@
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        fnUpdateValue("#Receipts_total", "#Receipts_total_view");
+        fnUpdateValue("#Receipts_discount", "#Receipts_discount_view");
+        fnUpdateValue("#Receipts_final", "#Receipts_final_view");
+       $("#Receipts_total").change(function() {
+           fnUpdateValue("#Receipts_total", "#Receipts_total_view");
+       });
+       $("#Receipts_discount").change(function() {
+           fnUpdateValue("#Receipts_discount", "#Receipts_discount_view");
+       });
+       $("#Receipts_final").change(function() {
+           fnUpdateValue("#Receipts_final", "#Receipts_final_view");
+       });
+    });
+</script>

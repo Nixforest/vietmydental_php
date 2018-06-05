@@ -502,11 +502,13 @@ class Customers extends BaseActiveRecord
             $i = count($this->rMedicalRecord->rTreatmentSchedule);
             foreach ($this->rMedicalRecord->rTreatmentSchedule as $schedule) {
                 if (isset($schedule->rDetail)) {
+                    $rightContent .= '<b>';
                     if ($schedule->rPathological) {
                         $rightContent .= '<p>Đợt ' . $i . ': ' . $schedule->getStartTime() . ' - ' . $schedule->rPathological->name . '</p>';
                     } else {
                         $rightContent .= '<p>Đợt ' . $i . ': ' . $schedule->getStartTime() . '</p>';
                     }
+                    $rightContent .= '</b>';
                     $rightContent .= HtmlHandler::createButtonWithImage(
                             Yii::app()->createAbsoluteUrl(
                                         "admin/treatmentScheduleDetails/create", array("schedule_id" => $schedule->id)),
@@ -520,7 +522,9 @@ class Customers extends BaseActiveRecord
                                 "admin/treatmentScheduleDetails/update", array("id" => $detail->id)),
                                 DomainConst::CONTENT00011, true);
                         $btnTitle = '';
-                        if ($detail->rDiagnosis) {
+                        if ($detail->rTreatmentType) {
+                            $btnTitle = 'Lần ' . $detailIdx . ': ' . $detail->rTreatmentType->name;
+                        } else if ($detail->rDiagnosis) {
                             $btnTitle = 'Lần ' . $detailIdx . ': ' . $detail->rDiagnosis->name;
                         } else {
                             $btnTitle = 'Lần ' . $detailIdx . ': ' . DomainConst::CONTENT00177;

@@ -323,3 +323,24 @@ function fnBindRemoveActionUploadFile() {
     });
 }
 
+/**
+ * Format current cy
+ * @param {Int} price Price need to format
+ * @returns {String} Price after formated
+ */
+function fnFormatCurrency(price) {
+    // Create our number formatter.
+    var formatter = new Intl.NumberFormat('de-DE', {
+      style: 'currency',
+      currency: 'VND',
+      minimumFractionDigits: 0,
+      // the default value for minimumFractionDigits depends on the currency
+      // and is usually already 2
+    });
+    return formatter.format(price);
+}
+function fnUpdateValue(_input, _label) {
+    var nameValue = $(_input).val();
+       $(_label).val(fnFormatCurrency(nameValue));
+}
+
