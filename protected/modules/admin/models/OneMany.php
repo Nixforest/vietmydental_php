@@ -266,17 +266,31 @@ class OneMany extends BaseActiveRecord
     }
     
     /**
+     * Get number of teeth of receipt
+     * @return Number of teeth, or "0"
+     */
+    public function getReceiptNumTeeth() {
+        $retVal = '';
+        if (isset($this->rReceipt)) {
+            $retVal = $this->rReceipt->getNumTeeth();
+        }
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return '1';
+    }
+    
+    /**
      * Get treatment type's price of receipt
      * @return Treatment type price, or "0"
      */
     public function getReceiptTreatmentTypePrice() {
         $retVal = '';
         if (isset($this->rReceipt)) {
-//            $treatment = $this->rReceipt->getTreatmentType();
-//            if ($treatment != NULL) {
-//                $retVal = $treatment->price;
-//            }
-            $retVal = $this->rReceipt->getTotal();
+            $treatment = $this->rReceipt->getTreatmentType();
+            if ($treatment != NULL) {
+                $retVal = $treatment->price;
+            }
         }
         if (!empty($retVal)) {
             return $retVal;
@@ -289,14 +303,7 @@ class OneMany extends BaseActiveRecord
      * @return Treatment type price, or "0"
      */
     public function getReceiptTreatmentTypePriceText() {
-        $retVal = '';
-        if (isset($this->rReceipt)) {
-//            $treatment = $this->rReceipt->getTreatmentType();
-//            if ($treatment != NULL) {
-//                $retVal = $treatment->getPrice();
-//            }
-            $retVal = CommonProcess::formatCurrency($this->rReceipt->getTotal()) . " " . DomainConst::CONTENT00134;
-        }
+        $retVal = CommonProcess::formatCurrency($this->getReceiptTreatmentTypePrice()) . " " . DomainConst::CONTENT00134;
         if (!empty($retVal)) {
             return $retVal;
         }
@@ -313,6 +320,50 @@ class OneMany extends BaseActiveRecord
         $retVal = 0;
         foreach ($arrData as $value) {
             $retVal += $value->getReceiptTreatmentTypePrice();
+        }
+        return CommonProcess::formatCurrency($retVal) . " " . DomainConst::CONTENT00134;
+    }
+    
+    /**
+     * Get total of receipt
+     * @return Treatment type price, or "0"
+     */
+    public function getReceiptTotal() {
+        $retVal = '';
+        if (isset($this->rReceipt)) {
+            $retVal = $this->rReceipt->getTotal();
+        }
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return '0';
+    }
+    
+    /**
+     * Get total of receipt
+     * @return Treatment type price, or "0"
+     */
+    public function getReceiptTotalText() {
+        $retVal = '';
+        if (isset($this->rReceipt)) {
+            $retVal = CommonProcess::formatCurrency($this->getReceiptTotal()) . " " . DomainConst::CONTENT00134;
+        }
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return "0 " . DomainConst::CONTENT00134;
+    }
+    
+    /**
+     * Get total price
+     * @param type $data
+     * @return type
+     */
+    public static function getReceiptTotalTotal($data) {
+        $arrData = $data;
+        $retVal = 0;
+        foreach ($arrData as $value) {
+            $retVal += $value->getReceiptTotal();
         }
         return CommonProcess::formatCurrency($retVal) . " " . DomainConst::CONTENT00134;
     }

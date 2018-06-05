@@ -322,6 +322,8 @@ class ReceptionistController extends Controller {
                 Loggers::info("Update receipt with id = $id", "save()", __CLASS__);
                 // Update customer's debt
                 $model->updateCustomerDebt();
+                // Confirm finish Treatment schedule detail
+                $model->finishTreatmentScheduleDetail();
             } else {
                 Loggers::info("Update receipt failed: " . CommonProcess::json_encode_unicode($model->getErrors()),
                         __FUNCTION__, __CLASS__);

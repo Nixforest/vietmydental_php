@@ -2,7 +2,7 @@
 
 class ReportsController extends AdminController
 {
-	public $layout='//layouts/column2';
+	public $layout='//layouts/column1';
         /**
          * Index action.
          */

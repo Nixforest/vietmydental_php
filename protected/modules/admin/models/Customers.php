@@ -516,18 +516,16 @@ class Customers extends BaseActiveRecord
                             '/img/add.png', true, '');
                     $detailIdx = count($schedule->rDetail);
                     foreach ($schedule->rDetail as $detail) {
-//                        $updateTag = '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/update",
-//                                        array("id" => $detail->id)) . '">' . DomainConst::CONTENT00272 . '</a>';
-                        $updateTag = HtmlHandler::createButton(Yii::app()->createAbsoluteUrl(
-                                "admin/treatmentScheduleDetails/update", array("id" => $detail->id)),
-                                DomainConst::CONTENT00011, true);
-                        $btnTitle = '';
+                        $btnTitle = $detail->getStartDate() . '<br>';
                         if ($detail->rTreatmentType) {
-                            $btnTitle = 'Lần ' . $detailIdx . ': ' . $detail->rTreatmentType->name;
+//                            $btnTitle = 'Lần ' . $detailIdx . ': ' . $detail->rTreatmentType->name;
+                            $btnTitle .= $detail->rTreatmentType->name;
                         } else if ($detail->rDiagnosis) {
-                            $btnTitle = 'Lần ' . $detailIdx . ': ' . $detail->rDiagnosis->name;
+//                            $btnTitle = 'Lần ' . $detailIdx . ': ' . $detail->rDiagnosis->name;
+                            $btnTitle .= $detail->rDiagnosis->name;
                         } else {
-                            $btnTitle = 'Lần ' . $detailIdx . ': ' . DomainConst::CONTENT00177;
+//                            $btnTitle = 'Lần ' . $detailIdx . ': ' . DomainConst::CONTENT00177;
+                            $btnTitle .= DomainConst::CONTENT00177;
                         }
                         switch (Yii::app()->user->role_name) {
                             case Roles::ROLE_ASSISTANT:
@@ -537,9 +535,15 @@ class Customers extends BaseActiveRecord
                             case Roles::ROLE_RECEPTIONIST:
 //                                $updateTag = '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/update",
 //                                        array("id" => $detail->id)) . '">' . DomainConst::CONTENT00272 . '</a>';
-                                $updateTag = HtmlHandler::createButton(Yii::app()->createAbsoluteUrl(
+//                                if ($detail->isCompleted()) {
+//                                    $updateTag = HtmlHandler::createButton(Yii::app()->createAbsoluteUrl(
+//                                        "admin/treatmentScheduleDetails/view", array("id" => $detail->id)),
+//                                        $btnTitle, true);
+//                                } else {
+                                    $updateTag = HtmlHandler::createButton(Yii::app()->createAbsoluteUrl(
                                         "admin/treatmentScheduleDetails/update", array("id" => $detail->id)),
                                         $btnTitle, true);
+//                                }
                             default:
                                 break;
                         }

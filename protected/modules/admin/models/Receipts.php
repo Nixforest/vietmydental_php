@@ -476,15 +476,27 @@ class Receipts extends CActiveRecord
      */
     public function getTotal() {
         $retVal = 0;
-        $treatment = $this->getTreatmentType();
-        if ($this->total == 0) {
-            if ($treatment != NULL) {
-                $retVal = $treatment->price;
-            }
-        } else {
-            $retVal = $this->total;
-        }
+//        $treatment = $this->getTreatmentType();
+//        if ($this->total == 0) {
+//            if ($treatment != NULL) {
+//                $retVal = $treatment->price;
+//            }
+//        } else {
+//            $retVal = $this->total;
+//        }
+        $retVal = $this->total;
         return $retVal;
+    }
+    
+    /**
+     * Get number of teeth of receipt
+     * @return Number of teeth, or "0"
+     */
+    public function getNumTeeth() {
+        if (isset($this->rTreatmentScheduleDetail)) {
+            return $this->rTreatmentScheduleDetail->getTeethCount();
+        }
+        return 0;
     }
     
     public function getDebit() {
@@ -507,6 +519,16 @@ class Receipts extends CActiveRecord
      */
     public function getDebitText() {
         return CommonProcess::formatCurrency($this->getDebit()) . ' ' . DomainConst::CONTENT00134;
+    }
+    
+    /**
+     * Confirm finish Treatment schedule detail
+     */
+    public function finishTreatmentScheduleDetail() {
+        if (isset($this->rTreatmentScheduleDetail)) {
+            $this->rTreatmentScheduleDetail->status = TreatmentScheduleDetails::STATUS_COMPLETED;
+            $this->rTreatmentScheduleDetail->save();
+        }
     }
     
     /**

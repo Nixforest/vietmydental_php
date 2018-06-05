@@ -136,10 +136,23 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '$data->getReceiptTreatmentTypeName()',
         ),
         array(
-            'name' => DomainConst::CONTENT00129,
+            'name' => DomainConst::CONTENT00313,
+            'htmlOptions' => array('style' => 'text-align:right;'),
+            'value' => '$data->getReceiptNumTeeth()',
+        ),
+        array(
+            'name' => DomainConst::CONTENT00315,
             'htmlOptions' => array('style' => 'text-align:right;'),
             'value' => '$data->getReceiptTreatmentTypePriceText()',
             'footer' => OneMany::getReceiptTreatmentTypePriceTotal($receipts->getData()),
+            'footerHtmlOptions' => array(
+                'style' => 'text-align:right; font-weight:bold'),
+        ),
+        array(
+            'name' => DomainConst::CONTENT00353,
+            'htmlOptions' => array('style' => 'text-align:right;'),
+            'value' => '$data->getReceiptTotalText()',
+            'footer' => OneMany::getReceiptTotalTotal($receipts->getData()),
             'footerHtmlOptions' => array(
                 'style' => 'text-align:right; font-weight:bold'),
         ),
@@ -196,7 +209,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
         <tbody>
             <tr class="even">
                 <td style="text-align:center; font-weight:bold"><?php echo OneMany::getReceiptCustomerTotal($receipts->rawData); ?></td>
-                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptTreatmentTypePriceTotal($receipts->rawData); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptTotalTotal($receipts->rawData); ?></td>
                 <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptDiscountTotal($receipts->rawData); ?></td>
                 <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptFinalTotal($receipts->rawData); ?></td>
                 <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptDebitTotal($receipts->rawData); ?></td>

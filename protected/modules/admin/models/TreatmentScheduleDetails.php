@@ -232,6 +232,23 @@ class TreatmentScheduleDetails extends BaseActiveRecord
     }
     
     /**
+     * Check if record completed
+     * @return True if status is completed, False otherwise
+     */
+    public function isCompleted() {
+//        return $this->status === self::STATUS_COMPLETED;
+        // Init can update flag
+        $canUpdate = DomainConst::NUMBER_ONE_VALUE;
+        // Check if this detail was receipted
+        if (isset($this->rReceipt)) {
+            if ($this->rReceipt->status === Receipts::STATUS_RECEIPTIONIST) {
+                $canUpdate = DomainConst::NUMBER_ZERO_VALUE;
+            }
+        }
+        return !$canUpdate;
+    }
+    
+    /**
      * Get name of doctor
      * @return string
      */
@@ -428,6 +445,15 @@ class TreatmentScheduleDetails extends BaseActiveRecord
         }
         
         return $info;
+    }
+    
+    /**
+     * Get start time string
+     * @return String Time and Start date
+     */
+    public function getStartDate() {
+        $retVal = CommonProcess::convertDateTime($this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_5);
+        return $retVal;
     }
     
     /**
