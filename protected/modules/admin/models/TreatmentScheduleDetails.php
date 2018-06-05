@@ -24,6 +24,7 @@ class TreatmentScheduleDetails extends BaseActiveRecord
     //-----------------------------------------------------
     public $autocomplete_medical_record;
     public $order_number;
+    public $autocomplete_treatment;
     
     //-----------------------------------------------------
     // Constants

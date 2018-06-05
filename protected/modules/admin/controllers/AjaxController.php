@@ -487,6 +487,37 @@ class AjaxController extends AdminController
         }
     }
     
+    /**
+     * Search treatment type from database
+     * @throws CHttpException
+     * @return JSON Json object
+     */
+    public function actionSearchTreatmentType() {
+        $retVal = array();
+        if (!isset($_GET[AjaxController::KEY_TERM])) {
+            throw new CHttpException(404, "Uid: " . Yii::app()->user->id . " cố gắng truy cập link không phải ajax");
+        }
+        $keyword = trim($_GET[AjaxController::KEY_TERM]);
+        $criteria = new CDbCriteria();
+        $criteria->addCondition("t.name like '%$keyword%'");
+        $criteria->limit = 50;
+        $criteria->compare("t.status", DomainConst::DEFAULT_STATUS_ACTIVE);
+        $models = TreatmentTypes::model()->findAll($criteria);
+        if (empty($models)) {
+            $models = TreatmentTypes::model()->findAll();
+        }
+        foreach ($models as $model) {
+            $label = $model->getAutoCompleteView();
+            $retVal[] = array(
+                'label' => $label,
+                'value' => $label,
+                'id'    => $model->id,
+            );
+        }
+        echo CJSON::encode($retVal);
+        Yii::app()->end();   
+    }
+    
     // Uncomment the following methods and override them if needed
 	/*
 	public function filters()

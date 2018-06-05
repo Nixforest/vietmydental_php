@@ -139,4 +139,12 @@ class TreatmentTypes extends BaseActiveRecord
         }
         return $_items;
     }
+
+    /**
+     * Get autocomplete
+     * @return String [id - last_name first_name]
+     */
+    public function getAutoCompleteView() {
+        return $this->name . " - " . CommonProcess::formatCurrency($this->price);
+    }
 }

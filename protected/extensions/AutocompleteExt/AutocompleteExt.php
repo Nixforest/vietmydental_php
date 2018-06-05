@@ -68,6 +68,9 @@ class AutocompleteExt extends CPortlet {
         parent::init();
     }
     
+    /**
+     * Render content.
+     */
     public function renderContent() {
         $classdAddDivWrap       = CommonProcess::getValue($this->data, AutocompleteExt::KEY_CLASS_ADD_DIV_WRAP);
         $url                    = CommonProcess::getValue(
