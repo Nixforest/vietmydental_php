@@ -502,6 +502,7 @@ class AjaxController extends AdminController
         $criteria->addCondition("t.name like '%$keyword%'");
         $criteria->limit = 50;
         $criteria->compare("t.status", DomainConst::DEFAULT_STATUS_ACTIVE);
+        $criteria->order = 'name ASC';
         $models = TreatmentTypes::model()->findAll($criteria);
         if (empty($models)) {
             $models = TreatmentTypes::model()->findAll();
