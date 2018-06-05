@@ -235,7 +235,7 @@ class OneMany extends BaseActiveRecord
      * @return type
      */
     public static function getReceiptCustomerTotal($data) {
-        $arrData = $data->getData();
+        $arrData = $data;
         $retVal = array();
         foreach ($arrData as $value) {
             if (isset($value->rReceipt)) {
@@ -309,7 +309,7 @@ class OneMany extends BaseActiveRecord
      * @return type
      */
     public static function getReceiptTreatmentTypePriceTotal($data) {
-        $arrData = $data->getData();
+        $arrData = $data;
         $retVal = 0;
         foreach ($arrData as $value) {
             $retVal += $value->getReceiptTreatmentTypePrice();
@@ -353,7 +353,7 @@ class OneMany extends BaseActiveRecord
      * @return type
      */
     public static function getReceiptDiscountTotal($data) {
-        $arrData = $data->getData();
+        $arrData = $data;
         $retVal = 0;
         foreach ($arrData as $value) {
             $retVal += $value->getReceiptDiscount();
@@ -397,7 +397,7 @@ class OneMany extends BaseActiveRecord
      * @return type
      */
     public static function getReceiptFinalTotal($data) {
-        $arrData = $data->getData();
+        $arrData = $data;
         $retVal = 0;
         foreach ($arrData as $value) {
             $retVal += $value->getReceiptFinal();
@@ -441,7 +441,7 @@ class OneMany extends BaseActiveRecord
      * @return type
      */
     public static function getReceiptDebitTotal($data) {
-        $arrData = $data->getData();
+        $arrData = $data;
         $retVal = 0;
         foreach ($arrData as $value) {
             $retVal += $value->getReceiptDebit();

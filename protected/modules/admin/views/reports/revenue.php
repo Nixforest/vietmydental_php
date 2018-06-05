@@ -2,10 +2,23 @@
 /* @var $this ReportsController */
 
 $this->createMenu('revenue', null);
-$date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3);
+$dateFrom = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_BACK_END);
+$dateTo = $dateFrom;
+if (!empty($from)) {
+    $dateFrom = CommonProcess::convertDateTime($from, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_BACK_END);
+}
+if (!empty($to)) {
+    $dateTo = CommonProcess::convertDateTime($to, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_BACK_END);
+}
 ?>
-<h1><?php echo $this->pageTitle . ' ngày: ' . $date; ?></h1>
+<h1><?php echo $this->pageTitle . ' ngày: ' . $dateFrom . ' đến ' . $dateTo; ?></h1>
 
+<div class="form">
+
+<?php $form=$this->beginWidget('CActiveForm', array(
+	'id'=>'treatment-schedule-details-form',
+	'enableAjaxValidation'=>false,
+)); ?>
     <div class="row">
         <div class="col-md-6">
             <label for="from_date" class="required">Từ </label>
@@ -27,8 +40,8 @@ $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3);
                 'htmlOptions'=>array(
                             'class'=>'w-16',
 //                                'style'=>'height:20px;width:166px;',
-                            'readonly'=>'readonly',
-                            'value' => $date,
+//                            'readonly'=>'readonly',
+                            'value' => $dateFrom,
                         ),
             ));
             ?>
@@ -53,14 +66,35 @@ $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3);
                 'htmlOptions'=>array(
                             'class'=>'w-16',
 //                                'style'=>'height:20px;width:166px;',
-                            'readonly'=>'readonly',
-                            'value' => $date,
+//                            'readonly'=>'readonly',
+                            'value' => $dateTo,
                         ),
             ));
             ?>
         </div>
     </div>
 
+	<div class="row buttons">
+		<?php
+                echo CHtml::submitButton(DomainConst::CONTENT00349, array(
+                    'name' => DomainConst::KEY_SUBMIT,
+                ));
+                ?>
+		<?php
+                echo CHtml::submitButton(DomainConst::CONTENT00350, array(
+                    'name' => DomainConst::KEY_SUBMIT_MONTH,
+                ));
+                ?>
+		<?php
+                echo CHtml::submitButton(DomainConst::CONTENT00351, array(
+                    'name' => DomainConst::KEY_SUBMIT_LAST_MONTH,
+                ));
+                ?>
+	</div>
+
+<?php $this->endWidget(); ?>
+
+</div><!-- form -->
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'receipts-grid',
@@ -91,7 +125,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'name' => DomainConst::CONTENT00100,
             'htmlOptions' => array('style' => 'text-align:left;'),
             'value' => '$data->getReceiptCustomerName()',
-            'footer' => OneMany::getReceiptCustomerTotal($receipts),
+            'footer' => OneMany::getReceiptCustomerTotal($receipts->getData()),
             'footerHtmlOptions' => array(
                 'style' => 'text-align:right; font-weight:bold'),
         ),
@@ -105,7 +139,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'name' => DomainConst::CONTENT00129,
             'htmlOptions' => array('style' => 'text-align:right;'),
             'value' => '$data->getReceiptTreatmentTypePriceText()',
-            'footer' => OneMany::getReceiptTreatmentTypePriceTotal($receipts),
+            'footer' => OneMany::getReceiptTreatmentTypePriceTotal($receipts->getData()),
             'footerHtmlOptions' => array(
                 'style' => 'text-align:right; font-weight:bold'),
         ),
@@ -113,7 +147,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'name' => DomainConst::CONTENT00317,
             'htmlOptions' => array('style' => 'text-align:right;'),
             'value' => '$data->getReceiptDiscountText()',
-            'footer' => OneMany::getReceiptDiscountTotal($receipts),
+            'footer' => OneMany::getReceiptDiscountTotal($receipts->getData()),
             'footerHtmlOptions' => array(
                 'style' => 'text-align:right; font-weight:bold'),
         ),
@@ -121,7 +155,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'name' => DomainConst::CONTENT00259,
             'htmlOptions' => array('style' => 'text-align:right;'),
             'value' => '$data->getReceiptFinalText()',
-            'footer' => OneMany::getReceiptFinalTotal($receipts),
+            'footer' => OneMany::getReceiptFinalTotal($receipts->getData()),
             'footerHtmlOptions' => array(
                 'style' => 'text-align:right; font-weight:bold'),
         ),
@@ -129,7 +163,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'name' => DomainConst::CONTENT00300,
             'htmlOptions' => array('style' => 'text-align:right;'),
             'value' => '$data->getReceiptDebitText()',
-            'footer' => OneMany::getReceiptDebitTotal($receipts),
+            'footer' => OneMany::getReceiptDebitTotal($receipts->getData()),
             'footerHtmlOptions' => array(
                 'style' => 'text-align:right; font-weight:bold'),
         ),
@@ -137,3 +171,36 @@ $this->widget('zii.widgets.grid.CGridView', array(
     ),
 ));
 ?>
+<h1><?php echo DomainConst::CONTENT00254; ?></h1>
+<div class="grid-view">
+    <table class="items">
+        <thead>
+            <tr>
+                <th>
+                    <?php echo DomainConst::CONTENT00352; ?>
+                </th>
+                <th>
+                    <?php echo DomainConst::CONTENT00353; ?>
+                </th>
+                <th>
+                    <?php echo DomainConst::CONTENT00354; ?>
+                </th>
+                <th>
+                    <?php echo DomainConst::CONTENT00355; ?>
+                </th>
+                <th>
+                    <?php echo DomainConst::CONTENT00356; ?>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="even">
+                <td style="text-align:center; font-weight:bold"><?php echo OneMany::getReceiptCustomerTotal($receipts->rawData); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptTreatmentTypePriceTotal($receipts->rawData); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptDiscountTotal($receipts->rawData); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptFinalTotal($receipts->rawData); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptDebitTotal($receipts->rawData); ?></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

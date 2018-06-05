@@ -877,6 +877,12 @@ class DomainConst {
     const KEY_CUSTOMER_LIST                 = 'customer_list';
     /** city_id */
     const KEY_CITY_ID                       = 'city_id';
+    /** Submit */
+    const KEY_SUBMIT                        = 'submit';
+    /** Submit month */
+    const KEY_SUBMIT_MONTH                  = 'submitMonth';
+    /** Submit last month */
+    const KEY_SUBMIT_LAST_MONTH             = 'submitLastMonth';
     
     //-----------------------------------------------------
     // List domain const
@@ -1297,4 +1303,12 @@ class DomainConst {
     const CONTENT00346  = 'Cập nhật';
     const CONTENT00347  = 'Khoản chi';
     const CONTENT00348  = 'Tạo phiếu thu';
+    const CONTENT00349  = 'Tìm';
+    const CONTENT00350  = 'Tháng này';
+    const CONTENT00351  = 'Tháng trước';
+    const CONTENT00352  = 'Tổng số hồ sơ';
+    const CONTENT00353  = 'Tổng tiền';
+    const CONTENT00354  = 'Giảm giá';
+    const CONTENT00355  = 'Tổng thực thu';
+    const CONTENT00356  = 'Còn nợ';
 }

@@ -19,15 +19,58 @@ class ReportsController extends AdminController
 	{
             $agentId = isset(Yii::app()->user->agent_id) ? Yii::app()->user->agent_id : '';
             $mAgent = Agents::model()->findByPk($agentId);
-            $receipts = array();
-            if ($mAgent) {
-                $receipts = $mAgent->getReceipts();
+            $from = '';
+            $to = '';
+            // Get data from url
+            $this->validateRevenueUrl($from, $to);
+            if (empty($from)) {
+                $from = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
             }
-		$this->render('revenue', array(
-                        'receipts' => $receipts,
-                        DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-		));
+            if (empty($to)) {
+                $to = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
+            }
+            $receipts = array();
+            // Start access db
+            if ($mAgent) {
+                $receipts = $mAgent->getReceipts($from, $to);
+            }
+            if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
+                $this->redirect(array('revenue',
+                    'from'  => CommonProcess::convertDateTime($_POST['from_date'], DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_4),
+                    'to'    => CommonProcess::convertDateTime($_POST['to_date'], DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_4)
+                    ));
+            }
+            if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_MONTH)) {
+                $from = CommonProcess::getFirstDateOfCurrentMonth(DomainConst::DATE_FORMAT_4);
+                $this->redirect(array('revenue',
+                    'from'  => $from,
+                    'to'    => CommonProcess::getLastDateOfMonth($from)
+                    ));
+            }
+            if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_LAST_MONTH)) {
+                $from = CommonProcess::getPreviousMonth(DomainConst::DATE_FORMAT_4);
+                $this->redirect(array('revenue',
+                    'from'  => CommonProcess::getFirstDateOfMonth($from),
+                    'to'    => CommonProcess::getLastDateOfMonth($from)
+                    ));
+            }
+            $this->render('revenue', array(
+                    'receipts'  => $receipts,
+                    'from'      => $from,
+                    'to'        => $to,
+                    DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+            ));
 	}
+        
+        /**
+         * Validate revenue url
+         * @param String $from From
+         * @param String $to To
+         */
+        public function validateRevenueUrl(&$from, &$to) {
+            $from = isset($_GET['from']) ? $_GET['from'] : '';
+            $to = isset($_GET['to']) ? $_GET['to'] : '';
+        }
 
 	// Uncomment the following methods and override them if needed
 	/*

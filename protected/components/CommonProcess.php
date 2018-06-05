@@ -434,7 +434,7 @@ class CommonProcess {
     }
     
     /**
-     * Get previous month
+     * Get first day of current month
      * @param String $format Date time format
      * @return Date time string (default is DATE_FORMAT_1 - 'Y-m-d H:i:s')
      */
@@ -442,20 +442,6 @@ class CommonProcess {
         date_default_timezone_set(DomainConst::DEFAULT_TIMEZONE);
         $formatFirst = str_replace("d", "01", $format);
         return date($formatFirst);
-    }
-    
-    /**
-     * Check if a datetime has format in param
-     * @param String $datetime  Date time string
-     * @param String $format    Format to check
-     * @return boolean  True if date time string has format in param, False otherwise
-     */
-    public static function checkFormat($datetime, $format) {
-        $converter = DateTime::createFromFormat($format, $datetime);
-        if ($converter) {
-            return true;
-        }
-        return false;
     }
     
     /**
@@ -474,6 +460,20 @@ class CommonProcess {
      */
     public static function getLastDateOfMonth($date) {
         return date('Y-m-t', strtotime($date));
+    }
+    
+    /**
+     * Check if a datetime has format in param
+     * @param String $datetime  Date time string
+     * @param String $format    Format to check
+     * @return boolean  True if date time string has format in param, False otherwise
+     */
+    public static function checkFormat($datetime, $format) {
+        $converter = DateTime::createFromFormat($format, $datetime);
+        if ($converter) {
+            return true;
+        }
+        return false;
     }
             
     //-----------------------------------------------------
