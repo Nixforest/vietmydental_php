@@ -19,4 +19,5 @@ $this->menu[] = array(
 
 <h1><?php echo $this->pageTitle . ' ' . $model->id; ?></h1>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php echo $this->renderPartial('_form', array('model'=>$model,
+            'customer'  => $customer,)); ?>

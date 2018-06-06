@@ -136,3 +136,81 @@
        });
     });
 </script>
+<?php if ($customer !== NULL): ?>
+<div class="form">
+    <h1><?php echo DomainConst::CONTENT00135 . ': ' . $customer->name; ?></h1>
+    
+
+<?php $form=$this->beginWidget('CActiveForm', array(
+	'id'=>'customers-form',
+	'enableAjaxValidation'=>false,
+));
+if (isset($customer->rMedicalRecord)) {
+            $recordNumber = $customer->rMedicalRecord->record_number;
+        }
+?>
+    <div class="row">
+        <div class="col-md-6">
+            <?php echo $form->labelEx($customer,'date_of_birth'); ?>
+            <?php echo $form->textField($customer,'date_of_birth', array('size'=>60,'maxlength'=>255, 'readonly' => true)); ?>
+        </div>
+        <div class="col-md-6">
+            <?php echo $form->labelEx($customer,'gender'); ?>
+            <?php echo $form->dropDownList($customer,'gender', array(CommonProcess::getGender()[$customer->gender]), array('readonly' => true)); ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <?php echo $form->labelEx($customer,'phone'); ?>
+            <?php echo $form->textField($customer,'phone', array('readonly' => true)); ?>
+        </div>
+        <div class="col-md-6">
+            <label for="Customers_date_of_birth" class="required"><?php echo DomainConst::CONTENT00136; ?> </label>
+            <input size="60" maxlength="255" readonly="readonly" name="Customers[date_of_birth]" id="Customers_date_of_birth" value="<?php echo $recordNumber; ?>" type="text">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <?php echo $form->labelEx($customer,'address'); ?>
+            <?php echo $form->textArea($customer,'address', array('readonly' => true)); ?>
+        </div>
+    </div>
+    
+<?php $this->endWidget(); ?>
+</div>
+<?php endif; // end if (condition) ?>
+
+<?php if ($detail !== NULL): ?>
+<div class="form">
+    <h1><?php echo DomainConst::CONTENT00146 . ' ngày: ' . $detail->getStartDate(); ?></h1>
+    
+
+<?php $form=$this->beginWidget('CActiveForm', array(
+	'id'=>'customers-form',
+	'enableAjaxValidation'=>false,
+));
+?>
+    <div class="row">
+<!--        <div class="col-md-6">
+            <label for="teeth"><?php echo DomainConst::CONTENT00284; ?></label>
+            <?php // echo $detail->generateTeethInfo(", "); ?>
+        </div>-->
+        <div class="col-md-6">
+            <?php echo $form->labelEx($detail,'diagnosis_id'); ?>
+            <?php echo $form->dropDownList($detail,'diagnosis_id', array(Diagnosis::loadChildItems(true)[$detail->diagnosis_id]), array('readonly' => true)); ?>
+        </div>
+        <div class="col-md-6">
+            <?php echo $form->labelEx($detail,'treatment_type_id'); ?>
+            <?php echo $form->dropDownList($detail,'treatment_type_id', array(TreatmentTypes::loadItems(true)[$detail->treatment_type_id]), array('readonly' => true)); ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <?php echo $form->labelEx($detail,'description'); ?>
+            <?php echo $form->textArea($detail,'description', array('readonly' => true)); ?>
+        </div>
+    </div>
+    
+<?php $this->endWidget(); ?>
+</div>
+<?php endif; // end if (condition) ?>

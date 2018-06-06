@@ -98,6 +98,7 @@ class ReceiptsController extends AdminController
             $userId = isset(Yii::app()->user->id) ? Yii::app()->user->id : '';
             $mDetail = TreatmentScheduleDetails::model()->findByPk($detailId);
             $total = 0;
+            $customer = NULL;
             if ($mDetail) {
                 if (isset($mDetail->rReceipt)) {
                     $model = $mDetail->rReceipt;
@@ -105,6 +106,8 @@ class ReceiptsController extends AdminController
                     $model   = new Receipts();
                 }
                 $total = $mDetail->getTotalMoney();
+                
+                $customer = $mDetail->getCustomerModel();
             } else {
                 $model   = new Receipts();
             }
@@ -132,6 +135,7 @@ class ReceiptsController extends AdminController
                 'model' => $model,
                 'total' => $total,
                 'detail' => $mDetail,
+                'customer'  => $customer,
                 DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
             ));
         }

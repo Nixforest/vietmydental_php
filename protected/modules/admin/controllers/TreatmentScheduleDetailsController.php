@@ -110,6 +110,7 @@ class TreatmentScheduleDetailsController extends AdminController
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
+                $customer = $model->getCustomerModel();
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -143,6 +144,7 @@ class TreatmentScheduleDetailsController extends AdminController
 
 		$this->render('update',array(
 			'model'=>$model,
+                        'customer'  => $customer,
                         DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
 		));
 	}
