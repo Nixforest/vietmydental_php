@@ -31,9 +31,23 @@ class SelectToothExt extends CPortlet {
      * Render content.
      */
     protected function renderContent() {
+        $className              = '';
+        $model                  = CommonProcess::getValue($this->data, AutocompleteExt::KEY_MODEL, NULL);
+        if (isset($model)) {
+            $className = get_class($model);
+        }
+        $rTeeth = array();
+        if (isset($model->rJoinTeeth)) {
+            foreach ($model->rJoinTeeth as $item) {
+                $rTeeth[] = $item->many_id;
+            }
+        }
+        
+        
         // Render
         $this->render('view', array(
-            'data'              => $this->data,
+            'className'         => $className,
+            'selectedTeeth'     => $rTeeth,
         ));
     }
 }

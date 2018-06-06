@@ -226,7 +226,7 @@ class CommonProcess {
      * @param type $emptyOption
      * @return string
      */
-    public static function getListTeeth($emptyOption = false) {
+    public static function getListTeeth($emptyOption = false, $prefix = DomainConst::CONTENT00284) {
         $retVal = array();
         if ($emptyOption) {
             $retVal[''] = '';
@@ -258,7 +258,7 @@ class CommonProcess {
                 $i = 8;
                 $n = $index - 46;
             }
-            $retVal[$index] = DomainConst::CONTENT00284 . $i . " - " . $n;
+            $retVal[$index] = $prefix . $i . " - " . $n;
         }
         
 //        $retVal[52] = DomainConst::CONTENT00285;

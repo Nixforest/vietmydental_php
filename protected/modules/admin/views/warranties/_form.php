@@ -41,42 +41,9 @@
     <div class="row">
         <label for="teeth"><?php echo DomainConst::CONTENT00284; ?></label>
         <?php
-        $arrTeeth = CommonProcess::getListTeeth();
-        $rTeeth = array();
-        if (isset($model->rJoinTeeth)) {
-            foreach ($model->rJoinTeeth as $item) {
-                $rTeeth[] = $item->many_id;
-            }
-        }
-        $index = 0;
+        $this->widget('ext.SelectToothExt.SelectToothExt',
+                        array('data' => $aData));
         ?>
-        <table>
-            <?php foreach ($arrTeeth as $teeth): ?>
-                <?php
-                    $inputId = "teeth_" . $index;
-                    $inputName = "teeth" . '[' . $index . ']';
-                    $checked = "";
-                    if (in_array($index, $rTeeth)) {
-                        $checked = 'checked="checked"';
-                    }
-                    $index++;
-                ?>
-                <tr>
-                    <td>
-                        <input
-                            name="<?php echo $inputName ?>"
-                            value="1"
-                            type="checkbox"
-                            id="<?php echo $inputId ?>"
-                            <?php echo $checked; ?>
-                            >
-                        <label for="<?php echo $inputId ?>" >
-                            <?php echo $teeth; ?>
-                        </label>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
     </div>
     <div class="row">
         <?php echo $form->labelEx($model, 'start_date'); ?>
