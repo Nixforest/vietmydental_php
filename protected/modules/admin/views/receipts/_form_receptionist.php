@@ -52,6 +52,40 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'process_date'); ?>
+		<?php
+                if ($model->isNewRecord) {
+                    $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3);
+                } else {
+                    $date = CommonProcess::convertDateTime($model->process_date,
+                            DomainConst::DATE_FORMAT_4,
+                            DomainConst::DATE_FORMAT_3);
+                }
+                $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+                    'model'     => $model,
+                    'attribute' => 'process_date',
+                    'options'   => array(
+                        'showAnim'      => 'fold',
+                        'dateFormat'    => DomainConst::DATE_FORMAT_2,
+                        'maxDate'       => '0',
+                        'changeMonth'   => true,
+                        'changeYear'    => true,
+                        'showOn'        => 'button',
+                        'buttonImage'   => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
+                        'buttonImageOnly' => true,
+                    ),
+                    'htmlOptions'=>array(
+                                'class'=>'w-16',
+//                                'style'=>'height:20px;width:166px;',
+                                'readonly'=>'readonly',
+                                'value' => $date,
+                            ),
+                ));
+                ?>
+		<?php echo $form->error($model,'process_date'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'description'); ?>
 		<?php echo $form->textArea($model,'description',array('rows'=>6, 'cols'=>50)); ?>
 		<?php echo $form->error($model,'description'); ?>

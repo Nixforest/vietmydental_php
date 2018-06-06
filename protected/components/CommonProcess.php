@@ -424,6 +424,26 @@ class CommonProcess {
     }
     
     /**
+     * Get yesterday
+     * @param String $format Date time format
+     * @return Date time string (default is DATE_FORMAT_1 - 'Y-m-d H:i:s')
+     */
+    public static function getPreviousDateTime($format = DomainConst::DATE_FORMAT_1) {
+        date_default_timezone_set(DomainConst::DEFAULT_TIMEZONE);
+        return date($format, strtotime('-1 day'));
+    }
+    
+    /**
+     * Get the date before yesterday
+     * @param String $format Date time format
+     * @return Date time string (default is DATE_FORMAT_1 - 'Y-m-d H:i:s')
+     */
+    public static function getDateBeforeYesterdayDateTime($format = DomainConst::DATE_FORMAT_1) {
+        date_default_timezone_set(DomainConst::DEFAULT_TIMEZONE);
+        return date($format, strtotime('-2 day'));
+    }
+    
+    /**
      * Get previous month
      * @param String $format Date time format
      * @return Date time string (default is DATE_FORMAT_1 - 'Y-m-d H:i:s')

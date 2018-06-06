@@ -883,6 +883,12 @@ class DomainConst {
     const KEY_SUBMIT_MONTH                  = 'submitMonth';
     /** Submit last month */
     const KEY_SUBMIT_LAST_MONTH             = 'submitLastMonth';
+    /** Submit date before yesterday */
+    const KEY_SUBMIT_DATE_BEFORE_YESTERDAY  = 'submitDateBeforeYesterday';
+    /** Submit yesterday */
+    const KEY_SUBMIT_DATE_YESTERDAY         = 'submitYesterday';
+    /** Submit today */
+    const KEY_SUBMIT_TODATE                 = 'submitToday';
     
     //-----------------------------------------------------
     // List domain const
@@ -1311,4 +1317,7 @@ class DomainConst {
     const CONTENT00354  = 'Giảm giá';
     const CONTENT00355  = 'Tổng thực thu';
     const CONTENT00356  = 'Còn nợ';
+    const CONTENT00357  = 'Hôm qua';
+    const CONTENT00358  = 'Hôm nay';
+    const CONTENT00359  = 'Hôm trước';
 }

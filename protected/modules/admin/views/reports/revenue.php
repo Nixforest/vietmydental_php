@@ -2,7 +2,7 @@
 /* @var $this ReportsController */
 
 $this->createMenu('revenue', null);
-$dateFrom = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_BACK_END);
+$dateFrom = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
 $dateTo = $dateFrom;
 if (!empty($from)) {
     $dateFrom = CommonProcess::convertDateTime($from, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_BACK_END);
@@ -16,7 +16,7 @@ if (!empty($to)) {
 <div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'treatment-schedule-details-form',
+	'id'=>'revenue-form',
 	'enableAjaxValidation'=>false,
 )); ?>
     <div class="row">
@@ -39,10 +39,9 @@ if (!empty($to)) {
                 ),
                 'htmlOptions'=>array(
                             'class'=>'w-16',
-//                                'style'=>'height:20px;width:166px;',
-//                            'readonly'=>'readonly',
-                            'value' => $dateFrom,
+                            'readonly'=>'readonly',
                         ),
+                'value' => $dateFrom,
             ));
             ?>
         </div>
@@ -65,10 +64,9 @@ if (!empty($to)) {
                 ),
                 'htmlOptions'=>array(
                             'class'=>'w-16',
-//                                'style'=>'height:20px;width:166px;',
-//                            'readonly'=>'readonly',
-                            'value' => $dateTo,
+                            'readonly'=>'readonly',
                         ),
+                'value' => $dateTo,
             ));
             ?>
         </div>
@@ -78,6 +76,21 @@ if (!empty($to)) {
 		<?php
                 echo CHtml::submitButton(DomainConst::CONTENT00349, array(
                     'name' => DomainConst::KEY_SUBMIT,
+                ));
+                ?>
+		<?php
+                echo CHtml::submitButton(DomainConst::CONTENT00359, array(
+                    'name' => DomainConst::KEY_SUBMIT_DATE_BEFORE_YESTERDAY,
+                ));
+                ?>
+		<?php
+                echo CHtml::submitButton(DomainConst::CONTENT00357, array(
+                    'name' => DomainConst::KEY_SUBMIT_DATE_YESTERDAY,
+                ));
+                ?>
+		<?php
+                echo CHtml::submitButton(DomainConst::CONTENT00358, array(
+                    'name' => DomainConst::KEY_SUBMIT_TODATE,
                 ));
                 ?>
 		<?php

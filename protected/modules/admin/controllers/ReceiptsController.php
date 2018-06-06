@@ -116,7 +116,7 @@ class ReceiptsController extends AdminController
             if (isset($_POST['Receipts'])) {
                 $model->attributes = $_POST['Receipts'];
                 $model->detail_id = $detailId;
-                $model->process_date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
+//                $model->process_date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
                 $model->need_approve = 0;
                 $model->customer_confirm = 0;
                 $model->receiptionist_id = $userId;
