@@ -1320,4 +1320,5 @@ class DomainConst {
     const CONTENT00357  = 'Hôm qua';
     const CONTENT00358  = 'Hôm nay';
     const CONTENT00359  = 'Hôm trước';
+    const CONTENT00360  = 'Phiếu thu cũ';
 }

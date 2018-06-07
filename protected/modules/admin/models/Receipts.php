@@ -385,7 +385,11 @@ class Receipts extends CActiveRecord
         if ($this->status == self::STATUS_DOCTOR) {
             $rightContent .=                '<td>';
             $rightContent .=                    '<div class="group-btn">';
-            $rightContent .=                        '<a href="' . Yii::app()->createAbsoluteUrl("front/receptionist/update", array("id" => $this->id)) . '">' . DomainConst::CONTENT00265 . '</a>';
+            $rightContent .=                        '<a href="' . Yii::app()->createAbsoluteUrl("front/receptionist/update",
+                    array(
+                        "id" => $this->id,
+                        'action'    => DateTimeExt::isToday($this->process_date, DomainConst::DATE_FORMAT_4) ? 'receipt' : 'receiptOld',
+                    )) . '">' . DomainConst::CONTENT00265 . '</a>';
             $rightContent .=                    '</div>';
             $rightContent .=                '</td>';
         }
@@ -394,7 +398,10 @@ class Receipts extends CActiveRecord
         $rightContent .=                    '<div class="group-btn">';
 //        $rightContent .=                        '<a style="cursor: pointer;"'
 //                                                    . ' onclick="{createPrintDialog(); $(\'#dialog\').dialog(\'open\');}">' . DomainConst::CONTENT00264 . '</a>';
-        $rightContent .=                        '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("front/receptionist/printReceipt", array("id" => $this->id)) . '">' . DomainConst::CONTENT00264 . '</a>';
+        $rightContent .=                        '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("front/receptionist/printReceipt",
+                array(
+                    "id"        => $this->id,
+                )) . '">' . DomainConst::CONTENT00264 . '</a>';
         $rightContent .=                    '</div>';
         $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
@@ -605,6 +612,43 @@ class Receipts extends CActiveRecord
         return false;
     }
 
+    /**
+     * Retrieves a list of models based on the current search/filter conditions.
+     * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+     */
+    public function searchOld()
+    {
+            // Warning: Please modify the following code to remove attributes that
+            // should not be searched.
+
+            $criteria=new CDbCriteria;
+
+            $criteria->compare('id',$this->id,true);
+            $criteria->compare('detail_id',$this->detail_id,true);
+            $now = new CDbExpression("NOW()");
+//            $criteria->addCondition("t.process2_date != " . CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4));
+            $criteria->addCondition('t.process_date < DATE(NOW())');
+            $criteria->compare('total',$this->total,true);
+            $criteria->compare('discount',$this->discount,true);
+            $criteria->compare('final',$this->final,true);
+            $criteria->compare('need_approve',$this->need_approve);
+            $criteria->compare('customer_confirm',$this->customer_confirm);
+            $criteria->compare('description',$this->description,true);
+            $criteria->compare('created_date',$this->created_date,true);
+            $criteria->compare('created_by',$this->created_by,true);
+            $criteria->compare('receiptionist_id',$this->receiptionist_id,true);
+            $criteria->addCondition('t.status != ' . self::STATUS_RECEIPTIONIST);
+            $criteria->addCondition('t.status != ' . self::STATUS_INACTIVE);
+            $criteria->order = 'id DESC';
+
+            return new CActiveDataProvider($this, array(
+                    'criteria'=>$criteria,
+                    'pagination' => array(
+                        'pageSize' => Settings::getListPageSize(),
+                    ),
+            ));
+    }
+
     //-----------------------------------------------------
     // Static methods
     //-----------------------------------------------------
@@ -636,6 +680,24 @@ class Receipts extends CActiveRecord
         }
         
         return $retVal;
+//        $criteria = new CDbCriteria();
+//        $criteria->addCondition('t.process_date = DATE(NOW())');
+//        $criteria->addCondition('t.status != ' . self::STATUS_INACTIVE);
+//        $models = self::model()->findAll($criteria);
+//        return $models;
+    }
+    
+    /**
+     * Get list receipts old
+     * @return type
+     */
+    public static function getReceiptsOld() {
+        $criteria = new CDbCriteria();
+        $criteria->addCondition('t.process_date < DATE(NOW())');
+        $criteria->addCondition('t.status != ' . self::STATUS_RECEIPTIONIST);
+        $criteria->addCondition('t.status != ' . self::STATUS_INACTIVE);
+        $models = self::model()->findAll($criteria);
+        return $models;
     }
     
     /**

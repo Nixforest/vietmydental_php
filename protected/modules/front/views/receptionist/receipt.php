@@ -83,7 +83,7 @@
                 </div>
                 <?php $this->widget('zii.widgets.grid.CGridView', array(
                         'id'=>'receipts-grid',
-                        'dataProvider'=>$models->search(),
+                        'dataProvider'=>$models,
 //                        'filter'=>$models,
                         'summaryText'=>'Đang hiển thị {start} - {end} trên {count} kết quả', 
                         'selectableRows'=>1,
@@ -103,13 +103,11 @@
                                     'headerHtmlOptions' => array('width' => '30px','style' => 'text-align:center;'),
                                     'htmlOptions' => array('style' => 'text-align:center;')
                                 ),
+                                'process_date',
                                 array(
                                     'name' => DomainConst::CONTENT00100,
-                                    'value' => '($data->getCustomer() !== NULL) ? $data->getCustomer()->name : ""',
-                                ),
-                                array(
-                                    'name' => DomainConst::CONTENT00170,
-                                    'value' => '($data->getCustomer() !== NULL) ? $data->getCustomer()->phone : ""',
+                                    'value' => '($data->getCustomer() !== NULL) ? $data->getCustomer()->name."<br>".$data->getCustomer()->phone : ""',
+                                    'type' => 'html',
                                 ),
                                 array(
                                     'name' => DomainConst::CONTENT00255,
@@ -120,7 +118,6 @@
                                     'htmlOptions' => array('style' => 'text-align:right;'),
                                     'value' => '($data->getTreatmentType() !== NULL) ? CommonProcess::formatCurrency($data->final) : ""',
                                 ),
-//                                'process_date',
 //                                'discount',
 //                                'need_approve',
 //                                'customer_confirm',
@@ -146,6 +143,9 @@
 //                                ),
                         ),
                 )); ?>
+                <?php if ($isToday == true): ?>
+                <?php echo HtmlHandler::createButton(Yii::app()->createAbsoluteUrl('front/receptionist/receiptOld'), DomainConst::CONTENT00360) ?>
+                <?php endif; // end if (condition) ?>
             </div>
         </div>
     </div>
@@ -192,13 +192,21 @@
                 "#right_page_title",
                 "<?php echo DomainConst::CONTENT00171 ?>");
     });
-    $("body").on("click", "#customer-info tbody tr", function() {
-        fnShowCustomerInfo(
-                "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/getReceiptInfo'); ?>",
-                "#right-content",
-                "#right_page_title",
-                "<?php echo DomainConst::CONTENT00256 ?>",
-                $(this).attr('id'));
+    $("body").on("click", "#receipts-grid tbody tr", function() {
+//        fnShowCustomerInfo(
+//                "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/getReceiptInfo'); ?>",
+//                "#right-content",
+//                "#right_page_title",
+//                "<?php echo DomainConst::CONTENT00256 ?>",
+//                $(this).attr('id'));
+    });
+    $("body").on("click", "#receipts-grid-old tbody tr", function() {
+//        fnShowCustomerInfo(
+//                "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/getReceiptInfo'); ?>",
+//                "#right-content",
+//                "#right_page_title",
+//                "<?php echo DomainConst::CONTENT00256 ?>",
+//                $(this).attr('id'));
 //        alert($(this).attr('id'));
     });
 </script>

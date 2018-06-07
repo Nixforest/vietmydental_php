@@ -302,17 +302,36 @@ class ReceptionistController extends Controller {
         if(isset($_GET['Receipts']))
 			$models->attributes=$_GET['Receipts'];
         $this->render('receipt', array(
-            'models' => $models, 
-            'arrModels' => $arrModels, 
+            'models' => $models->search(), 
+            'arrModels' => $arrModels,
+            'isToday'   => true,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }
     
     /**
+     * Action handle receipt old
+     */
+    public function actionReceiptOld() {
+        Loggers::info("Load receipt", "actionReceiptOld", __CLASS__);
+        $arrModels = Receipts::getReceiptsOld();
+        $models = new Receipts('searchOld');
+        $models->unsetAttributes();  // clear any default values
+        if (isset($_GET['Receipts']))
+            $models->attributes = $_GET['Receipts'];
+        $this->render('receipt', array(
+            'models' => $models->searchOld(),
+            'arrModels' => $arrModels,
+            'isToday'   => false,
+            DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+        ));
+    }
+
+    /**
      * Update receipt
      * @param String $id Id of receipt
      */
-    public function actionUpdate($id) {
+    public function actionUpdate($id, $action) {
         Loggers::info("Update receipt with id = $id", "actionUpdate", __CLASS__);
         $model = Receipts::model()->findByPk($id);
         if ($model) {
@@ -331,7 +350,7 @@ class ReceptionistController extends Controller {
         }
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax'])) {
-            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('receipt'));
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array($action));
         }
     }
     
