@@ -166,8 +166,8 @@ class ActionsUsers extends BaseActiveRecord
      * @param String $controller_name Name of controller
      * @return Array List of actions
      */
-    public static function getActionArrAllowForCurrentUserByControllerName($controller_name) {
-        $controller = Controllers::getByName($controller_name);
+    public static function getActionArrAllowForCurrentUserByControllerName($controller_name, $module_name = 'admin') {
+        $controller = Controllers::getByName($controller_name, $module_name);
         if ($controller) {
             return ActionsUsers::getActionArrAllowForCurrentUserByController($controller->id);
         } else {

@@ -11,7 +11,8 @@
  *
  * @author NguyenPT
  */
-class AdminMenuManager {    
+class AdminMenuManager {
+    
     /**
      * Check if a menu has child
      * @param Int $id       id of menu
@@ -233,6 +234,7 @@ class AdminMenuManager {
                 if ($menuTemp->rModule->name != 'front') {
                     continue;
                 }
+                
                 $c = isset($menuTemp->rController) ? $menuTemp->rController->name : '';
                 $a = $menuTemp->action;
                 // If allow menu session
@@ -245,14 +247,14 @@ class AdminMenuManager {
                     $sessionTemp = $session[DomainConst::KEY_FE_MENU_CONTROLLER_ACTION];
                     if (!isset($sessionTemp[$c])) {
                         // Get list all actions of current controller data from db
-                        $sessionTemp[$c] = ActionsUsers::getActionArrAllowForCurrentUserByControllerName($c);
+                        $sessionTemp[$c] = ActionsUsers::getActionArrAllowForCurrentUserByControllerName($c, 'front');
                         $session[DomainConst::KEY_FE_MENU_CONTROLLER_ACTION] = $sessionTemp;
                     }
                     $aActionAllowed = $session[DomainConst::KEY_FE_MENU_CONTROLLER_ACTION][$c];
                 } else {
                     // Reset action
                     $session[DomainConst::KEY_FE_MENU_CONTROLLER_ACTION] = array();
-                    $aActionAllowed = ActionsUsers::getActionArrAllowForCurrentUserByControllerName($c);
+                    $aActionAllowed = ActionsUsers::getActionArrAllowForCurrentUserByControllerName($c, 'front');
                 }
                 // Check if current action is allowed
                 if (in_array($a, $aActionAllowed)) {

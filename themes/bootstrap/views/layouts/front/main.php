@@ -47,7 +47,7 @@ Yii::app()->clientscript
         <link href="apple-touch-icon.png" rel="apple-touch-icon" /> 
         <link href="favicon.ico" rel="icon" /> 
       
-        <title>Immortal Technology LTD.,CO</title>        
+        <title><?php echo CHtml::encode($this->pageTitle); ?></title>        
         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/bootstrap.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/bootstrap-responsive.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/style.css" />

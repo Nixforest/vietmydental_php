@@ -3,7 +3,7 @@
 /* @var $model Receipts */
 
 $this->createMenu('view', $model);
-if (AdminController::isAccessAction('cancel', $actions)) {
+if (AdminController::canAccessAction('cancel', $actions)) {
     $this->menu[] = array(
                     'label' => $this->getPageTitleByAction('cancel'),
                     'url' => array(

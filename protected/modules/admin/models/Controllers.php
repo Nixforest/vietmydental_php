@@ -148,10 +148,18 @@ class Controllers extends BaseActiveRecord
      * @param String $name Name of controller
      * @return Controllers Model controller
      */
-    public static function getByName($name)
+    public static function getByName($name, $module_name = 'admin')
     {
-        return Controllers::model()->find('LOWER(name)="'.  strtolower($name).'"');
+        $mModule = Modules::getByName($module_name);
+        if ($mModule) {
+            $mController = self::model()->find('LOWER(name)="'.  strtolower($name).'" AND module_id="' . $mModule->id . '"');
+            if ($mController) {
+                return $mController;
+            } 
+        }
+        return NULL;
     }
+    
     /**
      * Get controller by id
      * @param String $id Id of controller
@@ -181,8 +189,8 @@ class Controllers extends BaseActiveRecord
      * @param String $name name of controller
      * @return string Description of controller
      */
-    public static function getControllerDescriptionByName($name) {
-        $controller = Controllers::getByName($name);
+    public static function getControllerDescriptionByName($name, $module_name = 'admin') {
+        $controller = Controllers::getByName($name, $module_name);
         if ($controller) {
             return $controller->description;
         }

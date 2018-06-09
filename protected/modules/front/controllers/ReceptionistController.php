@@ -1,6 +1,6 @@
 <?php
 
-class ReceptionistController extends Controller {
+class ReceptionistController extends FrontController {
     /**
      * Handle receiving patient in agent.
      */
@@ -363,7 +363,7 @@ class ReceptionistController extends Controller {
         ));
     }
     
-    
+
 
     /**
      * Handle print receipt.

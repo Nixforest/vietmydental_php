@@ -1,7 +1,7 @@
 <?php
 /* @var $this SiteController */
 
-$this->pageTitle=Yii::app()->name;
+$this->pageTitle = Yii::app()->name;
 ?>
 
 <h1>Chào mừng bạn đến với <i><?php echo CHtml::encode(Settings::getWebsiteName()); ?></i></h1>

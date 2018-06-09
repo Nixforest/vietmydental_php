@@ -158,6 +158,7 @@ class Modules extends BaseActiveRecord
     {
         return Modules::model()->find('LOWER(name)="'.  strtolower($name).'"');
     }
+    
     // TEST
     public static function getControllers() {
         $retVal = array();

@@ -1,6 +1,6 @@
 <?php
 
-class CustomerController extends Controller {
+class CustomerController extends FrontController {
     /**
      * Handle receiving patient in agent.
      */

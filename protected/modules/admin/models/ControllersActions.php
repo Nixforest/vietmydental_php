@@ -123,14 +123,14 @@ class ControllersActions extends BaseActiveRecord
      * @param String $action Id of action
      * @return string Name of action
      */
-    public static function getActionNameByController($controller_name, $action) {
-        $controller = Controllers::getByName($controller_name);
+    public static function getActionNameByController($controller_name, $action, $module_name = 'admin') {
+        $controller = Controllers::getByName($controller_name, $module_name);
         if ($controller) {
             foreach (ControllersActions::getActionArrByController($controller->id) as $value) {
-            if ($value->action == $action) {
-                return $value->name;
+                if ($value->action == $action) {
+                    return $value->name;
+                }
             }
-        }
         }
         
         return '';

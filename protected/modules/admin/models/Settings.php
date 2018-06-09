@@ -266,6 +266,7 @@ class Settings extends BaseActiveRecord
                 Settings::KEY_EMAIL_TRANSPORT_PORT);
         Yii::app()->mail->transportOptions[DomainConst::KEY_ENCRYPTION] = self::getItem(
                 Settings::KEY_EMAIL_TRANSPORT_ENCRYPTION);
+        Yii::app()->name = self::getWebsiteName();
     }
     
     /**
