@@ -62,6 +62,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 //                    'value'=> '',
 //                    'filter'=>Modules::getControllers(),
 //                    ),
+		'description',
                 array(
                     'header' => DomainConst::CONTENT00239,
                     'class'=>'CButtonColumn',

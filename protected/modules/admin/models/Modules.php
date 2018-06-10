@@ -6,6 +6,7 @@
  * The followings are the available columns in table 'modules':
  * @property integer $id
  * @property string $name
+ * @property string $description
  */
 class Modules extends BaseActiveRecord
 {
@@ -25,10 +26,11 @@ class Modules extends BaseActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('description', 'required'),
 			array('name', 'length', 'max'=>63),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name', 'safe', 'on'=>'search'),
+			array('id, name, description', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -53,6 +55,7 @@ class Modules extends BaseActiveRecord
 		return array(
 			'id' => 'ID',
 			'name' => 'Name',
+			'description' => 'Description',
 		);
 	}
 
@@ -76,6 +79,7 @@ class Modules extends BaseActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
+		$criteria->compare('description',$this->description,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

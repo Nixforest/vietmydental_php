@@ -1,6 +1,11 @@
 <?php
 
 class RolesAuthController extends AdminController {
+	/**
+	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
+	 * using two-column layout. See 'protected/views/layouts/column2.php'.
+	 */
+	public $layout='//layouts/column2';
 //    public $aControllers = array(
 //        'users' => array(
 //            'alias' => 'Quản lý nhân sự',
@@ -78,6 +83,45 @@ class RolesAuthController extends AdminController {
                 $retVal[$controller->id][DomainConst::KEY_ACTIONS][$action->action] = array();
                 $retVal[$controller->id][DomainConst::KEY_ACTIONS][$action->action][DomainConst::KEY_ALIAS] = $action->name;
                 $retVal[$controller->id][DomainConst::KEY_ACTIONS][$action->action][DomainConst::KEY_CHILD_ACTIONS] = array();
+            }
+        }
+        return $retVal;
+    }
+    /**
+     * Get list of roles that authenticated from database
+     * @return array Array object format like
+     */
+    public static function getListRolesAuthenticatedFromDb1() {
+        $retVal = array();
+        $mModule = Modules::model()->findAll(array(
+            'order' => 'id DESC',
+        ));
+        // Loop for list controllers
+        foreach ($mModule as $id => $module) {
+            if (!CommonProcess::isUserAdmin() && $module->name == 'api') {
+                continue;
+            }
+            if (isset($module->rController)) {
+                $retVal[$module->id] = array();
+                $retVal[$module->id][DomainConst::KEY_ALIAS] = $module->description;
+                $actions = array();
+                // Loop for list controllers
+                foreach ($module->rController as $controller) {
+                    $listActions = ControllersActions::getActionArrByController($controller->id);
+                    if (count($listActions) == 0) {
+                        continue;
+                    }
+                    $actions[$controller->id] = array();
+                    $actions[$controller->id][DomainConst::KEY_ALIAS] = $controller->description;
+                    $actions[$controller->id][DomainConst::KEY_ACTIONS] = array();
+                    // Loop for all actions of this controller
+                    foreach ($listActions as $action) {
+                        $actions[$controller->id][DomainConst::KEY_ACTIONS][$action->action] = array();
+                        $actions[$controller->id][DomainConst::KEY_ACTIONS][$action->action][DomainConst::KEY_ALIAS] = $action->name;
+                        $actions[$controller->id][DomainConst::KEY_ACTIONS][$action->action][DomainConst::KEY_CHILD_ACTIONS] = array();
+                    }
+                }
+                $retVal[$module->id][DomainConst::KEY_CHILDREN] = $actions;
             }
         }
         return $retVal;

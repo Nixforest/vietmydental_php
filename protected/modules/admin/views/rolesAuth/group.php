@@ -19,7 +19,93 @@ $form = $this->beginWidget('CActiveForm', array(
         <?php echo Yii::app()->user->getFlash(DomainConst::KEY_SUCCESS_UPDATE); ?>
     </div>
 <?php endif; // end if (Yii::app()->user->hasFlash('successUpdate'))  ?>
-<table style="">
+<div id="tabs" class="container">
+    <ul class="nav nav-tabs">
+        <?php
+        $isFirstTab = true;
+        $isFirstTabContent = true;
+        $listControllers = RolesAuthController::getListRolesAuthenticatedFromDb1();
+        foreach ($listControllers as $module_id => $module) {
+            $class = '';                // Class specific which tab is actived
+            if ($isFirstTab) {
+                $class = 'class="active"';
+                $isFirstTab = false;
+            }
+            echo '<li ' . $class . '><a data-toggle="tab" href=#tabs-' . $module_id . '>' . $module[DomainConst::KEY_ALIAS] . '</a></li>';
+        }
+        ?>
+    </ul>
+    <div class="tab-content">
+        <?php foreach ($listControllers as $module_id => $module): ?>
+        <?php
+            $class = '';                // Class specific which tab is actived
+            if ($isFirstTabContent) {
+                $class = 'in active"';
+                $isFirstTabContent = false;
+            }
+        ?>
+        <div id="tabs-<?php echo $module_id; ?>" class="tab-pane fade <?php echo $class; ?>">
+            <div id="tabs-ctrl" class="container">
+                <ul class="nav nav-tabs">
+                    <?php
+                    $isCtlFirstTab = true;
+                    $isCtlFirstTabContent = true;
+                    foreach ($module[DomainConst::KEY_CHILDREN] as $controller_id => $controller) {
+                        $class = '';                // Class specific which tab is actived
+                        if ($isCtlFirstTab) {
+                            $class = 'class="active"';
+                            $isCtlFirstTab = false;
+                        }
+                        echo '<li ' . $class . '><a data-toggle="tab" href=#tabs-ctrl-' . $controller_id . '>' . $controller[DomainConst::KEY_ALIAS] . '</a></li>';
+                    }
+                    ?>
+                </ul>
+                <div class="tab-content">
+                    <?php foreach ($module[DomainConst::KEY_CHILDREN] as $controller_id => $controller): ?>
+                    <?php
+                        $class = '';                // Class specific which tab is actived
+                        if ($isCtlFirstTabContent) {
+                            $class = 'in active"';
+                            $isCtlFirstTabContent = false;
+                        }
+                    ?>
+                    <div id="tabs-ctrl-<?php echo $controller_id; ?>" class="tab-pane fade <?php echo $class; ?>">
+                        <?php
+                            $listAllowActions = ActionsRoles::getActionArrByRoleAndController($id, $controller_id);
+                        ?>
+                        <?php foreach($controller[DomainConst::KEY_ACTIONS] as $keyAction => $aAction): ?>
+                            <?php if ((CommonProcess::isUserAdmin()
+                                    || (!CommonProcess::isUserAdmin() && $keyAction != DomainConst::KEY_ACTION_DELETE))): ?>
+                                <?php
+                                    $checkBoxName = $controller_id . '[' . $keyAction . ']';
+                                    $checkBoxId = $controller_id . '_' . $keyAction;
+                                    ?>
+                                <input
+                                        name="<?php echo $checkBoxName ?>"
+                                        value="1"
+                                        type="checkbox"
+                                        id="<?php echo $checkBoxId ?>"
+                                        <?php
+                                            if (in_array($keyAction, $listAllowActions)) {
+                                                echo 'checked="checked"';
+                                            }
+                                        ?>
+                                        >
+                                <label for="<?php echo $checkBoxId ?>" style="display: block;">
+                                        <?php echo $aAction[DomainConst::KEY_ALIAS] ?>
+                                        </label>
+                            <?php endif; // end if (condition) ?>
+                        <?php endforeach; ?> 
+                    </div>
+                    <?php endforeach; // foreach ($module[DomainConst::KEY_CHILDREN] as $controller): ?>
+                </div>
+                
+            </div>
+        </div>
+        <?php endforeach; // foreach ($listControllers as $module): ?>
+    </div>
+</div>
+<!--<table style="">
     <?php foreach($this->aControllers as $controller_id=>$aController): ?>
         <?php
             $listAllowActions = ActionsRoles::getActionArrByRoleAndController($id, $controller_id);
@@ -67,7 +153,7 @@ $form = $this->beginWidget('CActiveForm', array(
             <?php endif; // end if (condition) ?>
         <?php endforeach; ?>   
     <?php endforeach; ?>    
-</table>
+</table>-->
 <div class="form form_fix_submit">
     <div class="row buttons" style="padding-left: 250px; padding-top: 20px;">
         <?php echo CHtml::submitButton("Save", array('name'=>'submit')); ?>

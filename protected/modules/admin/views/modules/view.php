@@ -25,5 +25,6 @@ $this->createMenu('view', $model);
 	'attributes'=>array(
 		'id',
 		'name',
+		'description',
 	),
 )); ?>
