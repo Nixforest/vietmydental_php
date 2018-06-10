@@ -566,6 +566,36 @@ class Customers extends BaseActiveRecord
     }
     
     /**
+     * Get active schedule time
+     * @return string Schedule time
+     */
+    public function getScheduleTime() {
+        $scheduleId = $this->getSchedule(false);
+        if (!empty($scheduleId)) {
+            $mSchedule = TreatmentScheduleDetails::model()->findByPk($scheduleId);
+            if ($mSchedule) {
+                return $mSchedule->getTimer();
+            }
+        }
+        return '';
+    }
+    
+    /**
+     * Get active schedule doctor
+     * @return string Doctor name
+     */
+    public function getScheduleDoctor() {
+        $scheduleId = $this->getSchedule(false);
+        if (!empty($scheduleId)) {
+            $mSchedule = TreatmentScheduleDetails::model()->findByPk($scheduleId);
+            if ($mSchedule) {
+                return $mSchedule->getDoctor();
+            }
+        }
+        return '';
+    }
+    
+    /**
      * Get customer ajax schedule information
      * @return string
      */

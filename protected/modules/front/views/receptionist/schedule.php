@@ -12,7 +12,7 @@
 <div class="maincontent clearfix">
     <div class="left-page">
         <div class="title-1">
-           Bộ lọc Tìm kiếm
+           <?php echo DomainConst::CONTENT00363; ?>
         </div>
         <div class="info-content">
             <div class="box-search">
@@ -32,32 +32,12 @@
     </div>
     <div class="right-page">
         <div class="title-1" id="right_page_title">
-            Danh sách Bệnh nhân có lịch hẹn vào hôm nay
+            <?php echo DomainConst::CONTENT00177; ?>
         </div>
         <div class="info-content">
             <div id="right-content">
-                <div class="scroll-table">
-                    <table id="customer-info">
-                        <thead>
-                            <tr>
-                                <th><?php echo DomainConst::CONTENT00100; ?></th>
-                                <th><?php echo DomainConst::CONTENT00170; ?></th>
-                                <th><?php echo DomainConst::CONTENT00101; ?></th>
-                                <th class="col-4"><?php echo DomainConst::CONTENT00045; ?></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($model as $customer) :?>
-                            <tr id="<?php echo $customer->id; ?>" class="customer-info-tr">
-                                <td><?php echo $customer->name ?></td>
-                                <td><?php echo $customer->phone ?></td>
-                                <td><?php echo $customer->date_of_birth ?></td>
-                                <td><?php echo $customer->address ?></td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
+                <?php echo HtmlHandler::createTableCustomer($model, DomainConst::CONTENT00361); ?></div>
+                <?php echo HtmlHandler::createTableCustomer($todayModels, DomainConst::CONTENT00362); ?>
             </div>
         </div>
     </div>

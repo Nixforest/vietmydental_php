@@ -1321,4 +1321,7 @@ class DomainConst {
     const CONTENT00358  = 'Hôm nay';
     const CONTENT00359  = 'Hôm trước';
     const CONTENT00360  = 'Phiếu thu cũ';
+    const CONTENT00361  = 'Đã đặt lịch trước';
+    const CONTENT00362  = 'Vừa tạo';
+    const CONTENT00363  = 'Tra cứu thông tin Bệnh Nhân';
 }

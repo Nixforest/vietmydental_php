@@ -691,17 +691,39 @@ class TreatmentScheduleDetails extends BaseActiveRecord
     
     /**
      * Get list all customersn have schedule in today
-     * @return array
+     * @return Array List of customer's id
      */
     public static function getListCustomerIdHaveScheduleToday() {
         $retVal = array();
         $arrModel = self::model()->findAll();
         foreach ($arrModel as $value) {
             if ($value->status != self::STATUS_INACTIVE
-                    && DateTimeExt::isToday($value->start_date, DomainConst::DATE_FORMAT_1)) {
+                    && DateTimeExt::isToday($value->start_date, DomainConst::DATE_FORMAT_1)
+                    && !DateTimeExt::isToday($value->created_date, DomainConst::DATE_FORMAT_1)) {
                 $customerId = $value->getCustomer();
                 if (!empty($customerId)) {
                     $retVal[] = $customerId;
+                }
+            }
+        }
+        return $retVal;
+    }
+    
+    /**
+     * Get list all customersn have schedule in today
+     * AND was created on today
+     * @return Array List of customer model
+     */
+    public static function getListCustomerHaveScheduleTodayCreatedToday() {
+        $retVal = array();
+        $arrModel = self::model()->findAll();
+        foreach ($arrModel as $value) {
+            if ($value->status != self::STATUS_INACTIVE
+                    && DateTimeExt::isToday($value->start_date, DomainConst::DATE_FORMAT_1)
+                    && DateTimeExt::isToday($value->created_date, DomainConst::DATE_FORMAT_1)) {
+                $mCustomer = $value->getCustomerModel();
+                if (isset($mCustomer)) {
+                    $retVal[] = $mCustomer;
                 }
             }
         }

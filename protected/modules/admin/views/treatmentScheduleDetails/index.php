@@ -85,6 +85,12 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'description',
 		'type_schedule',
                 array(
+                    'name'=>'created_date',
+                    'htmlOptions' => array('style' => 'text-align:center;'),
+                    'value'=> '$data->created_date',
+                    'visible' => CommonProcess::isUserAdmin(),
+		),
+                array(
                     'header' => DomainConst::CONTENT00239,
                     'class'=>'CButtonColumn',
                     'template'=> $this->createActionButtons()

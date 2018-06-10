@@ -282,10 +282,12 @@ class ReceptionistController extends FrontController {
         $criteria = new CDbCriteria();
         $criteria->addInCondition('id', $arrCustomerId);
         $models = Customers::model()->findAll($criteria);
+        $todayModels = TreatmentScheduleDetails::getListCustomerHaveScheduleTodayCreatedToday();
         
         $this->render('schedule', array(
             'model' => $models,
             'array' => $arrCustomerId,
+            'todayModels'   => $todayModels,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }

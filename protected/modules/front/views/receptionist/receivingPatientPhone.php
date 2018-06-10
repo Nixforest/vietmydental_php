@@ -12,7 +12,7 @@
 <div class="maincontent clearfix">
     <div class="left-page">
         <div class="title-1">
-            Tra Cứu Thông Tin Bệnh Nhân
+            <?php echo DomainConst::CONTENT00363; ?>
         </div>
         <div class="info-content">
             <div class="box-search">
