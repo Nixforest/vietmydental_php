@@ -26,7 +26,10 @@
             <div class="info-result" id="customer_info_schedule">
                 <div class="group-btn" id="create_customer">
                     <?php
-                        echo CHtml::link(DomainConst::CONTENT00176, '#', array(
+                        echo CHtml::link(
+                                '<img src="' . Yii::app()->theme->baseUrl . DomainConst::IMG_BASE_PATH . DomainConst::IMG_ADD_ICON . '"> '
+                                . DomainConst::CONTENT00176,
+                                '#', array(
                             'style' => 'cursor: pointer;',
                             'onclick' =>''
                             . 'createCustomer();'

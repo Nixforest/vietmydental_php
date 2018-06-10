@@ -238,14 +238,15 @@ class TreatmentScheduleDetails extends BaseActiveRecord
     public function isCompleted() {
 //        return $this->status === self::STATUS_COMPLETED;
         // Init can update flag
-        $canUpdate = DomainConst::NUMBER_ONE_VALUE;
+        $retVal = false;
         // Check if this detail was receipted
         if (isset($this->rReceipt)) {
-            if ($this->rReceipt->status === Receipts::STATUS_RECEIPTIONIST) {
-                $canUpdate = DomainConst::NUMBER_ZERO_VALUE;
+            if ($this->rReceipt->status == Receipts::STATUS_RECEIPTIONIST) {
+//            CommonProcess::dumpVariable('456');
+                $retVal = true;
             }
         }
-        return !$canUpdate;
+        return $retVal;
     }
     
     /**

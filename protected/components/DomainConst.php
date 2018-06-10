@@ -956,6 +956,24 @@ class DomainConst {
     /** Actions: search medicine */
     const KEY_ACTION_SEARCH_MEDICINE        = 'searchMedicine';
     
+    //-----------------------------------------------------
+    // List Image name
+    //-----------------------------------------------------
+    /** Image base path */
+    const IMG_BASE_PATH                     = '/img/';
+    /** Icon: new */
+    const IMG_NEW_ICON                      = 'icon_new_24.png';
+    /** Icon: edit */
+    const IMG_EDIT_ICON                     = 'icon_edit_24.png';
+    /** Icon: completed */
+    const IMG_COMPLETED_ICON                = 'icon_completed_24.png';
+    /** Icon: add */
+    const IMG_ADD_ICON                      = 'add.png';
+    /** Icon: view */
+    const IMG_VIEW_ICON                     = 'icon_view_24.png';
+    /** Icon: appointment */
+    const IMG_APPOINTMENT_ICON              = 'icon_calendar_r.gif';
+    
     
     /**----- Message content -----*/
     const CONTENT00001  = 'Thu';
@@ -1135,10 +1153,10 @@ class DomainConst {
 //    const CONTENT00174  = 'Chi tiết điều trị';
     const CONTENT00174  = 'Lần điều trị';
     const CONTENT00175  = 'Email';
-    const CONTENT00176  = 'Tạo Mới Bệnh Nhân';
+    const CONTENT00176  = 'Tạo mới bệnh nhân';
     const CONTENT00177  = 'Lịch hẹn';
-    const CONTENT00178  = 'Cập Nhật Lịch Hẹn';
-    const CONTENT00179  = 'Đặt Lịch Hẹn';
+    const CONTENT00178  = 'Cập nhật lịch hẹn';
+    const CONTENT00179  = 'Đặt lịch hẹn';
     const CONTENT00180  = 'Tạo mới bệnh nhân thành công';
     const CONTENT00181  = 'Cập nhật lịch hẹn thành công';
     const CONTENT00182  = 'Thông tin lịch hẹn';
@@ -1324,4 +1342,5 @@ class DomainConst {
     const CONTENT00361  = 'Đã đặt lịch trước';
     const CONTENT00362  = 'Vừa tạo';
     const CONTENT00363  = 'Tra cứu thông tin Bệnh Nhân';
+    const CONTENT00367  = 'Tạo mới Lần điều trị';
 }

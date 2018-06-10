@@ -56,7 +56,17 @@ class HtmlHandler {
         
         $retVal .= '<div class="' . $class . '">';
         $retVal .= '<a ' . $target . ' href="' . $href . '">'
-                . '<img src="' . Yii::app()->theme->baseUrl . $image . '">'
+                . '<img src="' . Yii::app()->theme->baseUrl . DomainConst::IMG_BASE_PATH . $image . '"> '
+                . '' . $title . '</a>';
+        $retVal .= '</div>';
+        return $retVal;
+    }
+    
+    public static function createAjaxButtonWithImage($title, $image, $onClick, $style, $class = self::CLASS_GROUP_BUTTON) {
+        $retVal = '';
+        $retVal .= '<div class="' . $class . '">';
+        $retVal .= '<a style="' . $style . '" onclick="' . $onClick . '">'
+                . '<img src="' . Yii::app()->theme->baseUrl . DomainConst::IMG_BASE_PATH . $image . '"> '
                 . '' . $title . '</a>';
         $retVal .= '</div>';
         return $retVal;

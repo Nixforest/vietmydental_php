@@ -476,12 +476,16 @@ class Customers extends BaseActiveRecord
         $rightContent .=            '</tr>';
         $rightContent .=            '<tr>';
         $rightContent .=                '<td style="width: 50%;">';
-        $rightContent .=                    HtmlHandler::createButton(CommonProcess::generateQRCodeURL($this->id),
-                                                                    DomainConst::CONTENT00011, true);
+        $rightContent .=                    HtmlHandler::createButtonWithImage(CommonProcess::generateQRCodeURL($this->id),
+                                            DomainConst::CONTENT00011,
+                                            DomainConst::IMG_VIEW_ICON, true);
         $rightContent .=                '</td>';
         $rightContent .=                '<td style="width: 50%;">';
-        $rightContent .=                    HtmlHandler::createButton(Yii::app()->createAbsoluteUrl("admin/customers/update", array("id" => $this->id)),
-                                                                    DomainConst::CONTENT00346, true);
+        $rightContent .=                    HtmlHandler::createButtonWithImage(
+                                            Yii::app()->createAbsoluteUrl(
+                                                        "admin/customers/update", array("id" => $this->id)),
+                                            DomainConst::CONTENT00346,
+                                            DomainConst::IMG_EDIT_ICON, true);
         $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
         $pathological = '';
@@ -510,10 +514,10 @@ class Customers extends BaseActiveRecord
                     }
                     $rightContent .= '</b>';
                     $rightContent .= HtmlHandler::createButtonWithImage(
-                            Yii::app()->createAbsoluteUrl(
-                                        "admin/treatmentScheduleDetails/create", array("schedule_id" => $schedule->id)),
-                            'Tạo mới Lần điều trị',
-                            '/img/add.png', true, '');
+                                        Yii::app()->createAbsoluteUrl(
+                                            "admin/treatmentScheduleDetails/create", array("schedule_id" => $schedule->id)),
+                                        DomainConst::CONTENT00367,
+                                        DomainConst::IMG_ADD_ICON, true, '');
                     $detailIdx = count($schedule->rDetail);
                     foreach ($schedule->rDetail as $detail) {
                         $btnTitle = $detail->getStartDate() . '<br>';
@@ -533,17 +537,17 @@ class Customers extends BaseActiveRecord
                                         array("id" => $detail->id)) . '">' . DomainConst::CONTENT00272 . '</a>';
                                 break;
                             case Roles::ROLE_RECEPTIONIST:
-//                                $updateTag = '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/update",
-//                                        array("id" => $detail->id)) . '">' . DomainConst::CONTENT00272 . '</a>';
-//                                if ($detail->isCompleted()) {
-//                                    $updateTag = HtmlHandler::createButton(Yii::app()->createAbsoluteUrl(
-//                                        "admin/treatmentScheduleDetails/view", array("id" => $detail->id)),
-//                                        $btnTitle, true);
-//                                } else {
-                                    $updateTag = HtmlHandler::createButton(Yii::app()->createAbsoluteUrl(
-                                        "admin/treatmentScheduleDetails/update", array("id" => $detail->id)),
-                                        $btnTitle, true);
-//                                }
+                                if ($detail->isCompleted()) {
+                                    $updateTag = HtmlHandler::createButtonWithImage(
+                                            Yii::app()->createAbsoluteUrl(
+                                                        "admin/treatmentScheduleDetails/view", array("id" => $detail->id)),
+                                            $btnTitle, DomainConst::IMG_COMPLETED_ICON, true);
+                                } else {
+                                    $updateTag = HtmlHandler::createButtonWithImage(
+                                            Yii::app()->createAbsoluteUrl(
+                                                        "admin/treatmentScheduleDetails/update", array("id" => $detail->id)),
+                                            $btnTitle, DomainConst::IMG_NEW_ICON, true);
+                                }
                             default:
                                 break;
                         }
@@ -603,12 +607,14 @@ class Customers extends BaseActiveRecord
         $infoSchedule = '';
         $scheduleId = $this->getSchedule();
 
-        $infoSchedule .= '<div class="group-btn">';
-        $infoSchedule .=    '<a style="cursor: pointer;"'
-//        $infoSchedule .=    '<a style="cursor: pointer;" href="'
-                        . ' onclick="{createSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}">' . DomainConst::CONTENT00179 . '</a>';
-//                        . Yii::app()->createAbsoluteUrl("front/receptionist/createScheduleExt") . '">' . DomainConst::CONTENT00179 . '</a>';
-        $infoSchedule .= '</div>';
+        $infoSchedule .= HtmlHandler::createAjaxButtonWithImage(
+                DomainConst::CONTENT00179, DomainConst::IMG_APPOINTMENT_ICON,
+                '{createSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}',
+                'cursor: pointer;');
+//        $infoSchedule .= '<div class="group-btn">';
+//        $infoSchedule .=    '<a style="cursor: pointer;"'
+//                        . ' onclick="{createSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}">' . DomainConst::CONTENT00179 . '</a>';
+//        $infoSchedule .= '</div>';
         if (!empty($scheduleId)) {
             Settings::saveAjaxTempValue($scheduleId);
             $mSchedule = TreatmentScheduleDetails::model()->findByPk($scheduleId);
@@ -621,10 +627,10 @@ class Customers extends BaseActiveRecord
                 $infoSchedule .=    '<p>Chi Tiết Công Việc: ' . $mSchedule->description . '</p>';
                 $infoSchedule .=    '<p>Bác sĩ: ' . $mSchedule->getDoctor() . '</p>';
                 $infoSchedule .= '</div>';
-                $infoSchedule .= '<div class="group-btn">';
-                $infoSchedule .=    '<a style="cursor: pointer;"'
-                        . ' onclick="{updateSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}">' . DomainConst::CONTENT00178 . '</a>';
-                $infoSchedule .= '</div>';
+                $infoSchedule .= HtmlHandler::createAjaxButtonWithImage(
+                        DomainConst::CONTENT00346, DomainConst::IMG_EDIT_ICON,
+                        '{updateSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}',
+                        'cursor: pointer;');
             }
         }
         return $infoSchedule;
