@@ -96,7 +96,7 @@ class HtmlHandler {
             $retVal .=                   $customer->name . '<br>' . $customer->phone . '<br>';
             $retVal .=               '</td>';
             $retVal .=               '<td>';
-            $retVal .=                   $customer->date_of_birth  . '<br>'. $customer->address;
+            $retVal .=                   $customer->getBirthDay()  . '<br>'. $customer->address;
             $retVal .=               '</td>';
             $retVal .=               '<td>';
             $retVal .=                   $customer->getScheduleTime();

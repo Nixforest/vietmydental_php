@@ -84,4 +84,22 @@ class DateTimeExt extends DateTime {
     public static function compare($date1, $date2, $format = "") {
         return strtotime($date1) > strtotime($date2) ? '1' : (strtotime($date1) == strtotime($date2) ? '0' : '-1');
     }
+    
+    /**
+     * Check if a date value from database (mysql) is null
+     * @param String $date Date value
+     * @return True if date is '0000-00-00', False otherwise
+     */
+    public static function isDateNull($date) {
+        return (!isset($date) || $date == DomainConst::DATE_DEFAULT_NULL);
+    }
+    
+    /**
+     * Check if a year value from database (mysql) is null
+     * @param String $year Year value
+     * @return True if year is '0000', False otherwise
+     */
+    public static function isYearNull($year) {
+        return (!isset($year) || $year == DomainConst::DATE_DEFAULT_YEAR_NULL);
+    }
 }

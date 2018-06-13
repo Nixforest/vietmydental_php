@@ -45,7 +45,7 @@
                             <tr id="<?php echo $customer->id; ?>" class="customer-info-tr">
                                 <td><?php echo $customer->name ?></td>
                                 <td><?php echo $customer->phone ?></td>
-                                <td><?php echo $customer->date_of_birth ?></td>
+                                <td><?php echo $customer->getBirthday() ?></td>
                                 <td><?php echo $customer->address ?></td>
                             </tr>
                             <?php endforeach; ?>

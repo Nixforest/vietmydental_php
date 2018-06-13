@@ -11,6 +11,7 @@
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'customers-form',
 	'enableAjaxValidation'=>false,
+        'focus'=>[$customer,'phone'],
 )); ?>
 
     <?php echo DomainConst::CONTENT00081; ?>
@@ -20,12 +21,12 @@
     <div class="row">
         <div class="col-md-6">
             <?php echo $form->labelEx($customer,'phone'); ?>
-            <?php echo $form->textField($customer,'phone',array('size'=>60,'maxlength'=>200)); ?>
+            <?php echo $form->textField($customer,'phone',array('size'=>60,'maxlength'=>200, 'placeholder'=>'0123456789')); ?>
             <?php echo $form->error($customer,'phone'); ?>
         </div>
         <div class="col-md-6">
             <?php echo $form->labelEx($customer,'name'); ?>
-            <?php echo $form->textField($customer,'name',array('size'=>60,'maxlength'=>255)); ?>
+            <?php echo $form->textField($customer,'name',array('size'=>60,'maxlength'=>255, 'placeholder'=>'Họ và tên')); ?>
             <?php echo $form->error($customer,'name'); ?>
         </div>
     </div>
@@ -38,6 +39,7 @@
         <div class="col-md-6">
             <?php echo $form->labelEx($customer,'date_of_birth'); ?>
             <!--<label for="Customers_date_of_birth" class="required">Ngày sinh (m/d/y) <span class="required">*</span></label>-->
+            
             <?php echo $form->dateField($customer, 'date_of_birth');
     //        $this->widget('zii.widgets.jui.CJuiDatePicker', array(
     //            'model'     => $customer,
@@ -61,6 +63,7 @@
     //                    ),
     //        ));
             ?>
+            <?php echo $form->numberField($customer,'year_of_birth',array('size'=>60,'maxlength'=>255, 'placeholder'=>'Năm sinh')); ?>
             <?php echo $form->error($customer,'date_of_birth'); ?>
         </div>
         
@@ -68,12 +71,12 @@
     <div class="row">
         <div class="col-md-6">
             <?php echo $form->labelEx($customer,'house_numbers'); ?>
-            <?php echo $form->textField($customer,'house_numbers',array('size'=>60,'maxlength'=>255)); ?>
+            <?php echo $form->textField($customer,'house_numbers',array('size'=>60,'maxlength'=>255, 'placeholder'=>'Số nhà')); ?>
             <?php echo $form->error($customer,'house_numbers'); ?>
         </div>
         <div class="col-md-6">
             <?php echo $form->labelEx($medicalRecord,'record_number'); ?>
-            <?php echo $form->textField($medicalRecord,'record_number',array('size'=>60,'maxlength'=>255)); ?>
+            <?php echo $form->textField($medicalRecord,'record_number',array('size'=>60,'maxlength'=>255, 'placeholder'=>'Số bệnh án')); ?>
             <?php echo $form->error($medicalRecord,'record_number'); ?>
         </div>
     </div>

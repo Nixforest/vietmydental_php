@@ -226,7 +226,9 @@ class TreatmentScheduleDetails extends BaseActiveRecord
      */
     public function isSchedule() {
         if (!isset($this->diagnosis_id) && !isset($this->treatment_type_id)) {
-            return true;
+            if (!$this->isCompleted()) {
+                return true;
+            }
         }
         return false;
     }

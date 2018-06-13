@@ -261,7 +261,7 @@ class AjaxController extends AdminController
      */
     private function findCustomerByKeyword($keyword) {
         $criteria = new CDbCriteria();
-        $criteria->addCondition("t.name like '%$keyword%' or t.phone like '%$keyword%' or YEAR(t.date_of_birth) like '%$keyword%'");
+        $criteria->addCondition("t.name like '%$keyword%' or t.phone like '%$keyword%' or YEAR(t.date_of_birth) like '%$keyword%' or t.year_of_birth like '%$keyword%'");
         $criteria->limit = 50;
         $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
         $models = Customers::model()->findAll($criteria);
@@ -294,7 +294,7 @@ class AjaxController extends AdminController
                     $keyVal1 = trim($arrKeyword[0]);
                     $keyVal2 = trim($arrKeyword[1]);
                     $criteria = new CDbCriteria();
-                    $criteria->addCondition("t.name like '%$keyVal1%' and YEAR(t.date_of_birth) like '%$keyVal2%'");
+                    $criteria->addCondition("t.name like '%$keyVal1%' and (YEAR(t.date_of_birth) like '%$keyVal2%' or t.year_of_birth like '%$keyVal2%')");
                     $criteria->limit = 50;
                     $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
                     $models = Customers::model()->findAll($criteria);
@@ -310,7 +310,7 @@ class AjaxController extends AdminController
                 } else {
                     $criteria = new CDbCriteria();
 //                    $criteria->addCondition("t.name like '%$keyword%' or t.phone like '%$keyword%'");
-                    $criteria->addCondition("t.name like '%$keyword%' or t.phone like '%$keyword%' or YEAR(t.date_of_birth) like '%$keyword%'");
+                    $criteria->addCondition("t.name like '%$keyword%' or t.phone like '%$keyword%' or YEAR(t.date_of_birth) like '%$keyword%' or t.year_of_birth like '%$keyword%'");
                     $criteria->limit = 50;
     //                $criteria->compare("t.status", DomainConst::DEFAULT_STATUS_ACTIVE);
                     $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
@@ -348,7 +348,7 @@ class AjaxController extends AdminController
                         $retVal .= '<tr id="' . $model->id . '" class="customer-info-tr">';
                         $retVal .= '<td>' . $model->name . '</td>';
                         $retVal .= '<td>' . $model->phone . '<br>' . $recordNumber . '</br>' . '</td>';
-                        $retVal .= '<td>' . $model->date_of_birth . '</td>';
+                        $retVal .= '<td>' . $model->getBirthday() . '</td>';
                         $retVal .= '<td>' . $model->address . '</td>';
                         $retVal .= '</tr>';
                     }

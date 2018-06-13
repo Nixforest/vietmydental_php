@@ -24,8 +24,6 @@ if (!empty($to)) {
             <label for="from_date" class="required">Từ </label>
             <?php
             $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-//                'model'     => null,
-//                'attribute' => 'date_of_birth',
                 'name' => 'from_date',
                 'options'   => array(
                     'showAnim'      => 'fold',
@@ -49,8 +47,6 @@ if (!empty($to)) {
             <label for="to_date" class="required">Đến </label>
             <?php
             $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-//                'model'     => null,
-                'attribute' => 'date_of_birth',
                 'name' => 'to_date',
                 'options'   => array(
                     'showAnim'      => 'fold',

@@ -86,6 +86,12 @@ class DomainConst {
     /** Date format */
     const DATE_FORMAT_10                                = 'Ymd';
     /** Date format */
+    const DATE_FORMAT_11                                = 'd/m/Y H:i';
+    /** Date default value null */
+    const DATE_DEFAULT_NULL                             = '0000-00-00';
+    /** Date default year value null */
+    const DATE_DEFAULT_YEAR_NULL                        = '0000';
+    /** Date format */
     const DEFAULT_TIMEZONE                              = 'Asia/Ho_Chi_Minh';
     /** Default IP address */
     const DEFAULT_IP_ADDRESS                            = '192.168.1.1';
@@ -1343,4 +1349,6 @@ class DomainConst {
     const CONTENT00362  = 'Vừa tạo';
     const CONTENT00363  = 'Tra cứu thông tin Bệnh Nhân';
     const CONTENT00367  = 'Tạo mới Lần điều trị';
+    const CONTENT00368  = 'Năm sinh';
+    const CONTENT00369  = 'Năm sinh (Nếu không xin được thông tin Ngày sinh)';
 }

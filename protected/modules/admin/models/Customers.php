@@ -8,6 +8,7 @@
  * @property string $name
  * @property integer $gender
  * @property string $date_of_birth
+ * @property string $year_of_birth
  * @property string $phone
  * @property string $email
  * @property integer $city_id
@@ -58,16 +59,17 @@ class Customers extends BaseActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, date_of_birth, city_id, district_id', 'required'),
+			array('name, city_id, district_id', 'required'),
 			array('gender, city_id, district_id, ward_id, type_id, career_id, status', 'numerical', 'integerOnly'=>true),
 			array('name, house_numbers', 'length', 'max'=>255),
+			array('year_of_birth', 'length', 'max'=>4),
 			array('phone, email', 'length', 'max'=>200),
 			array('street_id, user_id, created_by', 'length', 'max'=>11),
 			array('debt', 'length', 'max'=>10),
-			array('address, characteristics', 'safe'),
+			array('date_of_birth, address, characteristics', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, gender, date_of_birth, phone, email, city_id, district_id, ward_id, street_id, house_numbers, address, type_id, career_id, user_id, status, characteristics, created_by, created_date', 'safe', 'on'=>'search'),
+			array('id, name, gender, date_of_birth, year_of_birth, phone, email, city_id, district_id, ward_id, street_id, house_numbers, address, type_id, career_id, user_id, status, characteristics, created_by, created_date', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -121,6 +123,7 @@ class Customers extends BaseActiveRecord
 			'name' => DomainConst::CONTENT00100,
 			'gender' => DomainConst::CONTENT00047,
 			'date_of_birth' => DomainConst::CONTENT00101,
+			'year_of_birth' => DomainConst::CONTENT00368,
 			'phone' => DomainConst::CONTENT00048,
 			'email' => DomainConst::CONTENT00040,
 			'city_id' => DomainConst::CONTENT00102,
@@ -157,6 +160,7 @@ class Customers extends BaseActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('gender',$this->gender);
 		$criteria->compare('date_of_birth',$this->date_of_birth,true);
+		$criteria->compare('year_of_birth',$this->year_of_birth,true);
 		$criteria->compare('phone',$this->phone,true);
 		$criteria->compare('email',$this->email,true);
 		$criteria->compare('city_id',$this->city_id);
@@ -350,15 +354,24 @@ class Customers extends BaseActiveRecord
      * @return String Birthday with format {01 thg 11, 2018}
      */
     public function getBirthday() {
-        $date = CommonProcess::convertDateTime($this->date_of_birth,
-                            DomainConst::DATE_FORMAT_4,
-                            DomainConst::DATE_FORMAT_5);
-        if (empty($date)) {
-            $date = CommonProcess::convertDateTime($this->date_of_birth,
-                            DomainConst::DATE_FORMAT_1,
-                            DomainConst::DATE_FORMAT_5);
+        $retVal = '';
+        if (!DateTimeExt::isYearNull($this->year_of_birth)) {
+            $retVal = $this->year_of_birth;
         }
-        return $date;
+        
+        if (empty($retVal) && !DateTimeExt::isDateNull($this->date_of_birth)) {
+            $date = CommonProcess::convertDateTime($this->date_of_birth,
+                                DomainConst::DATE_FORMAT_4,
+                                DomainConst::DATE_FORMAT_5);
+            if (empty($date)) {
+                $date = CommonProcess::convertDateTime($this->date_of_birth,
+                                DomainConst::DATE_FORMAT_1,
+                                DomainConst::DATE_FORMAT_5);
+            }
+            $retVal = $date;
+        }
+        
+        return $retVal;
     }
     
     /**
@@ -366,10 +379,17 @@ class Customers extends BaseActiveRecord
      * @return String Birthday with format {2018}
      */
     public function getBirthYear() {
-        $date = CommonProcess::convertDateTime($this->date_of_birth,
+        $retVal = '';
+        if (!DateTimeExt::isDateNull($this->date_of_birth)) {
+            $retVal = CommonProcess::convertDateTime($this->date_of_birth,
                             DomainConst::DATE_FORMAT_4,
                             'Y');
-        return $date;
+        } else if (!DateTimeExt::isYearNull($this->year_of_birth)) {
+            $retVal = $this->year_of_birth;
+        }
+        
+        
+        return $retVal;
     }
     
     /**
@@ -378,9 +398,16 @@ class Customers extends BaseActiveRecord
      */
     public function getAge() {
         $retVal = '0';
-        $age = DateTime::createFromFormat(
+        $age = '';
+        if (!DateTimeExt::isDateNull($this->date_of_birth)) {
+            $age = DateTime::createFromFormat(
                 DomainConst::DATE_FORMAT_4,
                 $this->date_of_birth);
+        } else if (!DateTimeExt::isYearNull($this->year_of_birth)) {
+            $age = DateTime::createFromFormat(
+                'Y',
+                $this->year_of_birth);
+        }
         if ($age) {
             $retVal = $age->diff(new DateTime('now'))->y;
         }
@@ -531,6 +558,7 @@ class Customers extends BaseActiveRecord
 //                            $btnTitle = 'Lần ' . $detailIdx . ': ' . DomainConst::CONTENT00177;
                             $btnTitle .= DomainConst::CONTENT00177;
                         }
+                        $updateTag = '';
                         switch (Yii::app()->user->role_name) {
                             case Roles::ROLE_ASSISTANT:
                                 $updateTag = '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/updateImageXRay",
