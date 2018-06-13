@@ -31,9 +31,11 @@ class ReportsController extends AdminController
                 $to = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
             }
             $receipts = array();
+            $newReceipts = array();
             // Start access db
             if ($mAgent) {
-                $receipts = $mAgent->getReceipts($from, $to);
+                $receipts = $mAgent->getReceipts($from, $to, array(Receipts::STATUS_RECEIPTIONIST));
+                $newReceipts = $mAgent->getReceipts($from, $to, array(Receipts::STATUS_DOCTOR));
             }
             if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
                 $this->redirect(array('revenue',
@@ -78,6 +80,7 @@ class ReportsController extends AdminController
             }
             $this->render('revenue', array(
                     'receipts'  => $receipts,
+                    'newReceipts'  => $newReceipts,
                     'from'      => $from,
                     'to'        => $to,
                     DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,

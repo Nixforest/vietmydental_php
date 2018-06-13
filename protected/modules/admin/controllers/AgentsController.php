@@ -53,7 +53,17 @@ class AgentsController extends AdminController
 	{
             $model = $this->loadModel($id);
             $users = $model->getUsers();
-            $receipts = $model->getReceipts();
+            $from = '';
+            $to = '';
+            // Get data from url
+//            $this->validateRevenueUrl($from, $to);
+            if (empty($from)) {
+                $from = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
+            }
+            if (empty($to)) {
+                $to = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
+            }
+            $receipts = $model->getReceipts($from, $to, array(Receipts::STATUS_RECEIPTIONIST, Receipts::STATUS_DOCTOR));
 		$this->render('view',array(
 			'model'=>$model,
                         'users' => $users,

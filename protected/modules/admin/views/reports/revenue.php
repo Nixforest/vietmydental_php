@@ -226,3 +226,93 @@ $this->widget('zii.widgets.grid.CGridView', array(
         </tbody>
     </table>
 </div>
+<h1><?php echo DomainConst::CONTENT00370; ?></h1>
+<?php
+$this->widget('zii.widgets.grid.CGridView', array(
+    'id' => 'new-receipts-grid',
+    'dataProvider' => $newReceipts,
+//    'filter'    => $model->rProducts,
+    'columns' => array(
+        array(
+            'header' => DomainConst::CONTENT00034,
+            'type' => 'raw',
+            'value' => '$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
+            'headerHtmlOptions' => array('width' => '30px', 'style' => 'text-align:center;'),
+            'htmlOptions' => array('style' => 'text-align:center;')
+        ),
+        array(
+            'name' => DomainConst::CONTENT00343,
+            'htmlOptions' => array('style' => 'text-align:center;'),
+            'value' => 'isset($data->rReceipt) ? $data->rReceipt->getProcessDate() : ""',
+            'footer' => DomainConst::CONTENT00254,
+            'footerHtmlOptions' => array(
+                'style' => 'text-align:right; font-weight:bold'),
+        ),
+        array(
+            'name' => DomainConst::CONTENT00138,
+            'htmlOptions' => array('style' => 'text-align:left;'),
+            'value' => '$data->getReceiptCustomerRecordNumber()',
+        ),
+        array(
+            'name' => DomainConst::CONTENT00100,
+            'htmlOptions' => array('style' => 'text-align:left;'),
+            'value' => '$data->getReceiptCustomerName()',
+            'footer' => OneMany::getReceiptCustomerTotal($newReceipts->getData()),
+            'footerHtmlOptions' => array(
+                'style' => 'text-align:right; font-weight:bold'),
+        ),
+        array(
+            'name' => DomainConst::CONTENT00128,
+            'htmlOptions' => array(
+                'style' => 'text-align:left;'),
+            'value' => '$data->getReceiptTreatmentTypeName()',
+        ),
+        array(
+            'name' => DomainConst::CONTENT00313,
+            'htmlOptions' => array('style' => 'text-align:right;'),
+            'value' => '$data->getReceiptNumTeeth()',
+        ),
+        array(
+            'name' => DomainConst::CONTENT00315,
+            'htmlOptions' => array('style' => 'text-align:right;'),
+            'value' => '$data->getReceiptTreatmentTypePriceText()',
+            'footer' => OneMany::getReceiptTreatmentTypePriceTotal($newReceipts->getData()),
+            'footerHtmlOptions' => array(
+                'style' => 'text-align:right; font-weight:bold'),
+        ),
+        array(
+            'name' => DomainConst::CONTENT00353,
+            'htmlOptions' => array('style' => 'text-align:right;'),
+            'value' => '$data->getReceiptTotalText()',
+            'footer' => OneMany::getReceiptTotalTotal($newReceipts->getData()),
+            'footerHtmlOptions' => array(
+                'style' => 'text-align:right; font-weight:bold'),
+        ),
+        array(
+            'name' => DomainConst::CONTENT00317,
+            'htmlOptions' => array('style' => 'text-align:right;'),
+            'value' => '$data->getReceiptDiscountText()',
+            'footer' => OneMany::getReceiptDiscountTotal($newReceipts->getData()),
+            'footerHtmlOptions' => array(
+                'style' => 'text-align:right; font-weight:bold'),
+        ),
+        array(
+            'name' => DomainConst::CONTENT00259,
+            'htmlOptions' => array('style' => 'text-align:right;'),
+            'value' => '$data->getReceiptFinalText()',
+            'footer' => OneMany::getReceiptFinalTotal($newReceipts->getData()),
+            'footerHtmlOptions' => array(
+                'style' => 'text-align:right; font-weight:bold'),
+        ),
+        array(
+            'name' => DomainConst::CONTENT00300,
+            'htmlOptions' => array('style' => 'text-align:right;'),
+            'value' => '$data->getReceiptDebitText()',
+            'footer' => OneMany::getReceiptDebitTotal($newReceipts->getData()),
+            'footerHtmlOptions' => array(
+                'style' => 'text-align:right; font-weight:bold'),
+        ),
+        
+    ),
+));
+?>

@@ -248,13 +248,16 @@ class Agents extends BaseActiveRecord
      * Get list receipts
      * @return \CArrayDataProvider
      */
-    public function getReceipts($from, $to) {
+//    public function getReceipts($from, $to) {
+    public function getReceipts($from, $to, $arrStatus) {
         $arrReceipts = array();
         if (isset($this->rJoinReceipt)) {
             foreach ($this->rJoinReceipt as $value) {
+//                if (isset($value->rReceipt)
+//                        && ($value->rReceipt->status == Receipts::STATUS_DOCTOR
+//                                || $value->rReceipt->status == Receipts::STATUS_RECEIPTIONIST)) {
                 if (isset($value->rReceipt)
-                        && ($value->rReceipt->status == Receipts::STATUS_DOCTOR
-                                || $value->rReceipt->status == Receipts::STATUS_RECEIPTIONIST)) {
+                        && in_array($value->rReceipt->status, $arrStatus)) {
                     $date = $value->rReceipt->process_date;
 //                    CommonProcess::dumpVariable($date);
                     $compareFrom = DateTimeExt::compare($date, $from);
