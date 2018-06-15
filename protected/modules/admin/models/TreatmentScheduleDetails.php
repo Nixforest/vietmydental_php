@@ -241,6 +241,9 @@ class TreatmentScheduleDetails extends BaseActiveRecord
 //        return $this->status === self::STATUS_COMPLETED;
         // Init can update flag
         $retVal = false;
+        if ($this->status == self::STATUS_COMPLETED) {
+            return true;
+        }
         // Check if this detail was receipted
         if (isset($this->rReceipt)) {
             if ($this->rReceipt->status == Receipts::STATUS_RECEIPTIONIST) {
@@ -632,10 +635,14 @@ class TreatmentScheduleDetails extends BaseActiveRecord
      * @return int
      */
     public function getTeethCount() {
+        $retVal = 0;
         if (isset($this->rJoinTeeth)) {
-            return count($this->rJoinTeeth);
+            $retVal = count($this->rJoinTeeth);
         }
-        return 0;
+        if ($retVal != 0) {
+            return $retVal;
+        }
+        return 1;
     }
     
     /**

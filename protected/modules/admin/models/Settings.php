@@ -37,6 +37,8 @@ class Settings extends BaseActiveRecord
     const KEY_DOMAIN                            = 'DOMAIN';
     /** Key Max number download file QR code */
     const KEY_NUM_QRCODE_DOWNLOAD_MAX           = 'NUM_QRCODE_DOWNLOAD_MAX';
+    /** Key print receipt font size rate */
+    const KEY_PRINT_RECEIPT_FONT_SIZE_RATE      = 'PRINT_RECEIPT_FONT_SIZE_RATE';
     
     /* --- App settings --- */
     /** Key Mobile app version iOS */
@@ -351,5 +353,17 @@ class Settings extends BaseActiveRecord
             return $retVal;
         }
         return "";
+    }
+    
+    /**
+     * Get print receipt font size
+     * @return string
+     */
+    public static function getPrintReceiptFontSize() {
+        $retVal = Settings::getItem(Settings::KEY_PRINT_RECEIPT_FONT_SIZE_RATE);
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return "150%";
     }
 }

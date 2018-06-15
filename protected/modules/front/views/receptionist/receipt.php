@@ -144,7 +144,10 @@
                         ),
                 )); ?>
                 <?php if ($isToday == true): ?>
-                <?php echo HtmlHandler::createButton(Yii::app()->createAbsoluteUrl('front/receptionist/receiptOld'), DomainConst::CONTENT00360) ?>
+                <?php // echo HtmlHandler::createButton(Yii::app()->createAbsoluteUrl('front/receptionist/receiptOld'), DomainConst::CONTENT00360) ?>
+                <?php echo HtmlHandler::createButtonWithImage(Yii::app()->createAbsoluteUrl('front/receptionist/receiptOld'),
+                        DomainConst::CONTENT00360,
+                        DomainConst::IMG_RECEIPT_ICON) ?>
                 <?php endif; // end if (condition) ?>
             </div>
         </div>
@@ -155,7 +158,6 @@
         </div>
         <div class="info-content">
             <div id="right-content">
-                
             </div>
         </div>
     </div>
@@ -163,26 +165,27 @@
 <?php $this->endWidget(); ?>
 </div><!-- form -->
 
-<!-- Create new dialog -->
-    <?php
-        $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
-            'id'    => 'dialog',
-            'options' => array(
-                'title' => "",
-                'autoOpen'  => false,
-                'modal'     => true,
-                'position'  => array(
-                    'my'    => 'top',
-                    'at'    => 'top',
-                ),
-                'width'     => 1300,
-                'heigh'     => 670,
-                'close'     => 'js:function() { }',
+
+<!-- Select print dialog -->
+<?php
+    $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
+        'id'    => 'dialogPrintReceipt',
+        'options' => array(
+            'title' => DomainConst::CONTENT00374,
+            'autoOpen'  => false,
+            'modal'     => true,
+            'position'  => array(
+                'my'    => 'top',
+                'at'    => 'top',
             ),
-        ));
-    ?>
-    <div class="divForForm"></div>
-    <?php $this->endWidget('zii.widgets.jui.CJuiDialog');?>
+            'width'     => 700,
+            'heigh'     => 470,
+            'close'     => 'js:function() { }',
+        ),
+    ));
+?>
+<div class="divForForm"></div>
+<?php $this->endWidget('zii.widgets.jui.CJuiDialog');?>
 
 <script>
     $(function(){
@@ -216,35 +219,36 @@
      * @returns {Boolean}
      */
     function createPrintDialog() {
-        $("<link/>", {
-            id: "form_ccs",
-            rel: "stylesheet",
-            type: "text/css",
-            href: "<?php echo Yii::app()->theme->baseUrl . '/css/form.css'; ?>"
-         }).appendTo("head");
-        <?php
-        echo CHtml::ajax(array(
-            'url' => Yii::app()->createAbsoluteUrl('front/receptionist/printReceipt'),
-            'data' => "js:$(this).serialize()",
-            'type' => 'post',
-            'dataType' => 'json',
-            'success' => "function(data)
-                    {
-                        if (data.status == 'failure')
-                        {
-                            $('#dialog div.divForForm').html(data.div);
-                                  // Here is the trick: on submit-> once again this function!
-                            $('#dialog div.divForForm form').submit(createPrintDialog);
-                        }
-                        else
-                        {
-                            $('#dialog div.divForForm').html(data.div);
-                            setTimeout(\"$('#dialog').dialog('close') \",1000);
-                        }
-
-                    } ",
-        ))
+        alert("<?php echo DomainConst::CONTENT00375; ?>");
+//        $("<link/>", {
+//            id: "form_ccs",
+//            rel: "stylesheet",
+//            type: "text/css",
+//            href: "<?php echo Yii::app()->theme->baseUrl . '/css/form.css'; ?>"
+//         }).appendTo("head");
+//        <?php
+//        echo CHtml::ajax(array(
+//            'url' => Yii::app()->createAbsoluteUrl('front/receptionist/printMore'),
+//            'data' => "js:$(this).serialize()",
+//            'type' => 'post',
+//            'dataType' => 'json',
+//            'success' => "function(data)
+//                    {
+//                        if (data.status == 'failure')
+//                        {
+//                            $('#dialog div.divForForm').html(data.div);
+//                                  // Here is the trick: on submit-> once again this function!
+//                            $('#dialog div.divForForm form').submit(createPrintDialog);
+//                        }
+//                        else
+//                        {
+//                            $('#dialog div.divForForm').html(data.div);
+//                            setTimeout(\"$('#dialog').dialog('close') \",1000);
+//                        }
+//
+//                    } ",
+//        ))
         ?>;
-        return false;
+//        return false;
     }
 </script>

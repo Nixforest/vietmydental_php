@@ -895,6 +895,8 @@ class DomainConst {
     const KEY_SUBMIT_DATE_YESTERDAY         = 'submitYesterday';
     /** Submit today */
     const KEY_SUBMIT_TODATE                 = 'submitToday';
+    /** Submit save */
+    const KEY_SUBMIT_SAVE                   = 'submitSave';
     
     //-----------------------------------------------------
     // List domain const
@@ -979,6 +981,12 @@ class DomainConst {
     const IMG_VIEW_ICON                     = 'icon_view_24.png';
     /** Icon: appointment */
     const IMG_APPOINTMENT_ICON              = 'icon_calendar_r.gif';
+    /** Icon: receipt */
+    const IMG_RECEIPT_ICON                  = 'icon_receipt_24.png';
+    /** Icon: print */
+    const IMG_PRINT_ICON                    = 'icon_print_24.png';
+    /** Icon: print all */
+    const IMG_PRINT_ALL_ICON                = 'icon_print_all_24.png';
     
     
     /**----- Message content -----*/
@@ -1352,4 +1360,9 @@ class DomainConst {
     const CONTENT00368  = 'Năm sinh';
     const CONTENT00369  = 'Năm sinh (Nếu không xin được thông tin Ngày sinh)';
     const CONTENT00370 = 'Chưa thu';
+    const CONTENT00371 = 'Xong';
+    const CONTENT00372 = 'Lưu và tạo phiếu thu';
+    const CONTENT00373 = 'In thêm';
+    const CONTENT00374 = 'Chọn phiếu thu cần in';
+    const CONTENT00375 = 'Chức năng hiện đang hoàn thiện, xin vui lòng thử lại sau';
 }

@@ -172,9 +172,23 @@
 
 	<div class="row buttons">
 		<?php
-                echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array(
-                    'name' => 'submit',
-                ));
+                $roleName = isset(Yii::app()->user->role_name) ? Yii::app()->user->role_name : '';
+                switch ($roleName) {
+                    case Roles::ROLE_RECEPTIONIST:
+                        echo CHtml::submitButton(DomainConst::CONTENT00372, array(
+                            'name' => DomainConst::KEY_SUBMIT_SAVE,
+                        ));
+                        echo CHtml::submitButton(DomainConst::CONTENT00371, array(
+                            'name' => DomainConst::KEY_SUBMIT,
+                        ));
+                        break;
+
+                    default:
+                        echo CHtml::submitButton($model->isNewRecord ? DomainConst::CONTENT00017 : 'Save', array(
+                            'name' => 'submit',
+                        ));
+                        break;
+                }
                 ?>
 	</div>
 

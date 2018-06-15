@@ -384,25 +384,51 @@ class Receipts extends CActiveRecord
         $rightContent .=            '<tr>';
         if ($this->status == self::STATUS_DOCTOR) {
             $rightContent .=                '<td>';
-            $rightContent .=                    '<div class="group-btn">';
-            $rightContent .=                        '<a href="' . Yii::app()->createAbsoluteUrl("front/receptionist/update",
-                    array(
+            $rightContent .= HtmlHandler::createButtonWithImage(
+                    Yii::app()->createAbsoluteUrl("front/receptionist/update", array(
                         "id" => $this->id,
                         'action'    => DateTimeExt::isToday($this->process_date, DomainConst::DATE_FORMAT_4) ? 'receipt' : 'receiptOld',
-                    )) . '">' . DomainConst::CONTENT00265 . '</a>';
-            $rightContent .=                    '</div>';
+                    )),
+                    '<br>' . DomainConst::CONTENT00265,
+                    DomainConst::IMG_COMPLETED_ICON);
+//            $rightContent .=                    '<div class="group-btn">';
+//            $rightContent .=                        '<a href="' . Yii::app()->createAbsoluteUrl("front/receptionist/update",
+//                    array(
+//                        "id" => $this->id,
+//                        'action'    => DateTimeExt::isToday($this->process_date, DomainConst::DATE_FORMAT_4) ? 'receipt' : 'receiptOld',
+//                    )) . '">' . DomainConst::CONTENT00265 . '</a>';
+//            $rightContent .=                    '</div>';
             $rightContent .=                '</td>';
         }
         
         $rightContent .=                '<td>';
-        $rightContent .=                    '<div class="group-btn">';
+        $rightContent .= HtmlHandler::createButtonWithImage(
+                Yii::app()->createAbsoluteUrl("front/receptionist/printReceipt", array(
+                    "id" => $this->id,
+                )),
+                '<br>' . DomainConst::CONTENT00264,
+                DomainConst::IMG_PRINT_ICON, true);
+//        $rightContent .=                    '<div class="group-btn">';
 //        $rightContent .=                        '<a style="cursor: pointer;"'
 //                                                    . ' onclick="{createPrintDialog(); $(\'#dialog\').dialog(\'open\');}">' . DomainConst::CONTENT00264 . '</a>';
-        $rightContent .=                        '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("front/receptionist/printReceipt",
-                array(
-                    "id"        => $this->id,
-                )) . '">' . DomainConst::CONTENT00264 . '</a>';
-        $rightContent .=                    '</div>';
+//        $rightContent .=                        '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("front/receptionist/printReceipt",
+//                array(
+//                    "id"        => $this->id,
+//                )) . '">' . DomainConst::CONTENT00264 . '</a>';
+//        $rightContent .=                    '</div>';
+        $rightContent .=                '</td>';
+        $rightContent .=                '<td>';
+//        $rightContent .= HtmlHandler::createButtonWithImage(
+//                Yii::app()->createAbsoluteUrl("front/receptionist/printReceipt", array(
+//                    "id" => $this->id,
+//                )),
+//                '<br>' . DomainConst::CONTENT00373,
+//                DomainConst::IMG_PRINT_ALL_ICON, true);
+        
+        $rightContent .= HtmlHandler::createAjaxButtonWithImage(
+                '<br>' . DomainConst::CONTENT00373, DomainConst::IMG_PRINT_ALL_ICON,
+                'createPrintDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');return false;',
+                'cursor: pointer;');
         $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
         $rightContent .=        '</table>';

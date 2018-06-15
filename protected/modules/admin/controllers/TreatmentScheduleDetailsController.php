@@ -64,8 +64,15 @@ class TreatmentScheduleDetailsController extends AdminController
 	public function actionCreate()
 	{
 		$model=new TreatmentScheduleDetails;
+                $customer = NULL;
                 // Get parameter from url
                 $this->validateCreateUrl($model);
+                if (isset($model->schedule_id)) {
+                    $schedule = TreatmentSchedules::model()->findByPk($model->schedule_id);
+                    if ($schedule) {
+                        $customer = $schedule->getCustomerModel();
+                    }
+                }
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -74,7 +81,7 @@ class TreatmentScheduleDetailsController extends AdminController
 		{
 			$model->attributes=$_POST['TreatmentScheduleDetails'];
 			if($model->save()) {
-                            if (filter_input(INPUT_POST, 'submit')) {
+                            if (filter_input(INPUT_POST, 'submit') || filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_SAVE)) {
                                 $index = 0;
                                 foreach (CommonProcess::getListTeeth() as $teeth) {
                                     if (isset($_POST['teeth'][$index])
@@ -84,12 +91,32 @@ class TreatmentScheduleDetailsController extends AdminController
                                     $index++;
                                 }
                             }
-                            $this->redirect(array('view','id'=>$model->id));
+                            $roleName = isset(Yii::app()->user->role_name) ? Yii::app()->user->role_name : '';
+                            switch ($roleName) {
+                                case Roles::ROLE_RECEPTIONIST:
+                                    if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
+                                        $model->status = TreatmentScheduleDetails::STATUS_COMPLETED;
+                                        if ($model->save()) {
+                                            $this->redirect(array('view', 'id' => $model->id));
+                                        }
+                                    }
+                                    if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_SAVE)) {
+                                        $this->redirect(array('../admin/receipts/createReceptionist', 'detailId' => $model->id));
+                                    }
+
+                                    break;
+
+                                default:
+                                    $this->redirect(array('view', 'id' => $model->id));
+                                    break;
+                            }
+//                            $this->redirect(array('view','id'=>$model->id));
                         }
 		}
 
 		$this->render('create',array(
 			'model'=>$model,
+                        'customer'  => $customer,
                         DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
 		));
 	}
@@ -102,54 +129,60 @@ class TreatmentScheduleDetailsController extends AdminController
         $model->schedule_id         = isset($_GET['schedule_id']) ? $_GET['schedule_id'] : '';
     }
 
-	/**
-	 * Updates a particular model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id the ID of the model to be updated
-	 */
-	public function actionUpdate($id)
-	{
-		$model=$this->loadModel($id);
-                $customer = $model->getCustomerModel();
+    /**
+     * Updates a particular model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id the ID of the model to be updated
+     */
+    public function actionUpdate($id) {
+        $model = $this->loadModel($id);
+        $customer = $model->getCustomerModel();
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+        // Uncomment the following line if AJAX validation is needed
+        // $this->performAjaxValidation($model);
 
-		if(isset($_POST['TreatmentScheduleDetails']))
-		{
-			$model->attributes=$_POST['TreatmentScheduleDetails'];
-			if($model->save()) {
-                                // Remove old record
-                                OneMany::deleteAllOldRecords($model->id, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
-                                $index = 0;
-                                foreach (CommonProcess::getListTeeth() as $teeth) {
-                                    if (isset($_POST['teeth'][$index])
-                                            && ($_POST['teeth'][$index] == DomainConst::CHECKBOX_STATUS_CHECKED)) {
-                                        OneMany::insertOne($model->id, $index, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
-                                    }
-                                    $index++;
-                                }
-                            $roleName = isset(Yii::app()->user->role_name) ? Yii::app()->user->role_name : '';
-                            switch ($roleName) {
-                                case Roles::ROLE_RECEPTIONIST:
-                                    $this->redirect(array('../admin/receipts/createReceptionist','detailId'=>$model->id));
-                                    break;
-
-                                default:
-                                    break;
+        if (isset($_POST['TreatmentScheduleDetails'])) {
+            $model->attributes = $_POST['TreatmentScheduleDetails'];
+            if ($model->save()) {
+                // Remove old record
+                OneMany::deleteAllOldRecords($model->id, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+                $index = 0;
+                foreach (CommonProcess::getListTeeth() as $teeth) {
+                    if (isset($_POST['teeth'][$index]) && ($_POST['teeth'][$index] == DomainConst::CHECKBOX_STATUS_CHECKED)) {
+                        OneMany::insertOne($model->id, $index, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+                    }
+                    $index++;
+                }
+                $roleName = isset(Yii::app()->user->role_name) ? Yii::app()->user->role_name : '';
+                switch ($roleName) {
+                    case Roles::ROLE_RECEPTIONIST:
+                        if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
+                            $model->status = TreatmentScheduleDetails::STATUS_COMPLETED;
+                            if ($model->save()) {
+                                $this->redirect(array('view', 'id' => $model->id));
                             }
-                            $this->redirect(array('view','id'=>$model->id));
                         }
-		}
+                        if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_SAVE)) {
+                            $this->redirect(array('../admin/receipts/createReceptionist', 'detailId' => $model->id));
+                        }
+                        
+                        break;
 
-		$this->render('update',array(
-			'model'=>$model,
-                        'customer'  => $customer,
-                        DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-		));
-	}
-        
-        /**
+                    default:
+                        $this->redirect(array('view', 'id' => $model->id));
+                        break;
+                }
+            }
+        }
+
+        $this->render('update', array(
+            'model' => $model,
+            'customer' => $customer,
+            DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+        ));
+    }
+
+    /**
          * Handle update image XRay
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated

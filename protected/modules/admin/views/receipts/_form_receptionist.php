@@ -52,6 +52,11 @@
 	</div>
 
 	<div class="row">
+		<label for="debit">Bệnh nhân còn nợ</label>
+                <input size="11" maxlength="11" value="<?php echo $customer->getDebt() ?>" id="Receipts_debit" type="text" readonly="true">
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'process_date'); ?>
 		<?php
                 if ($model->isNewRecord) {

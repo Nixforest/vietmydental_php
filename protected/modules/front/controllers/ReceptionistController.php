@@ -369,14 +369,61 @@ class ReceptionistController extends FrontController {
 
     /**
      * Handle print receipt.
+     * @param Array List array id
      */
     public function actionPrintReceipt($id) {
         $this->layout = '//layouts/front/print';
-        $model = Receipts::model()->findByPk($id);
+        $arrId = explode('-', $id);
+        $model = array();
+        if (is_array($arrId)) {
+            $criteria = new CDbCriteria();
+            $criteria->addInCondition('id', $arrId, 'OR');
+            $model = Receipts::model()->findAll($criteria);
+        } else {
+            $model[] = Receipts::model()->findByPk($id);
+        }
+        $receiptId = '';
+        $customer = NULL;
+        if (count($model) > 0) {
+            $receiptId = $model[0]->getId();
+            $customer = $model[0]->getCustomer();
+        }
+        foreach ($model as $receipt) {
+            
+        }
         $this->render('printReceipt', array(
-            'model' => $model,
+            'model'         => $model,
+            'receiptId'     => $receiptId,
+            'customer'      => $customer,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
+    }
+
+    /**
+     * Handle create customer.
+     */
+    public function actionPrintMore() {
+        $customerId = Settings::getAjaxTempValue();
+        $customer = Customers::model()->findByPk($customerId);
+        if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
+            echo CJavaScript::jsonEncode(array(
+                DomainConst::KEY_STATUS => 'success',
+                'div' => DomainConst::CONTENT00180,
+                'rightContent'  => '',
+                'infoSchedule' => '',
+            ));
+            exit;
+        }
+        echo CJSON::encode(array(
+            DomainConst::KEY_STATUS => 'failure',
+            'div' => $this->renderPartial('_form_print_receipt',
+                    array(
+                        'customer' => $customer,
+                        DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                    ),
+                    true)
+        ));
+        exit;
     }
 
     // Uncomment the following methods and override them if needed
