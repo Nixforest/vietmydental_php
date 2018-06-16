@@ -398,6 +398,11 @@ class AjaxController extends AdminController
 	if ($ajax == 1) {
             $id = $_GET[AjaxController::KEY_TERM][0];
             $model = Receipts::model()->findByPk($id);
+            $customer = $model->getCustomer();
+            if (isset($customer)) {
+                // Save temp value to use at ReceptionistController::actionPrintMore()
+                Settings::saveAjaxTempValue1($customer->id);
+            }
             $rightContent = '';
             $infoSchedule = '';
             if ($model) {

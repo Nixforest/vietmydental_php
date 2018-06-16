@@ -403,7 +403,7 @@ class ReceptionistController extends FrontController {
      * Handle create customer.
      */
     public function actionPrintMore() {
-        $customerId = Settings::getAjaxTempValue();
+        $customerId = Settings::getAjaxTempValue1();
         $customer = Customers::model()->findByPk($customerId);
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
             echo CJavaScript::jsonEncode(array(
@@ -420,8 +420,7 @@ class ReceptionistController extends FrontController {
                     array(
                         'customer' => $customer,
                         DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-                    ),
-                    true)
+                    ), true)
         ));
         exit;
     }

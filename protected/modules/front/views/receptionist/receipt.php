@@ -219,36 +219,36 @@
      * @returns {Boolean}
      */
     function createPrintDialog() {
-        alert("<?php echo DomainConst::CONTENT00375; ?>");
-//        $("<link/>", {
-//            id: "form_ccs",
-//            rel: "stylesheet",
-//            type: "text/css",
-//            href: "<?php echo Yii::app()->theme->baseUrl . '/css/form.css'; ?>"
-//         }).appendTo("head");
-//        <?php
-//        echo CHtml::ajax(array(
-//            'url' => Yii::app()->createAbsoluteUrl('front/receptionist/printMore'),
-//            'data' => "js:$(this).serialize()",
-//            'type' => 'post',
-//            'dataType' => 'json',
-//            'success' => "function(data)
-//                    {
-//                        if (data.status == 'failure')
-//                        {
-//                            $('#dialog div.divForForm').html(data.div);
-//                                  // Here is the trick: on submit-> once again this function!
-//                            $('#dialog div.divForForm form').submit(createPrintDialog);
-//                        }
-//                        else
-//                        {
-//                            $('#dialog div.divForForm').html(data.div);
-//                            setTimeout(\"$('#dialog').dialog('close') \",1000);
-//                        }
-//
-//                    } ",
-//        ))
+//        alert("<?php echo DomainConst::CONTENT00375; ?>");
+        $("<link/>", {
+            id: "form_ccs",
+            rel: "stylesheet",
+            type: "text/css",
+            href: "<?php echo Yii::app()->theme->baseUrl . '/css/form.css'; ?>"
+         }).appendTo("head");
+        <?php
+        echo CHtml::ajax(array(
+            'url' => Yii::app()->createAbsoluteUrl('front/receptionist/printMore'),
+            'data' => "js:$(this).serialize()",
+            'type' => 'post',
+            'dataType' => 'json',
+            'success' => "function(data)
+                    {
+                        if (data.status == 'failure')
+                        {
+                            $('#dialogPrintReceipt div.divForForm').html(data.div);
+                                  // Here is the trick: on submit-> once again this function!
+                            $('#dialogPrintReceipt div.divForForm form').submit(createPrintDialog);
+                        }
+                        else
+                        {
+                            $('#dialog div.divForForm').html(data.div);
+                            setTimeout(\"$('#dialogPrintReceipt').dialog('close') \",1000);
+                        }
+
+                    } ",
+        ))
         ?>;
-//        return false;
+        return false;
     }
 </script>

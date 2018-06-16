@@ -34,7 +34,7 @@
                                 $agentName = " - " . $model->rJoinAgent->rAgent->name;
                             }
                         ?>
-                        <tr><td colspan="2" style="font-size: 150%;">NHA KHOA VIỆT MỸ<?php echo $agentName; ?></td></tr>
+                        <tr><td colspan="2"><b>NHA KHOA VIỆT MỸ<?php echo $agentName; ?></b></td></tr>
                         <tr>
                             <td><?php echo DomainConst::CONTENT00308; ?></td>
                                 <td>
@@ -54,11 +54,13 @@
                     </table>
                 </td>
             </tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
             <!--Row Title-->
             <tr>
                 <td colspan="13"></td>
-                <td colspan="10" class="align-middle"><font size="6"><?php echo DomainConst::CONTENT00301; ?></font></td>
-                <td colspan="8">Số/ID: <?php echo $receiptId; ?></td>
+                <td colspan="10" class="align-middle bigfont"><b><?php echo DomainConst::CONTENT00301; ?></b></td>
+                <td colspan="8"><b>Số/ID: <?php echo $receiptId; ?></b></td>
             </tr>
             <!--Row Patient information-->
             <tr>
@@ -129,19 +131,19 @@
                             <b><?php echo DomainConst::CONTENT00313; ?></b><br>
                             (<?php echo DomainConst::CONTENT00314; ?>)
                         </td>
-                        <td>
+                        <td class="center">
                             <b><?php echo DomainConst::CONTENT00315; ?></b><br>
                             (<?php echo DomainConst::CONTENT00316; ?>)
                         </td>
-                        <td>
+                        <td class="center">
                             <b><?php echo DomainConst::CONTENT00317; ?></b><br>
                             (<?php echo DomainConst::CONTENT00318; ?>)
                         </td>
-                        <td>
+                        <td class="center">
                             <b><?php echo DomainConst::CONTENT00319; ?></b><br>
                             (<?php echo DomainConst::CONTENT00320; ?>)
                         </td>
-                        <td>
+                        <td class="center">
                             <b><?php echo DomainConst::CONTENT00259; ?></b><br>
                             (<?php echo DomainConst::CONTENT00321; ?>)
                         </td>
@@ -242,18 +244,24 @@
                 <td colspan="31">
                     <table class="table table-borderless">
                         <tr>
-                            <td><b><?php echo DomainConst::CONTENT00326; ?></b></td>
-                            <td><b><?php echo DomainConst::CONTENT00327; ?></b></td>
-                            <td><b><?php echo DomainConst::CONTENT00328; ?></b></td>
-                            <td><b><?php echo DomainConst::CONTENT00329; ?></b></td>
-                            <td><b><?php echo DomainConst::CONTENT00330; ?></b></td>
+                            <td class="center"><b><?php echo DomainConst::CONTENT00326; ?></b></td>
+                            <td class="center"><b><?php echo DomainConst::CONTENT00327; ?></b></td>
+                            <td class="center"><b><?php echo DomainConst::CONTENT00328; ?></b></td>
+                            <td class="center"><b><?php echo DomainConst::CONTENT00329; ?></b></td>
+                            <td class="center"><b><?php echo DomainConst::CONTENT00330; ?></b></td>
                         </tr>
                         <tr>
-                            <td><?php echo DomainConst::CONTENT00331; ?></td>
-                            <td><?php echo DomainConst::CONTENT00331; ?></td>
-                            <td><?php echo DomainConst::CONTENT00331; ?></td>
-                            <td><?php echo DomainConst::CONTENT00331; ?></td>
-                            <td><?php echo DomainConst::CONTENT00331; ?></td>
+                            <td class="smallfont center"><?php echo DomainConst::CONTENT00331; ?></td>
+                            <td class="smallfont center"><?php echo DomainConst::CONTENT00331; ?></td>
+                            <td class="smallfont center"><?php echo DomainConst::CONTENT00331; ?></td>
+                            <td class="smallfont center"><?php echo DomainConst::CONTENT00331; ?></td>
+                            <td class="smallfont center"><?php echo DomainConst::CONTENT00331; ?></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5"></td>
                         </tr>
                         <tr>
                             <td colspan="5"></td>
@@ -268,8 +276,8 @@
                         }
                         ?>
                         <tr>
-                            <td><?php echo $customerName; ?></td>
-                            <td><?php echo $userName; ?></td>
+                            <td class="center"><?php echo $customerName; ?></td>
+                            <td class="center"><?php echo $userName; ?></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -298,10 +306,29 @@
 .table-borderless > thead > tr > th {
     border: none !important;
 }
+
+.table-bordered > tbody > tr > td,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > td,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > thead > tr > th {
+    border: 2px solid #060606;
+}
+
 td {
     font-size: <?php echo Settings::getPrintReceiptFontSize(); ?>;
 }
 .currency {
     text-align: right;
+}
+.bigfont {
+    font-size: 190%;
+}
+.smallfont {
+    font-size: 100%;
+}
+.center {
+    text-align: center;
 }
 </style>

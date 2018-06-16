@@ -67,6 +67,8 @@ class Settings extends BaseActiveRecord
     /* --- Others settings --- */
     /** Key Ajax template value */
     const KEY_AJAX_TEMPLATE_VALUE               = 'AJAX_TEMPLATE_VALUE';
+    /** Key Ajax template value */
+    const KEY_AJAX_TEMPLATE_VALUE_1             = 'AJAX_TEMPLATE_VALUE_1';
     
     /* --- SMS settings --- */
     /** Key SMS server url */
@@ -251,6 +253,22 @@ class Settings extends BaseActiveRecord
      */
     public static function saveAjaxTempValue($value) {
         Settings::saveSetting(Settings::KEY_AJAX_TEMPLATE_VALUE . '_'  . Yii::app()->user->id, $value);
+    }
+    
+    /**
+     * Get value of ajax template variable
+     * @return String
+     */
+    public static function getAjaxTempValue1() {
+        return Settings::getItem(Settings::KEY_AJAX_TEMPLATE_VALUE_1 . '_' . Yii::app()->user->id);
+    }
+    
+    /**
+     * Save value of ajax template variable
+     * @param String $value Value need to save
+     */
+    public static function saveAjaxTempValue1($value) {
+        Settings::saveSetting(Settings::KEY_AJAX_TEMPLATE_VALUE_1 . '_'  . Yii::app()->user->id, $value);
     }
     
     /**

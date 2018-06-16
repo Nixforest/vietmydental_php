@@ -610,6 +610,15 @@ class CommonProcess {
         return $res;
     }
     
+    /**
+     * Format currency value (include unit 'VND')
+     * @param type $price Price value
+     * @return String Price after format
+     */
+    public static function formatCurrencyWithUnit($price) {
+        return self::formatCurrency($price) . ' ' . DomainConst::CONTENT00134;
+    }
+    
     //-----------------------------------------------------
     // ++ Connection process
     //-----------------------------------------------------

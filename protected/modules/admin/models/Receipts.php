@@ -316,16 +316,32 @@ class Receipts extends CActiveRecord
     }
     
     /**
+     * Get insurrence amount (include unit 'VND')
+     * @return String Insurrence amount
+     */
+    public function getInsuranceAmount() {
+        $retVal = 0;
+        if (isset($this->rTreatmentScheduleDetail)
+                && isset($this->rTreatmentScheduleDetail->rSchedule)) {
+            $retVal = $this->rTreatmentScheduleDetail->rSchedule->insurrance;
+        }
+        return CommonProcess::formatCurrencyWithUnit($retVal);
+    }
+    
+    /**
      * Get ajax information
      * @return string
      */
     public function getAjaxInfo() {
+        // Get treatment schedule detail information
         if (isset($this->rTreatmentScheduleDetail)) {
-//            $teeth = $this->rTreatmentScheduleDetail->getTeeth();
+            // Teeth info
             $teeth = $this->rTreatmentScheduleDetail->generateTeethInfo(", ");
+            // Diagnosis
             $diagnosis = $this->rTreatmentScheduleDetail->getDiagnosis();
+            // Treatment type
             $treatmentType = $this->rTreatmentScheduleDetail->getTreatment() . " - " . $this->rTreatmentScheduleDetail->getTreatmentPriceText();
-//            $money = $this->rTreatmentScheduleDetail->getTreatmentPrice();
+            // Money
             $money = $this->getTotal();
             if (isset($this->rTreatmentScheduleDetail->rSchedule)) {
                 $insurance = $this->rTreatmentScheduleDetail->rSchedule->getInsurrance();
@@ -375,9 +391,6 @@ class Receipts extends CActiveRecord
         $rightContent .=                '<td align="right"><b>' . $this->description . '</b>' . '</td>';
         $rightContent .=            '</tr>';
         $rightContent .=        '</table>';
-//        $rightContent .= '<p>' . DomainConst::CONTENT00254 . ': ' . '<b>' . CommonProcess::formatCurrency($money) . '</b></p>';
-//        $rightContent .= '<p>' . DomainConst::CONTENT00257 . ': ' . '<b>' . CommonProcess::formatCurrency($this->discount) . '</b></p>';
-//        $rightContent .= '<p>' . DomainConst::CONTENT00259 . ': ' . '<b>' . CommonProcess::formatCurrency($this->final) . '</b></p>';
         $rightContent .=    '</div>';
         
         $rightContent .=        '<table>';
@@ -391,13 +404,6 @@ class Receipts extends CActiveRecord
                     )),
                     '<br>' . DomainConst::CONTENT00265,
                     DomainConst::IMG_COMPLETED_ICON);
-//            $rightContent .=                    '<div class="group-btn">';
-//            $rightContent .=                        '<a href="' . Yii::app()->createAbsoluteUrl("front/receptionist/update",
-//                    array(
-//                        "id" => $this->id,
-//                        'action'    => DateTimeExt::isToday($this->process_date, DomainConst::DATE_FORMAT_4) ? 'receipt' : 'receiptOld',
-//                    )) . '">' . DomainConst::CONTENT00265 . '</a>';
-//            $rightContent .=                    '</div>';
             $rightContent .=                '</td>';
         }
         
@@ -408,26 +414,12 @@ class Receipts extends CActiveRecord
                 )),
                 '<br>' . DomainConst::CONTENT00264,
                 DomainConst::IMG_PRINT_ICON, true);
-//        $rightContent .=                    '<div class="group-btn">';
-//        $rightContent .=                        '<a style="cursor: pointer;"'
-//                                                    . ' onclick="{createPrintDialog(); $(\'#dialog\').dialog(\'open\');}">' . DomainConst::CONTENT00264 . '</a>';
-//        $rightContent .=                        '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("front/receptionist/printReceipt",
-//                array(
-//                    "id"        => $this->id,
-//                )) . '">' . DomainConst::CONTENT00264 . '</a>';
-//        $rightContent .=                    '</div>';
         $rightContent .=                '</td>';
         $rightContent .=                '<td>';
-//        $rightContent .= HtmlHandler::createButtonWithImage(
-//                Yii::app()->createAbsoluteUrl("front/receptionist/printReceipt", array(
-//                    "id" => $this->id,
-//                )),
-//                '<br>' . DomainConst::CONTENT00373,
-//                DomainConst::IMG_PRINT_ALL_ICON, true);
         
         $rightContent .= HtmlHandler::createAjaxButtonWithImage(
                 '<br>' . DomainConst::CONTENT00373, DomainConst::IMG_PRINT_ALL_ICON,
-                'createPrintDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');return false;',
+                '{createPrintDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');}',
                 'cursor: pointer;');
         $rightContent .=                '</td>';
         $rightContent .=            '</tr>';

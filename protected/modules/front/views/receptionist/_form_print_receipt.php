@@ -10,14 +10,17 @@ $form = $this->beginWidget('CActiveForm', array(
     'enableAjaxValidation' => false,
 ));
 ?>
-    <div>
-        <div class="row buttons">
-                <?php echo CHtml::submitButton(DomainConst::CONTENT00264,
-                        array(
-                            'name'  => DomainConst::KEY_SUBMIT,
-                        )); ?>
-        </div>
+<div>
+    <?php echo $customer->name; ?>
+    <br>
+    <?php echo DomainConst::CONTENT00375; ?>
+    <div class="row buttons">
+        <?php echo CHtml::submitButton(DomainConst::CONTENT00264,
+            array(
+                'name'  => DomainConst::KEY_SUBMIT,
+            )); ?>
     </div>
+</div>
 <?php $this->endWidget(); ?>
 
 </div>
