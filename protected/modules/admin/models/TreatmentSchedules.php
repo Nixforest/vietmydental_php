@@ -296,6 +296,14 @@ class TreatmentSchedules extends BaseActiveRecord
         return $retVal;
     }
     
+    /**
+     * Get start date string
+     * @return String Start date
+     */
+    public function getStartDate() {
+        return CommonProcess::convertDateTime($this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_VIEW);
+    }
+    
 //    public function getStartDate() {
 //        return "Ngayf"
 //    }

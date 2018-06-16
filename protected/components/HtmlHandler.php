@@ -26,7 +26,7 @@ class HtmlHandler {
      * @param String $class Class of button
      * @return String Html string generate button
      */
-    public static function createButton($href, $title, $isNewTab = false, $class = self::CLASS_GROUP_BUTTON) {
+    public static function createButton($href, $title, $isNewTab = true, $class = self::CLASS_GROUP_BUTTON) {
         $retVal = '';
         $target = '';
         if ($isNewTab) {
@@ -47,7 +47,7 @@ class HtmlHandler {
      * @param String $class Class of button
      * @return String Html string generate button
      */
-    public static function createButtonWithImage($href, $title, $image, $isNewTab = false, $class = self::CLASS_GROUP_BUTTON) {
+    public static function createButtonWithImage($href, $title, $image, $isNewTab = false, $class = self::CLASS_GROUP_BUTTON, $tagAId = '') {
         $retVal = '';
         $target = '';
         if ($isNewTab) {
@@ -55,7 +55,7 @@ class HtmlHandler {
         }
         
         $retVal .= '<div class="' . $class . '">';
-        $retVal .= '<a ' . $target . ' href="' . $href . '">'
+        $retVal .= '<a ' . $target . ' href="' . $href . '" id="' . $tagAId . '">'
                 . '<img src="' . Yii::app()->theme->baseUrl . DomainConst::IMG_BASE_PATH . $image . '"> '
                 . '' . $title . '</a>';
         $retVal .= '</div>';

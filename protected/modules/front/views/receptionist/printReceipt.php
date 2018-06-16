@@ -298,37 +298,37 @@
 <script type="text/javascript">
 </script>
 <style>
-.table-borderless > tbody > tr > td,
-.table-borderless > tbody > tr > th,
-.table-borderless > tfoot > tr > td,
-.table-borderless > tfoot > tr > th,
-.table-borderless > thead > tr > td,
-.table-borderless > thead > tr > th {
-    border: none !important;
-}
+    .table-borderless > tbody > tr > td,
+    .table-borderless > tbody > tr > th,
+    .table-borderless > tfoot > tr > td,
+    .table-borderless > tfoot > tr > th,
+    .table-borderless > thead > tr > td,
+    .table-borderless > thead > tr > th {
+        border: none !important;
+    }
 
-.table-bordered > tbody > tr > td,
-.table-bordered > tbody > tr > th,
-.table-bordered > tfoot > tr > td,
-.table-bordered > tfoot > tr > th,
-.table-bordered > thead > tr > td,
-.table-bordered > thead > tr > th {
-    border: 2px solid #060606;
-}
+    .table-bordered > tbody > tr > td,
+    .table-bordered > tbody > tr > th,
+    .table-bordered > tfoot > tr > td,
+    .table-bordered > tfoot > tr > th,
+    .table-bordered > thead > tr > td,
+    .table-bordered > thead > tr > th {
+        border: 2px solid #060606;
+    }
 
-td {
-    font-size: <?php echo Settings::getPrintReceiptFontSize(); ?>;
-}
-.currency {
-    text-align: right;
-}
-.bigfont {
-    font-size: 190%;
-}
-.smallfont {
-    font-size: 100%;
-}
-.center {
-    text-align: center;
-}
+    td {
+        font-size: <?php echo Settings::getPrintReceiptFontSize(); ?>;
+    }
+    .currency {
+        text-align: right;
+    }
+    .bigfont {
+        font-size: 190%;
+    }
+    .smallfont {
+        font-size: 100%;
+    }
+    .center {
+        text-align: center;
+    }
 </style>

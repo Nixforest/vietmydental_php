@@ -897,6 +897,8 @@ class DomainConst {
     const KEY_SUBMIT_TODATE                 = 'submitToday';
     /** Submit save */
     const KEY_SUBMIT_SAVE                   = 'submitSave';
+    /** Receipt */
+    const KEY_RECEIPT                       = 'receipt';
     
     //-----------------------------------------------------
     // List domain const
@@ -1365,4 +1367,5 @@ class DomainConst {
     const CONTENT00373 = 'In thêm';
     const CONTENT00374 = 'Chọn phiếu thu cần in';
     const CONTENT00375 = 'Chức năng hiện đang hoàn thiện, xin vui lòng thử lại sau';
+    const CONTENT00376 = 'Không có phiếu thu';
 }

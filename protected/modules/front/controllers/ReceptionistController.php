@@ -405,14 +405,33 @@ class ReceptionistController extends FrontController {
     public function actionPrintMore() {
         $customerId = Settings::getAjaxTempValue1();
         $customer = Customers::model()->findByPk($customerId);
-        if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
-            echo CJavaScript::jsonEncode(array(
-                DomainConst::KEY_STATUS => 'success',
-                'div' => DomainConst::CONTENT00180,
-                'rightContent'  => '',
-                'infoSchedule' => '',
-            ));
-            exit;
+        if (isset($_POST[DomainConst::KEY_RECEIPT])) {
+//        if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
+//            CommonProcess::dumpVariable('hoho');
+            $nameArr = DomainConst::KEY_RECEIPT;
+            $selected = array();
+            if (isset($customer->rMedicalRecord) && isset($customer->rMedicalRecord->rTreatmentSchedule)) {
+                foreach ($customer->rMedicalRecord->rTreatmentSchedule as $schedule) {
+                    if (isset($schedule->rDetail)) {
+                        foreach ($schedule->rDetail as $detail) {
+                            if (isset($detail->rReceipt)) {
+                                if (isset($_POST[DomainConst::KEY_RECEIPT][$schedule->id][$detail->rReceipt->id])
+                                        && ($_POST[DomainConst::KEY_RECEIPT][$schedule->id][$detail->rReceipt->id] == DomainConst::CHECKBOX_STATUS_CHECKED)) {
+                                    $selected[] = $detail->rReceipt->id;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            $this->redirect(array('printReceipt','id'=> implode('-', $selected)));
+//            echo CJavaScript::jsonEncode(array(
+//                DomainConst::KEY_STATUS => 'success',
+//                'div' => DomainConst::CONTENT00180,
+//                'rightContent'  => '',
+//                'infoSchedule' => '',
+//            ));
+//            exit;
         }
         echo CJSON::encode(array(
             DomainConst::KEY_STATUS => 'failure',
