@@ -721,13 +721,13 @@ class Customers extends BaseActiveRecord
         $retVal = array();
         if (isset($this->rMedicalRecord) && isset($this->rMedicalRecord->rTreatmentSchedule)) {
             foreach ($this->rMedicalRecord->rTreatmentSchedule as $schedule) {
-                if (isset($schedule->rDetail)) {
-                    foreach ($schedule->rDetail as $detail) {
-                        $retVal[] = $detail;
-                    }
-                }
+//                if (isset($schedule->rDetail)) {
+//                    foreach ($schedule->rDetail as $detail) {
+//                        $retVal[] = $detail;
+//                    }
+//                }
+                $retVal[] = $schedule;
             }
-//            return $this->rMedicalRecord->rTreatmentSchedule;
         }
         return $retVal;
     }

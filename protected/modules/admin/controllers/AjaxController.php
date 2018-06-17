@@ -466,6 +466,22 @@ class AjaxController extends AdminController
         }
     }
     
+    public function actionGetTreatmentScheduleInfo() {
+        $ajax = filter_input(INPUT_GET, AjaxController::KEY_AJAX);
+	if ($ajax == 1) {
+            $id = filter_input(INPUT_GET, AjaxController::KEY_TERM);
+            $model = TreatmentSchedules::model()->findByPk($id);
+            if ($model) {
+                $retVal = $model->getHtmlTreatmentDetail();
+            }
+            $json = CJavaScript::jsonEncode(array(
+                'data'  => $retVal,
+            ));
+            echo $json;
+            Yii::app()->end();
+        }
+    }
+    
     /**
      * Get money type information
      */

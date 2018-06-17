@@ -13,7 +13,7 @@
             <div class="col-md-4">
                 <div class="profile__item">
                     <div class="profile__img">
-                        <img src="<?php echo Yii::app()->theme->baseUrl; ?>/img/tempt/img1.jpg" alt="">
+                        <!--<img src="<?php echo Yii::app()->theme->baseUrl; ?>/img/tempt/img1.jpg" alt="">-->
                     </div>
                     <div class="profile__des">
                         <div class="p-item">
@@ -119,14 +119,22 @@
                     <span class="icon25"></span> <?php echo DomainConst::CONTENT00280; ?>
                 </div>
                 <div class="list__2__info" id="treatment_schedule-info">
+                    <?php $treatmentCnt = count($treatment); ?>
                     <?php foreach ($treatment as $value): ?>
+                    <?php
+                        $title = 'Đợt ' . $treatmentCnt-- . ': ' . $value->getStartTime();
+                        $info = '';
+                        if (isset($value->rDetail) && (count($value->rDetail) > 0)) {
+                            $info = $value->rDetail[0]->getTreatmentInfo();
+                        }
+                    ?>
                     <div class="list__2__des" id="<?php echo $value->id; ?>">
                         <div class="list__2__item">
                             <span class="icon26 icon-list"></span>
                             <p>
-                                <strong><?php echo $value->getTreatmentInfo(); ?></strong>
+                                <strong><?php echo $title; ?></strong>
                             </p>
-                            <p><?php echo $value->getStartTime(); ?></p>
+                            <p><?php echo $info; ?></p>
                         </div>
                     </div>
                     <?php endforeach; // end foreach ($treatment as $value) ?>
@@ -141,63 +149,14 @@
                     <span class="icon27"></span> <?php echo DomainConst::CONTENT00174; ?>
                 </div>
                 <div class="list__2__info" id="treatment_schedule_detail-info">
-<!--                    <div class="list__2__des">
-                        <div class="list__2__item">
-                            <span class="icon28 icon-list"></span>
-                            <p>
-                                <strong>Lịch Điều Trị</strong>
-                            </p>
-                            <p>Ngày Bắt Đầu: 9:30 AM - 26/03/2018
-                                <br/> Ngày Kết Thúc: 10:30 AM - 26/04/2018</p>
-                        </div>
-                    </div>
-                    <div class="list__2__des">
-                        <div class="list__2__item">
-                            <span class="icon29 icon-list"></span>
-                            <p>
-                                <strong>Răng Số: </strong>
-                            </p>
-                            <p>2 Hàm</p>
-                        </div>
-                    </div>
-                    <div class="list__2__des">
-                        <div class="list__2__item">
-                            <span class="icon30 icon-list"></span>
-                            <p>
-                                <strong>Triệu Chứng: </strong>
-                            </p>
-                            <p>Chảy Máu Chân Răng</p>
-                        </div>
-                    </div>
-                    <div class="list__2__des">
-                        <div class="list__2__item">
-                            <span class="icon31 icon-list"></span>
-                            <p>
-                                <strong>Chuẩn Đoán: </strong>
-                            </p>
-                            <p>Viêm Nha Chu</p>
-                        </div>
-                    </div>
-                    <div class="list__2__des">
-                        <div class="list__2__item">
-                            <span class="icon32 icon-list"></span>
-                            <p>
-                                <strong>Loại Điều Trị:</strong>
-                            </p>
-                            <p>Cạo Vôi Răng - Đánh Bóng 2 Hàm</p>
-                        </div>
-                    </div>
-                    <div class="list__2__des">
-                        <div class="list__2__item">
-                            <span class="icon33 icon-list"></span>
-                            <p>
-                                <strong>Bảo Hiểm Thanh Toán:</strong>
-                            </p>
-                            <p>5.000.000 VND</p>
-                        </div>
-                    </div>
+                    <?php
+                        if (count($treatment) > 0) {
+                            $retVal = $treatment[0]->getHtmlTreatmentDetail();
+                            echo $retVal;
+                        }
+                    ?>
 
-                    <a href="#">(Xem Thêm)</a>-->
+                    <!--<a href="#">(Xem Thêm)</a>-->
                 </div>
             </div>
 
@@ -212,12 +171,13 @@
                     <span class="icon34"></span> Chi Tiết Thanh Toán
                 </div>
                 <div class="list__2__info">
+                    <?php $idx = 1; ?>
                     <?php foreach($model->getReceipts() as $receipt): ?>
                         <div class="list__2__des">
                             <div class="list__2__item">
                                 <span class="icon26 icon-list"></span>
                                 <p>
-                                    <strong>Thanh Toán Lần 1: </strong>
+                                    <strong>Thanh Toán Lần <?php echo $idx++; ?>: </strong>
                                 </p>
                                 <p><?php echo CommonProcess::formatCurrency($receipt->final); ?> (Ngày Thanh Toán: <?php echo $receipt->process_date; ?>)</p>
                             </div>
@@ -235,7 +195,7 @@
 
                 </div>
                 <div class="list__2__info">
-                    <div class="list__2__des">
+<!--                    <div class="list__2__des">
                         <div class="list__2__item">
                             <span class="icon26 icon-list"></span>
                             <p>
@@ -261,8 +221,8 @@
                             </p>
                             <p>5.000.000 VND (Ngày Thanh Toán: 26/03/2018)</p>
                         </div>
-                    </div>
-                    <a href="#">(Xem Thêm)</a>
+                    </div>-->
+                    <!--<a href="#">(Xem Thêm)</a>-->
                 </div>
             </div>
         </div>
@@ -322,7 +282,7 @@
     $("body").on("click", "#treatment_schedule-info .list__2__des", function() {
 //        alert($(this).attr('id'));
         fnShowTreatmentScheduleDetailInfo(
-                "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/getTreatmentScheduleDetailInfo'); ?>",
+                "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/getTreatmentScheduleInfo'); ?>",
                 $(this).attr('id'),
                 "#treatment_schedule_detail-info"
                 );
