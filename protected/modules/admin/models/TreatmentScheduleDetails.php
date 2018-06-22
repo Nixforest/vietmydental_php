@@ -207,6 +207,13 @@ class TreatmentScheduleDetails extends BaseActiveRecord
         if (isset($this->rReceipt)) {
             $this->rReceipt->delete();
         }
+        OneMany::deleteAllOldRecords($this->id, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+        if (isset($this->rImgXRayFile)) {
+            foreach ($this->rImgXRayFile as $image) {
+                $image->delete();
+            }
+        }
+        Loggers::info("Deleted " . get_class($this) . " with id = $this->id.", __FUNCTION__, __LINE__);
         return parent::beforeDelete();
     }
 

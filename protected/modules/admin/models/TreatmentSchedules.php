@@ -212,6 +212,7 @@ class TreatmentSchedules extends BaseActiveRecord
                 $detail->delete();
             }
         }
+        Loggers::info("Deleted " . get_class($this) . " with id = $this->id.", __FUNCTION__, __LINE__);
         return parent::beforeDelete();
     }
 

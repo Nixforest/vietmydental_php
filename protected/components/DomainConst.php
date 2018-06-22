@@ -1368,4 +1368,5 @@ class DomainConst {
     const CONTENT00374 = 'Chọn phiếu thu cần in';
     const CONTENT00375 = 'Chức năng hiện đang hoàn thiện, xin vui lòng thử lại sau';
     const CONTENT00376 = 'Không có phiếu thu';
+    const CONTENT00377 = 'Lưu';
 }

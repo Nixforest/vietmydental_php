@@ -38,7 +38,7 @@ $this->createMenu('changePassword', $model);
     </div>
 
     <div class="row buttons" style="padding-left: 135px;padding-top: 15px;">
-        <span class="btn-submit"> <?php echo CHtml::submitButton('Save'); ?></span>
+        <span class="btn-submit"> <?php echo CHtml::submitButton(DomainConst::CONTENT00377); ?></span>
     </div>
 
 <?php $this->endWidget(); ?>

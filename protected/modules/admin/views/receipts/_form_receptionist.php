@@ -116,7 +116,7 @@
 	</div>-->
 
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save',
+		<?php echo CHtml::submitButton(DomainConst::CONTENT00377,
                         array(
                             'name'  => 'submit',
                         )); ?>

@@ -165,6 +165,7 @@ class Files extends CActiveRecord
      */
     protected function beforeDelete() {
         self::removeFileOnly($this, self::KEY_FILE_NAME);
+        Loggers::info("Deleted " . get_class($this) . " with id = $this->id.", __FUNCTION__, __LINE__);
         return parent::beforeDelete();
     }
 

@@ -186,6 +186,17 @@ class Receipts extends CActiveRecord
         }
         return parent::beforeSave();
     }
+    
+    /**
+     * Override before delete method
+     */
+    public function beforeDelete() {
+        // Handle Agent relation
+        OneMany::deleteAllManyOldRecords($this->id, OneMany::TYPE_AGENT_RECEIPT);
+        
+        Loggers::info("Deleted " . get_class($this) . " with id = $this->id.", __FUNCTION__, __LINE__);
+        return parent::beforeDelete();
+    }
 
     //-----------------------------------------------------
     // Utility methods

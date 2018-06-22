@@ -234,11 +234,19 @@ class Customers extends BaseActiveRecord
         if (isset($this->rMedicalRecord)) {
             $this->rMedicalRecord->delete();
         }
+        if (isset($this->rReferCode)) {
+            $this->rReferCode->delete();
+        }
+        if (isset($this->rWarranty)) {
+            foreach ($this->rWarranty as $warranty) {
+                $warranty->delete();
+            }
+        }
         // Handle Agent relation
         OneMany::deleteAllManyOldRecords($this->id, OneMany::TYPE_AGENT_CUSTOMER);
         // Handle Social network relation
         SocialNetworks::deleteAllOldRecord($this->id, SocialNetworks::TYPE_CUSTOMER);
-        
+        Loggers::info("Deleted " . get_class($this) . " with id = $this->id.", __FUNCTION__, __LINE__);
         return parent::beforeDelete();
     }
 
