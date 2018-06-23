@@ -18,6 +18,13 @@
 
     <?php echo $form->errorSummary($customer); ?>
     <?php echo $form->errorSummary($medicalRecord); ?>
+    <?php
+    if (isset($error) && !$customer->hasErrors() && !empty($error)) {
+        echo '<div class="errorMessage">' . $error . '</div>';
+    } else {
+        echo '<div class="errorMessage" style="display: none;">' . $error . '</div>';
+    }
+    ?>
     <div class="row">
         <div class="col-md-6">
             <?php echo $form->labelEx($customer,'phone'); ?>

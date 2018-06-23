@@ -25,6 +25,7 @@ class ReceptionistController extends FrontController {
     public function actionCreateCustomer() {
         $customer = new Customers();
         $medicalRecord = new MedicalRecords();
+        $errMsg = '';
         if (isset($_POST['Customers'], $_POST['MedicalRecords'])) {
             $customer->attributes = $_POST['Customers'];
             $medicalRecord->attributes = $_POST['MedicalRecords'];
@@ -45,7 +46,7 @@ class ReceptionistController extends FrontController {
                 $medicalRecord->customer_id = $customer->id;
                 
                 // Try to save medical record
-                if ($medicalRecord->save()) {
+                if ($medicalRecord->isValidRecordNumber() && $medicalRecord->save()) {
                     echo CJavaScript::jsonEncode(array(
                         DomainConst::KEY_STATUS => 'success',
                         'div' => DomainConst::CONTENT00180,
@@ -54,10 +55,15 @@ class ReceptionistController extends FrontController {
                     ));
                     exit;
                 } else {
+                    if (!$medicalRecord->isValidRecordNumber()) {
+                        $errMsg = "Hồ sơ số $medicalRecord->record_number tại chi nhánh " . $customer->getAgentName() . " đã tồn tại.";
+                    } else {
+                        $errMsg = CommonProcess::json_encode_unicode($medicalRecord->getErrors());
+                    }
                     $customer->delete();
                 }
             } else {
-                CommonProcess::dumpVariable($customer->getErrors());
+                $errMsg = CommonProcess::json_encode_unicode($customer->getErrors());
             }
         }
         echo CJSON::encode(array(
@@ -66,6 +72,7 @@ class ReceptionistController extends FrontController {
                     array(
                         'customer' => $customer,
                         'medicalRecord' => $medicalRecord,
+                        'error'         => $errMsg,
                         DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
                     ),
                     true)

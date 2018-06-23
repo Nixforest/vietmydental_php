@@ -378,6 +378,7 @@ class AjaxController extends AdminController
             $id = filter_input(INPUT_GET, AjaxController::KEY_TERM);
             $model = Customers::model()->findByPk($id);
             if ($model) {
+                Settings::saveAjaxTempValue1($model->id);
                 $rightContent = $model->getCustomerAjaxInfo();
                 $infoSchedule = $model->getCustomerAjaxScheduleInfo();
             }

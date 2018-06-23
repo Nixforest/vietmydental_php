@@ -523,6 +523,12 @@ class Customers extends BaseActiveRecord
                                             DomainConst::IMG_EDIT_ICON, true);
         $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
+        $rightContent .=                '<tr><td>';
+        $rightContent .=                    HtmlHandler::createAjaxButtonWithImage(
+                '<br>' . DomainConst::CONTENT00264, DomainConst::IMG_PRINT_ALL_ICON,
+                '{createPrintDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');}',
+                'cursor: pointer;');
+        $rightContent .=                '</td></tr>';
         $pathological = '';
         if (isset($this->rMedicalRecord)) {
             $pathological = $this->rMedicalRecord->generateMedicalHistory(", ");

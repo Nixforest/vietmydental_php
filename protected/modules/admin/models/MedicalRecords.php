@@ -175,4 +175,34 @@ class MedicalRecords extends BaseActiveRecord
         $retVal .= ' - ' . $this->record_number;
         return $retVal;
     }
+    
+    /**
+     * Check if current record number property is not exist in db
+     * @return True if record number value is not exist, False otherwise
+     */
+    public function isValidRecordNumber() {
+        $agentId = isset(Yii::app()->user) ? Yii::app()->user->agent_id : '';
+        $criteria = new CDbCriteria();
+        $criteria->compare('t.record_number', $this->record_number);
+        $models = self::model()->findAll($criteria);
+        if ($models) {
+            foreach ($models as $value) {
+                if (($value->record_number == $this->record_number)
+                        && $value->getAgentId() == $agentId) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * Get id of agent
+     * @return Id of agent
+     */
+    public function getAgentId() {
+        if (isset($this->rCustomer)) {
+            return $this->rCustomer->getAgentId();
+        }
+    }
 }
