@@ -406,6 +406,9 @@ class CommonProcess {
      * @return String Date time value after convert
      */
     public static function convertDateTime($datetime, $fromFormat, $toFormat) {
+        if (DateTimeExt::isDateNull($datetime)) {
+            return '';
+        }
         $converter = DateTime::createFromFormat($fromFormat, $datetime);
         if ($converter) {
             return $converter->format($toFormat);

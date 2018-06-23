@@ -164,7 +164,7 @@
             </div>
             <div class="col-md-6">
                 <?php echo $form->labelEx($model,'career_id'); ?>
-		<?php echo $form->dropDownList($model,'career_id', Careers::loadItems()); ?>
+		<?php echo $form->dropDownList($model,'career_id', Careers::loadItems(true)); ?>
 		<?php echo $form->error($model,'career_id'); ?>
             </div>
 	</div>

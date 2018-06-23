@@ -1361,12 +1361,12 @@ class DomainConst {
     const CONTENT00367  = 'Tạo mới Lần điều trị';
     const CONTENT00368  = 'Năm sinh';
     const CONTENT00369  = 'Năm sinh (Nếu không xin được thông tin Ngày sinh)';
-    const CONTENT00370 = 'Chưa thu';
-    const CONTENT00371 = 'Xong';
-    const CONTENT00372 = 'Lưu và tạo phiếu thu';
-    const CONTENT00373 = 'In thêm';
-    const CONTENT00374 = 'Chọn phiếu thu cần in';
-    const CONTENT00375 = 'Chức năng hiện đang hoàn thiện, xin vui lòng thử lại sau';
-    const CONTENT00376 = 'Không có phiếu thu';
-    const CONTENT00377 = 'Lưu';
+    const CONTENT00370  = 'Chưa thu';
+    const CONTENT00371  = 'Xong';
+    const CONTENT00372  = 'Lưu và tạo phiếu thu';
+    const CONTENT00373  = 'In thêm';
+    const CONTENT00374  = 'Chọn phiếu thu cần in';
+    const CONTENT00375  = 'Chức năng hiện đang hoàn thiện, xin vui lòng thử lại sau';
+    const CONTENT00376  = 'Không có phiếu thu';
+    const CONTENT00377  = 'Lưu';
 }
