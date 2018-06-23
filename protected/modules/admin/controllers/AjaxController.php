@@ -332,9 +332,9 @@ class AjaxController extends AdminController
                 $retVal .=      '<thead>';
                 $retVal .=          '<tr>';
                 $retVal .=          '<th>' . DomainConst::CONTENT00100 . '</th>';
-                $retVal .=          '<th>' . DomainConst::CONTENT00170 . '<br>' . DomainConst::CONTENT00136 . '</br>' . '</th>';
+                $retVal .=          '<th>' . DomainConst::CONTENT00170 . '<br>' . DomainConst::CONTENT00136 . '</th>';
                 $retVal .=          '<th>' . DomainConst::CONTENT00101 . '</th>';
-                $retVal .=          '<th class="col-4">' . DomainConst::CONTENT00045 . '</th>';
+                $retVal .=          '<th class="col-4">' . DomainConst::CONTENT00199 . '<br>' . DomainConst::CONTENT00045 . '</th>';
                 $retVal .=          '</tr>';
                 $retVal .=      '</thead>';
                 $retVal .=      '<tbody>';
@@ -347,9 +347,9 @@ class AjaxController extends AdminController
                         }
                         $retVal .= '<tr id="' . $model->id . '" class="customer-info-tr">';
                         $retVal .= '<td>' . $model->name . '</td>';
-                        $retVal .= '<td>' . $model->phone . '<br>' . $recordNumber . '</br>' . '</td>';
+                        $retVal .= '<td>' . $model->phone . '<br>' . $recordNumber . '</td>';
                         $retVal .= '<td>' . $model->getBirthday() . '</td>';
-                        $retVal .= '<td>' . $model->address . '</td>';
+                        $retVal .= '<td>' . $model->getAgentName() . '<br>' . $model->address . '</td>';
                         $retVal .= '</tr>';
                     }
                 } else {
