@@ -83,9 +83,10 @@
                 </div>
                 <?php $this->widget('zii.widgets.grid.CGridView', array(
                         'id'=>'receipts-grid',
-                        'dataProvider'=>$models,
-//                        'filter'=>$models,
-                        'summaryText'=>'Đang hiển thị {start} - {end} trên {count} kết quả', 
+                        'dataProvider' => $dataProvider,
+//                        'dataProvider' => $models,
+//                        'filter'=>$dataProvider,
+                        'summaryText'=>'Đang hiển thị {start} - {end} trên ' . count($dataProvider->getData()) . ' kết quả', 
                         'selectableRows'=>1,
                         'selectionChanged'=>'function(id){
                                         fnShowCustomerInfo(

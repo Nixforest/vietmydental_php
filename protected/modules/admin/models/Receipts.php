@@ -592,6 +592,19 @@ class Receipts extends CActiveRecord
     }
     
     /**
+     * Get id of agent
+     * @return Id of agent
+     */
+    public function getAgentId() {
+        if (isset($this->rJoinAgent)) {
+            if (isset($this->rJoinAgent->rAgent)) {
+                return $this->rJoinAgent->rAgent->id;
+            }
+        }
+        return '';
+    }
+    
+    /**
      * Get name of agent
      * @return Name of agent
      */
@@ -701,9 +714,12 @@ class Receipts extends CActiveRecord
     public static function getReceiptsToday() {
         $retVal = array();
         $models = self::model()->findAll();
+        $agentId = isset(Yii::app()->user) ? Yii::app()->user->agent_id : '';
         foreach ($models as $model) {
             if ($model->status != self::STATUS_INACTIVE
-                    && DateTimeExt::isToday($model->process_date, DomainConst::DATE_FORMAT_4)) {
+                    && DateTimeExt::isToday($model->process_date, DomainConst::DATE_FORMAT_4)
+                    && ($model->getAgentId() == $agentId)) {
+//        CommonProcess::dumpVariable($model->getAgentId());
                 $retVal[] = $model;
             }
         }
@@ -726,7 +742,14 @@ class Receipts extends CActiveRecord
         $criteria->addCondition('t.status != ' . self::STATUS_RECEIPTIONIST);
         $criteria->addCondition('t.status != ' . self::STATUS_INACTIVE);
         $models = self::model()->findAll($criteria);
-        return $models;
+        $retVal = array();
+        $agentId = isset(Yii::app()->user) ? Yii::app()->user->agent_id : '';
+        foreach ($models as $value) {
+            if ($value->getAgentId() == $agentId) {
+                $retVal[] = $value;
+            }
+        }
+        return $retVal;
     }
     
     /**

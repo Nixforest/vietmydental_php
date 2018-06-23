@@ -713,14 +713,19 @@ class TreatmentScheduleDetails extends BaseActiveRecord
     public static function getListCustomerIdHaveScheduleToday() {
         $retVal = array();
         $arrModel = self::model()->findAll();
+        $agentId = isset(Yii::app()->user) ? Yii::app()->user->agent_id : '';
         foreach ($arrModel as $value) {
             if ($value->status != self::STATUS_INACTIVE
                     && DateTimeExt::isToday($value->start_date, DomainConst::DATE_FORMAT_1)
                     && !DateTimeExt::isToday($value->created_date, DomainConst::DATE_FORMAT_1)) {
                 $customerId = $value->getCustomer();
-                if (!empty($customerId)) {
-                    $retVal[] = $customerId;
+                $mCustomer = $value->getCustomerModel();
+                if (isset($mCustomer) && ($mCustomer->getAgentId() == $agentId)) {
+                    $retVal[] = $mCustomer->id;
                 }
+//                if (!empty($customerId)) {
+//                    $retVal[] = $customerId;
+//                }
             }
         }
         return $retVal;
@@ -734,12 +739,14 @@ class TreatmentScheduleDetails extends BaseActiveRecord
     public static function getListCustomerHaveScheduleTodayCreatedToday() {
         $retVal = array();
         $arrModel = self::model()->findAll();
+        $agentId = isset(Yii::app()->user) ? Yii::app()->user->agent_id : '';
         foreach ($arrModel as $value) {
             if ($value->status != self::STATUS_INACTIVE
                     && DateTimeExt::isToday($value->start_date, DomainConst::DATE_FORMAT_1)
                     && DateTimeExt::isToday($value->created_date, DomainConst::DATE_FORMAT_1)) {
                 $mCustomer = $value->getCustomerModel();
-                if (isset($mCustomer)) {
+//                if (isset($mCustomer)) {
+                if (isset($mCustomer) && ($mCustomer->getAgentId() == $agentId)) {
                     $retVal[] = $mCustomer;
                 }
             }

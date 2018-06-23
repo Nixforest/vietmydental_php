@@ -270,8 +270,10 @@ class ReceptionistController extends FrontController {
         $criteria = new CDbCriteria();
         $models = Customers::model()->findAll($criteria);
         $retVal = array();
+        $agentId = isset(Yii::app()->user) ? Yii::app()->user->agent_id : '';
         foreach ($models as $model) {
-            if (DateTimeExt::isBirthday($model->date_of_birth, DomainConst::DATE_FORMAT_4)) {
+            if (DateTimeExt::isBirthday($model->date_of_birth, DomainConst::DATE_FORMAT_4)
+                    && ($model->getAgentId() == $agentId)) {
                 $retVal[$model->id] = $model;
             }
         }
@@ -310,10 +312,20 @@ class ReceptionistController extends FrontController {
         $models->process_date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
         if(isset($_GET['Receipts']))
 			$models->attributes=$_GET['Receipts'];
+        
+//        $dataProvider = new CActiveDataProvider('Receipts', array(
+//            'pagination' => array(
+//                'pageSize' => Settings::getListPageSize(),
+//            )
+//        ));
+        $dataProvider = $models->search();
+        $dataProvider->setData($arrModels);
+        
         $this->render('receipt', array(
             'models' => $models->search(), 
             'arrModels' => $arrModels,
             'isToday'   => true,
+            'dataProvider'  => $dataProvider,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }
@@ -328,10 +340,20 @@ class ReceptionistController extends FrontController {
         $models->unsetAttributes();  // clear any default values
         if (isset($_GET['Receipts']))
             $models->attributes = $_GET['Receipts'];
+        
+//        $dataProvider = new CActiveDataProvider('Receipts', array(
+//            'pagination' => array(
+//                'pageSize' => Settings::getListPageSize(),
+//            )
+//        ));
+        $dataProvider = $models->searchOld();
+        $dataProvider->setData($arrModels);
+        
         $this->render('receipt', array(
             'models' => $models->searchOld(),
             'arrModels' => $arrModels,
             'isToday'   => false,
+            'dataProvider'  => $dataProvider,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }
