@@ -157,5 +157,20 @@ class BaseActiveRecord extends CActiveRecord {
             Yii::log("Exception " . print_r($e, true), 'error');
             throw new CHttpException("Exception " . print_r($e, true));
         }
+    }
+    
+    /**
+     * Get total value
+     * @param type $records
+     * @param type $column
+     * @return type
+     */
+    public function getTotal($records, $column) {
+        $total = 0;
+        foreach ($records as $record) {
+            $total += $record->$column;
         }
+        return $total;
+    }
+
 }

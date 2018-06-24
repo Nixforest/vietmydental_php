@@ -145,4 +145,21 @@ class Money extends BaseActiveRecord
         // Call parent method
         return parent::beforeSave();
     }
+    
+    /**
+     * Check if can update this record
+     * @return True if can update, False otherwise
+     */
+    public function canUpdate() {
+        $retVal = false;
+        $role = isset(Yii::app()->user->role_id) ? Yii::app()->user->role_id : '';
+        if (Roles::isAdminRole($role)) {
+            // Admin user
+            $retVal = true;
+        } else {
+            // Staff user
+            $retVal = DateTimeExt::isToday($this->action_date, DomainConst::DATE_FORMAT_4);
+        }
+        return $retVal;
+    }
 }

@@ -44,7 +44,13 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'headerHtmlOptions' => array('width' => '30px','style' => 'text-align:center;'),
                     'htmlOptions' => array('style' => 'text-align:center;')
                 ),
-		'name',
+//		'name',
+                array(
+                    'name'  => 'name',
+                    'footer' => DomainConst::CONTENT00254,
+                    'footerHtmlOptions' => array(
+                        'style' => 'text-align:right; font-weight:bold'),
+                ),
 		array(
                     'name'=>'user_id',
                     'htmlOptions' => array('style' => 'text-align:center;'),
@@ -61,6 +67,9 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'name' => 'amount',
                     'htmlOptions' => array('style' => 'text-align:right;'),
                     'value' => 'CommonProcess::formatCurrency($data->amount)',
+                    'footer' => CommonProcess::formatCurrency($model->getTotal($model->search()->getData(), 'amount')),
+                    'footerHtmlOptions' => array(
+                        'style' => 'text-align:right; font-weight:bold'),
                 ),
 		array(
                     'name'=>'account_id',
@@ -74,7 +83,12 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                 array(
                     'header' => DomainConst::CONTENT00239,
                     'class'=>'CButtonColumn',
-                    'template'=> $this->createActionButtons()
+                    'template'=> $this->createActionButtons(),
+                    'buttons'=>array(
+                        'update' => array(
+                            'visible' => '$data->canUpdate()',
+                        ),
+                    ),
                 ),
 	),
 )); ?>
