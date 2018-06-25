@@ -26,167 +26,162 @@
  * @property string $created_by
  * @property string $created_date
  */
-class Customers extends BaseActiveRecord
-{
+class Customers extends BaseActiveRecord {
+
     public $autocomplete_name_user;
     public $autocomplete_name_street;
     public $agent;
     public $referCode;
     public $autocomplete_name_refercode;
-	/**
-	 * Returns the static model of the specified AR class.
-	 * @param string $className active record class name.
-	 * @return Customers the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
 
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return 'customers';
-	}
+    /**
+     * Returns the static model of the specified AR class.
+     * @param string $className active record class name.
+     * @return Customers the static model class
+     */
+    public static function model($className = __CLASS__) {
+        return parent::model($className);
+    }
 
-	/**
-	 * @return array validation rules for model attributes.
-	 */
-	public function rules()
-	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-			array('name, city_id, district_id', 'required'),
-			array('gender, city_id, district_id, ward_id, type_id, career_id, status', 'numerical', 'integerOnly'=>true),
-			array('name, house_numbers', 'length', 'max'=>255),
-			array('year_of_birth', 'length', 'max'=>4),
-			array('phone, email', 'length', 'max'=>200),
-			array('street_id, user_id, created_by', 'length', 'max'=>11),
-			array('debt', 'length', 'max'=>10),
-			array('date_of_birth, address, characteristics', 'safe'),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('id, name, gender, date_of_birth, year_of_birth, phone, email, city_id, district_id, ward_id, street_id, house_numbers, address, type_id, career_id, user_id, status, characteristics, created_by, created_date', 'safe', 'on'=>'search'),
-		);
-	}
+    /**
+     * @return string the associated database table name
+     */
+    public function tableName() {
+        return 'customers';
+    }
 
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-                    'rCity' => array(self::BELONGS_TO, 'Cities', 'city_id'),
-                    'rDistrict' => array(self::BELONGS_TO, 'Districts', 'district_id'),
-                    'rWard' => array(self::BELONGS_TO, 'Wards', 'ward_id'),
-                    'rStreet' => array(self::BELONGS_TO, 'Streets', 'street_id'),
-                    'rType' => array(self::BELONGS_TO, 'CustomerTypes', 'type_id'),
-                    'rCareer' => array(self::BELONGS_TO, 'Careers', 'career_id'),
-                    'rUser' => array(self::BELONGS_TO, 'Users', 'user_id'),
-                    'rCreatedBy' => array(self::BELONGS_TO, 'Users', 'created_by'),
-                    'rStreet' => array(self::BELONGS_TO, 'Streets', 'street_id'),
-                    'rMedicalRecord' => array(
-                        self::HAS_ONE, 'MedicalRecords', 'customer_id',
-                        'on' => 'status = 1',
-                    ),
-                    'rJoinAgent' => array(
-                        self::HAS_MANY, 'OneMany', 'many_id',
-                        'on'    => 'type = ' . OneMany::TYPE_AGENT_CUSTOMER,
-                    ),
-                    'rReferCode' => array(
-                        self::HAS_ONE, 'ReferCodes', 'object_id',
-                        'on'    => 'type = ' . ReferCodes::TYPE_CUSTOMER,
-                    ),
-                    'rSocialNetwork' => array(
-                        self::HAS_MANY, 'SocialNetworks', 'object_id',
-                        'on'    => 'type = ' . SocialNetworks::TYPE_CUSTOMER,
-                    ),
-                    'rWarranty' => array(self::HAS_MANY, 'Warranties', 'customer_id',
-                        'on' => 'status!=' . DomainConst::DEFAULT_STATUS_INACTIVE,
-                        'order' => 'id ASC',
-                        ),
-		);
-	}
+    /**
+     * @return array validation rules for model attributes.
+     */
+    public function rules() {
+        // NOTE: you should only define rules for those attributes that
+        // will receive user inputs.
+        return array(
+            array('name, city_id, district_id', 'required'),
+            array('gender, city_id, district_id, ward_id, type_id, career_id, status', 'numerical', 'integerOnly' => true),
+            array('name, house_numbers', 'length', 'max' => 255),
+            array('year_of_birth', 'length', 'max' => 4),
+            array('phone, email', 'length', 'max' => 200),
+            array('street_id, user_id, created_by', 'length', 'max' => 11),
+            array('debt', 'length', 'max' => 10),
+            array('date_of_birth, address, characteristics', 'safe'),
+            // The following rule is used by search().
+            // Please remove those attributes that should not be searched.
+            array('id, name, gender, date_of_birth, year_of_birth, phone, email, city_id, district_id, ward_id, street_id, house_numbers, address, type_id, career_id, user_id, status, characteristics, created_by, created_date', 'safe', 'on' => 'search'),
+        );
+    }
 
-	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return array(
-			'id' => 'ID',
-			'name' => DomainConst::CONTENT00100,
-			'gender' => DomainConst::CONTENT00047,
-			'date_of_birth' => DomainConst::CONTENT00101,
-			'year_of_birth' => DomainConst::CONTENT00368,
-			'phone' => DomainConst::CONTENT00048,
-			'email' => DomainConst::CONTENT00040,
-			'city_id' => DomainConst::CONTENT00102,
-			'district_id' => DomainConst::CONTENT00103,
-			'ward_id' => DomainConst::CONTENT00104,
-			'street_id' => DomainConst::CONTENT00105,
-			'house_numbers' => DomainConst::CONTENT00106,
-			'address' => DomainConst::CONTENT00045,
-			'type_id' => DomainConst::CONTENT00107,
-			'career_id' => DomainConst::CONTENT00099,
-			'user_id' => DomainConst::CONTENT00008,
-			'debt' => DomainConst::CONTENT00300,
-			'status' => DomainConst::CONTENT00026,
-			'characteristics' => DomainConst::CONTENT00108,
-			'created_by' => DomainConst::CONTENT00054,
-			'created_date' => DomainConst::CONTENT00010,
-                        'agent' => DomainConst::CONTENT00199,
-                        'referCode' => DomainConst::CONTENT00271,
-		);
-	}
+    /**
+     * @return array relational rules.
+     */
+    public function relations() {
+        // NOTE: you may need to adjust the relation name and the related
+        // class name for the relations automatically generated below.
+        return array(
+            'rCity' => array(self::BELONGS_TO, 'Cities', 'city_id'),
+            'rDistrict' => array(self::BELONGS_TO, 'Districts', 'district_id'),
+            'rWard' => array(self::BELONGS_TO, 'Wards', 'ward_id'),
+            'rStreet' => array(self::BELONGS_TO, 'Streets', 'street_id'),
+            'rType' => array(self::BELONGS_TO, 'CustomerTypes', 'type_id'),
+            'rCareer' => array(self::BELONGS_TO, 'Careers', 'career_id'),
+            'rUser' => array(self::BELONGS_TO, 'Users', 'user_id'),
+            'rCreatedBy' => array(self::BELONGS_TO, 'Users', 'created_by'),
+            'rStreet' => array(self::BELONGS_TO, 'Streets', 'street_id'),
+            'rMedicalRecord' => array(
+                self::HAS_ONE, 'MedicalRecords', 'customer_id',
+                'on' => 'status = 1',
+            ),
+            'rJoinAgent' => array(
+                self::HAS_MANY, 'OneMany', 'many_id',
+                'on' => 'type = ' . OneMany::TYPE_AGENT_CUSTOMER,
+            ),
+            'rReferCode' => array(
+                self::HAS_ONE, 'ReferCodes', 'object_id',
+                'on' => 'type = ' . ReferCodes::TYPE_CUSTOMER,
+            ),
+            'rSocialNetwork' => array(
+                self::HAS_MANY, 'SocialNetworks', 'object_id',
+                'on' => 'type = ' . SocialNetworks::TYPE_CUSTOMER,
+            ),
+            'rWarranty' => array(self::HAS_MANY, 'Warranties', 'customer_id',
+                'on' => 'status!=' . DomainConst::DEFAULT_STATUS_INACTIVE,
+                'order' => 'id ASC',
+            ),
+        );
+    }
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels() {
+        return array(
+            'id' => 'ID',
+            'name' => DomainConst::CONTENT00100,
+            'gender' => DomainConst::CONTENT00047,
+            'date_of_birth' => DomainConst::CONTENT00101,
+            'year_of_birth' => DomainConst::CONTENT00368,
+            'phone' => DomainConst::CONTENT00048,
+            'email' => DomainConst::CONTENT00040,
+            'city_id' => DomainConst::CONTENT00102,
+            'district_id' => DomainConst::CONTENT00103,
+            'ward_id' => DomainConst::CONTENT00104,
+            'street_id' => DomainConst::CONTENT00105,
+            'house_numbers' => DomainConst::CONTENT00106,
+            'address' => DomainConst::CONTENT00045,
+            'type_id' => DomainConst::CONTENT00107,
+            'career_id' => DomainConst::CONTENT00099,
+            'user_id' => DomainConst::CONTENT00008,
+            'debt' => DomainConst::CONTENT00300,
+            'status' => DomainConst::CONTENT00026,
+            'characteristics' => DomainConst::CONTENT00108,
+            'created_by' => DomainConst::CONTENT00054,
+            'created_date' => DomainConst::CONTENT00010,
+            'agent' => DomainConst::CONTENT00199,
+            'referCode' => DomainConst::CONTENT00271,
+        );
+    }
 
-		$criteria=new CDbCriteria;
+    /**
+     * Retrieves a list of models based on the current search/filter conditions.
+     * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+     */
+    public function search() {
+        // Warning: Please modify the following code to remove attributes that
+        // should not be searched.
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('gender',$this->gender);
-		$criteria->compare('date_of_birth',$this->date_of_birth,true);
-		$criteria->compare('year_of_birth',$this->year_of_birth,true);
-		$criteria->compare('phone',$this->phone,true);
-		$criteria->compare('email',$this->email,true);
-		$criteria->compare('city_id',$this->city_id);
-		$criteria->compare('district_id',$this->district_id);
-		$criteria->compare('ward_id',$this->ward_id);
-		$criteria->compare('street_id',$this->street_id,true);
-		$criteria->compare('house_numbers',$this->house_numbers,true);
-		$criteria->compare('address',$this->address,true);
-		$criteria->compare('type_id',$this->type_id);
-		$criteria->compare('career_id',$this->career_id);
-		$criteria->compare('user_id',$this->user_id,true);
-		$criteria->compare('debt',$this->debt,true);
-		$criteria->compare('status',$this->status);
-		$criteria->compare('characteristics',$this->characteristics,true);
-		$criteria->compare('created_by',$this->created_by,true);
-		$criteria->compare('created_date',$this->created_date,true);
-                $criteria->order = 'created_date DESC';
+        $criteria = new CDbCriteria;
 
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-                        'pagination' => array(
-                            'pageSize' => Settings::getListPageSize(),
-                        ),
-		));
-	}
-        
+        $criteria->compare('id', $this->id, true);
+        $criteria->compare('name', $this->name, true);
+        $criteria->compare('gender', $this->gender);
+        $criteria->compare('date_of_birth', $this->date_of_birth, true);
+        $criteria->compare('year_of_birth', $this->year_of_birth, true);
+        $criteria->compare('phone', $this->phone, true);
+        $criteria->compare('email', $this->email, true);
+        $criteria->compare('city_id', $this->city_id);
+        $criteria->compare('district_id', $this->district_id);
+        $criteria->compare('ward_id', $this->ward_id);
+        $criteria->compare('street_id', $this->street_id, true);
+        $criteria->compare('house_numbers', $this->house_numbers, true);
+        $criteria->compare('address', $this->address, true);
+        $criteria->compare('type_id', $this->type_id);
+        $criteria->compare('career_id', $this->career_id);
+        $criteria->compare('user_id', $this->user_id, true);
+        $criteria->compare('debt', $this->debt, true);
+        $criteria->compare('status', $this->status);
+        $criteria->compare('characteristics', $this->characteristics, true);
+        $criteria->compare('created_by', $this->created_by, true);
+        $criteria->compare('created_date', $this->created_date, true);
+        $criteria->order = 'created_date DESC';
+
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+            'pagination' => array(
+                'pageSize' => Settings::getListPageSize(),
+            ),
+        ));
+    }
+
     //-----------------------------------------------------
     // Parent override methods
     //-----------------------------------------------------
@@ -199,18 +194,16 @@ class Customers extends BaseActiveRecord
         // Format birthday value
         $date = $this->date_of_birth;
         $this->date_of_birth = CommonProcess::convertDateTimeToMySqlFormat(
-                $date, DomainConst::DATE_FORMAT_3);
+                        $date, DomainConst::DATE_FORMAT_3);
         if (empty($this->date_of_birth)) {
             $this->date_of_birth = CommonProcess::convertDateTimeToMySqlFormat(
-                        $date, DomainConst::DATE_FORMAT_4);
+                            $date, DomainConst::DATE_FORMAT_4);
         }
         if (empty($this->date_of_birth)) {
             $this->date_of_birth = $date;
         }
         $this->address = CommonProcess::createAddressString(
-                $this->city_id, $this->district_id,
-                $this->ward_id, $this->street_id,
-                $this->house_numbers);
+                        $this->city_id, $this->district_id, $this->ward_id, $this->street_id, $this->house_numbers);
         if ($this->isNewRecord) {   // Add
             // Handle created by
             if (empty($this->created_by)) {
@@ -218,13 +211,11 @@ class Customers extends BaseActiveRecord
             }
             // Handle created date
             $this->created_date = CommonProcess::getCurrentDateTime();
-            
         } else {                    // Update
-            
         }
         return parent::beforeSave();
     }
-    
+
     /**
      * Override before delete method
      * @return Parent result
@@ -282,7 +273,7 @@ class Customers extends BaseActiveRecord
         $retVal .= ' -  SN: ' . $this->date_of_birth;
         return $retVal;
     }
-    
+
     /**
      * Check if customer have schedule date
      * @return Id of treatment schedule (have not detail data), empty otherwise
@@ -297,14 +288,13 @@ class Customers extends BaseActiveRecord
             } else { // #0
                 // Get newest record
                 $schedule = $this->rMedicalRecord->rTreatmentSchedule[0];
-                if ($isActive
-                        && ($schedule->status == TreatmentSchedules::STATUS_COMPLETED)) {
+                if ($isActive && ($schedule->status == TreatmentSchedules::STATUS_COMPLETED)) {
 //                // Status of schedule is Completed
 //                if ($schedule->status == TreatmentSchedules::STATUS_COMPLETED) {
                     $retVal = '';
                 } else {
                     if (isset($schedule->rDetail)) {
-                        if (count($schedule->rDetail) == 0) {                        
+                        if (count($schedule->rDetail) == 0) {
                             $retVal = '';
                         } else { // #0
                             if ($schedule->rDetail[0]->isSchedule()) {
@@ -316,12 +306,12 @@ class Customers extends BaseActiveRecord
                     } else {
                         $retVal = '';
                     }
-                }                
+                }
             }
         }
         return $retVal;
     }
-    
+
     /**
      * Get value of id
      * @return String
@@ -330,7 +320,7 @@ class Customers extends BaseActiveRecord
         $retVal = CommonProcess::generateID(DomainConst::CUSTOMER_ID_PREFIX, $this->id);
         return $retVal;
     }
-    
+
     /**
      * Get name of agent
      * @return Name of agent
@@ -343,7 +333,7 @@ class Customers extends BaseActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get id of agent
      * @return Id of agent
@@ -356,7 +346,7 @@ class Customers extends BaseActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get birthday with format
      * @return String Birthday with format {01 thg 11, 2018}
@@ -366,22 +356,18 @@ class Customers extends BaseActiveRecord
         if (!DateTimeExt::isYearNull($this->year_of_birth)) {
             $retVal = $this->year_of_birth;
         }
-        
+
         if (empty($retVal) && !DateTimeExt::isDateNull($this->date_of_birth)) {
-            $date = CommonProcess::convertDateTime($this->date_of_birth,
-                                DomainConst::DATE_FORMAT_4,
-                                DomainConst::DATE_FORMAT_5);
+            $date = CommonProcess::convertDateTime($this->date_of_birth, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_5);
             if (empty($date)) {
-                $date = CommonProcess::convertDateTime($this->date_of_birth,
-                                DomainConst::DATE_FORMAT_1,
-                                DomainConst::DATE_FORMAT_5);
+                $date = CommonProcess::convertDateTime($this->date_of_birth, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_5);
             }
             $retVal = $date;
         }
-        
+
         return $retVal;
     }
-    
+
     /**
      * Get birth year
      * @return String Birthday with format {2018}
@@ -389,17 +375,15 @@ class Customers extends BaseActiveRecord
     public function getBirthYear() {
         $retVal = '';
         if (!DateTimeExt::isDateNull($this->date_of_birth)) {
-            $retVal = CommonProcess::convertDateTime($this->date_of_birth,
-                            DomainConst::DATE_FORMAT_4,
-                            'Y');
+            $retVal = CommonProcess::convertDateTime($this->date_of_birth, DomainConst::DATE_FORMAT_4, 'Y');
         } else if (!DateTimeExt::isYearNull($this->year_of_birth)) {
             $retVal = $this->year_of_birth;
         }
-        
-        
+
+
         return $retVal;
     }
-    
+
     /**
      * Get age of customer
      * $return String Age of customer
@@ -409,19 +393,17 @@ class Customers extends BaseActiveRecord
         $age = '';
         if (!DateTimeExt::isDateNull($this->date_of_birth)) {
             $age = DateTime::createFromFormat(
-                DomainConst::DATE_FORMAT_4,
-                $this->date_of_birth);
+                            DomainConst::DATE_FORMAT_4, $this->date_of_birth);
         } else if (!DateTimeExt::isYearNull($this->year_of_birth)) {
             $age = DateTime::createFromFormat(
-                'Y',
-                $this->year_of_birth);
+                            'Y', $this->year_of_birth);
         }
         if ($age) {
             $retVal = $age->diff(new DateTime('now'))->y;
         }
         return $retVal . 't';
     }
-    
+
     /**
      * Get phone value
      * @return String
@@ -429,7 +411,7 @@ class Customers extends BaseActiveRecord
     public function getPhone() {
         return isset($this->phone) ? $this->phone : '';
     }
-    
+
     /**
      * Get email value
      * @return String
@@ -446,7 +428,7 @@ class Customers extends BaseActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get address value
      * @return String
@@ -454,7 +436,7 @@ class Customers extends BaseActiveRecord
     public function getAddress() {
         return isset($this->address) ? $this->address : '';
     }
-    
+
     /**
      * Get career value
      * @return String
@@ -462,7 +444,7 @@ class Customers extends BaseActiveRecord
     public function getCareer() {
         return isset($this->rCareer) ? $this->rCareer->name : '';
     }
-    
+
     /**
      * Get characteristics value
      * @return String
@@ -470,7 +452,7 @@ class Customers extends BaseActiveRecord
     public function getCharacteristics() {
         return isset($this->characteristics) ? $this->characteristics : '';
     }
-    
+
     /**
      * Get record number value
      * @return String
@@ -478,7 +460,7 @@ class Customers extends BaseActiveRecord
     public function getMedicalRecordNumber() {
         return isset($this->rMedicalRecord) ? $this->rMedicalRecord->record_number : '';
     }
-    
+
     /**
      * Get customer ajax info
      * @return string Ajax information data
@@ -489,60 +471,54 @@ class Customers extends BaseActiveRecord
             $recordNumber = $this->rMedicalRecord->record_number;
         }
         $rightContent = '<div class="info-result">';
-        $rightContent .=    '<div class="title-2">';
-        $rightContent .=        DomainConst::CONTENT00173;
-        $rightContent .=    '</div>';
-        $rightContent .=    '<div class="item-search">';
-        $rightContent .=        '<table>';
-        $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00100 . ': ' . '<b>' . $this->name . '<b>' . '</td>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00101 . ': ' . '<b>' . $this->getBirthday() . '<b>' . '</td>';
-        $rightContent .=            '</tr>';
-        $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00170 . ': ' . '<b>' . $this->getPhone() . '<b>' . '</td>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00047 . ': ' . '<b>' . CommonProcess::getGender()[$this->gender] . '<b>' . '</td>';
-        $rightContent .=            '</tr>';
-        $rightContent .=            '<tr>';
-        $rightContent .=                '<td colspan="2">' . DomainConst::CONTENT00045 . ': ' . '<b>' . $this->getAddress() . '<b>' . '</td>';
-        $rightContent .=            '</tr>';
-        $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . '<b>' . $this->getAgentName() . '<b>' . '</td>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00136 . ': ' . '<b>' . $recordNumber . '<b>' . '</td>';
-        $rightContent .=            '</tr>';
-        $rightContent .=            '<tr>';
-        $rightContent .=                '<td style="width: 50%;">';
-        $rightContent .=                    HtmlHandler::createButtonWithImage(CommonProcess::generateQRCodeURL($this->id),
-                                            DomainConst::CONTENT00011,
-                                            DomainConst::IMG_VIEW_ICON, true);
-        $rightContent .=                '</td>';
-        $rightContent .=                '<td style="width: 50%;">';
-        $rightContent .=                    HtmlHandler::createButtonWithImage(
-                                            Yii::app()->createAbsoluteUrl(
-                                                        "admin/customers/update", array("id" => $this->id)),
-                                            DomainConst::CONTENT00346,
-                                            DomainConst::IMG_EDIT_ICON, true);
-        $rightContent .=                '</td>';
-        $rightContent .=            '</tr>';
-        $rightContent .=                '<tr><td>';
-        $rightContent .=                    HtmlHandler::createAjaxButtonWithImage(
-                '<br>' . DomainConst::CONTENT00264, DomainConst::IMG_PRINT_ALL_ICON,
-                '{createPrintDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');}',
-                'cursor: pointer;');
-        $rightContent .=                '</td></tr>';
+        $rightContent .= '<div class="title-2">';
+        $rightContent .= DomainConst::CONTENT00173;
+        $rightContent .= '</div>';
+        $rightContent .= '<div class="item-search">';
+        $rightContent .= '<table>';
+        $rightContent .= '<tr>';
+        $rightContent .= '<td>' . DomainConst::CONTENT00100 . ': ' . '<b>' . $this->name . '<b>' . '</td>';
+        $rightContent .= '<td>' . DomainConst::CONTENT00101 . ': ' . '<b>' . $this->getBirthday() . '<b>' . '</td>';
+        $rightContent .= '</tr>';
+        $rightContent .= '<tr>';
+        $rightContent .= '<td>' . DomainConst::CONTENT00170 . ': ' . '<b>' . $this->getPhone() . '<b>' . '</td>';
+        $rightContent .= '<td>' . DomainConst::CONTENT00047 . ': ' . '<b>' . CommonProcess::getGender()[$this->gender] . '<b>' . '</td>';
+        $rightContent .= '</tr>';
+        $rightContent .= '<tr>';
+        $rightContent .= '<td colspan="2">' . DomainConst::CONTENT00045 . ': ' . '<b>' . $this->getAddress() . '<b>' . '</td>';
+        $rightContent .= '</tr>';
+        $rightContent .= '<tr>';
+        $rightContent .= '<td>' . '<b>' . $this->getAgentName() . '<b>' . '</td>';
+        $rightContent .= '<td>' . DomainConst::CONTENT00136 . ': ' . '<b>' . $recordNumber . '<b>' . '</td>';
+        $rightContent .= '</tr>';
+        $rightContent .= '<tr>';
+        $rightContent .= '<td style="width: 50%;">';
+        $rightContent .= HtmlHandler::createButtonWithImage(CommonProcess::generateQRCodeURL($this->id), DomainConst::CONTENT00011, DomainConst::IMG_VIEW_ICON, false);
+        $rightContent .= '</td>';
+        $rightContent .= '<td style="width: 50%;">';
+        $rightContent .= HtmlHandler::createButtonWithImage(
+                        Yii::app()->createAbsoluteUrl(
+                                "admin/customers/update", array("id" => $this->id)), DomainConst::CONTENT00346, DomainConst::IMG_EDIT_ICON, false);
+        $rightContent .= '</td>';
+        $rightContent .= '</tr>';
+        $rightContent .= '<tr><td>';
+        $rightContent .= HtmlHandler::createAjaxButtonWithImage(
+                        '<br>' . DomainConst::CONTENT00264, DomainConst::IMG_PRINT_ALL_ICON, '{createPrintDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');}', 'cursor: pointer;');
+        $rightContent .= '</td></tr>';
         $pathological = '';
         if (isset($this->rMedicalRecord)) {
             $pathological = $this->rMedicalRecord->generateMedicalHistory(", ");
             Settings::saveAjaxTempValue($this->rMedicalRecord->id);
         }
         if (!empty($pathological)) {
-            $rightContent .=        '<tr>';
-            $rightContent .=            '<td colspan="2">' . DomainConst::CONTENT00137 . ': ' . '<b>' . $pathological . '<b>' . '</td>';
-            $rightContent .=        '</tr>';
-        }                
-        $rightContent .=        '</table>';
-        $rightContent .=    '</div>';
-        $rightContent .=    '<div class="title-2">' . DomainConst::CONTENT00201 . '</div>';
-        $rightContent .=    '<div class="item-search">';                
+            $rightContent .= '<tr>';
+            $rightContent .= '<td colspan="2">' . DomainConst::CONTENT00137 . ': ' . '<b>' . $pathological . '<b>' . '</td>';
+            $rightContent .= '</tr>';
+        }
+        $rightContent .= '</table>';
+        $rightContent .= '</div>';
+        $rightContent .= '<div class="title-2">' . DomainConst::CONTENT00201 . '</div>';
+        $rightContent .= '<div class="item-search">';
         if (isset($this->rMedicalRecord) && isset($this->rMedicalRecord->rTreatmentSchedule)) {
             $i = count($this->rMedicalRecord->rTreatmentSchedule);
             foreach ($this->rMedicalRecord->rTreatmentSchedule as $schedule) {
@@ -555,10 +531,8 @@ class Customers extends BaseActiveRecord
                     }
                     $rightContent .= '</b>';
                     $rightContent .= HtmlHandler::createButtonWithImage(
-                                        Yii::app()->createAbsoluteUrl(
-                                            "admin/treatmentScheduleDetails/create", array("schedule_id" => $schedule->id)),
-                                        DomainConst::CONTENT00367,
-                                        DomainConst::IMG_ADD_ICON, true, '');
+                                    Yii::app()->createAbsoluteUrl(
+                                            "admin/treatmentScheduleDetails/create", array("schedule_id" => $schedule->id)), DomainConst::CONTENT00367, DomainConst::IMG_ADD_ICON, false, '');
                     $detailIdx = count($schedule->rDetail);
                     foreach ($schedule->rDetail as $detail) {
                         $btnTitle = $detail->getStartDate() . '<br>';
@@ -575,25 +549,22 @@ class Customers extends BaseActiveRecord
                         $updateTag = '';
                         switch (Yii::app()->user->role_name) {
                             case Roles::ROLE_ASSISTANT:
-                                $updateTag = '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/updateImageXRay",
-                                        array("id" => $detail->id)) . '">' . DomainConst::CONTENT00272 . '</a>';
+                                $updateTag = '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/updateImageXRay", array("id" => $detail->id)) . '">' . DomainConst::CONTENT00272 . '</a>';
                                 break;
                             case Roles::ROLE_RECEPTIONIST:
                                 if ($detail->isCompleted()) {
                                     $updateTag = HtmlHandler::createButtonWithImage(
-                                            Yii::app()->createAbsoluteUrl(
-                                                        "admin/treatmentScheduleDetails/view", array("id" => $detail->id)),
-                                            $btnTitle, DomainConst::IMG_COMPLETED_ICON, true);
+                                                    Yii::app()->createAbsoluteUrl(
+                                                            "admin/treatmentScheduleDetails/view", array("id" => $detail->id)), $btnTitle, DomainConst::IMG_COMPLETED_ICON, false);
                                 } else {
                                     $updateTag = HtmlHandler::createButtonWithImage(
-                                            Yii::app()->createAbsoluteUrl(
-                                                        "admin/treatmentScheduleDetails/update", array("id" => $detail->id)),
-                                            $btnTitle, DomainConst::IMG_NEW_ICON, true);
+                                                    Yii::app()->createAbsoluteUrl(
+                                                            "admin/treatmentScheduleDetails/update", array("id" => $detail->id)), $btnTitle, DomainConst::IMG_NEW_ICON, false);
                                 }
                             default:
                                 break;
                         }
-                        
+
 //                        if ($detail->rDiagnosis) {
 //                            $rightContent .= '<p>- Lần ' . $detailIdx . ': ' . $detail->rDiagnosis->name . ' - [' . $updateTag . ']</p>';
 //                        } else {
@@ -606,11 +577,11 @@ class Customers extends BaseActiveRecord
                 $i--;
             }
         }
-        $rightContent .=    '</div>';
+        $rightContent .= '</div>';
         $rightContent .= '</div>';
         return $rightContent;
     }
-    
+
     /**
      * Get active schedule time
      * @return string Schedule time
@@ -625,7 +596,7 @@ class Customers extends BaseActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get active schedule doctor
      * @return string Doctor name
@@ -640,7 +611,7 @@ class Customers extends BaseActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get customer ajax schedule information
      * @return string
@@ -650,9 +621,7 @@ class Customers extends BaseActiveRecord
         $scheduleId = $this->getSchedule();
 
         $infoSchedule .= HtmlHandler::createAjaxButtonWithImage(
-                DomainConst::CONTENT00179, DomainConst::IMG_APPOINTMENT_ICON,
-                '{createSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}',
-                'cursor: pointer;');
+                        DomainConst::CONTENT00179, DomainConst::IMG_APPOINTMENT_ICON, '{createSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}', 'cursor: pointer;');
 //        $infoSchedule .= '<div class="group-btn">';
 //        $infoSchedule .=    '<a style="cursor: pointer;"'
 //                        . ' onclick="{createSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}">' . DomainConst::CONTENT00179 . '</a>';
@@ -664,20 +633,18 @@ class Customers extends BaseActiveRecord
                 $infoSchedule = '<div class="title-2">' . DomainConst::CONTENT00177 . ': </div>';
                 $infoSchedule .= '<div class="item-search">';
 //                $infoSchedule .=    '<p>' . $mSchedule->start_date . '</p>';
-                $infoSchedule .=    '<p>' . $mSchedule->getStartTime() . '</p>';
-                $infoSchedule .=    '<p>' . DomainConst::CONTENT00260 . ': ' . $mSchedule->rSchedule->getInsurrance() . '</p>';
-                $infoSchedule .=    '<p>Chi Tiết Công Việc: ' . $mSchedule->description . '</p>';
-                $infoSchedule .=    '<p>Bác sĩ: ' . $mSchedule->getDoctor() . '</p>';
+                $infoSchedule .= '<p>' . $mSchedule->getStartTime() . '</p>';
+                $infoSchedule .= '<p>' . DomainConst::CONTENT00260 . ': ' . $mSchedule->rSchedule->getInsurrance() . '</p>';
+                $infoSchedule .= '<p>Chi Tiết Công Việc: ' . $mSchedule->description . '</p>';
+                $infoSchedule .= '<p>Bác sĩ: ' . $mSchedule->getDoctor() . '</p>';
                 $infoSchedule .= '</div>';
                 $infoSchedule .= HtmlHandler::createAjaxButtonWithImage(
-                        DomainConst::CONTENT00346, DomainConst::IMG_EDIT_ICON,
-                        '{updateSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}',
-                        'cursor: pointer;');
+                                DomainConst::CONTENT00346, DomainConst::IMG_EDIT_ICON, '{updateSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}', 'cursor: pointer;');
             }
         }
         return $infoSchedule;
     }
-    
+
     /**
      * Get social network information
      * @return String
@@ -692,7 +659,7 @@ class Customers extends BaseActiveRecord
         }
         return implode('<br>', $retVal);
     }
-    
+
     /**
      * Get social network value
      * @param Int $type_network Network type
@@ -708,7 +675,7 @@ class Customers extends BaseActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get medical history html
      * @return type
@@ -719,14 +686,13 @@ class Customers extends BaseActiveRecord
             foreach ($this->rMedicalRecord->rJoinPathological as $item) {
                 if (isset($item->rPathological)) {
                     $retVal[] = CommonProcess::createConfigJson(
-                            $item->rPathological->id,
-                            $item->rPathological->name);
+                                    $item->rPathological->id, $item->rPathological->name);
                 }
             }
         }
         return $retVal;
     }
-    
+
     /**
      * Get list of customer's treatment schedule
      * @return Array List of customer's treatment schedule
@@ -745,7 +711,7 @@ class Customers extends BaseActiveRecord
         }
         return $retVal;
     }
-    
+
     /**
      * Get debt information
      * @return String
@@ -753,14 +719,14 @@ class Customers extends BaseActiveRecord
     public function getDebt() {
         return CommonProcess::formatCurrency($this->debt) . ' ' . DomainConst::CONTENT00134;
     }
-    
+
     /**
      * Get list receipt of this customer
      * @return array
      */
     public function getReceipts() {
         $retVal = array();
-        
+
         if (isset($this->rMedicalRecord) && isset($this->rMedicalRecord->rTreatmentSchedule)) {
             // Loop for all treatment schedules
             foreach ($this->rMedicalRecord->rTreatmentSchedule as $treatmentSchedule) {
@@ -775,7 +741,7 @@ class Customers extends BaseActiveRecord
                 }
             }
         }
-        
+
         return $retVal;
     }
 
@@ -806,14 +772,13 @@ class Customers extends BaseActiveRecord
             foreach ($this->rMedicalRecord->rJoinPathological as $item) {
                 if (isset($item->rPathological)) {
                     $retVal[] = CommonProcess::createConfigJson(
-                            $item->rPathological->id,
-                            $item->rPathological->name);
+                                    $item->rPathological->id, $item->rPathological->name);
                 }
             }
         }
         return $retVal;
     }
-    
+
     /**
      * Get 3 of last record TreatmentSchedules
      * @return String
@@ -870,20 +835,18 @@ class Customers extends BaseActiveRecord
                     $count++;
                     if ($count >= 3) {
                         $retVal[] = CommonProcess::createConfigJson(
-                                CustomerController::ITEM_UPDATE_DATE,
-                                DomainConst::CONTENT00230);
+                                        CustomerController::ITEM_UPDATE_DATE, DomainConst::CONTENT00230);
                         return $retVal;
                     }
                 }
             }
         }
         $retVal[] = CommonProcess::createConfigJson(
-                CustomerController::ITEM_UPDATE_DATE,
-                DomainConst::CONTENT00230);
-        
+                        CustomerController::ITEM_UPDATE_DATE, DomainConst::CONTENT00230);
+
         return $retVal;
     }
-    
+
     /**
      * List api return
      * @param Array $root Root value
@@ -918,17 +881,17 @@ class Customers extends BaseActiveRecord
             default:
                 break;
         }
-        
+
         // Get return value
         $retVal = new CActiveDataProvider(
-                $this,
-                array(
-                    'criteria' => $criteria,
-                    'pagination' => array(
-                        'pageSize' => Settings::getApiListPageSize(),
-                        'currentPage' => (int)$root->page,
-                    ),
-                ));
+                $this, array(
+            'criteria' => $criteria,
+            'pagination' => array(
+                'pageSize' => Settings::getApiListPageSize(),
+                'currentPage' => (int) $root->page,
+            ),
+        ));
         return $retVal;
     }
+
 }
