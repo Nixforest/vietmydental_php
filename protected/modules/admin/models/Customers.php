@@ -513,14 +513,14 @@ class Customers extends BaseActiveRecord
         $rightContent .=                '<td style="width: 50%;">';
         $rightContent .=                    HtmlHandler::createButtonWithImage(CommonProcess::generateQRCodeURL($this->id),
                                             DomainConst::CONTENT00011,
-                                            DomainConst::IMG_VIEW_ICON, true);
+                                            DomainConst::IMG_VIEW_ICON, false);
         $rightContent .=                '</td>';
         $rightContent .=                '<td style="width: 50%;">';
         $rightContent .=                    HtmlHandler::createButtonWithImage(
                                             Yii::app()->createAbsoluteUrl(
                                                         "admin/customers/update", array("id" => $this->id)),
                                             DomainConst::CONTENT00346,
-                                            DomainConst::IMG_EDIT_ICON, true);
+                                            DomainConst::IMG_EDIT_ICON, false);
         $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
         $rightContent .=                '<tr><td>';
@@ -558,7 +558,7 @@ class Customers extends BaseActiveRecord
                                         Yii::app()->createAbsoluteUrl(
                                             "admin/treatmentScheduleDetails/create", array("schedule_id" => $schedule->id)),
                                         DomainConst::CONTENT00367,
-                                        DomainConst::IMG_ADD_ICON, true, '');
+                                        DomainConst::IMG_ADD_ICON, false, '');
                     $detailIdx = count($schedule->rDetail);
                     foreach ($schedule->rDetail as $detail) {
                         $btnTitle = $detail->getStartDate() . '<br>';
@@ -583,12 +583,12 @@ class Customers extends BaseActiveRecord
                                     $updateTag = HtmlHandler::createButtonWithImage(
                                             Yii::app()->createAbsoluteUrl(
                                                         "admin/treatmentScheduleDetails/view", array("id" => $detail->id)),
-                                            $btnTitle, DomainConst::IMG_COMPLETED_ICON, true);
+                                            $btnTitle, DomainConst::IMG_COMPLETED_ICON, false);
                                 } else {
                                     $updateTag = HtmlHandler::createButtonWithImage(
                                             Yii::app()->createAbsoluteUrl(
                                                         "admin/treatmentScheduleDetails/update", array("id" => $detail->id)),
-                                            $btnTitle, DomainConst::IMG_NEW_ICON, true);
+                                            $btnTitle, DomainConst::IMG_NEW_ICON, false);
                                 }
                             default:
                                 break;

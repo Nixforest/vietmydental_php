@@ -424,7 +424,7 @@ class Receipts extends CActiveRecord
                     "id" => $this->id,
                 )),
                 '<br>' . DomainConst::CONTENT00264,
-                DomainConst::IMG_PRINT_ICON, true);
+                DomainConst::IMG_PRINT_ICON, false);
         $rightContent .=                '</td>';
         $rightContent .=                '<td>';
         

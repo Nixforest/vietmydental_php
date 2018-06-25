@@ -85,7 +85,7 @@ $form = $this->beginWidget('CActiveForm', array(
                     "id" => 1,
                 )), DomainConst::CONTENT00264,
                 DomainConst::IMG_PRINT_ICON,
-                true, HtmlHandler::CLASS_GROUP_BUTTON,
+                false, HtmlHandler::CLASS_GROUP_BUTTON,
                 'printButton');
         ?>
     </div>
