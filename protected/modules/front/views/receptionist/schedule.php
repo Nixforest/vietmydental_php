@@ -1,6 +1,11 @@
 <?php
 /* @var $this ReceptionistController */
-
+// Get value of current date
+$date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
+//CommonProcess::dumpVariable($dateValue);
+if (!empty($dateValue)) {
+    $date = CommonProcess::convertDateTime($dateValue, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_BACK_END);
+}
 ?>
 <div class="form">
 
@@ -9,39 +14,71 @@
 	'enableAjaxValidation'=>false,
 )); ?>
     
-<div class="maincontent clearfix">
-    <div class="left-page">
-        <div class="title-1">
-           <?php echo DomainConst::CONTENT00363; ?>
-        </div>
-        <div class="info-content">
-            <div class="box-search">
-                <form>
-                    <span class="icon-s"></span>
-                    <input type="text" class="form-control text-change"  placeholder="Tìm Kiếm Bệnh Nhân"
-                           id="customer_find">
-                </form>
+    <div class="maincontent clearfix">
+        <div class="left-page">
+            <div class="title-1">
+               <?php echo DomainConst::CONTENT00363; ?>
             </div>
-            <div class="info-result" id="customer_info_schedule">
-                <div class="group-btn" id="create_customer">
-                    
+            <div class="info-content">
+                <div class="box-search">
+                    <form>
+                        <span class="icon-s"></span>
+                        <input type="text" class="form-control text-change"  placeholder="Tìm Kiếm Bệnh Nhân"
+                               id="customer_find">
+                    </form>
                 </div>
-                <div class="content"></div>
+                <div class="info-result" id="customer_info_schedule">
+                    <div class="group-btn" id="create_customer">
+
+                    </div>
+                    <div class="content"></div>
+                </div>
+            </div>
+        </div>
+        <div class="right-page">
+            <div class="title-1" id="right_page_title">
+                <?php echo DomainConst::CONTENT00177; ?>
+            </div>
+            <div class="info-content">
+                <div id="right-content">
+                    <label for="date" class="required"><?php echo DomainConst::CONTENT00378; ?></label>
+                    <?php
+                        $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+                            'name' => 'date',
+                            'options'   => array(
+                                'showAnim'      => 'fold',
+                                'dateFormat'    => DomainConst::DATE_FORMAT_2,
+//                                'maxDate'       => '0',
+                                'changeMonth'   => true,
+                                'changeYear'    => true,
+                                'showOn'        => 'button',
+                                'buttonImage'   => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
+                                'buttonImageOnly' => true,
+                            ),
+                            'htmlOptions'=>array(
+                                        'class'=>'w-16 input',
+                                        'readonly'=>'readonly',
+                                    ),
+                            'value' => $date
+                        ));
+                        ?>
+                        <div class="row buttons">
+                            <?php
+                            echo CHtml::submitButton(DomainConst::CONTENT00349, array(
+                                'name' => DomainConst::KEY_SUBMIT,
+                            ));
+                            ?>
+                        </div>
+                        
+                    <?php echo HtmlHandler::createTableCustomer($model, DomainConst::CONTENT00361); ?>
+                    <?php echo HtmlHandler::createTableCustomer($todayModels, DomainConst::CONTENT00362); ?>
+                    <div class="scroll-table">
+                
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="right-page">
-        <div class="title-1" id="right_page_title">
-            <?php echo DomainConst::CONTENT00177; ?>
-        </div>
-        <div class="info-content">
-            <div id="right-content">
-                <?php echo HtmlHandler::createTableCustomer($model, DomainConst::CONTENT00361); ?></div>
-                <?php echo HtmlHandler::createTableCustomer($todayModels, DomainConst::CONTENT00362); ?>
-            </div>
-        </div>
-    </div>
-</div>
 <?php $this->endWidget(); ?>
 </div><!-- form -->
 
@@ -222,3 +259,8 @@
         return false;
     }
 </script>
+<style>
+    .input {
+        float: inherit;
+    }
+</style>

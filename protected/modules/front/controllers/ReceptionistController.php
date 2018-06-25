@@ -287,18 +287,51 @@ class ReceptionistController extends FrontController {
      * Action get all customers have schedule on today
      */
     public function actionSchedule() {
-        $arrCustomerId = TreatmentScheduleDetails::getListCustomerIdHaveScheduleToday();
-        $criteria = new CDbCriteria();
-        $criteria->addInCondition('id', $arrCustomerId);
-        $models = Customers::model()->findAll($criteria);
-        $todayModels = TreatmentScheduleDetails::getListCustomerHaveScheduleTodayCreatedToday();
-        
+        $date = '';
+        $dateFormat = DomainConst::DATE_FORMAT_4;
+        // Get data from url
+        $this->validateScheduleUrl($date);
+        // If url have not parameter -> Set date value is today
+        if (empty($date)) {
+            $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
+        }
+        // Date value is today
+        if (DateTimeExt::isToday($date, DomainConst::DATE_FORMAT_4)) {
+            // Old logic
+            $arrCustomerId = TreatmentScheduleDetails::getListCustomerIdHaveScheduleToday();
+            $criteria = new CDbCriteria();
+            $criteria->addInCondition('id', $arrCustomerId);
+            $models = Customers::model()->findAll($criteria);
+            $todayModels = TreatmentScheduleDetails::getListCustomerHaveScheduleTodayCreatedToday();
+        } else {
+            // New logic
+            $arrCustomerId = TreatmentScheduleDetails::getListCustomerIdHaveScheduleToday($date);
+            $criteria = new CDbCriteria();
+            $criteria->addInCondition('id', $arrCustomerId);
+            $models = Customers::model()->findAll($criteria);
+            $todayModels = array();
+        }
+        // Start search
+        if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
+            $this->redirect(array('schedule',
+                'dateValue'  => CommonProcess::convertDateTime($_POST['date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat),
+                ));
+        }
         $this->render('schedule', array(
             'model' => $models,
             'array' => $arrCustomerId,
             'todayModels'   => $todayModels,
+            'dateValue'     => $date,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
+    }
+    
+    /**
+     * Validate schedule url
+     * @param String $date Date value
+     */
+    public function validateScheduleUrl(&$date) {
+        $date = isset($_GET['dateValue']) ? $_GET['dateValue'] : '';
     }
     
     /**

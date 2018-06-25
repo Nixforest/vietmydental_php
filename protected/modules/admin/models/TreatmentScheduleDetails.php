@@ -710,24 +710,48 @@ class TreatmentScheduleDetails extends BaseActiveRecord
      * Get list all customersn have schedule in today
      * @return Array List of customer's id
      */
-    public static function getListCustomerIdHaveScheduleToday() {
+    public static function getListCustomerIdHaveScheduleToday($date = '') {
         $retVal = array();
         $arrModel = self::model()->findAll();
         $agentId = isset(Yii::app()->user) ? Yii::app()->user->agent_id : '';
         foreach ($arrModel as $value) {
-            if ($value->status != self::STATUS_INACTIVE
-                    && DateTimeExt::isToday($value->start_date, DomainConst::DATE_FORMAT_1)
-                    && !DateTimeExt::isToday($value->created_date, DomainConst::DATE_FORMAT_1)) {
+//            if ($value->status != self::STATUS_INACTIVE
+//                    && DateTimeExt::isToday($value->start_date, DomainConst::DATE_FORMAT_1)
+//                    && !DateTimeExt::isToday($value->created_date, DomainConst::DATE_FORMAT_1)) {
+            if ($value->isScheduleOnDate($date)) {
                 $customerId = $value->getCustomer();
                 $mCustomer = $value->getCustomerModel();
                 if (isset($mCustomer) && ($mCustomer->getAgentId() == $agentId)) {
                     $retVal[] = $mCustomer->id;
                 }
-//                if (!empty($customerId)) {
-//                    $retVal[] = $customerId;
-//                }
             }
         }
+        return $retVal;
+    }
+    
+    /**
+     * Check is treament schedule detail has start_date is match with parameter date value
+     * @param String $date Date value informat (DATE_FORMAT_4 = 'Y-m-d')
+     * @return boolean True if treament schedule detail has start_date is match with parameter date value
+     */
+    public function isScheduleOnDate($date) {
+        $retVal = false;
+        $startDate = CommonProcess::convertDateTime($this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
+        $createdDate = CommonProcess::convertDateTime($this->created_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
+        // Case date is empty
+        if (empty($date)) {
+            if ($this->status != self::STATUS_INACTIVE
+                    && DateTimeExt::isToday($this->start_date, DomainConst::DATE_FORMAT_1)
+                    && !DateTimeExt::isToday($this->created_date, DomainConst::DATE_FORMAT_1)) {
+                $retVal = true;
+            }
+        } else {    // Date is not empty
+            if ($this->status != self::STATUS_INACTIVE
+                    && (DateTimeExt::compare($startDate, $date) == 0)) {
+                $retVal = true;
+            }
+        }
+        
         return $retVal;
     }
     
