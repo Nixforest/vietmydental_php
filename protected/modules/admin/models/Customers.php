@@ -481,7 +481,7 @@ class Customers extends BaseActiveRecord
     
     /**
      * Get customer ajax info
-     * @return string
+     * @return string Ajax information data
      */
     public function getCustomerAjaxInfo() {
         $recordNumber = '';
