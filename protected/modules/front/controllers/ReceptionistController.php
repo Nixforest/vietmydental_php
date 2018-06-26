@@ -75,7 +75,7 @@ class ReceptionistController extends FrontController {
                         'error'         => $errMsg,
                         DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
                     ),
-                    true)
+                    true,true)
         ));
         exit;
     }
