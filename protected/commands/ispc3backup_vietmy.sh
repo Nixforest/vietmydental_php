@@ -1,5 +1,6 @@
 #https://gist.github.com/zekus/665115
 
+
 ## Start user editable variables
 BACKUPDIR="/var/www/vietmytest.immortal.vn/private/backup_vietmy"		# backup directory
 DBUSER="username"						 # database user
