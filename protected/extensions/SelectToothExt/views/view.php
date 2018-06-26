@@ -46,7 +46,7 @@ $labelStyle = "padding-top: 0px; width: auto; float: center;";
                     ?>
                     <td>
                         <input
-                            style ='display: none'
+                            style='display: none'
                             name="<?php echo $inputName ?>"
                             value="1"
                             type="checkbox"
@@ -72,7 +72,7 @@ $labelStyle = "padding-top: 0px; width: auto; float: center;";
                     ?>
                     <td>
                         <input
-                            style ='display: none'
+                            style='display: none'
                             name="<?php echo $inputName ?>"
                             value="1"
                             type="checkbox"
@@ -178,6 +178,7 @@ $labelStyle = "padding-top: 0px; width: auto; float: center;";
     }
 </script>
 <script>
+$(function(){
     var style = '<style>'+
                     '.grey{background: #eaeaea;}'+
                     '.teeth-tbl{user-select: none;}'+
@@ -192,6 +193,11 @@ $labelStyle = "padding-top: 0px; width: auto; float: center;";
                 '</style>';
     $('head').append(style);
     var els = $('.teeth-tbl td');
+    $('.teeth-tbl td input').each(function(){
+        if($(this).prop('checked')){
+            $(this).parent('td').addClass('grey');
+        }
+    });
     var flag;
     var num_td = $('.teeth-tbl td').length;
     var num_td_in_tr =  num_td / $('.teeth-tbl tr').length;
@@ -234,8 +240,10 @@ $labelStyle = "padding-top: 0px; width: auto; float: center;";
 //            }
 //        }
 //    })//end
+});
 </script>
 <script>
+$(function(){
     $('.adults .gr1').on('click', function(){
         for(var i = 0; i < 8; i++){
             if($(this).find('input').prop('checked')){
@@ -309,4 +317,5 @@ $labelStyle = "padding-top: 0px; width: auto; float: center;";
             }
         }
     })
+});
 </script>
