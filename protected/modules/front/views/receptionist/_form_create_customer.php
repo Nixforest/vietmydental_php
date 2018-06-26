@@ -191,10 +191,10 @@
 </div><!-- form -->
 <script>
     $(function(){
-            var style = '<style>'+
-                    '.form .autocomplete_name_text{padding-left:10px!important;}'+
-                '</style>';
-    $('head').append(style);
+        var style = '<style>'+
+                        '.form .autocomplete_name_text{padding-left:10px!important;}'+
+                    '</style>';
+        $('head').append(style);
         fnBindChangeCity(
             '#Customers_city_id',
             '#Customers_district_id',
