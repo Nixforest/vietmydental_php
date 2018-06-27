@@ -89,6 +89,18 @@
     </div>
     <div class="row">
         <div class="col-md-6">
+            <?php
+            // Setting default value of city
+            if ($customer->isNewRecord) {
+                // Get agent id of current user
+                $agentId = isset(Yii::app()->user->agent_id) ? Yii::app()->user->agent_id : '';
+                $agent = Agents::model()->findByPk($agentId);
+                if ($agent) {
+                    // Set default value of city id
+                    $customer->city_id = $agent->city_id;
+                }
+            }
+            ?>
             <?php echo $form->labelEx($customer,'city_id'); ?>
             <?php echo $form->dropDownList($customer,'city_id', Cities::loadItems(), array('class'=>'','empty'=>'Select')); ?>
             <?php echo $form->error($customer,'city_id'); ?>
