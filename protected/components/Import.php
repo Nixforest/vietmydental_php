@@ -23,11 +23,11 @@ class Import {
             "7" => "Lai Châu",
             "8" => "Lào Cai",
             "9" => "Tuyên Quang",
-            "10" => "Lạng Sơn ",
+            "10" => "Lạng Sơn",
             "11" => "Bắc Kạn",
             "12" => "Thái Nguyên",
             "13" => "Yên Bái",
-            "14" => "Sơn La ",
+            "14" => "Sơn La",
             "15" => "Phú Thọ",
             "16" => "Vĩnh Phúc",
             "17" => "Quảng Ninh",
@@ -41,7 +41,7 @@ class Import {
             "25" => "Nam Định",
             "26" => "Thái Bình",
             "27" => "Ninh Bình",
-            "28" => "Thanh Hoá",
+            "28" => "Thanh Hóa",
             "29" => "Nghệ An",
             "30" => "Hà Tĩnh",
             "31" => "Quảng Bình",
@@ -49,12 +49,12 @@ class Import {
             "33" => "Thừa Thiên-Huế",
             "34" => "Quảng Nam",
             "35" => "Quảng Ngãi",
-            "36" => "Kontum",
+            "36" => "Kon Tum",
             "37" => "Bình Định",
             "38" => "Gia Lai",
             "39" => "Phú Yên",
             "40" => "Đăk Lăk",
-            "41" => "Khánh Hoà",
+            "41" => "Khánh Hòa",
             "42" => "Lâm Đồng",
             "43" => "Bình Phước",
             "44" => "Bình Dương",
@@ -92,377 +92,377 @@ class Import {
     
     public static function importDistricts() {
         $data = array(
-            "TP HCM" => array(
-                "Quận 1+1" => array(
-                    "Phường Tân Định",
-                    "Phường Đa Kao",
-                    "Phường Bến Nghé",
-                    "Phường Bến Thành",
-                    "Phường Nguyễn Thái Bình",
-                    "Phường Phạm Ngũ Lão",
-                    "Phường Cầu Ông Lãnh",
-                    "Phường Cô Giang",
-                    "Phường Nguyễn Cư Trinh",
-                    "Phường Cầu Kho"
-                ),
-                "Quận 2+2" => array(
-                    "Phường Thảo Điền",
-                    "Phường An Phú",
-                    "Phường Bình An",
-                    "Phường Bình Trưng Đông",
-                    "Phường Bình Trưng Tây",
-                    "Phường Bình Khánh",
-                    "Phường An Khánh",
-                    "Phường Cát Lái",
-                    "Phường Thạnh Mỹ Lợi",
-                    "Phường An Lợi Đông",
-                    "Phường Thủ Thiêm"
-                ),
-                "Quận 3+3" => array(
-                    "Phường 08",
-                    "Phường 07",
-                    "Phường 14",
-                    "Phường 12",
-                    "Phường 11",
-                    "Phường 13",
-                    "Phường 06",
-                    "Phường 09",
-                    "Phường 10",
-                    "Phường 04",
-                    "Phường 05",
-                    "Phường 03",
-                    "Phường 02",
-                    "Phường 01"
-                ),
-                "Quận 4+4" => array(
-                    "Phường 12",
-                    "Phường 13",
-                    "Phường 09",
-                    "Phường 06",
-                    "Phường 08",
-                    "Phường 10",
-                    "Phường 05",
-                    "Phường 18",
-                    "Phường 14",
-                    "Phường 04",
-                    "Phường 03",
-                    "Phường 16",
-                    "Phường 02",
-                    "Phường 15",
-                    "Phường 01"
-                ),
-                "Quận 5+5" => array(
-                    "Phường 04",
-                    "Phường 09",
-                    "Phường 03",
-                    "Phường 12",
-                    "Phường 02",
-                    "Phường 08",
-                    "Phường 15",
-                    "Phường 07",
-                    "Phường 01",
-                    "Phường 11",
-                    "Phường 14",
-                    "Phường 05",
-                    "Phường 06",
-                    "Phường 10",
-                    "Phường 13"
-                ),
-                "Quận 6+6" => array(
-                    "Phường 14",
-                    "Phường 13",
-                    "Phường 09",
-                    "Phường 06",
-                    "Phường 12",
-                    "Phường 05",
-                    "Phường 11",
-                    "Phường 02",
-                    "Phường 01",
-                    "Phường 04",
-                    "Phường 08",
-                    "Phường 03",
-                    "Phường 07"
-                ),
-                "Quận 7+7" => array(
-                    "Phường Tân Thuận Đông",
-                    "Phường Tân Thuận Tây",
-                    "Phường Tân Kiểng",
-                    "Phường Tân Hưng",
-                    "Phường Bình Thuận",
-                    "Phường Tân Quy",
-                    "Phường Phú Thuận",
-                    "Phường Tân Phú",
-                    "Phường Tân Phong",
-                    "Phường Phú Mỹ"
-                ),
-                "Quận 8+8" => array(
-                    "Phường 08",
-                    "Phường 02",
-                    "Phường 01",
-                    "Phường 03",
-                    "Phường 11",
-                    "Phường 09",
-                    "Phường 10",
-                    "Phường 04",
-                    "Phường 13",
-                    "Phường 12",
-                    "Phường 05",
-                    "Phường 14",
-                    "Phường 06",
-                    "Phường 15",
-                    "Phường 16",
-                    "Phường 07"
-                ),
-                "Quận 9+9" => array(
-                    "Phường Long Bình",
-                    "Phường Long Thạnh Mỹ",
-                    "Phường Tân Phú",
-                    "Phường Hiệp Phú",
-                    "Phường Tăng Nhơn Phú A",
-                    "Phường Tăng Nhơn Phú B",
-                    "Phường Phước Long B",
-                    "Phường Phước Long A",
-                    "Phường Trường Thạnh",
-                    "Phường Long Phước",
-                    "Phường Long Trường",
-                    "Phường Phước Bình",
-                    "Phường Phú Hữu"
-                ),
-                "Quận 10+10" => array(
-                    "Phường 15",
-                    "Phường 13",
-                    "Phường 14",
-                    "Phường 12",
-                    "Phường 11",
-                    "Phường 10",
-                    "Phường 09",
-                    "Phường 01",
-                    "Phường 08",
-                    "Phường 02",
-                    "Phường 04",
-                    "Phường 07",
-                    "Phường 05",
-                    "Phường 06",
-                    "Phường 03"
-                ),
-                "Quận 11+11" => array(
-                    "Phường 15",
-                    "Phường 05",
-                    "Phường 14",
-                    "Phường 11",
-                    "Phường 03",
-                    "Phường 10",
-                    "Phường 13",
-                    "Phường 08",
-                    "Phường 09",
-                    "Phường 12",
-                    "Phường 07",
-                    "Phường 06",
-                    "Phường 04",
-                    "Phường 01",
-                    "Phường 02",
-                    "Phường 16"
-                ),
-                "Quận 12+12" => array(
-                    "Phường Thạnh Xuân",
-                    "Phường Thạnh Lộc",
-                    "Phường Hiệp Thành",
-                    "Phường Thới An",
-                    "Phường Tân Chánh Hiệp",
-                    "Phường An Phú Đông",
-                    "Phường Tân Thới Hiệp",
-                    "Phường Trung Mỹ Tây",
-                    "Phường Tân Hưng Thuận",
-                    "Phường Đông Hưng Thuận",
-                    "Phường Tân Thới Nhất"
-                ),
-                "Quận Gò Vấp+13" => array(
-		    "Phường 15",
-		    "Phường 13",
-		    "Phường 17",
-		    "Phường 06",
-		    "Phường 16",
-		    "Phường 12",
-		    "Phường 14",
-		    "Phường 10",
-		    "Phường 05",
-		    "Phường 07",
-		    "Phường 04",
-		    "Phường 01",
-		    "Phường 09",
-		    "Phường 08",
-		    "Phường 11",
-		    "Phường 03"
-                ),
-                "Quận Tân Bình+14" => array(
-		    "Phường 02",
-		    "Phường 04",
-		    "Phường 12",
-		    "Phường 13",
-		    "Phường 01",
-		    "Phường 03",
-		    "Phường 11",
-		    "Phường 07",
-		    "Phường 05",
-		    "Phường 10",
-		    "Phường 06",
-		    "Phường 08",
-		    "Phường 09",
-		    "Phường 14",
-		    "Phường 15"
-                ),
-                "Quận Tân Phú+15" => array(
-		    "Phường Tân Sơn Nhì",
-		    "Phường Tây Thạnh",
-		    "Phường Sơn Kỳ",
-		    "Phường Tân Qúy",
-		    "Phường Tân Thành",
-		    "Phường Phú Thọ Hoà",
-		    "Phường Phú Thạnh",
-		    "Phường Phú Trung",
-		    "Phường Hoà Thạnh",
-		    "Phường Hiệp Tân",
-		    "Phường Tân Thới Hoà"
-                ),
-                "Quận Bình Thạnh+16" => array(
-		    "Phường 13",
-		    "Phường 11",
-		    "Phường 27",
-		    "Phường 26",
-		    "Phường 12",
-		    "Phường 25",
-		    "Phường 05",
-		    "Phường 07",
-		    "Phường 24",
-		    "Phường 06",
-		    "Phường 14",
-		    "Phường 15",
-		    "Phường 02",
-		    "Phường 01",
-		    "Phường 03",
-		    "Phường 17",
-		    "Phường 21",
-		    "Phường 22",
-		    "Phường 19",
-		    "Phường 28"
-                ),
-                "Quận Phú Nhuận+17" => array(
-		    "Phường 04",
-		    "Phường 05",
-		    "Phường 09",
-		    "Phường 07",
-		    "Phường 03",
-		    "Phường 01",
-		    "Phường 02",
-		    "Phường 08",
-		    "Phường 15",
-		    "Phường 10",
-		    "Phường 11",
-		    "Phường 17",
-		    "Phường 14",
-		    "Phường 12",
-		    "Phường 13"
-                ),
-                "Quận Thủ Đức+18" => array(
-		    "Phường Linh Xuân",
-		    "Phường Bình Chiểu",
-		    "Phường Linh Trung",
-		    "Phường Tam Bình",
-		    "Phường Tam Phú",
-		    "Phường Hiệp Bình Phước",
-		    "Phường Hiệp Bình Chánh",
-		    "Phường Linh Chiểu",
-		    "Phường Linh Tây",
-		    "Phường Linh Đông",
-		    "Phường Bình Thọ",
-		    "Phường Trường Thọ"
-                ),
-                "Quận Bình Tân+19" => array(
-		    "Phường Bình Hưng Hòa",
-		    "Phường Bình Hưng Hoà A",
-		    "Phường Bình Hưng Hoà B",
-		    "Phường Bình Trị Đông",
-		    "Phường Bình Trị Đông A",
-		    "Phường Bình Trị Đông B",
-		    "Phường Tân Tạo",
-		    "Phường Tân Tạo A",
-		    "Phường An Lạc",
-		    "Phường An Lạc A"
-                ),
-                "Huyện Bình Chánh+54" => array(
-		    "Thị trấn Tân Túc",
-		    "Xã Phạm Văn Hai",
-		    "Xã Vĩnh Lộc A",
-		    "Xã Vĩnh Lộc B",
-		    "Xã Bình Lợi",
-		    "Xã Lê Minh Xuân",
-		    "Xã Tân Nhựt",
-		    "Xã Tân Kiên",
-		    "Xã Bình Hưng",
-		    "Xã Phong Phú",
-		    "Xã An Phú Tây",
-		    "Xã Hưng Long",
-		    "Xã Đa Phước",
-		    "Xã Tân Quý Tây",
-		    "Xã Bình Chánh",
-		    "Xã Quy Đức"
-                ),
-                "Huyện Củ Chi+52" => array(
-		    "Thị trấn Củ Chi",
-		    "Xã Phú Mỹ Hưng",
-		    "Xã An Phú",
-		    "Xã Trung Lập Thượng",
-		    "Xã An Nhơn Tây",
-		    "Xã Nhuận Đức",
-		    "Xã Phạm Văn Cội",
-		    "Xã Phú Hòa Đông",
-		    "Xã Trung Lập Hạ",
-		    "Xã Trung An",
-		    "Xã Phước Thạnh",
-		    "Xã Phước Hiệp",
-		    "Xã Tân An Hội",
-		    "Xã Phước Vĩnh An",
-		    "Xã Thái Mỹ",
-		    "Xã Tân Thạnh Tây",
-		    "Xã Hòa Phú",
-		    "Xã Tân Thạnh Đông",
-		    "Xã Bình Mỹ",
-		    "Xã Tân Phú Trung",
-		    "Xã Tân Thông Hội"
-                ),
-                "Huyện Hóc Môn+53" => array(
-		    "Thị trấn Hóc Môn",
-		    "Xã Tân Hiệp",
-		    "Xã Nhị Bình",
-		    "Xã Đông Thạnh",
-		    "Xã Tân Thới Nhì",
-		    "Xã Thới Tam Thôn",
-		    "Xã Xuân Thới Sơn",
-		    "Xã Tân Xuân",
-		    "Xã Xuân Thới Đông",
-		    "Xã Trung Chánh",
-		    "Xã Xuân Thới Thượng",
-		    "Xã Bà Điểm"
-                ),
-                "Huyện Nhà Bè+55" => array(
-		    "Thị trấn Nhà Bè",
-		    "Xã Phước Kiển",
-		    "Xã Phước Lộc",
-		    "Xã Nhơn Đức",
-		    "Xã Phú Xuân",
-		    "Xã Long Thới",
-		    "Xã Hiệp Phước"
-                ),
-                "Huyện Cần Giờ+56" => array(
-		    "Thị trấn Cần Thạnh",
-		    "Xã Bình Khánh",
-		    "Xã Tam Thôn Hiệp",
-		    "Xã An Thới Đông",
-		    "Xã Thạnh An",
-		    "Xã Long Hòa",
-		    "Xã Lý Nhơn"
-                )
-            ),
+//            "TP HCM" => array(
+//                "Quận 1+1" => array(
+//                    "Phường Tân Định",
+//                    "Phường Đa Kao",
+//                    "Phường Bến Nghé",
+//                    "Phường Bến Thành",
+//                    "Phường Nguyễn Thái Bình",
+//                    "Phường Phạm Ngũ Lão",
+//                    "Phường Cầu Ông Lãnh",
+//                    "Phường Cô Giang",
+//                    "Phường Nguyễn Cư Trinh",
+//                    "Phường Cầu Kho"
+//                ),
+//                "Quận 2+2" => array(
+//                    "Phường Thảo Điền",
+//                    "Phường An Phú",
+//                    "Phường Bình An",
+//                    "Phường Bình Trưng Đông",
+//                    "Phường Bình Trưng Tây",
+//                    "Phường Bình Khánh",
+//                    "Phường An Khánh",
+//                    "Phường Cát Lái",
+//                    "Phường Thạnh Mỹ Lợi",
+//                    "Phường An Lợi Đông",
+//                    "Phường Thủ Thiêm"
+//                ),
+//                "Quận 3+3" => array(
+//                    "Phường 08",
+//                    "Phường 07",
+//                    "Phường 14",
+//                    "Phường 12",
+//                    "Phường 11",
+//                    "Phường 13",
+//                    "Phường 06",
+//                    "Phường 09",
+//                    "Phường 10",
+//                    "Phường 04",
+//                    "Phường 05",
+//                    "Phường 03",
+//                    "Phường 02",
+//                    "Phường 01"
+//                ),
+//                "Quận 4+4" => array(
+//                    "Phường 12",
+//                    "Phường 13",
+//                    "Phường 09",
+//                    "Phường 06",
+//                    "Phường 08",
+//                    "Phường 10",
+//                    "Phường 05",
+//                    "Phường 18",
+//                    "Phường 14",
+//                    "Phường 04",
+//                    "Phường 03",
+//                    "Phường 16",
+//                    "Phường 02",
+//                    "Phường 15",
+//                    "Phường 01"
+//                ),
+//                "Quận 5+5" => array(
+//                    "Phường 04",
+//                    "Phường 09",
+//                    "Phường 03",
+//                    "Phường 12",
+//                    "Phường 02",
+//                    "Phường 08",
+//                    "Phường 15",
+//                    "Phường 07",
+//                    "Phường 01",
+//                    "Phường 11",
+//                    "Phường 14",
+//                    "Phường 05",
+//                    "Phường 06",
+//                    "Phường 10",
+//                    "Phường 13"
+//                ),
+//                "Quận 6+6" => array(
+//                    "Phường 14",
+//                    "Phường 13",
+//                    "Phường 09",
+//                    "Phường 06",
+//                    "Phường 12",
+//                    "Phường 05",
+//                    "Phường 11",
+//                    "Phường 02",
+//                    "Phường 01",
+//                    "Phường 04",
+//                    "Phường 08",
+//                    "Phường 03",
+//                    "Phường 07"
+//                ),
+//                "Quận 7+7" => array(
+//                    "Phường Tân Thuận Đông",
+//                    "Phường Tân Thuận Tây",
+//                    "Phường Tân Kiểng",
+//                    "Phường Tân Hưng",
+//                    "Phường Bình Thuận",
+//                    "Phường Tân Quy",
+//                    "Phường Phú Thuận",
+//                    "Phường Tân Phú",
+//                    "Phường Tân Phong",
+//                    "Phường Phú Mỹ"
+//                ),
+//                "Quận 8+8" => array(
+//                    "Phường 08",
+//                    "Phường 02",
+//                    "Phường 01",
+//                    "Phường 03",
+//                    "Phường 11",
+//                    "Phường 09",
+//                    "Phường 10",
+//                    "Phường 04",
+//                    "Phường 13",
+//                    "Phường 12",
+//                    "Phường 05",
+//                    "Phường 14",
+//                    "Phường 06",
+//                    "Phường 15",
+//                    "Phường 16",
+//                    "Phường 07"
+//                ),
+//                "Quận 9+9" => array(
+//                    "Phường Long Bình",
+//                    "Phường Long Thạnh Mỹ",
+//                    "Phường Tân Phú",
+//                    "Phường Hiệp Phú",
+//                    "Phường Tăng Nhơn Phú A",
+//                    "Phường Tăng Nhơn Phú B",
+//                    "Phường Phước Long B",
+//                    "Phường Phước Long A",
+//                    "Phường Trường Thạnh",
+//                    "Phường Long Phước",
+//                    "Phường Long Trường",
+//                    "Phường Phước Bình",
+//                    "Phường Phú Hữu"
+//                ),
+//                "Quận 10+10" => array(
+//                    "Phường 15",
+//                    "Phường 13",
+//                    "Phường 14",
+//                    "Phường 12",
+//                    "Phường 11",
+//                    "Phường 10",
+//                    "Phường 09",
+//                    "Phường 01",
+//                    "Phường 08",
+//                    "Phường 02",
+//                    "Phường 04",
+//                    "Phường 07",
+//                    "Phường 05",
+//                    "Phường 06",
+//                    "Phường 03"
+//                ),
+//                "Quận 11+11" => array(
+//                    "Phường 15",
+//                    "Phường 05",
+//                    "Phường 14",
+//                    "Phường 11",
+//                    "Phường 03",
+//                    "Phường 10",
+//                    "Phường 13",
+//                    "Phường 08",
+//                    "Phường 09",
+//                    "Phường 12",
+//                    "Phường 07",
+//                    "Phường 06",
+//                    "Phường 04",
+//                    "Phường 01",
+//                    "Phường 02",
+//                    "Phường 16"
+//                ),
+//                "Quận 12+12" => array(
+//                    "Phường Thạnh Xuân",
+//                    "Phường Thạnh Lộc",
+//                    "Phường Hiệp Thành",
+//                    "Phường Thới An",
+//                    "Phường Tân Chánh Hiệp",
+//                    "Phường An Phú Đông",
+//                    "Phường Tân Thới Hiệp",
+//                    "Phường Trung Mỹ Tây",
+//                    "Phường Tân Hưng Thuận",
+//                    "Phường Đông Hưng Thuận",
+//                    "Phường Tân Thới Nhất"
+//                ),
+//                "Quận Gò Vấp+13" => array(
+//		    "Phường 15",
+//		    "Phường 13",
+//		    "Phường 17",
+//		    "Phường 06",
+//		    "Phường 16",
+//		    "Phường 12",
+//		    "Phường 14",
+//		    "Phường 10",
+//		    "Phường 05",
+//		    "Phường 07",
+//		    "Phường 04",
+//		    "Phường 01",
+//		    "Phường 09",
+//		    "Phường 08",
+//		    "Phường 11",
+//		    "Phường 03"
+//                ),
+//                "Quận Tân Bình+14" => array(
+//		    "Phường 02",
+//		    "Phường 04",
+//		    "Phường 12",
+//		    "Phường 13",
+//		    "Phường 01",
+//		    "Phường 03",
+//		    "Phường 11",
+//		    "Phường 07",
+//		    "Phường 05",
+//		    "Phường 10",
+//		    "Phường 06",
+//		    "Phường 08",
+//		    "Phường 09",
+//		    "Phường 14",
+//		    "Phường 15"
+//                ),
+//                "Quận Tân Phú+15" => array(
+//		    "Phường Tân Sơn Nhì",
+//		    "Phường Tây Thạnh",
+//		    "Phường Sơn Kỳ",
+//		    "Phường Tân Qúy",
+//		    "Phường Tân Thành",
+//		    "Phường Phú Thọ Hoà",
+//		    "Phường Phú Thạnh",
+//		    "Phường Phú Trung",
+//		    "Phường Hoà Thạnh",
+//		    "Phường Hiệp Tân",
+//		    "Phường Tân Thới Hoà"
+//                ),
+//                "Quận Bình Thạnh+16" => array(
+//		    "Phường 13",
+//		    "Phường 11",
+//		    "Phường 27",
+//		    "Phường 26",
+//		    "Phường 12",
+//		    "Phường 25",
+//		    "Phường 05",
+//		    "Phường 07",
+//		    "Phường 24",
+//		    "Phường 06",
+//		    "Phường 14",
+//		    "Phường 15",
+//		    "Phường 02",
+//		    "Phường 01",
+//		    "Phường 03",
+//		    "Phường 17",
+//		    "Phường 21",
+//		    "Phường 22",
+//		    "Phường 19",
+//		    "Phường 28"
+//                ),
+//                "Quận Phú Nhuận+17" => array(
+//		    "Phường 04",
+//		    "Phường 05",
+//		    "Phường 09",
+//		    "Phường 07",
+//		    "Phường 03",
+//		    "Phường 01",
+//		    "Phường 02",
+//		    "Phường 08",
+//		    "Phường 15",
+//		    "Phường 10",
+//		    "Phường 11",
+//		    "Phường 17",
+//		    "Phường 14",
+//		    "Phường 12",
+//		    "Phường 13"
+//                ),
+//                "Quận Thủ Đức+18" => array(
+//		    "Phường Linh Xuân",
+//		    "Phường Bình Chiểu",
+//		    "Phường Linh Trung",
+//		    "Phường Tam Bình",
+//		    "Phường Tam Phú",
+//		    "Phường Hiệp Bình Phước",
+//		    "Phường Hiệp Bình Chánh",
+//		    "Phường Linh Chiểu",
+//		    "Phường Linh Tây",
+//		    "Phường Linh Đông",
+//		    "Phường Bình Thọ",
+//		    "Phường Trường Thọ"
+//                ),
+//                "Quận Bình Tân+19" => array(
+//		    "Phường Bình Hưng Hòa",
+//		    "Phường Bình Hưng Hoà A",
+//		    "Phường Bình Hưng Hoà B",
+//		    "Phường Bình Trị Đông",
+//		    "Phường Bình Trị Đông A",
+//		    "Phường Bình Trị Đông B",
+//		    "Phường Tân Tạo",
+//		    "Phường Tân Tạo A",
+//		    "Phường An Lạc",
+//		    "Phường An Lạc A"
+//                ),
+//                "Huyện Bình Chánh+54" => array(
+//		    "Thị trấn Tân Túc",
+//		    "Xã Phạm Văn Hai",
+//		    "Xã Vĩnh Lộc A",
+//		    "Xã Vĩnh Lộc B",
+//		    "Xã Bình Lợi",
+//		    "Xã Lê Minh Xuân",
+//		    "Xã Tân Nhựt",
+//		    "Xã Tân Kiên",
+//		    "Xã Bình Hưng",
+//		    "Xã Phong Phú",
+//		    "Xã An Phú Tây",
+//		    "Xã Hưng Long",
+//		    "Xã Đa Phước",
+//		    "Xã Tân Quý Tây",
+//		    "Xã Bình Chánh",
+//		    "Xã Quy Đức"
+//                ),
+//                "Huyện Củ Chi+52" => array(
+//		    "Thị trấn Củ Chi",
+//		    "Xã Phú Mỹ Hưng",
+//		    "Xã An Phú",
+//		    "Xã Trung Lập Thượng",
+//		    "Xã An Nhơn Tây",
+//		    "Xã Nhuận Đức",
+//		    "Xã Phạm Văn Cội",
+//		    "Xã Phú Hòa Đông",
+//		    "Xã Trung Lập Hạ",
+//		    "Xã Trung An",
+//		    "Xã Phước Thạnh",
+//		    "Xã Phước Hiệp",
+//		    "Xã Tân An Hội",
+//		    "Xã Phước Vĩnh An",
+//		    "Xã Thái Mỹ",
+//		    "Xã Tân Thạnh Tây",
+//		    "Xã Hòa Phú",
+//		    "Xã Tân Thạnh Đông",
+//		    "Xã Bình Mỹ",
+//		    "Xã Tân Phú Trung",
+//		    "Xã Tân Thông Hội"
+//                ),
+//                "Huyện Hóc Môn+53" => array(
+//		    "Thị trấn Hóc Môn",
+//		    "Xã Tân Hiệp",
+//		    "Xã Nhị Bình",
+//		    "Xã Đông Thạnh",
+//		    "Xã Tân Thới Nhì",
+//		    "Xã Thới Tam Thôn",
+//		    "Xã Xuân Thới Sơn",
+//		    "Xã Tân Xuân",
+//		    "Xã Xuân Thới Đông",
+//		    "Xã Trung Chánh",
+//		    "Xã Xuân Thới Thượng",
+//		    "Xã Bà Điểm"
+//                ),
+//                "Huyện Nhà Bè+55" => array(
+//		    "Thị trấn Nhà Bè",
+//		    "Xã Phước Kiển",
+//		    "Xã Phước Lộc",
+//		    "Xã Nhơn Đức",
+//		    "Xã Phú Xuân",
+//		    "Xã Long Thới",
+//		    "Xã Hiệp Phước"
+//                ),
+//                "Huyện Cần Giờ+56" => array(
+//		    "Thị trấn Cần Thạnh",
+//		    "Xã Bình Khánh",
+//		    "Xã Tam Thôn Hiệp",
+//		    "Xã An Thới Đông",
+//		    "Xã Thạnh An",
+//		    "Xã Long Hòa",
+//		    "Xã Lý Nhơn"
+//                )
+//            ),
             "An Giang" => array(
                 "Thành phố Long Xuyên" => array(
 	
@@ -2128,7 +2128,7 @@ class Import {
                 )
             ),
             "Thanh Hóa" => array(
-                "Thành phố Thanh Hoá" => array(
+                "Thành phố Thanh Hóa" => array(
 
                 ),
                 "Thị xã Bỉm Sơn" => array(
@@ -2627,25 +2627,60 @@ class Import {
             // Get id of city
             $cityId = Cities::getModelIdByName($cityName);
             if (!empty($cityId)) {
+                Loggers::info("City: $cityName - Id: $cityId", __FUNCTION__, __LINE__);
                 // Loop for all districts inside city
                 foreach ($districtData as $districtName => $wardData) {
-                    // Create new district
-                    $model = new Districts();
-                    $nameArr = explode("+", $districtName);
-                    $name = $districtName;
-                    if (count($nameArr) == 2) {
-                        $model->id = $nameArr[1];
-                        $name = $nameArr[0];
+//                    // Create new district
+//                    $model = new Districts();
+//                    $nameArr = explode("+", $districtName);
+//                    $name = $districtName;
+//                    if (count($nameArr) == 2) {
+//                        $model->id = $nameArr[1];
+//                        $name = $nameArr[0];
+//                    }
+//                    $model->name = $name;
+//                    $model->city_id = $cityId;
+//                    $model->short_name = CommonProcess::getShortString($name);
+//                    $model->status = DomainConst::DEFAULT_STATUS_ACTIVE;
+//                    $model->slug = CommonProcess::getSlugString($name);
+//                    if ($model->save()) {
+//                        foreach ($wardData as $wardName) {
+//                            $ward = new Wards();
+//                            $ward->district_id = $model->id;
+//                            $ward->name = $wardName;
+//                            $ward->short_name = CommonProcess::getShortString($wardName);
+//                            $ward->status = DomainConst::DEFAULT_STATUS_ACTIVE;
+//                            $ward->slug = CommonProcess::getSlugString($wardName);
+//                            $ward->save();
+//                        }
+//                    }
+                    $districtId = Districts::getModelIdByName($districtName);
+                    if (empty($districtId)) {
+                        Loggers::info("Not found district: $districtName", __FUNCTION__, __LINE__);
+                        // Create new district
+                        $model = new Districts();
+                        $nameArr = explode("+", $districtName);
+                        $name = $districtName;
+                        if (count($nameArr) == 2) {
+                            $model->id = $nameArr[1];
+                            $name = $nameArr[0];
+                        }
+                        $model->name = $name;
+                        $model->city_id = $cityId;
+                        $model->short_name = CommonProcess::getShortString($name);
+                        $model->status = DomainConst::DEFAULT_STATUS_ACTIVE;
+                        $model->slug = CommonProcess::getSlugString($name);
+                        if ($model->save()) {
+                            $districtId = $model->id;
+                        }
+                    } else {
+                        Loggers::info("District: $districtName - Id: $districtId", __FUNCTION__, __LINE__);
                     }
-                    $model->name = $name;
-                    $model->city_id = $cityId;
-                    $model->short_name = CommonProcess::getShortString($name);
-                    $model->status = DomainConst::DEFAULT_STATUS_ACTIVE;
-                    $model->slug = CommonProcess::getSlugString($name);
-                    if ($model->save()) {
+                    
+                    if (!empty($districtId)) {
                         foreach ($wardData as $wardName) {
                             $ward = new Wards();
-                            $ward->district_id = $model->id;
+                            $ward->district_id = $districtId;
                             $ward->name = $wardName;
                             $ward->short_name = CommonProcess::getShortString($wardName);
                             $ward->status = DomainConst::DEFAULT_STATUS_ACTIVE;
@@ -2655,6 +2690,8 @@ class Import {
                     }
                 }
                 
+            } else {
+                Loggers::info("Not found city: $cityName", __FUNCTION__, __LINE__);
             }
         }
     }

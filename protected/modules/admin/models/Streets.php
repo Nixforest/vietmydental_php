@@ -105,6 +105,7 @@ class Streets extends BaseActiveRecord
 		$criteria->compare('short_name',$this->short_name,true);
 		$criteria->compare('status',$this->status);
 		$criteria->compare('slug',$this->slug,true);
+                $criteria->order = 'name ASC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -155,7 +156,7 @@ class Streets extends BaseActiveRecord
             $_items[""] = "";
         }
         $models = self::model()->findAll(array(
-            'order' => 'id ASC',
+            'order' => 'name ASC',
         ));
         foreach ($models as $model) {
             $_items[$model->id] = $model->name. ' - ' . $model->rCity->name;
