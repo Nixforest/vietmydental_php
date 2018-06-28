@@ -2,3 +2,5 @@
 0 0 * * * root /usr/bin/php /var/www/vietmy.immortal.vn/web/cron.php BuildEmailResetPass
 # Send Email - At 02:00
 0 2 * * * root /usr/bin/php /var/www/vietmy.immortal.vn/web/cron.php SendScheduleEmail
+# build backup database - At 01:35
+35 01 * * * /var/www/vietmy.immortal.vn/web/protected/commands/ispc3backup_vietmy.sh
