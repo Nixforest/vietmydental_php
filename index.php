@@ -1,5 +1,5 @@
 <?php
-
+// For test branch
 // change the following paths if necessary
 //$yii = dirname(__FILE__) . '/../yii-1.1.19.5790cb/framework/yii.php';
 $yii=dirname(__FILE__).'/../yii-framework-1.1.13/yii.php';
