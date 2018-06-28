@@ -157,6 +157,7 @@
                         if (data.status == 'failure')
                         {
                             $('#dialogCreateCustomer div.divForForm').html(data.div);
+                            $('.ui-dialog-title').html('" . DomainConst::CONTENT00176 . "');
                                   // Here is the trick: on submit-> once again this function!
                             $('#dialogCreateCustomer div.divForForm form').submit(createCustomer);
                         }
@@ -197,6 +198,7 @@
                         if (data.status == 'failure')
                         {
                             $('#dialogUpdateSchedule div.divForFormUpdateSchedule').html(data.div);
+                            $('.ui-dialog-title').html('" . DomainConst::CONTENT00182 . "');
                                   // Here is the trick: on submit-> once again this function!
                             $('#dialogUpdateSchedule div.divForFormUpdateSchedule form').submit(createSchedule);
                         }
@@ -236,6 +238,7 @@
                         if (data.status == 'failure')
                         {
                             $('#dialogUpdateSchedule div.divForFormUpdateSchedule').html(data.div);
+                            $('.ui-dialog-title').html('" . DomainConst::CONTENT00182 . "');
                                   // Here is the trick: on submit-> once again this function!
                             $('#dialogUpdateSchedule div.divForFormUpdateSchedule form').submit(updateSchedule);
                         }
@@ -259,7 +262,6 @@
      * @returns {Boolean}
      */
     function createPrintDialog() {
-//        alert("<?php echo DomainConst::CONTENT00375; ?>");
         $("<link/>", {
             id: "form_ccs",
             rel: "stylesheet",
@@ -277,12 +279,51 @@
                         if (data.status == 'failure')
                         {
                             $('#dialogPrintReceipt div.divForForm').html(data.div);
+                            $('.ui-dialog-title').html('" . DomainConst::CONTENT00374 . "');
                                   // Here is the trick: on submit-> once again this function!
                             $('#dialogPrintReceipt div.divForForm form').submit(createPrintDialog);
                         }
                         else
                         {
                             $('#dialog div.divForForm').html(data.div);
+                            setTimeout(\"$('#dialogPrintReceipt').dialog('close') \",1000);
+                        }
+
+                    } ",
+        ))
+        ?>;
+        return false;
+    }
+    
+    /**
+     * Create print dialog
+     * @returns {Boolean}
+     */
+    function createPrescriptionDialog() {
+        $("<link/>", {
+            id: "form_ccs",
+            rel: "stylesheet",
+            type: "text/css",
+            href: "<?php echo Yii::app()->theme->baseUrl . '/css/form.css'; ?>"
+         }).appendTo("head");
+        <?php
+        echo CHtml::ajax(array(
+            'url' => Yii::app()->createAbsoluteUrl('front/receptionist/createPrescription'),
+            'data' => "js:$(this).serialize()",
+            'type' => 'post',
+            'dataType' => 'json',
+            'success' => "function(data)
+                    {
+                        if (data.status == 'failure')
+                        {
+                            $('#dialogPrintReceipt div.divForForm').html(data.div);
+                            $('.ui-dialog-title').html('" . DomainConst::CONTENT00379 . "');
+                                  // Here is the trick: on submit-> once again this function!
+                            $('#dialogPrintReceipt div.divForForm form').submit(createPrescriptionDialog);
+                        }
+                        else
+                        {
+                            $('#dialogPrintReceipt div.divForForm').html(data.div);
                             setTimeout(\"$('#dialogPrintReceipt').dialog('close') \",1000);
                         }
 

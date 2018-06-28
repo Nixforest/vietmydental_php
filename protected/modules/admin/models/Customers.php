@@ -600,6 +600,10 @@ class Customers extends BaseActiveRecord
 //                            $rightContent .= '<p>- Lần ' . $detailIdx . ': ' . DomainConst::CONTENT00177 . ' - [' . $updateTag . ']</p>';
 //                        }
                         $rightContent .= $updateTag;
+//                        $rightContent .= HtmlHandler::createAjaxButtonWithImage(
+//                                            DomainConst::CONTENT00379, DomainConst::IMG_PRESCRIPTION_ICON,
+//                                            '{createPrescriptionDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');}',
+//                                            'cursor: pointer;');
                         $detailIdx--;
                     }
                 }
