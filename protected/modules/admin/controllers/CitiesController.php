@@ -51,14 +51,17 @@ class CitiesController extends AdminController
 	 */
 	public function actionView($id)
 	{
-            $districts = $this->loadModel($id)->getDistricts($id);
-            $streets = $this->loadModel($id)->getStreets($id);
+                Loggers::info('Start load districts and streets: ', __FUNCTION__, __LINE__);
+                $districts = $this->loadModel($id)->getDistricts($id);
+                $streets = $this->loadModel($id)->getStreets($id);
+            
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
                         'districts' => $districts,
                         'streets' => $streets,
                         DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
 		));
+            Loggers::info('End load districts and streets: ', __FUNCTION__, __LINE__);
 	}
 
 	/**

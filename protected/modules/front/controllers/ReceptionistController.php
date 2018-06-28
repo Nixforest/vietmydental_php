@@ -505,6 +505,28 @@ class ReceptionistController extends FrontController {
         ));
         exit;
     }
+    
+    /**
+     * Action create prescription.
+     */
+    public function actionCreatePrescription() {
+        // Temp value saved at Customers::getCustomerAjaxScheduleInfo()
+        $detailId = Settings::getAjaxTempValue();
+        $model = TreatmentScheduleDetails::model()->findByPk($detailId);
+        if ($model) {
+        } else {
+            $model = new TreatmentScheduleDetails();
+        }
+        echo CJSON::encode(array(
+            DomainConst::KEY_STATUS => 'failure',
+            'div' => $this->renderPartial('_form_create_prescription',
+                    array(
+                        'model' => $model,
+                        DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                    ), true)
+        ));
+        exit;
+    }
 
     // Uncomment the following methods and override them if needed
 	/*

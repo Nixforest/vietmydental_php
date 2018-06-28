@@ -989,6 +989,8 @@ class DomainConst {
     const IMG_PRINT_ICON                    = 'icon_print_24.png';
     /** Icon: print all */
     const IMG_PRINT_ALL_ICON                = 'icon_print_all_24.png';
+    /** Icon: print all */
+    const IMG_PRESCRIPTION_ICON             = 'icon_prescription_24.png';
     
     
     /**----- Message content -----*/
@@ -1370,4 +1372,5 @@ class DomainConst {
     const CONTENT00376  = 'Không có phiếu thu';
     const CONTENT00377  = 'Lưu';
     const CONTENT00378  = 'Chọn ngày';
+    const CONTENT00379  = 'Tạo toa thuốc';
 }

@@ -11,7 +11,7 @@
  * @property string $created_date
  * @property string $description
  * @property string $level
- * @property integer $logtime
+ * @property double $logtime
  * @property string $category
  */
 class Loggers extends CActiveRecord
@@ -54,7 +54,7 @@ class Loggers extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('logtime', 'numerical', 'integerOnly'=>true),
+			array('logtime', 'numerical'),
 			array('ip_address', 'length', 'max'=>50),
 			array('country', 'length', 'max'=>100),
 			array('description', 'length', 'max'=>250),
@@ -144,6 +144,10 @@ class Loggers extends CActiveRecord
         return parent::beforeSave();
     }
     
+    public function getLogtime() {
+        return number_format((float)$this->logtime, 0, '.', ',');
+    }
+    
     //-----------------------------------------------------
     // Static methods
     //-----------------------------------------------------
@@ -159,9 +163,15 @@ class Loggers extends CActiveRecord
         $model->message = $message;
         $model->description = $description;
         $model->level = $level;
-        $model->logtime = time();
+//        $model->logtime = time();
+        $model->logtime = self::microseconds();
         $model->category = $category;
         $model->save();
+    }
+    
+    private static function microseconds() {
+        $mt = explode(' ', microtime());
+        return ((int)$mt[1]) * 1000000 + ((int)round($mt[0] * 1000000));
     }
     
     /**

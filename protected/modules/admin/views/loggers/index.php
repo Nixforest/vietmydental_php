@@ -49,7 +49,11 @@ $('.search-form form').submit(function(){
 		'category',
 		'ip_address',
 		'country',
-		'logtime',
+//		'logtime',
+                array(
+                    'name' => 'logtime',
+                    'value' => '$data->getLogtime()',
+                ),
                 array(
                     'header' => 'Actions',
                     'class'=>'CButtonColumn',
