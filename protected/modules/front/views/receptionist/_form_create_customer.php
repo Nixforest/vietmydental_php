@@ -119,20 +119,21 @@
         </div>
         <div class="col-md-6">
             <?php echo $form->labelEx($customer,'street_id'); ?>
-            <?php // echo $form->hiddenField($customer,'street_id', array()); ?>
-            <?php echo $form->dropDownList($customer,'street_id', Streets::loadItems(), array('class'=>'','empty'=>'Select')); ?>
+            <?php echo $form->hiddenField($customer,'street_id', array()); ?>
+            <?php // echo $form->dropDownList($customer,'street_id', Streets::loadItems(), array('class'=>'','empty'=>'Select')); ?>
             <?php 
                 // widget auto complete search user customer and supplier
-    //            $aData = array(
-    //                'model'=>$customer,
-    //                'field_street_id'=>'street_id',
-    //                'field_autocomplete_name'=>'autocomplete_name_street',
-    //                'url'=> Yii::app()->createAbsoluteUrl('admin/ajax/searchStreet'),
-    //                'NameRelation'=>'rStreet',
-    //                'ClassAdd' => 'w-400',
-    //            );
-    //            $this->widget('ext.GasAutoStreet.GasAutoStreet',
-    //                array('data'=>$aData));                                        
+                $aData = array(
+                    'model'=>$customer,
+                    'field_street_id'=>'street_id',
+                    'field_autocomplete_name'=>'autocomplete_name_street',
+                    'url'=> Yii::app()->createAbsoluteUrl('admin/ajax/searchStreet'),
+                    'NameRelation'=>'rStreet',
+                    'ClassAdd' => 'w-320',
+                    'placeholder'=>'Nhập',
+                );
+                $this->widget('ext.AutocompleteExt.AutocompleteExt',
+                            array('data' => $aData));                                      
             ?>
             <?php echo $form->error($customer,'street_id'); ?>
         </div>
@@ -202,6 +203,10 @@
 </div><!-- form -->
 <script>
     $(function(){
+        var style = '<style>'+
+                        '.form .autocomplete_name_text{padding-left:10px!important;}'+
+                    '</style>';
+        $('head').append(style);
         fnBindChangeCity(
             '#Customers_city_id',
             '#Customers_district_id',
