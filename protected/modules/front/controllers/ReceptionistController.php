@@ -74,7 +74,8 @@ class ReceptionistController extends FrontController {
                         'medicalRecord' => $medicalRecord,
                         'error'         => $errMsg,
                         DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-                    ),true,true)
+                    ),
+                    true)
         ));
         exit;
     }
