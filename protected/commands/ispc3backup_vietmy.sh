@@ -73,6 +73,6 @@ done
 # all done
 # Remove older backups (> 8 days),
 # unless you want to run out of drive space
- find $BACKUPDIR/db/daily -mtime +30 -print0 | xargs -0 rm -rf
+ find $BACKUPDIR/db/daily -mtime +5 -print0 | xargs -0 rm -rf
 
 exit 0
