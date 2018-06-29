@@ -95,6 +95,8 @@ class CustomerController extends APIController
     const ITEM_CUSTOMER_DEBT                = '41';
     /** Item id: Image */
     const ITEM_IMAGE                        = '42';
+    /** Item id: Image */
+    const ITEM_IMAGE_TREATMENT              = '42';
     
     
     /**

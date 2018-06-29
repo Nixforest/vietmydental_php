@@ -1373,4 +1373,5 @@ class DomainConst {
     const CONTENT00377  = 'Lưu';
     const CONTENT00378  = 'Chọn ngày';
     const CONTENT00379  = 'Tạo toa thuốc';
+    const CONTENT00380  = 'Hình ảnh trước và sau điều trị';
 }
