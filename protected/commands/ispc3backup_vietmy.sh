@@ -2,7 +2,7 @@
 
 
 ## Start user editable variables
-BACKUPDIR="/var/www/vietmytest.immortal.vn/web/vietmy_sql"		# backup directory
+BACKUPDIR="/var/www/vietmytest.immortal.vn/private/backup_vietmy"		# backup directory
 DBUSER="Username"						 # database user
 DBPASS="Password"				# database password
 TAR=`which tar`						# name and location of tar
