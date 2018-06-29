@@ -14,19 +14,19 @@ $labelStyle = "padding-top: 0px; width: auto; float: center;";
         <td>
 <!--            Check group of teeth-->
             <div colspan='2' class="adults">
-                <label class="container gr1">Nhóm 1
+                <label class="grcontainer gr1">Nhóm 1
                     <input type="checkbox">
                     <span class="checkmark"></span>
                 </label>
-                <label class="container gr2">Nhóm 2
+                <label class="grcontainer gr2">Nhóm 2
                     <input type="checkbox">
                     <span class="checkmark"></span>
                 </label>
-                <label class="container gr3">Nhóm 3
+                <label class="grcontainer gr3">Nhóm 3
                     <input type="checkbox">
                     <span class="checkmark"></span>
                 </label>
-                <label class="container gr4">Nhóm 4
+                <label class="grcontainer gr4">Nhóm 4
                     <input type="checkbox">
                     <span class="checkmark"></span>
                 </label>
@@ -92,19 +92,19 @@ $labelStyle = "padding-top: 0px; width: auto; float: center;";
         <td>
             <!--            Check group of teeth-->
             <div colspan='2' class="children">
-                <label class="container gr5">Nhóm 5
+                <label class="grcontainer gr5">Nhóm 5
                     <input type="checkbox">
                     <span class="checkmark"></span>
                 </label>
-                <label class="container gr6">Nhóm 6
+                <label class="grcontainer gr6">Nhóm 6
                     <input type="checkbox">
                     <span class="checkmark"></span>
                 </label>
-                <label class="container gr7">Nhóm 7
+                <label class="grcontainer gr7">Nhóm 7
                     <input type="checkbox">
                     <span class="checkmark"></span>
                 </label>
-                <label class="container gr8">Nhóm 8
+                <label class="grcontainer gr8">Nhóm 8
                     <input type="checkbox">
                     <span class="checkmark"></span>
                 </label>
@@ -182,14 +182,14 @@ $(function(){
     var style = '<style>'+
                     '.grey{background: #eaeaea;}'+
                     '.teeth-tbl{user-select: none;}'+
-                    '.container {width:150px;display: block;position: relative;padding-left: 35px;margin-bottom: 12px;cursor: pointer;font-size: 15px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}'+
-                    '.container input {position: absolute;opacity: 0;cursor: pointer;}'+
+                    '.grcontainer {width:150px;display: block;position: relative;padding-left: 35px;margin-bottom: 12px;cursor: pointer;font-size: 15px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}'+
+                    '.grcontainer input {position: absolute;opacity: 0;cursor: pointer;}'+
                     '.checkmark {position: absolute;top: 0;left: 0;height: 25px;width: 25px;background-color: #eee;}'+
-                    '.container:hover input ~ .checkmark {background-color: #ccc;}'+
-                    '.container input:checked ~ .checkmark {background-color: #2196F3;}'+
+                    '.grcontainer:hover input ~ .checkmark {background-color: #ccc;}'+
+                    '.grcontainer input:checked ~ .checkmark {background-color: #2196F3;}'+
                     '.checkmark:after {content: "";position: absolute;display: none;}'+
-                    '.container input:checked ~ .checkmark:after {display: block;}'+
-                    '.container .checkmark:after {left: 9px;top: 5px;width: 5px;height: 10px;border: solid white;border-width: 0 3px 3px 0;-webkit-transform: rotate(45deg);-ms-transform: rotate(45deg);transform: rotate(45deg);}'+
+                    '.grcontainer input:checked ~ .checkmark:after {display: block;}'+
+                    '.grcontainer .checkmark:after {left: 9px;top: 5px;width: 5px;height: 10px;border: solid white;border-width: 0 3px 3px 0;-webkit-transform: rotate(45deg);-ms-transform: rotate(45deg);transform: rotate(45deg);}'+
                 '</style>';
     $('head').append(style);
     var els = $('.teeth-tbl td');
