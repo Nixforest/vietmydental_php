@@ -196,7 +196,7 @@ class TreatmentScheduleDetailsController extends AdminController
 		{
 //			$model->attributes=$_POST['TreatmentScheduleDetails'];
 //                        $mImageXRayFile->attributes = $_POST['Files'];
-                        Files::deleteFileInUpdateNotIn($model);
+                        Files::deleteFileInUpdateNotIn($model, Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY);
                         Files::saveRecordFile($model, Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY);
 			$this->redirect(array('view','id'=>$model->id));
 		}
@@ -205,6 +205,24 @@ class TreatmentScheduleDetailsController extends AdminController
 			'model'=>$model,
                         DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
 		));
+        }
+        
+        /**
+         * Update image before and after treatment.
+         * @param String $id Id of treatment schedule detail
+         */
+        public function actionUpdateImageReal($id) {
+            $model = $this->loadModel($id);
+            if (isset($_POST['TreatmentScheduleDetails'])) {
+                Files::deleteFileInUpdateNotIn($model, Files::TYPE_3_TREATMENT_SCHEDULE_REAL_IMG);
+                Files::saveRecordFile($model, Files::TYPE_3_TREATMENT_SCHEDULE_REAL_IMG);
+                $this->redirect(array('view', 'id' => $model->id));
+            }
+            
+            $this->render('updateImageReal', array(
+                'model' => $model,
+                DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+            ));
         }
 
 	/**

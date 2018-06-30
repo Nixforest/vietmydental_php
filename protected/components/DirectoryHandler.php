@@ -56,7 +56,7 @@ class DirectoryHandler {
      * @return bool True on success or false on failure.
      */
     public static function createSingleDirectoryByPath($path) {
-        $path = self::getRootPath() . $path;
+        $path = self::getRootPath() . DIRECTORY_SEPARATOR . $path;
         if (!is_dir($path)) {
             return mkdir($path);
         }
@@ -69,10 +69,15 @@ class DirectoryHandler {
      * @return bool True on success or false on failure.
      */
     public static function deleteFile($source) {
+//        $path = DirectoryHandler::getRootPath() . DIRECTORY_SEPARATOR . $source;
         $path = DirectoryHandler::getRootPath() . DIRECTORY_SEPARATOR . $source;
         Loggers::info($path, __FUNCTION__, __LINE__);
-        if (file_exists($path)) {
-            return unlink($path);
+        if (file_exists($path) && !is_dir($path)) {
+            if (!unlink($path)) {
+                return false;
+            } else {
+                return true;
+            }
         }
         return false;
     }

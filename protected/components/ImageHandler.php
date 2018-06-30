@@ -59,7 +59,7 @@ class ImageHandler {
     public function createThumbs() {
         if (count($this->thumbs) > 0) {
             // Get root path
-            $rootPath = DirectoryHandler::getRootPath()
+            $rootPath = DirectoryHandler::getRootPath() . DIRECTORY_SEPARATOR
                     . $this->folder . DIRECTORY_SEPARATOR;
             // Get file path
             $pathFile = $rootPath . $this->file;
@@ -69,10 +69,14 @@ class ImageHandler {
                 return false;
             }
             DirectoryHandler::createDirectoryByPath($this->folder);
+            Loggers::info($this->folder, __FUNCTION__, __LINE__);
             // Loop for all thumbs
             foreach ($this->thumbs as $folderThumb => $size) {
+                Loggers::info($this->folder, __FUNCTION__, __LINE__);
+                Loggers::info($folderThumb, __FUNCTION__, __LINE__);
                 // Temp path
                 $tempPath = $this->folder . DIRECTORY_SEPARATOR . $folderThumb;
+                Loggers::info($tempPath, __FUNCTION__, __LINE__);
                 if (DirectoryHandler::createSingleDirectoryByPath($tempPath)) {
                     // Get size
                     $width = $size[self::WIDTH];
@@ -111,7 +115,7 @@ class ImageHandler {
     public function resizeAndCrop($fileName) {
         $thumb = new EPhpThumb();
         $thumb->init();
-        $rootPath = DirectoryHandler::getRootPath()
+        $rootPath = DirectoryHandler::getRootPath() . DIRECTORY_SEPARATOR
                 . $this->folder . DIRECTORY_SEPARATOR;
         $thumb->create($rootPath . $this->file)
                 ->adaptiveResize($this->thumbs[self::WIDTH], $this->thumbs[self::HEIGHT])
@@ -311,7 +315,7 @@ class ImageHandler {
         $baseUrl = CommonProcess::getHostUrl();
         Loggers::info($baseUrl, __FUNCTION__, __LINE__);
         $noImagePath = self::NO_IMAGE_PATH . $width . self::SIZE_SPLITTER . $height . self::IMG_EXT_JPG;
-        $rootPath = DirectoryHandler::getRootPath();
+        $rootPath = DirectoryHandler::getRootPath() . DIRECTORY_SEPARATOR;
         
         Loggers::info($rootPath . $path, __FUNCTION__, __LINE__);
         if (!file_exists($rootPath . $path)) {
@@ -343,9 +347,9 @@ class ImageHandler {
             $aDate = explode('-', $model->created_date);
             $pathUpload = Files::UPLOAD_PATH . "/$aDate[0]/$aDate[1]";
             Loggers::info($pathUpload, __FUNCTION__, __LINE__);
-            $path = DIRECTORY_SEPARATOR . $pathUpload . '/size128x96' . DIRECTORY_SEPARATOR . $model->file_name;
+            $path = $pathUpload . '/size128x96' . DIRECTORY_SEPARATOR . $model->file_name;
             if (isset($customField['size'])) {
-                $path = DIRECTORY_SEPARATOR . $pathUpload . DIRECTORY_SEPARATOR . $customField['size'] . DIRECTORY_SEPARATOR . $model->file_name;
+                $path = $pathUpload . DIRECTORY_SEPARATOR . $customField['size'] . DIRECTORY_SEPARATOR . $model->file_name;
             }
             return self::bindImage($path, $width, $height);
         } else {

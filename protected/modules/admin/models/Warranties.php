@@ -150,4 +150,38 @@ class Warranties extends CActiveRecord
         }        
         return implode($spliter, $array);
     }
+    
+    /**
+     * Get start time
+     * @return String Start time
+     */
+    public function getStartTime() {
+        return CommonProcess::convertDateTime($this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_VIEW);
+    }
+    
+    /**
+     * Get end time
+     * @return String End time
+     */
+    public function getEndTime() {
+        return CommonProcess::convertDateTime($this->end_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_VIEW);
+    }
+    
+    /**
+     * Get warranty time.
+     * @return string Warranty time
+     */
+    public function getWarrantyTime() {
+        // TODO: Implement
+        return '';
+    }
+    
+    /**
+     * Get remain time.
+     * @return string Remain time
+     */
+    public function getRemainTime() {
+        // TODO: Implement
+        return '';
+    }
 }

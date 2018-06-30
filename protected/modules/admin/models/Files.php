@@ -18,6 +18,7 @@ class Files extends CActiveRecord
     //-----------------------------------------------------
     const TYPE_1_USER_AVATAR                        = 1;
     const TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY     = 2;
+    const TYPE_3_TREATMENT_SCHEDULE_REAL_IMG        = 3;
     
     const ALLOW_IMAGE_FILE_TYPE         = 'jpg,jpeg,png';
     const ALLOW_DOCS_FILE_TYPE          = 'pdf,xls,xlsx,jpg,jpeg,png';
@@ -27,8 +28,11 @@ class Files extends CActiveRecord
     
     const KEY_FILE_NAME                 = 'file_name';
     const KEY_NAME                      = 'name';
+    const KEY_SIZE                      = 'size';
     const KEY_TMP_NAME                  = 'tmp_name';
     const KEY_CLASS_NAME                = 'Files';
+    const KEY_NORMAL_SIZE               = 'size1024x900';
+    const KEY_SMALL_SIZE                = 'size128x96';
     
     const IMAGE_SIZES                   = array(
         'size128x96'    =>  array(          // Small size
@@ -45,12 +49,14 @@ class Files extends CActiveRecord
     public static $TYPE_ARRAY = array(
         self::TYPE_1_USER_AVATAR                        => 'Users',
         self::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY     => 'TreatmentScheduleDetails',
+        self::TYPE_3_TREATMENT_SCHEDULE_REAL_IMG        => 'TreatmentScheduleDetails',
     );
     
     // Array of type need resize image before save
     public static $TYPE_RESIZE_IMAGE = array(
         self::TYPE_1_USER_AVATAR,
-        self::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY
+        self::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY,
+        self::TYPE_3_TREATMENT_SCHEDULE_REAL_IMG
     );
     
 	/**
@@ -199,12 +205,14 @@ class Files extends CActiveRecord
      * Get view image
      * @return string Image view
      */
-    public function getViewImage() {
+    public function getViewImage($width = 80, $height = 60) {
         if (empty($this->file_name) && !in_array($this->type, self::$TYPE_RESIZE_IMAGE)) {
-             return '';
+            return '';
         }
-        $str = "<a class='gallery' target='_blank' href='" . ImageHandler::bindImageByModel($this,'','',array('size'=>'size1024x900')) . "'>"
-                . "<img width='80' height='60' src='" . ImageHandler::bindImageByModel($this, '', '', array('size' => 'size128x96')) . "'>"
+        $str = "<a class='gallery' target='_blank' href='" . ImageHandler::bindImageByModel($this, '', '',
+                array('size' => self::KEY_NORMAL_SIZE)) . "'>"
+                . "<img width='" . $width . "' height='" . $height . "' src='" . ImageHandler::bindImageByModel($this, '', '',
+                        array('size' => self::KEY_SMALL_SIZE)) . "'>"
                 . "</a>";
         return $str;
     }
@@ -323,10 +331,12 @@ class Files extends CActiveRecord
         $month = DateTimeExt::getYearByDate($model->created_date, array('format' => 'm'));
         $pathUpload = self::UPLOAD_PATH . "/$year/$month";
         $imageHandler = new ImageHandler();
-        $imageHandler->folder = DIRECTORY_SEPARATOR . $pathUpload;
+        $imageHandler->folder = $pathUpload;
+//        $imageHandler->folder = DIRECTORY_SEPARATOR . $pathUpload;
         $imageHandler->file = $model->$fieldName;
         $imageHandler->aRGB = array(0, 0, 0);   // Full black background
         $imageHandler->thumbs = self::IMAGE_SIZES;
+        Loggers::info("Try create thumb: " . $imageHandler->folder, __FUNCTION__, __LINE__);
         $imageHandler->createThumbs();
         Loggers::info("Delete file: " . $imageHandler->folder . DIRECTORY_SEPARATOR . $model->$fieldName, __FUNCTION__, __LINE__);
         DirectoryHandler::deleteFile($imageHandler->folder . DIRECTORY_SEPARATOR . $model->$fieldName);
@@ -341,7 +351,8 @@ class Files extends CActiveRecord
         $aDate = explode('-', $modelRemove->created_date);
         $pathUpload = self::UPLOAD_PATH . "/$aDate[0]/$aDate[1]";
         $imageHandler = new ImageHandler();
-        $imageHandler->folder = DIRECTORY_SEPARATOR . $pathUpload;
+//        $imageHandler->folder = DIRECTORY_SEPARATOR . $pathUpload;
+        $imageHandler->folder = $pathUpload;
         Loggers::info($imageHandler->folder . DIRECTORY_SEPARATOR . $modelRemove->$fieldName, __FUNCTION__, __LINE__);
         DirectoryHandler::deleteFile($imageHandler->folder . DIRECTORY_SEPARATOR . $modelRemove->$fieldName);
         foreach (self::IMAGE_SIZES as $key => $value) {
@@ -461,7 +472,7 @@ class Files extends CActiveRecord
      * Delete file in update action (with not in array param)
      * @param type $mBelongTo
      */
-    public static function deleteFileInUpdateNotIn($mBelongTo) {
+    public static function deleteFileInUpdateNotIn($mBelongTo, $type = '') {
         Loggers::info(isset($_POST['delete_file']) . "", __FUNCTION__, __LINE__);
 //        Loggers::info(CommonProcess::json_encode_unicode($_POST['delete_file']), __FUNCTION__, __LINE__);
         if (isset($_POST['delete_file']) && is_array($_POST['delete_file']) && count($_POST['delete_file'])) {
@@ -471,6 +482,9 @@ class Files extends CActiveRecord
             $sParamsIn = implode(',', $_POST['delete_file']);
             Loggers::info($sParamsIn, __FUNCTION__, __LINE__);
             $criteria->addCondition("t.id NOT IN ($sParamsIn)");
+            if (!empty($type)) {
+                $criteria->compare('t.type', $type);
+            }
             $models = self::model()->findAll($criteria);
             foreach ($models as $model) {
                 $model->delete();
@@ -488,8 +502,8 @@ class Files extends CActiveRecord
         foreach ($aModel as $mFile) {
             $tmp = array();
             $tmp['id'] = $mFile->id;
-            $tmp['thumb'] = ImageHandler::bindImageByModel($mFile, '', '', array('size' => 'size128x96'));
-            $tmp['large'] = ImageHandler::bindImageByModel($mFile, '', '', array('size' => 'size1024x900'));
+            $tmp['thumb'] = ImageHandler::bindImageByModel($mFile, '', '', array('size' => self::KEY_SMALL_SIZE));
+            $tmp['large'] = ImageHandler::bindImageByModel($mFile, '', '', array('size' => self::KEY_NORMAL_SIZE));
             $retVal[] = $tmp;
         }
         return $retVal;

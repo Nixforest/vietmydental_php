@@ -9,6 +9,15 @@ $this->menu[] = array(
                         'updateImageXRay',
                         'id' => $model->id
                 ));
+
+if (AdminController::canAccessAction('updateImageReal', $actions)) {
+    $this->menu[] = array(
+                    'label' => $this->getPageTitleByAction('updateImageReal'),
+                    'url' => array(
+                        'updateImageReal',
+                        'id' => $model->id
+                ));
+}
 $this->menu[] = array(
                     'label' => 'Tạo thêm lần điều trị',
                     'url' => array(

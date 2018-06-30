@@ -233,20 +233,53 @@
         </div>
         <div class="list__3__info">
             <div class="row">
-                <div class="col-md-6">
-                    <p>Hình Ảnh Trước Và Sau Điều Trị</p>
-                    <div class="list__3__img">
-                        <img src="<?php echo Yii::app()->theme->baseUrl; ?>/img/img2.jpg">
-                        <img src="<?php echo Yii::app()->theme->baseUrl; ?>/img/img2.jpg">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <p>Hình Ảnh Chụp XQuang</p>
-                    <div class="list__3__img">
-                        <img src="<?php echo Yii::app()->theme->baseUrl; ?>/img/img2.jpg">
-                        <img src="<?php echo Yii::app()->theme->baseUrl; ?>/img/img2.jpg">
-                    </div>
-                </div>
+                <?php foreach ($treatment as $item) : ?>
+                    <?php if (isset($item->rDetail)) : ?>
+                        <?php foreach ($item->rDetail as $detail): ?>
+                            <?php if(count($detail->rImgRealFile) || count($detail->rImgXRayFile)) : ?>
+                                <?php
+                                    $info = '';
+                                    if (isset($detail->rTreatmentType)) {
+                                        $info = $detail->rTreatmentType->name;
+                                    } else if (isset($detail->rDiagnosis)) {
+                                        $info = $detail->rDiagnosis->name;
+                                    } else {
+                                        $info = DomainConst::CONTENT00177;
+                                    }
+                                ?>
+                                <div class="col-md-6">
+                                    <p>Hình Ảnh Trước Và Sau Điều Trị</p>
+                                <?php echo $detail->getStartTime() . ' - ' . $info; ?>
+                                    <?php if(count($detail->rImgRealFile)) : ?>
+                                    <?php
+                                        $listOldImage = array_reverse($detail->rImgRealFile);
+                                        $index = 1;
+                                    ?>
+                                    <div class="list__3__img">
+                                        <?php foreach ($listOldImage as $img) : ?>
+                                            <?php echo $img->getViewImage(200, 300); ?>
+                                        <?php endforeach; ?>
+                                    </div>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>Hình Ảnh Chụp XQuang</p>
+                                    <?php if(count($detail->rImgXRayFile)) : ?>
+                                    <?php
+                                        $listOldImage = array_reverse($detail->rImgXRayFile);
+                                        $index = 1;
+                                    ?>
+                                    <div class="list__3__img">
+                                        <?php foreach ($listOldImage as $img) : ?>
+                                            <?php echo $img->getViewImage(200, 300); ?>
+                                        <?php endforeach; ?>
+                                    </div>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                <?php endforeach; ?>
             </div>
 
         </div>
@@ -258,10 +291,27 @@
                     <span class="icon37"></span> Bảo Hành
                 </div>
                 <div class="list__3__info">
-                    <p><strong>Thời Gian Bảo Hành</strong>: 3 Năm
-                        <br/> <strong>Ngày Bắt Đầu:</strong> 9:30 AM - 26/03/2018
-                        <br/> <strong>Ngày Kết Thúc:</strong> 10:30 AM - 26/04/2018
-                        <br/> <strong>Thời Gian Còn Lại</strong>: 365 Ngày</p>
+                    <?php
+                        $html = '';
+                        if (isset($model->rWarranty)) {
+                            foreach ($model->rWarranty as $warranty) {
+                                if (isset($warranty->rType)) {
+                                }
+                                $html .= '<p>';
+                                    $html .= '<strong>';
+                                    $html .= $warranty->rType->name . ' - ' . DomainConst::CONTENT00381 . ': ';
+                                    $html .= '</strong>' . $warranty->getWarrantyTime();
+                                    $html .= '<br/><strong>' . DomainConst::CONTENT00139;
+                                    $html .= '</strong>: ' . $warranty->getStartTime();
+                                    $html .= '<br/><strong>' . DomainConst::CONTENT00140;
+                                    $html .= '</strong>: ' . $warranty->getEndTime();
+                                    $html .= '<br/><strong>' . DomainConst::CONTENT00382;
+                                    $html .= '</strong>: ' . $warranty->getRemainTime();
+                                $html .= '</p>';
+                            }
+                        }
+                        echo $html;
+                    ?>
                 </div>
             </div>
             <div class="col-md-6">
@@ -269,10 +319,10 @@
                     <span class="icon38"></span> Lịch Hẹn Tái Khám
                 </div>
                 <div class="list__3__info">
-                    <p><strong>Thời Gian Bảo Hành</strong>: 3 Năm
+<!--                    <p><strong>Thời Gian Bảo Hành</strong>: 3 Năm
                         <br/> <strong>Ngày Bắt Đầu:</strong> 9:30 AM - 26/03/2018
                         <br/> <strong>Ngày Kết Thúc:</strong> 10:30 AM - 26/04/2018
-                        <br/> <strong>Thời Gian Còn Lại</strong>: 365 Ngày</p>
+                        <br/> <strong>Thời Gian Còn Lại</strong>: 365 Ngày</p>-->
                 </div>
             </div>
         </div>

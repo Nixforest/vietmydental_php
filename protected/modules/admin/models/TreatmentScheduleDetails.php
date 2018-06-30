@@ -95,9 +95,14 @@ class TreatmentScheduleDetails extends BaseActiveRecord
                         self::HAS_MANY, 'OneMany', 'one_id',
                         'on'    => 'type = ' . OneMany::TYPE_TREATMENT_DETAIL_TEETH,
                     ),
-                    'rImgXRayFile' => array(
+                    'rImgXRayFile' => array(    // XRay images
                         self::HAS_MANY, 'Files', 'belong_id',
                         'on' => 'type=' . Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY,
+                        'order' => 'id DESC',
+                    ),
+                    'rImgRealFile' => array(    // Images before and after treatment
+                        self::HAS_MANY, 'Files', 'belong_id',
+                        'on' => 'type = ' . Files::TYPE_3_TREATMENT_SCHEDULE_REAL_IMG,
                         'order' => 'id DESC',
                     ),
 		);
@@ -208,8 +213,15 @@ class TreatmentScheduleDetails extends BaseActiveRecord
             $this->rReceipt->delete();
         }
         OneMany::deleteAllOldRecords($this->id, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+        // Delete images XRay
         if (isset($this->rImgXRayFile)) {
             foreach ($this->rImgXRayFile as $image) {
+                $image->delete();
+            }
+        }
+        // Delete images before and after treatment
+        if (isset($this->rImgRealFile)) {
+            foreach ($this->rImgRealFile as $image) {
                 $image->delete();
             }
         }
@@ -630,11 +642,28 @@ class TreatmentScheduleDetails extends BaseActiveRecord
         foreach ($this->rImgXRayFile as $image) {
             $data[] = CommonProcess::createConfigJson(
                     '' . $index++,
-                    ImageHandler::bindImageByModel($image, '', '', array('size' => 'size1')),
-                    ImageHandler::bindImageByModel($image, '', '', array('size' => 'size2')));
+                    ImageHandler::bindImageByModel($image, '', '', array(Files::KEY_SIZE => Files::KEY_SMALL_SIZE)),
+                    ImageHandler::bindImageByModel($image, '', '', array(Files::KEY_SIZE => self::KEY_NORMAL_SIZE)));
         }
         return CommonProcess::createConfigJson(CustomerController::ITEM_IMAGE,
                 DomainConst::CONTENT00298, $data);
+    }
+    
+    /**
+     * Get list image before and after treatment information
+     * @return type
+     */
+    public function getListImageRealInfo() {
+        $data = array();
+        $index = 0;
+        foreach ($this->rImgRealFile as $image) {
+            $data[] = CommonProcess::createConfigJson(
+                    '' . $index++,
+                    ImageHandler::bindImageByModel($image, '', '', array(Files::KEY_SIZE => self::KEY_SMALL_SIZE)),
+                    ImageHandler::bindImageByModel($image, '', '', array(Files::KEY_SIZE => self::KEY_NORMAL_SIZE)));
+        }
+        return CommonProcess::createConfigJson(CustomerController::ITEM_IMAGE_TREATMENT,
+                DomainConst::CONTENT00380, $data);
     }
     
     /**
