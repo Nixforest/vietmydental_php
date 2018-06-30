@@ -205,13 +205,13 @@ class Files extends CActiveRecord
      * Get view image
      * @return string Image view
      */
-    public function getViewImage() {
+    public function getViewImage($width = 80, $height = 60) {
         if (empty($this->file_name) && !in_array($this->type, self::$TYPE_RESIZE_IMAGE)) {
             return '';
         }
         $str = "<a class='gallery' target='_blank' href='" . ImageHandler::bindImageByModel($this, '', '',
                 array('size' => self::KEY_NORMAL_SIZE)) . "'>"
-                . "<img width='80' height='60' src='" . ImageHandler::bindImageByModel($this, '', '',
+                . "<img width='" . $width . "' height='" . $height . "' src='" . ImageHandler::bindImageByModel($this, '', '',
                         array('size' => self::KEY_SMALL_SIZE)) . "'>"
                 . "</a>";
         return $str;
