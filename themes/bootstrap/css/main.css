@@ -1075,3 +1075,45 @@ span.icon21 {
 .table-borderless>thead>tr>th {
     border: none !important;
 }
+
+
+
+.gr-container{
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 5px;
+    /*border: 1px solid grey;*/
+    background: white;
+    position: relative;
+    color: black;
+}
+.gr-container:hover{
+    background: #f3f3f3;
+}
+a:hover{
+    text-decoration: none!important;
+}
+.mr-1{margin-right: 4px;}
+.ml-1{margin-left: 4px;}
+.gr-bar{
+    position: relative;
+    top: 48%;
+    margin-top: 12px;
+    left: 7px;
+    right: 5px;
+    float: right;
+}
+.create-treatment-btn{text-align: right;}
+.round-container {
+    border-left: 2px solid #a7a7a7;
+    margin-left: -20px;
+    padding-left: 10px;
+    padding-bottom: 6px;
+}
+svg.mark-icon {
+    position: relative;
+    right: 26px;
+    top: 4px;
+    fill: #a7a7a7;
+}
+.round-txt{margin-left: -20px;}
