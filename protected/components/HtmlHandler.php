@@ -62,6 +62,32 @@ class HtmlHandler {
         return $retVal;
     }
     
+    public static function createCustomButton($href, $title, $time, $doctor, $status = '') {
+        $retVal = '';
+        $target = '';
+        $target = 'target="_blank"';
+        $sttClass = 'label-warning';
+        if(!empty($status) && $status['type']){
+            $sttClass = 'label-success';
+        }
+
+        $paymentLink = Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/payment");
+        $createPrescriptionLink = Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/createPrescription");
+        
+        $retVal .= '<a ' . $target . ' href="' . $href . '">'
+                .       '<div class="gr-container">'
+                .           '<div class="gr-bar">'
+                .               '<h4 style="display: inline; margin-right: 4px;"><span class="label '.$sttClass.'">'.$status['name'].'</span></h4>'
+                .               '<a '.$target.' href="" class="btn btn-xs btn-primary mr-1">Thanh toán</a>'
+                .               '<a '.$target.' href="" class="btn btn-xs btn-success mr-1">Tạo toa thuốc</a>'
+                .           '</div>'
+                .           '<h4><b>'.$title .'</b></h4>'
+                .           '<span>Bác sĩ <b>'.$doctor.'</b> thực hiện lúc <b>'.$time.'</b>.</span>'
+                .       '</div>'
+                . '</a>';
+        return $retVal;
+    }
+    
     public static function createAjaxButtonWithImage($title, $image, $onClick, $style, $class = self::CLASS_GROUP_BUTTON) {
         $retVal = '';
         $retVal .= '<div class="' . $class . '">';

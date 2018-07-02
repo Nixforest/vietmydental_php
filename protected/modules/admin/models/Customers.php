@@ -542,26 +542,36 @@ class Customers extends BaseActiveRecord
         $rightContent .=        '</table>';
         $rightContent .=    '</div>';
         $rightContent .=    '<div class="title-2">' . DomainConst::CONTENT00201 . '</div>';
-        $rightContent .=    '<div class="item-search">';                
+        $rightContent .=    '<div class="item-search treatment-history-container">';     
+        
+        //DuongNV add custom html
+        $htmlIcon =  '<svg class="mark-icon"'
+                    .' viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true">'
+                    .       '<path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path>'
+                    .'</svg>';//END
         if (isset($this->rMedicalRecord) && isset($this->rMedicalRecord->rTreatmentSchedule)) {
             $i = count($this->rMedicalRecord->rTreatmentSchedule);
             foreach ($this->rMedicalRecord->rTreatmentSchedule as $schedule) {
                 if (isset($schedule->rDetail)) {
-                    $rightContent .= '<b>';
+                    $rightContent .= '<b style="float: left">';
                     if ($schedule->rPathological) {
-                        $rightContent .= '<p>Đợt ' . $i . ': ' . $schedule->getStartTime() . ' - ' . $schedule->rPathological->name . '</p>';
+                        $rightContent .= $htmlIcon.'<span class="round-txt">Đợt ' . $i . ': ' . $schedule->getStartTime() . ' - ' . $schedule->rPathological->name . '</span>';
                     } else {
-                        $rightContent .= '<p>Đợt ' . $i . ': ' . $schedule->getStartTime() . '</p>';
+                        $rightContent .= $htmlIcon.'<span class="round-txt">Đợt ' . $i . ': ' . $schedule->getStartTime() . '</span>';
                     }
                     $rightContent .= '</b>';
+                    
                     $rightContent .= HtmlHandler::createButtonWithImage(
                                         Yii::app()->createAbsoluteUrl(
                                             "admin/treatmentScheduleDetails/create", array("schedule_id" => $schedule->id)),
-                                        DomainConst::CONTENT00367,
-                                        DomainConst::IMG_ADD_ICON, false, '');
+//                                        DomainConst::CONTENT00367,
+                                        '',
+                                        DomainConst::IMG_ADD_ICON, false, 'create-treatment-btn');
                     $detailIdx = count($schedule->rDetail);
+                    $rightContent .= '<div class="round-container">';//Html container of all treatment by Duong
                     foreach ($schedule->rDetail as $detail) {
-                        $btnTitle = $detail->getStartDate() . '<br>';
+//                        $btnTitle = $detail->getStartDate() . '<br>';
+                        $btnTitle = '';
                         if ($detail->rTreatmentType) {
 //                            $btnTitle = 'Lần ' . $detailIdx . ': ' . $detail->rTreatmentType->name;
                             $btnTitle .= $detail->rTreatmentType->name;
@@ -580,15 +590,15 @@ class Customers extends BaseActiveRecord
                                 break;
                             case Roles::ROLE_RECEPTIONIST:
                                 if ($detail->isCompleted()) {
-                                    $updateTag = HtmlHandler::createButtonWithImage(
+                                    $updateTag = HtmlHandler::createCustomButton(
                                             Yii::app()->createAbsoluteUrl(
                                                         "admin/treatmentScheduleDetails/view", array("id" => $detail->id)),
-                                            $btnTitle, DomainConst::IMG_COMPLETED_ICON, false);
+                                            $btnTitle, $detail->getStartTime(), $detail->getDoctor(), array('name'=>'complete', 'type'=>1));
                                 } else {
-                                    $updateTag = HtmlHandler::createButtonWithImage(
+                                    $updateTag = HtmlHandler::createCustomButton(
                                             Yii::app()->createAbsoluteUrl(
                                                         "admin/treatmentScheduleDetails/update", array("id" => $detail->id)),
-                                            $btnTitle, DomainConst::IMG_NEW_ICON, false);
+                                            $btnTitle, $detail->getStartTime(), $detail->getDoctor(), array('name'=>'new', 'type'=>0));
                                 }
                             default:
                                 break;
@@ -602,6 +612,7 @@ class Customers extends BaseActiveRecord
                         $rightContent .= $updateTag;
                         $detailIdx--;
                     }
+                    $rightContent .=    '</div>';//Duong
                 }
                 $i--;
             }
