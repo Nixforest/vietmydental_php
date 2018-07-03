@@ -45,10 +45,6 @@
                 </form>
             </div>
             <div id="customer_info_schedule" style="text-align: center"> <!--class="info-result"-->
-<!--                 <span class="btn btn-primary" 
-                       style="margin: 10px;" 
-                       onclick="createCustomer(); $('#dialogCreateCustomer').dialog('open');return false;">
-                        <i class="glyphicon glyphicon-plus"></i>Tạo mới bệnh nhân</span>-->
                 <div class="group-btn" id="create_customer">
                     <?php
                         echo CHtml::link(
