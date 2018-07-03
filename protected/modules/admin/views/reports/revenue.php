@@ -153,9 +153,9 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'name' => DomainConst::CONTENT00315,
             'htmlOptions' => array('style' => 'text-align:right;'),
             'value' => '$data->getReceiptTreatmentTypePriceText()',
-            'footer' => OneMany::getReceiptTreatmentTypePriceTotal($receipts->getData()),
-            'footerHtmlOptions' => array(
-                'style' => 'text-align:right; font-weight:bold'),
+//            'footer' => OneMany::getReceiptTreatmentTypePriceTotal($receipts->getData()),
+//            'footerHtmlOptions' => array(
+//                'style' => 'text-align:right; font-weight:bold'),
         ),
         array(
             'name' => DomainConst::CONTENT00353,
@@ -276,9 +276,9 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'name' => DomainConst::CONTENT00315,
             'htmlOptions' => array('style' => 'text-align:right;'),
             'value' => '$data->getReceiptTreatmentTypePriceText()',
-            'footer' => OneMany::getReceiptTreatmentTypePriceTotal($newReceipts->getData()),
-            'footerHtmlOptions' => array(
-                'style' => 'text-align:right; font-weight:bold'),
+//            'footer' => OneMany::getReceiptTreatmentTypePriceTotal($newReceipts->getData()),
+//            'footerHtmlOptions' => array(
+//                'style' => 'text-align:right; font-weight:bold'),
         ),
         array(
             'name' => DomainConst::CONTENT00353,

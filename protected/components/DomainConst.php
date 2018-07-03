@@ -61,6 +61,7 @@ class DomainConst {
     /** Constant of splitter */
     const SPLITTER_TYPE_1                               = ', ';
     const SPLITTER_TYPE_2                               = ',';
+    const SPLITTER_TYPE_3                               = '-';
     /** Html space */
     const SPACE                                         = '&nbsp;';
     /** Date format main */
@@ -1377,6 +1378,8 @@ class DomainConst {
     const CONTENT00379  = 'Tạo toa thuốc';
     const CONTENT00380  = 'Hình ảnh trước và sau điều trị';
     const CONTENT00381  = 'Thời gian bảo hành';
-    const CONTENT00382  = 'Tìm kiếm bệnh nhân';
-    const CONTENT00383  = 'Chọn chi nhánh';
+    const CONTENT00382  = 'Thời gian còn lại';
+    const CONTENT00383  = 'Điều trị đã hoàn thành, không thể cập nhật.';
+    const CONTENT00384  = 'Tìm kiếm bệnh nhân';
+    const CONTENT00385  = 'Chọn chi nhánh';
 }
