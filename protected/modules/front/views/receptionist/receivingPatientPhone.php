@@ -28,16 +28,19 @@
             </div>
             <div class="box-search">
                 <form>
-                    <span class="icon-s1"></span>
-                    <input type="text" class="form-control text-change"  placeholder="<?php echo DomainConst::CONTENT00170?>"
+                    <input type="text" class="form-control text-change" placeholder="<?php echo DomainConst::CONTENT00170?>"
                            id="customer_find_phone">
-                </form>
-            </div>
-            <div class="box-search">
-                <form>
-                    <span class="icon-s"></span>
-                    <input type="text" class="form-control text-change"  placeholder="<?php echo DomainConst::CONTENT00045?>"
+                    <input type="text" class="form-control text-change" placeholder="<?php echo DomainConst::CONTENT00045?>"
                            id="customer_find_address">
+                    <select id="customer_find_agent" name="customer_find[agent]">
+                        <?php
+                        $html = '<option value="">' . DomainConst::CONTENT00383 . '</option>';
+                        foreach (Agents::loadItems() as $key => $agent) {
+                            $html .= '<option value="' . $key . '">' . $agent . '</option>';
+                        }
+                        echo $html;
+                        ?>
+                    </select>
                 </form>
             </div>
             <div class="info-result" id="customer_info_schedule">
@@ -148,7 +151,13 @@
                 "#right_page_title",
                 "<?php echo DomainConst::CONTENT00172 ?>",
                 $(this).attr('id'));
-//        alert($(this).attr('id'));
+    });
+    $("#customer_find_agent").change(function() {
+        fnSearchCustomerReception(
+                "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/searchCustomerReception'); ?>",
+                "#right-content",
+                "#right_page_title",
+                "<?php echo DomainConst::CONTENT00171 ?>");
     });
 </script>
 <script type="text/javascript">

@@ -168,7 +168,7 @@ function fnHandleTextChange(_url, outputId, _titleId, _titleVal) {
  */
 function fnGetSearchArray() {
     var arrVal = {};
-    var arrKey = ["customer_find", "customer_find_phone", "customer_find_address"];
+    var arrKey = ["customer_find", "customer_find_phone", "customer_find_address", "customer_find_agent"];
     for (var i = 0; i < arrKey.length; i++) {
         arrVal[arrKey[i]] = $("#" + arrKey[i]).val().trim();
     }
