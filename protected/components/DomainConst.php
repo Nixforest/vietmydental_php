@@ -61,6 +61,7 @@ class DomainConst {
     /** Constant of splitter */
     const SPLITTER_TYPE_1                               = ', ';
     const SPLITTER_TYPE_2                               = ',';
+    const SPLITTER_TYPE_3                               = '-';
     /** Date format main */
     const DATE_FORMAT_VIEW                              = self::DATE_FORMAT_5;
     /** Date format backend */
