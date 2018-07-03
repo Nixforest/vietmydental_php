@@ -493,9 +493,10 @@ class Customers extends BaseActiveRecord
         $rightContent .=        DomainConst::CONTENT00173;
         $rightContent .=    '</div>';
         $rightContent .=    '<div class="item-search">';
-        $rightContent .=        '<table style="font-size: 15px;">';
+        
+        $rightContent .=        '<table style="font-size: 15px;" id="patient-records-tbl">';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td style="width: 85%;">' . DomainConst::CONTENT00100 . ': ' . '<b>' . $this->name . '<b>' . '</td>';
+        $rightContent .=                '<td style="width: 85%;" title="'.DomainConst::CONTENT00100.'"><i class="glyphicon glyphicon-ok"></i> ' . '<b>' . $this->name . '<b>' . '</td>';
         $rightContent .=                '<td>';
         $rightContent .=                '<a href='.CommonProcess::generateQRCodeURL($this->id).' class="btn btn-default glyphicon glyphicon-info-sign" title="Chi tiết" target="_blank"></a>';
 //        $rightContent .=                    HtmlHandler::createButtonWithImage(CommonProcess::generateQRCodeURL($this->id),
@@ -505,7 +506,7 @@ class Customers extends BaseActiveRecord
         $rightContent .=            '</tr>';
         
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00170 . ': ' . '<b>' . $this->getPhone() . '<b>' . '</td>';
+        $rightContent .=                '<td title="'.DomainConst::CONTENT00170.'"><i class="glyphicon glyphicon-earphone"></i> ' . '<b>' . $this->getPhone() . '<b>' . '</td>';
         $rightContent .=                '<td style="width: 50%;">';
         $rightContent .=                '<a href='.Yii::app()->createAbsoluteUrl("admin/customers/update", array("id" => $this->id)).' class="btn btn-default glyphicon glyphicon-pencil" title="Cập nhật" target="_blank"></a>';
 //        $rightContent .=                    HtmlHandler::createButtonWithImage(
@@ -517,7 +518,7 @@ class Customers extends BaseActiveRecord
         $rightContent .=            '</tr>';
         
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00045 . ': ' . '<b>' . $this->getAddress() . '<b>' . '</td>';
+        $rightContent .=                '<td title="'.DomainConst::CONTENT00106.'"><i class="glyphicon glyphicon-home"></i> ' . '<b>' . $this->getAddress() . '<b>' . '</td>';
         $rightContent .=                '<td>';
         $rightContent .=                '<a class="btn btn-default glyphicon glyphicon-print"'
                                         .'title="In phiếu thu"'
@@ -531,22 +532,22 @@ class Customers extends BaseActiveRecord
         $rightContent .=            '</tr>';
         
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00199 . ': <b>' . $this->getAgentName() . '<b>' . '</td>';
+        $rightContent .=                '<td title="'.DomainConst::CONTENT00197.'"><i class="glyphicon glyphicon-map-marker"></i>  <b>' . $this->getAgentName() . '<b>' . '</td>';
         $rightContent .=                '<td></td>';
         $rightContent .=            '</tr>';
         
         
         
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00101 . ': ' . '<b>' . $this->getBirthday() . '<b>' . '</td>';
+        $rightContent .=                '<td title="'.DomainConst::CONTENT00101.'"><i class="	glyphicon glyphicon-gift"></i>  <b>' . $this->getBirthday() . '<b>' . '</td>';
         $rightContent .=                '<td></td>';
         $rightContent .=            '</tr>';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00047 . ': ' . '<b>' . CommonProcess::getGender()[$this->gender] . '<b>' . '</td>';
+        $rightContent .=                '<td title="'.DomainConst::CONTENT00047.'"><i class="	glyphicon glyphicon-user"></i> <b>' . CommonProcess::getGender()[$this->gender] . '<b>' . '</td>';
         $rightContent .=                '<td></td>';
         $rightContent .=            '</tr>';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00136 . ': ' . '<b>' . $recordNumber . '<b>' . '</td>';
+        $rightContent .=                '<td title="'.DomainConst::CONTENT00136.'"><i class="	glyphicon glyphicon-tasks"></i> <b>' . $recordNumber . '<b>' . '</td>';
         $rightContent .=                '<td></td>';
         $rightContent .=            '</tr>';
         
