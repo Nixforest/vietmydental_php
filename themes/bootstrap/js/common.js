@@ -149,18 +149,19 @@ function fnHandleTextChange(_url, outputId, _titleId, _titleVal) {
     });
 
     var checkLength = function (val) {
-        console.log(val);
         fnSearchCustomerReception(_url, outputId, _titleId, _titleVal);
     };
 
     $('.text-change').on('change keypress paste focus textInput input', function () {
         var val = $(this).val();
+        console.log($(this).attr('id'));
         if (val != $(this).attr('oldval')) {
             $(this).attr('oldval', val);
             checkLength($(this).val());
         }
     });
 }
+var SEARCH_CUSTOMER_KEYS = ["customer_find", "customer_find_phone", "customer_find_address", "customer_find_agent"];
 
 /**
  * Get search array value
@@ -168,11 +169,27 @@ function fnHandleTextChange(_url, outputId, _titleId, _titleVal) {
  */
 function fnGetSearchArray() {
     var arrVal = {};
-    var arrKey = ["customer_find", "customer_find_phone", "customer_find_address", "customer_find_agent"];
-    for (var i = 0; i < arrKey.length; i++) {
-        arrVal[arrKey[i]] = $("#" + arrKey[i]).val().trim();
+    for (var i = 0; i < SEARCH_CUSTOMER_KEYS.length; i++) {
+        arrVal[SEARCH_CUSTOMER_KEYS[i]] = $("#" + SEARCH_CUSTOMER_KEYS[i]).val().trim();
     }
     return arrVal;
+}
+
+/**
+ * Check if array is empty
+ * @param {Array} _array Array to check
+ * @returns {Boolean} True if all array element is empty, False otherwise
+ */
+function fnIsEmptySearchArray(_array) {
+    var retVal = false;
+    for (var i = 0; i < SEARCH_CUSTOMER_KEYS.length; i++) {
+        // Check if element is not empty
+        if (_array[SEARCH_CUSTOMER_KEYS[i]]) {
+            return true;
+        }
+    }
+    
+    return retVal;
 }
 
 /**
@@ -183,13 +200,10 @@ function fnGetSearchArray() {
 function fnSearchCustomerReception(_url, outputId, _titleId, _titleVal) {
     var val = $('.text-change').val();
     var arr = fnGetSearchArray();
-    for (var key in arr) {
-        console.log("key " + key + " has value " + arr[key]);
-    }
-    if (val.length >= 2) {
+//    if (val.length >= 2) {
+    if (fnIsEmptySearchArray(arr)) {
         $.ajax({
             url: _url,
-//            data: {ajax: 1, term: val},
             data: {ajax: 1, term: arr},
             type: "get",
             dataType: 'json',
