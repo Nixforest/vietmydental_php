@@ -493,42 +493,65 @@ class Customers extends BaseActiveRecord
         $rightContent .=        DomainConst::CONTENT00173;
         $rightContent .=    '</div>';
         $rightContent .=    '<div class="item-search">';
-        $rightContent .=        '<table>';
+        $rightContent .=        '<table style="font-size: 15px;">';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00100 . ': ' . '<b>' . $this->name . '<b>' . '</td>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00101 . ': ' . '<b>' . $this->getBirthday() . '<b>' . '</td>';
+        $rightContent .=                '<td style="width: 85%;">' . DomainConst::CONTENT00100 . ': ' . '<b>' . $this->name . '<b>' . '</td>';
+        $rightContent .=                '<td>';
+        $rightContent .=                '<a href='.CommonProcess::generateQRCodeURL($this->id).' class="btn btn-default glyphicon glyphicon-info-sign" title="Chi tiết" target="_blank"></a>';
+//        $rightContent .=                    HtmlHandler::createButtonWithImage(CommonProcess::generateQRCodeURL($this->id),
+//                                            DomainConst::CONTENT00011,
+//                                            DomainConst::IMG_VIEW_ICON, false);
+        $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
+        
         $rightContent .=            '<tr>';
         $rightContent .=                '<td>' . DomainConst::CONTENT00170 . ': ' . '<b>' . $this->getPhone() . '<b>' . '</td>';
+        $rightContent .=                '<td style="width: 50%;">';
+        $rightContent .=                '<a href='.Yii::app()->createAbsoluteUrl("admin/customers/update", array("id" => $this->id)).' class="btn btn-default glyphicon glyphicon-pencil" title="Cập nhật" target="_blank"></a>';
+//        $rightContent .=                    HtmlHandler::createButtonWithImage(
+//                                            Yii::app()->createAbsoluteUrl(
+//                                                        "admin/customers/update", array("id" => $this->id)),
+//                                            DomainConst::CONTENT00346,
+//                                            DomainConst::IMG_EDIT_ICON, false);
+        $rightContent .=                '</td>';
+        $rightContent .=            '</tr>';
+        
+        $rightContent .=            '<tr>';
+        $rightContent .=                '<td>' . DomainConst::CONTENT00045 . ': ' . '<b>' . $this->getAddress() . '<b>' . '</td>';
+        $rightContent .=                '<td>';
+        $rightContent .=                '<a class="btn btn-default glyphicon glyphicon-print"'
+                                        .'title="In phiếu thu"'
+                                        .'onclick="{createPrintDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');}" ></a>';
+        
+//        $rightContent .=                    HtmlHandler::createAjaxButtonWithImage(
+//                                            '<br>' . DomainConst::CONTENT00264, DomainConst::IMG_PRINT_ALL_ICON,
+//                                            '{createPrintDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');}',
+//                                            'cursor: pointer;');
+        $rightContent .=                '</td>';
+        $rightContent .=            '</tr>';
+        
+        $rightContent .=            '<tr>';
+        $rightContent .=                '<td>' . DomainConst::CONTENT00199 . ': <b>' . $this->getAgentName() . '<b>' . '</td>';
+        $rightContent .=                '<td></td>';
+        $rightContent .=            '</tr>';
+        
+        
+        
+        $rightContent .=            '<tr>';
+        $rightContent .=                '<td>' . DomainConst::CONTENT00101 . ': ' . '<b>' . $this->getBirthday() . '<b>' . '</td>';
+        $rightContent .=                '<td></td>';
+        $rightContent .=            '</tr>';
+        $rightContent .=            '<tr>';
         $rightContent .=                '<td>' . DomainConst::CONTENT00047 . ': ' . '<b>' . CommonProcess::getGender()[$this->gender] . '<b>' . '</td>';
+        $rightContent .=                '<td></td>';
         $rightContent .=            '</tr>';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td colspan="2">' . DomainConst::CONTENT00045 . ': ' . '<b>' . $this->getAddress() . '<b>' . '</td>';
-        $rightContent .=            '</tr>';
-        $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . '<b>' . $this->getAgentName() . '<b>' . '</td>';
         $rightContent .=                '<td>' . DomainConst::CONTENT00136 . ': ' . '<b>' . $recordNumber . '<b>' . '</td>';
+        $rightContent .=                '<td></td>';
         $rightContent .=            '</tr>';
-        $rightContent .=            '<tr>';
-        $rightContent .=                '<td style="width: 50%;">';
-        $rightContent .=                    HtmlHandler::createButtonWithImage(CommonProcess::generateQRCodeURL($this->id),
-                                            DomainConst::CONTENT00011,
-                                            DomainConst::IMG_VIEW_ICON, false);
-        $rightContent .=                '</td>';
-        $rightContent .=                '<td style="width: 50%;">';
-        $rightContent .=                    HtmlHandler::createButtonWithImage(
-                                            Yii::app()->createAbsoluteUrl(
-                                                        "admin/customers/update", array("id" => $this->id)),
-                                            DomainConst::CONTENT00346,
-                                            DomainConst::IMG_EDIT_ICON, false);
-        $rightContent .=                '</td>';
-        $rightContent .=            '</tr>';
-        $rightContent .=                '<tr><td>';
-        $rightContent .=                    HtmlHandler::createAjaxButtonWithImage(
-                '<br>' . DomainConst::CONTENT00264, DomainConst::IMG_PRINT_ALL_ICON,
-                '{createPrintDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');}',
-                'cursor: pointer;');
-        $rightContent .=                '</td></tr>';
+        
+
+
         $pathological = '';
         if (isset($this->rMedicalRecord)) {
             $pathological = $this->rMedicalRecord->generateMedicalHistory(", ");
