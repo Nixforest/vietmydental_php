@@ -18,11 +18,28 @@
             <div class="box-search">
                 <form>
                     <span class="icon-s"></span>
-                    <input type="text" class="form-control text-change"  placeholder="Tìm Kiếm Bệnh Nhân"
+                    <input type="text" class="form-control text-change"  placeholder="<?php echo DomainConst::CONTENT00382?>"
                            id="customer_find">
                 </form>
             </div>
             
+            <div class="title-2">
+                <?php echo DomainConst::CONTENT00073; ?>
+            </div>
+            <div class="box-search">
+                <form>
+                    <span class="icon-s1"></span>
+                    <input type="text" class="form-control text-change"  placeholder="<?php echo DomainConst::CONTENT00170?>"
+                           id="customer_find_phone">
+                </form>
+            </div>
+            <div class="box-search">
+                <form>
+                    <span class="icon-s"></span>
+                    <input type="text" class="form-control text-change"  placeholder="<?php echo DomainConst::CONTENT00045?>"
+                           id="customer_find_address">
+                </form>
+            </div>
             <div class="info-result" id="customer_info_schedule">
                 <div class="group-btn" id="create_customer">
                     <?php
