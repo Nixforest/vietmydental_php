@@ -283,7 +283,12 @@ class AjaxController extends AdminController
     public function actionSearchCustomerReception() {
 	if (isset($_GET[AjaxController::KEY_AJAX]) && $_GET[AjaxController::KEY_AJAX] == 1) {
             if (isset($_GET[AjaxController::KEY_TERM])) {
-                $keyword = trim($_GET[AjaxController::KEY_TERM]);
+//                $keyword = trim($_GET[AjaxController::KEY_TERM]);
+                $keyword = '';
+                $keywordArr = ($_GET[AjaxController::KEY_TERM]);
+                if (isset($keywordArr["customer_find"])) {
+                    $keyword = $keywordArr["customer_find"];
+                }
                 $arrKeyword = explode(",", $keyword);
                 $models = array();
                 if (is_array($arrKeyword) && count($arrKeyword) > 1) {
@@ -297,6 +302,19 @@ class AjaxController extends AdminController
                     $criteria->addCondition("t.name like '%$keyVal1%' and (YEAR(t.date_of_birth) like '%$keyVal2%' or t.year_of_birth like '%$keyVal2%')");
                     $criteria->limit = 50;
                     $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
+                    if (isset($keywordArr["customer_find_phone"])) {
+                        $phone = $keywordArr["customer_find_phone"];
+                        $criteria->addCondition("t.phone like'%$phone%'");
+                    }
+                    if (isset($keywordArr["customer_find_address"])) {
+                        $address = $keywordArr["customer_find_address"];
+                        $criteria->addCondition("t.address like'%$address%'");
+                    }
+                    $agentId = '';
+                    if (isset($keywordArr["customer_find_agent"])) {
+                        $agentId = $keywordArr["customer_find_agent"];
+                    }
+                    
                     $models = Customers::model()->findAll($criteria);
 
                     $medicalRecords = $this->findCustomerByRecordNumber($keyword);
@@ -307,13 +325,39 @@ class AjaxController extends AdminController
                             }
                         }
                     }
+                    // Search by agent
+                    if (!empty($agentId)) {
+                        $result = array();
+                        foreach ($models as $model) {
+                            if ($model->getAgentId() == $agentId) {
+                                $result[] = $model;
+                            }
+                        }
+                        $models = $result;
+                    }
                 } else {
                     $criteria = new CDbCriteria();
 //                    $criteria->addCondition("t.name like '%$keyword%' or t.phone like '%$keyword%'");
-                    $criteria->addCondition("t.name like '%$keyword%' or t.phone like '%$keyword%' or YEAR(t.date_of_birth) like '%$keyword%' or t.year_of_birth like '%$keyword%'");
+//                    $criteria->addCondition("t.name like '%$keyword%' or t.phone like '%$keyword%' or YEAR(t.date_of_birth) like '%$keyword%' or t.year_of_birth like '%$keyword%'");
                     $criteria->limit = 50;
     //                $criteria->compare("t.status", DomainConst::DEFAULT_STATUS_ACTIVE);
                     $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
+                    if (isset($keywordArr["customer_find"])) {
+                        $name = $keywordArr["customer_find"];
+                        $criteria->addCondition("t.name like'%$name%'");
+                    }
+                    if (isset($keywordArr["customer_find_phone"])) {
+                        $phone = $keywordArr["customer_find_phone"];
+                        $criteria->addCondition("t.phone like'%$phone%'");
+                    }
+                    if (isset($keywordArr["customer_find_address"])) {
+                        $address = $keywordArr["customer_find_address"];
+                        $criteria->addCondition("t.address like'%$address%'");
+                    }
+                    $agentId = '';
+                    if (isset($keywordArr["customer_find_agent"])) {
+                        $agentId = $keywordArr["customer_find_agent"];
+                    }
                     $models = Customers::model()->findAll($criteria);
 
                     $medicalRecords = $this->findCustomerByRecordNumber($keyword);
@@ -323,6 +367,16 @@ class AjaxController extends AdminController
                                 array_push($models, $record->rCustomer);
                             }
                         }
+                    }
+                    // Search by agent
+                    if (!empty($agentId)) {
+                        $result = array();
+                        foreach ($models as $model) {
+                            if ($model->getAgentId() == $agentId) {
+                                $result[] = $model;
+                            }
+                        }
+                        $models = $result;
                     }
                 }
                 $retVal = '<div class="scroll-table">';

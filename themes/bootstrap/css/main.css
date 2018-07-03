@@ -431,31 +431,53 @@ th.col-4 {
 
 .group-btn {
     text-align: center;
-    border-top: 1px solid #fff;
+    /*border-top: 1px solid #fff;*/ 
     padding-top: 20px;
     padding-bottom: 20px;
 }
 
 .group-btn a {
-    background: #0866cd;
+    position: relative;
+    background: #337ab7;
     display: inline-block;
     color: #fff;
     font-weight: bold;
     text-decoration: none;
     font-size: 16px;
-    padding: 20px 35px;
-    border-radius: 9px;
+    padding: 10px 13px;
+    border-radius: 5px;
+    border: 2px solid #1566ab;
 }
 
+/*new css by DuongNV*/
+.group-btn a::after {
+    content: "";
+    width: 0%;
+    margin-left: 15%;
+    height: 2px;
+    background: white;
+    position: absolute;
+    left: 0;
+    bottom: 5px;
+}
+
+.group-btn a:hover::after{
+    width: 70%;
+    transition: .5s;
+}
+/*end*/
+
 .group-btn a:hover {
-    color: #333;
-    background: rgb(205, 205, 205);
+    color: white;
+    text-decoration: none;
+    background: #003f75; /** set new background by DuongNV
+/*    background: rgb(205, 205, 205);*/
     /* Old browsers */
-    background: -moz-linear-gradient(top, rgba(205, 205, 205, 1) 0%, rgba(251, 252, 252, 1) 99%);
+    /*background: -moz-linear-gradient(top, rgba(205, 205, 205, 1) 0%, rgba(251, 252, 252, 1) 99%);*/
     /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, rgba(205, 205, 205, 1) 0%, rgba(251, 252, 252, 1) 99%);
+    /*background: -webkit-linear-gradient(top, rgba(205, 205, 205, 1) 0%, rgba(251, 252, 252, 1) 99%);*/
     /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, rgba(205, 205, 205, 1) 0%, rgba(251, 252, 252, 1) 99%);
+    /*background: linear-gradient(to bottom, rgba(205, 205, 205, 1) 0%, rgba(251, 252, 252, 1) 99%);*/
     /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 .item-search .group-btn a {

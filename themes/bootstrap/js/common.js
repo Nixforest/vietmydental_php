@@ -144,22 +144,52 @@ function fnBindChangeDistrict(inputId, outputId, url_) {
  * @param {String} outputId Id of output DOM
  */
 function fnHandleTextChange(_url, outputId, _titleId, _titleVal) {
-    $('.text-change').each(function(){
-        $(this).attr('oldval',$(this).val());
-   });
-    
+    $('.text-change').each(function () {
+        $(this).attr('oldval', $(this).val());
+    });
+
     var checkLength = function (val) {
-        console.log(val);
         fnSearchCustomerReception(_url, outputId, _titleId, _titleVal);
     };
 
-   $('.text-change').on('change keypress paste focus textInput input',function(){
-       var val = $(this).val();
-       if(val != $(this).attr('oldval') ){
-           $(this).attr('oldval',val); 
-           checkLength($(this).val());
+    $('.text-change').on('change keypress paste focus textInput input', function () {
+        var val = $(this).val();
+        console.log($(this).attr('id'));
+        if (val != $(this).attr('oldval')) {
+            $(this).attr('oldval', val);
+            checkLength($(this).val());
         }
     });
+}
+var SEARCH_CUSTOMER_KEYS = ["customer_find", "customer_find_phone", "customer_find_address", "customer_find_agent"];
+
+/**
+ * Get search array value
+ * @returns {unresolved}
+ */
+function fnGetSearchArray() {
+    var arrVal = {};
+    for (var i = 0; i < SEARCH_CUSTOMER_KEYS.length; i++) {
+        arrVal[SEARCH_CUSTOMER_KEYS[i]] = $("#" + SEARCH_CUSTOMER_KEYS[i]).val().trim();
+    }
+    return arrVal;
+}
+
+/**
+ * Check if array is empty
+ * @param {Array} _array Array to check
+ * @returns {Boolean} True if all array element is empty, False otherwise
+ */
+function fnIsEmptySearchArray(_array) {
+    var retVal = false;
+    for (var i = 0; i < SEARCH_CUSTOMER_KEYS.length; i++) {
+        // Check if element is not empty
+        if (_array[SEARCH_CUSTOMER_KEYS[i]]) {
+            return true;
+        }
+    }
+    
+    return retVal;
 }
 
 /**
@@ -169,23 +199,25 @@ function fnHandleTextChange(_url, outputId, _titleId, _titleVal) {
  */
 function fnSearchCustomerReception(_url, outputId, _titleId, _titleVal) {
     var val = $('.text-change').val();
-    if (val.length >= 2) {
+    var arr = fnGetSearchArray();
+//    if (val.length >= 2) {
+    if (fnIsEmptySearchArray(arr)) {
         $.ajax({
             url: _url,
-            data: { ajax: 1, term: val },
+            data: {ajax: 1, term: arr},
             type: "get",
             dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 // Show list customers
                 $(outputId).html(data['rightContent']);
                 // Change title
                 $(_titleId).html(_titleVal);
                 if (data['count'] != 0) {
                     // Hide create customer button
-                    $('.info-content .info-result #create_customer').css({ display: "none"});
+                    $('.info-content .info-result #create_customer').css({display: "none"});
                 } else {
                     // Show create customer button
-                    $('.info-content .info-result #create_customer').css({ display: "block"});
+                    $('.info-content .info-result #create_customer').css({display: "block"});
                 }
             }
         });
@@ -193,7 +225,7 @@ function fnSearchCustomerReception(_url, outputId, _titleId, _titleVal) {
         // Clear list customers
         $(outputId).html('');
         // Show create customer button
-        $('.info-content .info-result #create_customer').css({ display: "block"});
+        $('.info-content .info-result #create_customer').css({display: "block"});
         $('.left-page .info-content .info-result .content').html('');
     }
 }
@@ -210,10 +242,10 @@ function fnSearchCustomerReception(_url, outputId, _titleId, _titleVal) {
 function fnShowCustomerInfo(_url, _outputId, _titleId, _titleVal, _customerId) {
     $.ajax({
         url: _url,
-        data: { ajax: 1, term: _customerId },
+        data: {ajax: 1, term: _customerId},
         type: "get",
         dataType: 'json',
-        success: function(data) {
+        success: function (data) {
             $(_outputId).html(data['rightContent']);
             $(_titleId).html(_titleVal);
             $('.left-page .info-content .info-result .content').html(data['infoSchedule']);
@@ -237,47 +269,47 @@ function fnShowTreatmentScheduleDetailInfo(_url, _id, _outputId) {
         },
         type: "get",
         dataType: 'json',
-        success: function(data){
+        success: function (data) {
             $(_outputId).html(data['data']);
         }
     });
 }
-function validateNumber(){     
-//    console.log('Bind event input number');
-    $(".number_only_v1").each(function(){
-            $(this).unbind("keydown");
-            $(this).bind("keydown",function(event){
-                if( !(event.keyCode === 8                                // backspace
-                    || event.keyCode === 46                              // delete
-                    || event.keyCode === 110                              // dấu chám bên bàn phím nhỏ
-                    || event.keyCode === 9							// tab
-                    || event.keyCode === 190							// dấu chấm (point) 
-                    || (event.keyCode >= 35 && event.keyCode <= 40)     // arrow keys/home/end
-                    || (event.keyCode >= 48 && event.keyCode <= 57)     // numbers on keyboard
-                    || (event.keyCode >= 96 && event.keyCode <= 105))   // number on keypad
-                    ) {
-                        event.preventDefault();     // Prevent character input
-                    }
-            });
-    });
-
-    return;
-    $(".number_only").each(function(){
-            $(this).unbind("keydown");
-            $(this).bind("keydown",function(event){
-                if( !(event.keyCode === 8                                // backspace
-                    || event.keyCode === 46                              // delete
-                    || event.keyCode === 9							// tab
-                    || event.keyCode === 190							// dấu chấm (point) 
-                    || (event.keyCode >= 35 && event.keyCode <= 40)     // arrow keys/home/end
-                    || (event.keyCode >= 48 && event.keyCode <= 57)     // numbers on keyboard
-                    || (event.keyCode >= 96 && event.keyCode <= 105))   // number on keypad
-                    ) {
-                        event.preventDefault();     // Prevent character input
-                    }
-            });
-    });
-}
+//function validateNumber(){     
+////    console.log('Bind event input number');
+//    $(".number_only_v1").each(function(){
+//            $(this).unbind("keydown");
+//            $(this).bind("keydown",function(event){
+//                if( !(event.keyCode === 8                                // backspace
+//                    || event.keyCode === 46                              // delete
+//                    || event.keyCode === 110                              // dấu chám bên bàn phím nhỏ
+//                    || event.keyCode === 9							// tab
+//                    || event.keyCode === 190							// dấu chấm (point) 
+//                    || (event.keyCode >= 35 && event.keyCode <= 40)     // arrow keys/home/end
+//                    || (event.keyCode >= 48 && event.keyCode <= 57)     // numbers on keyboard
+//                    || (event.keyCode >= 96 && event.keyCode <= 105))   // number on keypad
+//                    ) {
+//                        event.preventDefault();     // Prevent character input
+//                    }
+//            });
+//    });
+//
+//    return;
+//    $(".number_only").each(function(){
+//            $(this).unbind("keydown");
+//            $(this).bind("keydown",function(event){
+//                if( !(event.keyCode === 8                                // backspace
+//                    || event.keyCode === 46                              // delete
+//                    || event.keyCode === 9							// tab
+//                    || event.keyCode === 190							// dấu chấm (point) 
+//                    || (event.keyCode >= 35 && event.keyCode <= 40)     // arrow keys/home/end
+//                    || (event.keyCode >= 48 && event.keyCode <= 57)     // numbers on keyboard
+//                    || (event.keyCode >= 96 && event.keyCode <= 105))   // number on keypad
+//                    ) {
+//                        event.preventDefault();     // Prevent character input
+//                    }
+//            });
+//    });
+//}
 
 /**
  * Function handle BEFORE user click on remove icon at Upload file form
@@ -300,9 +332,9 @@ function fnAfterRemoveActionUploadFile() {}
  */
 function fnRefreshOrderNumber() {
     validateNumber();
-    $('.upload_files_table').each(function() {
+    $('.upload_files_table').each(function () {
         var index = 1;
-        $(this).find('.order_no').each(function() {
+        $(this).find('.order_no').each(function () {
             $(this).text(index++);
         });
     });
@@ -313,7 +345,7 @@ function fnRefreshOrderNumber() {
  * @returns {undefined}
  */
 function fnBindRemoveActionUploadFile() {
-    $('.remove_icon_only').live('click', function() {
+    $('.remove_icon_only').live('click', function () {
         if (confirm("Bạn chắc chắn muốn xóa?")) {
             fnBeforeRemoveActionUploadFile($(this));
             $(this).closest('tr').remove();
@@ -331,16 +363,16 @@ function fnBindRemoveActionUploadFile() {
 function fnFormatCurrency(price) {
     // Create our number formatter.
     var formatter = new Intl.NumberFormat('de-DE', {
-      style: 'currency',
-      currency: 'VND',
-      minimumFractionDigits: 0,
-      // the default value for minimumFractionDigits depends on the currency
-      // and is usually already 2
+        style: 'currency',
+        currency: 'VND',
+        minimumFractionDigits: 0,
+        // the default value for minimumFractionDigits depends on the currency
+        // and is usually already 2
     });
     return formatter.format(price);
 }
 function fnUpdateValue(_input, _label) {
     var nameValue = $(_input).val();
-       $(_label).val(fnFormatCurrency(nameValue));
+    $(_label).val(fnFormatCurrency(nameValue));
 }
 

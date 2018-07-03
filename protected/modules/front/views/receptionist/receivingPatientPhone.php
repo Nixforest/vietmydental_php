@@ -18,16 +18,38 @@
             <div class="box-search">
                 <form>
                     <span class="icon-s"></span>
-                    <input type="text" class="form-control text-change"  placeholder="Tìm Kiếm Bệnh Nhân"
+                    <input type="text" class="form-control text-change"  placeholder="<?php echo DomainConst::CONTENT00382?>"
                            id="customer_find">
                 </form>
             </div>
             
-            <div class="info-result" id="customer_info_schedule">
+            <div class="title-2" data-toggle="collapse" data-target="#advance-search-ctn">
+                <?php echo DomainConst::CONTENT00073; ?>
+                <i class="glyphicon glyphicon-chevron-down"></i>
+            </div>
+            <div class="box-search collapse" id="advance-search-ctn" style="text-align: center;">
+                <form style="width: 350px; margin: auto;">
+                    <input type="text" class="form-control text-change" placeholder="<?php echo DomainConst::CONTENT00170?>"
+                           id="customer_find_phone">
+                    <input type="text" class="form-control text-change" placeholder="<?php echo DomainConst::CONTENT00045?>"
+                           id="customer_find_address">
+                    <select id="customer_find_agent" class="form-control" name="customer_find[agent]" style="width: 350px!important; color: #277aff;">
+                        <?php
+                        $html = '<option value="" style="color: black">' . DomainConst::CONTENT00383 . '</option>';
+                        foreach (Agents::loadItems() as $key => $agent) {
+                            $html .= '<option value="' . $key . '"  style="color: black">' . $agent . '</option>';
+                        }
+                        echo $html;
+                        ?>
+                    </select>
+                </form>
+            </div>
+            <div id="customer_info_schedule" style="text-align: center"> <!--class="info-result"-->
                 <div class="group-btn" id="create_customer">
                     <?php
                         echo CHtml::link(
-                                '<img src="' . Yii::app()->theme->baseUrl . DomainConst::IMG_BASE_PATH . DomainConst::IMG_ADD_ICON . '"> '
+//                                '<img src="' . Yii::app()->theme->baseUrl . DomainConst::IMG_BASE_PATH . DomainConst::IMG_ADD_ICON . '"> '
+                                '<i class="glyphicon glyphicon-plus" style="margin-right: 5px;"></i>'
                                 . DomainConst::CONTENT00176,
                                 '#', array(
                             'style' => 'cursor: pointer;',
@@ -137,7 +159,13 @@
                 "#right_page_title",
                 "<?php echo DomainConst::CONTENT00172 ?>",
                 $(this).attr('id'));
-//        alert($(this).attr('id'));
+    });
+    $("#customer_find_agent").change(function() {
+        fnSearchCustomerReception(
+                "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/searchCustomerReception'); ?>",
+                "#right-content",
+                "#right_page_title",
+                "<?php echo DomainConst::CONTENT00171 ?>");
     });
 </script>
 <script type="text/javascript">

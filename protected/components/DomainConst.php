@@ -62,6 +62,8 @@ class DomainConst {
     const SPLITTER_TYPE_1                               = ', ';
     const SPLITTER_TYPE_2                               = ',';
     const SPLITTER_TYPE_3                               = '-';
+    /** Html space */
+    const SPACE                                         = '&nbsp;';
     /** Date format main */
     const DATE_FORMAT_VIEW                              = self::DATE_FORMAT_5;
     /** Date format backend */
@@ -1378,4 +1380,6 @@ class DomainConst {
     const CONTENT00381  = 'Thời gian bảo hành';
     const CONTENT00382  = 'Thời gian còn lại';
     const CONTENT00383  = 'Điều trị đã hoàn thành, không thể cập nhật.';
+    const CONTENT00384  = 'Tìm kiếm bệnh nhân';
+    const CONTENT00385  = 'Chọn chi nhánh';
 }
