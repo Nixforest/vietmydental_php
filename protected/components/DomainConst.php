@@ -61,6 +61,8 @@ class DomainConst {
     /** Constant of splitter */
     const SPLITTER_TYPE_1                               = ', ';
     const SPLITTER_TYPE_2                               = ',';
+    /** Html space */
+    const SPACE                                         = '&nbsp;';
     /** Date format main */
     const DATE_FORMAT_VIEW                              = self::DATE_FORMAT_5;
     /** Date format backend */
@@ -1376,4 +1378,5 @@ class DomainConst {
     const CONTENT00380  = 'Hình ảnh trước và sau điều trị';
     const CONTENT00381  = 'Thời gian bảo hành';
     const CONTENT00382  = 'Tìm kiếm bệnh nhân';
+    const CONTENT00383  = 'Chọn chi nhánh';
 }

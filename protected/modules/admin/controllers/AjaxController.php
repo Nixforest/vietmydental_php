@@ -302,10 +302,6 @@ class AjaxController extends AdminController
                     $criteria->addCondition("t.name like '%$keyVal1%' and (YEAR(t.date_of_birth) like '%$keyVal2%' or t.year_of_birth like '%$keyVal2%')");
                     $criteria->limit = 50;
                     $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
-//                    if (isset($keywordArr["customer_find"])) {
-//                        $name = $keywordArr["customer_find"];
-//                        $criteria->addCondition("t.name like'%$name%'");
-//                    }
                     if (isset($keywordArr["customer_find_phone"])) {
                         $phone = $keywordArr["customer_find_phone"];
                         $criteria->addCondition("t.phone like'%$phone%'");
@@ -313,6 +309,10 @@ class AjaxController extends AdminController
                     if (isset($keywordArr["customer_find_address"])) {
                         $address = $keywordArr["customer_find_address"];
                         $criteria->addCondition("t.address like'%$address%'");
+                    }
+                    $agentId = '';
+                    if (isset($keywordArr["customer_find_agent"])) {
+                        $agentId = $keywordArr["customer_find_agent"];
                     }
                     
                     $models = Customers::model()->findAll($criteria);
@@ -324,6 +324,16 @@ class AjaxController extends AdminController
                                 array_push($models, $record->rCustomer);
                             }
                         }
+                    }
+                    // Search by agent
+                    if (!empty($agentId)) {
+                        $result = array();
+                        foreach ($models as $model) {
+                            if ($model->getAgentId() == $agentId) {
+                                $result[] = $model;
+                            }
+                        }
+                        $models = $result;
                     }
                 } else {
                     $criteria = new CDbCriteria();
@@ -344,6 +354,10 @@ class AjaxController extends AdminController
                         $address = $keywordArr["customer_find_address"];
                         $criteria->addCondition("t.address like'%$address%'");
                     }
+                    $agentId = '';
+                    if (isset($keywordArr["customer_find_agent"])) {
+                        $agentId = $keywordArr["customer_find_agent"];
+                    }
                     $models = Customers::model()->findAll($criteria);
 
                     $medicalRecords = $this->findCustomerByRecordNumber($keyword);
@@ -353,6 +367,16 @@ class AjaxController extends AdminController
                                 array_push($models, $record->rCustomer);
                             }
                         }
+                    }
+                    // Search by agent
+                    if (!empty($agentId)) {
+                        $result = array();
+                        foreach ($models as $model) {
+                            if ($model->getAgentId() == $agentId) {
+                                $result[] = $model;
+                            }
+                        }
+                        $models = $result;
                     }
                 }
                 $retVal = '<div class="scroll-table">';
@@ -411,7 +435,7 @@ class AjaxController extends AdminController
                 Settings::saveAjaxTempValue1($model->id);
                 $rightContent = $model->getCustomerAjaxInfo();
                 $infoSchedule = $model->getCustomerAjaxScheduleInfo();
-            }
+                }
             $json = CJavaScript::jsonEncode(array(
                 'rightContent'  => $rightContent,
                 'infoSchedule' => $infoSchedule,
