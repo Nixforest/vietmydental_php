@@ -593,12 +593,29 @@ class Customers extends BaseActiveRecord
                                     $updateTag = HtmlHandler::createCustomButton(
                                             Yii::app()->createAbsoluteUrl(
                                                         "admin/treatmentScheduleDetails/view", array("id" => $detail->id)),
-                                            $btnTitle, $detail->getStartTime(), $detail->getDoctor(), array('name'=>'complete', 'type'=>1));
+                                            $btnTitle,
+                                            $detail->getStartTime(),
+                                            $detail->getDoctor(),
+                                            Yii::app()->createAbsoluteUrl(
+                                                    "admin/receipts/createReceptionist", array("detailId" => $detail->id)),
+                                            Yii::app()->createAbsoluteUrl(
+                                                    "admin/receipts/createReceptionist", array("detailId" => $detail->id)),
+                                            'alert(\'' . DomainConst::CONTENT00383 . '\')',
+                                            'alert(\'' . DomainConst::CONTENT00375 . '\')',
+                                            array('name'=>'complete', 'type'=>1));
                                 } else {
                                     $updateTag = HtmlHandler::createCustomButton(
                                             Yii::app()->createAbsoluteUrl(
                                                         "admin/treatmentScheduleDetails/update", array("id" => $detail->id)),
-                                            $btnTitle, $detail->getStartTime(), $detail->getDoctor(), array('name'=>'new', 'type'=>0));
+                                            $btnTitle, $detail->getStartTime(),
+                                            $detail->getDoctor(),
+                                            Yii::app()->createAbsoluteUrl(
+                                                    "admin/receipts/createReceptionist", array("detailId" => $detail->id)),
+                                            Yii::app()->createAbsoluteUrl(
+                                                    "admin/receipts/createReceptionist", array("detailId" => $detail->id)),
+                                            '',
+                                            'alert(\'' . DomainConst::CONTENT00375 . '\')',
+                                            array('name'=>'new', 'type'=>0));
                                 }
                             default:
                                 break;

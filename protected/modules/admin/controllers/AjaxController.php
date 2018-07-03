@@ -381,6 +381,13 @@ class AjaxController extends AdminController
                 Settings::saveAjaxTempValue1($model->id);
                 $rightContent = $model->getCustomerAjaxInfo();
                 $infoSchedule = $model->getCustomerAjaxScheduleInfo();
+            } else {
+                $id = Settings::getAjaxTempValue1();
+                $model = Customers::model()->findByPk($id);
+                if ($model) {
+                    $rightContent = $model->getCustomerAjaxInfo();
+                    $infoSchedule = $model->getCustomerAjaxScheduleInfo();
+                }
             }
             $json = CJavaScript::jsonEncode(array(
                 'rightContent'  => $rightContent,

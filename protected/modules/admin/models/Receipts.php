@@ -554,7 +554,12 @@ class Receipts extends CActiveRecord
      * @return type
      */
     public function getDebitText() {
-        return CommonProcess::formatCurrency($this->getDebit()) . ' ' . DomainConst::CONTENT00134;
+        $debit = $this->getDebit();
+        if ($debit > 0) {
+            return CommonProcess::formatCurrency($debit) . ' ' . DomainConst::CONTENT00134;
+        }
+        return '';
+//            return CommonProcess::formatCurrency($debit) . ' ' . DomainConst::CONTENT00134;
     }
     
     /**

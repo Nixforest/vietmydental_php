@@ -123,6 +123,12 @@
                 "#right-content",
                 "#right_page_title",
                 "<?php echo DomainConst::CONTENT00171 ?>");
+        fnShowCustomerInfo(
+                "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/getCustomerInfo'); ?>",
+                "#right-content",
+                "#right_page_title",
+                "<?php echo DomainConst::CONTENT00172 ?>",
+                '');
     });
     $("body").on("click", "#customer-info tbody tr", function() {
         fnShowCustomerInfo(
