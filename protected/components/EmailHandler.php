@@ -35,7 +35,6 @@ class EmailHandler {
         
         // Body
         $message->setBody($data[DomainConst::KEY_PARAMS], 'text/html');
-        
         // Receiver
         if (is_array($data[DomainConst::KEY_TO])) {
             foreach ($data[DomainConst::KEY_TO] as $value) {
@@ -61,7 +60,12 @@ class EmailHandler {
 //        CommonProcess::dumpVariable($message->from);
 //        CommonProcess::dumpVariable(Yii::app()->mail->transportOptions[DomainConst::KEY_HOST]);
 //        CommonProcess::dumpVariable(Yii::app()->mail->class);
-        return Yii::app()->mail->send($message);
+        try {
+            Yii::app()->mail->send($message);
+            Loggers::info(__METHOD__,'Gửi mail thành công', get_class());
+        } catch (Exception $e) {
+            Loggers::info(__METHOD__, $e->getMessage(), get_class());
+        }
 //        return Yii::app()->mail->sendSimple('nguyenpt@spj.vn', 'nixforest@live.com', 'Subject', 'Body');
     }
     
