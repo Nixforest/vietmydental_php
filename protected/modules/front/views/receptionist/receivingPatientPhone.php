@@ -18,7 +18,7 @@
             <div class="box-search">
                 <form>
                     <span class="icon-s"></span>
-                    <input type="text" class="form-control text-change"  placeholder="<?php echo DomainConst::CONTENT00382?>"
+                    <input type="text" class="form-control text-change"  placeholder="<?php echo DomainConst::CONTENT00384?>"
                            id="customer_find">
                 </form>
             </div>
@@ -35,7 +35,7 @@
                            id="customer_find_address">
                     <select id="customer_find_agent" class="form-control" name="customer_find[agent]" style="width: 350px!important; color: #277aff;">
                         <?php
-                        $html = '<option value="" style="color: black">' . DomainConst::CONTENT00383 . '</option>';
+                        $html = '<option value="" style="color: black">' . DomainConst::CONTENT00385 . '</option>';
                         foreach (Agents::loadItems() as $key => $agent) {
                             $html .= '<option value="' . $key . '"  style="color: black">' . $agent . '</option>';
                         }
@@ -44,7 +44,7 @@
                     </select>
                 </form>
             </div>
-            <div id="customer_info_schedule" style="text-align: center"> <!--class="info-result"-->
+            <div id="customer_info_schedule" class="info-result"> <!-- style="text-align: center" -->
                 <div class="group-btn" id="create_customer">
                     <?php
                         echo CHtml::link(
