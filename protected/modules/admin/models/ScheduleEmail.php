@@ -22,7 +22,7 @@ class ScheduleEmail extends BaseActiveRecord
     //-----------------------------------------------------
     // Type of email
     //-----------------------------------------------------
-    const MAIL_NORMAL               = 1;            // Normail email
+    const MAIL_NORMAL               = 2;            // Normail email
     
 	/**
 	 * Returns the static model of the specified AR class.
@@ -171,6 +171,7 @@ class ScheduleEmail extends BaseActiveRecord
             ScheduleEmail::prepareData($aScheduleEmail, $aIdScheduleEmail,
                     $aUsers, $aIdUsers, '');
             $countSent = count($aIdUsers);
+            
             if ($countSent > 0) {
                 $aIdDelete = array();
                 foreach ($aScheduleEmail as $key => $mScheduleEmail) {
