@@ -28,23 +28,34 @@
                 <i class="glyphicon glyphicon-chevron-down"></i>
             </div>
             <div class="box-search collapse" id="advance-search-ctn" style="text-align: center;">
-                <form style="width: 350px; margin: auto;">
-                    <input type="text" class="form-control text-change" placeholder="<?php echo DomainConst::CONTENT00170?>"
+                <form style="width: 350px; margin: auto; height: 185px;">
+                    <div class="form-ctn">
+                        <i class="glyphicon glyphicon-search"></i>
+                        <input type="text" class="form-control text-change" placeholder="<?php echo DomainConst::CONTENT00170?>"
                            id="customer_find_phone">
-                    <input type="text" class="form-control text-change" placeholder="<?php echo DomainConst::CONTENT00045?>"
+                    </div>
+                    
+                    <div class="form-ctn">
+                        <i class="glyphicon glyphicon-home"></i>
+                        <input type="text" class="form-control text-change" placeholder="<?php echo DomainConst::CONTENT00045?>"
                            id="customer_find_address">
-                    <select id="customer_find_agent" class="form-control" name="customer_find[agent]" style="width: 350px!important; color: #277aff;">
-                        <?php
-                        $html = '<option value="" style="color: black">' . DomainConst::CONTENT00383 . '</option>';
-                        foreach (Agents::loadItems() as $key => $agent) {
-                            $html .= '<option value="' . $key . '"  style="color: black">' . $agent . '</option>';
-                        }
-                        echo $html;
-                        ?>
-                    </select>
+                    </div>
+                    
+                    <div class="form-ctn">
+                        <i class="glyphicon glyphicon-map-marker"></i>
+                        <select id="customer_find_agent" class="form-control" name="customer_find[agent]" style="width: 350px!important; color: #277aff;">
+                            <?php
+                            $html = '<option value="" style="color: black">' . DomainConst::CONTENT00383 . '</option>';
+                            foreach (Agents::loadItems() as $key => $agent) {
+                                $html .= '<option value="' . $key . '"  style="color: black">' . $agent . '</option>';
+                            }
+                            echo $html;
+                            ?>
+                        </select>
+                    </div>
                 </form>
             </div>
-            <div id="customer_info_schedule" style="text-align: center"> <!--class="info-result"-->
+            <div id="customer_info_schedule" class="info-result">
                 <div class="group-btn" id="create_customer">
                     <?php
                         echo CHtml::link(
