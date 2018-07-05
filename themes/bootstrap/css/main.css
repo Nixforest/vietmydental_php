@@ -1139,4 +1139,5 @@ svg.mark-icon {
     fill: #a7a7a7;
 }
 .round-txt{margin-left: -20px;}
+#patient-records-tbl td{height: 46px;}
 .form-ctn .glyphicon{ position: relative; right: 152px; top: 28px; }
