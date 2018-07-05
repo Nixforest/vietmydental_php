@@ -17,32 +17,35 @@
         <div class="info-content">
             <div class="box-search">
                 <form>
-                    <span class="icon-s"></span>
+                    <span class="icon-s" style="top:20px;"></span>
+                    <i class="clr-txt-btn search-area glyphicon glyphicon-remove"></i>
                     <input type="text" class="form-control text-change"  placeholder="<?php echo DomainConst::CONTENT00384?>"
                            id="customer_find">
                 </form>
             </div>
             
-            <div class="title-2" data-toggle="collapse" data-target="#advance-search-ctn">
+            <div class="title-2" id="adv-search-btn" data-toggle="collapse" data-target="#advance-search-ctn">
                 <?php echo DomainConst::CONTENT00073; ?>
                 <i class="glyphicon glyphicon-chevron-down"></i>
             </div>
             <div class="box-search collapse" id="advance-search-ctn" style="text-align: center;">
                 <form style="width: 350px; margin: auto; height: 185px;">
                     <div class="form-ctn">
-                        <i class="glyphicon glyphicon-search"></i>
+                        <i class="left-input-icon glyphicon glyphicon-search"></i>
                         <input type="text" class="form-control text-change" placeholder="<?php echo DomainConst::CONTENT00170?>"
                            id="customer_find_phone">
+                        <i class="clr-txt-btn as-area glyphicon glyphicon-remove"></i>
                     </div>
                     
                     <div class="form-ctn">
-                        <i class="glyphicon glyphicon-home"></i>
+                        <i class="left-input-icon glyphicon glyphicon-home"></i>
                         <input type="text" class="form-control text-change" placeholder="<?php echo DomainConst::CONTENT00045?>"
                            id="customer_find_address">
+                        <i class="clr-txt-btn as-area glyphicon glyphicon-remove"></i>
                     </div>
                     
                     <div class="form-ctn">
-                        <i class="glyphicon glyphicon-map-marker"></i>
+                        <i class="left-input-icon glyphicon glyphicon-map-marker"></i>
                         <select id="customer_find_agent" class="form-control" name="customer_find[agent]" style="width: 350px!important; color: #277aff;">
                             <?php
                             $html = '<option value="" style="color: black">' . DomainConst::CONTENT00385 . '</option>';
@@ -377,4 +380,21 @@
         ?>;
         return false;
     }
+    
+    
+    /*
+     * Customer clear text button at search box and advance search
+     * DuongNV
+     */
+    $(document).on('click', '.clr-txt-btn', function(){
+        $(this).siblings('input').val("");
+    })
+    $(document).on('click', '#adv-search-btn', function(){
+        var isHidden = $('#adv-search-btn').hasClass('collapsed');
+        if(isHidden){
+            $('#customer_find_phone').val('');
+            $('#customer_find_address').val('');
+            $('#customer_find_agent option').eq(0).attr('selected','selectd');
+        }
+    })
 </script>
