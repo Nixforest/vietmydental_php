@@ -32,20 +32,20 @@
                 <form style="width: 350px; margin: auto; height: 185px;">
                     <div class="form-ctn">
                         <i class="left-input-icon glyphicon glyphicon-search"></i>
+                        <i class="clr-txt-btn as-area glyphicon glyphicon-remove"></i>
                         <input type="text" class="form-control text-change" placeholder="<?php echo DomainConst::CONTENT00170?>"
                            id="customer_find_phone">
-                        <i class="clr-txt-btn as-area glyphicon glyphicon-remove"></i>
                     </div>
                     
                     <div class="form-ctn">
                         <i class="left-input-icon glyphicon glyphicon-home"></i>
+                        <i class="clr-txt-btn as-area glyphicon glyphicon-remove"></i>
                         <input type="text" class="form-control text-change" placeholder="<?php echo DomainConst::CONTENT00045?>"
                            id="customer_find_address">
-                        <i class="clr-txt-btn as-area glyphicon glyphicon-remove"></i>
                     </div>
                     
                     <div class="form-ctn">
-                        <i class="left-input-icon glyphicon glyphicon-map-marker"></i>
+                        <i class="left-input-icon glyphicon glyphicon-map-marker" style="right:160px;"></i>
                         <select id="customer_find_agent" class="form-control" name="customer_find[agent]" style="width: 350px!important; color: #277aff;">
                             <?php
                             $html = '<option value="" style="color: black">' . DomainConst::CONTENT00385 . '</option>';
@@ -103,7 +103,7 @@
             ),
             'width'     => 700,
             'heigh'     => 470,
-            'close'     => 'js:function() { }',
+            'close'     => 'js:function() { $("#form_ccs").remove(); }',
         ),
     ));
 ?>
@@ -124,7 +124,7 @@
             ),
             'width'     => 700,
             'heigh'     => 470,
-            'close'     => 'js:function() { }',
+            'close'     => 'js:function() { $("#form_ccs").remove(); }',
         ),
     ));
 ?>
@@ -145,7 +145,7 @@
             ),
             'width'     => 700,
             'heigh'     => 470,
-            'close'     => 'js:function() { }',
+            'close'     => 'js:function() { $("#form_ccs").remove(); }',
         ),
     ));
 ?>
@@ -388,6 +388,14 @@
      */
     $(document).on('click', '.clr-txt-btn', function(){
         $(this).siblings('input').val("");
+        $(this).css('opacity','0');
+    })
+    $(document).on('input', '.clr-txt-btn + input', function(){
+        if($(this).val() == ''){
+            $(this).siblings('i.clr-txt-btn').css('opacity','0');
+        } else {
+            $(this).siblings('i.clr-txt-btn').css('opacity','1');
+        }
     })
     $(document).on('click', '#adv-search-btn', function(){
         var isHidden = $('#adv-search-btn').hasClass('collapsed');
