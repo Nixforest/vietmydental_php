@@ -1141,7 +1141,7 @@ svg.mark-icon {
 .round-txt{margin-left: -20px;}
 #patient-records-tbl td{height: 46px;}
 .form-ctn .left-input-icon{ position: relative; right: 152px; top: 28px; }
-.clr-txt-btn{opacity: 0;}
+.clr-txt-btn{opacity: 0; color: red;}
 .clr-txt-btn.as-area{
     position: relative;
     left: 150px;;
