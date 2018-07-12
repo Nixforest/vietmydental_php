@@ -3,333 +3,341 @@
 /* @var $model Customers */
 //echo $model->name;
 ?>
-<div class="maincontent-2 clearfix">
+
+<div class="container" style="width: 100%; padding: 0!important;">
     <!-- Medical record -->
-    <div class="title-1">
-        <span class="icon10"></span> <?php echo DomainConst::CONTENT00138; ?>
-    </div>
-    <div class="profile__info">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="profile__item">
-                    <div class="profile__img">
-                        <!--<img src="<?php echo Yii::app()->theme->baseUrl; ?>/img/tempt/img1.jpg" alt="">-->
-                    </div>
-                    <div class="profile__des">
-                        <div class="p-item">
-                            <span class="icon-p icon-11"></span>
-                            <span class="p-info">
-                                <strong><?php echo DomainConst::CONTENT00100; ?>:</strong> <?php echo $model->name; ?></span>
-                        </div>
-                        <div class="p-item">
-                            <span class="icon-p icon-12"></span>
-                            <span class="p-info">
-                                <strong><?php echo DomainConst::CONTENT00101; ?>:</strong> <?php echo $model->getBirthday(); ?></span>
-                        </div>
-                        <div class="p-item">
-                            <span class="icon-p icon-13"></span>
-                            <span class="p-info">
-                                <strong><?php echo DomainConst::CONTENT00047; ?>:</strong> <?php echo CommonProcess::getGender()[$model->gender]; ?></span>
-                        </div>
-                        <div class="p-item">
-                            <span class="icon-p icon-14"></span>
-                            <span class="p-info">
-                                <strong><?php echo DomainConst::CONTENT00277; ?>:</strong> <?php echo $model->getMedicalRecordNumber(); ?></span>
-                        </div>
-                    </div>
+    <div class="lp-parent-container">
+        <div class="lp-parent-title">
+            <h3><i class="fas fa-id-card"></i> <?php echo DomainConst::CONTENT00138; ?></h3>
+        </div>
+
+        <div class="row row-eq-height lp-row">
+            <!--Thong tin benh nhan-->
+            <div class="lp-child-container col-md-7">
+                <div class="lp-child-title">
+                    <h4><i class="fas fa-id-card-alt"></i> <?php echo DomainConst::CONTENT00172; ?></h4>
                 </div>
-            </div>
-            <div class="col-md-8">
-                <div class="title-1">
-                    <span class="icon15"></span> <?php echo DomainConst::CONTENT00276; ?>
-                </div>
-                <div class="p-add-info">
-                    <div class="p-item">
-                        <span class="icon-p icon-16"></span>
-                        <span class="p-info">
-                            <strong><?php echo DomainConst::CONTENT00045; ?>:</strong> <?php echo $model->getAddress(); ?></span>
+                <div class="lp-child-content">
+                    <div class="lp-profile-img">
+                        <img src="<?php echo Yii::app()->theme->baseUrl; ?>/img/tempt/img2.jpg" alt="">
                     </div>
-                    <div class="p-item">
-                        <span class="icon-p icon-17"></span>
-                        <span class="p-info">
-                            <strong><?php echo DomainConst::CONTENT00048; ?>: </strong> <?php echo $model->getPhone(); ?></span>
+                    <div class="lp-content-row">
+                        <i class="fas fa-user" title="<?php echo DomainConst::CONTENT00100; ?>"></i>
+                        <span class="lp-txt">
+                            <?php echo $model->name; ?>
+                        </span>
                     </div>
-                    <div class="p-item">
-                        <span class="icon-p icon-18"></span>
-                        <span class="p-info">
-                            <strong><?php echo DomainConst::CONTENT00175; ?>:</strong> <?php echo $model->getEmail(); ?></span>
+                    <div class="lp-content-row">
+                        <i class="fas fa-birthday-cake" title="<?php echo DomainConst::CONTENT00101; ?>"></i>
+                        <span class="lp-txt">
+                            <?php echo $model->getBirthday(); ?>
+                        </span>
+                    </div>
+                    <div class="lp-content-row">
+                        <i class="fas fa-transgender" title="<?php echo DomainConst::CONTENT00047; ?>"></i>
+                        <span class="lp-txt">
+                            <?php echo CommonProcess::getGender()[$model->gender]; ?>
+                        </span>
+                    </div>
+                    <div class="lp-content-row">
+                        <i class="fas fa-id-card" title="<?php echo DomainConst::CONTENT00277; ?>"></i>
+                        <span class="lp-txt">
+                            <?php echo $model->getMedicalRecordNumber(); ?>
+                        </span>
+                    </div>
+                    <div class="lp-content-row">
+                        <i class="fas fa-map-marker-alt" title="<?php echo DomainConst::CONTENT00045; ?>"></i>
+                        <span class="lp-txt">
+                            <?php echo $model->getAddress(); ?>
+                        </span>
+                    </div>
+                    <div class="lp-content-row">
+                        <i class="fas fa-phone" title="<?php echo DomainConst::CONTENT00048; ?>"></i>
+                        <span class="lp-txt">
+                            <?php echo $model->getPhone(); ?>
+                        </span>
+                    </div>
+                    <div class="lp-content-row">
+                        <i class="fas fa-envelope" title="<?php echo DomainConst::CONTENT00175; ?>"></i>
+                        <span class="lp-txt">
+                            <?php echo $model->getEmail(); ?>
+                        </span>
                         <!--<a href="#">(Xem Thêm)</a>-->
                     </div>
+                    <div class="clrfix"></div>
                 </div>
-                <div class="p-add-g clearfix">
-                    <div class="p-add-1">
-                        <div class="title-1">
-                            <span class="icon19"></span> <?php echo DomainConst::CONTENT00202; ?>
+            </div>
+
+            <!--Thong tin lien quan-->
+            <div class="lp-child-container col-md-5" style="margin-top:0">
+                <div class="row">
+                    <div class="lp-child-container col-md-12">
+                        <div class="lp-child-title">
+                            <h4><i class="fas fa-plus"></i> <?php echo DomainConst::CONTENT00278; ?></h4>
                         </div>
-                        <div class="p-add-info">
+                        <div class="lp-child-content">
+                            <div class="lp-content-row">
+                                <i class="fas fa-user-md" title="<?php echo DomainConst::CONTENT00143; ?>"></i>
+                                <span class="lp-txt">
+                                    <?php echo $schedule->getDoctor(); ?>
+                                </span>
+                            </div>
+                            <?php if ($schedule->getSale() != NULL): ?>
+                                <div class="lp-content-row">
+                                    <i class="fas fa-user-plus" title="<?php echo DomainConst::CONTENT00279; ?>"></i>
+                                    <span class="lp-txt">
+                                        <?php echo $schedule->getSale()->getFullname(); ?>
+                                    </span>
+                                </div>
+                            <?php endif; // end if (isset($schedule->getSale())) ?>
+
+                            <div class="lp-content-row">
+                                <i class="fas fa-code-branch" title="<?php echo DomainConst::CONTENT00199; ?>"></i>
+                                <span class="lp-txt">
+                                    <?php echo $model->getAgentName(); ?> 
+                                </span>
+                            </div>
+                            <!--<a href="#">(Xem Thêm)</a>-->
+                        </div>
+                    </div>
+
+                    <div class="lp-child-container col-md-12">
+                        <!--Thong tin tien su benh-->
+                        <div class="lp-child-title">
+                            <h4><i class="fas fa-history"></i> <?php echo DomainConst::CONTENT00202; ?></h4>
+                        </div>
+                        <div class="lp-list-container">
+                            <!--for test-->
+                            <!--                            <div class="lp-list-item">
+                                                            <i class="fas fa-angle-right lp-list-item-icon"></i>
+                                                            <b>Tiểu đường</b>
+                                                        </div>end for test-->
                             <?php if (isset($model->rMedicalRecord)): ?>
                                 <?php foreach ($model->rMedicalRecord->rJoinPathological as $value): ?>
-                                <?php if (isset($value->rPathological)): ?>
-                                <div class="p-item">
-                                    <span class="icon-p icon-20"></span>
-                                    <span class="p-info"><?php echo $value->rPathological->name; ?></span>
-                                </div>
-                                <?php endif; // end if ($value->rPathological) ?>
+                                    <?php if (isset($value->rPathological)): ?>
+                                        <div class="lp-list-item">
+                                            <i class="fas fa-angle-right lp-list-item-icon"></i>
+                                            <b><?php echo $value->rPathological->name; ?></b>
+                                        </div>
+                                    <?php endif; // end if ($value->rPathological) ?>
                                 <?php endforeach; // end foreach ($model->rMedicalRecord->rJoinPathological as $value) ?>
                             <?php endif; // end if (isset($model->rMedicalRecord)) ?>
                             <!--<a href="#">(Xem Thêm)</a>-->
                         </div>
                     </div>
-                    <div class="p-add-1">
-                        <div class="title-1">
-                            <span class="icon21"></span> <?php echo DomainConst::CONTENT00278; ?>
-                        </div>
-                        <div class="p-add-info">
-                            <div class="p-item">
-                                <span class="icon-p icon-22"></span>
-                                <span class="p-info">
-                                    <strong><?php echo DomainConst::CONTENT00143; ?>:</strong> <?php echo $schedule->getDoctor(); ?></span>
-                            </div>
-                            <?php if ($schedule->getSale() != NULL): ?>
-                            <div class="p-item">
-                                <span class="icon-p icon-23"></span>
-                                <span class="p-info">
-                                    <strong><?php echo DomainConst::CONTENT00279; ?>:</strong> <?php echo $schedule->getSale()->getFullname(); ?></span>
-                            </div>
-                            <?php endif; // end if (isset($schedule->getSale())) ?>
-                            
-                            <div class="p-item">
-                                <span class="icon-p icon-24"></span>
-                                <span class="p-info">
-                                    <strong><?php echo DomainConst::CONTENT00199; ?>:</strong> <?php echo $model->getAgentName(); ?> </span>
-                            </div>
-                            <!--<a href="#">(Xem Thêm)</a>-->
-                        </div>
-                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <!-- End Medical record -->
-    <!-- List of treatment -->
-    <div class="row list__1">
-        <div class="col-md-6">
-            <div class="list__2">
-                <div class="title-1">
-                    <span class="icon25"></span> <?php echo DomainConst::CONTENT00280; ?>
-                </div>
-                <div class="list__2__info" id="treatment_schedule-info">
-                    <?php $treatmentCnt = count($treatment); ?>
-                    <?php foreach ($treatment as $value): ?>
-                    <?php
-                        $title = 'Đợt ' . $treatmentCnt-- . ': ' . $value->getStartTime();
-                        $info = '';
-                        if (isset($value->rDetail) && (count($value->rDetail) > 0)) {
-                            $info = $value->rDetail[0]->getTreatmentInfo();
-                        }
-                    ?>
-                    <div class="list__2__des" id="<?php echo $value->id; ?>">
-                        <div class="list__2__item">
-                            <span class="icon26 icon-list"></span>
-                            <p>
-                                <strong><?php echo $title; ?></strong>
-                            </p>
-                            <p><?php echo $info; ?></p>
-                        </div>
-                    </div>
-                    <?php endforeach; // end foreach ($treatment as $value) ?>
-                    <!--<a href="#">(Xem Thêm)</a>-->
-                </div>
-            </div>
+        </div><!--End row-->
 
-        </div>
-        <div class="col-md-6">
-            <div class="list__2">
-                <div class="title-1">
-                    <span class="icon27"></span> <?php echo DomainConst::CONTENT00174; ?>
-                </div>
-                <div class="list__2__info" id="treatment_schedule_detail-info">
-                    <?php
-                        if (count($treatment) > 0) {
-                            $retVal = $treatment[0]->getHtmlTreatmentDetail();
-                            echo $retVal;
-                        }
-                    ?>
+        <!--Tab-->
+        <div class="lp-tab-container">
+            <div class="row row-eq-height lp-row">
+                <div class="container-fluid">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#treatment-list"><i class="fas fa-list-ol"></i> <?php echo DomainConst::CONTENT00280; ?></a></li>
+                        <li><a data-toggle="tab" href="#treatment-time"><i class="fas fa-calendar-check"></i> <?php echo DomainConst::CONTENT00174; ?></a></li>
+                        <li><a data-toggle="tab" href="#payment-detail"><i class="fas fa-credit-card"></i> <?php echo DomainConst::CONTENT00256; ?></a></li>
+                        <li><a data-toggle="tab" href="#treatment-process"><i class="fas fa-sliders-h"></i> Tiến Trình Điều Trị</a></li>
+                        <li><a data-toggle="tab" href="#treatment-picture"><i class="fas fa-images"></i> Hình Ảnh Điều Trị</a></li>
+                        <li><a data-toggle="tab" href="#guarantee"><i class="fas fa-shield-alt"></i> Bảo Hành</a></li>
+                        <li><a data-toggle="tab" href="#retreatment-schedule"><i class="fas fa-calendar-alt"></i> Lịch Hẹn Tái Khám</a></li>
+                    </ul>
 
-                    <!--<a href="#">(Xem Thêm)</a>-->
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <!-- End List of treatment -->
-    <div class="row list__5">
-        <div class="col-md-6">
-
-            <div class="list__2">
-                <div class="title-1">
-                    <span class="icon34"></span> Chi Tiết Thanh Toán
-                </div>
-                <div class="list__2__info">
-                    <?php $idx = 1; ?>
-                    <?php foreach($model->getReceipts() as $receipt): ?>
-                        <div class="list__2__des">
-                            <div class="list__2__item">
-                                <span class="icon26 icon-list"></span>
-                                <p>
-                                    <strong>Thanh Toán Lần <?php echo $idx++; ?>: </strong>
-                                </p>
-                                <p><?php echo CommonProcess::formatCurrency($receipt->final); ?> (Ngày Thanh Toán: <?php echo $receipt->process_date; ?>)</p>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                    <!--<a href="#">(Xem Thêm)</a>-->
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-
-            <div class="list__2">
-                <div class="title-1">
-                    <span class="icon35"></span> Tiến Trình Điều Trị
-
-                </div>
-                <div class="list__2__info">
-<!--                    <div class="list__2__des">
-                        <div class="list__2__item">
-                            <span class="icon26 icon-list"></span>
-                            <p>
-                                <strong>Thanh Toán Lần 1: </strong>
-                            </p>
-                            <p>5.000.000 VND (Ngày Thanh Toán: 26/03/2018)</p>
-                        </div>
-                    </div>
-                    <div class="list__2__des">
-                        <div class="list__2__item">
-                            <span class="icon26 icon-list"></span>
-                            <p>
-                                <strong>Thanh Toán Lần 1: </strong>
-                            </p>
-                            <p>5.000.000 VND (Ngày Thanh Toán: 26/03/2018)</p>
-                        </div>
-                    </div>
-                    <div class="list__2__des">
-                        <div class="list__2__item">
-                            <span class="icon26 icon-list"></span>
-                            <p>
-                                <strong>Thanh Toán Lần 1: </strong>
-                            </p>
-                            <p>5.000.000 VND (Ngày Thanh Toán: 26/03/2018)</p>
-                        </div>
-                    </div>-->
-                    <!--<a href="#">(Xem Thêm)</a>-->
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="list__3">
-        <div class="title-1">
-            <span class="icon36"></span> Hình Ảnh Điều Trị
-        </div>
-        <div class="list__3__info">
-            <div class="row">
-                <?php foreach ($treatment as $item) : ?>
-                    <?php if (isset($item->rDetail)) : ?>
-                        <?php foreach ($item->rDetail as $detail): ?>
-                            <?php if(count($detail->rImgRealFile) || count($detail->rImgXRayFile)) : ?>
-                                <?php
+                    <div class="tab-content">
+                        <!--Danh sach dieu tri -->
+                        <div id="treatment-list" class="tab-pane fade in active">
+                            <h3><?php echo DomainConst::CONTENT00280; ?></h3>
+                            <div class="lp-list-container" id="treatment_schedule-info">
+                                <?php $treatmentCnt = count($treatment); ?>
+                                <?php foreach ($treatment as $value): ?>
+                                    <?php
+                                    $title = 'Đợt ' . $treatmentCnt-- . ': ' . $value->getStartTime();
                                     $info = '';
-                                    if (isset($detail->rTreatmentType)) {
-                                        $info = $detail->rTreatmentType->name;
-                                    } else if (isset($detail->rDiagnosis)) {
-                                        $info = $detail->rDiagnosis->name;
-                                    } else {
-                                        $info = DomainConst::CONTENT00177;
+                                    if (isset($value->rDetail) && (count($value->rDetail) > 0)) {
+                                        $info = $value->rDetail[0]->getTreatmentInfo();
                                     }
-                                ?>
-                                <div class="col-md-6">
-                                    <p>Hình Ảnh Trước Và Sau Điều Trị</p>
-                                <?php echo $detail->getStartTime() . ' - ' . $info; ?>
-                                    <?php if(count($detail->rImgRealFile)) : ?>
-                                    <?php
-                                        $listOldImage = array_reverse($detail->rImgRealFile);
-                                        $index = 1;
                                     ?>
-                                    <div class="list__3__img">
-                                        <?php foreach ($listOldImage as $img) : ?>
-                                            <?php echo $img->getViewImage(200, 300); ?>
-                                        <?php endforeach; ?>
+                                    <div class="lp-list-item" id="<?php echo $value->id; ?>">
+                                        <i class="fas fa-list-ol lp-list-item-icon"></i>
+                                        <strong><?php echo $title; ?></strong><br>
+                                        <span><?php echo $info; ?></span>
                                     </div>
-                                    <?php endif; ?>
-                                </div>
-                                <div class="col-md-6">
-                                    <p>Hình Ảnh Chụp XQuang</p>
-                                    <?php if(count($detail->rImgXRayFile)) : ?>
-                                    <?php
-                                        $listOldImage = array_reverse($detail->rImgXRayFile);
-                                        $index = 1;
-                                    ?>
-                                    <div class="list__3__img">
-                                        <?php foreach ($listOldImage as $img) : ?>
-                                            <?php echo $img->getViewImage(200, 300); ?>
-                                        <?php endforeach; ?>
-                                    </div>
-                                    <?php endif; ?>
-                                </div>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            </div>
-
-        </div>
-    </div>
-    <div class="list__4">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="title-1">
-                    <span class="icon37"></span> Bảo Hành
-                </div>
-                <div class="list__3__info">
-                    <?php
-                        $html = '';
-                        if (isset($model->rWarranty)) {
-                            foreach ($model->rWarranty as $warranty) {
-                                if (isset($warranty->rType)) {
+                                <?php endforeach; // end foreach ($treatment as $value) ?>
+                                <!--<a href="#">(Xem Thêm)</a>-->
+                            </div>
+                        </div>
+                        <!--Lan dieu tri -->
+                        <div id="treatment-time" class="tab-pane fade">
+                            <h3><?php echo DomainConst::CONTENT00174; ?></h3>
+                            <div class="lp-list-container" id="treatment_schedule_detail-info">
+                                <?php
+                                if (count($treatment) > 0) {
+                                    $retVal = $treatment[0]->getHtmlTreatmentDetail();
+                                    echo $retVal;
                                 }
-                                $html .= '<p>';
-                                    $html .= '<strong>';
-                                    $html .= $warranty->rType->name . ' - ' . DomainConst::CONTENT00381 . ': ';
-                                    $html .= '</strong>' . $warranty->getWarrantyTime();
-                                    $html .= '<br/><strong>' . DomainConst::CONTENT00139;
-                                    $html .= '</strong>: ' . $warranty->getStartTime();
-                                    $html .= '<br/><strong>' . DomainConst::CONTENT00140;
-                                    $html .= '</strong>: ' . $warranty->getEndTime();
-                                    $html .= '<br/><strong>' . DomainConst::CONTENT00382;
-                                    $html .= '</strong>: ' . $warranty->getRemainTime();
-                                $html .= '</p>';
-                            }
-                        }
-                        echo $html;
-                    ?>
+                                ?>
+
+                                <!--<a href="#">(Xem Thêm)</a>-->
+                            </div>
+                        </div>
+                        <!--Chi tiet thanh toan -->
+                        <div id="payment-detail" class="tab-pane fade">
+                            <h3><?php echo DomainConst::CONTENT00256; ?></h3>
+                            <div class="lp-list-container">
+                                <?php $idx = 1; ?>
+                                <?php foreach ($model->getReceipts() as $receipt): ?>
+                                    <div class="lp-list-item">
+                                        <i class="fas fa-credit-card lp-list-item-icon"></i>
+                                        <strong>Thanh Toán Lần <?php echo $idx++; ?>: </strong><br>
+                                        <span><?php echo CommonProcess::formatCurrency($receipt->final); ?> (Ngày Thanh Toán: <?php echo $receipt->process_date; ?>)</span>
+                                    </div>
+                                <?php endforeach; ?>
+                                <!--<a href="#">(Xem Thêm)</a>-->
+                            </div>
+                        </div>
+                        <!--Qua trinh dieu tri -->
+                        <div id="treatment-process" class="tab-pane fade">
+                            <h3>Tiến Trình Điều Trị</h3>
+                            <!--                        <div class="list__2__info">
+                                                        <div class="list__2__des">
+                                                            <div class="list__2__item">
+                                                                <span class="icon26 icon-list"></span>
+                                                                <p>
+                                                                    <strong>Thanh Toán Lần 1: </strong>
+                                                                </p>
+                                                                <p>5.000.000 VND (Ngày Thanh Toán: 26/03/2018)</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="list__2__des">
+                                                            <div class="list__2__item">
+                                                                <span class="icon26 icon-list"></span>
+                                                                <p>
+                                                                    <strong>Thanh Toán Lần 1: </strong>
+                                                                </p>
+                                                                <p>5.000.000 VND (Ngày Thanh Toán: 26/03/2018)</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="list__2__des">
+                                                            <div class="list__2__item">
+                                                                <span class="icon26 icon-list"></span>
+                                                                <p>
+                                                                    <strong>Thanh Toán Lần 1: </strong>
+                                                                </p>
+                                                                <p>5.000.000 VND (Ngày Thanh Toán: 26/03/2018)</p>
+                                                            </div>
+                                                        </div>
+                                                        <a href="#">(Xem Thêm)</a>
+                                                    </div>-->
+                        </div>
+                        <!--Hinh anh dieu tri -->
+                        <div id="treatment-picture" class="tab-pane fade">
+                            <h3>Hình Ảnh Điều Trị</h3>
+                            <div class="lp-child-container">
+                                <div class="row">
+                                    <?php foreach ($treatment as $item) : ?>
+                                        <?php if (isset($item->rDetail)) : ?>
+                                            <?php foreach ($item->rDetail as $detail): ?>
+                                                <?php if (count($detail->rImgRealFile) || count($detail->rImgXRayFile)) : ?>
+                                                    <?php
+                                                    $info = '';
+                                                    if (isset($detail->rTreatmentType)) {
+                                                        $info = $detail->rTreatmentType->name;
+                                                    } else if (isset($detail->rDiagnosis)) {
+                                                        $info = $detail->rDiagnosis->name;
+                                                    } else {
+                                                        $info = DomainConst::CONTENT00177;
+                                                    }
+                                                    ?>
+                                                    <div class="col-md-6">
+                                                        <p>Hình Ảnh Trước Và Sau Điều Trị</p>
+                                                        <?php echo $detail->getStartTime() . ' - ' . $info; ?>
+                                                        <?php if (count($detail->rImgRealFile)) : ?>
+                                                            <?php
+                                                            $listOldImage = array_reverse($detail->rImgRealFile);
+                                                            $index = 1;
+                                                            ?>
+                                                            <div class="lp-list-image">
+                                                                <span class="prev-img">&#10094;</span>
+                                                                <span class="next-img">&#10095;</span>
+                                                                <?php foreach ($listOldImage as $img) : ?>
+                                                                    <?php echo $img->getViewImage(200, 300); ?>
+                                                                <?php endforeach; ?>
+                                                            </div>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <p>Hình Ảnh Chụp XQuang</p>
+                                                        <?php if (count($detail->rImgXRayFile)) : ?>
+                                                            <?php
+                                                            $listOldImage = array_reverse($detail->rImgXRayFile);
+                                                            $index = 1;
+                                                            ?>
+                                                            <div class="lp-list-image">
+                                                                <span class="prev-img">&#10094;</span>
+                                                                <span class="next-img">&#10095;</span>
+                                                                <?php foreach ($listOldImage as $img) : ?>
+                                                                    <?php echo $img->getViewImage(200, 300); ?>
+                                                                <?php endforeach; ?>
+                                                            </div>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Bao hanh -->
+                        <div id="guarantee" class="tab-pane fade">
+                            <h3>Bảo Hành</h3>
+                            <div class="lp-text-content">
+                                <?php
+                                $html = '';
+                                if (isset($model->rWarranty)) {
+                                    foreach ($model->rWarranty as $warranty) {
+                                        if (isset($warranty->rType)) {
+                                            
+                                        }
+                                        $html .= '<p>';
+                                        $html .= '<strong>';
+                                        $html .= $warranty->rType->name . ' - ' . DomainConst::CONTENT00381 . ': ';
+                                        $html .= '</strong>' . $warranty->getWarrantyTime();
+                                        $html .= '<br/><strong>' . DomainConst::CONTENT00139;
+                                        $html .= '</strong>: ' . $warranty->getStartTime();
+                                        $html .= '<br/><strong>' . DomainConst::CONTENT00140;
+                                        $html .= '</strong>: ' . $warranty->getEndTime();
+                                        $html .= '<br/><strong>' . DomainConst::CONTENT00382;
+                                        $html .= '</strong>: ' . $warranty->getRemainTime();
+                                        $html .= '</p>';
+                                    }
+                                }
+                                echo $html;
+                                ?>
+                            </div>
+                        </div>
+                        <!--Lich tai kham -->
+                        <div id="retreatment-schedule" class="tab-pane fade">
+                            <h3>Lịch Hẹn Tái Khám</h3>
+                            <div class="lp-text-content">
+                                <p><strong>Thời Gian Bảo Hành</strong>: 3 Năm
+                                    <br/> <strong>Ngày Bắt Đầu:</strong> 9:30 AM - 26/03/2018
+                                    <br/> <strong>Ngày Kết Thúc:</strong> 10:30 AM - 26/04/2018
+                                    <br/> <strong>Thời Gian Còn Lại</strong>: 365 Ngày</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="title-1">
-                    <span class="icon38"></span> Lịch Hẹn Tái Khám
-                </div>
-                <div class="list__3__info">
-<!--                    <p><strong>Thời Gian Bảo Hành</strong>: 3 Năm
-                        <br/> <strong>Ngày Bắt Đầu:</strong> 9:30 AM - 26/03/2018
-                        <br/> <strong>Ngày Kết Thúc:</strong> 10:30 AM - 26/04/2018
-                        <br/> <strong>Thời Gian Còn Lại</strong>: 365 Ngày</p>-->
-                </div>
-            </div>
-        </div>
-    </div>
+        </div><!--End tab-->
+    </div><!--End medical record-->
 </div>
+
+
 <script>
-    $("body").on("click", "#treatment_schedule-info .list__2__des", function() {
+    //inport font awesome
+    $('head').append('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">');
+    $("body").on("click", "#treatment_schedule-info .lp-list-item", function () {
 //        alert($(this).attr('id'));
         fnShowTreatmentScheduleDetailInfo(
                 "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/getTreatmentScheduleInfo'); ?>",
@@ -337,4 +345,38 @@
                 "#treatment_schedule_detail-info"
                 );
     });
+    
+    //Slide
+    $('.prev-img').on('click', function(){
+        clickSlide('prev', $(this));
+    })
+    $('.next-img').on('click', function(){
+        clickSlide('next', $(this));
+    })
+    
+    function clickSlide(type, elm){
+        var firstAImg = elm.siblings('a.gallery').first();
+        var aImgWidth = firstAImg.width();
+        var imgLink = elm.parent().children('a.gallery');
+        var maxLength = parseInt(imgLink.length*aImgWidth);
+        var curLength = parseInt(elm.parent().width());
+        
+        var maxMr = 41;
+        var coef = 1;
+        if(type == 'prev') {
+            maxMr = parseInt(curLength - maxLength - 50);
+            coef = -1;
+        }
+        
+        var curMr = firstAImg.css('margin-left');
+        curMr = parseInt(curMr.replace('px', ''));
+        
+        if(curMr*coef <= maxMr*coef){
+            var mr = curMr + 150*coef;
+            if(maxMr*coef-(curMr*coef+150) <= 0){
+                mr = maxMr;
+            }
+            firstAImg.css('margin-left', mr + 'px');
+        }
+    }
 </script>
