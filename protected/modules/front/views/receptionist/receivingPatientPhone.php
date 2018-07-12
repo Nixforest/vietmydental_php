@@ -17,34 +17,48 @@
         <div class="info-content">
             <div class="box-search">
                 <form>
-                    <span class="icon-s"></span>
+                    <span class="icon-s" style="top:20px;"></span>
+                    <i class="clr-txt-btn search-area glyphicon glyphicon-remove"></i>
                     <input type="text" class="form-control text-change"  placeholder="<?php echo DomainConst::CONTENT00384?>"
                            id="customer_find">
                 </form>
             </div>
             
-            <div class="title-2" data-toggle="collapse" data-target="#advance-search-ctn">
+            <div class="title-2" id="adv-search-btn" data-toggle="collapse" data-target="#advance-search-ctn">
                 <?php echo DomainConst::CONTENT00073; ?>
                 <i class="glyphicon glyphicon-chevron-down"></i>
             </div>
             <div class="box-search collapse" id="advance-search-ctn" style="text-align: center;">
-                <form style="width: 350px; margin: auto;">
-                    <input type="text" class="form-control text-change" placeholder="<?php echo DomainConst::CONTENT00170?>"
+                <form style="width: 350px; margin: auto; height: 185px;">
+                    <div class="form-ctn">
+                        <i class="left-input-icon glyphicon glyphicon-search"></i>
+                        <i class="clr-txt-btn as-area glyphicon glyphicon-remove"></i>
+                        <input type="text" class="form-control text-change" placeholder="<?php echo DomainConst::CONTENT00170?>"
                            id="customer_find_phone">
-                    <input type="text" class="form-control text-change" placeholder="<?php echo DomainConst::CONTENT00045?>"
+                    </div>
+                    
+                    <div class="form-ctn">
+                        <i class="left-input-icon glyphicon glyphicon-home"></i>
+                        <i class="clr-txt-btn as-area glyphicon glyphicon-remove"></i>
+                        <input type="text" class="form-control text-change" placeholder="<?php echo DomainConst::CONTENT00045?>"
                            id="customer_find_address">
-                    <select id="customer_find_agent" class="form-control" name="customer_find[agent]" style="width: 350px!important; color: #277aff;">
-                        <?php
-                        $html = '<option value="" style="color: black">' . DomainConst::CONTENT00385 . '</option>';
-                        foreach (Agents::loadItems() as $key => $agent) {
-                            $html .= '<option value="' . $key . '"  style="color: black">' . $agent . '</option>';
-                        }
-                        echo $html;
-                        ?>
-                    </select>
+                    </div>
+                    
+                    <div class="form-ctn">
+                        <i class="left-input-icon glyphicon glyphicon-map-marker" style="right:160px;"></i>
+                        <select id="customer_find_agent" class="form-control" name="customer_find[agent]" style="width: 350px!important; color: #277aff;">
+                            <?php
+                            $html = '<option value="" style="color: black">' . DomainConst::CONTENT00385 . '</option>';
+                            foreach (Agents::loadItems() as $key => $agent) {
+                                $html .= '<option value="' . $key . '"  style="color: black">' . $agent . '</option>';
+                            }
+                            echo $html;
+                            ?>
+                        </select>
+                    </div>
                 </form>
             </div>
-            <div id="customer_info_schedule" class="info-result"> <!-- style="text-align: center" -->
+            <div id="customer_info_schedule" class="info-result">
                 <div class="group-btn" id="create_customer">
                     <?php
                         echo CHtml::link(
@@ -89,7 +103,7 @@
             ),
             'width'     => 700,
             'heigh'     => 470,
-            'close'     => 'js:function() { }',
+            'close'     => 'js:function() { $("#form_ccs").remove(); }',
         ),
     ));
 ?>
@@ -110,7 +124,7 @@
             ),
             'width'     => 700,
             'heigh'     => 470,
-            'close'     => 'js:function() { }',
+            'close'     => 'js:function() { $("#form_ccs").remove(); }',
         ),
     ));
 ?>
@@ -131,7 +145,7 @@
             ),
             'width'     => 700,
             'heigh'     => 470,
-            'close'     => 'js:function() { }',
+            'close'     => 'js:function() { $("#form_ccs").remove(); }',
         ),
     ));
 ?>
@@ -366,4 +380,29 @@
         ?>;
         return false;
     }
+    
+    
+    /*
+     * Customer clear text button at search box and advance search
+     * DuongNV
+     */
+    $(document).on('click', '.clr-txt-btn', function(){
+        $(this).siblings('input').val("");
+        $(this).css('opacity','0');
+    })
+    $(document).on('input', '.clr-txt-btn + input', function(){
+        if($(this).val() == ''){
+            $(this).siblings('i.clr-txt-btn').css('opacity','0');
+        } else {
+            $(this).siblings('i.clr-txt-btn').css('opacity','1');
+        }
+    })
+    $(document).on('click', '#adv-search-btn', function(){
+        var isHidden = $('#adv-search-btn').hasClass('collapsed');
+        if(isHidden){
+            $('#customer_find_phone').val('');
+            $('#customer_find_address').val('');
+            $('#customer_find_agent option').eq(0).attr('selected','selectd');
+        }
+    })
 </script>

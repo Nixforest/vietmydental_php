@@ -1139,9 +1139,22 @@ svg.mark-icon {
     fill: #a7a7a7;
 }
 .round-txt{margin-left: -20px;}
-
-
-
+#patient-records-tbl td{height: 46px;}
+.form-ctn .left-input-icon{ position: relative; right: 152px; top: 28px; }
+.clr-txt-btn{opacity: 0; color: red;}
+.clr-txt-btn.as-area{
+    position: relative;
+    left: 150px;;
+    top:30px;
+    cursor: pointer;
+}
+.clr-txt-btn:hover{background: #d8d8d8;}
+.clr-txt-btn.search-area{
+    position: relative;
+    left: 470px!important;
+    top:30px;
+    cursor: pointer;
+}
 /*Landing page css*/
 .lp-parent-container{
     border: 1px solid grey;
