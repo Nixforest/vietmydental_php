@@ -187,8 +187,9 @@ class MedicalRecords extends BaseActiveRecord
         $models = self::model()->findAll($criteria);
         if ($models) {
             foreach ($models as $value) {
-                if (($value->record_number == $this->record_number)
-                        && $value->getAgentId() == $agentId) {
+                if (($value->record_number == $this->record_number)     // Match record number
+                        && $value->getAgentId() == $agentId             // Match agent id
+                        && $value->id != $this->id) {                   // Diff model id (case update model)
                     return false;
                 }
             }

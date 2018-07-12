@@ -241,18 +241,20 @@ class Settings extends BaseActiveRecord
     
     /**
      * Get value of ajax template variable
+     * @param String id Id of key need to get
      * @return String
      */
-    public static function getAjaxTempValue() {
-        return Settings::getItem(Settings::KEY_AJAX_TEMPLATE_VALUE . '_' . Yii::app()->user->id);
+    public static function getAjaxTempValue($id = '') {
+        return Settings::getItem(Settings::KEY_AJAX_TEMPLATE_VALUE . '_' . Yii::app()->user->id . $id);
     }
     
     /**
      * Save value of ajax template variable
+     * @param String id Id of key need to save
      * @param String $value Value need to save
      */
-    public static function saveAjaxTempValue($value) {
-        Settings::saveSetting(Settings::KEY_AJAX_TEMPLATE_VALUE . '_'  . Yii::app()->user->id, $value);
+    public static function saveAjaxTempValue($value, $id = '') {
+        Settings::saveSetting(Settings::KEY_AJAX_TEMPLATE_VALUE . '_'  . Yii::app()->user->id . $id, $value);
     }
     
     /**

@@ -19,36 +19,45 @@
 
     <div class="row">
         <label for="TreatmentSchedules_start_date" class="required"><?php echo DomainConst::CONTENT00208; ?> <span class="required">*</span></label>
-        <?php // echo $form->labelEx($schedule,'start_date'); ?>
         <?php echo $form->dropDownList($schedule,'time_id', ScheduleTimes::loadItems()); ?>
         <?php echo $form->error($schedule,'time_id'); ?>
-        <?php echo $form->dateField($schedule, 'start_date'); ?>
+    </div>
+
+    <div class="row">
+        <?php // echo $form->labelEx($schedule,'start_date'); ?>
+        <label for="TreatmentSchedules_start_date"><?php echo DomainConst::SPACE; ?></label>
         <?php
-//        Yii::import('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker');
-//            $this->widget('CJuiDateTimePicker',array(
-//                'model'=>$schedule, //Model object
-//                'attribute'=>'start_date', //attribute name
-//                'mode'=>'datetime', //use "time","date" or "datetime" (default)
-//                'language'=>'en-GB',
-//                'options'=>array(
-//                    'showAnim'=>'fold',
-//                    'showButtonPanel'=>true,
-//                    'autoSize'=>true,
-//                    'dateFormat'=>'dd-mm-yy',
-//                    'timeFormat'=>'hh:mm:ss',
-//                    'width'=>'120',
-//                    'separator'=>' ',
-//                    'showOn' => 'button',
-//                    'buttonImage'=> Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
-//                    'buttonImageOnly'=> true,
-//                    'changeMonth' => true,
-//                    'changeYear' => true,
-//                    //                'regional' => 'en-GB'
-//                ),
-//                'htmlOptions' => array(
-//                    'style' => 'width:148px;',
-//                ),
-//            ));
+            if (!isset($schedule->start_date)) {
+                $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3);
+            } else {
+                $date = CommonProcess::convertDateTime($schedule->start_date,
+                            DomainConst::DATE_FORMAT_4,
+                            DomainConst::DATE_FORMAT_3);
+                if (empty($date)) {
+                    $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3);
+                }
+            }
+            $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+                'model'     => $schedule,
+                'attribute' => 'start_date',
+                'language'=>'en-GB',
+                'options'   => array(
+                    'showAnim'      => 'fold',
+                    'dateFormat'    => DomainConst::DATE_FORMAT_2,
+//                    'minDate'       => '0',
+                    'changeMonth'   => true,
+                    'changeYear'    => true,
+                    'showOn'        => 'button',
+                    'buttonImage'   => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
+                    'buttonImageOnly' => true,
+                ),
+                'htmlOptions'=>array(
+//                            'class'=>'w-16',
+                            'readonly'=>'readonly',
+//                            'value' => CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3),
+                            'value' => $date,
+                        ),
+            ));
             ?>
         <?php echo $form->error($schedule,'start_date'); ?>
     </div>

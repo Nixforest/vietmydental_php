@@ -528,7 +528,7 @@ class TreatmentScheduleDetails extends BaseActiveRecord
         $infoSchedule .= '</div>';
         $infoSchedule .= '<div class="group-btn">';
         $infoSchedule .=    '<a style="cursor: pointer;"'
-                . ' onclick="{updateSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}">' . DomainConst::CONTENT00178 . '</a>';
+                . ' onclick="{fnOpenUpdateSchedule(\'' . $this->id . '\');}">' . DomainConst::CONTENT00178 . '</a>';
         $infoSchedule .= '</div>';
         return $infoSchedule;
     }
@@ -705,6 +705,50 @@ class TreatmentScheduleDetails extends BaseActiveRecord
     public function getTotalMoneyText() {
         return CommonProcess::formatCurrency($this->getTotalMoney()) . " " . DomainConst::CONTENT00134;
     }
+    
+    /**
+     * Check is treament schedule detail has start_date is match with parameter date value
+     * @param String $date Date value informat (DATE_FORMAT_4 = 'Y-m-d')
+     * @return boolean True if treament schedule detail has start_date is match with parameter date value
+     */
+    public function isScheduleOnDate($date) {
+        $retVal = false;
+        $startDate = CommonProcess::convertDateTime($this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
+        $createdDate = CommonProcess::convertDateTime($this->created_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
+        // Case date is empty
+        if (empty($date)) {
+            if ($this->status != self::STATUS_INACTIVE
+                    && DateTimeExt::isToday($this->start_date, DomainConst::DATE_FORMAT_1)
+                    && !DateTimeExt::isToday($this->created_date, DomainConst::DATE_FORMAT_1)) {
+                $retVal = true;
+            }
+        } else {    // Date is not empty
+            if ($this->status != self::STATUS_INACTIVE
+                    && (DateTimeExt::compare($startDate, $date) == 0)) {
+                $retVal = true;
+            }
+        }
+        
+        return $retVal;
+    }
+    
+    /**
+     * Get title of treatment schedule detail
+     * @return String Title of treatment schedule detail
+     */
+    public function getTitle() {
+        $retVal = '';
+        if ($this->rTreatmentType) {
+            $retVal .= $this->rTreatmentType->name;
+        } else if ($this->rDiagnosis) {
+            $retVal .= $this->rDiagnosis->name;
+        } else if (!empty ($this->description)) {
+            $retVal .= $this->description;
+        } else {
+            $retVal .= DomainConst::CONTENT00177;
+        }
+        return $retVal;
+    }
 
     //-----------------------------------------------------
     // Static methods
@@ -755,32 +799,6 @@ class TreatmentScheduleDetails extends BaseActiveRecord
                 }
             }
         }
-        return $retVal;
-    }
-    
-    /**
-     * Check is treament schedule detail has start_date is match with parameter date value
-     * @param String $date Date value informat (DATE_FORMAT_4 = 'Y-m-d')
-     * @return boolean True if treament schedule detail has start_date is match with parameter date value
-     */
-    public function isScheduleOnDate($date) {
-        $retVal = false;
-        $startDate = CommonProcess::convertDateTime($this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
-        $createdDate = CommonProcess::convertDateTime($this->created_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
-        // Case date is empty
-        if (empty($date)) {
-            if ($this->status != self::STATUS_INACTIVE
-                    && DateTimeExt::isToday($this->start_date, DomainConst::DATE_FORMAT_1)
-                    && !DateTimeExt::isToday($this->created_date, DomainConst::DATE_FORMAT_1)) {
-                $retVal = true;
-            }
-        } else {    // Date is not empty
-            if ($this->status != self::STATUS_INACTIVE
-                    && (DateTimeExt::compare($startDate, $date) == 0)) {
-                $retVal = true;
-            }
-        }
-        
         return $retVal;
     }
     

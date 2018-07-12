@@ -92,6 +92,8 @@ class DomainConst {
     const DATE_FORMAT_11                                = 'd/m/Y H:i';
     /** Date default value null */
     const DATE_DEFAULT_NULL                             = '0000-00-00';
+    /** Date default value null */
+    const DATE_FORMAT_3_NULL                            = '00/00/0000';
     /** Date default year value null */
     const DATE_DEFAULT_YEAR_NULL                        = '0000';
     /** Date format */
@@ -902,6 +904,10 @@ class DomainConst {
     const KEY_SUBMIT_SAVE                   = 'submitSave';
     /** Receipt */
     const KEY_RECEIPT                       = 'receipt';
+    /** Right content */
+    const KEY_RIGHT_CONTENT                 = 'rightContent';
+    /** Info schedule */
+    const KEY_INFO_SCHEDULE                 = 'infoSchedule';
     
     //-----------------------------------------------------
     // List domain const
@@ -1382,4 +1388,6 @@ class DomainConst {
     const CONTENT00383  = 'Điều trị đã hoàn thành, không thể cập nhật.';
     const CONTENT00384  = 'Tìm kiếm bệnh nhân';
     const CONTENT00385  = 'Chọn chi nhánh';
+    const CONTENT00386  = 'Cập nhật thông tin Lần điều trị';
+    const CONTENT00387  = 'Thanh toán thành công';
 }

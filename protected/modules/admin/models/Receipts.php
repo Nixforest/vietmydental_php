@@ -358,6 +358,11 @@ class Receipts extends CActiveRecord
                 $insurance = $this->rTreatmentScheduleDetail->rSchedule->getInsurrance();
             }
         }
+        $customer = $this->getCustomer();
+        $customerId = '';
+        if ($customer !== NULL) {
+            $customerId = $customer->id;
+        }
         $rightContent = '<div class="info-result">';
         $rightContent .=    '<div class="title-2">' . DomainConst::CONTENT00174 . '</div>';
         $rightContent .=    '<div class="item-search">';
@@ -430,7 +435,7 @@ class Receipts extends CActiveRecord
         
         $rightContent .= HtmlHandler::createAjaxButtonWithImage(
                 '<br>' . DomainConst::CONTENT00373, DomainConst::IMG_PRINT_ALL_ICON,
-                '{createPrintDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');}',
+                '{fnOpenPrintReceipt(\'' . $customerId . '\');}',
                 'cursor: pointer;');
         $rightContent .=                '</td>';
         $rightContent .=            '</tr>';

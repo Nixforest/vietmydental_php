@@ -32,7 +32,7 @@ class SelectToothExt extends CPortlet {
      */
     protected function renderContent() {
         $className              = '';
-        $model                  = CommonProcess::getValue($this->data, AutocompleteExt::KEY_MODEL, NULL);
+        $model                  = CommonProcess::getValue($this->data, 'model', NULL);
         if (isset($model)) {
             $className = get_class($model);
         }

@@ -166,26 +166,24 @@
 <?php $this->endWidget(); ?>
 </div><!-- form -->
 
-
-<!-- Select print dialog -->
 <?php
     $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
-        'id'    => 'dialogPrintReceipt',
+        'id'    => 'dialogId',
         'options' => array(
-            'title' => DomainConst::CONTENT00374,
+            'title' => DomainConst::CONTENT00004,
             'autoOpen'  => false,
             'modal'     => true,
             'position'  => array(
                 'my'    => 'top',
                 'at'    => 'top',
             ),
-            'width'     => 700,
+            'width'     => 1000,
             'heigh'     => 470,
-            'close'     => 'js:function() { }',
+            'close'     => 'js:function() { $("#form_ccs").remove(); }',
         ),
     ));
 ?>
-<div class="divForForm"></div>
+<div class="divForFormClass"></div>
 <?php $this->endWidget('zii.widgets.jui.CJuiDialog');?>
 
 <script>
@@ -215,41 +213,91 @@
     });
 </script>
 <script type="text/javascript">
+    /** Dialog option */
+    var opt = {
+        autoOpen: false,
+        modal: true,
+        width: 1000,
+        height: 1000,
+        title: "<?php echo DomainConst::CONTENT00004; ?>",
+        close: function() {
+            $("#form_ccs").remove();
+        }
+    };
+    
     /**
-     * Create print dialog
-     * @returns {Boolean}
+     * Load from css.
      */
-    function createPrintDialog() {
-//        alert("<?php echo DomainConst::CONTENT00375; ?>");
+    function fnLoadFormCSS() {
         $("<link/>", {
             id: "form_ccs",
             rel: "stylesheet",
             type: "text/css",
             href: "<?php echo Yii::app()->theme->baseUrl . '/css/form.css'; ?>"
          }).appendTo("head");
-        <?php
-        echo CHtml::ajax(array(
-            'url' => Yii::app()->createAbsoluteUrl('front/receptionist/printMore'),
-            'data' => "js:$(this).serialize()",
-            'type' => 'post',
-            'dataType' => 'json',
-            'success' => "function(data)
-                    {
-                        if (data.status == 'failure')
-                        {
-                            $('#dialogPrintReceipt div.divForForm').html(data.div);
-                                  // Here is the trick: on submit-> once again this function!
-                            $('#dialogPrintReceipt div.divForForm form').submit(createPrintDialog);
-                        }
-                        else
-                        {
-                            $('#dialog div.divForForm').html(data.div);
-                            setTimeout(\"$('#dialogPrintReceipt').dialog('close') \",1000);
-                        }
-
-                    } ",
-        ))
-        ?>;
+    }
+    
+    /**
+     * Check if data is success
+     * @param {type} data
+     * @returns {Boolean}
+     */
+    function fnIsDataSuccess(data) {
+        return (data["<?php echo DomainConst::KEY_STATUS; ?>"]
+                === "<?php echo DomainConst::NUMBER_ONE_VALUE; ?>");
+    }
+    
+    /**
+     * Load dialog content
+     * @param {Json} data Json data
+     * @param {String} title Title of dialog
+     * @param {String} fnHandler Function handler
+     */
+    function fnLoadDialogContent(data, title, fnHandler) {
+        // Set content of dialog
+        $('#dialogId div.divForFormClass').html(
+                data['<?php echo DomainConst::KEY_CONTENT; ?>']);
+        // Set title of dialog
+        $('.ui-dialog-title').html(title);
+        // Here is the trick: on submit-> once again this function!
+        $('#dialogId div.divForFormClass form').submit(fnHandler);
+    }
+    
+    /**
+     * Open print dialog
+     * @param {String} _id Id of customer need to print receipts
+     * @returns {Boolean}
+     */
+    function fnOpenPrintReceipt(_id = '') {
+        createPrintDialog(_id);
+        $("#dialogId").dialog(opt).dialog("open");
+    }
+    
+    /**
+     * Create print dialog
+     * @param {String} _id Id of customer need to print receipts
+     * @returns {Boolean}
+     */
+    function createPrintDialog(_id = '') {
+        fnLoadFormCSS();
+        $.ajax({
+            url: "<?php echo Yii::app()->createAbsoluteUrl(
+                    'front/receptionist/printMore'); ?>",
+            data: $(this).serialize() + '&id=' + _id,
+            type: "post",
+            dataType: "json",
+            success: function(data) {
+                // After submit
+                if (fnIsDataSuccess(data)) {
+                    setTimeout("$('#dialogId').dialog(opt).dialog('close')", 1000);
+                } else {    // Load first time
+                    fnLoadDialogContent(data,
+                       '<?php echo DomainConst::CONTENT00374; ?>',
+                       createPrintDialog);
+                }
+            },
+            cache: false
+        });
         return false;
     }
 </script>

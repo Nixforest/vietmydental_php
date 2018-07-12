@@ -95,7 +95,7 @@ class HtmlHandler {
         $paymentLink = Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/payment");
         $createPrescriptionLink = Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/createPrescription");
         
-        $retVal .= '<a ' . $target . ' href="' . $href . '">'
+        $retVal .= '<a ' . $target . ' href="#">'
                 .       '<div class="gr-container">'
                 .           '<div class="gr-bar">'
                 .               '<h4 style="display: inline; margin-right: 4px;"><span class="label '.$sttClass.'">'.$status['name'].'</span></h4>'
@@ -104,7 +104,8 @@ class HtmlHandler {
                 .               $paymentItem
                 .               $prescriptItem
                 .           '</div>'
-                .           '<h4><b><a ' . $target . ' href="' . $href . '">' . $title . '</a></b></h4>'
+//                .           '<h4><b><a ' . $target . ' href="' . $href . '">' . $title . '</a></b></h4>'
+                .           '<h4><b><a ' . $target . ' href="#" onclick="' . $href . '">' . $title . '</a></b></h4>'
                 .           '<span>Bác sĩ <b>'.$doctor.'</b> thực hiện lúc <b>'.$time.'</b>.</span>'
                 .       '</div>'
                 . '</a>';

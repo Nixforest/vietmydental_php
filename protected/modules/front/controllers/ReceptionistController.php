@@ -48,10 +48,10 @@ class ReceptionistController extends FrontController {
                 // Try to save medical record
                 if ($medicalRecord->isValidRecordNumber() && $medicalRecord->save()) {
                     echo CJavaScript::jsonEncode(array(
-                        DomainConst::KEY_STATUS => 'success',
-                        'div' => DomainConst::CONTENT00180,
-                        'rightContent'  => $customer->getCustomerAjaxInfo(),
-                        'infoSchedule' => $customer->getCustomerAjaxScheduleInfo(),
+                        DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
+                        DomainConst::KEY_CONTENT => DomainConst::CONTENT00180,
+                        DomainConst::KEY_RIGHT_CONTENT  => $customer->getCustomerAjaxInfo(),
+                        DomainConst::KEY_INFO_SCHEDULE => $customer->getCustomerAjaxScheduleInfo(),
                     ));
                     exit;
                 } else {
@@ -67,75 +67,107 @@ class ReceptionistController extends FrontController {
             }
         }
         echo CJSON::encode(array(
-            DomainConst::KEY_STATUS => 'failure',
-            'div' => $this->renderPartial('_form_create_customer',
+            DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
+            DomainConst::KEY_CONTENT => $this->renderPartial('_form_create_customer',
                     array(
                         'customer' => $customer,
                         'medicalRecord' => $medicalRecord,
                         'error'         => $errMsg,
                         DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
                     ),
-                    true)
+                    true, true)
         ));
         exit;
     }
     
     /**
-     * Action create schedule extend
-     * Deleted
+     * Validate update url
+     * @param Sring $id Id of customer
+     * @param Sring $key Key value
      */
-    public function actionCreateScheduleExt() {
-        // Test commit
-        $schedule = new TreatmentSchedules();
-        $detail = new TreatmentScheduleDetails();
-        // Temp value saved at Customers::getCustomerAjaxInfo()
-        $recordId = Settings::getAjaxTempValue();
-        $schedule->record_id = $recordId;
-        $mMedicalRecord = MedicalRecords::model()->findByPk($recordId);
-        if (isset($_POST['TreatmentSchedules'], $_POST['TreatmentScheduleDetails']) && $mMedicalRecord) {
-            $schedule->attributes = $_POST['TreatmentSchedules'];
-            $detail->attributes = $_POST['TreatmentScheduleDetails'];
-            
-            // Set status for schedule
-            $schedule->status = TreatmentSchedules::STATUS_SCHEDULE;
-            
-            // Try to save Schedule
-            if ($schedule->save()) {
-                // Save detail field
-                $detail->schedule_id = $schedule->id;
-                $detail->start_date = $schedule->start_date;
-                $detail->end_date   = $schedule->end_date;
-                // Save success, start create detail
-                if ($detail->save()) {
-                    $rightContent = '';
-                    $infoSchedule = '';
-                    if (isset($mMedicalRecord->rCustomer)) {
-                        $rightContent = $mMedicalRecord->rCustomer->getCustomerAjaxInfo();
-                        $infoSchedule = $mMedicalRecord->rCustomer->getCustomerAjaxScheduleInfo();
-                    }
-//                    echo CJavaScript::jsonEncode(array(
-//                        DomainConst::KEY_STATUS => 'success',
-//                        'div' => DomainConst::CONTENT00205,
-//                        'rightContent'  => $rightContent,
-//                        'infoSchedule' => $infoSchedule,
-//                    ));
-//                    exit;
-                } else {
-                    $schedule->delete();
-                    CommonProcess::dumpVariable($detail->getErrors());
-                }
-            } else {
-                CommonProcess::dumpVariable($schedule->getErrors());
-            }
+    public function validateUpdateUrl(&$id, $key) {
+        if (isset($_POST[DomainConst::KEY_ID]) && $_POST[DomainConst::KEY_ID] !== '[object Object]') {
+            $id = $_POST[DomainConst::KEY_ID];
+            Settings::saveAjaxTempValue($id, $key);
+        } else {
+            $id = Settings::getAjaxTempValue($key);
         }
-        $this->render('_form_create_schedule', array(
-            
-                        'schedule' => $schedule,
-                        'detail' => $detail,
-                        DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-        ));
     }
 
+    /**
+     * Handle update customer.
+     */
+    public function actionUpdateCustomer() {
+        $id = '';
+        $this->validateUpdateUrl($id, DomainConst::KEY_CUSTOMER_ID);
+        Loggers::info("Id param value is " . $id, __FUNCTION__, __LINE__);
+        $customer = Customers::model()->findByPk($id);
+        $errMsg = '';
+        if ($customer) {
+            $customer->agent = $customer->getAgentId();
+            $medicalRecord = new MedicalRecords();
+            if (isset($customer->rMedicalRecord)) {
+                $medicalRecord = $customer->rMedicalRecord;
+            }
+            if (isset($_POST['Customers'], $_POST['MedicalRecords'])) {
+                $customer->attributes = $_POST['Customers'];
+                $medicalRecord->attributes = $_POST['MedicalRecords'];
+                // Try save customer
+                if ($customer->save()) {
+                    $referCode = $_POST['Customers']['referCode'];
+                    // Handle save refer code
+                    if (!empty($referCode)) {
+                        ReferCodes::connect($referCode, $customer->id, ReferCodes::TYPE_CUSTOMER);
+                    }
+                    // Handle save social network information
+                    SocialNetworks::deleteAllOldRecord($customer->id, SocialNetworks::TYPE_CUSTOMER);
+                    // Handle save social network information
+                    foreach (SocialNetworks::TYPE_NETWORKS as $key => $value) {
+                        $value = $_POST['Customers']["social_network_$key"];
+                        if (!empty($value)) {
+                            SocialNetworks::insertOne($value, $customer->id, SocialNetworks::TYPE_CUSTOMER, $key);
+                        }
+                    }
+                    // Save success -> start create medical record
+                    $medicalRecord->customer_id = $customer->id;
+
+                    // Try to save medical record
+//                CommonProcess::dumpVariable($medicalRecord->id);
+                    if ($medicalRecord->isValidRecordNumber() && $medicalRecord->save()) {
+                        echo CJavaScript::jsonEncode(array(
+                            DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
+                            DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
+                            DomainConst::KEY_RIGHT_CONTENT  => $customer->getCustomerAjaxInfo(),
+                            DomainConst::KEY_INFO_SCHEDULE => $customer->getCustomerAjaxScheduleInfo(),
+                        ));
+                        exit;
+                    } else {
+                        if (!$medicalRecord->isValidRecordNumber()) {
+                            $errMsg = "Hồ sơ số $medicalRecord->record_number tại chi nhánh " . $customer->getAgentName() . " đã tồn tại.";
+                        } else {
+                            $errMsg = CommonProcess::json_encode_unicode($medicalRecord->getErrors());
+                        }
+                    }
+                } else {
+                    $errMsg = CommonProcess::json_encode_unicode($customer->getErrors());
+                }
+            }
+            echo CJSON::encode(array(
+                DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
+                DomainConst::KEY_CONTENT => $this->renderPartial('_form_create_customer',
+                        array(
+                            'customer' => $customer,
+                            'medicalRecord' => $medicalRecord,
+                            'error'         => $errMsg,
+                            DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                        ),
+                        true, true)
+            ));
+            exit;
+        } else {
+            throw new CHttpException(404, 'The requested page does not exist.');
+        }
+    }
 
     /**
      * Handle create schedule
@@ -175,10 +207,10 @@ class ReceptionistController extends FrontController {
                                 $schedule->rDoctor);
                     }
                     echo CJavaScript::jsonEncode(array(
-                        DomainConst::KEY_STATUS => 'success',
-                        'div' => DomainConst::CONTENT00205,
-                        'rightContent'  => $rightContent,
-                        'infoSchedule' => $infoSchedule,
+                        DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
+                        DomainConst::KEY_CONTENT => DomainConst::CONTENT00205,
+                        DomainConst::KEY_RIGHT_CONTENT  => $rightContent,
+                        DomainConst::KEY_INFO_SCHEDULE => $infoSchedule,
                     ));
                     exit;
                 } else {
@@ -190,14 +222,14 @@ class ReceptionistController extends FrontController {
             }
         }
         echo CJSON::encode(array(
-            DomainConst::KEY_STATUS => 'failure',
-            'div' => $this->renderPartial('_form_create_schedule',
+            DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
+            DomainConst::KEY_CONTENT => $this->renderPartial('_form_create_schedule',
                     array(
                         'schedule' => $schedule,
                         'detail' => $detail,
                         DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
                     ),
-                    true)
+                    true, true),
         ));
         exit;
     }
@@ -206,60 +238,55 @@ class ReceptionistController extends FrontController {
      * Handle update schedule
      */
     public function actionUpdateSchedule() {
-        // Temp value saved at Customers::getCustomerAjaxScheduleInfo()
-        $detailId = Settings::getAjaxTempValue();
-        $model = TreatmentScheduleDetails::model()->findByPk($detailId);
+        $id = '';
+        $this->validateUpdateUrl($id, 'treatment_schedule_detail_id');
+        Loggers::info("Id param value is " . $id, __FUNCTION__, __LINE__);
+        $model = TreatmentScheduleDetails::model()->findByPk($id);
         if ($model) {
             $model->start_date = CommonProcess::convertDateTime(
                     $model->start_date,
                     DomainConst::DATE_FORMAT_1,
                     DomainConst::DATE_FORMAT_4);
             $schedule = $model->rSchedule;
-            if (isset($_POST['TreatmentScheduleDetails']) && isset($_POST['TreatmentSchedules'])) {
+            if (isset($_POST['TreatmentScheduleDetails']) && isset($_POST['TreatmentSchedules'])
+                    && isset($schedule)) {
                 $model->attributes = $_POST['TreatmentScheduleDetails'];
                 $schedule->attributes = $_POST['TreatmentSchedules'];
-                if ($model->save()) {
-                    // Update treatment schedule info
-                    if (isset($model->rSchedule)) {
-//                        $schedule = $model->rSchedule;
-                        // Schedule have only 1 detail
-                        if (isset($schedule->rDetail) && count($schedule->rDetail) == 1) {
-                            // Update time and start date of treatment schedule
-                            $schedule->time_id = $model->time_id;
-                            $schedule->start_date = $model->start_date;
-                            $schedule->save();
-                        }
-                    }
+                if ($schedule->save()) {
+                    // Update time and start date of treatment schedule detail
+                    $model->time_id = $schedule->time_id;
+                    $model->start_date = $schedule->start_date;
+                    $model->save();
+                    
                     $rightContent = '';
                     $infoSchedule = '';
-                    if (isset($model->rSchedule)
-                            && isset($model->rSchedule->rMedicalRecord)
-                            && isset($model->rSchedule->rMedicalRecord->rCustomer)) {
-                        $customer = $model->rSchedule->rMedicalRecord->rCustomer;
+                    $customer = $schedule->getCustomerModel();
+                    if ($customer != NULL) {
                         $rightContent = $customer->getCustomerAjaxInfo();
                         $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
-//                        $infoSchedule = $model->getAjaxScheduleInfo();
                     }
                     echo CJSON::encode(array(
-                        DomainConst::KEY_STATUS => 'success',
-                        'div' => DomainConst::CONTENT00181,
-                        'rightContent'  => $rightContent,
-                        'infoSchedule' => $infoSchedule,
+                        DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
+                        DomainConst::KEY_CONTENT => DomainConst::CONTENT00181,
+                        DomainConst::KEY_RIGHT_CONTENT  => $rightContent,
+                        DomainConst::KEY_INFO_SCHEDULE => $infoSchedule,
                     ));
                     exit;
                 }
             }
             echo CJSON::encode(array(
-                'status' => 'failure',
-                'div' => $this->renderPartial('_form_update_schedule',
+                DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
+                DomainConst::KEY_CONTENT => $this->renderPartial('_form_create_schedule',
                         array(
-                            'model' => $model,
+                            'detail' => $model,
                             'schedule' => $schedule,
                             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
                         ),
-                        true)
+                        true, true)
             ));
             exit;
+        } else {
+            throw new CHttpException(404, 'The requested page does not exist.');
         }
     }
     
@@ -465,11 +492,11 @@ class ReceptionistController extends FrontController {
      * Handle create customer.
      */
     public function actionPrintMore() {
-        $customerId = Settings::getAjaxTempValue1();
-        $customer = Customers::model()->findByPk($customerId);
+        $id = '';
+        $this->validateUpdateUrl($id, DomainConst::KEY_CUSTOMER_ID);
+        Loggers::info("Id param value is " . $id, __FUNCTION__, __LINE__);
+        $customer = Customers::model()->findByPk($id);
         if (isset($_POST[DomainConst::KEY_RECEIPT])) {
-//        if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
-//            CommonProcess::dumpVariable('hoho');
             $nameArr = DomainConst::KEY_RECEIPT;
             $selected = array();
             if (isset($customer->rMedicalRecord) && isset($customer->rMedicalRecord->rTreatmentSchedule)) {
@@ -496,12 +523,12 @@ class ReceptionistController extends FrontController {
 //            exit;
         }
         echo CJSON::encode(array(
-            DomainConst::KEY_STATUS => 'failure',
-            'div' => $this->renderPartial('_form_print_receipt',
+            DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
+            DomainConst::KEY_CONTENT => $this->renderPartial('_form_print_receipt',
                     array(
                         'customer' => $customer,
                         DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-                    ), true)
+                    ), true, true)
         ));
         exit;
     }
@@ -510,9 +537,10 @@ class ReceptionistController extends FrontController {
      * Action create prescription.
      */
     public function actionCreatePrescription() {
-        // Temp value saved at Customers::getCustomerAjaxScheduleInfo()
-        $detailId = Settings::getAjaxTempValue();
-        $model = TreatmentScheduleDetails::model()->findByPk($detailId);
+        $id = '';
+        $this->validateUpdateUrl($id, 'TreatmentScheduleDetails');
+        Loggers::info("Id of treatment schedule detail is " . $id, __FUNCTION__, __LINE__);
+        $model = TreatmentScheduleDetails::model()->findByPk($id);
         if ($model) {
         } else {
             $model = new TreatmentScheduleDetails();
@@ -526,6 +554,177 @@ class ReceptionistController extends FrontController {
                     ), true)
         ));
         exit;
+    }
+    
+    /**
+     * Action update treatment
+     */
+    public function actionUpdateTreatment() {
+        $id = '';
+        $this->validateUpdateUrl($id, 'TreatmentScheduleDetails');
+        Loggers::info("Id of treatment schedule detail is " . $id, __FUNCTION__, __LINE__);
+        $model = TreatmentScheduleDetails::model()->findByPk($id);
+        if ($model) {
+            if (isset($_POST['TreatmentScheduleDetails'])) {
+                $model->attributes = $_POST['TreatmentScheduleDetails'];
+                if ($model->save()) {
+                    // Remove old record
+                    OneMany::deleteAllOldRecords($model->id, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+                    $index = 0;
+                    foreach (CommonProcess::getListTeeth() as $teeth) {
+                        if (isset($_POST['teeth'][$index]) && ($_POST['teeth'][$index] == DomainConst::CHECKBOX_STATUS_CHECKED)) {
+                            OneMany::insertOne($model->id, $index, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+                        }
+                        $index++;
+                    }
+                    if (isset($_POST[DomainConst::KEY_SUBMIT])) {
+                        $model->status = TreatmentScheduleDetails::STATUS_COMPLETED;
+                        $model->save();
+                    }
+                    $rightContent = '';
+                    $infoSchedule = '';
+                    $customer = $model->getCustomerModel();
+                    if (isset($customer)) {
+                        $rightContent = $customer->getCustomerAjaxInfo();
+                        $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
+                    }
+                    echo CJavaScript::jsonEncode(array(
+                        DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
+                        DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
+                        DomainConst::KEY_RIGHT_CONTENT  => $rightContent,
+                        DomainConst::KEY_INFO_SCHEDULE => $infoSchedule,
+                    ));
+                    exit;
+                }
+            }
+        }
+        echo CJSON::encode(array(
+            DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
+            DomainConst::KEY_CONTENT => $this->renderPartial('_form_update_treatment_schedule',
+                    array(
+                        'model' => $model,
+                        DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                    ),
+                    true, true),
+        ));
+        exit;
+    }
+
+    /**
+     * Handle create receipt
+     */
+    public function actionCreateReceipt() {
+        $id = '';
+        $this->validateUpdateUrl($id, 'treatment_schedule_detail_id');
+        Loggers::info("Id param value is " . $id, __FUNCTION__, __LINE__);
+        $mDetail = TreatmentScheduleDetails::model()->findByPk($id);
+        $agentId = isset(Yii::app()->user->agent_id) ? Yii::app()->user->agent_id : '';
+        $userId = isset(Yii::app()->user->id) ? Yii::app()->user->id : '';
+        $total = 0;
+        $customer = NULL;
+        if ($mDetail) {
+            if (isset($mDetail->rReceipt)) {
+                $model = $mDetail->rReceipt;
+            } else {
+                $model   = new Receipts();
+            }
+            $total = $mDetail->getTotalMoney();
+
+            $customer = $mDetail->getCustomerModel();
+        } else {
+            $model   = new Receipts();
+            $customer = new Customers();
+        }
+        if (isset($_POST['Receipts'])) {
+            $model->attributes = $_POST['Receipts'];
+            $model->detail_id = $id;
+            $model->need_approve = 0;
+            $model->customer_confirm = 0;
+            $model->receiptionist_id = $userId;
+            $model->status = Receipts::STATUS_DOCTOR;
+
+            if ($model->save()) {
+                $model->connectAgent($agentId);
+                if (isset($customer)) {
+                    $rightContent = $customer->getCustomerAjaxInfo();
+                    $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
+                }
+                echo CJavaScript::jsonEncode(array(
+                    DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
+                    DomainConst::KEY_CONTENT => DomainConst::CONTENT00387,
+                    DomainConst::KEY_RIGHT_CONTENT  => $rightContent,
+                    DomainConst::KEY_INFO_SCHEDULE => $infoSchedule,
+                ));
+                exit;
+            }
+        }
+        echo CJSON::encode(array(
+            DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
+            DomainConst::KEY_CONTENT => $this->renderPartial('_form_create_receipt',
+                array(
+                    'model' => $model,
+                    'total' => $total,
+                    'detail' => $mDetail,
+                    'customer'  => $customer,
+                    DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                ),
+                true, true),
+        ));
+        exit;
+    }
+    
+    /**
+     * Action create new treatment
+     */
+    public function actionCreateNewTreatment() {
+        $id = '';
+        $this->validateUpdateUrl($id, 'TreatmentScheduleDetails');
+        Loggers::info("Id of treatment schedule detail is " . $id, __FUNCTION__, __LINE__);
+        $model = new TreatmentScheduleDetails();
+        $model->schedule_id = $id;
+        $mSchedule = TreatmentSchedules::model()->findByPk($id);
+        if ($mSchedule) {
+            if (isset($_POST['TreatmentScheduleDetails'])) {
+                $model->attributes = $_POST['TreatmentScheduleDetails'];
+                if ($model->save()) {
+                    $index = 0;
+                    foreach (CommonProcess::getListTeeth() as $teeth) {
+                        if (isset($_POST['teeth'][$index]) && ($_POST['teeth'][$index] == DomainConst::CHECKBOX_STATUS_CHECKED)) {
+                            OneMany::insertOne($model->id, $index, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+                        }
+                        $index++;
+                    }
+                    if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
+                        $model->status = TreatmentScheduleDetails::STATUS_COMPLETED;
+                        $model->save();
+                    }
+                    $rightContent = '';
+                    $infoSchedule = '';
+                    $customer = $model->getCustomerModel();
+                    if (isset($customer)) {
+                        $rightContent = $customer->getCustomerAjaxInfo();
+                        $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
+                    }
+                    echo CJavaScript::jsonEncode(array(
+                        DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
+                        DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
+                        DomainConst::KEY_RIGHT_CONTENT  => $rightContent,
+                        DomainConst::KEY_INFO_SCHEDULE => $infoSchedule,
+                    ));
+                    exit;
+                }
+            }
+            echo CJSON::encode(array(
+                DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
+                DomainConst::KEY_CONTENT => $this->renderPartial('_form_update_treatment_schedule',
+                    array(
+                        'model' => $model,
+                        DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                    ),
+                    true, true),
+            ));
+            exit;
+        }
     }
 
     // Uncomment the following methods and override them if needed
