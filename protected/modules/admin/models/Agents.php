@@ -88,7 +88,7 @@ class Agents extends BaseActiveRecord
                         'on'    => 'type = ' . OneMany::TYPE_AGENT_RECEIPT,
                     ),
                     'rMoneyAccount' => array(
-                        self::HAS_MANY, 'MoneyAccounts', 'agent_id',
+                        self::HAS_MANY, 'MoneyAccount', 'agent_id',
                         'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
                     ),
 		);
@@ -283,4 +283,118 @@ class Agents extends BaseActiveRecord
             ),
         ));
     }
+    
+    /**
+     * 
+     * @param type $from
+     * @param type $to
+     * @param type $arrStatus
+     * @return \CArrayDataProvider
+     */
+    public function getMoney($from, $to, $arrIsIncomming) {
+        $arrReceipts = array();
+        if (isset($this->rMoneyAccount)) {
+            foreach ($this->rMoneyAccount as $aValue) {
+                foreach ($aValue->rMoney as $value) {
+                    if (in_array($value->isIncomming, $arrIsIncomming)) {
+                        $date = $value->action_date;
+    //                    CommonProcess::dumpVariable($date);
+                        $compareFrom = DateTimeExt::compare($date, $from);
+                        $compareTo = DateTimeExt::compare($date, $to);
+                        // Check if receipt is between date range
+                        if (($compareFrom == 1 || $compareFrom == 0)
+                                && ($compareTo == 0 || $compareTo == -1)) {
+                            $arrReceipts[] = $value;
+                        }
+    //                        $arrReceipts[] = $value;
+                    }
+                }
+            }
+        }
+        return new CArrayDataProvider($arrReceipts, array(
+            'id' => 'moneys',
+            'sort'=>array(
+                'attributes'=>array(
+                     'id', 'agent_id'
+                ),
+            ),
+            'pagination'=>array(
+                'pageSize'=>Settings::getListPageSize(),
+            ),
+        ));
+    }
+    
+    /**
+     * get array report
+     * @param type $from
+     * @param type $to
+     */
+    public function getReportMoney($from, $to){
+        $aData = array();
+        $aData['DOCTORS'] = array();
+        $aData['RECEIPT'] = array();
+        $aData['RECEIPT']['DATES'] = array();
+        $aData['RECEIPT']['VALUES'] = array();
+        $aData['DOCTORS'] =  Users::getListUser(Roles::getRoleByName(Roles::ROLE_DOCTOR)->id,$this->id);
+//        Load receipts
+        $receipts = $this->getReceipts($from, $to, array(Receipts::STATUS_RECEIPTIONIST));
+        $receipts->pagination = false;
+        $aReceipts = $receipts->getData();
+        foreach ($aReceipts as $key => $mJoinReceipt) {
+            $mReceipt = $mJoinReceipt->rReceipt;
+            $doctor_id = $mReceipt->getDoctorId();
+            $money = $mJoinReceipt->getReceiptFinal();
+            $date = CommonProcess::convertDateTime($mReceipt->created_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
+//            set money RECEIPT
+            if(!empty($aData['RECEIPT']['VALUES'][$date][$doctor_id])){
+                $aData['RECEIPT']['VALUES'][$date][$doctor_id] += (int)$money;
+            }else{
+                $aData['RECEIPT']['VALUES'][$date][$doctor_id] = (int)$money;
+            }
+//            set date
+            if(empty($aData['RECEIPT']['DATES'][$date])){
+                $aData['RECEIPT']['DATES'][$date] = $date;
+            }
+        }
+//        Load money
+        $aData['GENERAL']['DATES']  = array();
+        $aData['GENERAL']['IMPORT'] = array();
+        $aData['GENERAL']['EXPORT'] = array();
+        $aData['EXPORT_DETAIL'] = array();
+        $moneys = $this->getMoney($from, $to, array(DomainConst::NUMBER_ONE_VALUE,DomainConst::NUMBER_ZERO_VALUE));
+        $moneys->pagination = false;
+        $aMoneys = $moneys->getData();
+        foreach ($aMoneys as $key => $mMoney) {
+            $date = $mMoney->action_date;
+//            import
+            if($mMoney->isIncomming == DomainConst::NUMBER_ONE_VALUE){
+                if(!empty($aData['GENERAL']['IMPORT'][$date])){
+                    $aData['GENERAL']['IMPORT'][$date] += $mMoney->amount;
+                }else{
+                    $aData['GENERAL']['IMPORT'][$date] = $mMoney->amount;
+                }
+            }
+//            export
+            if($mMoney->isIncomming == DomainConst::NUMBER_ZERO_VALUE){
+                if(!empty($aData['GENERAL']['EXPORT'][$date])){
+                    $aData['GENERAL']['EXPORT'][$date] += $mMoney->amount;
+                }else{
+                    $aData['GENERAL']['EXPORT'][$date] = $mMoney->amount;
+                }
+//                Detail Export
+                $aData['EXPORT_DETAIL'][] = array(
+                    'DATE' => $date,
+                    'MONEY' => $mMoney->amount,
+                    'DESCRIPTION' => $mMoney->description,
+                );
+            }
+//            set date GENERAL
+            if(empty($aData['GENERAL']['DATES'][$date])){
+                $aData['GENERAL']['DATES'][$date] = $date;
+            }
+            
+        }
+        return $aData;
+    }
+    
 }
