@@ -131,6 +131,9 @@ class ExcelHandler {
      */
     public static function summaryReportMoney($model, $from, $to) {
         try {
+            //        data
+            $aData = $model->getReportMoney($from, $to);
+            $titleCellDate = 'THÁNG '.date('m/Y',strtotime($from));
             $fileName = 'Báo cáo (' . $from . ' đến ' . $to . ')';
             Yii::import('application.extensions.vendors.PHPExcel', true);
             $objPHPExcel = new PHPExcel();
@@ -143,6 +146,7 @@ class ExcelHandler {
                     ->setKeywords(ExcelHandler::$keyword)
                     ->setCategory(ExcelHandler::$category);
             /*             * ************     SHEET CT DTHU **************************** */
+            $countDoctor = count($aData['DOCTORS']);
             $row = 1;
             $objPHPExcel->setActiveSheetIndex(0);
             $objPHPExcel->getActiveSheet()->getDefaultStyle()->getFont()->setName(ExcelHandler::$font);
@@ -152,20 +156,27 @@ class ExcelHandler {
             $objPHPExcel->getActiveSheet()->setCellValue("A$row", $titleCell);
             $objPHPExcel->getActiveSheet()->getStyle("A$row")->getFont()
                     ->setBold(true);
-            $objPHPExcel->getActiveSheet()->mergeCells("A$row:K$row");
-            $objPHPExcel->getActiveSheet()->getStyle("A$row:K" . $row)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-            $objPHPExcel->getActiveSheet()->getStyle("A$row:K" . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->mergeCells("A$row:".ExcelHandler::columnName($countDoctor+2) . $row);
+            $objPHPExcel->getActiveSheet()->getStyle("A$row:".ExcelHandler::columnName($countDoctor+2) . $row)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle("A$row:".ExcelHandler::columnName($countDoctor+2) . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getRowDimension($row)->setRowHeight(30);
+            $row++;
+            
+            $objPHPExcel->getActiveSheet()->setCellValue("A$row", $titleCellDate);
+            $objPHPExcel->getActiveSheet()->getStyle("A$row")->getFont()
+                    ->setBold(true);
+            $objPHPExcel->getActiveSheet()->mergeCells("A$row:".ExcelHandler::columnName($countDoctor+2) . $row);
+            $objPHPExcel->getActiveSheet()->getStyle("A$row:".ExcelHandler::columnName($countDoctor+2) . $row)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle("A$row:".ExcelHandler::columnName($countDoctor+2) . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
             $objPHPExcel->getActiveSheet()->getRowDimension($row)->setRowHeight(30);
             $row++;
             $index = 1;
             $beginBorder = $row;
-//        data
-            $aData = $model->getReportMoney($from, $to);
+
 //        name of column
-            $objPHPExcel->getActiveSheet()->getColumnDimension(ExcelHandler::columnName($index))->setWidth(30);
+            $objPHPExcel->getActiveSheet()->getColumnDimension(ExcelHandler::columnName($index))->setWidth(20);
             $objPHPExcel->getActiveSheet()->setCellValue(ExcelHandler::columnName($index++) . "$row", 'Ngày');
             $objPHPExcel->getActiveSheet()->setCellValue(ExcelHandler::columnName($index) . "$row", 'Bác sĩ thực hiện');
-            $countDoctor = count($aData['DOCTORS']);
 //        Trừ 1 vì 1 cột đã ghi tiêu đề
             $objPHPExcel->getActiveSheet()->mergeCells(ExcelHandler::columnName($index) . "$row" . ":" . ExcelHandler::columnName($index + $countDoctor - 1) . "$row");
             $index += $countDoctor;
@@ -180,12 +191,14 @@ class ExcelHandler {
             $rowMerge = $row - 1;
             $objPHPExcel->getActiveSheet()->mergeCells(ExcelHandler::columnName($index) . "$rowMerge" . ':' . ExcelHandler::columnName($index) . "$row");
             $index++;
+            $startCurrency = ExcelHandler::columnName($index);
             foreach ($aData['DOCTORS'] as $idDoctor => $strFullName) {
                 $objPHPExcel->getActiveSheet()->setCellValue(ExcelHandler::columnName($index) . "$row", $strFullName);
                 //        set style width
                 $objPHPExcel->getActiveSheet()->getColumnDimension(ExcelHandler::columnName($index))->setWidth(20);
                 $index++;
             }
+            $endCurrency = ExcelHandler::columnName($index-1);
             $objPHPExcel->getActiveSheet()->mergeCells(ExcelHandler::columnName($index) . "$rowMerge" . ':' . ExcelHandler::columnName($index) . "$row");
             $index++;
 //        set style column
@@ -204,7 +217,7 @@ class ExcelHandler {
                     ->getBorders()->getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
             $objPHPExcel->getActiveSheet()->getStyle("A$beginBorder:" . ExcelHandler::columnName($index) . $row)
                     ->getAlignment()->setWrapText(true);
-            $beginBorder++;
+            $objPHPExcel->getActiveSheet()->getStyle($startCurrency.$beginBorder.':'.$endCurrency.$row)->getNumberFormat()->setFormatCode('#,##0');
 
 
             /*             * ************     SHEET CT CHI **************************** */
@@ -223,12 +236,18 @@ class ExcelHandler {
             $objPHPExcel->getActiveSheet()->getStyle("A$row:C" . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
             $objPHPExcel->getActiveSheet()->getRowDimension($row)->setRowHeight(30);
             $row++;
+            $objPHPExcel->getActiveSheet()->setCellValue("A$row", $titleCellDate);
+            $objPHPExcel->getActiveSheet()->getStyle("A$row")->getFont()
+                    ->setBold(true);
+            $objPHPExcel->getActiveSheet()->mergeCells("A$row:C$row");
+            $objPHPExcel->getActiveSheet()->getStyle("A$row:C" . $row)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle("A$row:C" . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getRowDimension($row)->setRowHeight(30);
+            $row++;
             $index = 1;
             $beginBorder = $row;
-//        data
-            $aData = $model->getReportMoney($from, $to);
 //        name of column
-            $objPHPExcel->getActiveSheet()->getColumnDimension(ExcelHandler::columnName($index))->setWidth(30);
+            $objPHPExcel->getActiveSheet()->getColumnDimension(ExcelHandler::columnName($index))->setWidth(20);
             $objPHPExcel->getActiveSheet()->setCellValue(ExcelHandler::columnName($index++) . "$row", 'Ngày');
             $objPHPExcel->getActiveSheet()->getColumnDimension(ExcelHandler::columnName($index))->setWidth(30);
             $objPHPExcel->getActiveSheet()->setCellValue(ExcelHandler::columnName($index++) . "$row", 'Nội dung');
@@ -250,7 +269,7 @@ class ExcelHandler {
                     ->getBorders()->getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
             $objPHPExcel->getActiveSheet()->getStyle("A$beginBorder:" . ExcelHandler::columnName($index) . $row)
                     ->getAlignment()->setWrapText(true);
-            $beginBorder++;
+            $objPHPExcel->getActiveSheet()->getStyle("C$beginBorder:C".$row)->getNumberFormat()->setFormatCode('#,##0');
 
             /*             * ************     SHEET GENERAL **************************** */
             $objPHPExcel->createSheet(2);
@@ -268,12 +287,18 @@ class ExcelHandler {
             $objPHPExcel->getActiveSheet()->getStyle("A$row:D" . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
             $objPHPExcel->getActiveSheet()->getRowDimension($row)->setRowHeight(30);
             $row++;
+            $objPHPExcel->getActiveSheet()->setCellValue("A$row", $titleCellDate);
+            $objPHPExcel->getActiveSheet()->getStyle("A$row")->getFont()
+                    ->setBold(true);
+            $objPHPExcel->getActiveSheet()->mergeCells("A$row:D$row");
+            $objPHPExcel->getActiveSheet()->getStyle("A$row:D" . $row)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle("A$row:D" . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getRowDimension($row)->setRowHeight(30);
+            $row++;
             $index = 1;
             $beginBorder = $row;
-//        data
-            $aData = $model->getReportMoney($from, $to);
 //        name of column
-            $objPHPExcel->getActiveSheet()->getColumnDimension(ExcelHandler::columnName($index))->setWidth(30);
+            $objPHPExcel->getActiveSheet()->getColumnDimension(ExcelHandler::columnName($index))->setWidth(20);
             $objPHPExcel->getActiveSheet()->setCellValue(ExcelHandler::columnName($index++) . "$row", 'Ngày');
             $objPHPExcel->getActiveSheet()->setCellValue(ExcelHandler::columnName($index++) . "$row", 'Số tiền (VNĐ)');
             $objPHPExcel->getActiveSheet()->mergeCells(ExcelHandler::columnName($index - 1) . "$row:" . ExcelHandler::columnName($index) . $row);
@@ -309,8 +334,7 @@ class ExcelHandler {
                     ->getBorders()->getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
             $objPHPExcel->getActiveSheet()->getStyle("A$beginBorder:" . ExcelHandler::columnName($index) . $row)
                     ->getAlignment()->setWrapText(true);
-            $beginBorder++;
-
+            $objPHPExcel->getActiveSheet()->getStyle("B$beginBorder:C".$row)->getNumberFormat()->setFormatCode('#,##0');
             //save file
             $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 
