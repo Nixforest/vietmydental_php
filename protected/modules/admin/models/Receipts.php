@@ -800,4 +800,15 @@ class Receipts extends CActiveRecord
         $today = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_6);
         return self::getRevenue($from, $today, $agent_id);
     }
+    
+    /**
+     * get doctor_id
+     * @return Final
+     */
+    public function getDoctorId(){
+        if (isset($this->rTreatmentScheduleDetail)) {
+            return $this->rTreatmentScheduleDetail->getDoctorId();
+        }
+        return NULL;
+    }
 }
