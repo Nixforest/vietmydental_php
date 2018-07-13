@@ -336,6 +336,9 @@ class Agents extends BaseActiveRecord
         $aData['RECEIPT']['DATES'] = array();
         $aData['RECEIPT']['VALUES'] = array();
         $aData['DOCTORS'] =  Users::getListUser(Roles::getRoleByName(Roles::ROLE_DOCTOR)->id,$this->id);
+        foreach ($aData['DOCTORS'] as $id => $name){
+            $aData['DOCTORS'][$id] = $this->getNameBS($name);
+        }
 //        Load receipts
         $receipts = $this->getReceipts($from, $to, array(Receipts::STATUS_RECEIPTIONIST));
         $receipts->pagination = false;
@@ -395,6 +398,19 @@ class Agents extends BaseActiveRecord
             
         }
         return $aData;
+    }
+    
+    /**
+     * get name of BS
+     * @param type $strName
+     */
+    public function getNameBS($strName){
+        $result = '';
+        $arrayChar = explode(' ', $strName);
+        if(!empty($arrayChar)){
+            $result = 'BS '. $arrayChar[count($arrayChar)-1];
+        }
+        return $result;
     }
     
 }
