@@ -705,6 +705,23 @@ class TreatmentScheduleDetails extends BaseActiveRecord
     public function getTotalMoneyText() {
         return CommonProcess::formatCurrency($this->getTotalMoney()) . " " . DomainConst::CONTENT00134;
     }
+    /**
+     * Get title of treatment schedule detail
+     * @return String Title of treatment schedule detail
+     */
+    public function getTitle() {
+        $retVal = '';
+        if ($this->rTreatmentType) {
+            $retVal .= $this->rTreatmentType->name;
+        } else if ($this->rDiagnosis) {
+            $retVal .= $this->rDiagnosis->name;
+        } else if (!empty ($this->description)) {
+            $retVal .= $this->description;
+        } else {
+            $retVal .= DomainConst::CONTENT00177;
+        }
+        return $retVal;
+    }
 
     //-----------------------------------------------------
     // Static methods

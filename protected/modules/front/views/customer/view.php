@@ -137,21 +137,20 @@
                         <li class="active"><a data-toggle="tab" href="#treatment-list"><i class="fas fa-list-ol"></i> <?php echo DomainConst::CONTENT00280; ?></a></li>
                         <li><a data-toggle="tab" href="#treatment-time"><i class="fas fa-calendar-check"></i> <?php echo DomainConst::CONTENT00174; ?></a></li>
                         <li><a data-toggle="tab" href="#payment-detail"><i class="fas fa-credit-card"></i> <?php echo DomainConst::CONTENT00256; ?></a></li>
-                        <li><a data-toggle="tab" href="#treatment-process"><i class="fas fa-sliders-h"></i> Tiến Trình Điều Trị</a></li>
-                        <li><a data-toggle="tab" href="#treatment-picture"><i class="fas fa-images"></i> Hình Ảnh Điều Trị</a></li>
-                        <li><a data-toggle="tab" href="#guarantee"><i class="fas fa-shield-alt"></i> Bảo Hành</a></li>
-                        <li><a data-toggle="tab" href="#retreatment-schedule"><i class="fas fa-calendar-alt"></i> Lịch Hẹn Tái Khám</a></li>
+                        <li><a data-toggle="tab" href="#treatment-process"><i class="fas fa-sliders-h"></i> <?php echo DomainConst::CONTENT00233; ?></a></li>
+                        <li><a data-toggle="tab" href="#treatment-picture"><i class="fas fa-images"></i> <?php echo DomainConst::CONTENT00390; ?></a></li>
+                        <li><a data-toggle="tab" href="#guarantee"><i class="fas fa-shield-alt"></i> <?php echo DomainConst::CONTENT00391; ?></a></li>
+                        <li><a data-toggle="tab" href="#retreatment-schedule"><i class="fas fa-calendar-alt"></i> <?php echo DomainConst::CONTENT00392; ?></a></li>
                     </ul>
 
                     <div class="tab-content">
                         <!--Danh sach dieu tri -->
                         <div id="treatment-list" class="tab-pane fade in active">
-                            <h3><?php echo DomainConst::CONTENT00280; ?></h3>
                             <div class="lp-list-container" id="treatment_schedule-info">
                                 <?php $treatmentCnt = count($treatment); ?>
                                 <?php foreach ($treatment as $value): ?>
                                     <?php
-                                    $title = 'Đợt ' . $treatmentCnt-- . ': ' . $value->getStartTime();
+                                    $title = 'Đợt ' . $treatmentCnt-- . ': ' . $value->getStartDate();
                                     $info = '';
                                     if (isset($value->rDetail) && (count($value->rDetail) > 0)) {
                                         $info = $value->rDetail[0]->getTreatmentInfo();
@@ -168,13 +167,13 @@
                         </div>
                         <!--Lan dieu tri -->
                         <div id="treatment-time" class="tab-pane fade">
-                            <h3><?php echo DomainConst::CONTENT00174; ?></h3>
                             <div class="lp-list-container" id="treatment_schedule_detail-info">
                                 <?php
-                                if (count($treatment) > 0) {
-                                    $retVal = $treatment[0]->getHtmlTreatmentDetail();
-                                    echo $retVal;
+                                $retVal = '';
+                                foreach ($treatment as $value) {
+                                    $retVal .= $value->getHtmlTreatmentDetail();
                                 }
+                                echo $retVal;
                                 ?>
 
                                 <!--<a href="#">(Xem Thêm)</a>-->
@@ -182,7 +181,6 @@
                         </div>
                         <!--Chi tiet thanh toan -->
                         <div id="payment-detail" class="tab-pane fade">
-                            <h3><?php echo DomainConst::CONTENT00256; ?></h3>
                             <div class="lp-list-container">
                                 <?php $idx = 1; ?>
                                 <?php foreach ($model->getReceipts() as $receipt): ?>
@@ -197,7 +195,6 @@
                         </div>
                         <!--Qua trinh dieu tri -->
                         <div id="treatment-process" class="tab-pane fade">
-                            <h3>Tiến Trình Điều Trị</h3>
                             <!--                        <div class="list__2__info">
                                                         <div class="list__2__des">
                                                             <div class="list__2__item">
@@ -230,8 +227,7 @@
                                                     </div>-->
                         </div>
                         <!--Hinh anh dieu tri -->
-                        <div id="treatment-picture" class="tab-pane fade">
-                            <h3>Hình Ảnh Điều Trị</h3>
+                        <div id="treatment-picture" class="tab-pane fade" style="padding: 10px 15px!important">
                             <div class="orbit-spinner loading"> 
                                 <div class="orbit"></div>
                                 <div class="orbit"></div>
@@ -311,7 +307,6 @@
                         </div>
                         <!--Bao hanh -->
                         <div id="guarantee" class="tab-pane fade">
-                            <h3>Bảo Hành</h3>
                             <div class="lp-text-content">
                                 <?php
                                 $html = '';
@@ -340,19 +335,9 @@
                         </div>
                         <!--Lich tai kham -->
                         <div id="retreatment-schedule" class="tab-pane fade">
-                            <h3>Lịch Hẹn Tái Khám</h3>
-                            <div class="lp-text-content">
-                                <p>
-                                    <i class="fas fa-angle-double-right"></i> 
-                                    <strong>Thời Gian Bảo Hành: 3 Năm </strong><br>
-                                    <i class="fas fa-calendar-plus" title="Ngày bắt đầu"></i> 
-                                    9:30 AM - 26/03/2018<br>
-                                    <i class="fas fa-calendar-minus" title="Ngày kết thúc"></i>
-                                    10:30 AM - 26/04/2018<br>
-                                    <i class="fas fa-stopwatch" title="Thời gian còn lại"></i> 
-                                    365 Ngày<br>
-                                </p>
-                            </div>
+                            <?php
+                            echo $model->getLandingPageScheduleInfo();
+                            ?>
                         </div>
                     </div>
                 </div>

@@ -576,9 +576,9 @@ class Customers extends BaseActiveRecord
                 if (isset($schedule->rDetail)) {
                     $rightContent .= '<b style="float: left">';
                     if ($schedule->rPathological) {
-                        $rightContent .= $htmlIcon.'<span class="round-txt">Đợt ' . $i . ': ' . $schedule->getStartTime() . ' - ' . $schedule->rPathological->name . '</span>';
+                        $rightContent .= $htmlIcon.'<span class="round-txt">Đợt ' . $i . ': ' . $schedule->getStartDate() . ' - ' . $schedule->rPathological->name . '</span>';
                     } else {
-                        $rightContent .= $htmlIcon.'<span class="round-txt">Đợt ' . $i . ': ' . $schedule->getStartTime() . '</span>';
+                        $rightContent .= $htmlIcon.'<span class="round-txt">Đợt ' . $i . ': ' . $schedule->getStartDate() . '</span>';
                     }
                     $rightContent .= '</b>';
                     
@@ -729,6 +729,29 @@ class Customers extends BaseActiveRecord
             }
         }
         return $infoSchedule;
+    }
+    
+    /**
+     * Get landing page schedule information
+     * @return string
+     */
+    public function getLandingPageScheduleInfo() {
+        $scheduleId = $this->getSchedule();
+        $retVal = '';
+        if (!empty($scheduleId)) {
+            $mSchedule = TreatmentScheduleDetails::model()->findByPk($scheduleId);
+            if ($mSchedule) {
+                $retVal .= '<div class="lp-text-content">';
+                $retVal .=      '<p>';
+                $retVal .=          '<i class="fas fa-angle-double-right"></i> ';
+                $retVal .=          '<strong>' . $mSchedule->getTitle() . '</strong><br>';
+                $retVal .=          '<i class="fas fa-calendar-plus" title="Ngày bắt đầu"></i> ';
+                $retVal .=          $mSchedule->getStartTime() . '<br>';
+                $retVal .=      '</p>';
+                $retVal .= '</div>';
+            }
+        }
+        return $retVal;
     }
     
     /**
