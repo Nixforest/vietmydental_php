@@ -230,7 +230,7 @@
                                                     </div>-->
                         </div>
                         <!--Hinh anh dieu tri -->
-                        <div id="treatment-picture" class="tab-pane fade">
+                        <div id="treatment-picture" class="tab-pane fade" style="padding: 10px 15px!important">
                             <h3>Hình Ảnh Điều Trị</h3>
                             <div class="orbit-spinner loading"> 
                                 <div class="orbit"></div>
