@@ -232,8 +232,22 @@
                         <!--Hinh anh dieu tri -->
                         <div id="treatment-picture" class="tab-pane fade">
                             <h3>Hình Ảnh Điều Trị</h3>
+                            <div class="orbit-spinner loading"> 
+                                <div class="orbit"></div>
+                                <div class="orbit"></div>
+                                <div class="orbit"></div>
+                            </div>
                             <div class="lp-child-container">
                                 <div class="row">
+                                    <table style="width:100%" border="1">
+                                        <tr>
+                                            <th style="width:10%">Lần điều trị</th>
+                                            <th style="width:45%">Hình ảnh thực</th>
+                                            <th style="width:45%">X-Quang</th>
+                                        </tr>
+                                        <tr>
+                                            <td id="img-title-container">
+    
                                     <?php foreach ($treatment as $item) : ?>
                                         <?php if (isset($item->rDetail)) : ?>
                                             <?php foreach ($item->rDetail as $detail): ?>
@@ -248,43 +262,50 @@
                                                         $info = DomainConst::CONTENT00177;
                                                     }
                                                     ?>
-                                                    <div class="col-md-6">
-                                                        <p>Hình Ảnh Trước Và Sau Điều Trị</p>
-                                                        <?php echo $detail->getStartTime() . ' - ' . $info; ?>
-                                                        <?php if (count($detail->rImgRealFile)) : ?>
+        
+                                                <p class="btn btn-primary get-img-btn" data-id="<?php echo $detail->id ?>" style="margin: 10px 0;"><?php echo $detail->getStartTime() . ' - ' . $info; ?></p>
+                                                        
+                                                    <?php 
+//                                                     if (count($detail->rImgRealFile)) :
+//                                                        $listOldImage = array_reverse($detail->rImgRealFile);
+//                                                        $index = 1;
+                                                        ?>
+<!--                                                        <div class="lp-list-image">
+                                                            <span class="prev-img">&#10094;</span>
+                                                            <span class="next-img">&#10095;</span>-->
                                                             <?php
-                                                            $listOldImage = array_reverse($detail->rImgRealFile);
-                                                            $index = 1;
+//                                                            foreach ($listOldImage as $img) : 
+//                                                                echo $img->getViewImage(200, 300);
+//                                                            endforeach;
                                                             ?>
-                                                            <div class="lp-list-image">
-                                                                <span class="prev-img">&#10094;</span>
-                                                                <span class="next-img">&#10095;</span>
-                                                                <?php foreach ($listOldImage as $img) : ?>
-                                                                    <?php echo $img->getViewImage(200, 300); ?>
-                                                                <?php endforeach; ?>
-                                                            </div>
-                                                        <?php endif; ?>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <p>Hình Ảnh Chụp XQuang</p>
-                                                        <?php if (count($detail->rImgXRayFile)) : ?>
-                                                            <?php
-                                                            $listOldImage = array_reverse($detail->rImgXRayFile);
-                                                            $index = 1;
+                                                        <!--</div>-->
+                                                    <?php // endif; ?>
+                                        
+                                                        <?php 
+//                                                        if (count($detail->rImgXRayFile)) :
+//                                                            $listOldImage = array_reverse($detail->rImgXRayFile);
+//                                                            $index = 1;
                                                             ?>
-                                                            <div class="lp-list-image">
+<!--                                                            <div class="lp-list-image">
                                                                 <span class="prev-img">&#10094;</span>
-                                                                <span class="next-img">&#10095;</span>
-                                                                <?php foreach ($listOldImage as $img) : ?>
-                                                                    <?php echo $img->getViewImage(200, 300); ?>
-                                                                <?php endforeach; ?>
-                                                            </div>
-                                                        <?php endif; ?>
-                                                    </div>
+                                                                <span class="next-img">&#10095;</span>-->
+                                                                <?php 
+//                                                                foreach ($listOldImage as $img) :
+//                                                                    echo $img->getViewImage(200, 300);
+//                                                                endforeach; 
+                                                                ?>
+                                                            <!--</div>-->
+                                                        <?php // endif; ?>
+                                                
                                                 <?php endif; ?>
                                             <?php endforeach; ?>
                                         <?php endif; ?>
                                     <?php endforeach; ?>
+                                            </td>
+                                            <td class="img-real-container"></td>
+                                            <td class="img-xquang-container"></td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -300,15 +321,16 @@
                                             
                                         }
                                         $html .= '<p>';
+                                        $html .= '<i class="fas fa-angle-double-right"></i> ';
                                         $html .= '<strong>';
                                         $html .= $warranty->rType->name . ' - ' . DomainConst::CONTENT00381 . ': ';
                                         $html .= '</strong>' . $warranty->getWarrantyTime();
-                                        $html .= '<br/><strong>' . DomainConst::CONTENT00139;
-                                        $html .= '</strong>: ' . $warranty->getStartTime();
-                                        $html .= '<br/><strong>' . DomainConst::CONTENT00140;
-                                        $html .= '</strong>: ' . $warranty->getEndTime();
-                                        $html .= '<br/><strong>' . DomainConst::CONTENT00382;
-                                        $html .= '</strong>: ' . $warranty->getRemainTime();
+                                        $html .= '<br/><i class="fas fa-calendar-plus" title="' . DomainConst::CONTENT00139.'"></i> ';
+                                        $html .= $warranty->getStartTime();
+                                        $html .= '<br/><i class="fas fa-calendar-minus" title="' . DomainConst::CONTENT00140.'"></i> ';
+                                        $html .= $warranty->getEndTime();
+                                        $html .= '<br/><i class="fas fa-stopwatch" title="' . DomainConst::CONTENT00382.'"></i> ';
+                                        $html .= $warranty->getRemainTime();
                                         $html .= '</p>';
                                     }
                                 }
@@ -320,10 +342,16 @@
                         <div id="retreatment-schedule" class="tab-pane fade">
                             <h3>Lịch Hẹn Tái Khám</h3>
                             <div class="lp-text-content">
-                                <p><strong>Thời Gian Bảo Hành</strong>: 3 Năm
-                                    <br/> <strong>Ngày Bắt Đầu:</strong> 9:30 AM - 26/03/2018
-                                    <br/> <strong>Ngày Kết Thúc:</strong> 10:30 AM - 26/04/2018
-                                    <br/> <strong>Thời Gian Còn Lại</strong>: 365 Ngày</p>
+                                <p>
+                                    <i class="fas fa-angle-double-right"></i> 
+                                    <strong>Thời Gian Bảo Hành: 3 Năm </strong><br>
+                                    <i class="fas fa-calendar-plus" title="Ngày bắt đầu"></i> 
+                                    9:30 AM - 26/03/2018<br>
+                                    <i class="fas fa-calendar-minus" title="Ngày kết thúc"></i>
+                                    10:30 AM - 26/04/2018<br>
+                                    <i class="fas fa-stopwatch" title="Thời gian còn lại"></i> 
+                                    365 Ngày<br>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -347,10 +375,10 @@
     });
     
     //Slide
-    $('.prev-img').on('click', function(){
+    $('.lp-list-image').on('click', '.prev-img', function(){
         clickSlide('prev', $(this));
     })
-    $('.next-img').on('click', function(){
+    $('.lp-list-image').on('click', '.next-img', function(){
         clickSlide('next', $(this));
     })
     
@@ -379,4 +407,25 @@
             firstAImg.css('margin-left', mr + 'px');
         }
     }
+    
+    $('.get-img-btn').on('click', function(e){
+        var id = $(e.target).data('id');
+        $('.loading').css('opacity', '1');
+        $.ajax({
+           'url': '<?php echo Yii::app()->createAbsoluteUrl('front/customer/getTreatmentImageAjax') ?>'+'/id/'+id,
+           'type': 'get',
+           'success': function(html){
+                $('.loading').css('opacity', '0');
+                $(".img-real-container").remove();
+                $(".img-xquang-container").remove();
+                $('#img-title-container').after(html);
+                $('.lp-list-image').on('click', '.prev-img', function(){
+                    clickSlide('prev', $(this));
+                })
+                $('.lp-list-image').on('click', '.next-img', function(){
+                    clickSlide('next', $(this));
+                })
+           }
+        });
+    })
 </script>
