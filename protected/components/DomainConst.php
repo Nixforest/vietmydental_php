@@ -1390,4 +1390,6 @@ class DomainConst {
     const CONTENT00385  = 'Chọn chi nhánh';
     const CONTENT00386  = 'Cập nhật thông tin Lần điều trị';
     const CONTENT00387  = 'Thanh toán thành công';
+    const CONTENT00388  = 'Mã Lần điều trị';
+    const CONTENT00389  = 'Mã bệnh nhân';
 }

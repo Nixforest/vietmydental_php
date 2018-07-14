@@ -105,6 +105,10 @@ class TreatmentScheduleDetails extends BaseActiveRecord
                         'on' => 'type = ' . Files::TYPE_3_TREATMENT_SCHEDULE_REAL_IMG,
                         'order' => 'id DESC',
                     ),
+                    'rPrescription' => array(
+                        self::HAS_ONE, 'Prescriptions', 'process_id',
+                        'on'    => 'status = ' . DomainConst::DEFAULT_STATUS_ACTIVE,
+                    ),
 		);
 	}
 

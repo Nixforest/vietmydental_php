@@ -540,20 +540,44 @@ class ReceptionistController extends FrontController {
         $id = '';
         $this->validateUpdateUrl($id, 'TreatmentScheduleDetails');
         Loggers::info("Id of treatment schedule detail is " . $id, __FUNCTION__, __LINE__);
-        $model = TreatmentScheduleDetails::model()->findByPk($id);
-        if ($model) {
+        $mDetail = TreatmentScheduleDetails::model()->findByPk($id);
+        if ($mDetail) {
+            if (isset($mDetail->rPrescription)) {
+                $model = $mDetail->rPrescription;
+            } else {
+                $model = new Prescriptions();
+            }
+            $customer = $mDetail->getCustomerModel();
+            if (isset($_POST['Prescriptions'])) {
+                $model->attributes = $_POST['Prescriptions'];
+                if ($model->save()) {
+                    $customer = $model->getCustomerModel();
+                    if (isset($customer)) {
+                        $rightContent = $customer->getCustomerAjaxInfo();
+                        $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
+                    }
+                    echo CJavaScript::jsonEncode(array(
+                        DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
+                        DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
+                        DomainConst::KEY_RIGHT_CONTENT  => $rightContent,
+                        DomainConst::KEY_INFO_SCHEDULE => $infoSchedule,
+                    ));
+                    exit;
+                }
+            }
+            echo CJSON::encode(array(
+            DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
+            DomainConst::KEY_CONTENT => $this->renderPartial('_form_create_prescription',
+                array(
+                    'model'     => $model,
+                    'customer'  => $customer,
+                    DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                ), true, true)
+            ));
+            exit;
         } else {
-            $model = new TreatmentScheduleDetails();
+            throw new CHttpException(404, 'The requested page does not exist.');
         }
-        echo CJSON::encode(array(
-            DomainConst::KEY_STATUS => 'failure',
-            'div' => $this->renderPartial('_form_create_prescription',
-                    array(
-                        'model' => $model,
-                        DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-                    ), true)
-        ));
-        exit;
     }
     
     /**

@@ -119,7 +119,7 @@ class Customers extends BaseActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
+			'id' => DomainConst::CONTENT00389,
 			'name' => DomainConst::CONTENT00100,
 			'gender' => DomainConst::CONTENT00047,
 			'date_of_birth' => DomainConst::CONTENT00101,
