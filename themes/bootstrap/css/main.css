@@ -1139,22 +1139,9 @@ svg.mark-icon {
     fill: #a7a7a7;
 }
 .round-txt{margin-left: -20px;}
-#patient-records-tbl td{height: 46px;}
-.form-ctn .left-input-icon{ position: relative; right: 152px; top: 28px; }
-.clr-txt-btn{opacity: 0; color: red;}
-.clr-txt-btn.as-area{
-    position: relative;
-    left: 150px;;
-    top:30px;
-    cursor: pointer;
-}
-.clr-txt-btn:hover{background: #d8d8d8;}
-.clr-txt-btn.search-area{
-    position: relative;
-    left: 470px!important;
-    top:30px;
-    cursor: pointer;
-}
+
+
+
 /*Landing page css*/
 .lp-parent-container{
     border: 1px solid grey;
@@ -1178,8 +1165,7 @@ svg.mark-icon {
 .lp-child-content{padding:10px 20px;box-shadow: 1px 2px 12px #c5c5c5;}
 .lp-content-row{padding: 5px; font-size: 15px;}
 .lp-row{padding: 0 10px;}
-.lp-list-container{box-shadow: 1px 2px 12px #c5c5c5;}
-.lp-list-container{box-shadow: 1px 2px 12px #c5c5c5;}
+/*.lp-list-container{box-shadow: 1px 2px 12px #c5c5c5;}*/
 .lp-list-item {
     padding: 10px 50px;
     border-top: 1px solid #b9b9b9;
@@ -1215,8 +1201,9 @@ svg.mark-icon {
     height: 190px;
     overflow: hidden;
     display: flex;
+    flex: 0 0 372px;
     position: relative;
-    width: 100%;
+    width: 372px;
     background: #cecece;
     margin-bottom: 25px;
 }
@@ -1236,3 +1223,72 @@ svg.mark-icon {
     z-index: 1;
 }
 .next-img{right: 0;}
+
+/*loding btn*/
+.loading{opacity: 0}
+.orbit-spinner, .orbit-spinner * {
+    box-sizing: border-box;
+}
+
+.orbit-spinner {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    perspective: 800px;
+}
+
+.orbit-spinner .orbit {
+    position: absolute;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.orbit-spinner .orbit:nth-child(1) {
+    left: 0%;
+    top: 0%;
+    animation: orbit-spinner-orbit-one-animation 1200ms linear infinite;
+    border-bottom: 3px solid #3f82bb;
+}
+
+.orbit-spinner .orbit:nth-child(2) {
+    right: 0%;
+    top: 0%;
+    animation: orbit-spinner-orbit-two-animation 1200ms linear infinite;
+    border-right: 3px solid #3f82bb;
+}
+
+.orbit-spinner .orbit:nth-child(3) {
+    right: 0%;
+    bottom: 0%;
+    animation: orbit-spinner-orbit-three-animation 1200ms linear infinite;
+    border-top: 3px solid #3f82bb;
+}
+
+@keyframes orbit-spinner-orbit-one-animation {
+    0% {
+        transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
+    }
+    100% {
+        transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
+    }
+}
+
+@keyframes orbit-spinner-orbit-two-animation {
+    0% {
+        transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
+    }
+    100% {
+        transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
+    }
+}
+
+@keyframes orbit-spinner-orbit-three-animation {
+    0% {
+        transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
+    }
+    100% {
+        transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
+    }
+}

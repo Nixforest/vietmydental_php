@@ -64,4 +64,34 @@ class CustomerController extends FrontController {
 		);
 	}
 	*/
+    
+    public function actionGetTreatmentImageAjax($id) {
+        $model = TreatmentScheduleDetails::model()->findByPk($id);
+        echo '<td class="img-real-container">';
+        if (count($model->rImgRealFile)) {
+            $listOldImage = array_reverse($model->rImgRealFile);
+            $index = 1;
+            echo '<div class="lp-list-image">';
+                echo '<span class="prev-img">&#10094;</span>';
+                echo '<span class="next-img">&#10095;</span>';
+                foreach ($listOldImage as $img){
+                   echo $img->getViewImage(200, 300);
+                }
+            echo '</div>';
+        }
+        echo '</td>'
+             .'<td class="img-xquang-container">';
+        if (count($model->rImgXRayFile)){
+            $listOldImage = array_reverse($model->rImgXRayFile);
+            $index = 1;
+            echo '<div class="lp-list-image">';
+            echo '<span class="prev-img">&#10094;</span>';
+            echo '<span class="next-img">&#10095;</span>';
+            foreach ($listOldImage as $img){
+                echo $img->getViewImage(200, 300); 
+            }
+            echo '</div>';
+        }
+        echo '</td>';
+    }
 }
