@@ -669,7 +669,7 @@ class TreatmentSchedules extends BaseActiveRecord {
             $title = $detail->getStartTime();
             $info = '';
 
-            $teeth = !empty($detail->rJoinTeeth) ? $detail->rJoinTeeth->generateTeethInfo(", ") : '';
+            $teeth = !empty($detail->rJoinTeeth) ? $detail->generateTeethInfo(", ") : '';
             $diagnosis = !empty($detail->rDiagnosis) ? $detail->rDiagnosis->name : '';
             $treatment_type = !empty($detail->rTreatmentType) ? $detail->rTreatmentType->name : '';
             $description = $detail->description;

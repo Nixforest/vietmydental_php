@@ -1192,6 +1192,7 @@ svg.mark-icon {
     float: left;
     margin-right: 30px;
     border-radius: 50%;
+    margin-bottom: 25px;
 }
 .lp-profile-img img{width: 100%;}
 .clrfix{clear: both;}
