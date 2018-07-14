@@ -230,7 +230,7 @@
                                                     </div>-->
                         </div>
                         <!--Hinh anh dieu tri -->
-                        <div id="treatment-picture" class="tab-pane fade" style="padding: 10px 15px!important">
+                        <div id="treatment-picture" class="tab-pane fade" style="padding: 10px!important">
                             <h3>Hình Ảnh Điều Trị</h3>
                             <div class="orbit-spinner loading"> 
                                 <div class="orbit"></div>
@@ -239,11 +239,11 @@
                             </div>
                             <div class="lp-child-container">
                                 <div class="row">
-                                    <table style="width:100%" border="1">
+                                    <table class="table">
                                         <tr>
-                                            <th style="width:10%">Lần điều trị</th>
-                                            <th style="width:45%">Hình ảnh thực</th>
-                                            <th style="width:45%">X-Quang</th>
+                                            <th style="width:25%">Lần điều trị</th>
+                                            <th>Hình ảnh thực</th>
+                                            <th>X-Quang</th>
                                         </tr>
                                         <tr>
                                             <td id="img-title-container">
