@@ -984,4 +984,13 @@ class Customers extends BaseActiveRecord
                 ));
         return $retVal;
     }
+    
+    /**
+     * get field name
+     * @param type $fieldName
+     * @return type
+     */
+    public function getFieldName($fieldName = 'name'){
+        return !empty($this->$fieldName) ? $this->$fieldName : '';
+    }
 }
