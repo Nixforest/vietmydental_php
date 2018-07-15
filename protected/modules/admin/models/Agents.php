@@ -413,4 +413,56 @@ class Agents extends BaseActiveRecord
         return $result;
     }
     
+    /**
+     * get customer of agent
+     * @param type $from
+     * @param type $to
+     * @return \CArrayDataProvider
+     */
+    public function getCustomers($from, $to) {
+        $aData = [];
+        $aData['OLD'] = null;
+        $aData['NEW'] = null;
+        $aIdCus = [];
+        $criteriaNew = new CDbCriteria;
+        $criteriaOld = new CDbCriteria;
+        if (empty($this->rJoinCustomer)) {
+            return $aData;
+        }
+        foreach ($this->rJoinCustomer as $value) {
+            $aIdCus[$value->many_id] = $value->many_id;
+        }
+        $criteriaNew->select = ('t.*');
+        $criteriaNew->distinct = true;
+        $criteriaNew->addInCondition('t.id', $aIdCus);
+        $criteriaNew->join = 'JOIN (select re.* FROM medical_records as re JOIN treatment_schedules tr'
+                . ' ON re.id = tr.record_id'
+                . ' WHERE DATE(tr.created_date) >= "' . $from . '" AND DATE(tr.created_date) <= "' . $to . '") as b'
+                . ' ON b.customer_id = t.id';
+        $criteriaNew->addBetweenCondition('DATE(t.created_date)', $from, $to);
+        $criteriaOld->select = ('t.*');
+        $criteriaOld->distinct = true;
+        $criteriaOld->addInCondition('t.id', $aIdCus);
+        $criteriaOld->join = 'JOIN (select re.* FROM medical_records as re JOIN treatment_schedules tr'
+                . ' ON re.id = tr.record_id'
+                . ' WHERE DATE(tr.created_date) >= "' . $from . '" AND DATE(tr.created_date) <= "' . $to . '") as b'
+                . ' ON b.customer_id = t.id';
+        $criteriaOld->addCondition('DATE(t.created_date) <\'' . $from . '\'');
+
+        $mCustomers = new Customers('search');
+        $aData['OLD'] = new CActiveDataProvider($mCustomers, array(
+            'criteria' => $criteriaOld,
+            'pagination' => array(
+                'pageSize' => Settings::getListPageSize(),
+            ),
+        ));
+        $aData['NEW'] = new CActiveDataProvider($mCustomers, array(
+            'criteria' => $criteriaNew,
+            'pagination' => array(
+                'pageSize' => Settings::getListPageSize(),
+            ),
+        ));
+        return $aData;
+    }
+
 }
