@@ -138,9 +138,9 @@
                         <li><a data-toggle="tab" href="#treatment-time"><i class="fas fa-calendar-check"></i> <?php echo DomainConst::CONTENT00174; ?></a></li>
                         <li><a data-toggle="tab" href="#payment-detail"><i class="fas fa-credit-card"></i> <?php echo DomainConst::CONTENT00256; ?></a></li>
                         <li><a data-toggle="tab" href="#treatment-process"><i class="fas fa-sliders-h"></i> <?php echo DomainConst::CONTENT00233; ?></a></li>
-                        <li><a data-toggle="tab" href="#treatment-picture"><i class="fas fa-images"></i> <?php echo DomainConst::CONTENT00390; ?></a></li>
-                        <li><a data-toggle="tab" href="#guarantee"><i class="fas fa-shield-alt"></i> <?php echo DomainConst::CONTENT00391; ?></a></li>
-                        <li><a data-toggle="tab" href="#retreatment-schedule"><i class="fas fa-calendar-alt"></i> <?php echo DomainConst::CONTENT00392; ?></a></li>
+                        <li><a data-toggle="tab" href="#treatment-picture"><i class="fas fa-images"></i> <?php echo DomainConst::CONTENT00391; ?></a></li>
+                        <li><a data-toggle="tab" href="#guarantee"><i class="fas fa-shield-alt"></i> <?php echo DomainConst::CONTENT00392; ?></a></li>
+                        <li><a data-toggle="tab" href="#retreatment-schedule"><i class="fas fa-calendar-alt"></i> <?php echo DomainConst::CONTENT00393; ?></a></li>
                     </ul>
 
                     <div class="tab-content">

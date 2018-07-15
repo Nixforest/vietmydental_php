@@ -17,8 +17,8 @@
         <div class="info-content">
             <div class="box-search">
                 <form>
-                    <span class="icon-s" style="top:20px;"></span>
-                    <i class="clr-txt-btn search-area glyphicon glyphicon-remove"></i>
+                    <span class="icon-s" style="top:0;"></span>
+                    <i class="clr-txt-btn search-area glyphicon glyphicon-remove" style="position: absolute; right: 5px; top: 10px;color:red;"></i>
                     <input type="text" class="form-control text-change"  placeholder="<?php echo DomainConst::CONTENT00384?>"
                            id="customer_find">
                 </form>
@@ -31,21 +31,21 @@
             <div class="box-search collapse" id="advance-search-ctn" style="text-align: center;">
                 <form style="width: 350px; margin: auto; height: 185px;">
                     <div class="form-ctn">
-                        <i class="left-input-icon glyphicon glyphicon-search"></i>
-                        <i class="clr-txt-btn as-area glyphicon glyphicon-remove"></i>
+                        <i class="left-input-icon glyphicon glyphicon-search" style="position: relative; right: 150px; top: 30px;"></i>
+                        <i class="clr-txt-btn as-area glyphicon glyphicon-remove" style="position: relative; left: 150px; top: 30px;color:red;"></i>
                         <input type="text" class="form-control text-change" placeholder="<?php echo DomainConst::CONTENT00170?>"
                            id="customer_find_phone">
                     </div>
                     
                     <div class="form-ctn">
-                        <i class="left-input-icon glyphicon glyphicon-home"></i>
-                        <i class="clr-txt-btn as-area glyphicon glyphicon-remove"></i>
+                        <i class="left-input-icon glyphicon glyphicon-home" style="position: relative; right: 150px; top: 30px;"></i>
+                        <i class="clr-txt-btn as-area glyphicon glyphicon-remove" style="position: relative; left: 150px; top: 30px;color:red;"></i>
                         <input type="text" class="form-control text-change" placeholder="<?php echo DomainConst::CONTENT00045?>"
                            id="customer_find_address">
                     </div>
                     
                     <div class="form-ctn">
-                        <i class="left-input-icon glyphicon glyphicon-map-marker" style="right:160px;"></i>
+                        <i class="left-input-icon glyphicon glyphicon-map-marker" style="right:160px; top: 30px;"></i>
                         <select id="customer_find_agent" class="form-control" name="customer_find[agent]" style="width: 350px!important; color: #277aff;">
                             <?php
                             $html = '<option value="" style="color: black">' . DomainConst::CONTENT00385 . '</option>';
