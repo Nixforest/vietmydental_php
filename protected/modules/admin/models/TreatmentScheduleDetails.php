@@ -735,7 +735,7 @@ class TreatmentScheduleDetails extends BaseActiveRecord
         
         return $retVal;
     }
-    
+  
     /**
      * Get title of treatment schedule detail
      * @return String Title of treatment schedule detail

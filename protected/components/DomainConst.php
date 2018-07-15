@@ -1393,4 +1393,7 @@ class DomainConst {
     const CONTENT00388  = 'Mã Lần điều trị';
     const CONTENT00389  = 'Mã bệnh nhân';
     const CONTENT00390  = 'S-T-C-T';
+    const CONTENT00391  = 'Hình ảnh Điều Trị';
+    const CONTENT00392  = 'Bảo hành';
+    const CONTENT00393  = 'Lịch hẹn tái khám';
 }
