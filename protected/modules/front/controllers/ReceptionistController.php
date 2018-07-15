@@ -540,18 +540,47 @@ class ReceptionistController extends FrontController {
         $id = '';
         $this->validateUpdateUrl($id, 'TreatmentScheduleDetails');
         Loggers::info("Id of treatment schedule detail is " . $id, __FUNCTION__, __LINE__);
-        $mDetail = TreatmentScheduleDetails::model()->findByPk($id);
-        if ($mDetail) {
-            if (isset($mDetail->rPrescription)) {
-                $model = $mDetail->rPrescription;
+        $mTreatmentDetail = TreatmentScheduleDetails::model()->findByPk($id);
+        if ($mTreatmentDetail) {
+            if (isset($mTreatmentDetail->rPrescription)) {
+                $model = $mTreatmentDetail->rPrescription;
+                if (isset($model->rDetail) && count($model->rDetail) > 0) {
+                    $listDetail = $model->rDetail;
+                } else {
+                    $mDetail = new PrescriptionDetails();
+                    $listDetail = array($mDetail);
+                }
             } else {
                 $model = new Prescriptions();
+                $mDetail = new PrescriptionDetails();
+                $listDetail = array($mDetail);
             }
-            $customer = $mDetail->getCustomerModel();
+            $customer = $mTreatmentDetail->getCustomerModel();
             if (isset($_POST['Prescriptions'])) {
                 $model->attributes = $_POST['Prescriptions'];
+                $model->process_id = $mTreatmentDetail->id;
                 if ($model->save()) {
-                    $customer = $model->getCustomerModel();
+                    // Detail info
+                    foreach ($listDetail as $detail) {
+                        if (!$detail->isNewRecord) {
+                            $detail->delete();
+                        }
+                    }
+                    for ($i = 0; $i < 50; $i++) {
+                        if (isset($_POST['PrescriptionDetails'][$i])) {
+                            Loggers::info('Detail information: ' . CommonProcess::json_encode_unicode($_POST['PrescriptionDetails'][$i]),
+                                    __FUNCTION__, __LINE__);
+                            $newDetail = new PrescriptionDetails();
+                            $newDetail->attributes = $_POST['PrescriptionDetails'][$i];
+                            $newDetail->prescription_id = $model->id;
+                            if (!$newDetail->save()) {
+                                Loggers::info('Error when save detail: ' . CommonProcess::json_encode_unicode($newDetail->getErrors()),
+                                        __FUNCTION__, __LINE__);
+                            }
+                        }
+                    }
+                    
+                    $customer = $mTreatmentDetail->getCustomerModel();
                     if (isset($customer)) {
                         $rightContent = $customer->getCustomerAjaxInfo();
                         $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
@@ -571,6 +600,7 @@ class ReceptionistController extends FrontController {
                 array(
                     'model'     => $model,
                     'customer'  => $customer,
+                    'details'   => $listDetail,
                     DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
                 ), true, true)
             ));

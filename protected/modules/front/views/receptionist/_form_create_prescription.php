@@ -127,44 +127,156 @@
 
     <div class="row">
         <div class="table-responsive">
-            <table class="table" id="prescriptions-table" style="table-layout: fixed;">
+            <table class="table table-bordered materials_table" id="prescriptions-table" style="table-layout: fixed;">
                 <thead>
                     <tr>
-                        <th class="col-md-2">Tên thuốc</th>
-                        <th class="col-md-2">Đơn vị</th>
-                        <th class="col-md-1">Số lượng</th>
-                        <th class="col-md-2">Sáng, Trưa, Chiều, Tối</th>
-                        <th class="col-md-2">Cách dùng</th>
-                        <th class="col-md-2">Lưu ý</th>
-                        <th class="col-md-1">Delete</th>
+                        <!--<th class="col-md-1"><?php echo DomainConst::CONTENT00034; ?></th>--> 
+                        <th class="col-md-5"><?php echo DomainConst::CONTENT00112; ?></th> 
+                        <!--<th class="col-md-2"><?php echo DomainConst::CONTENT00114; ?></th>-->
+                        <th class="col-md-1"><?php echo DomainConst::CONTENT00313; ?></th>
+                        <th class="col-md-2"><?php echo DomainConst::CONTENT00390; ?></th>
+                        <!--<th class="col-md-2"><?php echo DomainConst::CONTENT00111; ?></th>-->
+                        <th class="col-md-2"><?php echo DomainConst::CONTENT00159; ?></th>
+                        <th class="col-md-1"><?php echo DomainConst::CONTENT00296; ?></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
-                            <?php echo $form->textField($model, 'note', array('style'=>'width: 99%')); ?>
-                        </td>
-                        <td>
-                            <?php echo $form->dropDownList($model, 'doctor_id', Users::getListUser(
-                                Roles::getRoleByName(Roles::ROLE_DOCTOR)->id, Yii::app()->user->agent_id), array('style'=>'width: 99%')) ?>
-                        </td>
-                        <td>
-                            <?php echo $form->textField($model, 'note', array('style'=>'width: 99%')); ?>
-                        </td>
-                        <td>
-                            <?php echo $form->textField($model, 'note', array('style'=>'width: 99%')); ?>
-                        </td>
-                        <td>
-                            <?php echo $form->dropDownList($model, 'doctor_id', Users::getListUser(
-                                Roles::getRoleByName(Roles::ROLE_DOCTOR)->id, Yii::app()->user->agent_id), array('style'=>'width: 99%')) ?>
-                        </td>
-                        <td>
-                            <?php echo $form->textField($model, 'note', array('style'=>'width: 99%')); ?>
-                        </td>
-                        <td style="text-align: center">
-                            <h6 class="delete-btn glyphicon glyphicon-remove btn-danger" style="padding:4px;border-radius: 50%;margin:5px;"></h6>
-                        </td>
-                    </tr>
+                    <?php
+                        $maxRow = 50;
+                        $maxShow = 1;
+                        if (count($details) > 1) {
+                            $maxShow = count($details);
+                        }
+                        $aOrderNumber = CommonProcess::buildOrderNumberArray($maxRow);
+                        $index = 0;
+                    ?>
+                    <?php foreach ($details as $detail): ?>
+                        <tr class="materials_row">
+                            <!--<td class="item_c order_no"><?php echo $index; ?></td>-->
+                            <td class="item_c">
+                                <?php echo $form->hiddenField($detail, "[$index]medicine_id", array('class' => '')); ?>
+                                <?php
+                                    $medicineName = isset($detail->rMedicine) ? $detail->rMedicine->getAutoCompleteMedicine() : '';
+                                    $url = Yii::app()->createAbsoluteUrl('admin/ajax/searchMedicine');
+                                    $aData = ['model'             => $detail,
+                                        'field_id'          => $index . "_medicine_id",
+                                        'update_value'      => $medicineName,
+                                        'url'               => $url,
+                                        'field_autocomplete_name' => "autocomplete_name_medicine",
+                                        'style'             => 'width: 99%',
+                                       ];
+                                    $this->widget('ext.AutocompleteExt.AutocompleteExt',
+                                            array('data' => $aData));
+                                ?>
+                            </td>
+                            <td class="item_c">
+                                <?php echo $form->numberField($detail, "[$index]quantity",
+                                        array(
+                                            'size'=>11,'maxlength'=>11,
+                                            'style'=>'width: 99%',
+                                        )); ?>
+                            </td>
+                            <td class="item_c">
+                                <?php echo $form->numberField($detail, "[$index]quantity1",
+                                        array(
+                                            'size'=>11,'maxlength'=>11,
+                                            'style'=>'width: 25%',
+                                        )); ?>
+                                <?php echo $form->numberField($detail, "[$index]quantity2",
+                                        array(
+                                            'size'=>11,'maxlength'=>11,
+                                            'style'=>'width: 25%',
+                                        )); ?>
+                                <?php echo $form->numberField($detail, "[$index]quantity3",
+                                        array(
+                                            'size'=>11,'maxlength'=>11,
+                                            'style'=>'width: 25%',
+                                        )); ?>
+                                <?php echo $form->numberField($detail, "[$index]quantity4",
+                                        array(
+                                            'size'=>11,'maxlength'=>11,
+                                            'style'=>'width: 25%',
+                                        )); ?>
+                                <?php // echo CHtml::activeTextField($detail, "[$index]quantity4"); ?>
+                            </td>
+                            <td class="item_c">
+                                <?php echo $form->textArea($detail, "[$index]note",
+                                        array(
+                                            'rows'=>4, 'cols'=>50,
+                                            'style'=>'width: 99%'
+                                            )); ?>
+                            </td>
+                            <td style="text-align: center" class="item_c last">
+                                <h6 class="delete-btn glyphicon glyphicon-remove btn-danger" style="padding:4px;border-radius: 50%;margin:5px;"></h6>
+                            </td>
+                        </tr>
+                        <?php $index++; ?>
+                    <?php endforeach; // end foreach ($_SESSION as $key => $value) ?>
+                    <?php for ($i = count($details) + 1; $i <= $maxRow; $i++) : ?>
+                        <?php
+                        $detail = new PrescriptionDetails();
+                        $display = "display_none";
+                        ?>
+                        <tr class="materials_row <?php echo $display;?>">
+                            <!--<td class="item_c order_no"><?php echo $index; ?></td>-->
+                            <td class="item_c">
+                                <?php echo $form->hiddenField($detail, "[$index]medicine_id", array('class' => '')); ?>
+                                <?php
+                                    $medicineName = isset($detail->rMedicine) ? $detail->rMedicine->getAutoCompleteMedicine() : '';
+                                    $url = Yii::app()->createAbsoluteUrl('admin/ajax/searchMedicine');
+                                    $aData = ['model'             => $detail,
+                                        'field_id'          => $index . "_medicine_id",
+                                        'update_value'      => $medicineName,
+                                        'url'               => $url,
+                                        'field_autocomplete_name' => "autocomplete_name_medicine",
+                                        'style'             => 'width: 99%',
+                                       ];
+                                    $this->widget('ext.AutocompleteExt.AutocompleteExt',
+                                            array('data' => $aData));
+                                ?>
+                            </td>
+                            <td class="item_c">
+                                <?php echo $form->numberField($detail, "[$index]quantity",
+                                        array(
+                                            'size'=>11,'maxlength'=>11,
+                                            'style'=>'width: 99%',
+                                        )); ?>
+                            </td>
+                            <td class="item_c">
+                                <?php echo $form->numberField($detail, "[$index]quantity1",
+                                        array(
+                                            'size'=>11,'maxlength'=>11,
+                                            'style'=>'width: 25%',
+                                        )); ?>
+                                <?php echo $form->numberField($detail, "[$index]quantity2",
+                                        array(
+                                            'size'=>11,'maxlength'=>11,
+                                            'style'=>'width: 25%',
+                                        )); ?>
+                                <?php echo $form->numberField($detail, "[$index]quantity3",
+                                        array(
+                                            'size'=>11,'maxlength'=>11,
+                                            'style'=>'width: 25%',
+                                        )); ?>
+                                <?php echo $form->numberField($detail, "[$index]quantity4",
+                                        array(
+                                            'size'=>11,'maxlength'=>11,
+                                            'style'=>'width: 25%',
+                                        )); ?>
+                            </td>
+                            <td class="item_c">
+                                <?php echo $form->textArea($detail, "[$index]note",
+                                        array(
+                                            'rows'=>4, 'cols'=>50,
+                                            'style'=>'width: 99%'
+                                            )); ?>
+                            </td>
+                            <td style="text-align: center" class="item_c last">
+                                <h6 class="delete-btn glyphicon glyphicon-remove btn-danger" style="padding:4px;border-radius: 50%;margin:5px;"></h6>
+                            </td>
+                        </tr>
+                        <?php $index++; ?>
+                    <?php endfor; ?>
                 </tbody>
             </table>
             <h5 class="new-row-btn glyphicon glyphicon-plus btn-success" style="padding: 4px; border-radius: 50%;"></h5>
@@ -186,53 +298,18 @@
 $(function(){
     $(document).on('click', '.delete-btn',function(){
         $(this).closest('tr').remove();
-    })
+    });
+    $(document).keydown(function(e) {
+        if(e.which == 119) {
+            fnBuildRow();
+        }
+    });
     $('.new-row-btn').on('click', function(){
-        var row = '<tr>'+
-                        '<td>'+
-                            '<?php echo $form->textField($model, 'note', array('style'=>'width: 99%')); ?>'+
-                        '</td>'+
-                        '<td>'+
-                            '<?php echo str_replace(array(
-                                html_entity_decode('<option'),
-                                html_entity_decode('/option>'),
-                                html_entity_decode('Prescriptions_doctor_id">'),
-                                html_entity_decode('</select>')),
-                                                    array(
-                                                        "'<option",
-                                                        "/option>'+",
-                                                        "Prescriptions_doctor_id>'+",
-                                                        "'</select>"),
-                                $form->dropDownList($model, 'doctor_id', Users::getListUser(Roles::getRoleByName(Roles::ROLE_DOCTOR)->id, Yii::app()->user->agent_id), array('style'=>'width: 99%'))) ?>'+
-                        '</td>'+
-                        '<td>'+
-                            '<?php echo $form->textField($model, 'note', array('style'=>'width: 99%')); ?>'+
-                        '</td>'+
-                        '<td>'+
-                            '<?php echo $form->textField($model, 'note', array('style'=>'width: 99%')); ?>'+
-                        '</td>'+
-                        '<td>'+
-                            '<?php echo str_replace(array(
-                                html_entity_decode('<option'),
-                                html_entity_decode('/option>'),
-                                html_entity_decode('Prescriptions_doctor_id">'),
-                                html_entity_decode('</select>')),
-                                                    array(
-                                                        "'<option",
-                                                        "/option>'+",
-                                                        "Prescriptions_doctor_id>'+",
-                                                        "'</select>"),
-                                $form->dropDownList($model, 'doctor_id', Users::getListUser(Roles::getRoleByName(Roles::ROLE_DOCTOR)->id, Yii::app()->user->agent_id), array('style'=>'width: 99%'))) ?>'+
-                        '</td>'+
-                        '<td>'+
-                            '<?php echo $form->textField($model, 'note', array('style'=>'width: 99%')); ?>'+
-                        '</td>'+
-                        '<td style="text-align: center">'+
-                            '<h6 class="delete-btn glyphicon glyphicon-remove btn-danger" style="padding:4px;border-radius: 50%;margin:5px;"></h6>'+
-                        '</td>'+
-                    '</tr>';
-            console.log(row);
-        $('#prescriptions-table tbody').append(row);
-    })
+        $('.materials_table').find('tr:visible:last').next('tr').show();
+    });
+    
+    function fnBuildRow(){
+        $('.materials_table').find('tr:visible:last').next('tr').show();
+    }
 })
 </script>

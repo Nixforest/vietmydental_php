@@ -40,7 +40,7 @@ class Prescriptions extends BaseActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('process_id, created_date, doctor_id', 'required'),
+			array('created_date, doctor_id', 'required'),
 			array('status', 'numerical', 'integerOnly'=>true),
 			array('process_id, doctor_id', 'length', 'max'=>11),
 			array('note', 'safe'),

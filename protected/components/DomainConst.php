@@ -1392,4 +1392,5 @@ class DomainConst {
     const CONTENT00387  = 'Thanh toán thành công';
     const CONTENT00388  = 'Mã Lần điều trị';
     const CONTENT00389  = 'Mã bệnh nhân';
+    const CONTENT00390  = 'S-T-C-T';
 }

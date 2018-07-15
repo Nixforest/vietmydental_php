@@ -62,7 +62,7 @@ $session                = Yii::app()->session;
             'class'         => "autocomplete_name_error $classAdd",
             'size'          => 30,
             'maxlength'     => 45,
-            'style'         =>'float:left;',
+            'style'         => "float:left; $style",
             'placeholder'   => $placeholder,
         ),
     ));
