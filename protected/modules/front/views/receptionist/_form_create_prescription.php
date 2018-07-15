@@ -126,32 +126,48 @@
     </div>
 
     <div class="row">
-        <div class="col-md-2">
-            Tên thuốc
-        </div>
-        <div class="col-md-1">
-            Đơn vị
-        </div>
-        <div class="col-md-1">
-            SL
-        </div>
-        <div class="col-md-1">
-            S
-        </div>
-        <div class="col-md-1">
-            T
-        </div>
-        <div class="col-md-1">
-            C
-        </div>
-        <div class="col-md-1">
-            T
-        </div>
-        <div class="col-md-1">
-            Cách dùng
-        </div>
-        <div class="col-md-3">
-            Lưu ý
+        <div class="table-responsive">
+            <table class="table" id="prescriptions-table" style="table-layout: fixed;">
+                <thead>
+                    <tr>
+                        <th class="col-md-2">Tên thuốc</th>
+                        <th class="col-md-2">Đơn vị</th>
+                        <th class="col-md-1">Số lượng</th>
+                        <th class="col-md-2">Sáng, Trưa, Chiều, Tối</th>
+                        <th class="col-md-2">Cách dùng</th>
+                        <th class="col-md-2">Lưu ý</th>
+                        <th class="col-md-1">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <?php echo $form->textField($model, 'note', array('style'=>'width: 99%')); ?>
+                        </td>
+                        <td>
+                            <?php echo $form->dropDownList($model, 'doctor_id', Users::getListUser(
+                                Roles::getRoleByName(Roles::ROLE_DOCTOR)->id, Yii::app()->user->agent_id), array('style'=>'width: 99%')) ?>
+                        </td>
+                        <td>
+                            <?php echo $form->textField($model, 'note', array('style'=>'width: 99%')); ?>
+                        </td>
+                        <td>
+                            <?php echo $form->textField($model, 'note', array('style'=>'width: 99%')); ?>
+                        </td>
+                        <td>
+                            <?php echo $form->dropDownList($model, 'doctor_id', Users::getListUser(
+                                Roles::getRoleByName(Roles::ROLE_DOCTOR)->id, Yii::app()->user->agent_id), array('style'=>'width: 99%')) ?>
+                        </td>
+                        <td>
+                            <?php echo $form->textField($model, 'note', array('style'=>'width: 99%')); ?>
+                        </td>
+                        <td style="text-align: center">
+                            <h6 class="delete-btn glyphicon glyphicon-remove btn-danger" style="padding:4px;border-radius: 50%;margin:5px;"></h6>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <h5 class="new-row-btn glyphicon glyphicon-plus btn-success" style="padding: 4px; border-radius: 50%;"></h5>
         </div>
     </div>
 
@@ -166,3 +182,57 @@
         <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+<script>
+$(function(){
+    $(document).on('click', '.delete-btn',function(){
+        $(this).closest('tr').remove();
+    })
+    $('.new-row-btn').on('click', function(){
+        var row = '<tr>'+
+                        '<td>'+
+                            '<?php echo $form->textField($model, 'note', array('style'=>'width: 99%')); ?>'+
+                        '</td>'+
+                        '<td>'+
+                            '<?php echo str_replace(array(
+                                html_entity_decode('<option'),
+                                html_entity_decode('/option>'),
+                                html_entity_decode('Prescriptions_doctor_id">'),
+                                html_entity_decode('</select>')),
+                                                    array(
+                                                        "'<option",
+                                                        "/option>'+",
+                                                        "Prescriptions_doctor_id>'+",
+                                                        "'</select>"),
+                                $form->dropDownList($model, 'doctor_id', Users::getListUser(Roles::getRoleByName(Roles::ROLE_DOCTOR)->id, Yii::app()->user->agent_id), array('style'=>'width: 99%'))) ?>'+
+                        '</td>'+
+                        '<td>'+
+                            '<?php echo $form->textField($model, 'note', array('style'=>'width: 99%')); ?>'+
+                        '</td>'+
+                        '<td>'+
+                            '<?php echo $form->textField($model, 'note', array('style'=>'width: 99%')); ?>'+
+                        '</td>'+
+                        '<td>'+
+                            '<?php echo str_replace(array(
+                                html_entity_decode('<option'),
+                                html_entity_decode('/option>'),
+                                html_entity_decode('Prescriptions_doctor_id">'),
+                                html_entity_decode('</select>')),
+                                                    array(
+                                                        "'<option",
+                                                        "/option>'+",
+                                                        "Prescriptions_doctor_id>'+",
+                                                        "'</select>"),
+                                $form->dropDownList($model, 'doctor_id', Users::getListUser(Roles::getRoleByName(Roles::ROLE_DOCTOR)->id, Yii::app()->user->agent_id), array('style'=>'width: 99%'))) ?>'+
+                        '</td>'+
+                        '<td>'+
+                            '<?php echo $form->textField($model, 'note', array('style'=>'width: 99%')); ?>'+
+                        '</td>'+
+                        '<td style="text-align: center">'+
+                            '<h6 class="delete-btn glyphicon glyphicon-remove btn-danger" style="padding:4px;border-radius: 50%;margin:5px;"></h6>'+
+                        '</td>'+
+                    '</tr>';
+            console.log(row);
+        $('#prescriptions-table tbody').append(row);
+    })
+})
+</script>
