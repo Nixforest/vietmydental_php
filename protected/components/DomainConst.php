@@ -1382,4 +1382,7 @@ class DomainConst {
     const CONTENT00383  = 'Điều trị đã hoàn thành, không thể cập nhật.';
     const CONTENT00384  = 'Tìm kiếm bệnh nhân';
     const CONTENT00385  = 'Chọn chi nhánh';
+    const CONTENT00386  = 'Khách hàng cũ';
+    const CONTENT00387  = 'Tuổi';
+    const CONTENT00388  = 'Thời gian điều trị';
 }
