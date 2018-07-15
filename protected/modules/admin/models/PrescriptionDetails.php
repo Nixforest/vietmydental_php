@@ -44,7 +44,7 @@ class PrescriptionDetails extends BaseActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('prescription_id, medicine_id, quantity, quantity1, quantity2, quantity3, quantity4', 'required'),
+			array('medicine_id', 'required'),
 			array('status', 'numerical', 'integerOnly'=>true),
 			array('prescription_id, medicine_id, quantity, quantity1, quantity2, quantity3, quantity4', 'length', 'max'=>11),
 			array('note', 'safe'),

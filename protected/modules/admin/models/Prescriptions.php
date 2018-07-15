@@ -40,7 +40,7 @@ class Prescriptions extends BaseActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('process_id, created_date, doctor_id', 'required'),
+			array('created_date, doctor_id', 'required'),
 			array('status', 'numerical', 'integerOnly'=>true),
 			array('process_id, doctor_id', 'length', 'max'=>11),
 			array('note', 'safe'),
@@ -58,7 +58,7 @@ class Prescriptions extends BaseActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-                    'rProcess' => array(self::BELONGS_TO, 'TreatmentScheduleProcess', 'process_id'),
+                    'rTreatmentScheduleDetail' => array(self::BELONGS_TO, 'TreatmentScheduleDetails', 'process_id'),
                     'rDoctor' => array(self::BELONGS_TO, 'Users', 'doctor_id'),
                     'rDetail' => array(
                         self::HAS_MANY, 'PrescriptionDetails', 'prescription_id',
@@ -75,7 +75,7 @@ class Prescriptions extends BaseActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'process_id' => DomainConst::CONTENT00149,
+			'process_id' => DomainConst::CONTENT00388,
 			'created_date' => DomainConst::CONTENT00150,
 			'doctor_id' => DomainConst::CONTENT00151,
 			'note' => DomainConst::CONTENT00152,
@@ -116,7 +116,7 @@ class Prescriptions extends BaseActiveRecord
     public function beforeSave() {
         // Format created date value
         $this->created_date = CommonProcess::convertDateTimeToMySqlFormat(
-                $this->created_date, DomainConst::DATE_FORMAT_3);
+                $this->created_date, DomainConst::DATE_FORMAT_BACK_END);
         if ($this->isNewRecord) {   // Add
             
         } else {                    // Update

@@ -95,6 +95,7 @@ class AutocompleteExt extends CPortlet {
         $isCallFuncSelected     = 0;
         $isCallFuncSelectedV2   = CommonProcess::getValue($this->data, AutocompleteExt::KEY_FN_SELECTED_V2, 0);
         $isDoSomethingOnClose   = CommonProcess::getValue($this->data, AutocompleteExt::KEY_DO_ST_ON_CLOSE, 0);
+        $style                  = CommonProcess::getValue($this->data, 'style', '');
         if (isset($model)) {
             $className = get_class($model);
         }
@@ -126,6 +127,7 @@ class AutocompleteExt extends CPortlet {
             'isCallFuncSelectedV2'  => $isCallFuncSelectedV2,
             'isDoSomethingOnClose'  => $isDoSomethingOnClose,
             'updateValue'       => $updateValue,
+            'style'             => $style,
         ));
     }
 }

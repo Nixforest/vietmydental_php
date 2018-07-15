@@ -42,7 +42,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'quantity'); ?>
-		<?php echo $form->textField($model,'quantity',array('size'=>11,'maxlength'=>11)); ?>
+		<?php echo $form->numberField($model,'quantity',array('size'=>11,'maxlength'=>11)); ?>
 		<?php echo $form->error($model,'quantity'); ?>
 	</div>
 

@@ -59,46 +59,24 @@
 <?php $this->endWidget(); ?>
 </div><!-- form -->
 
-<!-- Create customer dialog -->
 <?php
     $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
-        'id'    => 'dialogCreateCustomer',
+        'id'    => 'dialogId',
         'options' => array(
-            'title' => DomainConst::CONTENT00176,
+            'title' => DomainConst::CONTENT00004,
             'autoOpen'  => false,
             'modal'     => true,
             'position'  => array(
                 'my'    => 'top',
                 'at'    => 'top',
             ),
-            'width'     => 700,
+            'width'     => 1000,
             'heigh'     => 470,
-            'close'     => 'js:function() { }',
+            'close'     => 'js:function() { $("#form_ccs").remove(); }',
         ),
     ));
 ?>
-<div class="divForForm"></div>
-<?php $this->endWidget('zii.widgets.jui.CJuiDialog');?>
-
-<!-- Create/Update treatment schedule dialog -->
-<?php
-    $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
-        'id'    => 'dialogUpdateSchedule',
-        'options' => array(
-            'title' => DomainConst::CONTENT00182,
-            'autoOpen'  => false,
-            'modal'     => true,
-            'position'  => array(
-                'my'    => 'top',
-                'at'    => 'top',
-            ),
-            'width'     => 700,
-            'heigh'     => 470,
-            'close'     => 'js:function() { }',
-        ),
-    ));
-?>
-<div class="divForFormUpdateSchedule"></div>
+<div class="divForFormClass"></div>
 <?php $this->endWidget('zii.widgets.jui.CJuiDialog');?>
 
 <script>
@@ -120,44 +98,149 @@
     });
 </script>
 <script type="text/javascript">
+    
+    /** Dialog option */
+    var opt = {
+        autoOpen: false,
+        modal: true,
+        width: 1000,
+        height: 1000,
+        title: "<?php echo DomainConst::CONTENT00004; ?>",
+        close: function() {
+            $("#form_ccs").remove();
+        }
+    };
+    
     /**
-     * Create customer dialog
-     * @returns {Boolean}
+     * Load from css.
      */
-    function createCustomer() {
+    function fnLoadFormCSS() {
         $("<link/>", {
             id: "form_ccs",
             rel: "stylesheet",
             type: "text/css",
             href: "<?php echo Yii::app()->theme->baseUrl . '/css/form.css'; ?>"
          }).appendTo("head");
-        <?php
-        echo CHtml::ajax(array(
-            'url' => Yii::app()->createAbsoluteUrl('front/receptionist/createCustomer'),
-            'data' => "js:$(this).serialize()",
-            'type' => 'post',
-            'dataType' => 'json',
-            'success' => "function(data)
-                    {
-                        if (data.status == 'failure')
-                        {
-                            $('#dialogCreateCustomer div.divForForm').html(data.div);
-                                  // Here is the trick: on submit-> once again this function!
-                            $('#dialogCreateCustomer div.divForForm form').submit(createCustomer);
-                        }
-                        else
-                        {
-                            $('#dialogCreateCustomer div.divForForm').html(data.div);
-                            $('#right_page_title').html('Thông tin bệnh nhân');
-                            $('#right-content').html(data.rightContent);
-                            $('.left-page .info-content .info-result .content').html(data.infoSchedule);
-                            setTimeout(\"$('#dialogCreateCustomer').dialog('close') \",1000);
-                        }
-
-                    } ",
-        ))
-        ?>;
+    }
+    
+    /**
+     * Update customer data after do something
+     * @param {Json} data Json data
+     */
+    function fnUpdateCustomerData(data) {
+        $('#dialogId div.divForFormClass').html(data['<?php echo DomainConst::KEY_CONTENT; ?>']);
+        $('#right_page_title').html('<?php echo DomainConst::CONTENT00172; ?>');
+        $('#right-content').html(data['<?php echo DomainConst::KEY_RIGHT_CONTENT; ?>']);
+        $('.left-page .info-content .info-result .content').html(data['<?php echo DomainConst::KEY_INFO_SCHEDULE; ?>']);
+        setTimeout("$('#dialogId').dialog(opt).dialog('close')", 1000);
+    }
+    
+    /**
+     * Load dialog content
+     * @param {Json} data Json data
+     * @param {String} title Title of dialog
+     * @param {String} fnHandler Function handler
+     */
+    function fnLoadDialogContent(data, title, fnHandler) {
+        // Set content of dialog
+        $('#dialogId div.divForFormClass').html(
+                data['<?php echo DomainConst::KEY_CONTENT; ?>']);
+        // Set title of dialog
+        $('.ui-dialog-title').html(title);
+        // Here is the trick: on submit-> once again this function!
+        $('#dialogId div.divForFormClass form').submit(fnHandler);
+    }
+    
+    /**
+     * Check if data is success
+     * @param {type} data
+     * @returns {Boolean}
+     */
+    function fnIsDataSuccess(data) {
+        return (data["<?php echo DomainConst::KEY_STATUS; ?>"]
+                === "<?php echo DomainConst::NUMBER_ONE_VALUE; ?>");
+    }
+    
+    /**
+     * Open create customer dialog
+     */
+    function fnOpenCreateCustomer() {
+        createCustomer();
+        $("#dialogId").dialog(opt).dialog("open");
+    }
+    
+    /**
+     * Create customer dialog
+     * @returns {Boolean}
+     */
+    function createCustomer() {
+        fnLoadFormCSS();
+        $.ajax({
+             url: "<?php echo Yii::app()->createAbsoluteUrl(
+                     'front/receptionist/createCustomer'); ?>",
+             data: $(this).serialize(),
+             type: "post",
+             dataType: "json",
+             success: function(data) {
+                 // After submit
+                if (fnIsDataSuccess(data)) {
+                    fnUpdateCustomerData(data);
+                } else {    // Load first time
+                    fnLoadDialogContent(data,
+                        '<?php echo DomainConst::CONTENT00176; ?>',
+                        createCustomer);
+                }
+             },
+             cache: false
+         });
         return false;
+    }
+    
+    /**
+     * Open update customer dialog
+     * @param {String} _id Id of customer need update
+     * @returns {Boolean}
+     */
+    function fnOpenUpdateCustomer(_id = '') {
+        updateCustomer(_id);
+        $("#dialogId").dialog(opt).dialog("open");
+    }
+    
+    /**
+     * Update customer dialog
+     * @param {String} _id Id of customer need update
+     * @returns {Boolean}
+     */
+    function updateCustomer(_id = '') {
+        fnLoadFormCSS();
+        $.ajax({
+             url: "<?php echo Yii::app()->createAbsoluteUrl(
+                     'front/receptionist/updateCustomer'); ?>",
+             data: $(this).serialize() + '&id=' + _id,
+             type: "post",
+             dataType: "json",
+             success: function(data) {
+                 // After submit
+                if (fnIsDataSuccess(data)) {
+                    fnUpdateCustomerData(data);
+                } else {    // Load first time
+                    fnLoadDialogContent(data,
+                        '<?php echo DomainConst::CONTENT00172; ?>',
+                        updateCustomer);
+                }
+             },
+             cache: false
+         });
+        return false;
+    }
+    
+    /**
+     * Open create schedule dialog
+     * @returns {Boolean}
+     */
+    function fnOpenCreateSchedule() {
+        createSchedule();
+        $("#dialogId").dialog(opt).dialog("open");
     }
     
     /**
@@ -165,74 +248,253 @@
      * @returns {Boolean}
      */
     function createSchedule() {
-        $("<link/>", {
-            id: "form_ccs",
-            rel: "stylesheet",
-            type: "text/css",
-            href: "<?php echo Yii::app()->theme->baseUrl . '/css/form.css'; ?>"
-         }).appendTo("head");
-         <?php
-        echo CHtml::ajax(array(
-            'url' => Yii::app()->createAbsoluteUrl('front/receptionist/createSchedule'),
-            'data' => "js:$(this).serialize()",
-            'type' => 'post',
-            'dataType' => 'json',
-            'success' => "function(data)
-                    {
-                        if (data.status == 'failure')
-                        {
-                            $('#dialogUpdateSchedule div.divForFormUpdateSchedule').html(data.div);
-                                  // Here is the trick: on submit-> once again this function!
-                            $('#dialogUpdateSchedule div.divForFormUpdateSchedule form').submit(createSchedule);
-                        }
-                        else
-                        {
-                            $('#dialogUpdateSchedule div.divForFormUpdateSchedule').html(data.div);
-                            $('#right_page_title').html('Thông tin bệnh nhân');
-                            $('#right-content').html(data.rightContent);
-                            $('.left-page .info-content .info-result .content').html(data.infoSchedule);
-                            setTimeout(\"$('#dialogUpdateSchedule').dialog('close') \",1000);
-                        }
-                    } ",
-        ))
-        ?>;
+        fnLoadFormCSS();
+        $.ajax({
+            url: "<?php echo Yii::app()->createAbsoluteUrl(
+                    'front/receptionist/createSchedule'); ?>",
+            data: $(this).serialize(),
+            type: "post",
+            dataType: "json",
+            success: function(data) {
+                // After submit
+                if (fnIsDataSuccess(data)) {
+                    fnUpdateCustomerData(data);
+                } else {    // Load first time
+                    fnLoadDialogContent(data,
+                       '<?php echo DomainConst::CONTENT00182; ?>',
+                       createSchedule);
+                }
+            },
+            cache: false
+        });
         return false;
     }
     
     /**
-     * Update treatment schedule
+     * Open update schedule dialog
+     * @param {String} _id Id of treatment schedule need update
      * @returns {Boolean}
      */
-    function updateSchedule() {
-        $("<link/>", {
-            id: "form_ccs",
-            rel: "stylesheet",
-            type: "text/css",
-            href: "<?php echo Yii::app()->theme->baseUrl . '/css/form.css'; ?>"
-         }).appendTo("head");
-        <?php
-        echo CHtml::ajax(array(
-            'url' => Yii::app()->createAbsoluteUrl('front/receptionist/updateSchedule'),
-            'data' => "js:$(this).serialize()",
-            'type' => 'post',
-            'dataType' => 'json',
-            'success' => "function(data)
-                    {
-                        if (data.status == 'failure')
-                        {
-                            $('#dialogUpdateSchedule div.divForFormUpdateSchedule').html(data.div);
-                                  // Here is the trick: on submit-> once again this function!
-                            $('#dialogUpdateSchedule div.divForFormUpdateSchedule form').submit(updateSchedule);
-                        }
-                        else
-                        {
-                            $('#dialogUpdateSchedule div.divForFormUpdateSchedule').html(data.div);
-                            setTimeout(\"$('#dialogUpdateSchedule').dialog('close') \",1000);
-                        }
-
-                    } ",
-        ))
-        ?>;
+    function fnOpenUpdateSchedule(_id = '') {
+        updateSchedule(_id);
+        $("#dialogId").dialog(opt).dialog("open");
+    }
+    
+    /**
+     * Update treatment schedule
+     * @param {String} _id Id of treatment schedule need update
+     * @returns {Boolean}
+     */
+    function updateSchedule(_id = '') {
+        fnLoadFormCSS();
+        $.ajax({
+            url: "<?php echo Yii::app()->createAbsoluteUrl(
+                    'front/receptionist/updateSchedule'); ?>",
+            data: $(this).serialize() + '&id=' + _id,
+            type: "post",
+            dataType: "json",
+            success: function(data) {
+                // After submit
+                if (fnIsDataSuccess(data)) {
+                    fnUpdateCustomerData(data);
+                } else {    // Load first time
+                    fnLoadDialogContent(data,
+                       '<?php echo DomainConst::CONTENT00182; ?>',
+                       updateSchedule);
+                }
+            },
+            cache: false
+        });
+        return false;
+    }
+    
+    /**
+     * Open print dialog
+     * @param {String} _id Id of customer need to print receipts
+     * @returns {Boolean}
+     */
+    function fnOpenPrintReceipt(_id = '') {
+        createPrintDialog(_id);
+        $("#dialogId").dialog(opt).dialog("open");
+    }
+    
+    /**
+     * Create print dialog
+     * @param {String} _id Id of customer need to print receipts
+     * @returns {Boolean}
+     */
+    function createPrintDialog(_id = '') {
+        fnLoadFormCSS();
+        $.ajax({
+            url: "<?php echo Yii::app()->createAbsoluteUrl(
+                    'front/receptionist/printMore'); ?>",
+            data: $(this).serialize() + '&id=' + _id,
+            type: "post",
+            dataType: "json",
+            success: function(data) {
+                // After submit
+                if (fnIsDataSuccess(data)) {
+                    fnUpdateCustomerData(data);
+                } else {    // Load first time
+                    fnLoadDialogContent(data,
+                       '<?php echo DomainConst::CONTENT00374; ?>',
+                       createPrintDialog);
+                }
+            },
+            cache: false
+        });
+        return false;
+    }
+    
+    /**
+     * Open print dialog
+     * @param {String} _id Id of treatment schedule detail need to create prescription
+     * @returns {Boolean}
+     */
+    function fnOpenCreatePrescription(_id = '') {
+        createPrescriptionDialog(_id);
+        $("#dialogId").dialog(opt).dialog("open");
+    }
+    
+    /**
+     * Create print dialog
+     * @param {String} _id Id of treatment schedule detail need to create prescription
+     * @returns {Boolean}
+     */
+    function createPrescriptionDialog(_id = '') {
+        fnLoadFormCSS();
+        $.ajax({
+            url: "<?php echo Yii::app()->createAbsoluteUrl(
+                    'front/receptionist/createPrescription'); ?>",
+            data: $(this).serialize() + '&id=' + _id,
+            type: "post",
+            dataType: "json",
+            success: function(data) {
+                // After submit
+                if (fnIsDataSuccess(data)) {
+                    fnUpdateCustomerData(data);
+                } else {    // Load first time
+                    fnLoadDialogContent(data,
+                       '<?php echo DomainConst::CONTENT00379; ?>',
+                       createPrescriptionDialog);
+                }
+            },
+            cache: false
+        });
+        return false;
+    }
+    
+    /**
+     * Open update treatment dialog
+     * @param {String} _id Id of treatment schedule need update
+     * @returns {Boolean}
+     */
+    function fnOpenUpdateTreatment(_id = '') {
+        updateTreatment(_id);
+        $("#dialogId").dialog(opt).dialog("open");
+    }
+    
+    /**
+     * Update treatment
+     * @param {String} _id Id of treatment schedule need update
+     * @returns {Boolean}
+     */
+    function updateTreatment(_id = '') {
+        fnLoadFormCSS();
+        $.ajax({
+            url: "<?php echo Yii::app()->createAbsoluteUrl(
+                    'front/receptionist/updateTreatment'); ?>",
+            data: $(this).serialize() + '&id=' + _id,
+            type: "post",
+            dataType: "json",
+            success: function(data) {
+                // After submit
+                if (fnIsDataSuccess(data)) {
+                    fnUpdateCustomerData(data);
+                } else {    // Load first time
+                    fnLoadDialogContent(data,
+                       '<?php echo DomainConst::CONTENT00386; ?>',
+                       updateTreatment);
+                }
+            },
+            cache: false
+        });
+        return false;
+    }
+    
+    /**
+     * Open create treatment schedule detail dialog
+     * @param {String} _id Id of treatment schedule need update
+     * @returns {Boolean}
+     */
+    function fnOpenCreateNewTreatment(_id = '') {
+        createNewTreatment(_id);
+        $("#dialogId").dialog(opt).dialog("open");
+    }
+    
+    /**
+     * Create new treatment schedule detail
+     * @param {String} _id Id of treatment schedule need update
+     * @returns {Boolean}
+     */
+    function createNewTreatment(_id = '') {
+        fnLoadFormCSS();
+        $.ajax({
+            url: "<?php echo Yii::app()->createAbsoluteUrl(
+                    'front/receptionist/createNewTreatment'); ?>",
+            data: $(this).serialize() + '&id=' + _id,
+            type: "post",
+            dataType: "json",
+            success: function(data) {
+                // After submit
+                if (fnIsDataSuccess(data)) {
+                    fnUpdateCustomerData(data);
+                } else {    // Load first time
+                    fnLoadDialogContent(data,
+                       '<?php echo DomainConst::CONTENT00367; ?>',
+                       createNewTreatment);
+                }
+            },
+            cache: false
+        });
+        return false;
+    }
+    
+    /**
+     * Open create receipt dialog
+     * @param {String} _id Id of treatment schedule need create receipt
+     * @returns {Boolean}
+     */
+    function fnOpenCreateReceipt(_id = '') {
+        createReceipt(_id);
+        $("#dialogId").dialog(opt).dialog("open");
+    }
+    
+    /**
+     * Update treatment
+     * @param {String} _id Id of treatment schedule need update
+     * @returns {Boolean}
+     */
+    function createReceipt(_id = '') {
+        fnLoadFormCSS();
+        $.ajax({
+            url: "<?php echo Yii::app()->createAbsoluteUrl(
+                    'front/receptionist/createReceipt'); ?>",
+            data: $(this).serialize() + '&id=' + _id,
+            type: "post",
+            dataType: "json",
+            success: function(data) {
+                // After submit
+                if (fnIsDataSuccess(data)) {
+                    fnUpdateCustomerData(data);
+                } else {    // Load first time
+                    fnLoadDialogContent(data,
+                       '<?php echo DomainConst::CONTENT00256; ?>',
+                       createReceipt);
+                }
+            },
+            cache: false
+        });
         return false;
     }
 </script>
