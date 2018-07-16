@@ -902,6 +902,8 @@ class DomainConst {
     const KEY_SUBMIT_SAVE                   = 'submitSave';
     /** Receipt */
     const KEY_RECEIPT                       = 'receipt';
+    /** Submit excel     */
+    const KEY_SUBMIT_EXCEL                 = 'submitExcel';
     
     //-----------------------------------------------------
     // List domain const
@@ -1385,4 +1387,5 @@ class DomainConst {
     const CONTENT00386  = 'Khách hàng cũ';
     const CONTENT00387  = 'Tuổi';
     const CONTENT00388  = 'Thời gian điều trị';
+    const CONTENT00389  = 'Xuất excel';
 }
