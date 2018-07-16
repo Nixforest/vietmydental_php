@@ -11,7 +11,7 @@ if (!empty($to)) {
     $dateTo = CommonProcess::convertDateTime($to, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_BACK_END);
 }
 ?>
-<h1><?php echo $this->pageTitle . ' ngày: ' . $dateFrom . ' đến ' . $dateTo; ?></h1>
+<h1><?php echo 'Báo cáo bệnh nhân' . ' ngày: ' . $dateFrom . ' đến ' . $dateTo; ?></h1>
 
 <div class="form">
 
@@ -173,6 +173,11 @@ $this->widget('zii.widgets.grid.CGridView', array(
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getScheduleTime()',
         ),
+        array(
+            'name' => DomainConst::CONTENT00054,
+//            'htmlOptions' => array('style' => 'text-align:center;'),
+            'value' => '$data->getCreatedBy()',
+        ),
         
         
     ),
@@ -242,8 +247,42 @@ $this->widget('zii.widgets.grid.CGridView', array(
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getScheduleTime()',
         ),
-        
+        array(
+            'name' => DomainConst::CONTENT00054,
+//            'htmlOptions' => array('style' => 'text-align:center;'),
+            'value' => '$data->getCreatedBy()',
+        ),
         
     ),
 ));
 ?>
+<h1><?php echo DomainConst::CONTENT00254; ?></h1>
+<div class="grid-view">
+    <table class="items">
+        <thead>
+            <tr>
+                <th>
+                    <?php echo DomainConst::CONTENT00254; ?>
+                </th>
+                <th>
+                    <?php echo DomainConst::CONTENT00386; ?>
+                </th>
+                <th>
+                    <?php echo DomainConst::CONTENT00390; ?>
+                </th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="even">
+                <?php
+                $oldSum = !empty($old)  ? $old->getTotalItemCount() : 0;
+                $newSum = !empty($new)  ? $new->getTotalItemCount() : 0;
+                ?>
+                <td style="text-align:center; font-weight:bold"><?php echo $oldSum+$newSum; ?></td>
+                <td style="text-align:right; font-weight:bold"><?php echo $oldSum; ?></td>
+                <td style="text-align:right; font-weight:bold"><?php echo $newSum; ?></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
