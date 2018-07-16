@@ -200,6 +200,8 @@ class ReportsController extends AdminController
             $dateFormat = DomainConst::DATE_FORMAT_4;
             $agentId = isset(Yii::app()->user->agent_id) ? Yii::app()->user->agent_id : '';
             $mAgent = Agents::model()->findByPk($agentId);
+            $mAgent->created_by = '';
+            $mAgent->doctor_id = '';
             $from = '';
             $to = '';
             $old = null;
@@ -213,11 +215,7 @@ class ReportsController extends AdminController
                 $to = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
             }
             // Start access db
-            if ($mAgent) {
-                $data = $mAgent->getCustomers($from, $to);
-                $old = !empty($data['OLD']) ? $data['OLD'] : null;
-                $new = !empty($data['NEW']) ? $data['NEW'] : null;
-            }
+            
             if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
                 $this->redirect(array('customer',
                     'from'  => CommonProcess::convertDateTime($_POST['from_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat),
@@ -264,9 +262,18 @@ class ReportsController extends AdminController
                 $to = CommonProcess::convertDateTime($_POST['to_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat);
                 ExcelHandler::summaryReportMoney($mAgent, $from, $to);
             }
+            if(!empty($_GET['Agents'])){
+                $mAgent->attributes = $_GET['Agents'];
+            }
+            if ($mAgent) {
+                $data = $mAgent->getCustomers($from, $to);
+                $old = !empty($data['OLD']) ? $data['OLD'] : null;
+                $new = !empty($data['NEW']) ? $data['NEW'] : null;
+            }
             $this->render('customers', array(
                     'old'  => $old,
                     'new'  => $new,
+                    'model' => $mAgent,
                     'from'      => $from,
                     'to'        => $to,
                     DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
