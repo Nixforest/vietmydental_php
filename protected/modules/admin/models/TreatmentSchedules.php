@@ -17,136 +17,142 @@
  * @property string $created_by
  * @property integer $status
  */
-class TreatmentSchedules extends BaseActiveRecord {
-
+class TreatmentSchedules extends BaseActiveRecord
+{
     //-----------------------------------------------------
     // Autocomplete fields
     //-----------------------------------------------------
     public $autocomplete_medical_record;
     public $autocomplete_name_doctor;
-
+    
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
-    const STATUS_INACTIVE = 0;
-    const STATUS_ACTIVE = 1;
-    const STATUS_SCHEDULE = 2;
-    const STATUS_COMPLETED = 3;
+    const STATUS_INACTIVE               = 0;
+    const STATUS_ACTIVE                 = 1;
+    const STATUS_SCHEDULE               = 2;
+    const STATUS_COMPLETED              = 3;
+    
+	/**
+	 * Returns the static model of the specified AR class.
+	 * @param string $className active record class name.
+	 * @return TreatmentSchedules the static model class
+	 */
+	public static function model($className=__CLASS__)
+	{
+		return parent::model($className);
+	}
 
-    /**
-     * Returns the static model of the specified AR class.
-     * @param string $className active record class name.
-     * @return TreatmentSchedules the static model class
-     */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
+	/**
+	 * @return string the associated database table name
+	 */
+	public function tableName()
+	{
+		return 'treatment_schedules';
+	}
 
-    /**
-     * @return string the associated database table name
-     */
-    public function tableName() {
-        return 'treatment_schedules';
-    }
+	/**
+	 * @return array validation rules for model attributes.
+	 */
+	public function rules()
+	{
+		// NOTE: you should only define rules for those attributes that
+		// will receive user inputs.
+		return array(
+			array('record_id, time_id, start_date, doctor_id', 'required'),
+			array('time_id, diagnosis_id, pathological_id, status', 'numerical', 'integerOnly'=>true),
+			array('record_id, doctor_id, created_by', 'length', 'max'=>11),
+			array('insurrance', 'length', 'max'=>10),
+			// The following rule is used by search().
+			// Please remove those attributes that should not be searched.
+			array('id, record_id, time_id, start_date, end_date, diagnosis_id, pathological_id, insurrance, doctor_id, created_date, created_by, status', 'safe', 'on'=>'search'),
+		);
+	}
 
-    /**
-     * @return array validation rules for model attributes.
-     */
-    public function rules() {
-        // NOTE: you should only define rules for those attributes that
-        // will receive user inputs.
-        return array(
-            array('record_id, time_id, start_date, doctor_id', 'required'),
-            array('time_id, diagnosis_id, pathological_id, status', 'numerical', 'integerOnly' => true),
-            array('record_id, doctor_id, created_by', 'length', 'max' => 11),
-            array('insurrance', 'length', 'max' => 10),
-            // The following rule is used by search().
-            // Please remove those attributes that should not be searched.
-            array('id, record_id, time_id, start_date, end_date, diagnosis_id, pathological_id, insurrance, doctor_id, created_date, created_by, status', 'safe', 'on' => 'search'),
-        );
-    }
+	/**
+	 * @return array relational rules.
+	 */
+	public function relations()
+	{
+		// NOTE: you may need to adjust the relation name and the related
+		// class name for the relations automatically generated below.
+		return array(
+                    'rMedicalRecord' => array(self::BELONGS_TO, 'MedicalRecords', 'record_id'),
+                    'rDiagnosis' => array(self::BELONGS_TO, 'Diagnosis', 'diagnosis_id'),
+                    'rPathological' => array(self::BELONGS_TO, 'Pathological', 'pathological_id'),
+                    'rDoctor' => array(self::BELONGS_TO, 'Users', 'doctor_id'),
+                    'rJoinPathological' => array(
+                        self::HAS_MANY, 'OneMany', 'one_id',
+                        'on'    => 'type = ' . OneMany::TYPE_TREATMENT_SCHEDULES_PATHOLOGICAL,
+                    ),
+                    'rDetail' => array(
+                        self::HAS_MANY, 'TreatmentScheduleDetails', 'schedule_id',
+                        'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
+                        'order' => 'id DESC',
+                    ),
+                    'rTime' => array(
+                        self::BELONGS_TO, 'ScheduleTimes', 'time_id'
+                    ),
+                    'rCreatedBy' => array(
+                        self::BELONGS_TO, 'Users', 'created_by'
+                    ),
+		);
+	}
 
-    /**
-     * @return array relational rules.
-     */
-    public function relations() {
-        // NOTE: you may need to adjust the relation name and the related
-        // class name for the relations automatically generated below.
-        return array(
-            'rMedicalRecord' => array(self::BELONGS_TO, 'MedicalRecords', 'record_id'),
-            'rDiagnosis' => array(self::BELONGS_TO, 'Diagnosis', 'diagnosis_id'),
-            'rPathological' => array(self::BELONGS_TO, 'Pathological', 'pathological_id'),
-            'rDoctor' => array(self::BELONGS_TO, 'Users', 'doctor_id'),
-            'rJoinPathological' => array(
-                self::HAS_MANY, 'OneMany', 'one_id',
-                'on' => 'type = ' . OneMany::TYPE_TREATMENT_SCHEDULES_PATHOLOGICAL,
-            ),
-            'rDetail' => array(
-                self::HAS_MANY, 'TreatmentScheduleDetails', 'schedule_id',
-                'on' => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
-                'order' => 'id DESC',
-            ),
-            'rTime' => array(
-                self::BELONGS_TO, 'ScheduleTimes', 'time_id'
-            ),
-            'rCreatedBy' => array(
-                self::BELONGS_TO, 'Users', 'created_by'
-            ),
-        );
-    }
+	/**
+	 * @return array customized attribute labels (name=>label)
+	 */
+	public function attributeLabels()
+	{
+		return array(
+			'id' => 'ID',
+			'record_id' => DomainConst::CONTENT00138,
+			'time_id' => DomainConst::CONTENT00240,
+			'start_date' => DomainConst::CONTENT00139,
+			'end_date' => DomainConst::CONTENT00140,
+			'diagnosis_id' => DomainConst::CONTENT00121,
+			'pathological_id' => DomainConst::CONTENT00141,
+			'insurrance' => DomainConst::CONTENT00260,
+			'doctor_id' => DomainConst::CONTENT00143,
+			'created_date' => DomainConst::CONTENT00010,
+			'created_by' => DomainConst::CONTENT00054,
+			'status' => DomainConst::CONTENT00026,
+		);
+	}
 
-    /**
-     * @return array customized attribute labels (name=>label)
-     */
-    public function attributeLabels() {
-        return array(
-            'id' => 'ID',
-            'record_id' => DomainConst::CONTENT00138,
-            'time_id' => DomainConst::CONTENT00240,
-            'start_date' => DomainConst::CONTENT00139,
-            'end_date' => DomainConst::CONTENT00140,
-            'diagnosis_id' => DomainConst::CONTENT00121,
-            'pathological_id' => DomainConst::CONTENT00141,
-            'insurrance' => DomainConst::CONTENT00260,
-            'doctor_id' => DomainConst::CONTENT00143,
-            'created_date' => DomainConst::CONTENT00010,
-            'created_by' => DomainConst::CONTENT00054,
-            'status' => DomainConst::CONTENT00026,
-        );
-    }
+	/**
+	 * Retrieves a list of models based on the current search/filter conditions.
+	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+	 */
+	public function search()
+	{
+		// Warning: Please modify the following code to remove attributes that
+		// should not be searched.
 
-    /**
-     * Retrieves a list of models based on the current search/filter conditions.
-     * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-     */
-    public function search() {
-        // Warning: Please modify the following code to remove attributes that
-        // should not be searched.
+		$criteria=new CDbCriteria;
 
-        $criteria = new CDbCriteria;
+		$criteria->compare('id',$this->id,true);
+		$criteria->compare('record_id',$this->record_id,true);
+		$criteria->compare('time_id',$this->time_id);
+		$criteria->compare('start_date',$this->start_date,true);
+		$criteria->compare('end_date',$this->end_date,true);
+		$criteria->compare('diagnosis_id',$this->diagnosis_id);
+		$criteria->compare('pathological_id',$this->pathological_id);
+		$criteria->compare('insurrance',$this->insurrance,true);
+		$criteria->compare('doctor_id',$this->doctor_id,true);
+		$criteria->compare('created_date',$this->created_date,true);
+		$criteria->compare('created_by',$this->created_by,true);
+		$criteria->compare('status',$this->status);
+                $criteria->order = 'id DESC';
 
-        $criteria->compare('id', $this->id, true);
-        $criteria->compare('record_id', $this->record_id, true);
-        $criteria->compare('time_id', $this->time_id);
-        $criteria->compare('start_date', $this->start_date, true);
-        $criteria->compare('end_date', $this->end_date, true);
-        $criteria->compare('diagnosis_id', $this->diagnosis_id);
-        $criteria->compare('pathological_id', $this->pathological_id);
-        $criteria->compare('insurrance', $this->insurrance, true);
-        $criteria->compare('doctor_id', $this->doctor_id, true);
-        $criteria->compare('created_date', $this->created_date, true);
-        $criteria->compare('created_by', $this->created_by, true);
-        $criteria->compare('status', $this->status);
-        $criteria->order = 'id DESC';
-
-        return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
-            'pagination' => array(
-                'pageSize' => Settings::getListPageSize(),
-            ),
-        ));
-    }
-
+		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,
+                        'pagination' => array(
+                            'pageSize' => Settings::getListPageSize(),
+                        ),
+		));
+	}
+        
     //-----------------------------------------------------
     // Parent override methods
     //-----------------------------------------------------
@@ -159,10 +165,10 @@ class TreatmentSchedules extends BaseActiveRecord {
         // Format start date value
         $date = $this->start_date;
         $this->start_date = CommonProcess::convertDateTimeToMySqlFormat(
-                        $date, DomainConst::DATE_FORMAT_3);
+                $date, DomainConst::DATE_FORMAT_3);
         if (empty($this->start_date)) {
             $this->start_date = CommonProcess::convertDateTimeToMySqlFormat(
-                            $date, DomainConst::DATE_FORMAT_4);
+                    $date, DomainConst::DATE_FORMAT_4);
         }
 //        if (empty($this->start_date)) {
 //            $this->start_date = CommonProcess::convertDateTime($date, DomainConst::DATE_FORMAT_1, $toFormat)
@@ -170,12 +176,12 @@ class TreatmentSchedules extends BaseActiveRecord {
         if (empty($this->start_date)) {
             $this->start_date = $date;
         }
-
+        
 //        CommonProcess::dumpVariable($this->start_date);
         // Format end date value
         $date = $this->end_date;
         $this->end_date = CommonProcess::convertDateTimeToMySqlFormat(
-                        $date, DomainConst::DATE_FORMAT_3);
+                $date, DomainConst::DATE_FORMAT_3);
         if (empty($this->end_date)) {
             // Handle when create by receiptionist
             $this->end_date = $this->start_date;
@@ -194,7 +200,7 @@ class TreatmentSchedules extends BaseActiveRecord {
         }
         return parent::beforeSave();
     }
-
+    
     /**
      * Override before delete method
      * @return Parent result
@@ -220,7 +226,7 @@ class TreatmentSchedules extends BaseActiveRecord {
     public function getDiagnosis() {
         return isset($this->rDiagnosis) ? $this->rDiagnosis->name : '';
     }
-
+    
     /**
      * Get pathological
      * @return String Pathological
@@ -228,7 +234,7 @@ class TreatmentSchedules extends BaseActiveRecord {
     public function getPathological() {
         return isset($this->rPathological) ? $this->rPathological->name : '';
     }
-
+    
     /**
      * Get pathological
      * @return String Pathological information, if empty, return 'Lịch hẹn'
@@ -254,27 +260,28 @@ class TreatmentSchedules extends BaseActiveRecord {
         }
         return implode($spliter, $array);
     }
-
+    
     /**
      * Get details list
      * @return CArrayDataProvider
      */
     public function getDetails() {
         return new CArrayDataProvider(
-                $this->rDetail, array(
-            'id' => 'treatment_schedule_details',
-            'sort' => array(
-                'attributes' => array(
-                    'id', 'schedule_id', 'start_date', 'end_date', 'teeth_id', 'diagnosis_id', 'treatment_type_id', 'status',
-                ),
-            ),
-            'pagination' => array(
-                'pageSize' => Settings::getListPageSize(),
-            ),
+                $this->rDetail,
+                array(
+                    'id'        => 'treatment_schedule_details',
+                    'sort'      => array(
+                        'attributes'    => array(
+                            'id', 'schedule_id', 'start_date', 'end_date', 'teeth_id', 'diagnosis_id', 'treatment_type_id', 'status',
+                        ),
+                    ),
+                    'pagination'=>array(
+                        'pageSize'=>Settings::getListPageSize(),
+                    ),
                 )
-        );
+            );
     }
-
+    
     /**
      * Get start time string
      * @return String Time and Start date
@@ -289,7 +296,7 @@ class TreatmentSchedules extends BaseActiveRecord {
         $retVal .= CommonProcess::convertDateTime($this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_5);
         return $retVal;
     }
-
+    
     /**
      * Get start date string
      * @return String Start date
@@ -297,11 +304,11 @@ class TreatmentSchedules extends BaseActiveRecord {
     public function getStartDate() {
         return CommonProcess::convertDateTime($this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_VIEW);
     }
-
+    
 //    public function getStartDate() {
 //        return "Ngayf"
 //    }
-
+    
     /**
      * Get status of treatment schedule
      * @return STATUS_COMPLETED in case all treatment schedule details are
@@ -312,7 +319,8 @@ class TreatmentSchedules extends BaseActiveRecord {
         $isCompleted = true;
         if (isset($this->rDetail)) {
             foreach ($this->rDetail as $key => $value) {
-                if (($value->status != TreatmentScheduleDetails::STATUS_COMPLETED) && ($value->status != TreatmentScheduleDetails::STATUS_INACTIVE)) {
+                if (($value->status != TreatmentScheduleDetails::STATUS_COMPLETED)
+                        && ($value->status != TreatmentScheduleDetails::STATUS_INACTIVE)) {
                     $isCompleted = false;
                     break;
                 }
@@ -323,10 +331,10 @@ class TreatmentSchedules extends BaseActiveRecord {
         if ($isCompleted) {
             $retVal = strval(TreatmentSchedules::STATUS_COMPLETED);
         }
-
+        
         return $retVal;
     }
-
+    
     /**
      * Get customer id
      * @return string Customer id, empty string if failed
@@ -337,7 +345,7 @@ class TreatmentSchedules extends BaseActiveRecord {
         }
         return '';
     }
-
+    
     /**
      * Get customer model
      * @return Customer model, or NULL
@@ -348,7 +356,7 @@ class TreatmentSchedules extends BaseActiveRecord {
         }
         return NULL;
     }
-
+    
     /**
      * Get insurrance
      * @return Insurrance in currency format
@@ -380,7 +388,6 @@ class TreatmentSchedules extends BaseActiveRecord {
         }
         return $_items;
     }
-
     /**
      * Loads the application items for the specified type from the database
      * @param type $emptyOption boolean the item is empty
@@ -395,22 +402,23 @@ class TreatmentSchedules extends BaseActiveRecord {
             'order' => 'id ASC',
         ));
         foreach ($models as $model) {
-            if (($model->status != DomainConst::DEFAULT_STATUS_INACTIVE) && ($model->record_id == $recordId)) {
+            if (($model->status != DomainConst::DEFAULT_STATUS_INACTIVE)
+                && ($model->record_id == $recordId)) {
                 $_items[$model->id] = $model->id;
             }
         }
         return $_items;
     }
-
+    
     /**
      * Get list status of treatment schedule object
      * @return Array
      */
     public static function getStatus() {
         return array(
-            TreatmentSchedules::STATUS_INACTIVE => DomainConst::CONTENT00028,
-            TreatmentSchedules::STATUS_ACTIVE => DomainConst::CONTENT00027,
-            TreatmentSchedules::STATUS_SCHEDULE => DomainConst::CONTENT00177,
+            TreatmentSchedules::STATUS_INACTIVE  => DomainConst::CONTENT00028,
+            TreatmentSchedules::STATUS_ACTIVE    => DomainConst::CONTENT00027,
+            TreatmentSchedules::STATUS_SCHEDULE  => DomainConst::CONTENT00177,
             TreatmentSchedules::STATUS_COMPLETED => DomainConst::CONTENT00204,
         );
     }
@@ -436,16 +444,17 @@ class TreatmentSchedules extends BaseActiveRecord {
             }
         }
         $retVal = new CActiveDataProvider(
-                $this, array(
-            'criteria' => $criteria,
-            'pagination' => array(
-                'pageSize' => Settings::getApiListPageSize(),
-                'currentPage' => (int) $root->page,
-            ),
-        ));
+                $this,
+                array(
+                    'criteria' => $criteria,
+                    'pagination' => array(
+                        'pageSize' => Settings::getApiListPageSize(),
+                        'currentPage' => (int)$root->page,
+                    ),
+                ));
         return $retVal;
     }
-
+    
     /**
      * Get treatment info in Json format
      * @return String
@@ -466,20 +475,24 @@ class TreatmentSchedules extends BaseActiveRecord {
         }
         $diagnosis = $this->getDiagnosis();
         return CommonProcess::createConfigJson(
-                        $this->id, $pathological, array(
+                $this->id,
+                $pathological,
+                array(
 //                    DomainConst::KEY_START_DATE => CommonProcess::convertDateTimeWithFormat(
 //                            $this->start_date),
 //                    DomainConst::KEY_START_DATE => $this->getStartTime(),
                     DomainConst::KEY_START_DATE => CommonProcess::convertDateTime(
-                            $this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_VIEW),
+                            $this->start_date,
+                            DomainConst::DATE_FORMAT_1,
+                            DomainConst::DATE_FORMAT_VIEW),
                     DomainConst::KEY_END_DATE => CommonProcess::convertDateTimeWithFormat(
                             $this->end_date),
                     DomainConst::KEY_DIAGNOSIS => $diagnosis,
 //                    DomainConst::KEY_STATUS     => $this->status,
-                    DomainConst::KEY_STATUS => $this->getCurrentStatus(),
-        ));
+                    DomainConst::KEY_STATUS     => $this->getCurrentStatus(),
+                ));
     }
-
+    
     /**
      * Get treatment detail info in Json format
      * @param Array $role   Role name
@@ -588,43 +601,71 @@ class TreatmentSchedules extends BaseActiveRecord {
 //                        $processArr);
                 $details[] = CommonProcess::createConfigJson(
 //                        CommonProcess::convertDateTimeWithFormat($detail->start_date),
-                                $detail->getStartTime(), $detail->getTreatment(), $detail->getJsonInfo());
+                        $detail->getStartTime(),
+                        $detail->getTreatment(),
+                        $detail->getJsonInfo());
             }
         }
 //        $retVal[DomainConst::KEY_DETAILS]               = $details;
 //        $retVal[DomainConst::KEY_CAN_UPDATE]            = $this->status != TreatmentSchedules::STATUS_COMPLETED
 //                ? DomainConst::NUMBER_ONE_VALUE : DomainConst::NUMBER_ZERO_VALUE;
-
-        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_START_DATE, DomainConst::CONTENT00139,
+        
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_START_DATE,
+                DomainConst::CONTENT00139,
 //                CommonProcess::convertDateTimeWithFormat($this->start_date));
-                        CommonProcess::convertDateTime($this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_VIEW));
-        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_END_DATE, DomainConst::CONTENT00140, CommonProcess::convertDateTimeWithFormat($this->end_date));
-        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_PATHOLOGICAL, DomainConst::CONTENT00237, $this->getPathological());
-        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_PATHOLOGICAL_ID, '', $this->pathological_id);
-        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_DIAGNOSIS, DomainConst::CONTENT00231, $this->getDiagnosis());
-        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_DIAGNOSIS_ID, '', $this->diagnosis_id);
-
+                CommonProcess::convertDateTime($this->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_VIEW));
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_END_DATE,
+                DomainConst::CONTENT00140,
+                CommonProcess::convertDateTimeWithFormat($this->end_date));
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_PATHOLOGICAL,
+                DomainConst::CONTENT00237,
+                $this->getPathological());
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_PATHOLOGICAL_ID,
+                '',
+                $this->pathological_id);
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_DIAGNOSIS,
+                DomainConst::CONTENT00231,
+                $this->getDiagnosis());
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_DIAGNOSIS_ID,
+                '',
+                $this->diagnosis_id);
+        
         switch ($role) {
             case Roles::ROLE_DOCTOR:
                 break;
             default:
-                $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_DOCTOR, DomainConst::CONTENT00143, isset($this->rDoctor) ? $this->rDoctor->getFullName() : '');
+                $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_DOCTOR,
+                DomainConst::CONTENT00143,
+                isset($this->rDoctor) ? $this->rDoctor->getFullName() : '');
                 break;
         }
-
-        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_HEALTHY, DomainConst::CONTENT00142, $this->generateJsonHealthy());
-        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_INSURRANCE, DomainConst::CONTENT00260, $this->getInsurrance());
-        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_STATUS, DomainConst::CONTENT00026, $this->status);
+        
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_HEALTHY,
+                DomainConst::CONTENT00142,
+                $this->generateJsonHealthy());
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_INSURRANCE,
+            DomainConst::CONTENT00260,
+                $this->getInsurrance());
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_STATUS,
+                DomainConst::CONTENT00026,
+                $this->status);
         if (empty($details)) {
             $detail = new TreatmentScheduleDetails();
             $details[] = CommonProcess::createConfigJson(
-                            CommonProcess::convertDateTimeWithFormat($detail->start_date), $detail->getTreatment(), $detail->getJsonInfo());
+                        CommonProcess::convertDateTimeWithFormat($detail->start_date),
+                        $detail->getTreatment(),
+                        $detail->getJsonInfo());
         }
-        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_DETAILS, DomainConst::CONTENT00146, $details);
-        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_CAN_UPDATE, DomainConst::CONTENT00232, $this->status != TreatmentSchedules::STATUS_COMPLETED ? DomainConst::NUMBER_ONE_VALUE : DomainConst::NUMBER_ZERO_VALUE);
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_DETAILS,
+                DomainConst::CONTENT00146,
+                $details);
+        $retVal[] = CommonProcess::createConfigJson(CustomerController::ITEM_CAN_UPDATE,
+                DomainConst::CONTENT00232,
+                $this->status != TreatmentSchedules::STATUS_COMPLETED
+                ? DomainConst::NUMBER_ONE_VALUE : DomainConst::NUMBER_ZERO_VALUE);
         return $retVal;
     }
-
+    
     /**
      * Get json list status
      * @return Array
@@ -653,12 +694,13 @@ class TreatmentSchedules extends BaseActiveRecord {
         foreach ($this->rJoinPathological as $item) {
             if (isset($item->rPathological)) {
                 $retVal[] = CommonProcess::createConfigJson(
-                                $item->rPathological->id, $item->rPathological->name);
+                        $item->rPathological->id,
+                        $item->rPathological->name);
             }
         }
         return $retVal;
     }
-
+    
     /**
      * Get html treatment detail
      * @return type
@@ -668,12 +710,6 @@ class TreatmentSchedules extends BaseActiveRecord {
         foreach ($this->rDetail as $detail) {
             $title = $detail->getStartTime();
             $info = '';
-
-            $teeth = !empty($detail->rJoinTeeth) ? $detail->generateTeethInfo(", ") : '';
-            $diagnosis = !empty($detail->rDiagnosis) ? $detail->rDiagnosis->name : '';
-            $treatment_type = !empty($detail->rTreatmentType) ? $detail->rTreatmentType->name : '';
-            $description = $detail->description;
-            
             if (isset($detail->rTreatmentType)) {
                 $info = $detail->rTreatmentType->name;
             } else if (isset($detail->rDiagnosis)) {
@@ -681,34 +717,29 @@ class TreatmentSchedules extends BaseActiveRecord {
             } else {
                 $info = DomainConst::CONTENT00177;
             }
-//            $retVal .= '<div class="list__2__des">';
-//            $retVal .=      '<div class="list__2__item">';
-//            $retVal .=          '<span class="icon28 icon-list"></span>';
-//            $retVal .=          '<p>';
-//            $retVal .=              '<strong>' . $title . '</strong>';
-//            $retVal .=          '</p>';
-//            $retVal .=          '<p>';
-//            $retVal .=              $info;
-//            $retVal .=          '</p>';
-//            $retVal .=      '</div>';
-//            $retVal .= '</div>';
-
-            /**
-             * DuongNV add change template
-             */
-            $retVal = '<div class="lp-list-item" style=" width: 45%; margin: 10px 15px;float:left;>'
-                    .       '<i class="fas fa-calendar-check lp-list-item-icon"></i>'
-//                    .       '<strong> ' . $title . '</strong><br>'
-//                    .       '<span>' . $info . '</span>'
-                    .       '<p><i class="fas fa-angle-double-right" title="Tên"></i> '. $info .'</p>'
-                    .       '<p><i class="fas fa-calendar-alt" title="Thời gian"></i> '. $title .'</p>'
-                    .       '<p><i class="fas fa-tooth" title='.DomainConst::CONTENT00284.'></i> '. $teeth .'</p>'
-                    .       '<p><i class="fas fa-file-medical-alt" title="Chuẩn đoán"></i> '. $diagnosis .'</p>'
-                    .       '<p><i class="fas fa-file-medical" title='.DomainConst::CONTENT00128.'></i> '. $treatment_type .'</p>'
-                    .       '<p><i class="fas fa-sticky-note" title='.DomainConst::CONTENT00062.'></i> '. $description .'</p>'
-                    . '</div>';
+            $retVal .= '<div class="list__2__des">';
+            $retVal .=      '<div class="list__2__item">';
+            $retVal .=          '<span class="icon28 icon-list"></span>';
+            $retVal .=          '<p>';
+            $retVal .=              '<strong>' . $title . '</strong>';
+            $retVal .=          '</p>';
+            $retVal .=          '<p>';
+            $retVal .=              $info;
+            $retVal .=          '</p>';
+            $retVal .=      '</div>';
+            $retVal .= '</div>';
         }
         return $retVal;
     }
-
+    
+    /**
+     * 
+     * @return string
+     */
+    public function getDoctor() {
+        if (isset($this->rDoctor)) {
+            return $this->rDoctor->getFullname();
+        }
+        return '';
+    }
 }

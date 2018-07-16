@@ -22,7 +22,7 @@
  */
 class Agents extends BaseActiveRecord
 {
-    public $autocomplete_name_street;
+    public $autocomplete_name_street,$doctor_id;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -54,10 +54,10 @@ class Agents extends BaseActiveRecord
 			array('name, house_numbers, address_vi', 'length', 'max'=>255),
 			array('phone, email', 'length', 'max'=>200),
 			array('street_id, created_by', 'length', 'max'=>11),
-			array('foundation_date, address', 'safe'),
+			array('foundation_date, address,doctor_id', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, phone, email, foundation_date, city_id, district_id, ward_id, street_id, house_numbers, address, address_vi, created_by, created_date, status', 'safe', 'on'=>'search'),
+			array('id, doctor_id, name, phone, email, foundation_date, city_id, district_id, ward_id, street_id, house_numbers, address, address_vi, created_by, created_date, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -88,7 +88,7 @@ class Agents extends BaseActiveRecord
                         'on'    => 'type = ' . OneMany::TYPE_AGENT_RECEIPT,
                     ),
                     'rMoneyAccount' => array(
-                        self::HAS_MANY, 'MoneyAccounts', 'agent_id',
+                        self::HAS_MANY, 'MoneyAccount', 'agent_id',
                         'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
                     ),
 		);
@@ -283,4 +283,212 @@ class Agents extends BaseActiveRecord
             ),
         ));
     }
+    
+    /**
+     * 
+     * @param type $from
+     * @param type $to
+     * @param type $arrStatus
+     * @return \CArrayDataProvider
+     */
+    public function getMoney($from, $to, $arrIsIncomming) {
+        $arrReceipts = array();
+        if (isset($this->rMoneyAccount)) {
+            foreach ($this->rMoneyAccount as $aValue) {
+                foreach ($aValue->rMoney as $value) {
+                    if (in_array($value->isIncomming, $arrIsIncomming)) {
+                        $date = $value->action_date;
+    //                    CommonProcess::dumpVariable($date);
+                        $compareFrom = DateTimeExt::compare($date, $from);
+                        $compareTo = DateTimeExt::compare($date, $to);
+                        // Check if receipt is between date range
+                        if (($compareFrom == 1 || $compareFrom == 0)
+                                && ($compareTo == 0 || $compareTo == -1)) {
+                            $arrReceipts[] = $value;
+                        }
+    //                        $arrReceipts[] = $value;
+                    }
+                }
+            }
+        }
+        return new CArrayDataProvider($arrReceipts, array(
+            'id' => 'moneys',
+            'sort'=>array(
+                'attributes'=>array(
+                     'id', 'agent_id'
+                ),
+            ),
+            'pagination'=>array(
+                'pageSize'=>Settings::getListPageSize(),
+            ),
+        ));
+    }
+    
+    /**
+     * get array report
+     * @param type $from
+     * @param type $to
+     */
+    public function getReportMoney($from, $to){
+        $aData = array();
+        $aData['DOCTORS'] = array();
+        $aData['RECEIPT'] = array();
+        $aData['RECEIPT']['DATES'] = array();
+        $aData['RECEIPT']['VALUES'] = array();
+        $aData['DOCTORS'] =  Users::getListUser(Roles::getRoleByName(Roles::ROLE_DOCTOR)->id,$this->id);
+        foreach ($aData['DOCTORS'] as $id => $name){
+            $aData['DOCTORS'][$id] = $this->getNameBS($name);
+        }
+//        Load receipts
+        $receipts = $this->getReceipts($from, $to, array(Receipts::STATUS_RECEIPTIONIST));
+        $receipts->pagination = false;
+        $aReceipts = $receipts->getData();
+        foreach ($aReceipts as $key => $mJoinReceipt) {
+            $mReceipt = $mJoinReceipt->rReceipt;
+            $doctor_id = $mReceipt->getDoctorId();
+            $money = $mJoinReceipt->getReceiptFinal();
+            $date = CommonProcess::convertDateTime($mReceipt->created_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
+//            set money RECEIPT
+            if(!empty($aData['RECEIPT']['VALUES'][$date][$doctor_id])){
+                $aData['RECEIPT']['VALUES'][$date][$doctor_id] += (int)$money;
+            }else{
+                $aData['RECEIPT']['VALUES'][$date][$doctor_id] = (int)$money;
+            }
+//            set date
+            if(empty($aData['RECEIPT']['DATES'][$date])){
+                $aData['RECEIPT']['DATES'][$date] = $date;
+            }
+        }
+//        Load money
+        $aData['GENERAL']['DATES']  = array();
+        $aData['GENERAL']['IMPORT'] = array();
+        $aData['GENERAL']['EXPORT'] = array();
+        $aData['EXPORT_DETAIL'] = array();
+        $moneys = $this->getMoney($from, $to, array(DomainConst::NUMBER_ONE_VALUE,DomainConst::NUMBER_ZERO_VALUE));
+        $moneys->pagination = false;
+        $aMoneys = $moneys->getData();
+        foreach ($aMoneys as $key => $mMoney) {
+            $date = $mMoney->action_date;
+//            import
+            if($mMoney->isIncomming == DomainConst::NUMBER_ONE_VALUE){
+                if(!empty($aData['GENERAL']['IMPORT'][$date])){
+                    $aData['GENERAL']['IMPORT'][$date] += $mMoney->amount;
+                }else{
+                    $aData['GENERAL']['IMPORT'][$date] = $mMoney->amount;
+                }
+            }
+//            export
+            if($mMoney->isIncomming == DomainConst::NUMBER_ZERO_VALUE){
+                if(!empty($aData['GENERAL']['EXPORT'][$date])){
+                    $aData['GENERAL']['EXPORT'][$date] += $mMoney->amount;
+                }else{
+                    $aData['GENERAL']['EXPORT'][$date] = $mMoney->amount;
+                }
+//                Detail Export
+                $aData['EXPORT_DETAIL'][] = array(
+                    'DATE' => $date,
+                    'MONEY' => $mMoney->amount,
+                    'DESCRIPTION' => $mMoney->description,
+                );
+            }
+//            set date GENERAL
+            if(empty($aData['GENERAL']['DATES'][$date])){
+                $aData['GENERAL']['DATES'][$date] = $date;
+            }
+            
+        }
+        return $aData;
+    }
+    
+    /**
+     * get name of BS
+     * @param type $strName
+     */
+    public function getNameBS($strName){
+        $result = '';
+        $arrayChar = explode(' ', $strName);
+        if(!empty($arrayChar)){
+            $result = 'BS '. $arrayChar[count($arrayChar)-1];
+        }
+        return $result;
+    }
+    
+    /**
+     * get customer of agent
+     * @param type $from
+     * @param type $to
+     * @return \CArrayDataProvider
+     */
+    public function getCustomers($from, $to) {
+        $aData = [];
+        $strDocTor = '';
+        $aData['OLD'] = null;
+        $aData['NEW'] = null;
+        $aIdCus = [];
+        $criteriaNew = new CDbCriteria;
+        $criteriaOld = new CDbCriteria;
+        if (empty($this->rJoinCustomer)) {
+            return $aData;
+        }
+        foreach ($this->rJoinCustomer as $value) {
+            $aIdCus[$value->many_id] = $value->many_id;
+        }
+        $criteriaNew->select = ('t.*');
+        if(!empty($this->created_by)){
+            $criteria = new CDbCriteria;
+            $criteria->compare('t.first_name', $this->created_by,true);
+            $aUser = Users::model()->findAll($criteria);
+            $aId = [];
+            foreach ($aUser as $key => $value) {
+                $aId[] = $value->id;
+            }
+            $criteriaNew->addInCondition('t.created_by',$aId);
+            $criteriaOld->addInCondition('t.created_by',$aId);
+        }
+        if(!empty($this->doctor_id)){
+            $criteria = new CDbCriteria;
+            $criteria->compare('t.first_name', $this->doctor_id,true);
+            $aUser = Users::model()->findAll($criteria);
+            $aIdDoctor = [0];
+            foreach ($aUser as $key => $value) {
+                $aIdDoctor[] = $value->id;
+            }
+            $strDocTor = ' AND tr.doctor_id IN ('.implode(',', $aIdDoctor).')';
+        }
+        $criteriaNew->distinct = true;
+        $criteriaNew->addInCondition('t.id', $aIdCus);
+        $criteriaNew->join = 'JOIN (select re.* FROM medical_records as re JOIN treatment_schedules tr'
+                . ' ON re.id = tr.record_id'
+                . ' WHERE DATE(tr.created_date) >= "' . $from . '" AND DATE(tr.created_date) <= "' . $to . '" '.$strDocTor.') as b'
+                . ' ON b.customer_id = t.id';
+//        echo '<pre>';
+//        print_r($criteriaNew->join);
+//        echo '</pre>';
+//        die;
+        $criteriaNew->addBetweenCondition('DATE(t.created_date)', $from, $to);
+        $criteriaOld->select = ('t.*');
+        $criteriaOld->distinct = true;
+        $criteriaOld->addInCondition('t.id', $aIdCus);
+        $criteriaOld->join = 'JOIN (select re.* FROM medical_records as re JOIN treatment_schedules tr'
+                . ' ON re.id = tr.record_id'
+                . ' WHERE DATE(tr.created_date) >= "' . $from . '" AND DATE(tr.created_date) <= "' . $to . '" '.$strDocTor.') as b'
+                . ' ON b.customer_id = t.id';
+        $criteriaOld->addCondition('DATE(t.created_date) <\'' . $from . '\'');
+
+        $mCustomers = new Customers('search');
+        $aData['OLD'] = new CActiveDataProvider($mCustomers, array(
+            'criteria' => $criteriaOld,
+            'pagination' => array(
+                'pageSize' => Settings::getListPageSize(),
+            ),
+        ));
+        $aData['NEW'] = new CActiveDataProvider($mCustomers, array(
+            'criteria' => $criteriaNew,
+            'pagination' => array(
+                'pageSize' => Settings::getListPageSize(),
+            ),
+        ));
+        return $aData;
+    }
+
 }
