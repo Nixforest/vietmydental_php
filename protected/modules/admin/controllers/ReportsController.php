@@ -78,6 +78,11 @@ class ReportsController extends AdminController
                     'to'    => $from
                     ));
             }
+            if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_EXCEL)) {
+                $from = CommonProcess::convertDateTime($_POST['from_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat);
+                $to = CommonProcess::convertDateTime($_POST['to_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat);
+                ExcelHandler::summaryReportMoney($mAgent, $from, $to);
+            }
             $this->render('revenue', array(
                     'receipts'  => $receipts,
                     'newReceipts'  => $newReceipts,
@@ -253,6 +258,11 @@ class ReportsController extends AdminController
                     'from'  => $from,
                     'to'    => $from
                     ));
+            }
+            if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_EXCEL)) {
+                $from = CommonProcess::convertDateTime($_POST['from_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat);
+                $to = CommonProcess::convertDateTime($_POST['to_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat);
+                ExcelHandler::summaryReportMoney($mAgent, $from, $to);
             }
             $this->render('customers', array(
                     'old'  => $old,
