@@ -906,6 +906,10 @@ class DomainConst {
     const KEY_RECEIPT                       = 'receipt';
     /** Submit excel     */
     const KEY_SUBMIT_EXCEL                 = 'submitExcel';
+    /** Right content */
+    const KEY_RIGHT_CONTENT                 = 'rightContent';
+    /** Info schedule */
+    const KEY_INFO_SCHEDULE                 = 'infoSchedule';
     
     //-----------------------------------------------------
     // List domain const

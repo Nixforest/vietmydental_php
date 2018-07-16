@@ -119,7 +119,7 @@ class Customers extends BaseActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
+			'id' => DomainConst::CONTENT00389,
 			'name' => DomainConst::CONTENT00100,
 			'gender' => DomainConst::CONTENT00047,
 			'date_of_birth' => DomainConst::CONTENT00101,
@@ -361,7 +361,7 @@ class Customers extends BaseActiveRecord
      * Get birthday with format
      * @return String Birthday with format {01 thg 11, 2018}
      */
-    public function getBirthday($format = DomainConst::DATE_FORMAT_VIEW) {
+    public function getBirthday() {
         $retVal = '';
         if (!DateTimeExt::isYearNull($this->year_of_birth)) {
             $retVal = $this->year_of_birth;
@@ -370,11 +370,11 @@ class Customers extends BaseActiveRecord
         if (empty($retVal) && !DateTimeExt::isDateNull($this->date_of_birth)) {
             $date = CommonProcess::convertDateTime($this->date_of_birth,
                                 DomainConst::DATE_FORMAT_4,
-                                $format);
+                                DomainConst::DATE_FORMAT_5);
             if (empty($date)) {
                 $date = CommonProcess::convertDateTime($this->date_of_birth,
                                 DomainConst::DATE_FORMAT_1,
-                                $format);
+                                DomainConst::DATE_FORMAT_5);
             }
             $retVal = $date;
         }
@@ -498,22 +498,18 @@ class Customers extends BaseActiveRecord
         $rightContent .=            '<tr>';
         $rightContent .=                '<td style="width: 85%;" title="'.DomainConst::CONTENT00100.'"><i class="glyphicon glyphicon-ok"></i> ' . '<b>' . $this->name . '<b>' . '</td>';
         $rightContent .=                '<td>';
-        $rightContent .=                '<a href='.CommonProcess::generateQRCodeURL($this->id).' class="btn btn-default glyphicon glyphicon-info-sign" title="Chi tiết" target="_blank"></a>';
-//        $rightContent .=                    HtmlHandler::createButtonWithImage(CommonProcess::generateQRCodeURL($this->id),
-//                                            DomainConst::CONTENT00011,
-//                                            DomainConst::IMG_VIEW_ICON, false);
+        $rightContent .=                '<a href=' . CommonProcess::generateQRCodeURL($this->id)
+                                            . ' class="btn btn-default glyphicon glyphicon-info-sign"'
+                                            . ' title="' . DomainConst::CONTENT00011 . '"></a>';
         $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
         
         $rightContent .=            '<tr>';
         $rightContent .=                '<td title="'.DomainConst::CONTENT00170.'"><i class="glyphicon glyphicon-earphone"></i> ' . '<b>' . $this->getPhone() . '<b>' . '</td>';
         $rightContent .=                '<td style="width: 50%;">';
-        $rightContent .=                '<a href='.Yii::app()->createAbsoluteUrl("admin/customers/update", array("id" => $this->id)).' class="btn btn-default glyphicon glyphicon-pencil" title="Cập nhật" target="_blank"></a>';
-//        $rightContent .=                    HtmlHandler::createButtonWithImage(
-//                                            Yii::app()->createAbsoluteUrl(
-//                                                        "admin/customers/update", array("id" => $this->id)),
-//                                            DomainConst::CONTENT00346,
-//                                            DomainConst::IMG_EDIT_ICON, false);
+        $rightContent .=                    '<a onclick="{fnOpenUpdateCustomer(\'' . $this->id . '\');}"'
+                                            . ' class="btn btn-default glyphicon glyphicon-pencil"'
+                                            . ' title="' . DomainConst::CONTENT00229 . '"></a>';
         $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
         
@@ -522,12 +518,7 @@ class Customers extends BaseActiveRecord
         $rightContent .=                '<td>';
         $rightContent .=                '<a class="btn btn-default glyphicon glyphicon-print"'
                                         .'title="In phiếu thu"'
-                                        .'onclick="{createPrintDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');}" ></a>';
-        
-//        $rightContent .=                    HtmlHandler::createAjaxButtonWithImage(
-//                                            '<br>' . DomainConst::CONTENT00264, DomainConst::IMG_PRINT_ALL_ICON,
-//                                            '{createPrintDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');}',
-//                                            'cursor: pointer;');
+                                        .'onclick="{fnOpenPrintReceipt(\'' . $this->id . '\');}" ></a>';
         $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
         
@@ -535,8 +526,6 @@ class Customers extends BaseActiveRecord
         $rightContent .=                '<td title="'.DomainConst::CONTENT00197.'"><i class="glyphicon glyphicon-map-marker"></i>  <b>' . $this->getAgentName() . '<b>' . '</td>';
         $rightContent .=                '<td></td>';
         $rightContent .=            '</tr>';
-        
-        
         
         $rightContent .=            '<tr>';
         $rightContent .=                '<td title="'.DomainConst::CONTENT00101.'"><i class="	glyphicon glyphicon-gift"></i>  <b>' . $this->getBirthday() . '<b>' . '</td>';
@@ -576,33 +565,22 @@ class Customers extends BaseActiveRecord
                 if (isset($schedule->rDetail)) {
                     $rightContent .= '<b style="float: left">';
                     if ($schedule->rPathological) {
-                        $rightContent .= $htmlIcon.'<span class="round-txt">Đợt ' . $i . ': ' . $schedule->getStartTime() . ' - ' . $schedule->rPathological->name . '</span>';
+                        $rightContent .= $htmlIcon.'<span class="round-txt">Đợt ' . $i . ': ' . $schedule->getStartDate() . ' - ' . $schedule->rPathological->name . '</span>';
                     } else {
-                        $rightContent .= $htmlIcon.'<span class="round-txt">Đợt ' . $i . ': ' . $schedule->getStartTime() . '</span>';
+                        $rightContent .= $htmlIcon.'<span class="round-txt">Đợt ' . $i . ': ' . $schedule->getStartDate() . '</span>';
                     }
                     $rightContent .= '</b>';
+                    // Add button create new treatment schedule detail
+                    $rightContent .= HtmlHandler::createAjaxButtonWithImage('',
+                            DomainConst::IMG_ADD_ICON,
+                            '{fnOpenCreateNewTreatment(\'' . $schedule->id . '\');}',
+                            '', 'create-treatment-btn');
                     
-                    $rightContent .= HtmlHandler::createButtonWithImage(
-                                        Yii::app()->createAbsoluteUrl(
-                                            "admin/treatmentScheduleDetails/create", array("schedule_id" => $schedule->id)),
-//                                        DomainConst::CONTENT00367,
-                                        '',
-                                        DomainConst::IMG_ADD_ICON, false, 'create-treatment-btn');
                     $detailIdx = count($schedule->rDetail);
-                    $rightContent .= '<div class="round-container">';//Html container of all treatment by Duong
+                    // Html container of all treatment by Duong
+                    $rightContent .= '<div class="round-container">';
                     foreach ($schedule->rDetail as $detail) {
-//                        $btnTitle = $detail->getStartDate() . '<br>';
-                        $btnTitle = '';
-                        if ($detail->rTreatmentType) {
-//                            $btnTitle = 'Lần ' . $detailIdx . ': ' . $detail->rTreatmentType->name;
-                            $btnTitle .= $detail->rTreatmentType->name;
-                        } else if ($detail->rDiagnosis) {
-//                            $btnTitle = 'Lần ' . $detailIdx . ': ' . $detail->rDiagnosis->name;
-                            $btnTitle .= $detail->rDiagnosis->name;
-                        } else {
-//                            $btnTitle = 'Lần ' . $detailIdx . ': ' . DomainConst::CONTENT00177;
-                            $btnTitle .= DomainConst::CONTENT00177;
-                        }
+                        $btnTitle = $detail->getTitle();
                         $updateTag = '';
                         switch (Yii::app()->user->role_name) {
                             case Roles::ROLE_ASSISTANT:
@@ -610,48 +588,43 @@ class Customers extends BaseActiveRecord
                                         array("id" => $detail->id)) . '">' . DomainConst::CONTENT00272 . '</a>';
                                 break;
                             case Roles::ROLE_RECEPTIONIST:
+                                $createPrescription = '{fnOpenCreatePrescription(\'' . $detail->id . '\');}';
+                                $updateTreatment = '{fnOpenUpdateTreatment(\'' . $detail->id . '\');}';
+                                $createReceipt = '{fnOpenCreateReceipt(\'' . $detail->id . '\')}';
+                                // Show item was completed
                                 if ($detail->isCompleted()) {
-                                    $updateTag = HtmlHandler::createCustomButton(
-                                            Yii::app()->createAbsoluteUrl(
-                                                        "admin/treatmentScheduleDetails/view", array("id" => $detail->id)),
-                                            $btnTitle,
-                                            $detail->getStartTime(),
-                                            $detail->getDoctor(),
-                                            Yii::app()->createAbsoluteUrl(
-                                                    "admin/receipts/createReceptionist", array("detailId" => $detail->id)),
-                                            Yii::app()->createAbsoluteUrl(
-                                                    "admin/receipts/createReceptionist", array("detailId" => $detail->id)),
-                                            'alert(\'' . DomainConst::CONTENT00383 . '\')',
-                                            'alert(\'' . DomainConst::CONTENT00375 . '\')',
-                                            array('name'=>'complete', 'type'=>1));
-                                } else {
-                                    $updateTag = HtmlHandler::createCustomButton(
-                                            Yii::app()->createAbsoluteUrl(
-                                                        "admin/treatmentScheduleDetails/update", array("id" => $detail->id)),
-                                            $btnTitle, $detail->getStartTime(),
-                                            $detail->getDoctor(),
-                                            Yii::app()->createAbsoluteUrl(
-                                                    "admin/receipts/createReceptionist", array("detailId" => $detail->id)),
-                                            Yii::app()->createAbsoluteUrl(
-                                                    "admin/receipts/createReceptionist", array("detailId" => $detail->id)),
-                                            '',
-                                            'alert(\'' . DomainConst::CONTENT00375 . '\')',
-                                            array('name'=>'new', 'type'=>0));
+                                    $updateTag = 
+                                            HtmlHandler::createCustomButton(
+                                                $updateTreatment,
+                                                $btnTitle,
+                                                $detail->getStartTime(),
+                                                $detail->getDoctor(),
+                                                '', '',
+                                                $createReceipt,
+                                                $createPrescription,
+                                                array(
+                                                    DomainConst::KEY_NAME => 'complete',
+                                                    DomainConst::KEY_TYPE => 1
+                                                ));
+                                } else {    // Normal item
+                                    $updateTag =
+                                            HtmlHandler::createCustomButton(
+                                                $updateTreatment,
+                                                $btnTitle,
+                                                $detail->getStartTime(),
+                                                $detail->getDoctor(),
+                                                '', '',
+                                                $createReceipt,
+                                                $createPrescription,
+                                                array(
+                                                    DomainConst::KEY_NAME => 'new',
+                                                    DomainConst::KEY_TYPE => 0
+                                                ));
                                 }
                             default:
                                 break;
                         }
-                        
-//                        if ($detail->rDiagnosis) {
-//                            $rightContent .= '<p>- Lần ' . $detailIdx . ': ' . $detail->rDiagnosis->name . ' - [' . $updateTag . ']</p>';
-//                        } else {
-//                            $rightContent .= '<p>- Lần ' . $detailIdx . ': ' . DomainConst::CONTENT00177 . ' - [' . $updateTag . ']</p>';
-//                        }
                         $rightContent .= $updateTag;
-//                        $rightContent .= HtmlHandler::createAjaxButtonWithImage(
-//                                            DomainConst::CONTENT00379, DomainConst::IMG_PRESCRIPTION_ICON,
-//                                            '{createPrescriptionDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');}',
-//                                            'cursor: pointer;');
                         $detailIdx--;
                     }
                     $rightContent .=    '</div>';//Duong
@@ -668,20 +641,12 @@ class Customers extends BaseActiveRecord
      * Get active schedule time
      * @return string Schedule time
      */
-    public function getScheduleTime($isFull = false) {
-//        $scheduleId = $this->getSchedule(false);
-//        if (!empty($scheduleId)) {
-//            $mSchedule = TreatmentScheduleDetails::model()->findByPk($scheduleId);
-//            if ($mSchedule) {
-//                return $mSchedule->getTimer();
-//            }
-//        }
-        $schedule = !empty($this->rMedicalRecord->rTreatmentSchedule[0]) ? $this->rMedicalRecord->rTreatmentSchedule[0] : null;
-        if (!empty($schedule)) {
-            if ($isFull) {
-                return $schedule->getStartTime();
-            } else {
-                return isset($schedule->rTime) ? $schedule->rTime->name : '';
+    public function getScheduleTime() {
+        $scheduleId = $this->getSchedule(false);
+        if (!empty($scheduleId)) {
+            $mSchedule = TreatmentScheduleDetails::model()->findByPk($scheduleId);
+            if ($mSchedule) {
+                return $mSchedule->getTimer();
             }
         }
         return '';
@@ -692,9 +657,12 @@ class Customers extends BaseActiveRecord
      * @return string Doctor name
      */
     public function getScheduleDoctor() {
-        $schedule = !empty($this->rMedicalRecord->rTreatmentSchedule[0]) ? $this->rMedicalRecord->rTreatmentSchedule[0] : null;
-        if (!empty($schedule)) {
-            return $schedule->getDoctor();
+        $scheduleId = $this->getSchedule(false);
+        if (!empty($scheduleId)) {
+            $mSchedule = TreatmentScheduleDetails::model()->findByPk($scheduleId);
+            if ($mSchedule) {
+                return $mSchedule->getDoctor();
+            }
         }
         return '';
     }
@@ -709,19 +677,14 @@ class Customers extends BaseActiveRecord
 
         $infoSchedule .= HtmlHandler::createAjaxButtonWithImage(
                 DomainConst::CONTENT00179, DomainConst::IMG_APPOINTMENT_ICON,
-                '{createSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}',
+                '{fnOpenCreateSchedule();}',
                 'cursor: pointer;');
-//        $infoSchedule .= '<div class="group-btn">';
-//        $infoSchedule .=    '<a style="cursor: pointer;"'
-//                        . ' onclick="{createSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}">' . DomainConst::CONTENT00179 . '</a>';
-//        $infoSchedule .= '</div>';
         if (!empty($scheduleId)) {
             Settings::saveAjaxTempValue($scheduleId);
             $mSchedule = TreatmentScheduleDetails::model()->findByPk($scheduleId);
             if ($mSchedule) {
                 $infoSchedule = '<div class="title-2">' . DomainConst::CONTENT00177 . ': </div>';
                 $infoSchedule .= '<div class="item-search">';
-//                $infoSchedule .=    '<p>' . $mSchedule->start_date . '</p>';
                 $infoSchedule .=    '<p>' . $mSchedule->getStartTime() . '</p>';
                 $infoSchedule .=    '<p>' . DomainConst::CONTENT00260 . ': ' . $mSchedule->rSchedule->getInsurrance() . '</p>';
                 $infoSchedule .=    '<p>Chi Tiết Công Việc: ' . $mSchedule->description . '</p>';
@@ -729,11 +692,34 @@ class Customers extends BaseActiveRecord
                 $infoSchedule .= '</div>';
                 $infoSchedule .= HtmlHandler::createAjaxButtonWithImage(
                         DomainConst::CONTENT00346, DomainConst::IMG_EDIT_ICON,
-                        '{updateSchedule(); $(\'#dialogUpdateSchedule\').dialog(\'open\');}',
+                        '{fnOpenUpdateSchedule(\'' . $scheduleId . '\');}',
                         'cursor: pointer;');
             }
         }
         return $infoSchedule;
+    }
+    
+    /**
+     * Get landing page schedule information
+     * @return string
+     */
+    public function getLandingPageScheduleInfo() {
+        $scheduleId = $this->getSchedule();
+        $retVal = '';
+        if (!empty($scheduleId)) {
+            $mSchedule = TreatmentScheduleDetails::model()->findByPk($scheduleId);
+            if ($mSchedule) {
+                $retVal .= '<div class="lp-text-content">';
+                $retVal .=      '<p>';
+                $retVal .=          '<i class="fas fa-angle-double-right"></i> ';
+                $retVal .=          '<strong>' . $mSchedule->getTitle() . '</strong><br>';
+                $retVal .=          '<i class="fas fa-calendar-plus" title="Ngày bắt đầu"></i> ';
+                $retVal .=          $mSchedule->getStartTime() . '<br>';
+                $retVal .=      '</p>';
+                $retVal .= '</div>';
+            }
+        }
+        return $retVal;
     }
     
     /**
@@ -1005,5 +991,4 @@ class Customers extends BaseActiveRecord
     public function getCreatedBy(){
         return !empty($this->rCreatedBy) ? $this->rCreatedBy->getFullName() : '';
     }
-    
 }
