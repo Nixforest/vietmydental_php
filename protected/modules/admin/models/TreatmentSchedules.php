@@ -731,4 +731,15 @@ class TreatmentSchedules extends BaseActiveRecord
         }
         return $retVal;
     }
+    
+    /**
+     * 
+     * @return string
+     */
+    public function getDoctor() {
+        if (isset($this->rDoctor)) {
+            return $this->rDoctor->getFullname();
+        }
+        return '';
+    }
 }
