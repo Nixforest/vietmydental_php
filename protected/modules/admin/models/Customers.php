@@ -507,7 +507,7 @@ class Customers extends BaseActiveRecord
         $rightContent .=            '<tr>';
         $rightContent .=                '<td title="'.DomainConst::CONTENT00170.'"><i class="glyphicon glyphicon-earphone"></i> ' . '<b>' . $this->getPhone() . '<b>' . '</td>';
         $rightContent .=                '<td style="width: 50%;">';
-        $rightContent .=                    '<a href="#" onclick="{fnOpenUpdateCustomer(\'' . $this->id . '\');}"'
+        $rightContent .=                    '<a onclick="{fnOpenUpdateCustomer(\'' . $this->id . '\');}"'
                                             . ' class="btn btn-default glyphicon glyphicon-pencil"'
                                             . ' title="' . DomainConst::CONTENT00229 . '"></a>';
         $rightContent .=                '</td>';

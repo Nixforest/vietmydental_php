@@ -96,10 +96,10 @@
             'title' => DomainConst::CONTENT00004,
             'autoOpen'  => false,
             'modal'     => true,
-            'position'  => array(
-                'my'    => 'top',
-                'at'    => 'top',
-            ),
+//            'position'  => array(
+//                'my'    => 'top',
+//                'at'    => 'top',
+//            ),
             'width'     => 1000,
             'heigh'     => 470,
             'close'     => 'js:function() { $("#form_ccs").remove(); }',
@@ -196,7 +196,8 @@
         $('#right_page_title').html('<?php echo DomainConst::CONTENT00172; ?>');
         $('#right-content').html(data['<?php echo DomainConst::KEY_RIGHT_CONTENT; ?>']);
         $('.left-page .info-content .info-result .content').html(data['<?php echo DomainConst::KEY_INFO_SCHEDULE; ?>']);
-        setTimeout("$('#dialogId').dialog(opt).dialog('close')", 1000);
+//        setTimeout("$('#dialogId').parent().dialog(opt).dialog('close'); $('.ui-widget-overlay').remove();", 1000);
+        setTimeout("$('.ui-icon.ui-icon-closethick').click()", 1000);
     }
     
     /**

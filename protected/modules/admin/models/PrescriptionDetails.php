@@ -17,7 +17,7 @@
  */
 class PrescriptionDetails extends BaseActiveRecord
 {
-    public $autocomplete_name_medicine;
+    public $autocomplete_id_medicine;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.

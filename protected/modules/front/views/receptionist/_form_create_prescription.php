@@ -149,8 +149,9 @@
                         }
                         $aOrderNumber = CommonProcess::buildOrderNumberArray($maxRow);
                         $index = 0;
+                        $listDetails = array_reverse($details);
                     ?>
-                    <?php foreach ($details as $detail): ?>
+                    <?php foreach ($listDetails as $detail): ?>
                         <tr class="materials_row">
                             <!--<td class="item_c order_no"><?php echo $index; ?></td>-->
                             <td class="item_c">
@@ -162,7 +163,7 @@
                                         'field_id'          => $index . "_medicine_id",
                                         'update_value'      => $medicineName,
                                         'url'               => $url,
-                                        'field_autocomplete_name' => "autocomplete_name_medicine",
+                                        'field_autocomplete_name' => "[$index]autocomplete_id_medicine",
                                         'style'             => 'width: 99%',
                                        ];
                                     $this->widget('ext.AutocompleteExt.AutocompleteExt',
@@ -228,7 +229,7 @@
                                         'field_id'          => $index . "_medicine_id",
                                         'update_value'      => $medicineName,
                                         'url'               => $url,
-                                        'field_autocomplete_name' => "autocomplete_name_medicine",
+                                        'field_autocomplete_name' => "[$index]autocomplete_id_medicine",
                                         'style'             => 'width: 99%',
                                        ];
                                     $this->widget('ext.AutocompleteExt.AutocompleteExt',

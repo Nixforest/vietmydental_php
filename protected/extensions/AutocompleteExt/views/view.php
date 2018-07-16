@@ -70,8 +70,14 @@ $session                = Yii::app()->session;
     <?php if (!empty($updateValue)): ?>
         <script>
             $(function() {
+//                console.log('<?php echo $idFieldName; ?>');
+                var oldId = '<?php echo $idFieldName; ?>';
+                var newId = oldId.replace("_[", "_");
+                newId = newId.replace(/\]/g , "_");
+                console.log(newId);
                 var remove_div = '<span class=\'remove_row_item\' onclick=\'fnRemoveName(this, \"<?php echo $idFieldName;?>\", \"<?php echo $idFieldId;?>\")\'></span>';
-                $('<?php echo $idFieldName; ?>').val('<?php echo $updateValue; ?>').attr('readonly', true).after(remove_div);
+//                $('<?php echo $idFieldName; ?>').val('<?php echo $updateValue; ?>').attr('readonly', true).after(remove_div);
+$(newId).val('<?php echo $updateValue; ?>').attr('readonly', true).after(remove_div);
             });
         </script>
     <?php endif; // end if ($mUserRelation && $isShowInfo) ?>

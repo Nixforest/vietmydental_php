@@ -1108,6 +1108,7 @@ span.icon21 {
     background: white;
     position: relative;
     color: black;
+    z-index: 0;
 }
 .gr-container:hover{
     background: #f3f3f3;
@@ -1124,6 +1125,7 @@ a:hover{
     left: 7px;
     right: 5px;
     float: right;
+    z-index: 1;
 }
 .create-treatment-btn{text-align: right;}
 .round-container {

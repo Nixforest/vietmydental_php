@@ -85,17 +85,17 @@ class HtmlHandler {
         }
         $paymentItem = '<a href="' . $paymentHref . '" class="btn btn-xs btn-primary mr-1">' . DomainConst::CONTENT00251 . '</a>';
         if (!empty($paymentClick)) {
-            $paymentItem = '<a href="#" onclick="' . $paymentClick . '" class="btn btn-xs btn-primary mr-1">' . DomainConst::CONTENT00251 . '</a>';
+            $paymentItem = '<a onclick="' . $paymentClick . '" class="btn btn-xs btn-primary mr-1">' . DomainConst::CONTENT00251 . '</a>';
         }
         $prescriptItem = '<a href="' . $prescriptHref . '" class="btn btn-xs btn-success mr-1">' . DomainConst::CONTENT00379 . '</a>';
         if (!empty($prescriptClick)) {
-            $prescriptItem = '<a href="#" onclick="' . $prescriptClick . '" class="btn btn-xs btn-success mr-1">' . DomainConst::CONTENT00379 . '</a>';
+            $prescriptItem = '<a onclick="' . $prescriptClick . '" class="btn btn-xs btn-success mr-1">' . DomainConst::CONTENT00379 . '</a>';
         }
 
         $paymentLink = Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/payment");
         $createPrescriptionLink = Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/createPrescription");
         
-        $retVal .= '<a ' . $target . ' href="#">'
+        $retVal .= '<a ' . $target . '>'
                 .       '<div class="gr-container">'
                 .           '<div class="gr-bar">'
                 .               '<h4 style="display: inline; margin-right: 4px;"><span class="label '.$sttClass.'">'.$status['name'].'</span></h4>'
@@ -105,7 +105,7 @@ class HtmlHandler {
                 .               $prescriptItem
                 .           '</div>'
 //                .           '<h4><b><a ' . $target . ' href="' . $href . '">' . $title . '</a></b></h4>'
-                .           '<h4><b><a ' . $target . ' href="#" onclick="' . $href . '">' . $title . '</a></b></h4>'
+                .           '<h4><b><a ' . $target . ' onclick="' . $href . '" style="cursor:pointer;">' . $title . '</a></b></h4>'
                 .           '<span>Bác sĩ <b>'.$doctor.'</b> thực hiện lúc <b>'.$time.'</b>.</span>'
                 .       '</div>'
                 . '</a>';
@@ -115,7 +115,7 @@ class HtmlHandler {
     public static function createAjaxButtonWithImage($title, $image, $onClick, $style, $class = self::CLASS_GROUP_BUTTON) {
         $retVal = '';
         $retVal .= '<div class="' . $class . '">';
-        $retVal .= '<a style="' . $style . '" onclick="' . $onClick . '" href="#">'
+        $retVal .= '<a style="' . $style . '" onclick="' . $onClick . '">'
                 . '<img src="' . Yii::app()->theme->baseUrl . DomainConst::IMG_BASE_PATH . $image . '"> '
                 . '' . $title . '</a>';
         $retVal .= '</div>';
