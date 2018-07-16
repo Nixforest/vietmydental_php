@@ -1388,4 +1388,5 @@ class DomainConst {
     const CONTENT00387  = 'Tuổi';
     const CONTENT00388  = 'Thời gian điều trị';
     const CONTENT00389  = 'Xuất excel';
+    const CONTENT00390  = 'Khách hàng mới';
 }
