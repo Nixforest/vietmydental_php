@@ -993,4 +993,11 @@ class Customers extends BaseActiveRecord
     public function getFieldName($fieldName = 'name'){
         return !empty($this->$fieldName) ? $this->$fieldName : '';
     }
+    
+    /**
+     * get created by
+     */
+    public function getCreatedBy(){
+        return !empty($this->rCreatedBy) ? $this->rCreatedBy->getFullName() : '';
+    }
 }
