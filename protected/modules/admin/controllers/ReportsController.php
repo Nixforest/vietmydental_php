@@ -130,7 +130,6 @@ class ReportsController extends AdminController
 	*/
         
         public function actionReportMoney() {
-            $isExport = false;
             $dateFormat = DomainConst::DATE_FORMAT_4;
             $agentId = isset(Yii::app()->user->agent_id) ? Yii::app()->user->agent_id : '';
             $mAgent = Agents::model()->findByPk($agentId);
@@ -144,50 +143,57 @@ class ReportsController extends AdminController
             if (empty($to)) {
                 $to = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
             }
-            $receipts = array();
-            $aMoney = array();
-
             if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
-                $isExport = true;
-                $from = CommonProcess::convertDateTime($_POST['from_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat);
-                $to = CommonProcess::convertDateTime($_POST['to_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat);
+                $this->redirect(array('ReportMoney',
+                    'from'  => CommonProcess::convertDateTime($_POST['from_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat),
+                    'to'    => CommonProcess::convertDateTime($_POST['to_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat)
+                    ));
             }
             if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_MONTH)) {
-                $isExport = true;
                 $from = CommonProcess::getFirstDateOfCurrentMonth($dateFormat);
-                $to = CommonProcess::getLastDateOfMonth($from);
+                $this->redirect(array('ReportMoney',
+                    'from'  => $from,
+                    'to'    => CommonProcess::getLastDateOfMonth($from)
+                    ));
             }
             if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_LAST_MONTH)) {
-                $isExport = true;
                 $from = CommonProcess::getPreviousMonth($dateFormat);
-                $from = CommonProcess::getFirstDateOfMonth($from);
-                $to = CommonProcess::getLastDateOfMonth($from);
+                $this->redirect(array('ReportMoney',
+                    'from'  => CommonProcess::getFirstDateOfMonth($from),
+                    'to'    => CommonProcess::getLastDateOfMonth($from)
+                    ));
             }
             if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_TODATE)) {
-                $isExport = true;
                 $from = CommonProcess::getCurrentDateTime($dateFormat);
-                $to = $from;
+                $this->redirect(array('ReportMoney',
+                    'from'  => $from,
+                    'to'    => $from
+                    ));
             }
             if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_DATE_YESTERDAY)) {
-                $isExport = true;
                 $from = CommonProcess::getPreviousDateTime($dateFormat);
-                $to = $from;
+                $this->redirect(array('ReportMoney',
+                    'from'  => $from,
+                    'to'    => $from
+                    ));
             }
             if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_DATE_BEFORE_YESTERDAY)) {
-                $isExport = true;
                 $from = CommonProcess::getDateBeforeYesterdayDateTime($dateFormat);
-                $to = $from;
+                $this->redirect(array('ReportMoney',
+                    'from'  => $from,
+                    'to'    => $from
+                    ));
             }
-            if ($isExport) {
-                // Start access db
-                if (!empty($mAgent)) {
-                    ExcelHandler::summaryReportMoney($mAgent, $from, $to);
-                }
+            if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_EXCEL)) {
+                $from = CommonProcess::convertDateTime($_POST['from_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat);
+                $to = CommonProcess::convertDateTime($_POST['to_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat);
+                ExcelHandler::summaryReportMoney($mAgent, $from, $to);
             }
 
             $this->render('report_money', array(
                 'from' => $from,
                 'to' => $to,
+                'aData' => $mAgent->getReportMoney($from, $to),
                 DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
             ));
         }
