@@ -631,7 +631,8 @@ class ReceptionistController extends FrontController {
                         }
                         $index++;
                     }
-                    if (isset($_POST[DomainConst::KEY_SUBMIT])) {
+//                    if (isset($_POST[DomainConst::KEY_SUBMIT])) {
+                    if (isset($_POST['TreatmentScheduleDetails']['isFinish']) && $_POST['TreatmentScheduleDetails']['isFinish'] == 1) {
                         $model->status = TreatmentScheduleDetails::STATUS_COMPLETED;
                         $model->save();
                     }

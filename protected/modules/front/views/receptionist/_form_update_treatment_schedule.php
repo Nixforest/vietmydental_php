@@ -100,6 +100,12 @@
 		<?php echo $form->error($model,'description'); ?>
 	</div>
 
+        <div class="row">
+		<?php echo $form->labelEx($model,'isFinish'); ?>
+		<?php echo $form->dropDownList($model,'isFinish', array(0 => 'Không', 1 => 'Có')); ?>
+		<?php echo $form->error($model,'isFinish'); ?>
+	</div>
+
 	<div class="row buttons">
 		<?php // echo CHtml::submitButton($model->isNewRecord ? 'Create' : DomainConst::CONTENT00377); ?>
                 <?php
