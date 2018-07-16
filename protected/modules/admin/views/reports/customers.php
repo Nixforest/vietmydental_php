@@ -113,8 +113,8 @@ if (!empty($to)) {
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'grid-new',
-    'dataProvider' => $new,
-//    'filter'    => $model->rProducts,
+    'dataProvider' => $model->getCustomers($from, $to)['NEW'],
+    'filter'    => $model,
     'columns' => array(
         array(
             'header' => DomainConst::CONTENT00034,
@@ -124,57 +124,59 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array('style' => 'text-align:center;')
         ),
         array(
-            'name' => DomainConst::CONTENT00049,
+            'header' => DomainConst::CONTENT00049,
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getFieldName(\'name\')',
         ),
         array(
-            'name' => DomainConst::CONTENT00387,
+            'header' => DomainConst::CONTENT00387,
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getAge()',
         ),
         array(
-            'name' => DomainConst::CONTENT00101,
+            'header' => DomainConst::CONTENT00101,
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getBirthday()',
         ),
         array(
-            'name' => DomainConst::CONTENT00045,
+            'header' => DomainConst::CONTENT00045,
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getAddress()',
         ),
         array(
-            'name' => DomainConst::CONTENT00099,
+            'header' => DomainConst::CONTENT00099,
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getCareer()',
         ),
         array(
-            'name' => DomainConst::CONTENT00300,
+            'header' => DomainConst::CONTENT00300,
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getDebt()',
         ),
         array(
-            'name' => DomainConst::CONTENT00175,
+            'header' => DomainConst::CONTENT00175,
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getEmail()',
         ),
         array(
-            'name' => DomainConst::CONTENT00307,
+            'header' => DomainConst::CONTENT00307,
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getPhone()',
         ),
         array(
-            'name' => DomainConst::CONTENT00143,
+            'header' => DomainConst::CONTENT00388,
+//            'htmlOptions' => array('style' => 'text-align:center;'),
+            'value' => '$data->getScheduleTime()',
+        ),
+          array(
+            'name' => 'doctor_id',
+            'header' => DomainConst::CONTENT00143,
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getScheduleDoctor()',
         ),
         array(
-            'name' => DomainConst::CONTENT00388,
-//            'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => '$data->getScheduleTime()',
-        ),
-        array(
-            'name' => DomainConst::CONTENT00054,
+            'name' => 'created_by',
+            'header' => DomainConst::CONTENT00054,
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getCreatedBy()',
         ),
@@ -187,8 +189,8 @@ $this->widget('zii.widgets.grid.CGridView', array(
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'receipts-grid',
-    'dataProvider' => $old,
-//    'filter'    => $model->rProducts,
+    'dataProvider' => $model->getCustomers($from, $to)['OLD'],
+    'filter'    => $model,
     'columns' => array(
         array(
             'header' => DomainConst::CONTENT00034,
@@ -198,57 +200,59 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array('style' => 'text-align:center;')
         ),
         array(
-            'name' => DomainConst::CONTENT00049,
+            'header' => DomainConst::CONTENT00049,
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getFieldName(\'name\')',
         ),
         array(
-            'name' => DomainConst::CONTENT00387,
+            'header' => DomainConst::CONTENT00387,
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getAge()',
         ),
         array(
-            'name' => DomainConst::CONTENT00101,
+            'header' => DomainConst::CONTENT00101,
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getBirthday()',
         ),
         array(
-            'name' => DomainConst::CONTENT00045,
+            'header' => DomainConst::CONTENT00045,
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getAddress()',
         ),
         array(
-            'name' => DomainConst::CONTENT00099,
+            'header' => DomainConst::CONTENT00099,
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getCareer()',
         ),
         array(
-            'name' => DomainConst::CONTENT00300,
+            'header' => DomainConst::CONTENT00300,
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getDebt()',
         ),
         array(
-            'name' => DomainConst::CONTENT00175,
+            'header' => DomainConst::CONTENT00175,
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getEmail()',
         ),
         array(
-            'name' => DomainConst::CONTENT00307,
+            'header' => DomainConst::CONTENT00307,
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getPhone()',
         ),
         array(
-            'name' => DomainConst::CONTENT00143,
-//            'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => '$data->getScheduleDoctor()',
-        ),
-        array(
-            'name' => DomainConst::CONTENT00388,
+            'header' => DomainConst::CONTENT00388,
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getScheduleTime()',
         ),
         array(
-            'name' => DomainConst::CONTENT00054,
+            'name' => 'doctor_id',
+            'header' => DomainConst::CONTENT00143,
+//            'htmlOptions' => array('style' => 'text-align:center;'),
+            'value' => '$data->getScheduleDoctor()',
+        ),
+        array(
+            'name' => 'created_by',
+            'header' => DomainConst::CONTENT00054,
 //            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->getCreatedBy()',
         ),
