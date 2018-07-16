@@ -99,6 +99,11 @@ if (!empty($to)) {
                     'name' => DomainConst::KEY_SUBMIT_LAST_MONTH,
                 ));
                 ?>
+		<?php
+                echo CHtml::submitButton(DomainConst::CONTENT00389, array(
+                    'name' => DomainConst::KEY_SUBMIT_EXCEL,
+                ));
+                ?>
 	</div>
 
 <?php $this->endWidget(); ?>
