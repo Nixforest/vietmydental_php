@@ -1,7 +1,5 @@
 <?php
 /* @var $this ReportsController */
-
-$this->createMenu('revenue', null);
 $dateFrom = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
 $dateTo = $dateFrom;
 if (!empty($from)) {
@@ -100,8 +98,104 @@ if (!empty($to)) {
                     'name' => DomainConst::KEY_SUBMIT_LAST_MONTH,
                 ));
                 ?>
+                <?php
+                echo CHtml::submitButton(DomainConst::CONTENT00389, array(
+                    'name' => DomainConst::KEY_SUBMIT_EXCEL,
+                ));
+                ?>
 	</div>
 
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+<!--Money Import Body-->
+<h1><?php echo DomainConst::CONTENT00391; ?></h1>
+<div class="grid-view">
+    <table class="items">
+        <thead>
+            <tr>
+                <th>
+                    <?php echo DomainConst::CONTENT00343; ?>
+                </th>
+                <?php foreach ($aData['DOCTORS'] as $idDoctor => $strFullName) { ?>
+                    <th>
+                        <?php echo $strFullName; ?>
+                    </th>
+                <?php } ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($aData['RECEIPT']['DATES'] as $key => $date) { 
+                if (empty($aData['RECEIPT']['VALUES'][$date])) {
+                    continue;
+                }
+            ?>
+                <tr class="even">
+                    <td><?php echo $date; ?></td>
+                <?php foreach ($aData['DOCTORS'] as $idDoctor => $strFullName) { ?>
+                    <td><?php echo !empty($aData['RECEIPT']['VALUES'][$date][$idDoctor]) ? $aData['RECEIPT']['VALUES'][$date][$idDoctor] : ''; ?></td>
+                <?php } ?>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>
+
+<h1><?php echo DomainConst::CONTENT00392; ?></h1>
+<div class="grid-view">
+    <table class="items">
+        <thead>
+            <tr>
+                <th>
+                    <?php echo DomainConst::CONTENT00343; ?>
+                </th>
+                <th>
+                    <?php echo DomainConst::CONTENT00062; ?>
+                </th>
+                <th>
+                    <?php echo DomainConst::CONTENT00304; ?>
+                </th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($aData['EXPORT_DETAIL'] as $key => $valueExport) { ?>
+                <tr class="even">
+                    <td><?php echo $valueExport['DATE']; ?></td>
+                    <td><?php echo $valueExport['DESCRIPTION']; ?></td>
+                    <td><?php echo $valueExport['MONEY']; ?></td>
+                </tr>
+            <?php } ?>
+            
+        </tbody>
+    </table>
+</div>
+
+<h1><?php echo DomainConst::CONTENT00393; ?></h1>
+<div class="grid-view">
+    <table class="items">
+        <thead>
+            <tr>
+                <th>
+                    <?php echo DomainConst::CONTENT00343; ?>
+                </th>
+                <th>
+                    <?php echo DomainConst::CONTENT00394; ?>
+                </th>
+                <th>
+                    <?php echo DomainConst::CONTENT00395; ?>
+                </th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <?php  foreach ($aData['GENERAL']['DATES'] as $key => $date) { ?>
+            <tr class="even">
+                <td><?php echo $date; ?></td>
+                <td><?php echo !empty($aData['GENERAL']['IMPORT'][$date]) ? $aData['GENERAL']['IMPORT'][$date] : ''; ?></td>
+                <td><?php echo !empty($aData['GENERAL']['EXPORT'][$date]) ? $aData['GENERAL']['EXPORT'][$date] : ''; ?></td>
+            </tr>
+            <?php }?>
+        </tbody>
+    </table>
+</div>
