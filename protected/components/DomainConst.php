@@ -1389,4 +1389,9 @@ class DomainConst {
     const CONTENT00388  = 'Thời gian điều trị';
     const CONTENT00389  = 'Xuất excel';
     const CONTENT00390  = 'Khách hàng mới';
+    const CONTENT00391  = 'CHI TIẾT DOANH THU CỦA BÁC SĨ';
+    const CONTENT00392  = 'BÁO CÁO CHI TIẾT CHI HÀNG NGÀY';
+    const CONTENT00393  = 'BẢNG TỔNG HỢP THU - CHI';
+    const CONTENT00394  = 'Thu';
+    const CONTENT00395  = 'Chi';
 }
