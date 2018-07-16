@@ -22,7 +22,7 @@
  */
 class Agents extends BaseActiveRecord
 {
-    public $autocomplete_name_street;
+    public $autocomplete_name_street,$doctor_id;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -54,10 +54,10 @@ class Agents extends BaseActiveRecord
 			array('name, house_numbers, address_vi', 'length', 'max'=>255),
 			array('phone, email', 'length', 'max'=>200),
 			array('street_id, created_by', 'length', 'max'=>11),
-			array('foundation_date, address', 'safe'),
+			array('foundation_date, address,doctor_id', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, phone, email, foundation_date, city_id, district_id, ward_id, street_id, house_numbers, address, address_vi, created_by, created_date, status', 'safe', 'on'=>'search'),
+			array('id, doctor_id, name, phone, email, foundation_date, city_id, district_id, ward_id, street_id, house_numbers, address, address_vi, created_by, created_date, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -421,6 +421,7 @@ class Agents extends BaseActiveRecord
      */
     public function getCustomers($from, $to) {
         $aData = [];
+        $strDocTor = '';
         $aData['OLD'] = null;
         $aData['NEW'] = null;
         $aIdCus = [];
@@ -433,19 +434,44 @@ class Agents extends BaseActiveRecord
             $aIdCus[$value->many_id] = $value->many_id;
         }
         $criteriaNew->select = ('t.*');
+        if(!empty($this->created_by)){
+            $criteria = new CDbCriteria;
+            $criteria->compare('t.first_name', $this->created_by,true);
+            $aUser = Users::model()->findAll($criteria);
+            $aId = [];
+            foreach ($aUser as $key => $value) {
+                $aId[] = $value->id;
+            }
+            $criteriaNew->addInCondition('t.created_by',$aId);
+            $criteriaOld->addInCondition('t.created_by',$aId);
+        }
+        if(!empty($this->doctor_id)){
+            $criteria = new CDbCriteria;
+            $criteria->compare('t.first_name', $this->doctor_id,true);
+            $aUser = Users::model()->findAll($criteria);
+            $aIdDoctor = [0];
+            foreach ($aUser as $key => $value) {
+                $aIdDoctor[] = $value->id;
+            }
+            $strDocTor = ' AND tr.doctor_id IN ('.implode(',', $aIdDoctor).')';
+        }
         $criteriaNew->distinct = true;
         $criteriaNew->addInCondition('t.id', $aIdCus);
         $criteriaNew->join = 'JOIN (select re.* FROM medical_records as re JOIN treatment_schedules tr'
                 . ' ON re.id = tr.record_id'
-                . ' WHERE DATE(tr.created_date) >= "' . $from . '" AND DATE(tr.created_date) <= "' . $to . '") as b'
+                . ' WHERE DATE(tr.created_date) >= "' . $from . '" AND DATE(tr.created_date) <= "' . $to . '" '.$strDocTor.') as b'
                 . ' ON b.customer_id = t.id';
+//        echo '<pre>';
+//        print_r($criteriaNew->join);
+//        echo '</pre>';
+//        die;
         $criteriaNew->addBetweenCondition('DATE(t.created_date)', $from, $to);
         $criteriaOld->select = ('t.*');
         $criteriaOld->distinct = true;
         $criteriaOld->addInCondition('t.id', $aIdCus);
         $criteriaOld->join = 'JOIN (select re.* FROM medical_records as re JOIN treatment_schedules tr'
                 . ' ON re.id = tr.record_id'
-                . ' WHERE DATE(tr.created_date) >= "' . $from . '" AND DATE(tr.created_date) <= "' . $to . '") as b'
+                . ' WHERE DATE(tr.created_date) >= "' . $from . '" AND DATE(tr.created_date) <= "' . $to . '" '.$strDocTor.') as b'
                 . ' ON b.customer_id = t.id';
         $criteriaOld->addCondition('DATE(t.created_date) <\'' . $from . '\'');
 
