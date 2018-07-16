@@ -904,10 +904,8 @@ class DomainConst {
     const KEY_SUBMIT_SAVE                   = 'submitSave';
     /** Receipt */
     const KEY_RECEIPT                       = 'receipt';
-    /** Right content */
-    const KEY_RIGHT_CONTENT                 = 'rightContent';
-    /** Info schedule */
-    const KEY_INFO_SCHEDULE                 = 'infoSchedule';
+    /** Submit excel     */
+    const KEY_SUBMIT_EXCEL                 = 'submitExcel';
     
     //-----------------------------------------------------
     // List domain const
@@ -1396,4 +1394,12 @@ class DomainConst {
     const CONTENT00391  = 'Hình ảnh Điều Trị';
     const CONTENT00392  = 'Bảo hành';
     const CONTENT00393  = 'Lịch hẹn tái khám';
+    const CONTENT00394  = 'Bệnh nhân cũ';
+    const CONTENT00395  = 'Tuổi';
+    const CONTENT00396  = 'Thời gian điều trị';
+    const CONTENT00397  = 'Xuất excel';
+    const CONTENT00398  = 'Bệnh nhân mới';
+    const CONTENT00399  = 'Chi tiết doanh thu của Bác sĩ';
+    const CONTENT00400  = 'Báo cáo chi tiết chi hằng ngày';
+    const CONTENT00401  = 'Bảng tổng hợp Thu - Chi';
 }

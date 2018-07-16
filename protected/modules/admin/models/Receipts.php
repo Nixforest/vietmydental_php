@@ -358,11 +358,6 @@ class Receipts extends CActiveRecord
                 $insurance = $this->rTreatmentScheduleDetail->rSchedule->getInsurrance();
             }
         }
-        $customer = $this->getCustomer();
-        $customerId = '';
-        if ($customer !== NULL) {
-            $customerId = $customer->id;
-        }
         $rightContent = '<div class="info-result">';
         $rightContent .=    '<div class="title-2">' . DomainConst::CONTENT00174 . '</div>';
         $rightContent .=    '<div class="item-search">';
@@ -435,7 +430,7 @@ class Receipts extends CActiveRecord
         
         $rightContent .= HtmlHandler::createAjaxButtonWithImage(
                 '<br>' . DomainConst::CONTENT00373, DomainConst::IMG_PRINT_ALL_ICON,
-                '{fnOpenPrintReceipt(\'' . $customerId . '\');}',
+                '{createPrintDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');}',
                 'cursor: pointer;');
         $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
@@ -804,5 +799,16 @@ class Receipts extends CActiveRecord
         $from = CommonProcess::getFirstDateOfCurrentMonth(DomainConst::DATE_FORMAT_6);
         $today = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_6);
         return self::getRevenue($from, $today, $agent_id);
+    }
+    
+    /**
+     * get doctor_id
+     * @return Final
+     */
+    public function getDoctorId(){
+        if (isset($this->rTreatmentScheduleDetail)) {
+            return $this->rTreatmentScheduleDetail->getDoctorId();
+        }
+        return NULL;
     }
 }

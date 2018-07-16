@@ -25,7 +25,6 @@ class TreatmentScheduleDetails extends BaseActiveRecord
     public $autocomplete_medical_record;
     public $order_number;
     public $autocomplete_treatment;
-    public $isFinish;
     
     //-----------------------------------------------------
     // Constants
@@ -131,7 +130,6 @@ class TreatmentScheduleDetails extends BaseActiveRecord
 			'type_schedule' => DomainConst::CONTENT00206,
 			'created_date' => DomainConst::CONTENT00010,
 			'status' => DomainConst::CONTENT00026,
-			'isFinish' => 'Hoàn thành luôn',
 		);
 	}
 
