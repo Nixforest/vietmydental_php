@@ -90,7 +90,11 @@ class HtmlHandler {
         $dropdownMenu = '';
         foreach ($aStatus as $key => $value) {
             if($key != $status['type']){
-                $dropdownMenu .= '<li><a style="cursor:pointer;">'.$value.'</a></li>';
+                //++ BUG0017-IMT (DuongNV 20180717) Add event to status btn
+                //0 - new, 1 - complete, 2 - cancel
+//                $dropdownMenu .= '<li><a style="cursor:pointer;">'.$value.'</a></li>';
+                $dropdownMenu .= '<li class="ts-stt-btn" data-type="'.$key.'"><a style="cursor:pointer;">'.$value.'</a></li>';
+                //-- BUG0017-IMT (DuongNV 20180717) Add event to status btn
             }
         }
         $dropDown = '<div class="dropdown" style="display:inline-block;margin-right:3px;">'

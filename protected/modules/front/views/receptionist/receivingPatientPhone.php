@@ -562,4 +562,48 @@
         });
         return false;
     }
+    
+    //++ BUG0017-IMT (NguyenPT 20170717) Handle update treatment detail status
+    /**
+     * Update treatment detail status
+     * @param {String} _id      Id of treatment schedule detail need update
+     * @param {String} _status  Status value
+     *                          Cancel      -> 0 - TreatmentScheduleDetails::STATUS_INACTIVE
+     *                          Complete    -> 2 - TreatmentScheduleDetails::STATUS_COMPLETED
+     *                          New         -> 3 - TreatmentScheduleDetails::STATUS_SCHEDULE
+     */
+    function fnUpdateTreatmentDetailStatus(_id, _status) {
+        $.ajax({
+            url: "<?php echo Yii::app()->createAbsoluteUrl(
+                    'front/receptionist/updateTreatmentStatus'); ?>",
+            data: {id: _id, status: _status},
+            type: "get",
+            dataType: "json",
+            success: function (data) {
+                if (fnIsDataSuccess(data)) {
+                    fnUpdateData(data);
+                } else {    // Load first time
+                    alert(data["<?php echo DomainConst::KEY_CONTENT; ?>"]);
+                }
+            }
+        });
+    }
+    
+    /**
+     * Update customer data after change status
+     * @param {Array} data Json data
+     */
+    function fnUpdateData(data) {
+        $('#right-content').html(data['<?php echo DomainConst::KEY_RIGHT_CONTENT; ?>']);
+        $('.left-page .info-content .info-result .content').html(data['<?php echo DomainConst::KEY_INFO_SCHEDULE; ?>']);
+    }
+    //-- BUG0017-IMT (NguyenPT 20170717) Handle update treatment detail status
+    
+    //++ BUG0017-IMT (DuongNV 20180717) Add event to status btn
+    $(function(){
+        $(document).on('click', '.ts-stt-btn', function(){
+            alert($(this).data('type')); //0 - new, 1 - complete, 2 - cancel
+        })
+    })
+    //-- BUG0017-IMT (DuongNV 20180717) Add event to status btn
 </script>

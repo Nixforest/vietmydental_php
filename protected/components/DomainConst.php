@@ -905,11 +905,13 @@ class DomainConst {
     /** Receipt */
     const KEY_RECEIPT                       = 'receipt';
     /** Submit excel     */
-    const KEY_SUBMIT_EXCEL                 = 'submitExcel';
+    const KEY_SUBMIT_EXCEL                  = 'submitExcel';
     /** Right content */
     const KEY_RIGHT_CONTENT                 = 'rightContent';
     /** Info schedule */
     const KEY_INFO_SCHEDULE                 = 'infoSchedule';
+    /** Ajax */
+    const KEY_AJAX                          = 'ajax';
     
     //-----------------------------------------------------
     // List domain const

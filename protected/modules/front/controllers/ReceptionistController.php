@@ -610,6 +610,47 @@ class ReceptionistController extends FrontController {
         }
     }
     
+    //++ BUG0017-IMT (NguyenPT 20170717) Add new action updatrTreatmentStatus
+    /**
+     * Action update treatment status
+     */
+    public function actionUpdateTreatmentStatus() {
+        $ajax = filter_input(INPUT_GET, DomainConst::KEY_AJAX);
+        $error = '';
+	if ($ajax == 1) {
+            // Get parameters value
+            $id = filter_input(INPUT_GET, DomainConst::KEY_ID);
+            $status = filter_input(INPUT_GET, DomainConst::KEY_STATUS);
+            $model = TreatmentScheduleDetails::model()->findByPk($id);
+            if ($model) {
+                $model->status = $status;
+                if ($model->save()) {   // Save success
+                    $customer = $model->getCustomerModel();
+                    if (isset($customer)) {
+                        // Get customer information
+                        $rightContent = $customer->getCustomerAjaxInfo();
+                        $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
+                    }
+                    echo CJavaScript::jsonEncode(array(
+                        DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
+                        DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
+                        DomainConst::KEY_RIGHT_CONTENT  => $rightContent,
+                        DomainConst::KEY_INFO_SCHEDULE => $infoSchedule,
+                    ));
+                    exit;
+                } else {
+                    $error = CommonProcess::json_encode_unicode($model->getErrors());
+                }
+            }
+        }
+        echo CJavaScript::jsonEncode(array(
+            DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
+            DomainConst::KEY_CONTENT => $error,
+        ));
+        exit;
+    }
+    //-- BUG0017-IMT (NguyenPT 20170717) Add new action updatrTreatmentStatus
+    
     /**
      * Action update treatment
      */

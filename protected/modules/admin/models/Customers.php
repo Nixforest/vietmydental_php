@@ -722,9 +722,23 @@ class Customers extends BaseActiveRecord
                 $infoSchedule  = '<div class="title-2">' . DomainConst::CONTENT00177 . ': </div>';
                 $infoSchedule .= '<div class="item-search schedule-apmt-info">';
                 $infoSchedule .=        '<p><i class="glyphicon glyphicon-time" title="Thời gian"></i> ' . $mSchedule->getStartTime() . '</p>';
-                $infoSchedule .=        '<p><i class="glyphicon glyphicon-credit-card" title="' . DomainConst::CONTENT00260 . '"></i> ' . $mSchedule->rSchedule->getInsurrance() . '</p>';
-                $infoSchedule .=        '<p><i class="glyphicon glyphicon-info-sign" title="Chi Tiết Công Việc"></i> ' . $mSchedule->description . '</p>';
-                $infoSchedule .=        '<p><i class="glyphicon glyphicon-user" title="Bác sĩ"></i> ' . $mSchedule->getDoctor() . '</p>';
+                //++ BUG0017-IMT (NguyenPT 20170717) Show/hide item base on value
+//                $infoSchedule .=        '<p><i class="glyphicon glyphicon-credit-card" title="' . DomainConst::CONTENT00260 . '"></i> ' . $mSchedule->rSchedule->getInsurrance() . '</p>';
+//                $infoSchedule .=        '<p><i class="glyphicon glyphicon-info-sign" title="Chi Tiết Công Việc"></i> ' . $mSchedule->description . '</p>';
+//                $infoSchedule .=        '<p><i class="glyphicon glyphicon-user" title="Bác sĩ"></i> ' . $mSchedule->getDoctor() . '</p>';
+                if ($mSchedule->rSchedule->getInsurrance() != "0") {
+                    $infoSchedule .=        '<p><i class="glyphicon glyphicon-credit-card" title="'
+                            . DomainConst::CONTENT00260 . '">'
+                            . '</i> ' . $mSchedule->rSchedule->getInsurrance() . '</p>';
+                }
+                if (!empty($mSchedule->description)) {
+                    $infoSchedule .=        '<p><i class="glyphicon glyphicon-info-sign" title="'
+                            . DomainConst::CONTENT00207 . '">'
+                            . '</i> ' . $mSchedule->description . '</p>';
+                }
+                $infoSchedule .=        '<p><i class="fas fa-user-md" title="'
+                        . DomainConst::CONTENT00143 . '"></i> ' . $mSchedule->getDoctor() . '</p>';
+                //-- BUG0017-IMT (NguyenPT 20170717) Show/hide item base on value
                 $infoSchedule .= '</div>';
                 $infoSchedule .= HtmlHandler::createAjaxButtonWithImage(
                         DomainConst::CONTENT00346, DomainConst::IMG_EDIT_ICON,
