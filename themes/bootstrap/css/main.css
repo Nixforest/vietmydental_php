@@ -1108,7 +1108,7 @@ span.icon21 {
     background: white;
     position: relative;
     color: black;
-    z-index: 0;
+    /*z-index: 0;*/
 }
 .gr-container:hover{
     background: #f3f3f3;
@@ -1297,3 +1297,16 @@ svg.mark-icon {
         transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
     }
 }
+/*++BUG0017-IMT (DuongNV 20180717) add*/
+.btn-bar {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.btn-bar a {
+    display: block;
+    margin: 10px;
+}
+#patient-records-tbl tr td:nth-child(2){padding:0;}
+.clr-txt-btn{opacity:0}
+/*--BUG0017-IMT (DuongNV 20180717) add*/

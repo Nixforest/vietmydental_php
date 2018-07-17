@@ -488,56 +488,68 @@ class Customers extends BaseActiveRecord
         if (isset($this->rMedicalRecord)) {
             $recordNumber = $this->rMedicalRecord->record_number;
         }
+        //++BUG0017-IMT (DuongNV 20180717) modify
         $rightContent = '<div class="info-result">';
         $rightContent .=    '<div class="title-2">';
         $rightContent .=        DomainConst::CONTENT00173;
         $rightContent .=    '</div>';
-        $rightContent .=    '<div class="item-search">';
+        $rightContent .=    '<div class="item-search" style="position:relative;">';
         
-        $rightContent .=        '<table style="font-size: 15px;" id="patient-records-tbl">';
+        $rightContent .=        '<table style="font-size: 15px;width: 85%;" id="patient-records-tbl">';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td style="width: 85%;" title="'.DomainConst::CONTENT00100.'"><i class="glyphicon glyphicon-ok"></i> ' . '<b>' . $this->name . '<b>' . '</td>';
+        $rightContent .=                '<td style="width:10%;"><i title="'.DomainConst::CONTENT00100.'" class="glyphicon glyphicon-ok"></i></td>';
         $rightContent .=                '<td>';
-        $rightContent .=                '<a href=' . CommonProcess::generateQRCodeURL($this->id)
-                                            . ' class="btn btn-default glyphicon glyphicon-info-sign"'
-                                            . ' title="' . DomainConst::CONTENT00011 . '"></a>';
+        $rightContent .=                '<b>' . $this->name . '<b>';
+//        $rightContent .=                '<a href=' . CommonProcess::generateQRCodeURL($this->id)
+//                                            . ' class="btn btn-default glyphicon glyphicon-info-sign"'
+//                                            . ' title="' . DomainConst::CONTENT00011 . '"></a>';
         $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
         
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td title="'.DomainConst::CONTENT00170.'"><i class="glyphicon glyphicon-earphone"></i> ' . '<b>' . $this->getPhone() . '<b>' . '</td>';
-        $rightContent .=                '<td style="width: 50%;">';
-        $rightContent .=                    '<a onclick="{fnOpenUpdateCustomer(\'' . $this->id . '\');}"'
-                                            . ' class="btn btn-default glyphicon glyphicon-pencil"'
-                                            . ' title="' . DomainConst::CONTENT00229 . '"></a>';
-        $rightContent .=                '</td>';
-        $rightContent .=            '</tr>';
-        
-        $rightContent .=            '<tr>';
-        $rightContent .=                '<td title="'.DomainConst::CONTENT00106.'"><i class="glyphicon glyphicon-home"></i> ' . '<b>' . $this->getAddress() . '<b>' . '</td>';
+        $rightContent .=                '<td><i title="'.DomainConst::CONTENT00170.'" class="glyphicon glyphicon-earphone"></i></td>';
         $rightContent .=                '<td>';
-        $rightContent .=                '<a class="btn btn-default glyphicon glyphicon-print"'
-                                        .'title="In phiếu thu"'
-                                        .'onclick="{fnOpenPrintReceipt(\'' . $this->id . '\');}" ></a>';
+        $rightContent .=                '<b>' . $this->getPhone() . '<b>';
+//        $rightContent .=                    '<a onclick="{fnOpenUpdateCustomer(\'' . $this->id . '\');}"'
+//                                            . ' class="btn btn-default glyphicon glyphicon-pencil"'
+//                                            . ' title="' . DomainConst::CONTENT00229 . '"></a>';
         $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
         
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td title="'.DomainConst::CONTENT00197.'"><i class="glyphicon glyphicon-map-marker"></i>  <b>' . $this->getAgentName() . '<b>' . '</td>';
-        $rightContent .=                '<td></td>';
+        $rightContent .=                '<td><i title="'.DomainConst::CONTENT00106.'" class="glyphicon glyphicon-home"></i></td>';
+        $rightContent .=                '<td>';
+        $rightContent .=                '<b>' . $this->getAddress() . '<b>';
+//        $rightContent .=                '<a class="btn btn-default glyphicon glyphicon-print"'
+//                                        .'title="In phiếu thu"'
+//                                        .'onclick="{fnOpenPrintReceipt(\'' . $this->id . '\');}" ></a>';
+        $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
         
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td title="'.DomainConst::CONTENT00101.'"><i class="	glyphicon glyphicon-gift"></i>  <b>' . $this->getBirthday() . '<b>' . '</td>';
-        $rightContent .=                '<td></td>';
+        $rightContent .=                '<td><i title="'.DomainConst::CONTENT00197.'" class="glyphicon glyphicon-map-marker"></i></td>';
+        $rightContent .=                '<td>';
+        $rightContent .=                '<b>' . $this->getAgentName() . '<b>';
+        $rightContent .=                '</td>';
+        $rightContent .=            '</tr>';
+        
+        $rightContent .=            '<tr>';
+        $rightContent .=                '<td><i title="'.DomainConst::CONTENT00101.'" class="	glyphicon glyphicon-gift"></i></td>';
+        $rightContent .=                '<td>';
+        $rightContent .=                '<b>' . $this->getBirthday() . '<b>';
+        $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td title="'.DomainConst::CONTENT00047.'"><i class="	glyphicon glyphicon-user"></i> <b>' . CommonProcess::getGender()[$this->gender] . '<b>' . '</td>';
-        $rightContent .=                '<td></td>';
+        $rightContent .=                '<td title="'.DomainConst::CONTENT00047.'"><i class="	glyphicon glyphicon-user"></i></td>';
+        $rightContent .=                '<td>';
+        $rightContent .=                '<b>' . CommonProcess::getGender()[$this->gender] . '<b>';
+        $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td title="'.DomainConst::CONTENT00136.'"><i class="	glyphicon glyphicon-tasks"></i> <b>' . $recordNumber . '<b>' . '</td>';
-        $rightContent .=                '<td></td>';
+        $rightContent .=                '<td><i title="'.DomainConst::CONTENT00136.'" class="	glyphicon glyphicon-tasks"></i></td>';
+        $rightContent .=                '<td>';
+        $rightContent .=                '<b>' . $recordNumber . '<b>';
+        $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
         $pathological = '';
         if (isset($this->rMedicalRecord)) {
@@ -550,6 +562,18 @@ class Customers extends BaseActiveRecord
             $rightContent .=        '</tr>';
         }                
         $rightContent .=        '</table>';
+        $rightContent   .=  '<div class="btn-bar">'
+                        .       '<a href=' . CommonProcess::generateQRCodeURL($this->id)
+                        .       ' class="btn btn-default glyphicon glyphicon-info-sign"'
+                        .       ' title="' . DomainConst::CONTENT00011 . '"></a>'
+                        .       '<a onclick="{fnOpenUpdateCustomer(\'' . $this->id . '\');}"'
+                        .       ' class="btn btn-default glyphicon glyphicon-pencil"'
+                        .       ' title="' . DomainConst::CONTENT00229 . '"></a>'
+                        .       '<a class="btn btn-default glyphicon glyphicon-print"'
+                        .       'title="In phiếu thu"'
+                        .       'onclick="{fnOpenPrintReceipt(\'' . $this->id . '\');}" ></a>'
+                        .   '</div>';
+        //--BUG0017-IMT (DuongNV 20180717) modify
         $rightContent .=    '</div>';
         $rightContent .=    '<div class="title-2">' . DomainConst::CONTENT00201 . '</div>';
         $rightContent .=    '<div class="item-search treatment-history-container">';     
@@ -695,12 +719,12 @@ class Customers extends BaseActiveRecord
             Settings::saveAjaxTempValue($scheduleId);
             $mSchedule = TreatmentScheduleDetails::model()->findByPk($scheduleId);
             if ($mSchedule) {
-                $infoSchedule = '<div class="title-2">' . DomainConst::CONTENT00177 . ': </div>';
-                $infoSchedule .= '<div class="item-search">';
-                $infoSchedule .=    '<p>' . $mSchedule->getStartTime() . '</p>';
-                $infoSchedule .=    '<p>' . DomainConst::CONTENT00260 . ': ' . $mSchedule->rSchedule->getInsurrance() . '</p>';
-                $infoSchedule .=    '<p>Chi Tiết Công Việc: ' . $mSchedule->description . '</p>';
-                $infoSchedule .=    '<p>Bác sĩ: ' . $mSchedule->getDoctor() . '</p>';
+                $infoSchedule  = '<div class="title-2">' . DomainConst::CONTENT00177 . ': </div>';
+                $infoSchedule .= '<div class="item-search schedule-apmt-info">';
+                $infoSchedule .=        '<p><i class="glyphicon glyphicon-time" title="Thời gian"></i> ' . $mSchedule->getStartTime() . '</p>';
+                $infoSchedule .=        '<p><i class="glyphicon glyphicon-credit-card" title="' . DomainConst::CONTENT00260 . '"></i> ' . $mSchedule->rSchedule->getInsurrance() . '</p>';
+                $infoSchedule .=        '<p><i class="glyphicon glyphicon-info-sign" title="Chi Tiết Công Việc"></i> ' . $mSchedule->description . '</p>';
+                $infoSchedule .=        '<p><i class="glyphicon glyphicon-user" title="Bác sĩ"></i> ' . $mSchedule->getDoctor() . '</p>';
                 $infoSchedule .= '</div>';
                 $infoSchedule .= HtmlHandler::createAjaxButtonWithImage(
                         DomainConst::CONTENT00346, DomainConst::IMG_EDIT_ICON,
