@@ -1408,4 +1408,6 @@ class DomainConst {
     const CONTENT00399  = 'Chi tiết doanh thu của Bác sĩ';
     const CONTENT00400  = 'Báo cáo chi tiết chi hằng ngày';
     const CONTENT00401  = 'Bảng tổng hợp Thu - Chi';
+    const CONTENT00402  = 'Mới';
+    const CONTENT00403  = 'Hủy';
 }

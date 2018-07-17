@@ -627,9 +627,13 @@ class Customers extends BaseActiveRecord
                                                 $createReceipt,
                                                 $createPrescription,
                                                 array(
-                                                    DomainConst::KEY_NAME => 'complete',
+                                                    DomainConst::KEY_NAME => DomainConst::CONTENT00204,
                                                     DomainConst::KEY_TYPE => 1
-                                                ));
+                                                ),
+                                                //++ BUG0017-IMT (DuongNV 20180717) Add id to change status treatment history
+                                                $detail->id
+                                                //-- BUG0017-IMT (DuongNV 20180717) Add id to change status treatment history
+                                                );
                                 } else {    // Normal item
                                     $updateTag =
                                             HtmlHandler::createCustomButton(
@@ -641,9 +645,13 @@ class Customers extends BaseActiveRecord
                                                 $createReceipt,
                                                 $createPrescription,
                                                 array(
-                                                    DomainConst::KEY_NAME => 'new',
+                                                    DomainConst::KEY_NAME => DomainConst::CONTENT00402,
                                                     DomainConst::KEY_TYPE => 0
-                                                ));
+                                                ),
+                                                //++ BUG0017-IMT (DuongNV 20180717) Add id to change status treatment history
+                                                $detail->id
+                                                //-- BUG0017-IMT (DuongNV 20180717) Add id to change status treatment history
+                                                );
                                 }
                             default:
                                 break;

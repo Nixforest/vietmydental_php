@@ -576,7 +576,7 @@
         $.ajax({
             url: "<?php echo Yii::app()->createAbsoluteUrl(
                     'front/receptionist/updateTreatmentStatus'); ?>",
-            data: {id: _id, status: _status},
+            data: {ajax: 1, id: _id, status: _status},
             type: "get",
             dataType: "json",
             success: function (data) {
@@ -602,7 +602,21 @@
     //++ BUG0017-IMT (DuongNV 20180717) Add event to status btn
     $(function(){
         $(document).on('click', '.ts-stt-btn', function(){
-            alert($(this).data('type')); //0 - new, 1 - complete, 2 - cancel
+            var stt = $(this).data('type'); //0 - new, 1 - complete, 2 - cancel
+            switch(stt) {
+                case 0:     // New
+                    stt = <?php echo TreatmentScheduleDetails::STATUS_SCHEDULE; ?>;
+                    break;
+                case 1:     // Complete
+                    stt = <?php echo TreatmentScheduleDetails::STATUS_COMPLETED; ?>;
+                    break;
+                case 2:     // Cancel
+                    stt = <?php echo TreatmentScheduleDetails::STATUS_INACTIVE; ?>;
+                    break;
+                default:break;
+            }
+            var id = $(this).data('id');
+            fnUpdateTreatmentDetailStatus(id, stt);
         })
     })
     //-- BUG0017-IMT (DuongNV 20180717) Add event to status btn

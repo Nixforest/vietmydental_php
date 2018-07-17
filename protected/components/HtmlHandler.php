@@ -75,17 +75,17 @@ class HtmlHandler {
      * @param String $status
      * @return String Html string generate button
      */
-    public static function createCustomButton($href, $title, $time, $doctor, $paymentHref, $prescriptHref, $paymentClick = '', $prescriptClick = '', $status = '') {
+    public static function createCustomButton($href, $title, $time, $doctor, $paymentHref, $prescriptHref, $paymentClick = '', $prescriptClick = '', $status = '', $id = '') {
         $retVal = '';
         $target = '';
         $target = 'target=""';
         $sttClass = 'btn-default';
         //++BUG0017 (DuongNV 20180717) add
-        $aCssClass = array('btn-info', 'btn-success', 'btn-danger'); // 0 - new, 1 - complete, 2 - cancel
+        $aCssClass = array('btn-warning', 'btn-success', 'btn-danger'); // 0 - new, 1 - complete, 2 - cancel
         $aStatus = array(
-                        0=>'New', 
-                        1=>'Complete', 
-                        2=>'Cancel'
+                        0 => DomainConst::CONTENT00402, 
+                        1 => DomainConst::CONTENT00204,
+                        2 => DomainConst::CONTENT00403
                     );
         $dropdownMenu = '';
         foreach ($aStatus as $key => $value) {
@@ -93,7 +93,7 @@ class HtmlHandler {
                 //++ BUG0017-IMT (DuongNV 20180717) Add event to status btn
                 //0 - new, 1 - complete, 2 - cancel
 //                $dropdownMenu .= '<li><a style="cursor:pointer;">'.$value.'</a></li>';
-                $dropdownMenu .= '<li class="ts-stt-btn" data-type="'.$key.'"><a style="cursor:pointer;">'.$value.'</a></li>';
+                $dropdownMenu .= '<li class="ts-stt-btn" data-type="'.$key.'" data-id="'.$id.'"><a style="cursor:pointer;">'.$value.'</a></li>';
                 //-- BUG0017-IMT (DuongNV 20180717) Add event to status btn
             }
         }
