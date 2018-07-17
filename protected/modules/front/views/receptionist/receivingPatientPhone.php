@@ -562,4 +562,11 @@
         });
         return false;
     }
+    //++ BUG0017-IMT (DuongNV 20180717) Add event to status btn
+    $(function(){
+        $(document).on('click', '.ts-stt-btn', function(){
+            alert($(this).data('type')); //0 - new, 1 - complete, 2 - cancel
+        })
+    })
+    //-- BUG0017-IMT (DuongNV 20180717) Add event to status btn
 </script>
