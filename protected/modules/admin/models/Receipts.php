@@ -495,7 +495,7 @@ class Receipts extends CActiveRecord
      * @return String
      */
     public function getDiscount() {
-        return CommonProcess::formatCurrency($this->discount) . ' ' . DomainConst::CONTENT00134;
+        return CommonProcess::formatCurrency($this->discount);
     }
     
     /**
@@ -503,7 +503,7 @@ class Receipts extends CActiveRecord
      * @return String
      */
     public function getFinal() {
-        return CommonProcess::formatCurrency($this->final) . ' ' . DomainConst::CONTENT00134;
+        return CommonProcess::formatCurrency($this->final);
     }
     
     /**

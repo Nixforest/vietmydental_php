@@ -113,7 +113,7 @@ class TreatmentTypes extends BaseActiveRecord
     // Utility methods
     //-----------------------------------------------------
     public function getPrice() {
-        return CommonProcess::formatCurrency($this->price) . ' ' . DomainConst::CONTENT00134;
+        return CommonProcess::formatCurrency($this->price);
     }
 
     //-----------------------------------------------------

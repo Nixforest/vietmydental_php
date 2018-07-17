@@ -14,8 +14,8 @@
         <table class="table table-borderless">
             <!--Row header-->
             <tr>
-                <td colspan="5">
-                    <img src="<?php echo Yii::app()->theme->baseUrl . "/img/logo.png"; ?>" class="img-rounded" alt="">
+                <td colspan="10">
+                    <img src="<?php echo Yii::app()->theme->baseUrl . "/img/logo.png"; ?>" class="img-rounded" alt="" width="220%" height="220%">
                     
                 </td>
                 <td colspan="3">
@@ -36,20 +36,20 @@
                         ?>
                         <tr><td colspan="2"><b>NHA KHOA VIỆT MỸ<?php echo $agentName; ?></b></td></tr>
                         <tr>
-                            <td><?php echo DomainConst::CONTENT00308; ?></td>
-                                <td>
-                                    <i>
-                                        <?php echo $address; ?>
-                                    </i>
-                                </td>
+                            <td class="infofont"><?php echo DomainConst::CONTENT00308; ?></td>
+                            <td class="infofont">
+                                <i>
+                                    <?php echo $address; ?>
+                                </i>
+                            </td>
                         </tr>
                         <tr>
-                            <td><?php echo DomainConst::CONTENT00307; ?></td>
-                            <td><i><?php echo $phone; ?></i></td>
+                            <td class="infofont"><?php echo DomainConst::CONTENT00307; ?></td>
+                            <td class="infofont"><i><?php echo $phone; ?></i></td>
                         </tr>
                         <tr>
-                            <td><?php echo DomainConst::CONTENT00312; ?>:</td>
-                            <td><i><?php echo $website; ?></i></td>
+                            <td class="infofont"><?php echo DomainConst::CONTENT00312; ?>:</td>
+                            <td class="infofont"><i><?php echo $website; ?></i></td>
                         </tr>
                     </table>
                 </td>
@@ -69,13 +69,13 @@
                     <!--Table patient information-->
                     <table class="table table-borderless">
                         <tr>
-                            <td colspan="5"><?php echo DomainConst::CONTENT00302; ?></td>
+                            <td colspan="5"><b><?php echo DomainConst::CONTENT00302; ?></b></td>
                             <td colspan="10">
                                 <i>
                                     <?php echo CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3); ?>
                                 </i>
                             </td>
-                            <td colspan="5"><?php echo DomainConst::CONTENT00303; ?></td>
+                            <td colspan="5"><b><?php echo DomainConst::CONTENT00303; ?></b></td>
                             <td colspan="8"><i><?php echo DomainConst::CONTENT00304; ?></i></td>
                         </tr>
                         <tr>
@@ -89,25 +89,25 @@
                                 $oldDebt            = $customer->debt;
                             }
                             ?>
-                            <td colspan="5"><?php echo DomainConst::CONTENT00305; ?></td>
+                            <td colspan="5"><b><?php echo DomainConst::CONTENT00305; ?></b></td>
                             <td colspan="10">
                                 <i>
                                     <?php echo $customerName; ?>
                                 </i>
                             </td>
-                            <td colspan="5"><?php echo DomainConst::CONTENT00306; ?></td>
+                            <td colspan="5"><b><?php echo DomainConst::CONTENT00306; ?></b></td>
                             <td colspan="8">
                                 <i><?php echo $customerId; ?></i>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="5"><?php echo DomainConst::CONTENT00307; ?></td>
+                            <td colspan="5"><b><?php echo DomainConst::CONTENT00307; ?></b></td>
                             <td colspan="10"><i><?php echo $customerPhone; ?></i></td>
-                            <td colspan="5"><?php echo DomainConst::CONTENT00175; ?>:</td>
+                            <td colspan="5"><b><?php echo DomainConst::CONTENT00175; ?>:</b></td>
                             <td colspan="8"><i><?php echo $customerEmail; ?></i></td>
                         </tr>
                         <tr>
-                            <td colspan="5"><?php echo DomainConst::CONTENT00308; ?></td>
+                            <td colspan="5"><b><?php echo DomainConst::CONTENT00308; ?></b></td>
                             <td colspan="23"><i><?php echo $customerAddress; ?></i></td>
                         </tr>
                     </table>
@@ -118,7 +118,7 @@
                 <td colspan="31">
                     <table class="table table-bordered">
                     <tr>
-                        <td><b>#</b></td>
+                        <td><b>STT</b></td>
                         <td>
                             <b><?php echo DomainConst::CONTENT00241; ?></b><br>
                             (<?php echo 'Process date'; ?>)
@@ -185,7 +185,7 @@
                         <td><?php echo $teethCount; ?></td>
                         <td class="currency"><?php echo $price; ?></td>
                         <td class="currency"><?php echo $discount; ?></td>
-                        <td class="currency"><?php echo CommonProcess::formatCurrency($money) . ' ' . DomainConst::CONTENT00134; ?></td>
+                        <td class="currency"><?php echo CommonProcess::formatCurrency($money); ?></td>
                         <td class="currency"><?php echo $final; ?></td>
                     </tr>
                     <?php endforeach; // end foreach ($model as $value) ?>
@@ -220,23 +220,23 @@
                         <td><?php echo $final; ?></td>
                     </tr>-->
                     <tr>
-                        <td colspan="5"></td>
-                        <td><b><?php echo DomainConst::CONTENT00322; ?></b></td>
-                        <td class="currency"><?php echo CommonProcess::formatCurrency($totalmoney) . ' ' . DomainConst::CONTENT00134; ?></td>
-                        <td class="currency"><?php echo CommonProcess::formatCurrency($totalFinal) . ' ' . DomainConst::CONTENT00134; ?></td>
+                        <td colspan="5" style="border: none !important;" ></td>
+                        <td style="border: none !important;" ><b><?php echo DomainConst::CONTENT00322; ?></b></td>
+                        <td class="currency" style="border: none !important;" ><b><?php echo CommonProcess::formatCurrency($totalmoney); ?></b></td>
+                        <td class="currency" style="border: none !important;" ><b><?php echo CommonProcess::formatCurrency($totalFinal); ?></b></td>
                     </tr>
                     <tr>
-                        <td colspan="5"></td>
-                        <td><b><?php echo ($totalCurrentDebt <= 0) ? DomainConst::CONTENT00323 : DomainConst::CONTENT00324 ?></b></td>
-                        <td class="currency"><?php echo CommonProcess::formatCurrency(abs($totalCurrentDebt)) . ' ' . DomainConst::CONTENT00134; ?></td>
-                        <td></td>
+                        <td colspan="5" style="border: none !important;" ></td>
+                        <td style="border: none !important;" ><b><?php echo ($totalCurrentDebt <= 0) ? DomainConst::CONTENT00323 : DomainConst::CONTENT00324 ?></b></td>
+                        <td class="currency" style="border: none !important;" ><b><?php echo CommonProcess::formatCurrency(abs($totalCurrentDebt)); ?></b></td>
+                        <!--<td style="border: none !important;" ></td>-->
                     </tr>
-                    <tr>
+<!--                    <tr>
                         <td colspan="5"></td>
                         <td><b><?php echo DomainConst::CONTENT00325; ?></b></td>
-                        <td class="currency"><?php echo CommonProcess::formatCurrency($oldDebt) . ' ' . DomainConst::CONTENT00134;; ?></td>
-                        <td></td>
-                    </tr>
+                        <td class="currency"><?php echo CommonProcess::formatCurrency($oldDebt); ?></td>
+                        <td></td>-->
+                    <!--</tr>-->
                 </table>
                 </td>
             </tr>
@@ -256,6 +256,15 @@
                             <td class="smallfont center"><?php echo DomainConst::CONTENT00331; ?></td>
                             <td class="smallfont center"><?php echo DomainConst::CONTENT00331; ?></td>
                             <td class="smallfont center"><?php echo DomainConst::CONTENT00331; ?></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5"></td>
                         </tr>
                         <tr>
                             <td colspan="5"></td>
@@ -298,6 +307,14 @@
 <script type="text/javascript">
 </script>
 <style>
+/*    table {
+        border:solid #000 !important;
+        border-width:1px 0 0 1px !important;
+    }
+    th, td {
+        border:solid #000 !important;
+        border-width:0 1px 1px 0 !important;
+    }*/
     .table-borderless > tbody > tr > td,
     .table-borderless > tbody > tr > th,
     .table-borderless > tfoot > tr > td,
@@ -313,7 +330,13 @@
     .table-bordered > tfoot > tr > th,
     .table-bordered > thead > tr > td,
     .table-bordered > thead > tr > th {
-        border: 2px solid #060606;
+        /*border: 2px solid #060606;*/
+        border:solid #000 !important;
+        border-width:2px 2px 2px 2px !important;
+    }
+    
+    .nobordertd {
+        border: none !important;
     }
 
     td {
@@ -323,10 +346,13 @@
         text-align: right;
     }
     .bigfont {
-        font-size: 190%;
+        font-size: 250%;
+    }
+    .infofont {
+        font-size: 160%;
     }
     .smallfont {
-        font-size: 100%;
+        font-size: 150%;
     }
     .center {
         text-align: center;

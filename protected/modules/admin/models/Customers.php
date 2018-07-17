@@ -641,12 +641,20 @@ class Customers extends BaseActiveRecord
      * Get active schedule time
      * @return string Schedule time
      */
-    public function getScheduleTime() {
-        $scheduleId = $this->getSchedule(false);
-        if (!empty($scheduleId)) {
-            $mSchedule = TreatmentScheduleDetails::model()->findByPk($scheduleId);
-            if ($mSchedule) {
-                return $mSchedule->getTimer();
+    public function getScheduleTime($isFull = false) {
+//        $scheduleId = $this->getSchedule(false);
+//        if (!empty($scheduleId)) {
+//            $mSchedule = TreatmentScheduleDetails::model()->findByPk($scheduleId);
+//            if ($mSchedule) {
+//                return $mSchedule->getTimer();
+//            }
+//        }
+        $schedule = !empty($this->rMedicalRecord->rTreatmentSchedule[0]) ? $this->rMedicalRecord->rTreatmentSchedule[0] : null;
+        if (!empty($schedule)) {
+            if ($isFull) {
+                return $schedule->getStartTime();
+            } else {
+                return isset($schedule->rTime) ? $schedule->rTime->name : '';
             }
         }
         return '';
@@ -657,12 +665,16 @@ class Customers extends BaseActiveRecord
      * @return string Doctor name
      */
     public function getScheduleDoctor() {
-        $scheduleId = $this->getSchedule(false);
-        if (!empty($scheduleId)) {
-            $mSchedule = TreatmentScheduleDetails::model()->findByPk($scheduleId);
-            if ($mSchedule) {
-                return $mSchedule->getDoctor();
-            }
+//        $scheduleId = $this->getSchedule(false);
+//        if (!empty($scheduleId)) {
+//            $mSchedule = TreatmentScheduleDetails::model()->findByPk($scheduleId);
+//            if ($mSchedule) {
+//                return $mSchedule->getDoctor();
+//            }
+//        }
+        $schedule = !empty($this->rMedicalRecord->rTreatmentSchedule[0]) ? $this->rMedicalRecord->rTreatmentSchedule[0] : null;
+        if (!empty($schedule)) {
+            return $schedule->getDoctor();
         }
         return '';
     }
