@@ -576,7 +576,9 @@
         $.ajax({
             url: "<?php echo Yii::app()->createAbsoluteUrl(
                     'front/receptionist/updateTreatmentStatus'); ?>",
-            data: {id: _id, status: _status},
+            //++ BUG0017-IMT (DuongNV 20180717) Add ajax value
+            data: {ajax: 1, id: _id, status: _status},
+            //-- BUG0017-IMT (DuongNV 20180717) Add ajax value
             type: "get",
             dataType: "json",
             success: function (data) {
@@ -602,7 +604,11 @@
     //++ BUG0017-IMT (DuongNV 20180717) Add event to status btn
     $(function(){
         $(document).on('click', '.ts-stt-btn', function(){
-            alert($(this).data('type')); //0 - new, 1 - complete, 2 - cancel
+            //-- BUG0017_1-IMT (DuongNV 20180717) Run event when click status treatment history
+            var stt = $(this).data('type'); //0 - cancel, 2 - complete, 3 - new
+            var id = $(this).data('id');
+            fnUpdateTreatmentDetailStatus(id, stt);
+            //-- BUG0017_1-IMT (DuongNV 20180717) Run event when click status treatment history
         })
     })
     //-- BUG0017-IMT (DuongNV 20180717) Add event to status btn

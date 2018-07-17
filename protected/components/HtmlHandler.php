@@ -75,25 +75,33 @@ class HtmlHandler {
      * @param String $status
      * @return String Html string generate button
      */
-    public static function createCustomButton($href, $title, $time, $doctor, $paymentHref, $prescriptHref, $paymentClick = '', $prescriptClick = '', $status = '') {
+    public static function createCustomButton($href, $title, $time, $doctor, $paymentHref, $prescriptHref, $paymentClick = '', $prescriptClick = '', $status = '', $id = '') {
         $retVal = '';
         $target = '';
         $target = 'target=""';
         $sttClass = 'btn-default';
         //++BUG0017 (DuongNV 20180717) add
-        $aCssClass = array('btn-info', 'btn-success', 'btn-danger'); // 0 - new, 1 - complete, 2 - cancel
+        //++ BUG0017_1-IMT (DuongNV 20180717) modify status value
+        $aCssClass = array(
+                            0 => 'btn-danger',
+                            2 =>'btn-success', 
+                            3 => 'btn-info',
+                    ); // 0 - cancel, 2 - complete, 3 - new
         $aStatus = array(
-                        0=>'New', 
-                        1=>'Complete', 
-                        2=>'Cancel'
+                        0 => 'Cancel',
+                        2 => 'Complete', 
+                        3 => 'New', 
                     );
+        //++ BUG0017_1-IMT (DuongNV 20180717) modify status value
         $dropdownMenu = '';
         foreach ($aStatus as $key => $value) {
             if($key != $status['type']){
                 //++ BUG0017-IMT (DuongNV 20180717) Add event to status btn
                 //0 - new, 1 - complete, 2 - cancel
 //                $dropdownMenu .= '<li><a style="cursor:pointer;">'.$value.'</a></li>';
-                $dropdownMenu .= '<li class="ts-stt-btn" data-type="'.$key.'"><a style="cursor:pointer;">'.$value.'</a></li>';
+                    //++ BUG0017_1-IMT (DuongNV 20180717) Add id to change status treatment history
+                $dropdownMenu .= '<li class="ts-stt-btn" data-type="'.$key.'" data-id="'.$id.'"><a style="cursor:pointer;">'.$value.'</a></li>';
+                    //++ BUG0017_1-IMT (DuongNV 20180717) Add id to change status treatment history
                 //-- BUG0017-IMT (DuongNV 20180717) Add event to status btn
             }
         }
