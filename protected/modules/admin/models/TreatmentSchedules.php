@@ -709,25 +709,44 @@ class TreatmentSchedules extends BaseActiveRecord
         $retVal = '';
         foreach ($this->rDetail as $detail) {
             $title = $detail->getStartTime();
-            $info = '';
-            if (isset($detail->rTreatmentType)) {
-                $info = $detail->rTreatmentType->name;
-            } else if (isset($detail->rDiagnosis)) {
-                $info = $detail->rDiagnosis->name;
-            } else {
-                $info = DomainConst::CONTENT00177;
-            }
-            $retVal .= '<div class="list__2__des">';
-            $retVal .=      '<div class="list__2__item">';
-            $retVal .=          '<span class="icon28 icon-list"></span>';
-            $retVal .=          '<p>';
-            $retVal .=              '<strong>' . $title . '</strong>';
-            $retVal .=          '</p>';
-            $retVal .=          '<p>';
-            $retVal .=              $info;
-            $retVal .=          '</p>';
-            $retVal .=      '</div>';
-            $retVal .= '</div>';
+            $info = $detail->getTitle();
+
+            $teeth = !empty($detail->rJoinTeeth) ? $detail->generateTeethInfo(", ") : '';
+            $diagnosis = !empty($detail->rDiagnosis) ? $detail->rDiagnosis->name : '';
+            $treatment_type = !empty($detail->rTreatmentType) ? $detail->rTreatmentType->name : '';
+            $description = $detail->description;
+            
+//            if (isset($detail->rTreatmentType)) {
+//                $info = $detail->rTreatmentType->name;
+//            } else if (isset($detail->rDiagnosis)) {
+//                $info = $detail->rDiagnosis->name;
+//            } else {
+//                $info = DomainConst::CONTENT00177;
+//            }
+//            $retVal .= '<div class="list__2__des">';
+//            $retVal .=      '<div class="list__2__item">';
+//            $retVal .=          '<span class="icon28 icon-list"></span>';
+//            $retVal .=          '<p>';
+//            $retVal .=              '<strong>' . $title . '</strong>';
+//            $retVal .=          '</p>';
+//            $retVal .=          '<p>';
+//            $retVal .=              $info;
+//            $retVal .=          '</p>';
+//            $retVal .=      '</div>';
+//            $retVal .= '</div>';
+
+            /**
+             * DuongNV add change template
+             */
+            $retVal .= '<div class="lp-list-item" style=" width: 45%; margin: 10px 15px;float:left;>'
+                    .       '<i class="fas fa-calendar-check lp-list-item-icon"></i>'
+                    .       '<p><i class="fas fa-angle-double-right" title="Tên"></i> '. $info .'</p>'
+                    .       '<p><i class="fas fa-calendar-alt" title="Thời gian"></i> '. $title .'</p>'
+                    .       '<p><i class="fas fa-tooth" title='.DomainConst::CONTENT00284.'></i> '. $teeth .'</p>'
+                    .       '<p><i class="fas fa-file-medical-alt" title="Chuẩn đoán"></i> '. $diagnosis .'</p>'
+                    .       '<p><i class="fas fa-file-medical" title='.DomainConst::CONTENT00128.'></i> '. $treatment_type .'</p>'
+                    .       '<p><i class="fas fa-sticky-note" title='.DomainConst::CONTENT00062.'></i> '. $description .'</p>'
+                    . '</div>';
         }
         return $retVal;
     }

@@ -79,7 +79,7 @@
                             <div class="lp-content-row">
                                 <i class="fas fa-user-md" title="<?php echo DomainConst::CONTENT00143; ?>"></i>
                                 <span class="lp-txt">
-                                    <?php echo $schedule->getDoctor(); ?>
+                                    <?php echo $model->getScheduleDoctor(); ?>
                                 </span>
                             </div>
                             <?php if ($schedule->getSale() != NULL): ?>
@@ -182,11 +182,11 @@
                         <!--Chi tiet thanh toan -->
                         <div id="payment-detail" class="tab-pane fade">
                             <div class="lp-list-container">
-                                <?php $idx = 1; ?>
+                                <?php $idx = count($model->getReceipts()); ?>
                                 <?php foreach ($model->getReceipts() as $receipt): ?>
                                     <div class="lp-list-item">
                                         <i class="fas fa-credit-card lp-list-item-icon"></i>
-                                        <strong>Thanh Toán Lần <?php echo $idx++; ?>: </strong><br>
+                                        <strong>Thanh Toán Lần <?php echo $idx--; ?>: </strong><br>
                                         <span><?php echo CommonProcess::formatCurrency($receipt->final); ?> (Ngày Thanh Toán: <?php echo $receipt->process_date; ?>)</span>
                                     </div>
                                 <?php endforeach; ?>
