@@ -79,10 +79,31 @@ class HtmlHandler {
         $retVal = '';
         $target = '';
         $target = 'target=""';
-        $sttClass = 'label-warning';
-        if(!empty($status) && $status['type']){
-            $sttClass = 'label-success';
+        $sttClass = 'btn-default';
+        //++BUG0017 (DuongNV 20180717) add
+        $aCssClass = array('btn-info', 'btn-success', 'btn-danger'); // 0 - new, 1 - complete, 2 - cancel
+        $aStatus = array(
+                        0=>'New', 
+                        1=>'Complete', 
+                        2=>'Cancel'
+                    );
+        $dropdownMenu = '';
+        foreach ($aStatus as $key => $value) {
+            if($key != $status['type']){
+                $dropdownMenu .= '<li><a style="cursor:pointer;">'.$value.'</a></li>';
+            }
         }
+        $dropDown = '<div class="dropdown" style="display:inline-block;margin-right:3px;">'
+                    .        '<button class="btn '.$aCssClass[$status['type']].' btn-xs dropdown-toggle" type="button" data-toggle="dropdown">'.ucfirst($status['name'])
+                    .        ' <span class="caret"></span></button>'
+                    .        '<ul class="dropdown-menu" style="min-width:100px;">'
+                    .           $dropdownMenu
+                    .       '</ul>'
+                    .    '</div>';
+        //--BUG0017 (DuongNV 20180717) add
+//        if(!empty($status)){ //use for label, now is dropdown
+//            $sttClass = $aCssClass[$status['type']];
+//        }
         $paymentItem = '<a href="' . $paymentHref . '" class="btn btn-xs btn-primary mr-1">' . DomainConst::CONTENT00251 . '</a>';
         if (!empty($paymentClick)) {
             $paymentItem = '<a onclick="' . $paymentClick . '" class="btn btn-xs btn-primary mr-1">' . DomainConst::CONTENT00251 . '</a>';
@@ -94,21 +115,26 @@ class HtmlHandler {
 
         $paymentLink = Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/payment");
         $createPrescriptionLink = Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/createPrescription");
-        
-        $retVal .= '<a ' . $target . '>'
+        //++BUG0017 (DuongNV 20180717) modify
+//        $retVal = '<a ' . $target . '>'
+        $retVal = '<div ' . $target . '>'
                 .       '<div class="gr-container">'
                 .           '<div class="gr-bar">'
-                .               '<h4 style="display: inline; margin-right: 4px;"><span class="label '.$sttClass.'">'.$status['name'].'</span></h4>'
+                .               $dropDown
+//                .               '<h4 style="display: inline; margin-right: 4px;"><span class="label '.$sttClass.'">'.$status['name'].'</span></h4>'
 //                .               '<a href="#" onclick="alert(\'' . DomainConst::CONTENT00375 . '\')" class="btn btn-xs btn-primary mr-1">Thanh toán</a>'
 //                .               '<a href="#" onclick="alert(\'' . DomainConst::CONTENT00375 . '\')" class="btn btn-xs btn-success mr-1">Tạo toa thuốc</a>'
                 .               $paymentItem
                 .               $prescriptItem
+//                .               $dropDown
                 .           '</div>'
 //                .           '<h4><b><a ' . $target . ' href="' . $href . '">' . $title . '</a></b></h4>'
                 .           '<h4><b><a ' . $target . ' onclick="' . $href . '" style="cursor:pointer;">' . $title . '</a></b></h4>'
                 .           '<span>Bác sĩ <b>'.$doctor.'</b> thực hiện lúc <b>'.$time.'</b>.</span>'
                 .       '</div>'
-                . '</a>';
+                . '</div>';
+//                . '</a>';
+        //--BUG0017 (DuongNV 20180717) modify
         return $retVal;
     }
     
