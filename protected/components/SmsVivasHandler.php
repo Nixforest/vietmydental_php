@@ -1,25 +1,18 @@
 <?php
 class SmsVivasHandler {
-    const USERNAME          = '';
-    const PASSWORD          = '';
-    const URL_LOGIN         = 'http://mkt.vivas.vn:9080/SMSBNAPI/login';
-    const URL_SEND_SMS      = 'http://mkt.vivas.vn:9080/SMSBNAPI/send_sms';
-    const URL_SEND_SMS_EXT  = 'http://mkt.vivas.vn:9080/SMSBNAPI/send_sms_ext';
-    const URL_VERIFY        = 'http://mkt.vivas.vn:9080/SMSBNAPI/verify';
-    const URL_LOGOUT        = 'http://mkt.vivas.vn:9080/SMSBNAPI/logout';
     
     /**
      * login to server sms vivas
      */
     public function login(){
         $input_xml = '&lt;RQST&gt;'
-                        .'&lt;USERNAME&gt;'.SmsVivasHandler::USERNAME.'&lt;/USERNAME&gt;'
-                        .'&lt;PASSWORD&gt;'.$this->getSha1(SmsVivasHandler::PASSWORD).'&lt;/PASSWORD&gt;'
+                        .'&lt;USERNAME&gt;'.VIVAS_USERNAME.'&lt;/USERNAME&gt;'
+                        .'&lt;PASSWORD&gt;'.$this->getSha1(VIVAS_PASSWORD).'&lt;/PASSWORD&gt;'
                     .'&lt;/RQST&gt;';
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, SmsVivasHandler::URL_LOGIN);
+        curl_setopt($ch, CURLOPT_URL, VIVAS_URL_LOGIN);
         curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_POSTFIELDS,'XML='.$input_xml);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,$input_xml);
         curl_setopt($ch, CURLOPT_HTTPHEADER, Array("Content-Type: text/xml"));
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
