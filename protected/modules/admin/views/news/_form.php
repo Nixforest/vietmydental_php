@@ -18,7 +18,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl.'/themes/ckedit
 
         <div class="row">
             <?php echo $form->labelEx($model,'status'); ?>
-            <?php echo $form->textField($model,'status'); ?>
+            <?php echo $form->dropDownList($model,'status', $model->getArrayStatus(), array('class'=>'','empty'=>'Select')); ?>
             <?php echo $form->error($model,'status'); ?>
 	</div>
         
