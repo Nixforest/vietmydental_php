@@ -12,7 +12,11 @@
  */
 class News extends BaseActiveRecord
 {
-	/**
+    
+    const STATUS_ACTIVE = 1;
+    const STATUS_INACTIVE = 2;
+
+    /**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
 	 * @return News the static model class
@@ -55,6 +59,7 @@ class News extends BaseActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    'rCreated' => array(self::BELONGS_TO, 'Users', 'created_by'),
 		);
 	}
 
@@ -84,11 +89,11 @@ class News extends BaseActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id,true);
+		$criteria->compare('id',$this->id);
 		$criteria->compare('content',$this->content,true);
+		$criteria->compare('description',$this->description,true);
 		$criteria->compare('status',$this->status);
 		$criteria->compare('created_date',$this->created_date,true);
-		$criteria->compare('created_by',$this->created_by,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -102,5 +107,49 @@ class News extends BaseActiveRecord
          */
         public function getField($field = 'id'){
             return !empty($this->$field) ? $this->$field : '';
+        }
+        
+        /**
+         * get array status
+         * @return array
+         */
+        public function getArrayStatus(){
+            return [
+                self::STATUS_ACTIVE => 'Hoạt động',
+                self::STATUS_INACTIVE => 'Không hoạt động'
+            ];
+        }
+        
+        /**
+         * get status
+         * @return string
+         */
+        public function getStatus(){
+            $aStatus = $this->getArrayStatus();
+            return !empty($aStatus[$this->status]) ? $aStatus[$this->status] : '';
+        }
+        
+        /**
+         * get full name of create by
+         * @return string
+         */
+        public function getCreatedBy(){
+            $mCreatedBy = $this->rCreated;
+            return !empty($mCreatedBy) ? $mCreatedBy->getFullName() : '';
+        }
+        
+        /**
+         * get created date
+         * @return date
+         */
+        public function getCreatedDate(){
+            return CommonProcess::convertDateTime($this->created_date,DomainConst::DATE_FORMAT_1,DomainConst::DATE_FORMAT_11);
+        }
+        
+        /**
+         * handle before save
+         */
+        public function handleBeforeSave(){
+            $this->created_by = Yii::app()->user->id;
         }
 }
