@@ -1310,3 +1310,16 @@ svg.mark-icon {
 #patient-records-tbl tr td:nth-child(2){padding:0;}
 .clr-txt-btn{opacity:0}
 /*--BUG0017-IMT (DuongNV 20180717) add*/
+/*++BUG0036-IMT (DuongNV 20180719) UI birthday today*/
+.lp-title{
+    text-align: center;
+    font-size: 20px;
+    padding: 10px;
+    background: teal;
+    color: white;
+}
+.lp-table tr:hover{
+    box-shadow: 2px 2px 5px #868686;
+    background: #eaeaea;
+}
+/*--BUG0036-IMT (DuongNV 20180719) UI birthday today*/

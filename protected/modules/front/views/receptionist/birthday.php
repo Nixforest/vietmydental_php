@@ -24,20 +24,32 @@
             </div>
         </div>
     </div>-->
-    <div class="right-page">
+    <!--//++ BUG0036-IMT  (DuongNV 20180719) UI today birthday-->
+    <!--<div class="right-page">-->
+    <div>
         <div class="title-1" id="right_page_title">
+        <!--<div class="lp-title" id="right_page_title">-->
+    <!--//-- BUG0036-IMT  (DuongNV 20180719) UI today birthday-->
             Danh sách Bệnh nhân có sinh nhật vào hôm nay
         </div>
-        <div class="info-content">
+        <!--//++ BUG0036-IMT  (DuongNV 20180719) UI today birthday-->
+        <!--<div class="info-content">-->
+        <div class="lp-content">
             <div id="right-content">
-                <div class="scroll-table">
-                    <table id="customer-info">
+                <!--<div class="scroll-table">-->
+                    <!--<table id="customer-info">-->
+                    <div>
+                        <table id="customer-info" class="table table-striped lp-table">
+        <!--//-- BUG0036-IMT  (DuongNV 20180719) UI today birthday-->
                         <thead>
                             <tr>
                                 <th><?php echo DomainConst::CONTENT00100; ?></th>
                                 <th><?php echo DomainConst::CONTENT00170; ?></th>
                                 <th><?php echo DomainConst::CONTENT00101; ?></th>
-                                <th class="col-4"><?php echo DomainConst::CONTENT00045; ?></th>
+                                <!--//++ BUG0036-IMT  (DuongNV 20180719) UI today birthday-->
+                                <!--<th class="col-4"><?php // echo DomainConst::CONTENT00045; ?></th>-->
+                                <th><?php echo DomainConst::CONTENT00045; ?></th>
+                                <!--//-- BUG0036-IMT  (DuongNV 20180719) UI today birthday-->
                             </tr>
                         </thead>
                         <tbody>
@@ -131,7 +143,7 @@
         $('#dialogId div.divForFormClass').html(data['<?php echo DomainConst::KEY_CONTENT; ?>']);
         $('#right_page_title').html('<?php echo DomainConst::CONTENT00172; ?>');
         $('#right-content').html(data['<?php echo DomainConst::KEY_RIGHT_CONTENT; ?>']);
-        $('.left-page .info-content .info-result .content').html(data['<?php echo DomainConst::KEY_INFO_SCHEDULE; ?>']);
+        $('.left-page .lp-content .info-result .content').html(data['<?php echo DomainConst::KEY_INFO_SCHEDULE; ?>']);
         setTimeout("$('#dialogId').dialog(opt).dialog('close')", 1000);
     }
     
