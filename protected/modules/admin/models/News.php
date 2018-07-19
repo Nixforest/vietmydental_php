@@ -152,4 +152,18 @@ class News extends BaseActiveRecord
         public function handleBeforeSave(){
             $this->created_by = Yii::app()->user->id;
         }
+        
+        /**
+         * get array model news by status
+         * @param int $status
+         * @return array model
+         */
+        public function getArrayNews($status = News::STATUS_ACTIVE){
+            $aNews = [];
+            $criteria = new CDbCriteria;
+            $criteria->compare('status', $status);
+            $criteria->order = 't.id DESC';
+            $aNews = News::model()->findAll($criteria);
+            return $aNews;
+        }
 }
