@@ -25,9 +25,8 @@
         </div>
     </div>-->
     <!--//++ BUG0036-IMT  (DuongNV 20180719) UI today birthday-->
-<!--    <div class="right-page">
-        <div class="title-1" id="right_page_title">-->
-    <div class="">
+    <div class="right-page">
+        <!--<div class="title-1" id="right_page_title">-->
         <div class="lp-title" id="right_page_title">
     <!--//-- BUG0036-IMT  (DuongNV 20180719) UI today birthday-->
             Danh sách Bệnh nhân có sinh nhật vào hôm nay
@@ -39,7 +38,7 @@
                 <!--<div class="scroll-table">-->
                     <!--<table id="customer-info">-->
                     <div>
-                        <table class="table table-striped">
+                        <table id="customer-info" class="table table-striped">
         <!--//-- BUG0036-IMT  (DuongNV 20180719) UI today birthday-->
                         <thead>
                             <tr>
@@ -143,7 +142,7 @@
         $('#dialogId div.divForFormClass').html(data['<?php echo DomainConst::KEY_CONTENT; ?>']);
         $('#right_page_title').html('<?php echo DomainConst::CONTENT00172; ?>');
         $('#right-content').html(data['<?php echo DomainConst::KEY_RIGHT_CONTENT; ?>']);
-        $('.left-page .info-content .info-result .content').html(data['<?php echo DomainConst::KEY_INFO_SCHEDULE; ?>']);
+        $('.left-page .lp-content .info-result .content').html(data['<?php echo DomainConst::KEY_INFO_SCHEDULE; ?>']);
         setTimeout("$('#dialogId').dialog(opt).dialog('close')", 1000);
     }
     
