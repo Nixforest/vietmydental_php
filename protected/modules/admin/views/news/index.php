@@ -46,7 +46,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'users-grid',
 	'dataProvider'=>$model->search(),
-//	'filter'=>$model,
+	'filter'=>$model,
 	'columns'=>array(
                 array(
                     'header' => DomainConst::CONTENT00034,
@@ -59,6 +59,22 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'name' => 'description',
                     'type' => 'raw',
                     'value' => '$data->getField(\'description\')',
+                ),
+                array(
+                    'name' => 'status',
+                    'type' => 'raw',
+                    'value' => '$data->getStatus()',
+                    'filter' => $model->getArrayStatus(),
+                ),
+                array(
+                    'header' => DomainConst::CONTENT00054,
+                    'type' => 'raw',
+                    'value' => '$data->getCreatedBy()',
+                ),
+                array(
+                    'header' => DomainConst::CONTENT00010,
+                    'type' => 'raw',
+                    'value' => '$data->getCreatedDate()',
                 ),
                 array(
                     'header' => 'Actions',
