@@ -25,9 +25,10 @@
         </div>
     </div>-->
     <!--//++ BUG0036-IMT  (DuongNV 20180719) UI today birthday-->
-    <div class="right-page">
-        <!--<div class="title-1" id="right_page_title">-->
-        <div class="lp-title" id="right_page_title">
+    <!--<div class="right-page">-->
+    <div>
+        <div class="title-1" id="right_page_title">
+        <!--<div class="lp-title" id="right_page_title">-->
     <!--//-- BUG0036-IMT  (DuongNV 20180719) UI today birthday-->
             Danh sách Bệnh nhân có sinh nhật vào hôm nay
         </div>
@@ -38,7 +39,7 @@
                 <!--<div class="scroll-table">-->
                     <!--<table id="customer-info">-->
                     <div>
-                        <table id="customer-info" class="table table-striped">
+                        <table id="customer-info" class="table table-striped lp-table">
         <!--//-- BUG0036-IMT  (DuongNV 20180719) UI today birthday-->
                         <thead>
                             <tr>

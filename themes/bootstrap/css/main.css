@@ -1318,4 +1318,8 @@ svg.mark-icon {
     background: teal;
     color: white;
 }
+.lp-table tr:hover{
+    box-shadow: 2px 2px 5px #868686;
+    background: #eaeaea;
+}
 /*--BUG0036-IMT (DuongNV 20180719) UI birthday today*/
