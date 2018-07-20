@@ -27,28 +27,38 @@
         
 	<div class="row">
 		<?php echo $form->labelEx($model,'total'); ?>
+                <!--//++ BUG0045-IMT  (DuongNV 201807) Format currency when input-->
 		<?php
                 echo $form->textField($model, 'total', array(
                     'size' => 11,
                     'maxlength' => 11,
                     'value' => $total,
+                    'class' => 'format-currency number_only',
                     ));
                 ?>
-                <input size="11" maxlength="11" value="" id="Receipts_total_view" type="text" readonly="true">
+                <h4>&#8363;</h4><!--VND Sign-->
+                <!--<input size="11" maxlength="11" value="" id="Receipts_total_view" type="text" readonly="true">-->
+                <!--//-- BUG0045-IMT  (DuongNV 201807) Format currency when input-->
 		<?php echo $form->error($model,'total'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'discount'); ?>
-		<?php echo $form->textField($model,'discount',array('size'=>11,'maxlength'=>11)); ?>
-                <input size="11" maxlength="11" value="" id="Receipts_discount_view" type="text" readonly="true">
+                <!--//++ BUG0045-IMT  (DuongNV 201807) Format currency when input-->
+		<?php echo $form->textField($model,'discount',array('size'=>11,'maxlength'=>11, 'class'=>'format-currency number_only')); ?>
+                <h4>&#8363;</h4><!--VND Sign-->
+                <!--<input size="11" maxlength="11" value="" id="Receipts_discount_view" type="text" readonly="true">-->
+                <!--//-- BUG0045-IMT  (DuongNV 201807) Format currency when input-->
 		<?php echo $form->error($model,'discount'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'final'); ?>
-		<?php echo $form->textField($model,'final',array('size'=>10,'maxlength'=>10)); ?>
-                <input size="11" maxlength="11" value="" id="Receipts_final_view" type="text" readonly="true">
+                <!--//++ BUG0045-IMT  (DuongNV 201807) Format currency when input-->
+		<?php echo $form->textField($model,'final',array('size'=>10,'maxlength'=>11, 'class'=>'format-currency number_only')); ?>
+                <h4>&#8363;</h4><!--VND Sign-->
+                <!--<input size="11" maxlength="11" value="" id="Receipts_final_view" type="text" readonly="true">-->
+                <!--//-- BUG0045-IMT  (DuongNV 201807) Format currency when input-->
 		<?php echo $form->error($model,'final'); ?>
 	</div>
 
@@ -141,4 +151,22 @@
            fnUpdateValue("#Receipts_final", "#Receipts_final_view");
        });
     });
+    //++ BUG0045-IMT  (DuongNV 201807) Format currency when input
+    $(document).on('input', '.format-currency', function(){
+        var t = $(this).val();
+        t = t.replace(/[,]/g,'');
+        t = t.replace(/[.]/g,'');
+        $(this).val(fnFormatNumber(t));
+    });
+    $(document).on('input', '#Receipts_total, #Receipts_discount', function(){
+        var total = $('#Receipts_total').val();
+        total = total.replace(/[,]/g,'');
+        total = total.replace(/[.]/g,'');
+        var discount = $('#Receipts_discount').val();
+        discount = discount.replace(/[,]/g,'');
+        discount = discount.replace(/[.]/g,'');
+        $('#Receipts_final').val(fnFormatNumber(total-discount));
+    });
+    fnNumberOnly();
+    //++ BUG0045-IMT  (DuongNV 201807) Format currency when input
 </script>
