@@ -28,6 +28,8 @@ return array(
         'application.extensions.phpexcel.*',
         'application.extensions.phpexcel.Classes.*',
 //                'application.extensions.phpexcel.Classes.PHPExcel.*',
+//        ++ BUG0040-IMT add widget 
+        'application.components.widgets.*',
     ),
     'modules' => array(
         // uncomment the following to enable the Gii tool

@@ -52,6 +52,9 @@ Yii::app()->clientscript
         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/bootstrap-responsive.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/style.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/bootstrap.min.css" />  
+        <!-- ++ BUG0040-IMT (NamNH 20180719) add css file-->
+        <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/ad_new.css" />  
+        <!-- -- BUG0040-IMT (NamNH 20180719) add css file-->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
               integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
         <style>
