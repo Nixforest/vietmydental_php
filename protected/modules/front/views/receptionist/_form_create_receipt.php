@@ -138,9 +138,11 @@
 </div><!-- form -->
 <script type="text/javascript">
     $(document).ready(function() {
+        
         formatNumber("#Receipts_total");
         formatNumber("#Receipts_discount");
         formatNumber("#Receipts_final");
+        
         fnUpdateValue("#Receipts_total", "#Receipts_total_view");
         fnUpdateValue("#Receipts_discount", "#Receipts_discount_view");
         fnUpdateValue("#Receipts_final", "#Receipts_final_view");
@@ -161,6 +163,7 @@
         t = t.replace(/[.]/g,'');
         $(this).val(fnFormatNumber(t));
     });
+    
     function formatNumber(_id) {
         var t = $(_id).val();
         t = t.replace(/[,]/g,'');
@@ -177,5 +180,5 @@
         $('#Receipts_final').val(fnFormatNumber(total-discount));
     });
     fnNumberOnly();
-    //++ BUG0045-IMT  (DuongNV 201807) Format currency when input
+    //-- BUG0045-IMT  (DuongNV 201807) Format currency when input
 </script>
