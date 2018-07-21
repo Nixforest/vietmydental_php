@@ -46,8 +46,8 @@ class News extends BaseActiveRecord
 			array('status', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-                        array('content, status,description', 'safe'),
-			array('id, content, status, created_date, created_by,description', 'safe', 'on'=>'search'),
+                        array('content, status, description', 'safe'),
+			array('id, content, status, created_date, created_by, description', 'safe', 'on'=>'search'),
 		);
 	}
 
