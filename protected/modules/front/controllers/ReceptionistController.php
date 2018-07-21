@@ -724,7 +724,13 @@ class ReceptionistController extends FrontController {
             } else {
                 $model   = new Receipts();
             }
-            $total = $mDetail->getTotalMoney();
+            //++ BUG0045-IMT (DuongNV 20180721) Handle show total money when update receipt
+            //$total = $mDetail->getTotalMoney();
+            $total = $model->total;
+            if (empty($total)) {
+                $total = $mDetail->getTotalMoney();
+            }
+            //-- BUG0045-IMT (DuongNV 20180721) Handle show total money when update receipt
 
             $customer = $mDetail->getCustomerModel();
         } else {
@@ -733,6 +739,14 @@ class ReceptionistController extends FrontController {
         }
         if (isset($_POST['Receipts'])) {
             $model->attributes = $_POST['Receipts'];
+            
+            //++ BUG0045-IMT (DuongNV 20180721) Format money when save
+            $splitter = DomainConst::SPLITTER_TYPE_MONEY;
+            $model->total = str_replace($splitter, '', $_POST['Receipts']['total']);
+            $model->discount = str_replace($splitter, '', $_POST['Receipts']['discount']);
+            $model->final = str_replace($splitter, '', $_POST['Receipts']['final']);
+            //-- BUG0045-IMT (DuongNV 20180721) Format money when save
+            
             $model->detail_id = $id;
             $model->need_approve = 0;
             $model->customer_confirm = 0;

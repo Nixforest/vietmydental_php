@@ -62,6 +62,7 @@ class DomainConst {
     const SPLITTER_TYPE_1                               = ', ';
     const SPLITTER_TYPE_2                               = ',';
     const SPLITTER_TYPE_3                               = '-';
+    const SPLITTER_TYPE_MONEY                           = self::SPLITTER_TYPE_2;
     /** Html space */
     const SPACE                                         = '&nbsp;';
     /** Date format main */
