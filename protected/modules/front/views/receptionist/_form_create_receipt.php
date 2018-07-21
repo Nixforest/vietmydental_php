@@ -138,6 +138,9 @@
 </div><!-- form -->
 <script type="text/javascript">
     $(document).ready(function() {
+        formatNumber("#Receipts_total");
+        formatNumber("#Receipts_discount");
+        formatNumber("#Receipts_final");
         fnUpdateValue("#Receipts_total", "#Receipts_total_view");
         fnUpdateValue("#Receipts_discount", "#Receipts_discount_view");
         fnUpdateValue("#Receipts_final", "#Receipts_final_view");
@@ -158,6 +161,12 @@
         t = t.replace(/[.]/g,'');
         $(this).val(fnFormatNumber(t));
     });
+    function formatNumber(_id) {
+        var t = $(_id).val();
+        t = t.replace(/[,]/g,'');
+        t = t.replace(/[.]/g,'');
+        $(_id).val(fnFormatNumber(t));
+    };
     $(document).on('input', '#Receipts_total, #Receipts_discount', function(){
         var total = $('#Receipts_total').val();
         total = total.replace(/[,]/g,'');
