@@ -39,7 +39,9 @@ if (!empty($dateValue)) {
             <div class="title-1" id="right_page_title">
                 <?php echo DomainConst::CONTENT00177; ?>
             </div>
-            <div class="info-content">
+            <!--//++ BUG0037-IMT  (DuongNV 221807) Update UI schedule today--> 
+            <div class="info-content" style="background: white;">
+            <!--//++ BUG0037-IMT  (DuongNV 221807) Update UI schedule today--> 
                 <div id="right-content">
                     <label for="date" class="required"><?php echo DomainConst::CONTENT00378; ?></label>
                     <?php

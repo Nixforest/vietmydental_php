@@ -159,8 +159,11 @@ class HtmlHandler {
      */
     public static function createTableCustomer($arrCustomer, $title = DomainConst::CONTENT00201) {
         $retVal =    '<div class="title-2">' . $title . '</div>';
-        $retVal .=   '<div class="scroll-table">';
-        $retVal .=       '<table id="customer-info">';
+        //++ BUG0037-IMT  (DuongNV 221807) Update UI schedule today 
+//        $retVal .=   '<div class="scroll-table">';
+        $retVal .=   '<div>';
+        $retVal .=       '<table id="customer-info" class="table table-striped lp-table">';
+        //++ BUG0037-IMT  (DuongNV 221807) Update UI schedule today
         $retVal .=           '<thead>';
         $retVal .=               '<tr>';
         $retVal .=                   '<th>' . DomainConst::CONTENT00135 . '</th>';
