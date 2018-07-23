@@ -8,9 +8,11 @@
  * @property string $customer_types_id
  * @property double $discount
  * @property string $description
+ * @property int $promotion_id
  */
 class PromotionsDetail extends CActiveRecord
 {
+    public $treatments;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -37,12 +39,13 @@ class PromotionsDetail extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('customer_types_id, discount, description', 'required'),
+			array('customer_types_id, treatments,discount, description', 'required','on'=>'create,update'),
 			array('discount', 'numerical'),
 			array('customer_types_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, customer_types_id, discount, description', 'safe', 'on'=>'search'),
+			array('customer_types_id,treatments, discount, description,promotion_id', 'safe'),
+			array('id, promotion_id ,customer_types_id, discount, description', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -54,6 +57,10 @@ class PromotionsDetail extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    'rJoinTreatmentType' => array(
+                        self::HAS_MANY, 'OneMany', 'one_id',
+                        'on'    => 'type = ' . OneMany::TYPE_PROMOTION_TREATMENT_TYPE,
+                    ),
 		);
 	}
 
@@ -90,4 +97,48 @@ class PromotionsDetail extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+        
+        /**
+         * save promotion detail
+         */
+        public function handleSave(){
+            if($this->scenario == 'create'){
+//                do somthing
+            }else{
+                $this->deleteJoin();
+            }
+            if($this->save()){
+//                save onemany of promotion - agent
+                $tableName = OneMany::model()->tableName();
+                $aRowInsert = [];
+                $typeOneMany = OneMany::TYPE_PROMOTION_TREATMENT_TYPE;
+                foreach ($this->treatments as $key => $agent_id) {
+                    $aRowInsert[] = "(
+                        '{$this->id}',
+                        '{$agent_id}',
+                        '{$typeOneMany}'
+                        )";
+                }
+                $sql = "insert into $tableName (
+                            one_id,
+                            many_id,
+                            type
+                        ) values" . implode(',', $aRowInsert);
+                if (count($aRowInsert)){
+                    Yii::app()->db->createCommand($sql)->execute();
+                }
+                return true;
+            }
+            return false;
+        }
+        
+        /**
+         * delete onemany
+         */
+        public function deleteJoin(){
+            $aOneMany = $this->rJoinTreatmentType;
+            foreach ($aOneMany as $key => $mOnemany) {
+                $mOnemany->delete();
+            }
+        }
 }

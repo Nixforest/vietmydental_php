@@ -11,39 +11,39 @@ class PromotionsDetailController extends AdminController
 	/**
 	 * @return array action filters
 	 */
-	public function filters()
-	{
-		return array(
-			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
-		);
-	}
+//	public function filters()
+//	{
+//		return array(
+//			'accessControl', // perform access control for CRUD operations
+//			'postOnly + delete', // we only allow deletion via POST request
+//		);
+//	}
 
 	/**
 	 * Specifies the access control rules.
 	 * This method is used by the 'accessControl' filter.
 	 * @return array access control rules
 	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
+//	public function accessRules()
+//	{
+//		return array(
+//			array('allow',  // allow all users to perform 'index' and 'view' actions
+//				'actions'=>array('index','view'),
+//				'users'=>array('*'),
+//			),
+//			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+//				'actions'=>array('create','update'),
+//				'users'=>array('@'),
+//			),
+//			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+//				'actions'=>array('admin','delete'),
+//				'users'=>array('admin'),
+//			),
+//			array('deny',  // deny all users
+//				'users'=>array('*'),
+//			),
+//		);
+//	}
 
 	/**
 	 * Displays a particular model.
@@ -170,4 +170,50 @@ class PromotionsDetailController extends AdminController
 			Yii::app()->end();
 		}
 	}
+        
+        /**
+         * create detail of promotions
+         * @param int $id
+         */
+        public function actionCreateDetail($id){
+            $this->pageTitle = $this->getPageTitleByAction('createDetail');
+            $this->layout='//layouts/ajax';
+            $model = new PromotionsDetail('create');
+            $model->promotion_id = $id;
+            if(isset($_POST['PromotionsDetail']))
+            {
+                    $model->attributes=$_POST['PromotionsDetail'];
+                    $model->validate();
+                    if(!$model->hasErrors()){
+                        $model->handleSave();
+                        $this->redirect(array('CreateDetail','id'=>$model->id));
+                    }
+            }
+            $this->render('createDetail/create',array(
+                    'model'=>$model,
+            ));
+        }
+        
+        /**
+         * view list detail of promotions
+         * @param int $id
+         */
+        public function actionUpdateDetail($id){
+            $this->pageTitle = $this->getPageTitleByAction('updateDetail');
+            $this->layout='//layouts/ajax';
+            $model = $this->loadModel($id);
+            if(isset($_POST['PromotionsDetail']))
+            {
+                    $model->attributes=$_POST['PromotionsDetail'];
+                    $model->validate();
+                    if(!$model->hasErrors()){
+                        $model->handleSave();
+                        $this->redirect(array('CreateDetail','id'=>$model->id));
+                    }
+            }
+
+            $this->render('createDetail/update',array(
+                    'model'=>$model,
+            ));
+        }
 }

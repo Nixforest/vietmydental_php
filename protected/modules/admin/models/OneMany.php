@@ -30,6 +30,8 @@ class OneMany extends BaseActiveRecord
     const TYPE_TREATMENT_DETAIL_TEETH                   = '6';
     /** 1 [promotions] has many [agents] */
     const TYPE_PROMOTION_AGENT                          = '7';
+    /** 1 [promotionsDetail] has many [treatmentType] */
+    const TYPE_PROMOTION_TREATMENT_TYPE                          = '8';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
