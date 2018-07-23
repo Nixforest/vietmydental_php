@@ -70,8 +70,10 @@ class PromotionsController extends AdminController
 		if(isset($_POST['Promotions']))
 		{
 			$model->attributes=$_POST['Promotions'];
-                        $model->handleBeforeSave();
-                        if($model->handleSave()){
+                        $model->validate();
+                        if(!$model->hasErrors()){
+                            $model->handleBeforeSave();
+                            $model->handleSave();
                             $this->redirect(array('view','id'=>$model->id));
                         }
 		}
@@ -89,18 +91,19 @@ class PromotionsController extends AdminController
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-
+                $model->handleSearch();
 		if(isset($_POST['Promotions']))
-		{
+		{   
+                        $model->agents = null;
 			$model->attributes=$_POST['Promotions'];
-                        $model->handleBeforeSave();
-                        if($model->handleSave()){
+                        $model->validate();
+                        if(!$model->hasErrors()){
+                            $model->handleBeforeSave();
+                            $model->handleSave();
                             $this->redirect(array('view','id'=>$model->id));
                         }
-                        
 		}
 
 		$this->render('update',array(

@@ -23,14 +23,38 @@ $this->createMenu('view', $model);
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
-		'id',
-		'title',
-		'description',
-		'start_date',
-		'end_date',
-		'type',
-		'status',
-		'created_date',
-		'created_by',
+		array(
+                    'name' => DomainConst::CONTENT00004,
+                    'value' => $model->getField('title')
+                ),
+                array(
+                    'name' => DomainConst::CONTENT00062,
+                    'value' => $model->getField('description')
+                ),
+                array(
+                    'name' => DomainConst::CONTENT00139,
+                    'value' => $model->getStartDate()
+                ),
+                array(
+                    'name' => DomainConst::CONTENT00140,
+                    'value' => $model->getEndDate()
+                ),
+                array(
+                    'name' => DomainConst::CONTENT00199,
+                    'value' => $model->getAgents()
+                ),
+                array(
+                    'name' => DomainConst::CONTENT00404,
+                    'value' => $model->getType()
+                ),
+                array(
+                    'name' => DomainConst::CONTENT00054,
+                    'value' => $model->getCreatedBy()
+                ),
+                array(
+                    'name' => DomainConst::CONTENT00010,
+                    'value' => $model->getCreatedDate()
+                ),
 	),
 )); ?>
+<?php include '_view_detail.php' ?>

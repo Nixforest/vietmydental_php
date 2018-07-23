@@ -96,7 +96,7 @@ $mAgents = new Agents();
                          'htmlOptions'=>array('style' => 'width: 600px;'),
                    ));    
                ?>
-		<?php echo $form->error($model,'type'); ?>
+		<?php echo $form->error($model,'agents'); ?>
 	</div>
 
 	<div class="row">

@@ -82,8 +82,8 @@ class Promotions extends CActiveRecord
 			'id' => 'ID',
 			'title' => 'Tiêu đề',
 			'description' => 'Mô tả',
-			'start_date' => 'Từ ngày',
-			'end_date' => 'Đến ngày',
+			'start_date' => 'Ngày bắt đầu',
+			'end_date' => 'Ngày kết thúc',
 			'type' => 'Loại khuyến mãi',
 			'status' => 'Trạng thái',
 			'created_date' => 'Ngày tạo',
@@ -124,8 +124,9 @@ class Promotions extends CActiveRecord
         public function handleSave(){
             if($this->scenario == 'create'){
                 $this->created_by = Yii::app()->user->id;
+            }else{
+                $this->deleteAgentsJoin();
             }
-            
             if($this->save()){
 //                save onemany of promotion - agent
                 $tableName = OneMany::model()->tableName();
@@ -249,5 +250,35 @@ class Promotions extends CActiveRecord
         public function handleBeforeSave(){
             $this->start_date = CommonProcess::convertDateTime($this->start_date,DomainConst::DATE_FORMAT_3,DomainConst::DATE_FORMAT_4);
             $this->end_date = CommonProcess::convertDateTime($this->end_date,DomainConst::DATE_FORMAT_3,DomainConst::DATE_FORMAT_4);
+        }
+        
+        /**
+         * handle after read for search
+         */
+        public function handleSearch(){
+            $this->setAgents();
+            $this->start_date = CommonProcess::convertDateTime($this->start_date,DomainConst::DATE_FORMAT_4,DomainConst::DATE_FORMAT_3);
+            $this->end_date = CommonProcess::convertDateTime($this->end_date,DomainConst::DATE_FORMAT_4,DomainConst::DATE_FORMAT_3);
+        }
+        
+        /**
+         * set list agents of model to $agents
+         */
+        public function setAgents(){
+            $aOneMany = $this->rJoinAgent;
+            foreach ($aOneMany as $key => $mOnemany) {
+                $this->agents[$mOnemany->many_id] = $mOnemany->many_id;
+            }
+            
+        }
+        
+        /**
+         * delete onemany of promotions
+         */
+        public function deleteAgentsJoin(){
+            $aOneMany = $this->rJoinAgent;
+            foreach ($aOneMany as $key => $mOnemany) {
+                $mOnemany->delete();
+            }
         }
 }

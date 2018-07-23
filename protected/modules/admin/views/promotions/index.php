@@ -113,7 +113,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                         'label'=>'Thêm mới chi tiết',
                         'imageUrl'=>Yii::app()->theme->baseUrl . '/img/folder.png',
                         'options'=>array('class'=>'createDetail'),
-                        'url'=>'Yii::app()->createAbsoluteUrl("admin/borrow/createDetail",
+                        'url'=>'Yii::app()->createAbsoluteUrl("admin/PromotionsDetail/createDetail",
                             array("id"=>$data->id) )',
 //                         'visible' => '$data->canCreateDetail()',
 
