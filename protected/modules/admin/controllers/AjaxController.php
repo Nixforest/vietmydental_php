@@ -379,10 +379,13 @@ class AjaxController extends AdminController
                         $models = $result;
                     }
                 }
-                $retVal = '<div class="scroll-table">';
+                //++ BUG0037_1-IMT  (DuongNV 201807) Update UI schedule
+//                $retVal = '<div class="scroll-table">';
+                $retVal = '<div>';
                 $infoSchedule = '';
                 
-                $retVal .= '<table id="customer-info">';
+                $retVal .= '<table id="customer-info" class="table table-striped lp-table">';
+                //-- BUG0037_1-IMT  (DuongNV 201807) Update UI schedule
                 $retVal .=      '<thead>';
                 $retVal .=          '<tr>';
                 $retVal .=          '<th>' . DomainConst::CONTENT00100 . '</th>';

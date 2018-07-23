@@ -19,7 +19,9 @@ if (!empty($dateValue)) {
             <div class="title-1">
                <?php echo DomainConst::CONTENT00363; ?>
             </div>
-            <div class="info-content">
+            <!--//++ BUG0037_1-IMT  (DuongNV 201807) Update UI schedule-->
+            <?php $this->widget('FindCustomerWidget'); ?>
+<!--            <div class="info-content">
                 <div class="box-search">
                     <form>
                         <span class="icon-s"></span>
@@ -33,7 +35,8 @@ if (!empty($dateValue)) {
                     </div>
                     <div class="content"></div>
                 </div>
-            </div>
+            </div>-->
+            <!--//-- BUG0037_1-IMT  (DuongNV 201807) Update UI schedule-->
         </div>
         <div class="right-page">
             <div class="title-1" id="right_page_title">
