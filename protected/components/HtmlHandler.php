@@ -62,6 +62,30 @@ class HtmlHandler {
         return $retVal;
     }
     
+    //++ BUG0038-IMT  (DuongNV 201807) Update UI receipt
+    /**
+     * Create button with image icon
+     * @param String $href Link
+     * @param String $title Title of button
+     * @param String $image Image path
+     * @param String $isNewTab Want to open in new tab?
+     * @param String $class Class of button
+     * @return String Html string generate button
+     */
+    public static function createBstButton($href, $title, $classIcon = '' , $isNewTab = false, $class = 'btn btn-primary', $tagAId = '') {
+        $retVal = '';
+        $target = '';
+        if ($isNewTab) {
+            $target = 'target="_blank"';
+        }
+        
+        $retVal = '<a ' . $target . ' href="' . $href . '" id="' . $tagAId . '" class="' . $class . '">'
+                . '<i class="'.$classIcon.'"></i> '
+                . '' . $title . '</a>';
+        return $retVal;
+    }
+    //-- BUG0038-IMT  (DuongNV 201807) Update UI receipt
+    
     /**
      * Create custom treatment history item
      * @param String $href              Url to redirect update treatment info
@@ -151,6 +175,15 @@ class HtmlHandler {
         $retVal .= '</div>';
         return $retVal;
     }
+    
+    //++ BUG0038-IMT  (DuongNV 201807) Update UI receipt
+    public static function createBstAjaxButton($title, $classIcon, $onClick, $style, $class = 'btn btn-primary') {
+        $retVal = '<a style="' . $style . '" onclick="' . $onClick . '"  class="' . $class . '">'
+                . '<i class="'.$classIcon.'"></i> '
+                . '' . $title . '</a>';
+        return $retVal;
+    }
+    //-- BUG0038-IMT  (DuongNV 201807) Update UI receipt
     
     /**
      * Create table for customer information

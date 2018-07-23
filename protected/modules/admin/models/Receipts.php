@@ -358,21 +358,25 @@ class Receipts extends CActiveRecord
                 $insurance = $this->rTreatmentScheduleDetail->rSchedule->getInsurrance();
             }
         }
-        $rightContent = '<div class="info-result">';
+        //++ BUG0038-IMT (DuongNV 201807) Update UI receipt
+        $rightContent = '<div class="info-result" style="background:white">';
         $rightContent .=    '<div class="title-2">' . DomainConst::CONTENT00174 . '</div>';
         $rightContent .=    '<div class="item-search">';
         $rightContent .=        '<table class="table table-borderless">';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00145 . ': </td>';
-        $rightContent .=                '<td><b>' . $teeth . '</b>' . '</td>';
+//        $rightContent .=                '<td>' . DomainConst::CONTENT00145 . ': </td>';
+        $rightContent .=                '<td style="width:35px;"><i class="fas fa-tooth" title="'.DomainConst::CONTENT00145.'"></i></td>';
+        $rightContent .=                '<td>' . $teeth . '' . '</td>';
         $rightContent .=            '</tr>';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00231 . ': </td>';
-        $rightContent .=                '<td><b>' . $diagnosis . '</b>' . '</td>';
+//        $rightContent .=                '<td>' . DomainConst::CONTENT00231 . ': </td>';
+        $rightContent .=                '<td><i class="fas fa-diagnoses" title="' . DomainConst::CONTENT00231 . '" style="position:relative;right:3px;"></i></td>';
+        $rightContent .=                '<td>' . $diagnosis . '' . '</td>';
         $rightContent .=            '</tr>';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00128 . ': </td>';
-        $rightContent .=                '<td><b>' . $treatmentType . '</b>' . '</td>';
+//        $rightContent .=                '<td>' . DomainConst::CONTENT00128 . ': </td>';
+        $rightContent .=                '<td><i class="fas fa-calendar-check" title="' . DomainConst::CONTENT00128 . '"></i></td>';
+        $rightContent .=                '<td>' . $treatmentType . '' . '</td>';
         $rightContent .=            '</tr>';
         $rightContent .=        '</table>';
         $rightContent .=    '</div>';
@@ -380,26 +384,31 @@ class Receipts extends CActiveRecord
         $rightContent .=    '<div class="item-search">'; 
         $rightContent .=        '<table>';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00254 . ': </td>';
-        $rightContent .=                '<td align="right"><b>' . CommonProcess::formatCurrency($money) . '</b>' . '</td>';
+//        $rightContent .=                '<td>' . DomainConst::CONTENT00254 . ': </td>';
+        $rightContent .=                '<td style="width:35px;"><i class="fas fa-cart-plus" title="' . DomainConst::CONTENT00254 . '"></i></td>';
+        $rightContent .=                '<td align="right">' . CommonProcess::formatCurrency($money) . '' . '</td>';
         $rightContent .=            '</tr>';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00257 . ': </td>';
-        $rightContent .=                '<td align="right"><b>' . CommonProcess::formatCurrency($this->discount) . '</b>' . '</td>';
+//        $rightContent .=                '<td>' . DomainConst::CONTENT00257 . ': </td>';
+        $rightContent .=                '<td><i class="fas fa-piggy-bank" title="' . DomainConst::CONTENT00257 . '"></i></td>';
+        $rightContent .=                '<td align="right">' . CommonProcess::formatCurrency($this->discount) . '' . '</td>';
         $rightContent .=            '</tr>';
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00259 . ': </td>';
-        $rightContent .=                '<td align="right"><b>' . CommonProcess::formatCurrency($this->final) . '</b>' . '</td>';
+//        $rightContent .=                '<td>' . DomainConst::CONTENT00259 . ': </td>';
+        $rightContent .=                '<td><i class="fas fa-credit-card" title="' . DomainConst::CONTENT00259 . '"></i></td>';
+        $rightContent .=                '<td align="right">' . CommonProcess::formatCurrency($this->final) . '' . '</td>';
         $rightContent .=            '</tr>';
         if (!empty($insurance)) {
             $rightContent .=            '<tr>';
-            $rightContent .=                '<td>' . DomainConst::CONTENT00260 . ': </td>';
-            $rightContent .=                '<td align="right"><b>' . $insurance . '</b>' . '</td>';
+//            $rightContent .=                '<td>' . DomainConst::CONTENT00260 . ': </td>';
+            $rightContent .=                '<td><i class="fas fa-notes-medical" title="' . DomainConst::CONTENT00260 . '"></i></td>';;
+            $rightContent .=                '<td align="right">' . $insurance . '' . '</td>';
             $rightContent .=            '</tr>';
         }
         $rightContent .=            '<tr>';
-        $rightContent .=                '<td>' . DomainConst::CONTENT00091 . ': </td>';
-        $rightContent .=                '<td align="right"><b>' . $this->description . '</b>' . '</td>';
+//        $rightContent .=                '<td>' . DomainConst::CONTENT00091 . ': </td>';
+        $rightContent .=                '<td><i class="fas fa-sticky-note" title="' . DomainConst::CONTENT00091 . '"></i></td>';;
+        $rightContent .=                '<td align="right">' . $this->description . '' . '</td>';
         $rightContent .=            '</tr>';
         $rightContent .=        '</table>';
         $rightContent .=    '</div>';
@@ -408,30 +417,48 @@ class Receipts extends CActiveRecord
         $rightContent .=            '<tr>';
         if ($this->status == self::STATUS_DOCTOR) {
             $rightContent .=                '<td>';
-            $rightContent .= HtmlHandler::createButtonWithImage(
+//            $rightContent .= HtmlHandler::createButtonWithImage(
+//                    Yii::app()->createAbsoluteUrl("front/receptionist/update", array(
+//                        "id" => $this->id,
+//                        'action'    => DateTimeExt::isToday($this->process_date, DomainConst::DATE_FORMAT_4) ? 'receipt' : 'receiptOld',
+//                    )),
+//                    '<br>' . DomainConst::CONTENT00265,
+//                    DomainConst::IMG_COMPLETED_ICON);
+            $rightContent .= HtmlHandler::createBstButton(
                     Yii::app()->createAbsoluteUrl("front/receptionist/update", array(
                         "id" => $this->id,
                         'action'    => DateTimeExt::isToday($this->process_date, DomainConst::DATE_FORMAT_4) ? 'receipt' : 'receiptOld',
                     )),
-                    '<br>' . DomainConst::CONTENT00265,
-                    DomainConst::IMG_COMPLETED_ICON);
+                    DomainConst::CONTENT00265,
+                    'fas fa-check');
             $rightContent .=                '</td>';
         }
         
         $rightContent .=                '<td>';
-        $rightContent .= HtmlHandler::createButtonWithImage(
+//        $rightContent .= HtmlHandler::createButtonWithImage(
+//                Yii::app()->createAbsoluteUrl("front/receptionist/printReceipt", array(
+//                    "id" => $this->id,
+//                )),
+//                '<br>' . DomainConst::CONTENT00264,
+//                DomainConst::IMG_PRINT_ICON, false);
+        $rightContent .= HtmlHandler::createBstButton(
                 Yii::app()->createAbsoluteUrl("front/receptionist/printReceipt", array(
                     "id" => $this->id,
                 )),
-                '<br>' . DomainConst::CONTENT00264,
-                DomainConst::IMG_PRINT_ICON, false);
+                DomainConst::CONTENT00264,
+                'glyphicon glyphicon-print', false);
         $rightContent .=                '</td>';
         $rightContent .=                '<td>';
         
-        $rightContent .= HtmlHandler::createAjaxButtonWithImage(
-                '<br>' . DomainConst::CONTENT00373, DomainConst::IMG_PRINT_ALL_ICON,
+//        $rightContent .= HtmlHandler::createAjaxButtonWithImage(
+//                '<br>' . DomainConst::CONTENT00373, DomainConst::IMG_PRINT_ALL_ICON,
+//                '{createPrintDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');}',
+//                'cursor: pointer;');
+        $rightContent .= HtmlHandler::createBstAjaxButton(
+                DomainConst::CONTENT00373, 'fas fa-print',
                 '{createPrintDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');}',
                 'cursor: pointer;');
+        //-- BUG0038-IMT (DuongNV 201807) Update UI receipt
         $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
         $rightContent .=        '</table>';
