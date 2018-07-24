@@ -70,6 +70,7 @@ class PromotionsController extends AdminController
 		if(isset($_POST['Promotions']))
 		{
 			$model->attributes=$_POST['Promotions'];
+                        $model->created_by = Yii::app()->user->id;
                         $model->validate();
                         if(!$model->hasErrors()){
                             $model->handleBeforeSave();
