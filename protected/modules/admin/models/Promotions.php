@@ -281,4 +281,28 @@ class Promotions extends CActiveRecord
                 $mOnemany->delete();
             }
         }
+        
+        /**
+         * delete join before delete
+         */
+        public function beforeDelete() {
+            $this->deleteAgentsJoin();
+            return parent::beforeDelete();
+        }
+        
+        /**
+         * get list detail for view
+         * @return \CActiveDataProvider
+         */
+        public function searchDetail(){
+             if(empty($this->id)){
+                return null;
+            }
+            $mPromotionDetail = new PromotionsDetail('search');
+            $criteria   =   new CDbCriteria;
+            $criteria->compare('promotion_id',$this->id);
+            return new CActiveDataProvider($mPromotionDetail, array(
+                    'criteria'=>$criteria,
+            ));
+        }
 }

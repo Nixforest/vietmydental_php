@@ -186,7 +186,7 @@ class PromotionsDetailController extends AdminController
                     $model->validate();
                     if(!$model->hasErrors()){
                         $model->handleSave();
-                        $this->redirect(array('CreateDetail','id'=>$model->id));
+                        $this->redirect(array('createDetail','id'=>$model->promotion_id));
                     }
             }
             $this->render('createDetail/create',array(
@@ -202,13 +202,14 @@ class PromotionsDetailController extends AdminController
             $this->pageTitle = $this->getPageTitleByAction('updateDetail');
             $this->layout='//layouts/ajax';
             $model = $this->loadModel($id);
+            $model->setTreatmentType();
             if(isset($_POST['PromotionsDetail']))
             {
                     $model->attributes=$_POST['PromotionsDetail'];
                     $model->validate();
                     if(!$model->hasErrors()){
                         $model->handleSave();
-                        $this->redirect(array('CreateDetail','id'=>$model->id));
+                        $this->redirect(array('updateDetail','id'=>$model->id));
                     }
             }
 

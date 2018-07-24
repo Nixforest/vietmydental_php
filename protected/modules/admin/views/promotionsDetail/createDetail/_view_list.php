@@ -1,7 +1,6 @@
-<h1>Thông tin <?php echo $model->getField('title'); ?></h1>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'promotions-grid',
-	'dataProvider'=>$model->searchDetail(),
+	'dataProvider'=>$model->searchByPromotion(),
 //        'afterAjaxUpdate'=>'function(id, data){ BindClickView(); }',
 //	'filter'=>$model,
 	'columns'=>array(
@@ -32,7 +31,27 @@
                     'type' => 'raw',
                     'value' => '$data->getTreatmentTypes()'
                 ),
+                array(
+                    'header' => 'Actions',
+                    'class'=>'CButtonColumn',
+                    'template'=> $this->createActionButtons(array('updateDetail','delete')),
+                    'buttons'=>array(
+//                        'update'=>array(
+//                            'visible'=> '$data->canUpdate()',
+//                        ),
+//                        'delete'=>array(
+//                            'visible'=> '$data->canDelete()',
+//                        ),
+                        'updateDetail'=>array(
+                            'label'=>'Cập nhật chi tiết',
+                            'imageUrl'=>Yii::app()->theme->baseUrl . '/img/update.png',
+                            'options'=>array('class'=>'updateDetail'),
+                            'url'=>'Yii::app()->createAbsoluteUrl("admin/PromotionsDetail/updateDetail",
+                                array("id"=>$data->id) )',
+
+                        ),
+                    ),
+                ),
 	),
 )); 
 ?>
-

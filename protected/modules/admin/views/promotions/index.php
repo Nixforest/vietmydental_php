@@ -129,6 +129,6 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
     });
     
     function BindClickView(){
-        $(".createDetail").colorbox({iframe:true,innerHeight:'550', innerWidth: '850',close: "<span title='close'>close</span>"});
+        $(".createDetail").colorbox({iframe:true,innerHeight:'600', innerWidth: '1000',close: "<span title='close'>close</span>"});
     }
 </script>

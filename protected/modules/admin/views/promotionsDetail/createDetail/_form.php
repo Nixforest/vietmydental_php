@@ -17,7 +17,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'customer_types_id'); ?>
-		<?php echo $form->textField($model,'customer_types_id',[]); ?>
+                <?php echo $form->dropDownList($model,'customer_types_id', CustomerTypes::loadItems(), array('class'=>'','empty'=>'Select')); ?>
 		<?php echo $form->error($model,'customer_types_id'); ?>
 	</div>
         
@@ -33,21 +33,21 @@
 		<?php echo $form->error($model,'discount'); ?>
 	</div>
 
-<!--	<div class="row">
-		<?php // echo $form->labelEx($model,'treatments'); ?>
+	<div class="row">
+		<?php echo $form->labelEx($model,'treatments'); ?>
                 <?php
-//                   $this->widget('ext.multiselect.JMultiSelect',array(
-//                         'model'=>$model,
-//                         'attribute'=>'treatments',
-//                         'data'=> $mAgents->getAgentList(),
-//                         // additional javascript options for the MultiSelect plugin
-//                        'options'=>array('selectedList' => 30,),
-//                         // additional style
-//                         'htmlOptions'=>array('style' => 'width: 600px;'),
-//                   ));    
+                   $this->widget('ext.multiselect.JMultiSelect',array(
+                         'model'=>$model,
+                         'attribute'=>'treatments',
+                         'data'=> TreatmentTypes::loadItems(),
+                         // additional javascript options for the MultiSelect plugin
+                        'options'=>array('selectedList' => 30,),
+                         // additional style
+                         'htmlOptions'=>array('style' => 'width: 600px;'),
+                   ));    
                ?>
-		<?php // echo $form->error($model,'treatments'); ?>
-	</div>-->
+		<?php echo $form->error($model,'treatments'); ?>
+	</div>
 
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
@@ -56,3 +56,4 @@
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+<?php include '_view_list.php'; ?>

@@ -61,6 +61,8 @@ class PromotionsDetail extends CActiveRecord
                         self::HAS_MANY, 'OneMany', 'one_id',
                         'on'    => 'type = ' . OneMany::TYPE_PROMOTION_TREATMENT_TYPE,
                     ),
+                    'rPromotion' => array(self::BELONGS_TO, 'Promotions', 'promotion_id'),
+                    'rCustomerType' => array(self::BELONGS_TO, 'CustomerTypes', 'customer_types_id'),
 		);
 	}
 
@@ -71,9 +73,9 @@ class PromotionsDetail extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'customer_types_id' => 'Customer Types',
-			'discount' => 'Discount',
-			'description' => 'Description',
+			'customer_types_id' => 'Loại khách hàng',
+			'discount' => 'Giảm giá',
+			'description' => 'Mô tả',
 		);
 	}
 
@@ -112,10 +114,10 @@ class PromotionsDetail extends CActiveRecord
                 $tableName = OneMany::model()->tableName();
                 $aRowInsert = [];
                 $typeOneMany = OneMany::TYPE_PROMOTION_TREATMENT_TYPE;
-                foreach ($this->treatments as $key => $agent_id) {
+                foreach ($this->treatments as $key => $treatment_type_id) {
                     $aRowInsert[] = "(
                         '{$this->id}',
-                        '{$agent_id}',
+                        '{$treatment_type_id}',
                         '{$typeOneMany}'
                         )";
                 }
@@ -140,5 +142,78 @@ class PromotionsDetail extends CActiveRecord
             foreach ($aOneMany as $key => $mOnemany) {
                 $mOnemany->delete();
             }
+        }
+        
+        /**
+         * search by promotion
+         * @return \CActiveDataProvider
+         */
+        public function searchByPromotion()
+	{
+            if(empty($this->promotion_id)){
+                return null;
+            }
+            $criteria   =   new CDbCriteria;
+            $criteria->compare('promotion_id',$this->promotion_id);
+            return new CActiveDataProvider($this, array(
+                    'criteria'=>$criteria,
+            ));
+        }
+        
+        /**
+         * get field name of model
+         * @param string $field
+         * @return string
+         */
+        public function getField($field = 'id'){
+            return !empty($this->$field) ? $this->$field : '';
+        }
+        
+        /**
+         * get string name of customer type
+         * @return string
+         */
+        public function getCustomerType(){
+            return !empty($this->rCustomerType) ? $this->rCustomerType->name : '';
+        }
+        
+        /**
+         * delete join
+         * @return parent
+         */
+        public function beforeDelete() {
+            $this->deleteJoin();
+            return parent::beforeDelete();
+        }
+        
+        /**
+         * get treatment type
+         * @return string
+         */
+        public function getTreatmentTypes(){
+            $strResult = [];
+            $aOneMany = $this->rJoinTreatmentType;
+            $agent = [];
+            foreach ($aOneMany as $key => $mOnemany) {
+                $agent[] = $mOnemany->many_id;
+            }
+            $criteria = new CDbCriteria;
+            $criteria->addInCondition('id', $agent);
+            $aTreatmentTypes = TreatmentTypes::model()->findAll($criteria);
+            foreach ($aTreatmentTypes as $key => $mTreatmentTypes) {
+                $strResult[] = $mTreatmentTypes->name;
+            }
+            return implode('<br>', $strResult);
+        }
+        
+        /**
+         * set list treat ment of model to $treatments
+         */
+        public function setTreatmentType(){
+            $aOneMany = $this->rJoinTreatmentType;
+            foreach ($aOneMany as $key => $mOnemany) {
+                $this->treatments[$mOnemany->many_id] = $mOnemany->many_id;
+            }
+            
         }
 }
