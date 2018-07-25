@@ -59,7 +59,10 @@ class Customers extends BaseActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, city_id, district_id', 'required'),
+                        //++ BUG0041-IMT (DuongNV 20180725) Un required district when create patient
+//			array('name, city_id, district_id', 'required'),
+			array('name, city_id', 'required'),
+                        //-- BUG0041-IMT (DuongNV 20180725) Un required district when create patient
 			array('gender, city_id, district_id, ward_id, type_id, career_id, status', 'numerical', 'integerOnly'=>true),
 			array('name, house_numbers', 'length', 'max'=>255),
 			array('year_of_birth', 'length', 'max'=>4),
