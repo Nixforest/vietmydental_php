@@ -81,6 +81,7 @@ class PromotionDetails extends CActiveRecord
 			'customer_types_id' => 'Loại khách hàng',
 			'discount' => 'Giảm giá',
 			'description' => 'Mô tả',
+			'treatments' => 'Loại điều trị',
 		);
 	}
 

@@ -99,7 +99,7 @@ $mAgents = new Agents();
 		<?php echo $form->error($model,'agents'); ?>
 	</div>
 
-	<div class="row">
+	<div class="row" style='display:none;'>
 		<?php echo $form->labelEx($model,'status'); ?>
                 <?php echo $form->dropDownList($model,'status', $model->getArrayStatus(), array('class'=>'')); ?>
 		<?php echo $form->error($model,'status'); ?>
