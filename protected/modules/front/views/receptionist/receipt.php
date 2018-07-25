@@ -299,7 +299,8 @@
             success: function(data) {
                 // After submit
                 if (fnIsDataSuccess(data)) {
-                    setTimeout("$('#dialogId').dialog(opt).dialog('close')", 1000);
+//                    setTimeout("$('#dialogId').dialog(opt).dialog('close')", 1000);
+                    setTimeout("$('.ui-icon.ui-icon-closethick').click()", 1000);
                 } else {    // Load first time
                     fnLoadDialogContent(data,
                        '<?php echo DomainConst::CONTENT00374; ?>',

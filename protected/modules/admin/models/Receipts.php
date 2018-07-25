@@ -264,6 +264,18 @@ class Receipts extends CActiveRecord
     }
     
     /**
+     * Get customer id
+     * @return Customer id, or empty
+     */
+    public function getCustomerId() {
+        $model = $this->getCustomer();
+        if ($model != NULL) {
+            return $model->id;
+        }
+        return '';
+    }
+    
+    /**
      * Get customer record number
      * @return Customer record number, or empty
      */
@@ -454,9 +466,11 @@ class Receipts extends CActiveRecord
 //                '<br>' . DomainConst::CONTENT00373, DomainConst::IMG_PRINT_ALL_ICON,
 //                '{createPrintDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');}',
 //                'cursor: pointer;');
+        $customerId = $this->getCustomerId();
         $rightContent .= HtmlHandler::createBstAjaxButton(
                 DomainConst::CONTENT00373, 'fas fa-print',
-                '{createPrintDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');}',
+//                '{createPrintDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');}',
+                '{fnOpenPrintReceipt(\'' . $customerId . '\');}',
                 'cursor: pointer;');
         //-- BUG0038-IMT (DuongNV 201807) Update UI receipt
         $rightContent .=                '</td>';
