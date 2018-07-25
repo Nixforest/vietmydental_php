@@ -1,6 +1,6 @@
 <?php
 
-class PromotionsDetailController extends AdminController
+class PromotionDetailsController extends AdminController
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -62,14 +62,14 @@ class PromotionsDetailController extends AdminController
 	 */
 	public function actionCreate()
 	{
-		$model=new PromotionsDetail;
+		$model=new PromotionDetails;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['PromotionsDetail']))
+		if(isset($_POST['PromotionDetails']))
 		{
-			$model->attributes=$_POST['PromotionsDetail'];
+			$model->attributes=$_POST['PromotionDetails'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -91,9 +91,9 @@ class PromotionsDetailController extends AdminController
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['PromotionsDetail']))
+		if(isset($_POST['PromotionDetails']))
 		{
-			$model->attributes=$_POST['PromotionsDetail'];
+			$model->attributes=$_POST['PromotionDetails'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -122,7 +122,7 @@ class PromotionsDetailController extends AdminController
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('PromotionsDetail');
+		$dataProvider=new CActiveDataProvider('PromotionDetails');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -133,10 +133,10 @@ class PromotionsDetailController extends AdminController
 	 */
 	public function actionAdmin()
 	{
-		$model=new PromotionsDetail('search');
+		$model=new PromotionDetails('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['PromotionsDetail']))
-			$model->attributes=$_GET['PromotionsDetail'];
+		if(isset($_GET['PromotionDetails']))
+			$model->attributes=$_GET['PromotionDetails'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -147,12 +147,12 @@ class PromotionsDetailController extends AdminController
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return PromotionsDetail the loaded model
+	 * @return PromotionDetails the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=PromotionsDetail::model()->findByPk($id);
+		$model=PromotionDetails::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -160,7 +160,7 @@ class PromotionsDetailController extends AdminController
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param PromotionsDetail $model the model to be validated
+	 * @param PromotionDetails $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
@@ -178,11 +178,11 @@ class PromotionsDetailController extends AdminController
         public function actionCreateDetail($id){
             $this->pageTitle = $this->getPageTitleByAction('createDetail');
             $this->layout='//layouts/ajax';
-            $model = new PromotionsDetail('create');
+            $model = new PromotionDetails('create');
             $model->promotion_id = $id;
-            if(isset($_POST['PromotionsDetail']))
+            if(isset($_POST['PromotionDetails']))
             {
-                    $model->attributes=$_POST['PromotionsDetail'];
+                    $model->attributes=$_POST['PromotionDetails'];
                     $model->validate();
                     if(!$model->hasErrors()){
                         $model->handleSave();
@@ -203,9 +203,9 @@ class PromotionsDetailController extends AdminController
             $this->layout='//layouts/ajax';
             $model = $this->loadModel($id);
             $model->setTreatmentType();
-            if(isset($_POST['PromotionsDetail']))
+            if(isset($_POST['PromotionDetails']))
             {
-                    $model->attributes=$_POST['PromotionsDetail'];
+                    $model->attributes=$_POST['PromotionDetails'];
                     $model->validate();
                     if(!$model->hasErrors()){
                         $model->handleSave();

@@ -298,7 +298,7 @@ class Promotions extends CActiveRecord
              if(empty($this->id)){
                 return null;
             }
-            $mPromotionDetail = new PromotionsDetail('search');
+            $mPromotionDetail = new PromotionDetails('search');
             $criteria   =   new CDbCriteria;
             $criteria->compare('promotion_id',$this->id);
             return new CActiveDataProvider($mPromotionDetail, array(

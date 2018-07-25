@@ -1,6 +1,6 @@
 <?php
-/* @var $this PromotionsDetailController */
-/* @var $model PromotionsDetail */
+/* @var $this PromotionDetailsController */
+/* @var $model PromotionDetails */
 /* @var $form CActiveForm */
 ?>
 
@@ -48,7 +48,13 @@
                ?>
 		<?php echo $form->error($model,'treatments'); ?>
 	</div>
-
+        
+        <div class="row">
+		<?php echo $form->labelEx($model,'status'); ?>
+                <?php echo $form->dropDownList($model,'status', $model->getArrayStatus(), array('class'=>'')); ?>
+		<?php echo $form->error($model,'status'); ?>
+	</div>
+        
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
 	</div>

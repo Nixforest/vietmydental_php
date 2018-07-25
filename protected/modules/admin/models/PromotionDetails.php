@@ -8,15 +8,20 @@
  * @property string $customer_types_id
  * @property double $discount
  * @property string $description
+ * @property string $status
+ * @property string $created_date
+ * @property string $created_by
  * @property int $promotion_id
  */
-class PromotionsDetail extends CActiveRecord
+class PromotionDetails extends CActiveRecord
 {
     public $treatments;
+    const STATUS_ACTIVE = 1;
+    const STATUS_INACTIVE = 2;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return PromotionsDetail the static model class
+	 * @return PromotionDetails the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -28,7 +33,7 @@ class PromotionsDetail extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'promotions_detail';
+		return 'promotion_details';
 	}
 
 	/**
@@ -39,12 +44,12 @@ class PromotionsDetail extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('customer_types_id, treatments,discount, description', 'required','on'=>'create,update'),
+			array('treatments,discount, description', 'required','on'=>'create,update'),
 			array('discount', 'numerical'),
 			array('customer_types_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('customer_types_id,treatments, discount, description,promotion_id', 'safe'),
+			array('status,customer_types_id,treatments, discount, description,promotion_id', 'safe'),
 			array('id, promotion_id ,customer_types_id, discount, description', 'safe', 'on'=>'search'),
 		);
 	}
@@ -105,7 +110,7 @@ class PromotionsDetail extends CActiveRecord
          */
         public function handleSave(){
             if($this->scenario == 'create'){
-//                do somthing
+                $this->created_by = Yii::app()->user->id;
             }else{
                 $this->deleteJoin();
             }
@@ -151,7 +156,7 @@ class PromotionsDetail extends CActiveRecord
         public function searchByPromotion()
 	{
             if(empty($this->promotion_id)){
-                return null;
+                return new CActiveDataProvider();
             }
             $criteria   =   new CDbCriteria;
             $criteria->compare('promotion_id',$this->promotion_id);
@@ -215,5 +220,16 @@ class PromotionsDetail extends CActiveRecord
                 $this->treatments[$mOnemany->many_id] = $mOnemany->many_id;
             }
             
+        }
+        
+        /**
+         * get array status
+         * @return array
+         */
+        public function getArrayStatus(){
+            return [
+                self::STATUS_ACTIVE => 'Hoạt động',
+                self::STATUS_INACTIVE => 'Không hoạt động',
+            ];
         }
 }

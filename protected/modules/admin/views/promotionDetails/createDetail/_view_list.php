@@ -46,7 +46,7 @@
                             'label'=>'Cập nhật chi tiết',
                             'imageUrl'=>Yii::app()->theme->baseUrl . '/img/update.png',
                             'options'=>array('class'=>'updateDetail'),
-                            'url'=>'Yii::app()->createAbsoluteUrl("admin/PromotionsDetail/updateDetail",
+                            'url'=>'Yii::app()->createAbsoluteUrl("admin/PromotionDetails/updateDetail",
                                 array("id"=>$data->id) )',
 
                         ),
