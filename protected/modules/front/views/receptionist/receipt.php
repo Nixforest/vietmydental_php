@@ -16,8 +16,11 @@
            <?php echo DomainConst::CONTENT00253; ?>
         </div>
         <div class="info-content">
-            <div id="left-content">
-                <div class="scroll-table">
+            <!--//++ BUG0037-IMT  (DuongNV 201807) Update UI receipt-->
+            <div id="left-content" style="text-align:center">
+                <!--<div class="scroll-table">-->
+                <div>
+                <!--//-- BUG0037-IMT  (DuongNV 201807) Update UI receipt-->
                     <table id="customer-info" style="display: none;">
                         <thead>
                             <tr>
@@ -46,7 +49,9 @@
                             <?php endforeach; ?>
                         </tbody>
                     </table>
-                    <table id="customer-info">
+                    <!--//++ BUG0037-IMT  (DuongNV 201807) Update UI receipt-->
+                    <table id="customer-info" class="table table-striped table-bordered lp-table" style="background:white">
+                    <!--//-- BUG0037-IMT  (DuongNV 201807) Update UI receipt-->
                         <thead>
                             <tr>
                                 <th><?php echo DomainConst::CONTENT00254; ?></th>
@@ -146,9 +151,14 @@
                 )); ?>
                 <?php if ($isToday == true): ?>
                 <?php // echo HtmlHandler::createButton(Yii::app()->createAbsoluteUrl('front/receptionist/receiptOld'), DomainConst::CONTENT00360) ?>
-                <?php echo HtmlHandler::createButtonWithImage(Yii::app()->createAbsoluteUrl('front/receptionist/receiptOld'),
+                <!--//++ BUG0038-IMT  (DuongNV 201807) Update UI receipt-->
+                <?php // echo HtmlHandler::createButtonWithImage(Yii::app()->createAbsoluteUrl('front/receptionist/receiptOld'),
+//                        DomainConst::CONTENT00360,
+//                        DomainConst::IMG_RECEIPT_ICON) ?>
+                <?php echo HtmlHandler::createBstButton(Yii::app()->createAbsoluteUrl('front/receptionist/receiptOld'),
                         DomainConst::CONTENT00360,
-                        DomainConst::IMG_RECEIPT_ICON) ?>
+                        'fas fa-receipt') ?>
+                <!--//-- BUG0038-IMT  (DuongNV 201807) Update UI receipt-->
                 <?php endif; // end if (condition) ?>
             </div>
         </div>
@@ -289,7 +299,8 @@
             success: function(data) {
                 // After submit
                 if (fnIsDataSuccess(data)) {
-                    setTimeout("$('#dialogId').dialog(opt).dialog('close')", 1000);
+//                    setTimeout("$('#dialogId').dialog(opt).dialog('close')", 1000);
+                    setTimeout("$('.ui-icon.ui-icon-closethick').click()", 1000);
                 } else {    // Load first time
                     fnLoadDialogContent(data,
                        '<?php echo DomainConst::CONTENT00374; ?>',
