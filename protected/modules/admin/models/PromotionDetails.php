@@ -47,12 +47,12 @@ class PromotionDetails extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('treatments,type,discount, description', 'required','on'=>'create,update'),
+			array('type,discount, description', 'required','on'=>'create,update'),
 			array('discount', 'numerical'),
 			array('customer_types_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('status,type,customer_types_id, discount, description,promotion_id', 'safe'),
+			array('status,type,customer_types_id,treatments, discount, description,promotion_id', 'safe'),
 			array('id, promotion_id ,customer_types_id, discount, description', 'safe', 'on'=>'search'),
 		);
 	}
