@@ -84,11 +84,6 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'value' => '$data->getAgents()'
                 ),
                 array(
-                    'header' => DomainConst::CONTENT00404,
-                    'type' => 'raw',
-                    'value' => '$data->getType()'
-                ),
-                array(
                     'header' => DomainConst::CONTENT00054,
                     'type' => 'raw',
                     'value' => '$data->getCreatedBy()'

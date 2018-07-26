@@ -9,7 +9,6 @@
  * @property string $description
  * @property string $start_date
  * @property string $end_date
- * @property integer $type
  * @property integer $status
  * @property string $created_date
  * @property string $created_by
@@ -17,8 +16,6 @@
 class Promotions extends CActiveRecord
 {
     public $agents;
-    const TYPE_DISCOUNT = 1;// Trừ theo phần trăm
-    const TYPE_SERVICE = 2; // Trừ theo số tiền
     const STATUS_ACTIVE = 1;
     const STATUS_INACTIVE = 2;
 	/**
@@ -47,13 +44,13 @@ class Promotions extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('title, start_date, end_date, type, agents ,created_by', 'required','on'=>'update,create'),
-			array('type, status', 'numerical', 'integerOnly'=>true),
+			array('title, start_date, end_date, agents ,created_by', 'required','on'=>'update,create'),
+			array('status', 'numerical', 'integerOnly'=>true),
 			array('created_by', 'length', 'max'=>10),
-			array('title, description, start_date, end_date, type, status,agents,', 'safe'),
+			array('title, description, start_date, end_date, status,agents,', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, title, description, start_date, end_date, type, status, created_date, created_by', 'safe', 'on'=>'search'),
+			array('id, title, description, start_date, end_date, status, created_date, created_by', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -79,16 +76,15 @@ class Promotions extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'title' => 'Tiêu đề',
-			'description' => 'Mô tả',
-			'start_date' => 'Ngày bắt đầu',
-			'end_date' => 'Ngày kết thúc',
-			'type' => 'Loại khuyến mãi',
-			'status' => 'Trạng thái',
-			'created_date' => 'Ngày tạo',
-			'created_by' => 'Người tạo',
-			'agents' => 'Chi nhánh',
+			'id' => DomainConst::KEY_ID,
+			'title' => DomainConst::CONTENT00004,
+			'description' => DomainConst::CONTENT00062,
+			'start_date' => DomainConst::CONTENT00139,
+			'end_date' => DomainConst::CONTENT00140,
+			'status' => DomainConst::CONTENT00026,
+			'created_date' => DomainConst::CONTENT00010,
+			'created_by' => DomainConst::CONTENT00054,
+			'agents' => DomainConst::CONTENT00199,
 		);
 	}
 
@@ -108,7 +104,6 @@ class Promotions extends CActiveRecord
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('start_date',$this->start_date,true);
 		$criteria->compare('end_date',$this->end_date,true);
-		$criteria->compare('type',$this->type);
 		$criteria->compare('status',$this->status);
 		$criteria->compare('created_date',$this->created_date,true);
 		$criteria->compare('created_by',$this->created_by,true);
@@ -153,24 +148,13 @@ class Promotions extends CActiveRecord
         }
         
         /**
-         * get array of type
-         * @return array
-         */
-        public function getArrayType(){
-            return [
-                self::TYPE_DISCOUNT => 'Chiết khấu',
-                self::TYPE_SERVICE => 'Dịch vụ',
-            ];
-        }
-        
-        /**
          * get array status
          * @return array
          */
         public function getArrayStatus(){
             return [
-                self::STATUS_ACTIVE => 'Hoạt động',
-                self::STATUS_INACTIVE => 'Không hoạt động',
+                self::STATUS_ACTIVE => DomainConst::CONTENT00407,
+                self::STATUS_INACTIVE => DomainConst::CONTENT00408,
             ];
         }
         
@@ -233,15 +217,6 @@ class Promotions extends CActiveRecord
          */
         public function getCreatedBy(){
             return !empty($this->rUsers) ? $this->rUsers->getFullName() : '';
-        }
-        
-        /**
-         * get type of promotions
-         * @return string
-         */
-        public function getType(){
-            $aType = $this->getArrayType();
-            return !empty($aType[$this->type]) ? $aType[$this->type] : '';
         }
         
         /**

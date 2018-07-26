@@ -37,7 +37,6 @@ $mAgents = new Agents();
                     'options'   => array(
                         'showAnim'      => 'fold',
                         'dateFormat'    => DomainConst::DATE_FORMAT_2,
-                        'maxDate'       => '0',
                         'changeMonth'   => true,
                         'changeYear'    => true,
                         'showOn'        => 'button',
@@ -77,11 +76,6 @@ $mAgents = new Agents();
 		<?php echo $form->error($model,'end_date'); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'type'); ?>
-		<?php echo $form->dropDownList($model,'type', $model->getArrayType(), array('class'=>'','empty'=>'Select')); ?>
-		<?php echo $form->error($model,'type'); ?>
-	</div>
         
 	<div class="row">
 		<?php echo $form->labelEx($model,'agents'); ?>

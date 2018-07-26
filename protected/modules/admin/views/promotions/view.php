@@ -44,10 +44,6 @@ $this->createMenu('view', $model);
                     'value' => $model->getAgents()
                 ),
                 array(
-                    'name' => DomainConst::CONTENT00404,
-                    'value' => $model->getType()
-                ),
-                array(
                     'name' => DomainConst::CONTENT00054,
                     'value' => $model->getCreatedBy()
                 ),

@@ -28,6 +28,12 @@
 	</div>
         
 	<div class="row">
+		<?php echo $form->labelEx($model,'type'); ?>
+		<?php echo $form->dropDownList($model,'type', $model->getArrayType(), array('class'=>'','empty'=>'Select')); ?>
+		<?php echo $form->error($model,'type'); ?>
+	</div>
+        
+	<div class="row">
 		<?php echo $form->labelEx($model,'discount'); ?>
 		<?php echo $form->textField($model,'discount',[]); ?>
 		<?php echo $form->error($model,'discount'); ?>

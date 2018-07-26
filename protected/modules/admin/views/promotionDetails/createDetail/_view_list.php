@@ -17,6 +17,11 @@
                     'value' => '$data->getCustomerType()'
                 ),
                 array(
+                    'header' => DomainConst::CONTENT00404,
+                    'type' => 'raw',
+                    'value' => '$data->getType()'
+                ),
+                array(
                     'header' => DomainConst::CONTENT00317,
                     'type' => 'raw',
                     'value' => '$data->getField(\'discount\')'

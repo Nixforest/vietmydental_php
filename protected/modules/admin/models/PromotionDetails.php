@@ -9,6 +9,7 @@
  * @property double $discount
  * @property string $description
  * @property string $status
+ * @property string $type
  * @property string $created_date
  * @property string $created_by
  * @property int $promotion_id
@@ -16,6 +17,8 @@
 class PromotionDetails extends CActiveRecord
 {
     public $treatments;
+    const TYPE_DISCOUNT = 1;// Trừ theo phần trăm
+    const TYPE_SERVICE = 2; // Trừ theo số tiền
     const STATUS_ACTIVE = 1;
     const STATUS_INACTIVE = 2;
 	/**
@@ -44,12 +47,12 @@ class PromotionDetails extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('treatments,discount, description', 'required','on'=>'create,update'),
+			array('treatments,type,discount, description', 'required','on'=>'create,update'),
 			array('discount', 'numerical'),
 			array('customer_types_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('status,customer_types_id,treatments, discount, description,promotion_id', 'safe'),
+			array('status,type,customer_types_id,treatments, discount, description,promotion_id', 'safe'),
 			array('id, promotion_id ,customer_types_id, discount, description', 'safe', 'on'=>'search'),
 		);
 	}
@@ -77,11 +80,11 @@ class PromotionDetails extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'customer_types_id' => 'Loại khách hàng',
-			'discount' => 'Giảm giá',
-			'description' => 'Mô tả',
-			'treatments' => 'Loại điều trị',
+			'id' => DomainConst::KEY_ID,
+			'customer_types_id' => DomainConst::CONTENT00051,
+			'discount' => DomainConst::CONTENT00317,
+			'description' => DomainConst::CONTENT00062,
+			'treatments' => DomainConst::CONTENT00128,
 		);
 	}
 
@@ -99,6 +102,7 @@ class PromotionDetails extends CActiveRecord
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('customer_types_id',$this->customer_types_id,true);
 		$criteria->compare('discount',$this->discount);
+		$criteria->compare('type',$this->type);
 		$criteria->compare('description',$this->description,true);
 
 		return new CActiveDataProvider($this, array(
@@ -229,8 +233,29 @@ class PromotionDetails extends CActiveRecord
          */
         public function getArrayStatus(){
             return [
-                self::STATUS_ACTIVE => 'Hoạt động',
-                self::STATUS_INACTIVE => 'Không hoạt động',
+                self::STATUS_ACTIVE => DomainConst::CONTENT00407,
+                self::STATUS_INACTIVE => DomainConst::CONTENT00408,
             ];
+        }
+        
+        /**
+         * get array of type
+         * @return array
+         */
+        public function getArrayType(){
+            return [
+                self::TYPE_DISCOUNT => DomainConst::CONTENT00405,
+                self::TYPE_SERVICE => DomainConst::CONTENT00406,
+            ];
+        }
+        
+                
+        /**
+         * get type of promotions
+         * @return string
+         */
+        public function getType(){
+            $aType = $this->getArrayType();
+            return !empty($aType[$this->type]) ? $aType[$this->type] : '';
         }
 }
