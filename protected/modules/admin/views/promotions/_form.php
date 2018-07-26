@@ -18,7 +18,7 @@ $mAgents = new Agents();
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'title'); ?>
-		<?php echo $form->textArea($model,'title',array('rows'=>3, 'cols'=>50,'style'=>'width:600px;')); ?>
+		<?php echo $form->textField($model,'title',array('style'=>'width:600px;')); ?>
 		<?php echo $form->error($model,'title'); ?>
 	</div>
 
