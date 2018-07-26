@@ -125,6 +125,7 @@ class PromotionDetails extends CActiveRecord
                 $tableName = OneMany::model()->tableName();
                 $aRowInsert = [];
                 $typeOneMany = OneMany::TYPE_PROMOTION_TREATMENT_TYPE;
+                if(!empty($this->treatments))
                 foreach ($this->treatments as $key => $treatment_type_id) {
                     $aRowInsert[] = "(
                         '{$this->id}',

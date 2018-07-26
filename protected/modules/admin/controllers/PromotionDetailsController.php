@@ -205,6 +205,7 @@ class PromotionDetailsController extends AdminController
             $model->setTreatmentType();
             if(isset($_POST['PromotionDetails']))
             {
+                    $model->treatments  = '';
                     $model->attributes=$_POST['PromotionDetails'];
                     $model->validate();
                     if(!$model->hasErrors()){
