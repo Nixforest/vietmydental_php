@@ -188,4 +188,12 @@ class PromotionsController extends AdminController
 			Yii::app()->end();
 		}
 	}
+        
+        /**
+         * create detail of promotions
+         * @param int $id
+         */
+        public function actionCreateDetail($id){
+            $this->redirect(Yii::app()->createAbsoluteUrl('admin/promotionDetails/createDetail',['id'=>$id]));
+        }
 }
