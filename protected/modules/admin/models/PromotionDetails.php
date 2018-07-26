@@ -85,6 +85,7 @@ class PromotionDetails extends CActiveRecord
 			'discount' => DomainConst::CONTENT00317,
 			'description' => DomainConst::CONTENT00062,
 			'treatments' => DomainConst::CONTENT00128,
+			'type' => DomainConst::CONTENT00404,
 		);
 	}
 
