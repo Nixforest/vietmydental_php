@@ -341,19 +341,36 @@ class AjaxController extends AdminController
 //                    $criteria->addCondition("t.name like '%$keyword%' or t.phone like '%$keyword%' or YEAR(t.date_of_birth) like '%$keyword%' or t.year_of_birth like '%$keyword%'");
                     $criteria->limit = 50;
     //                $criteria->compare("t.status", DomainConst::DEFAULT_STATUS_ACTIVE);
-                    $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
+//                    ++ BUG0047-IMT (NamNH  20180727) add fix bug find like
+//                    $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
+//                    -- BUG0047-IMT (NamNH  20180727) add fix bug find like
                     if (isset($keywordArr["customer_find"])) {
                         $name = $keywordArr["customer_find"];
-                        $criteria->addCondition("t.name like'%$name%'");
+//                        ++ BUG0047-IMT (NamNH  20180727) add fix bug find like
+//                        $criteria->addCondition("t.name like'%$name%'");
+                        $criteria->compare('t.name',$name,true,'OR');
+                        $criteria->compare('t.phone',$name,true,'OR');
+                        $criteria->compare('t.address',$name,true,'OR');
+//                        pare to int
+                        if((int)$name > 0){
+                            $criteria->compare('t.year_of_birth',$name,false,'OR');
+                        }
+//                        -- BUG0047-IMT (NamNH  20180727) add fix bug find like
+
                     }
-                    if (isset($keywordArr["customer_find_phone"])) {
-                        $phone = $keywordArr["customer_find_phone"];
-                        $criteria->addCondition("t.phone like'%$phone%'");
-                    }
-                    if (isset($keywordArr["customer_find_address"])) {
-                        $address = $keywordArr["customer_find_address"];
-                        $criteria->addCondition("t.address like'%$address%'");
-                    }
+//                    ++ BUG0047-IMT (NamNH  20180727) add fix bug find like
+                    $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
+//                    -- BUG0047-IMT (NamNH  20180727) add fix bug find like
+//                        ++ BUG0047-IMT (NamNH  20180727) add fix bug find like
+//                    if (isset($keywordArr["customer_find_phone"])) {
+//                        $phone = $keywordArr["customer_find_phone"];
+//                        $criteria->addCondition("t.phone like'%$phone%'");
+//                    }
+//                    if (isset($keywordArr["customer_find_address"])) {
+//                        $address = $keywordArr["customer_find_address"];
+//                        $criteria->addCondition("t.address like'%$address%'");
+//                    }
+//                        -- BUG0047-IMT (NamNH  20180727) add fix bug find like
                     $agentId = '';
                     if (isset($keywordArr["customer_find_agent"])) {
                         $agentId = $keywordArr["customer_find_agent"];
