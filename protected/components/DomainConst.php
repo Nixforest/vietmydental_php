@@ -1411,4 +1411,9 @@ class DomainConst {
     const CONTENT00401  = 'Bảng tổng hợp Thu - Chi';
     const CONTENT00402  = 'Mới';
     const CONTENT00403  = 'Hủy';
+    const CONTENT00404  = 'Loại khuyến mãi';
+    const CONTENT00405  = 'KM chiết khấu';
+    const CONTENT00406  = 'KM khấu trừ';
+    const CONTENT00407  = 'Hoạt động';
+    const CONTENT00408  = 'Không hoạt động';
 }

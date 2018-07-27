@@ -491,4 +491,14 @@ class Agents extends BaseActiveRecord
         return $aData;
     }
 
+    /**
+     *  load all model to list id => name 
+     * @return array
+     */
+    public function getAgentList(){
+        $models = self::model()->findAll(array(
+            'order' => 'id ASC',
+        ));
+        return  CHtml::listData($models,'id','name');
+    }
 }
