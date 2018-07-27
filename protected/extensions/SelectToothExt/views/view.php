@@ -11,34 +11,7 @@ $labelStyle = "padding-top: 0px; width: auto; float: center;";
 <!--//++ BUG0043-IMT (DuongNV 20180727) Update UI select tooth-->
 <!--Rang-->
 <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version="1.1" width="289.61084" height="370.54398">      
-  <title id="title3476">Human Dental Arches</title>
-  <metadata id="metadata8">
-    <rdf:RDF>
-      <cc:Work 
-	    rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-        <dc:title>Human Dental Arches</dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <defs>
-    <marker refX="0" refY="0" orient="auto" overflow="visible">
-      <circle r="0.8" cy="0" cx="3"/>
-      <circle r="0.8" cy="0" cx="6.5"/>
-      <circle r="0.8" cy="0" cx="10"/>
-    </marker>
-    <marker orient="auto" refY="0" refX="0" overflow="visible">
-      <path d="m5.77 0-8.65 5 0-10 8.65 5z" transform="scale(-0.2,-0.2)" style="fill-rule:evenodd;marker-start:none;stroke-width:1pt;stroke:#000"/>
-    </marker>
-    <marker orient="auto" refY="0" refX="0" overflow="visible">
-      <path d="M0 0 5-5-12.5 0 5 5 0 0z" transform="matrix(0.2,0,0,0.2,1.2,0)" style="fill-rule:evenodd;marker-start:none;stroke-width:1pt;stroke:#000"/>
-    </marker>
-    <marker orient="auto" refY="0" refX="0" overflow="visible">
-      <path d="M0 0 5-5-12.5 0 5 5 0 0z" transform="matrix(0.8,0,0,0.8,10,0)" style="fill-rule:evenodd;marker-start:none;stroke-width:1pt;stroke:#000"/>
-    </marker>
-  </defs>
+
   <path
     class="tooth-11 tparent-11"
     d="m 113.894,31.723601 c 0.0561,0.43476 3.08165,4.91178 3.84449,6.93412 1.03137,2.18327 2.67371,4.15697 7.0469,5.19412 3.57083,-0.36803 7.19248,-0.4467 10.19825,-4.03315 l 7.38989,-9.40518 1.34756,-2.99193 c 0.97308,-2.16029 -1.13419,-4.14679 -3.10702,-4.99829 l -5.34936,-1.19716 c -3.12438,-0.16807 -5.19809,-0.93656 -11.30278,0.59905 l -5.72815,1.04816 c -2.08382,0.77109 -4.86648,0.46927 -4.92056,4.35665 0.10953,1.48595 -0.58405,2.8577 0.58078,4.49361 z"
