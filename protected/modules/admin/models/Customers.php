@@ -113,6 +113,9 @@ class Customers extends BaseActiveRecord
                         'on' => 'status!=' . DomainConst::DEFAULT_STATUS_INACTIVE,
                         'order' => 'id ASC',
                         ),
+                    'rAgents' =>array(self::MANY_MANY, 'Agents', 'one_many(many_id,one_id)',
+                        'condition' => 'rAgents_rAgents.type = ' . OneMany::TYPE_AGENT_CUSTOMER,
+                        'order'=> 'rAgents_rAgents.id DESC') ,
 		);
 	}
 

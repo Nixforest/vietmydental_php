@@ -1411,4 +1411,6 @@ class DomainConst {
     const CONTENT00401  = 'Bảng tổng hợp Thu - Chi';
     const CONTENT00402  = 'Mới';
     const CONTENT00403  = 'Hủy';
+    const CONTENT_WEBSITE  = 'http://nhakhoavietmy.com.vn';
+    const CONTENT_AGENT  = 'NHA KHOA VIỆT MỸ';
 }
