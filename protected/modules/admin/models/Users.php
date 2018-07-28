@@ -140,6 +140,9 @@ class Users extends BaseActiveRecord
                         self::HAS_MANY, 'ApiUserTokens', 'user_id',
                         'order' => 'id DESC',
                     ),
+                    'rAgents' =>array(self::MANY_MANY, 'Agents', 'one_many(many_id,one_id)',
+                        'condition' => 'rAgents_rAgents.type = ' . OneMany::TYPE_AGENT_USER,
+                        'order'=> 'rAgents_rAgents.id DESC') ,
 		);
 	}
 

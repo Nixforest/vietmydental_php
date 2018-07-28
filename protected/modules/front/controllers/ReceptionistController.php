@@ -484,6 +484,8 @@ class ReceptionistController extends FrontController {
             'model'         => $model,
             'receiptId'     => $receiptId,
             'customer'      => $customer,
+//            'aAgent'        => $customer->rAgents,
+            'mAgent'        => CommonProcess::getUserAgent(),
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }

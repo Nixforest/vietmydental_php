@@ -24,17 +24,31 @@
                 <td colspan="23">
                     <table class="table table-borderless">
                         <?php
+//                            $address = "128 Huỳnh Tấn Phát P. Phú Mỹ, Quận 7, TP HCM";
+//                            $phone = "028.3785.8989";
+//                            $website = "http://nhakhoavietmy.com.vn";
+//                            $agentName = "";
+//                            if (isset($model->rJoinAgent) && isset($model->rJoinAgent->rAgent)) {
+//                                $address = $model->rJoinAgent->rAgent->address;
+//                                $phone = $model->rJoinAgent->rAgent->phone;
+//                                $agentName = " - " . $model->rJoinAgent->rAgent->name;
+//                            }
+//                            $address    = (!empty($aAgent) ? $aAgent[0]->address : '');
+//                            $phone      = (!empty($aAgent) ?$aAgent[0]->phone : '');
+//                            $website    = DomainConst::CONTENT_WEBSITE;
+//                            $agentName  = DomainConst::CONTENT_AGENT. ' - '. (!empty($aAgent) ? $aAgent[0]->name : '');
+                            
                             $address = "128 Huỳnh Tấn Phát P. Phú Mỹ, Quận 7, TP HCM";
                             $phone = "028.3785.8989";
-                            $website = "http://nhakhoavietmy.com.vn";
+                            $website = Settings::getDomainSaleWebsite();
                             $agentName = "";
-                            if (isset($model->rJoinAgent) && isset($model->rJoinAgent->rAgent)) {
-                                $address = $model->rJoinAgent->rAgent->address;
-                                $phone = $model->rJoinAgent->rAgent->phone;
-                                $agentName = " - " . $model->rJoinAgent->rAgent->name;
+                            if (isset($mAgent)) {
+                                $address    = $mAgent->address;
+                                $phone      = $mAgent->phone;
+                                $agentName  = Settings::getWebsiteName() . ' - ' . $mAgent->name;
                             }
                         ?>
-                        <tr><td colspan="2"><b>NHA KHOA VIỆT MỸ<?php echo $agentName; ?></b></td></tr>
+                        <tr><td colspan="2"><b><?php echo $agentName; ?></b></td></tr>
                         <tr>
                             <td class="infofont"><?php echo DomainConst::CONTENT00308; ?></td>
                             <td class="infofont">

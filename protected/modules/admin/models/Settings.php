@@ -39,6 +39,8 @@ class Settings extends BaseActiveRecord
     const KEY_NUM_QRCODE_DOWNLOAD_MAX           = 'NUM_QRCODE_DOWNLOAD_MAX';
     /** Key print receipt font size rate */
     const KEY_PRINT_RECEIPT_FONT_SIZE_RATE      = 'PRINT_RECEIPT_FONT_SIZE_RATE';
+    /** Key Website for sale */
+    const KEY_DOMAIN_SALE_WEBSITE               = 'DOMAIN_SALE_WEBSITE';
     
     /* --- App settings --- */
     /** Key Mobile app version iOS */
@@ -385,5 +387,17 @@ class Settings extends BaseActiveRecord
             return $retVal;
         }
         return "150%";
+    }
+    
+    /**
+     * Get domain of sale website
+     * @return string
+     */
+    public static function getDomainSaleWebsite() {
+        $retVal = Settings::getItem(Settings::KEY_DOMAIN_SALE_WEBSITE);
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return DomainConst::CONTENT_WEBSITE;
     }
 }
