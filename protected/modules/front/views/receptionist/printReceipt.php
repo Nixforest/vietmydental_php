@@ -45,7 +45,7 @@
                             if (isset($mAgent)) {
                                 $address    = $mAgent->address;
                                 $phone      = $mAgent->phone;
-                                $agentName  = Settings::getWebsiteName() . ' - ' . $mAgent->name;
+                                $agentName  = $mAgent->getFullName();
                             }
                         ?>
                         <tr><td colspan="2"><b><?php echo $agentName; ?></b></td></tr>
