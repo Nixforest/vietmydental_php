@@ -650,6 +650,19 @@ class CommonProcess {
         }
         return $retVal;
     }
+    
+    /**
+     * Get user agent
+     * @return Agent model or NULL
+     */
+    public static function getUserAgent() {
+        $mUser = Users::model()->findByPk(self::getCurrentUserId());
+        if ($mUser && !empty($mUser->rAgents)) {
+            return $mUser->rAgents[0];
+        }
+        return NULL;
+    }
+    
     //-----------------------------------------------------
     // -- Connection process
     //-----------------------------------------------------

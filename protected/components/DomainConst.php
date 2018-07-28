@@ -117,6 +117,10 @@ class DomainConst {
     const RECEIPT_ID_PREFIX                             = 'PT';
     /** Prefix of refer code id string */
     const REFER_CODE_ID_PREFIX                          = 'QR';
+    /** Website domain */
+    const CONTENT_WEBSITE                               = 'http://nhakhoavietmy.com.vn';
+    /** Website name */
+    const CONTENT_AGENT                                 = 'NHA KHOA VIỆT MỸ';
     
     /** Editor width */
     const EDITOR_WIDTH                                  = '800px';
@@ -1411,6 +1415,4 @@ class DomainConst {
     const CONTENT00401  = 'Bảng tổng hợp Thu - Chi';
     const CONTENT00402  = 'Mới';
     const CONTENT00403  = 'Hủy';
-    const CONTENT_WEBSITE  = 'http://nhakhoavietmy.com.vn';
-    const CONTENT_AGENT  = 'NHA KHOA VIỆT MỸ';
 }
