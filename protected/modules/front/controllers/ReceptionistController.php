@@ -665,13 +665,29 @@ class ReceptionistController extends FrontController {
                 if ($model->save()) {
                     // Remove old record
                     OneMany::deleteAllOldRecords($model->id, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
-                    $index = 0;
-                    foreach (CommonProcess::getListTeeth() as $teeth) {
-                        if (isset($_POST['teeth'][$index]) && ($_POST['teeth'][$index] == DomainConst::CHECKBOX_STATUS_CHECKED)) {
-                            OneMany::insertOne($model->id, $index, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
-                        }
-                        $index++;
+                    //++ BUG0043-IMT (DuongNV 20180727) Update UI select tooth
+//                    $index = 0;
+                    $aTeethData = [];
+                    if (!empty($_POST['teethData'])) {
+                        $strDataRaw = $_POST['teethData'];
+                        $strData = implode(',', array_unique(explode(',', $strDataRaw)));
+                        $aTeethData = explode(',', rtrim($strData, ','));
                     }
+                    $arrTeeth = CommonProcess::getListTeeth(false, '');
+                    foreach ($arrTeeth as $key => $teeth) {
+                        $arrTeeth[$key] = str_replace(' - ', '', $teeth);
+                    }
+                    foreach ($aTeethData as $t) {
+                        $idInsert = array_search($t, $arrTeeth);
+                        OneMany::insertOne($model->id, $idInsert, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+                    }
+//                    foreach (CommonProcess::getListTeeth() as $teeth) {
+//                        if (isset($_POST['teeth'][$index]) && ($_POST['teeth'][$index] == DomainConst::CHECKBOX_STATUS_CHECKED)) {
+//                            OneMany::insertOne($model->id, $index, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+//                        }
+//                        $index++;
+//                    }
+//                    //-- BUG0043-IMT (DuongNV 20180727) Update UI select tooth
 //                    if (isset($_POST[DomainConst::KEY_SUBMIT])) {
                     if (isset($_POST['TreatmentScheduleDetails']['isFinish']) && $_POST['TreatmentScheduleDetails']['isFinish'] == 1) {
                         $model->status = TreatmentScheduleDetails::STATUS_COMPLETED;
@@ -798,13 +814,27 @@ class ReceptionistController extends FrontController {
             if (isset($_POST['TreatmentScheduleDetails'])) {
                 $model->attributes = $_POST['TreatmentScheduleDetails'];
                 if ($model->save()) {
-                    $index = 0;
-                    foreach (CommonProcess::getListTeeth() as $teeth) {
-                        if (isset($_POST['teeth'][$index]) && ($_POST['teeth'][$index] == DomainConst::CHECKBOX_STATUS_CHECKED)) {
-                            OneMany::insertOne($model->id, $index, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
-                        }
-                        $index++;
+                    //++ BUG0043-IMT (DuongNV 20180727) Update UI select tooth
+//                    $index = 0;
+                    $aTeethData = [];
+                    if(!empty($_POST['teethData'])){
+                        $aTeethData = explode(',', rtrim($_POST['teethData'], ','));
                     }
+                    $arrTeeth = CommonProcess::getListTeeth(false, '');
+                    foreach ($arrTeeth as $key => $teeth) {
+                        $arrTeeth[$key] = str_replace(' - ', '', $teeth);
+                    }
+                    foreach ($aTeethData as $t) {
+                        $idInsert = array_search($t, $arrTeeth);
+                        OneMany::insertOne($model->id, $idInsert, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+                    }
+//                    foreach (CommonProcess::getListTeeth() as $teeth) {
+//                        if (isset($_POST['teeth'][$index]) && ($_POST['teeth'][$index] == DomainConst::CHECKBOX_STATUS_CHECKED)) {
+//                            OneMany::insertOne($model->id, $index, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+//                        }
+//                        $index++;
+//                    }
+                    //-- BUG0043-IMT (DuongNV 20180727) Update UI select tooth
                     if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
                         $model->status = TreatmentScheduleDetails::STATUS_COMPLETED;
                         $model->save();
