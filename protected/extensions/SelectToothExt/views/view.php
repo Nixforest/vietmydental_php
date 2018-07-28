@@ -1498,6 +1498,9 @@ $(function(){
             echo '$(".child-tooth-'.$t.'").css("fill", "#f9b436");';
         }
         echo 'listTooth += "'.$t.',";';
+    	//++BUG0043-IMT (DuongNV 20180729) fix save tooth
+        echo '$("#teethData").val(listTooth);';
+        //--BUG0043-IMT (DuongNV 20180729) fix save tooth
     }
     ?>
     $('path[class*="tooth"]').on('click', function(){
