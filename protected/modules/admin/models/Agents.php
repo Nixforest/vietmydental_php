@@ -490,6 +490,14 @@ class Agents extends BaseActiveRecord
         ));
         return $aData;
     }
+    
+    /**
+     * Get full name of agent
+     * @return Full name
+     */
+    public function getFullName() {
+        return Settings::getWebsiteName() . ' - Chi Nhánh ' . $this->name;
+    }
 
     /**
      *  load all model to list id => name 
