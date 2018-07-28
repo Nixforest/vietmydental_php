@@ -668,9 +668,9 @@ class ReceptionistController extends FrontController {
                     //++ BUG0043-IMT (DuongNV 20180727) Update UI select tooth
 //                    $index = 0;
                     $aTeethData = [];
-                    if(!empty($_POST['teethData'])){
+                    if (!empty($_POST['teethData'])) {
                         $strDataRaw = $_POST['teethData'];
-                        $strData = implode(',',array_unique(explode(',', $strDataRaw)));
+                        $strData = implode(',', array_unique(explode(',', $strDataRaw)));
                         $aTeethData = explode(',', rtrim($strData, ','));
                     }
                     $arrTeeth = CommonProcess::getListTeeth(false, '');
