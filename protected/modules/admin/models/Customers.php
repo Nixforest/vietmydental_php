@@ -70,6 +70,8 @@ class Customers extends BaseActiveRecord
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, name, gender, date_of_birth, year_of_birth, phone, email, city_id, district_id, ward_id, street_id, house_numbers, address, type_id, career_id, user_id, status, characteristics, created_by, created_date', 'safe', 'on'=>'search'),
+                        array('type_id', 'safe'),
+
 		);
 	}
 
