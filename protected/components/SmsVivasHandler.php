@@ -6,9 +6,9 @@ class SmsVivasHandler {
      * login to server sms vivas
      */
     public function login() {
-        $input_xml = '<?xml version="1.0" encoding="UTF-8"?><RQST>'
+        $input_xml = '<RQST>'
                 . '<USERNAME>' . VIVAS_USERNAME . '</USERNAME>'
-                . '<PASSWORD>' . $this->getMd5(VIVAS_PASSWORD) . '</PASSWORD>'
+                . '<PASSWORD>' . $this->getSha1(VIVAS_PASSWORD) . '</PASSWORD>'
                 . '</RQST>';
         $headers = array(
             "Content-type: text/xml",
@@ -24,6 +24,7 @@ class SmsVivasHandler {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 300);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        
         $data = curl_exec($ch);
         if (curl_errno($ch)) {
             print curl_error($ch);
@@ -31,12 +32,8 @@ class SmsVivasHandler {
             curl_close($ch);
         }
         
-//        echo '<pre>';
-//        print_r(curl_getinfo($ch, CURLINFO_EFFECTIVE_URL));
-//        echo '</pre>';
-//        die;
-        
         echo '<pre>';
+        echo 'Result: ';
         print_r($data);
         echo '</pre>';
         die;
@@ -48,8 +45,7 @@ class SmsVivasHandler {
      * @return string
      */
     public function getSha1($strInput) {
-//        return sha1($strInput,true);
-        return sha1($strInput);
+        return base64_encode(sha1($strInput, true));
     }
 
     /**
@@ -58,7 +54,6 @@ class SmsVivasHandler {
      * @return string
      */
     public function getMd5($strInput) {
-//        return md5($strInput, true);
         return md5($strInput);
     }
 
