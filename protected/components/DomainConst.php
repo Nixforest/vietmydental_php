@@ -62,6 +62,7 @@ class DomainConst {
     const SPLITTER_TYPE_1                               = ', ';
     const SPLITTER_TYPE_2                               = ',';
     const SPLITTER_TYPE_3                               = '-';
+    const SPLITTER_TYPE_MONEY                           = self::SPLITTER_TYPE_2;
     /** Html space */
     const SPACE                                         = '&nbsp;';
     /** Date format main */
@@ -116,6 +117,10 @@ class DomainConst {
     const RECEIPT_ID_PREFIX                             = 'PT';
     /** Prefix of refer code id string */
     const REFER_CODE_ID_PREFIX                          = 'QR';
+    /** Website domain */
+    const CONTENT_WEBSITE                               = 'http://nhakhoavietmy.com.vn';
+    /** Website name */
+    const CONTENT_AGENT                                 = 'NHA KHOA VIỆT MỸ';
     
     /** Editor width */
     const EDITOR_WIDTH                                  = '800px';
@@ -1415,4 +1420,6 @@ class DomainConst {
     const CONTENT00406  = 'KM khấu trừ';
     const CONTENT00407  = 'Hoạt động';
     const CONTENT00408  = 'Không hoạt động';
+    const CONTENT00409  = 'Tất cả';
+    const CONTENT00410  = '%';
 }
