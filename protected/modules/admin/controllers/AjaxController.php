@@ -476,10 +476,17 @@ class AjaxController extends AdminController
                 $rightContent = $model->getAjaxInfo();
                 $infoSchedule = '';
             }
+            //++ BUG0043-IMT (DuongNV 20180730) Show tooth in receipt screen
+            $aData = array(
+                'model' => $model->rTreatmentScheduleDetail
+                    );
+            $tooth = $this->widget('ext.SelectToothExt.SelectToothExt',
+                    array('data' => $aData), true);
             $json = CJavaScript::jsonEncode(array(
-                'rightContent'  => $rightContent,
+                'rightContent'  => $tooth.$rightContent,
                 'infoSchedule' => $infoSchedule,
             ));
+            //-- BUG0043-IMT (DuongNV 20180730) Show tooth in receipt screen
             echo $json;
             Yii::app()->end();
         }
