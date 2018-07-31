@@ -28,7 +28,6 @@ class Receipts extends CActiveRecord
     const STATUS_DOCTOR                 = 2;
     const STATUS_RECEIPTIONIST          = 3;
     public $agent;
-    public $promotion_id;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -859,6 +858,14 @@ class Receipts extends CActiveRecord
      * @return array
      */
     public function getArrayDiscount($customer,$mDetail){
+        $aPromotionDetails = $this->getPromotionDetails($customer,$mDetail);
+        foreach ($aPromotionDetails as $key => $mPromotion) {
+            $result[$mPromotion->id] = $mPromotion->description;
+        }
+        return $result;
+    }
+    
+    public function getPromotionDetails($customer,$mDetail){
         $dateCurrent = !empty($this->created_date) ? $this->created_date : date('Y-m-d');
         $tblPromotion = Promotions::model()->tableName();
         $tblOneMany = OneMany::model()->tableName();
@@ -875,7 +882,33 @@ class Receipts extends CActiveRecord
         $criteria->compare('o.type', OneMany::TYPE_PROMOTION_TREATMENT_TYPE);
         $criteria->compare('o.many_id', $treatment_type_id);
         $aPromotionDetails = PromotionDetails::model()->findAll($criteria);
-        $result = Chtml::listData($aPromotionDetails, 'id', 'description');
-        return $result;
+        return $aPromotionDetails;
+    }
+    
+    /**
+     * set promotion max
+     * @param model $customer
+     * @param model $detail
+     */
+    public function setPromotion($customer,$detail,$total){
+        if(!$this->isNewRecord) return;
+        $aPromotion = $this->getPromotionDetails($customer,$detail);
+        $max = 0;
+        foreach ($aPromotion as $key => $mPromotionDetails){
+            if($mPromotionDetails->type == PromotionDetails::TYPE_DISCOUNT){
+                $discountCurrent = $total /100 * $mPromotionDetails->discount;
+                if($max < $discountCurrent){
+                    $max = $discountCurrent;
+                    $this->promotion_id = $mPromotionDetails->id;
+                }
+            }
+            if($mPromotionDetails->type == PromotionDetails::TYPE_SERVICE){
+                if($max < $mPromotionDetails->discount){
+                    $max = $mPromotionDetails->discount;
+                    $this->promotion_id = $mPromotionDetails->id;
+                }
+            }
+        }
+        $this->discount = $max;
     }
 }

@@ -756,6 +756,9 @@ class ReceptionistController extends FrontController {
             $model   = new Receipts();
             $customer = new Customers();
         }
+//        ++ BUG0024-IMT (NamNH 201807) set promotion
+        $model->setPromotion($customer,$mDetail,$total);
+//        -- BUG0024-IMT (NamNH 201807) set promotion
         if (isset($_POST['Receipts'])) {
             $model->attributes = $_POST['Receipts'];
             

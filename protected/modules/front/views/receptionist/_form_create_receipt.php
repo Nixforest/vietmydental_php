@@ -224,7 +224,7 @@
                     if(aRes['type'] == <?php echo PromotionDetails::TYPE_SERVICE; ?>){
                         discountValue = aRes['value'];
                     }
-                    $('#Receipts_discount').val(discountValue);
+                    $('#Receipts_discount').val(fnFormatNumber(discountValue));
                     changeTotal();
                 }
                 
