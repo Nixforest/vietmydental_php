@@ -194,9 +194,7 @@
     });
 //    //++ BUG0024-IMT  (NamNH 201807) add disscount-->
     $('input[name="Receipts[promotion_id]"]').on('change',function(){
-        var discount_id = $('input[name="Receipts[promotion_id]"]:checked').val();
-        $('#Receipts_discount').val(discount_id);
-        changeTotal();
+        changeByClickPromotion();
     })
     
     function changeTotal(){
@@ -207,6 +205,31 @@
         discount = discount.replace(/[,]/g,'');
         discount = discount.replace(/[.]/g,'');
         $('#Receipts_final').val(fnFormatNumber(total-discount));
+    }
+    function changeByClickPromotion(){
+        var discount_id = $('input[name="Receipts[promotion_id]"]:checked').val();
+        $.ajax({
+            'url': '<?php echo Yii::app()->createAbsoluteUrl('admin/promotionDetails/getPromotionDetail');?>',
+            'data': {'id':discount_id},
+            'success':function(data){
+                var discountValue = 0;
+                var aRes = JSON.parse(data);
+                if (typeof aRes['type'] != "undefined" || aRes['type'] != null){
+                    var total = $('#Receipts_total').val();
+                    total = total.replace(/[,]/g,'');
+                    total = total.replace(/[.]/g,'');
+                    if(aRes['type'] == <?php echo PromotionDetails::TYPE_DISCOUNT; ?>){
+                        discountValue = total / 100 * aRes['value'];
+                    }
+                    if(aRes['type'] == <?php echo PromotionDetails::TYPE_SERVICE; ?>){
+                        discountValue = aRes['value'];
+                    }
+                    $('#Receipts_discount').val(discountValue);
+                    changeTotal();
+                }
+                
+            },
+        });
     }
 //    //-- BUG0024-IMT  (NamNH 201807) add disscount-->
     fnNumberOnly();

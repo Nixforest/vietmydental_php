@@ -220,4 +220,18 @@ class PromotionDetailsController extends AdminController
                     'model'=>$model,
             ));
         }
+        
+        /**
+         * get json promotion detail 
+         * @param int $id
+         */
+        public function actionGetPromotionDetail($id){
+            $result = [];
+            $model = PromotionDetails::model()->findByPk($id);
+            if(!empty($model)){
+                $result['type'] = $model->type;
+                $result['value'] = $model->discount;
+            }
+            echo json_encode($result);
+        }
 }
