@@ -28,6 +28,7 @@ class Receipts extends CActiveRecord
     const STATUS_DOCTOR                 = 2;
     const STATUS_RECEIPTIONIST          = 3;
     public $agent;
+    public $promotion_id;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -58,7 +59,7 @@ class Receipts extends CActiveRecord
 			array('need_approve, customer_confirm, status', 'numerical', 'integerOnly'=>true),
 			array('detail_id, discount, created_by, receiptionist_id', 'length', 'max'=>11),
 			array('total, final', 'length', 'max'=>10),
-			array('description', 'safe'),
+			array('description,promotion_id', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, detail_id, process_date, total, discount, final, need_approve, customer_confirm, description, created_date, created_by, receiptionist_id, status', 'safe', 'on'=>'search'),
@@ -851,5 +852,17 @@ class Receipts extends CActiveRecord
             return $this->rTreatmentScheduleDetail->getDoctorId();
         }
         return NULL;
+    }
+    
+    /**
+     * get array promotion
+     * @return array
+     */
+    public function getArrayDiscount($customer,$mDetail){
+        $customer_type_id = $customer->type_id;
+        $treatment_type_id = $mDetail->treatment_type_id;
+//        OneMany::TYPE_PROMOTION_TREATMENT_TYPE
+        
+        return array('1'=>'Khuyen mai 1','2'=>'Khuyen mai 2');
     }
 }

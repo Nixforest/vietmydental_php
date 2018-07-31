@@ -1420,4 +1420,7 @@ class DomainConst {
     const CONTENT00406  = 'KM khấu trừ';
     const CONTENT00407  = 'Hoạt động';
     const CONTENT00408  = 'Không hoạt động';
+    const CONTENT00409  = 'Tất cả';
+    const CONTENT00410  = '%';
+    const CONTENT00411  = 'Danh sách khuyến mãi';
 }

@@ -24,7 +24,10 @@
         <label for="price">Đơn giá </label>
         <label for="price"><?php echo $detail->getTreatmentPriceText(); ?> </label>
     </div>
-        
+    <!--//++ BUG0024-IMT  (NamNH 201807) add disscount-->
+        <div class="row">
+        <div class="col-xs-6">
+    <!--//-- BUG0024-IMT  (NamNH 201807) add disscount-->
 	<div class="row">
 		<?php echo $form->labelEx($model,'total'); ?>
                 <!--//++ BUG0045-IMT  (DuongNV 201807) Format currency when input-->
@@ -125,7 +128,14 @@
 		<?php echo $form->textField($model,'status'); ?>
 		<?php echo $form->error($model,'status'); ?>
 	</div>-->
-
+<!--//++ BUG0024-IMT  (NamNH 201807) add disscount-->
+        </div>
+            <h4><?php echo DomainConst::CONTENT00411; ?></h4>
+            <div class="col-xs-6">
+                <?php echo $form->radioButtonList($model,'promotion_id',$model->getArrayDiscount($customer,$detail),['separator'=>'<br><br>',]); ?>
+            </div>
+        </div>
+<!--//-- BUG0024-IMT  (NamNH 201807) add disscount-->
 	<div class="row buttons">
 		<?php echo CHtml::submitButton(DomainConst::CONTENT00377,
                         array(
@@ -171,6 +181,25 @@
         $(_id).val(fnFormatNumber(t));
     };
     $(document).on('input', '#Receipts_total, #Receipts_discount', function(){
+//    //++ BUG0024-IMT  (NamNH 201807) add disscount-->
+//        var total = $('#Receipts_total').val();
+//        total = total.replace(/[,]/g,'');
+//        total = total.replace(/[.]/g,'');
+//        var discount = $('#Receipts_discount').val();
+//        discount = discount.replace(/[,]/g,'');
+//        discount = discount.replace(/[.]/g,'');
+//        $('#Receipts_final').val(fnFormatNumber(total-discount));
+        changeTotal();
+//    //-- BUG0024-IMT  (NamNH 201807) add disscount-->
+    });
+//    //++ BUG0024-IMT  (NamNH 201807) add disscount-->
+    $('input[name="Receipts[promotion_id]"]').on('change',function(){
+        var discount_id = $('input[name="Receipts[promotion_id]"]:checked').val();
+        $('#Receipts_discount').val(discount_id);
+        changeTotal();
+    })
+    
+    function changeTotal(){
         var total = $('#Receipts_total').val();
         total = total.replace(/[,]/g,'');
         total = total.replace(/[.]/g,'');
@@ -178,7 +207,8 @@
         discount = discount.replace(/[,]/g,'');
         discount = discount.replace(/[.]/g,'');
         $('#Receipts_final').val(fnFormatNumber(total-discount));
-    });
+    }
+//    //-- BUG0024-IMT  (NamNH 201807) add disscount-->
     fnNumberOnly();
     //-- BUG0045-IMT  (DuongNV 201807) Format currency when input
 </script>

@@ -240,7 +240,13 @@
         ?>
         <?php echo $form->error($customer,'street_id'); ?>
     </div>-->
-
+    <div class="row">
+        <div class="col-md-6">
+                <?php echo $form->labelEx($customer,'type_id'); ?>
+                <?php echo $form->dropDownList($customer,'type_id', CustomerTypes::loadItems(), array('class'=>'','empty'=>'Select')); ?>
+                <?php echo $form->error($customer,'type_id'); ?>
+        </div>
+    </div>
     <div class="row buttons">
             <?php echo CHtml::submitButton($customer->isNewRecord ? DomainConst::CONTENT00017 : 'Save',
                     array(

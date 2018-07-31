@@ -81,7 +81,7 @@ class PromotionDetails extends CActiveRecord
 	{
 		return array(
 			'id' => DomainConst::KEY_ID,
-			'customer_types_id' => DomainConst::CONTENT00051,
+			'customer_types_id' => DomainConst::CONTENT00107,
 			'discount' => DomainConst::CONTENT00317,
 			'description' => DomainConst::CONTENT00062,
 			'treatments' => DomainConst::CONTENT00128,
@@ -186,7 +186,7 @@ class PromotionDetails extends CActiveRecord
          * @return string
          */
         public function getCustomerType(){
-            return !empty($this->rCustomerType) ? $this->rCustomerType->name : '';
+            return !empty($this->rCustomerType) ? $this->rCustomerType->name : DomainConst::CONTENT00409;
         }
         
         /**
@@ -259,5 +259,29 @@ class PromotionDetails extends CActiveRecord
         public function getType(){
             $aType = $this->getArrayType();
             return !empty($aType[$this->type]) ? $aType[$this->type] : '';
+        }
+        
+        /**
+         * convert $this->discount -> int
+         */
+        public function convertDiscount(){
+            $this->discount = str_replace(DomainConst::SPLITTER_TYPE_2, '', $this->discount);
+        }
+        
+        /**
+         * get view discount
+         * @return string
+         */
+        public function getDiscount(){
+            $result = '';
+            switch ($this->type){
+                case self::TYPE_DISCOUNT:
+                    $result = $this->discount.' '.DomainConst::CONTENT00410;
+                    break;
+                case self::TYPE_SERVICE:
+                    $result = CommonProcess::formatCurrency($this->discount) . ' ' . DomainConst::CONTENT00134;
+                    break;
+            }
+            return $result;
         }
 }

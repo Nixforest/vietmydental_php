@@ -183,6 +183,7 @@ class PromotionDetailsController extends AdminController
             if(isset($_POST['PromotionDetails']))
             {
                     $model->attributes=$_POST['PromotionDetails'];
+                    $model->convertDiscount();
                     $model->validate();
                     if(!$model->hasErrors()){
                         $model->handleSave();
@@ -207,6 +208,7 @@ class PromotionDetailsController extends AdminController
             {
                     $model->treatments  = '';
                     $model->attributes=$_POST['PromotionDetails'];
+                    $model->convertDiscount();
                     $model->validate();
                     if(!$model->hasErrors()){
                         $model->handleSave();
