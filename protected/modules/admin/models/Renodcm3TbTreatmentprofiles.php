@@ -159,4 +159,12 @@ class Renodcm3TbTreatmentprofiles extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+    
+    public function createFields() {
+        $fields = array();
+        
+        $fields[] = $this->Reason;
+        $fields[] = $this->DateOfProfiles;
+        return $fields;
+    }
 }

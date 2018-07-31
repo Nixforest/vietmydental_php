@@ -228,4 +228,12 @@ class Renodcm3TbTreatment extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+    
+    public function createFields() {
+        $fields = array();
+        
+        $fields[] = $this->TreatmentDate;
+        $fields[] = $this->TotalMoney;
+        return $fields;
+    }
 }
