@@ -118,4 +118,12 @@ class Renodcm3TbTreatmentdetails extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+    
+    public function createFields() {
+        $fields = array();
+        
+        $fields[] = $this->Date;
+        $fields[] = $this->ContentOfWork;
+        return $fields;
+    }
 }

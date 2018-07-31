@@ -73,18 +73,6 @@ class Renodcm3TbTreatmentprofiles extends CActiveRecord
 	}
 
 	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-			'renodcm3TbTreatmentdetails' => array(self::HAS_MANY, 'Renodcm3TbTreatmentdetails', 'TreatmentProfiles_ID'),
-		);
-	}
-
-	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
 	public function attributeLabels()
@@ -159,6 +147,27 @@ class Renodcm3TbTreatmentprofiles extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
+	/**
+	 * @return array relational rules.
+	 */
+	public function relations()
+	{
+		// NOTE: you may need to adjust the relation name and the related
+		// class name for the relations automatically generated below.
+		return array(
+			'renodcm3TbTreatmentdetails' => array(self::HAS_MANY, 'Renodcm3TbTreatmentdetails', 'TreatmentProfiles_ID'),
+		);
+	}
+    
+    public function createChildData($relation, $fieldId) {
+        $retVal = array();
+        
+        foreach ($this->$relation as $model) {
+            $retVal[$model->$fieldId] = '[' . implode('][', $model->createFields()) . ']';
+        }
+        return $retVal;
+    }
     
     public function createFields() {
         $fields = array();

@@ -248,18 +248,16 @@ class Renodcm3TbPatient extends CActiveRecord {
         
         $fields[] = $this->Code;
         $fields[] = $this->FullName;
+        $fields[] = $this->Sex;
         $fields[] = $this->DateOfBirth;
         $fields[] = $this->YearOfBirth;
-        $fields[] = $this->Address;
-        $fields[] = $this->rCity->Name;
-        $fields[] = $this->rDistrict->Name;
         $fields[] = $this->Mobile;
         $fields[] = $this->Email;
-        $fields[] = $this->CreateDate;
+        $fields[] = isset($this->rCity) ? $this->rCity->Name : '';
+        $fields[] = isset($this->rDistrict) ? $this->rDistrict->Name : '';
+        $fields[] = $this->Address;
         $fields[] = $this->rCreatedBy->Name;
-        $fields[] = $this->Sex;
-        $fields[] = $this->YearOfBirth;
-        $fields[] = $this->YearOfBirth;
+        $fields[] = $this->CreateDate;
         return $fields;
     }
     
@@ -268,22 +266,36 @@ class Renodcm3TbPatient extends CActiveRecord {
         
         foreach ($this->$relation as $model) {
             $retVal[$model->$fieldId] = '[' . implode('][', $model->createFields()) . ']';
+            switch ($relation) {
+                case 'rTreatmentProfiles':
+                case 'rTreatment':
+                    $retVal['-TreatmentDetail-' . $model->$fieldId] = $model->createChildData('renodcm3TbTreatmentdetails', 'Id');
+                    break;
+
+                default:
+                    break;
+            }
+            
         }
         return $retVal;
     }
 
-    public static function import() {
+    public static function import($agentId, $isValidate = true) {
         $models = self::model()->findAll(array(
             'order' => 'id ASC',
-            'limit' => 1,
+            'limit' => 4,
         ));
         $print = array();
         
         foreach ($models as $model) {
-            $fields = $model->createFields();
-            $print[$model->Id] = '[' . implode('][', $fields) . ']';
-            $print['TreatmentProfile'] = $model->createChildData('rTreatmentProfiles', 'TreatmentProfiles_ID');
-            $print['Treatment'] = $model->createChildData('rTreatment', 'Treatment_Id');
+            if ($isValidate) {
+                $fields = $model->createFields();
+                $print[$model->Id] = '[' . implode('][', $fields) . ']';
+                $print['-TreatmentProfile-' . $model->Id] = $model->createChildData('rTreatmentProfiles', 'TreatmentProfiles_ID');
+                $print['-Treatment-' . $model->Id] = $model->createChildData('rTreatment', 'Treatment_Id');
+            } else {
+                Customers::transferCustomer($model, $agentId);
+            }
         }
         
         echo '<pre>';

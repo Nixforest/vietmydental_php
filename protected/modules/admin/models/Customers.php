@@ -1055,4 +1055,43 @@ class Customers extends BaseActiveRecord
     public function getCreatedBy(){
         return !empty($this->rCreatedBy) ? $this->rCreatedBy->getFullName() : '';
     }
+
+    //-----------------------------------------------------
+    // Static methods
+    //-----------------------------------------------------
+    public static function transferCustomer($renoPatient, $agentId) {
+        $record = MedicalRecords::model()->findByAttributes(array(
+            'record_number' => $renoPatient->Code,
+        ));
+        if (!empty($record)) {
+            // Update
+            $customer = $record->rCustomer;
+            // Remove old record
+            OneMany::deleteAllManyOldRecords($customer->id, OneMany::TYPE_AGENT_CUSTOMER);
+        } else {
+            // Create new
+            $customer = new Customers();
+        }
+        $customer->name = $renoPatient->FullName;
+        $customer->gender = DomainConst::GENDER_FEMALE;
+        if ($renoPatient->Sex == '1') {
+            $customer->gender = DomainConst::GENDER_MALE;
+        }
+        $customer->date_of_birth    = $renoPatient->DateOfBirth;
+        $customer->year_of_birth    = $renoPatient->YearOfBirth;
+        $customer->phone            = $renoPatient->Mobile;
+        $customer->city_id          = $renoPatient->ProvinceId;
+        $customer->district_id      = $renoPatient->DistrictId;
+        $customer->house_numbers    = $renoPatient->Address;
+        if ($customer->save()) {
+            OneMany::insertOne($agentId, $customer->id, OneMany::TYPE_AGENT_CUSTOMER);
+            $medicalRecord = new MedicalRecords();
+            $medicalRecord->customer_id = $customer->id;
+            $medicalRecord->record_number = $renoPatient->Code;
+            $medicalRecord->save();
+        } else {
+            Loggers::info("Lỗi khi lưu Bệnh nhân: " , $renoPatient->Code, __FUNCTION__ . __LINE__);
+            Loggers::info(CommonProcess::json_encode_unicode($customer->getErrors()), '', __FUNCTION__ . __LINE__);
+        }
+    }
 }

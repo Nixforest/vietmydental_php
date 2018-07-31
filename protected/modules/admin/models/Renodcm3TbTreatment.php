@@ -108,6 +108,7 @@ class Renodcm3TbTreatment extends CActiveRecord
 			'patient' => array(self::BELONGS_TO, 'Renodcm3TbPatient', 'Patient_ID'),
 			'treatmentProfiles' => array(self::BELONGS_TO, 'Renodcm3TbTreatmentprofiles', 'TreatmentProfiles_ID'),
 			'treatmentService' => array(self::BELONGS_TO, 'Renodcm3TbTreatmentservice', 'TreatmentServiceId'),
+			'renodcm3TbTreatmentdetails' => array(self::HAS_MANY, 'Renodcm3TbTreatmentdetails', 'TreatmentId'),
 		);
 	}
 
@@ -228,6 +229,15 @@ class Renodcm3TbTreatment extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+    
+    public function createChildData($relation, $fieldId) {
+        $retVal = array();
+        
+        foreach ($this->$relation as $model) {
+            $retVal[$model->$fieldId] = '[' . implode('][', $model->createFields()) . ']';
+        }
+        return $retVal;
+    }
     
     public function createFields() {
         $fields = array();
