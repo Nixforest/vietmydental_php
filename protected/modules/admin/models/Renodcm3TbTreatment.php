@@ -109,6 +109,8 @@ class Renodcm3TbTreatment extends CActiveRecord
 			'treatmentProfiles' => array(self::BELONGS_TO, 'Renodcm3TbTreatmentprofiles', 'TreatmentProfiles_ID'),
 			'treatmentService' => array(self::BELONGS_TO, 'Renodcm3TbTreatmentservice', 'TreatmentServiceId'),
 			'renodcm3TbTreatmentdetails' => array(self::HAS_MANY, 'Renodcm3TbTreatmentdetails', 'TreatmentId'),
+                        'rDoctorAdvise' => array(self::BELONGS_TO, 'RsTbAccount', 'DentistAdvise'),
+                        'rDoctor' => array(self::BELONGS_TO, 'RsTbAccount', 'Dentist'),
 		);
 	}
 
@@ -234,6 +236,7 @@ class Renodcm3TbTreatment extends CActiveRecord
         $retVal = array();
         
         foreach ($this->$relation as $model) {
+            $retVal[] = '[' . implode('][', $model->createFieldsLbl()) . ']';
             $retVal[$model->$fieldId] = '[' . implode('][', $model->createFields()) . ']';
         }
         return $retVal;
@@ -243,7 +246,39 @@ class Renodcm3TbTreatment extends CActiveRecord
         $fields = array();
         
         $fields[] = $this->TreatmentDate;
-        $fields[] = $this->TotalMoney;
+        $fields[] = $this->FinishDate;
+        $fields[] = $this->TreatmentTooth;
+        $fields[] = $this->TreatmentServiceId;
+        $fields[] = isset($this->treatmentService) ? $this->treatmentService->Name : '';
+        if (isset($this->treatmentProfiles)) {
+            $fields[] = $this->treatmentProfiles->Description;
+        }
+        $fields[] = isset($this->rDoctor) ? $this->rDoctor->Name : '';
+        $fields[] = isset($this->rDoctorAdvise) ? $this->rDoctorAdvise->Name : '';
+        
+        $fields[] = CommonProcess::formatCurrency($this->UnitPrice1);
+        $fields[] = CommonProcess::formatCurrency($this->Decrease);
+        $fields[] = CommonProcess::formatCurrency($this->TotalMoney);
+        $fields[] = CommonProcess::formatCurrency($this->Payed);
+        return $fields;
+    }
+    
+    public function createFieldsLbl() {
+        $fields = array();
+        
+        $fields[] = 'TreatmentDate';
+        $fields[] = 'FinishDate';
+        $fields[] = 'TreatmentTooth';
+        $fields[] = 'TreatmentServiceId';
+        $fields[] = 'TreatmentService';
+        $fields[] = 'Description';
+        
+        $fields[] = 'Doctor';
+        $fields[] = 'DoctorAdvise';
+        $fields[] = 'UnitPrice';
+        $fields[] = 'Decrease';
+        $fields[] = 'TotalMoney';
+        $fields[] = 'Payed';
         return $fields;
     }
 }

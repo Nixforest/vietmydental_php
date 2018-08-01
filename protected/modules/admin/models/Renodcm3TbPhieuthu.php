@@ -139,4 +139,20 @@ class Renodcm3TbPhieuthu extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+    
+    public function createFields() {
+        $fields = array();
+        
+        $fields[] = $this->PhieuThuNgay;
+        $fields[] = CommonProcess::formatCurrency($this->Money);
+        return $fields;
+    }
+    
+    public function createFieldsLbl() {
+        $fields = array();
+        
+        $fields[] = 'PhieuThuNgay';
+        $fields[] = 'Money';
+        return $fields;
+    }
 }

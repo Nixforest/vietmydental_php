@@ -222,6 +222,24 @@ class CommonProcess {
     }
     
     /**
+     * Convert teeth to index
+     * @param String $teeth Teeth value ("11")
+     * @return string Index of teeth
+     */
+    public static function convertTeethIndex($teeth) {
+        $retVal = str_split($teeth);
+        if (count($retVal) == 2) {
+            $retVal = $retVal[0] . ' - ' . $retVal[1];
+            $index = array_search($retVal, self::getListTeeth(FALSE, ''));
+            if ($index != false) {
+                return $index;
+            }
+        }
+        
+        return '';
+    }
+    
+    /**
      * Get list of teeth
      * @param type $emptyOption
      * @return string

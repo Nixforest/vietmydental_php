@@ -66,6 +66,7 @@ class Renodcm3TbTreatmentdetails extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'treatmentProfiles' => array(self::BELONGS_TO, 'Renodcm3TbTreatmentprofiles', 'TreatmentProfiles_ID'),
+                        'rDoctor' => array(self::BELONGS_TO, 'RsTbAccount', 'Doctor'),
 		);
 	}
 
@@ -123,7 +124,25 @@ class Renodcm3TbTreatmentdetails extends CActiveRecord
         $fields = array();
         
         $fields[] = $this->Date;
+        $fields[] = $this->Teeth;
         $fields[] = $this->ContentOfWork;
+        $fields[] = isset($this->rDoctor) ? $this->rDoctor->Name : '';
+        $fields[] = $this->Note;
         return $fields;
+    }
+    
+    public function createFieldsLbl() {
+        $fields = array();
+        
+        $fields[] = 'Date';
+        $fields[] = 'Teeth';
+        $fields[] = 'ContentOfWork';
+        $fields[] = 'Doctor';
+        $fields[] = 'Note';
+        return $fields;
+    }
+    
+    public function getDoctorName() {
+        return isset($this->rDoctor) ? $this->rDoctor->Name : '';
     }
 }

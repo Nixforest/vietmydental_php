@@ -157,6 +157,8 @@ class Renodcm3TbTreatmentprofiles extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
                     'renodcm3TbTreatmentdetails' => array(self::HAS_MANY, 'Renodcm3TbTreatmentdetails', 'TreatmentProfiles_ID'),
+                    'renodcm3TbTreatment' => array(self::HAS_MANY, 'Renodcm3TbTreatment', 'TreatmentProfiles_ID'),
+                    'renodcm3TbPhieuthu' => array(self::HAS_MANY, 'Renodcm3TbPhieuthu', 'TreatmentProfiles_ID'),
                     'rDoctor' => array(self::BELONGS_TO, 'RsTbAccount', 'Doctor_ID'),
 		);
 	}
@@ -165,16 +167,35 @@ class Renodcm3TbTreatmentprofiles extends CActiveRecord
         $retVal = array();
         
         foreach ($this->$relation as $model) {
+            $retVal[] = '[' . implode('][', $model->createFieldsLbl()) . ']';
             $retVal[$model->$fieldId] = '[' . implode('][', $model->createFields()) . ']';
+            switch ($relation) {
+                case 'renodcm3TbTreatment':
+                    $retVal['-Chi tiet phieu thu-' . $model->$fieldId] = $model->createChildData('renodcm3TbChitietphieuthus', 'Id');
+                    break;
+
+                default:
+                    break;
+            }
         }
         return $retVal;
+    }
+    
+    public function createFieldsLbl() {
+        $fields = array();
+        $fields[] = 'DateOfProfiles';
+        $fields[] = 'EndDateOfProfiles';
+        $fields[] = 'Reason';
+        $fields[] = 'Doctor';
+        
+        return $fields;
     }
     
     public function createFields() {
         $fields = array();
         $fields[] = $this->DateOfProfiles;
         $fields[] = $this->EndDateOfProfiles;
-        $fields[] = $this->Diagnosis;
+        $fields[] = $this->Reason;
         $fields[] = isset($this->rDoctor) ? $this->rDoctor->Name : '';
         
         return $fields;

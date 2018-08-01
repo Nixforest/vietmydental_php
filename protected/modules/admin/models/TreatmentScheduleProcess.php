@@ -53,7 +53,7 @@ class TreatmentScheduleProcess extends BaseActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('detail_id, process_date, name, doctor_id', 'required'),
+			array('detail_id, process_date, name', 'required'),
 			array('teeth_id, status', 'numerical', 'integerOnly'=>true),
 			array('detail_id, doctor_id', 'length', 'max'=>11),
 			array('name', 'length', 'max'=>255),

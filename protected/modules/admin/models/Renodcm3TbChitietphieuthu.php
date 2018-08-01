@@ -114,4 +114,28 @@ class Renodcm3TbChitietphieuthu extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+    
+    public function createFields() {
+        $fields = array();
+        
+        $fields[] = $this->Content;
+        $fields[] = CommonProcess::formatCurrency($this->UnitPrice);
+        $fields[] = $this->Quantity;
+        $fields[] = CommonProcess::formatCurrency($this->OldRemain);
+        $fields[] = CommonProcess::formatCurrency($this->Payed);
+        $fields[] = CommonProcess::formatCurrency($this->NewRemain);
+        return $fields;
+    }
+    
+    public function createFieldsLbl() {
+        $fields = array();
+        
+        $fields[] = 'Content';
+        $fields[] = 'UnitPrice';
+        $fields[] = 'Quantity';
+        $fields[] = 'OldRemain';
+        $fields[] = 'Payed';
+        $fields[] = 'NewRemain';
+        return $fields;
+    }
 }

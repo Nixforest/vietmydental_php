@@ -1141,7 +1141,81 @@ class Customers extends BaseActiveRecord
         } else {
             Loggers::info("Lỗi khi lưu TreatmentProfile: " , $renoTreatmentProfile->TreatmentProfiles_ID, __FUNCTION__ . __LINE__);
             Loggers::info(CommonProcess::json_encode_unicode($treatment->getErrors()), '', __FUNCTION__ . __LINE__);
+            Loggers::info("Doctor: " , $renoTreatmentProfile->getDoctorName(), __FUNCTION__ . __LINE__);
         }
         return '';
+    }
+    
+    public static function transferTreatmentScheduleDetail($renoTreatment, $treatmentId, $agentId) {
+        $detail = new TreatmentScheduleDetails();
+        $detail->schedule_id    = $treatmentId;
+        $detail->time_id        = 1;
+        $detail->start_date     = $renoTreatment->TreatmentDate;
+        $detail->end_date       = $renoTreatment->FinishDate;
+        $name = isset($renoTreatment->treatmentService) ? $renoTreatment->treatmentService->Name : '';
+        if (!empty($name)) {
+            $model = TreatmentTypes::getModelByName($name);
+            if (!empty($model)) {
+                $detail->treatment_type_id = $model->id;
+            }
+        }
+        if (isset($renoTreatment->treatmentProfiles)) {
+            $detail->description    = $renoTreatment->treatmentProfiles->Reason;
+        }
+        $detail->status = TreatmentScheduleDetails::STATUS_COMPLETED;
+        if ($detail->save()) {
+            Loggers::info("Lưu Treatment thành công: " , $detail->id, __FUNCTION__ . __LINE__);
+            // Teeth
+            if (!empty($renoTreatment->TreatmentTooth)) {
+                $arrTeeth = explode(',', $renoTreatment->TreatmentTooth);
+                foreach ($arrTeeth as $teeth) {
+                    $teethIndex = CommonProcess::convertTeethIndex($teeth);
+                    if (!empty($teethIndex)) {
+                        OneMany::insertOne($detail->id, $teethIndex, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+                    }
+                }
+            }
+            $receipt = new Receipts();
+            $receipt->detail_id = $detail->id;
+            $receipt->process_date  = CommonProcess::convertDateTime($detail->start_date,
+            DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
+            $receipt->total         = $renoTreatment->TotalMoney + $renoTreatment->Decrease;
+            $receipt->discount      = $renoTreatment->Decrease;
+            $receipt->final         = $renoTreatment->Payed;
+            $receipt->status        = Receipts::STATUS_RECEIPTIONIST;
+            if ($receipt->save()) {
+                Loggers::info("Lưu Phiếu thu thành công: " , $receipt->id, __FUNCTION__ . __LINE__);
+                // Update customer's debt
+                $receipt->updateCustomerDebt();
+                $receipt->connectAgent($agentId);
+            } else {
+                Loggers::info("Lỗi khi lưu Phiếu thu: " , $detail->id, __FUNCTION__ . __LINE__);
+                Loggers::info(CommonProcess::json_encode_unicode($receipt->getErrors()), '', __FUNCTION__ . __LINE__);
+            }
+                
+            return $detail->id;
+        } else {
+            Loggers::info("Lỗi khi lưu Treatment: " , $renoTreatment->Treatment_Id, __FUNCTION__ . __LINE__);
+            Loggers::info(CommonProcess::json_encode_unicode($detail->getErrors()), '', __FUNCTION__ . __LINE__);
+        }
+    }
+    
+    public static function transferTreatmentProcess($renoTreatmentDetail, $detailId, $agentId) {
+        $process = new TreatmentScheduleProcess();
+        $process->detail_id     = $detailId;
+        $process->process_date  = $renoTreatmentDetail->Date;
+        $process->name          = $renoTreatmentDetail->ContentOfWork;
+        $process->description   = $renoTreatmentDetail->Teeth;
+        $doctor = Users::getDoctorByName($renoTreatmentDetail->getDoctorName(), $agentId);
+        if (!empty($doctor)) {
+            $process->doctor_id   = $doctor->id;
+        }
+        $process->note          = $renoTreatmentDetail->Note;
+        if ($process->save()) {
+            Loggers::info("Lưu TreatmentDetail thành công: " , $process->id, __FUNCTION__ . __LINE__);
+        } else {
+            Loggers::info("Lỗi khi lưu TreatmentDetail: " , $renoTreatmentDetail->Id, __FUNCTION__ . __LINE__);
+            Loggers::info(CommonProcess::json_encode_unicode($process->getErrors()), '', __FUNCTION__ . __LINE__);
+        }
     }
 }

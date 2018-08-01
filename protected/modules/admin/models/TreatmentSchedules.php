@@ -59,7 +59,7 @@ class TreatmentSchedules extends BaseActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('record_id, time_id, start_date, doctor_id', 'required'),
+			array('record_id, time_id, start_date', 'required'),
 			array('time_id, diagnosis_id, pathological_id, status', 'numerical', 'integerOnly'=>true),
 			array('record_id, doctor_id, created_by', 'length', 'max'=>11),
 			array('insurrance', 'length', 'max'=>10),

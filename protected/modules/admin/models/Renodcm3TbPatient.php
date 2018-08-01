@@ -243,6 +243,24 @@ class Renodcm3TbPatient extends CActiveRecord {
         );
     }
     
+    public function createFieldsLbl() {
+        $fields = array();
+        
+        $fields[] = 'Code';
+        $fields[] = 'FullName';
+        $fields[] = 'Sex';
+        $fields[] = 'DateOfBirth';
+        $fields[] = 'YearOfBirth';
+        $fields[] = 'Mobile';
+        $fields[] = 'Email';
+        $fields[] = 'City';
+        $fields[] = 'District';
+        $fields[] = 'Address';
+        $fields[] = 'CreatedBy';
+        $fields[] = 'CreateDate';
+        return $fields;
+    }
+    
     public function createFields() {
         $fields = array();
         
@@ -265,11 +283,16 @@ class Renodcm3TbPatient extends CActiveRecord {
         $retVal = array();
         
         foreach ($this->$relation as $model) {
+            $retVal[] = '[' . implode('][', $model->createFieldsLbl()) . ']';
             $retVal[$model->$fieldId] = '[' . implode('][', $model->createFields()) . ']';
             switch ($relation) {
                 case 'rTreatmentProfiles':
-                case 'rTreatment':
+                    $retVal['-Treatment-' . $model->$fieldId] = $model->createChildData('renodcm3TbTreatment', 'Treatment_Id');
                     $retVal['-TreatmentDetail-' . $model->$fieldId] = $model->createChildData('renodcm3TbTreatmentdetails', 'Id');
+                    $retVal['-Phieu thu-' . $model->$fieldId] = $model->createChildData('renodcm3TbPhieuthu', 'Id');
+                    break;
+                case 'rTreatment':
+//                    $retVal['-Chi tiet phieu thu-' . $model->$fieldId] = $model->createChildData('renodcm3TbChitietphieuthus', 'Id');
                     break;
 
                 default:
@@ -283,24 +306,39 @@ class Renodcm3TbPatient extends CActiveRecord {
     public static function import($agentId, $isValidate = true) {
         $models = self::model()->findAll(array(
             'order' => 'id desc',
-            'limit' => 100,
-            'condition'  => 't.Code = ' . '017848',
+            'limit' => 200,
+//            'condition'  => 't.Code = ' . '017173',
+//            'condition'  => 't.Code = ' . '017841',
         ));
         $print = array();
         
         foreach ($models as $model) {
             if ($isValidate) {
                 $fields = $model->createFields();
+                $print[] = '[' . implode('][', $model->createFieldsLbl()) . ']';
                 $print[$model->Id] = '[' . implode('][', $fields) . ']';
                 $print['-TreatmentProfile-' . $model->Id] = $model->createChildData('rTreatmentProfiles', 'TreatmentProfiles_ID');
-                $print['-Treatment-' . $model->Id] = $model->createChildData('rTreatment', 'Treatment_Id');
+//                $print['-Treatment-' . $model->Id] = $model->createChildData('rTreatment', 'Treatment_Id');
             } else {
                 // Transfer customer
                 $medicalRecordId = Customers::transferCustomer($model, $agentId);
                 if (!empty($medicalRecordId)) {
+                    $treatmentId = '';
                     // Transfer treatment profiles
                     foreach ($model->rTreatmentProfiles as $renoTreatmentProfile) {
                         $treatmentId = Customers::transferTreatmentSchedule($renoTreatmentProfile, $medicalRecordId, $agentId);
+                        if (!empty($treatmentId)) {
+                            $detailId = '';
+                            // Transfer treatment
+                            foreach ($renoTreatmentProfile->renodcm3TbTreatment as $treatment) {
+                                $detailId = Customers::transferTreatmentScheduleDetail($treatment, $treatmentId, $agentId);
+                            }
+                            if (!empty($detailId)) {
+                                foreach ($renoTreatmentProfile->renodcm3TbTreatmentdetails as $treatmentDetail) {
+                                    Customers::transferTreatmentProcess($treatmentDetail, $detailId, $agentId);
+                                }
+                            }
+                        }
                     }
                 }
             }

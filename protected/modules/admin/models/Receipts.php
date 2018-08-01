@@ -54,7 +54,7 @@ class Receipts extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('detail_id, process_date, final, created_date', 'required'),
+			array('detail_id, process_date, final', 'required'),
 			array('need_approve, customer_confirm, status', 'numerical', 'integerOnly'=>true),
 			array('detail_id, discount, created_by, receiptionist_id', 'length', 'max'=>11),
 			array('total, final', 'length', 'max'=>10),
