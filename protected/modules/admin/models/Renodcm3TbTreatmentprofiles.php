@@ -156,7 +156,8 @@ class Renodcm3TbTreatmentprofiles extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'renodcm3TbTreatmentdetails' => array(self::HAS_MANY, 'Renodcm3TbTreatmentdetails', 'TreatmentProfiles_ID'),
+                    'renodcm3TbTreatmentdetails' => array(self::HAS_MANY, 'Renodcm3TbTreatmentdetails', 'TreatmentProfiles_ID'),
+                    'rDoctor' => array(self::BELONGS_TO, 'RsTbAccount', 'Doctor_ID'),
 		);
 	}
     
@@ -171,9 +172,15 @@ class Renodcm3TbTreatmentprofiles extends CActiveRecord
     
     public function createFields() {
         $fields = array();
-        
-        $fields[] = $this->Reason;
         $fields[] = $this->DateOfProfiles;
+        $fields[] = $this->EndDateOfProfiles;
+        $fields[] = $this->Diagnosis;
+        $fields[] = isset($this->rDoctor) ? $this->rDoctor->Name : '';
+        
         return $fields;
+    }
+    
+    public function getDoctorName() {
+        return isset($this->rDoctor) ? $this->rDoctor->Name : '';
     }
 }

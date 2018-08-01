@@ -169,6 +169,7 @@ class OneMany extends BaseActiveRecord
      * @param Int $type     Type of relation
      */
     public static function deleteOne($one_id, $many_id, $type) {
+        Loggers::info("DELETE one_many record: (one_id = $one_id, many_id = $many_id, type = $type)", __FUNCTION__, __LINE__);
         if (empty($one_id)) {
             return;
         }
@@ -185,6 +186,7 @@ class OneMany extends BaseActiveRecord
      * @param Int $type     Type of relation
      */
     public static function deleteAllOldRecords($one_id, $type) {
+        Loggers::info("DELETE all one_many record: (one_id = $one_id, type = $type)", __FUNCTION__, __LINE__);
         if (empty($one_id)) {
             return;
         }
@@ -200,6 +202,7 @@ class OneMany extends BaseActiveRecord
      * @param Int $type     Type of relation
      */
     public static function deleteAllManyOldRecords($many_id, $type) {
+        Loggers::info("DELETE all one_many record: (many_id = $many_id, type = $type)", __FUNCTION__, __LINE__);
         if (empty($many_id)) {
             return;
         }

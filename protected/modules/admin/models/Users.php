@@ -777,4 +777,28 @@ class Users extends BaseActiveRecord
         
         return Users::model()->findAll($criteria);
     }
+    
+    /**
+     * Get doctor by name (and agent id)
+     * @param String $name Name of doctor
+     * @param String $agentId Id of agent
+     * @return Model Users
+     */
+    public static function getDoctorByName($name, $agentId) {
+        if (empty($name)) {
+            return NULL;
+        }
+        $criteria = new CDbCriteria();
+        $criteria->compare('role_id', '6', true);
+        $criteria->compare('address_vi', $name, true, 'AND');
+        $user = NULL;
+        $models = Users::model()->findAll($criteria);
+        foreach ($models as $model) {
+            if ($model->getAgentId() == $agentId) {
+                $user = $model;
+                break;
+            }
+        }
+        return $user;
+    }
 }

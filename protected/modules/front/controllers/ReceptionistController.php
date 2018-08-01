@@ -457,7 +457,7 @@ class ReceptionistController extends FrontController {
         if (filter_input(INPUT_POST, 'import')) {
             $msg = "Import";
             $msg .= "\nĐang chọn chi nhánh: " . $agent;
-            Renodcm3TbPatient::import($agent);
+            Renodcm3TbPatient::import($agent, false);
         }
         if (filter_input(INPUT_POST, 'validate')) {
             $msg = "Validate";

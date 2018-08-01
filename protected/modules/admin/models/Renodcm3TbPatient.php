@@ -282,8 +282,9 @@ class Renodcm3TbPatient extends CActiveRecord {
 
     public static function import($agentId, $isValidate = true) {
         $models = self::model()->findAll(array(
-            'order' => 'id ASC',
-            'limit' => 4,
+            'order' => 'id desc',
+            'limit' => 100,
+            'condition'  => 't.Code = ' . '017848',
         ));
         $print = array();
         
@@ -294,7 +295,14 @@ class Renodcm3TbPatient extends CActiveRecord {
                 $print['-TreatmentProfile-' . $model->Id] = $model->createChildData('rTreatmentProfiles', 'TreatmentProfiles_ID');
                 $print['-Treatment-' . $model->Id] = $model->createChildData('rTreatment', 'Treatment_Id');
             } else {
-                Customers::transferCustomer($model, $agentId);
+                // Transfer customer
+                $medicalRecordId = Customers::transferCustomer($model, $agentId);
+                if (!empty($medicalRecordId)) {
+                    // Transfer treatment profiles
+                    foreach ($model->rTreatmentProfiles as $renoTreatmentProfile) {
+                        $treatmentId = Customers::transferTreatmentSchedule($renoTreatmentProfile, $medicalRecordId, $agentId);
+                    }
+                }
             }
         }
         
