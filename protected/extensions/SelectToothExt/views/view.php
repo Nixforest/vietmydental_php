@@ -1273,6 +1273,7 @@ $labelStyle = "padding-top: 0px; width: auto; float: center;";
         <td>
             Check group of teeth
 -->            
+        <?php if($canEdit){ ?>
             <div colspan='2' class="select-gr-tooth adults">
                 <h4>Răng người lớn:</h4>
                 <label class="grcontainer gr1">Nhóm 1
@@ -1292,6 +1293,7 @@ $labelStyle = "padding-top: 0px; width: auto; float: center;";
                     <span class="checkmark"></span>
                 </label>
             </div>
+        <?php } ?>
 <!--
             <table border="1" class='teeth-tbl'>
                 <tr>
@@ -1353,6 +1355,7 @@ $labelStyle = "padding-top: 0px; width: auto; float: center;";
         <td>
                         Check group of teeth
 -->            
+        <?php if($canEdit){ ?>
             <div colspan='2' class="select-gr-tooth children">
                 <h4>Răng trẻ em:</h4>
                 <label class="grcontainer gr5">Nhóm 5
@@ -1372,6 +1375,7 @@ $labelStyle = "padding-top: 0px; width: auto; float: center;";
                     <span class="checkmark"></span>
                 </label>
             </div>
+        <?php } ?>
 <!--
             <table border="1" class='teeth-tbl'>
                 <tr>
@@ -1431,6 +1435,7 @@ $labelStyle = "padding-top: 0px; width: auto; float: center;";
 </table>-->
 <input type="hidden" name="teethData" id="teethData" value="">
 <!--DUONG-->
+<?php if($canEdit){ ?>
 <script>
 //    function check(index){
 //        $('.teeth-tbl td').eq(index).addClass('grey');
@@ -1465,6 +1470,7 @@ $labelStyle = "padding-top: 0px; width: auto; float: center;";
         return listTooth;
     }
 </script>
+<?php } ?>
 <script>
 $(function(){
     /*hover*/
@@ -1503,6 +1509,7 @@ $(function(){
         //--BUG0043-IMT (DuongNV 20180729) fix save tooth
     }
     ?>
+    <?php if($canEdit){ ?>
     $('path[class*="tooth"]').on('click', function(){
         // adults tooth
         var id = $(this).attr('class').split(' ')[0].replace('tooth-', '');
@@ -1605,6 +1612,7 @@ $(function(){
         $(this).toggleClass('grey');
         $(this).find('input').prop('checked', !$(this).find('input').prop("checked"))
     })
+    <?php } ?>
     //drag to choose teeth
 //    $('.teeth-tbl td').on('mousedown', function(e){
 //        flag = true;

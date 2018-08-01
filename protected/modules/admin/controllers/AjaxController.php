@@ -481,7 +481,7 @@ class AjaxController extends AdminController
                 'model' => $model->rTreatmentScheduleDetail
                     );
             $tooth = $this->widget('ext.SelectToothExt.SelectToothExt',
-                    array('data' => $aData), true);
+                    array('data' => $aData, 'canEdit' => false), true);
             $json = CJavaScript::jsonEncode(array(
                 'rightContent'  => $tooth.$rightContent,
                 'infoSchedule' => $infoSchedule,
