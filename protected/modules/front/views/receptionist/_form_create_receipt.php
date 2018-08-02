@@ -18,7 +18,16 @@
         
     <div class="row">
         <label for="teeth">Răng </label>
-        <label for="teeth"><?php echo $detail->generateTeethInfo(", "); ?> </label>
+        <!--//++ BUG0043-IMT (DuongNV 20180730) Show tooth in receipt screen-->
+        <!--<label for="teeth"><?php // echo $detail->generateTeethInfo(", "); ?> </label>-->
+        <?php 
+        $aData = array(
+                'model' => $model->rTreatmentScheduleDetail
+                );
+        $this->widget('ext.SelectToothExt.SelectToothExt',
+                    array('data' => $aData));
+        ?>
+        <!--//-- BUG0043-IMT (DuongNV 20180730) Show tooth in receipt screen-->
     </div>
     <div class="row">
         <label for="price">Đơn giá </label>
@@ -138,7 +147,13 @@
 </div><!-- form -->
 <script type="text/javascript">
     $(document).ready(function() {
-        
+        //++ BUG0043-IMT (DuongNV 20180730) Show tooth in receipt screen
+        var style = '<style>'+
+                    '.select-gr-tooth{display: none!important;}'+
+                    '.portlet-content{text-align: left;}'+
+                    '</style>';
+        $('head').append(style);
+        //-- BUG0043-IMT (DuongNV 20180730) Show tooth in receipt screen
         formatNumber("#Receipts_total");
         formatNumber("#Receipts_discount");
         formatNumber("#Receipts_final");

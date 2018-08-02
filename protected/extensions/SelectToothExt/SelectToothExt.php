@@ -20,6 +20,7 @@ class SelectToothExt extends CPortlet {
      */
     public $data;
     
+    public $canEdit = true; //Default is editable
     /**
      * Initializer
      */
@@ -48,6 +49,7 @@ class SelectToothExt extends CPortlet {
         $this->render('view', array(
             'className'         => $className,
             'selectedTeeth'     => $rTeeth,
+            'canEdit'           => $this->canEdit,
         ));
     }
 }

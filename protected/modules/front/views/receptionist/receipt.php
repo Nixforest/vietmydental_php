@@ -198,6 +198,13 @@
 
 <script>
     $(function(){
+        //++ BUG0043-IMT (DuongNV 20180730) Show tooth in receipt screen
+        var style = '<style>'+
+                    '.select-gr-tooth{display: none!important;}'+
+                    '.portlet-content{text-align: center;}'+
+                    '</style>';
+        $('head').append(style);
+        //-- BUG0043-IMT (DuongNV 20180730) Show tooth in receipt screen
         fnHandleTextChange(
                 "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/searchCustomerReception'); ?>",
                 "#right-content",
