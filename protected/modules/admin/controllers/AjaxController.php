@@ -483,6 +483,7 @@ class AjaxController extends AdminController
             $tooth = $this->widget('ext.SelectToothExt.SelectToothExt',
                     array('data' => $aData, 'canEdit' => false), true);
             $json = CJavaScript::jsonEncode(array(
+                //'rightContent'  => $rightContent,
                 'rightContent'  => $tooth.$rightContent,
                 'infoSchedule' => $infoSchedule,
             ));
