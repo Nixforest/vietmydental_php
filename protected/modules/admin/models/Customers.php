@@ -1181,7 +1181,10 @@ class Customers extends BaseActiveRecord
             DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
             $receipt->total         = $renoTreatment->TotalMoney + $renoTreatment->Decrease;
             $receipt->discount      = $renoTreatment->Decrease;
-            $receipt->final         = $renoTreatment->Payed;
+            $receipt->final         = '0';
+            if (!empty($renoTreatment->Payed)) {
+                $receipt->final         = $renoTreatment->Payed;
+            }
             $receipt->status        = Receipts::STATUS_RECEIPTIONIST;
             if ($receipt->save()) {
                 Loggers::info("Lưu Phiếu thu thành công: " , $receipt->id, __FUNCTION__ . __LINE__);
@@ -1203,7 +1206,14 @@ class Customers extends BaseActiveRecord
     public static function transferTreatmentProcess($renoTreatmentDetail, $detailId, $agentId) {
         $process = new TreatmentScheduleProcess();
         $process->detail_id     = $detailId;
-        $process->process_date  = $renoTreatmentDetail->Date;
+        if (!empty($renoTreatmentDetail->Date)) {
+            $process->process_date  = $renoTreatmentDetail->Date;
+        } else {
+            if (isset($renoTreatmentDetail->treatmentProfiles)) {
+                $process->process_date  = $renoTreatmentDetail->treatmentProfiles->DateOfProfiles;
+            }
+        }
+        
         $process->name          = $renoTreatmentDetail->ContentOfWork;
         $process->description   = $renoTreatmentDetail->Teeth;
         $doctor = Users::getDoctorByName($renoTreatmentDetail->getDoctorName(), $agentId);

@@ -304,14 +304,22 @@ class Renodcm3TbPatient extends CActiveRecord {
     }
 
     public static function import($agentId, $isValidate = true) {
+        ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', 600);
         $models = self::model()->findAll(array(
             'order' => 'id desc',
-            'limit' => 200,
+//            'limit' => 200,
 //            'condition'  => 't.Code = ' . '017173',
 //            'condition'  => 't.Code = ' . '017841',
+//            'condition' => 't.Id >= 1 AND t.Id <= 5000',
+//            'condition' => 't.Id >= 5001 AND t.Id <= 10000',
+//            'condition' => 't.Id >= 10001 AND t.Id <= 15000',
+            'condition' => 't.Id >= 15001 AND t.Id <= 20000',
+            
         ));
         $print = array();
         
+//        CommonProcess::dumpVariable(count($models));
         foreach ($models as $model) {
             if ($isValidate) {
                 $fields = $model->createFields();
