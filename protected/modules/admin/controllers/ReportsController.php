@@ -35,6 +35,7 @@ class ReportsController extends AdminController
             // Start access db
             if ($mAgent) {
                 $receipts = $mAgent->getReceipts($from, $to, array(Receipts::STATUS_RECEIPTIONIST));
+                $allReceipts = $mAgent->getReceipts($from, $to, array(Receipts::STATUS_RECEIPTIONIST),true);
                 $newReceipts = $mAgent->getReceipts($from, $to, array(Receipts::STATUS_DOCTOR));
             }
             if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
@@ -85,6 +86,7 @@ class ReportsController extends AdminController
             }
             $this->render('revenue', array(
                     'receipts'  => $receipts,
+                    'allReceipts' => $allReceipts,
                     'newReceipts'  => $newReceipts,
                     'from'      => $from,
                     'to'        => $to,

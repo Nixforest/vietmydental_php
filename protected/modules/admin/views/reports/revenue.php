@@ -222,11 +222,16 @@ $this->widget('zii.widgets.grid.CGridView', array(
         </thead>
         <tbody>
             <tr class="even">
-                <td style="text-align:center; font-weight:bold"><?php echo OneMany::getReceiptCustomerTotal($receipts->rawData); ?></td>
-                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptTotalTotal($receipts->rawData); ?></td>
-                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptDiscountTotal($receipts->rawData); ?></td>
-                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptFinalTotal($receipts->rawData); ?></td>
-                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptDebitTotal($receipts->rawData); ?></td>
+<!--                <td style="text-align:center; font-weight:bold"><?php // echo OneMany::getReceiptCustomerTotal($receipts->rawData); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php // echo OneMany::getReceiptTotalTotal($receipts->rawData); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php // echo OneMany::getReceiptDiscountTotal($receipts->rawData); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php // echo OneMany::getReceiptFinalTotal($receipts->rawData); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php // echo OneMany::getReceiptDebitTotal($receipts->rawData); ?></td>-->
+                <td style="text-align:center; font-weight:bold"><?php echo OneMany::getReceiptCustomerTotal($allReceipts->getData()); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptTotalTotal($allReceipts->getData()); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptDiscountTotal($allReceipts->getData()); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptFinalTotal($allReceipts->getData()); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptDebitTotal($allReceipts->getData()); ?></td>
             </tr>
         </tbody>
     </table>

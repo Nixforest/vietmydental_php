@@ -249,38 +249,57 @@ class Agents extends BaseActiveRecord
      * @return \CArrayDataProvider
      */
 //    public function getReceipts($from, $to) {
-    public function getReceipts($from, $to, $arrStatus) {
-        $arrReceipts = array();
-        if (isset($this->rJoinReceipt)) {
-            foreach ($this->rJoinReceipt as $value) {
+    public function getReceipts($from, $to, $arrStatus,$allData = false) {
+//        $arrReceipts = array();
+//        if (isset($this->rJoinReceipt)) {
+//            foreach ($this->rJoinReceipt as $value) {
+////                if (isset($value->rReceipt)
+////                        && ($value->rReceipt->status == Receipts::STATUS_DOCTOR
+////                                || $value->rReceipt->status == Receipts::STATUS_RECEIPTIONIST)) {
 //                if (isset($value->rReceipt)
-//                        && ($value->rReceipt->status == Receipts::STATUS_DOCTOR
-//                                || $value->rReceipt->status == Receipts::STATUS_RECEIPTIONIST)) {
-                if (isset($value->rReceipt)
-                        && in_array($value->rReceipt->status, $arrStatus)) {
-                    $date = $value->rReceipt->process_date;
-//                    CommonProcess::dumpVariable($date);
-                    $compareFrom = DateTimeExt::compare($date, $from);
-                    $compareTo = DateTimeExt::compare($date, $to);
-                    // Check if receipt is between date range
-                    if (($compareFrom == 1 || $compareFrom == 0)
-                            && ($compareTo == 0 || $compareTo == -1)) {
-                        $arrReceipts[] = $value;
-                    }
+//                        && in_array($value->rReceipt->status, $arrStatus)) {
+//                    $date = $value->rReceipt->process_date;
+////                    CommonProcess::dumpVariable($date);
+//                    $compareFrom = DateTimeExt::compare($date, $from);
+//                    $compareTo = DateTimeExt::compare($date, $to);
+//                    // Check if receipt is between date range
+//                    if (($compareFrom == 1 || $compareFrom == 0)
+//                            && ($compareTo == 0 || $compareTo == -1)) {
 //                        $arrReceipts[] = $value;
-                }
-            }
-        }
-        return new CArrayDataProvider($arrReceipts, array(
-            'id' => 'receipts',
-            'sort'=>array(
-                'attributes'=>array(
-                     'id', 'one_id', 'many_id'
-                ),
-            ),
-            'pagination'=>array(
-                'pageSize'=>Settings::getListPageSize(),
-            ),
+//                    }
+////                        $arrReceipts[] = $value;
+//                }
+//            }
+//        }
+//        return new CArrayDataProvider($arrReceipts, array(
+//            'id' => 'receipts',
+//            'sort'=>array(
+//                'attributes'=>array(
+//                     'id', 'one_id', 'many_id'
+//                ),
+//            ),
+//            'pagination'=>array(
+//                'pageSize'=>Settings::getListPageSize(),
+//            ),
+//        ));
+        $mOneMany = new OneMany();
+        $criteria=new CDbCriteria;
+        $tblReceipts = Receipts::model()->tableName();
+        $criteria->compare('r.status', Receipts::STATUS_RECEIPTIONIST,false,'OR');
+        $criteria->compare('r.status', Receipts::STATUS_DOCTOR,false,'OR');
+        $criteria->compare('t.type', OneMany::TYPE_AGENT_RECEIPT);
+        $criteria->compare('t.one_id', $this->id);
+        $criteria->addCondition('r.status != '.Receipts::STATUS_INACTIVE);
+        $criteria->addInCondition('r.status', $arrStatus);
+        $criteria->addCondition('r.process_date >= \''.$from.'\'');
+        $criteria->addCondition('r.process_date <= \''.$to.'\'');
+        $criteria->order = 'r.process_date ASC';
+        $criteria->join = 'JOIN '.$tblReceipts.' as r ON r.id = t.many_id';
+        
+        return new CActiveDataProvider($mOneMany, array(
+            'criteria'=>$criteria,
+            'pagination'=>$allData ? false : [ 'pageSize'=>Settings::getListPageSize()]
+               
         ));
     }
     
@@ -291,36 +310,50 @@ class Agents extends BaseActiveRecord
      * @param type $arrStatus
      * @return \CArrayDataProvider
      */
-    public function getMoney($from, $to, $arrIsIncomming) {
-        $arrReceipts = array();
-        if (isset($this->rMoneyAccount)) {
-            foreach ($this->rMoneyAccount as $aValue) {
-                foreach ($aValue->rMoney as $value) {
-                    if (in_array($value->isIncomming, $arrIsIncomming)) {
-                        $date = $value->action_date;
-    //                    CommonProcess::dumpVariable($date);
-                        $compareFrom = DateTimeExt::compare($date, $from);
-                        $compareTo = DateTimeExt::compare($date, $to);
-                        // Check if receipt is between date range
-                        if (($compareFrom == 1 || $compareFrom == 0)
-                                && ($compareTo == 0 || $compareTo == -1)) {
-                            $arrReceipts[] = $value;
-                        }
-    //                        $arrReceipts[] = $value;
-                    }
-                }
-            }
-        }
-        return new CArrayDataProvider($arrReceipts, array(
-            'id' => 'moneys',
-            'sort'=>array(
-                'attributes'=>array(
-                     'id', 'agent_id'
-                ),
-            ),
-            'pagination'=>array(
-                'pageSize'=>Settings::getListPageSize(),
-            ),
+    public function getMoney($from, $to, $arrIsIncomming,$allData = false) {
+//        $arrReceipts = array();
+//        if (isset($this->rMoneyAccount)) {
+//            foreach ($this->rMoneyAccount as $aValue) {
+//                foreach ($aValue->rMoney as $value) {
+//                    if (in_array($value->isIncomming, $arrIsIncomming)) {
+//                        $date = $value->action_date;
+//    //                    CommonProcess::dumpVariable($date);
+//                        $compareFrom = DateTimeExt::compare($date, $from);
+//                        $compareTo = DateTimeExt::compare($date, $to);
+//                        // Check if receipt is between date range
+//                        if (($compareFrom == 1 || $compareFrom == 0)
+//                                && ($compareTo == 0 || $compareTo == -1)) {
+//                            $arrReceipts[] = $value;
+//                        }
+//    //                        $arrReceipts[] = $value;
+//                    }
+//                }
+//            }
+//        }
+//        return new CArrayDataProvider($arrReceipts, array(
+//            'id' => 'moneys',
+//            'sort'=>array(
+//                'attributes'=>array(
+//                     'id', 'agent_id'
+//                ),
+//            ),
+//            'pagination'=>array(
+//                'pageSize'=>Settings::getListPageSize(),
+//            ),
+//        ));
+        $criteria   =  new CDbCriteria;
+        $tblMoneyAccount = MoneyAccount::model()->tableName();
+        $criteria->compare('ma.agent_id', $this->id);
+        $criteria->addCondition('ma.status != '. DomainConst::DEFAULT_STATUS_INACTIVE);
+        $criteria->addInCondition('t.isIncomming', $arrIsIncomming);
+        $criteria->addCondition('t.action_date >= \''.$from.'\'');
+        $criteria->addCondition('t.action_date <= \''.$to.'\'');
+        $criteria->join = 'JOIN '.$tblMoneyAccount.' AS ma ON ma.id = t.account_id';
+        $criteria->order = 't.action_date ASC';
+        $mMoney     = new Money();
+        return new CActiveDataProvider($mMoney, array(
+            'criteria'=>$criteria,
+            'pagination'=>$allData ? false : [ 'pageSize'=>Settings::getListPageSize()]
         ));
     }
     
@@ -340,14 +373,15 @@ class Agents extends BaseActiveRecord
             $aData['DOCTORS'][$id] = $this->getNameBS($name);
         }
 //        Load receipts
-        $receipts = $this->getReceipts($from, $to, array(Receipts::STATUS_RECEIPTIONIST));
-        $receipts->pagination = false;
+        $receipts = $this->getReceipts($from, $to, array(Receipts::STATUS_RECEIPTIONIST),true);
+//        $receipts->pagination = false;
         $aReceipts = $receipts->getData();
         foreach ($aReceipts as $key => $mJoinReceipt) {
             $mReceipt = $mJoinReceipt->rReceipt;
             $doctor_id = $mReceipt->getDoctorId();
             $money = $mJoinReceipt->getReceiptFinal();
-            $date = CommonProcess::convertDateTime($mReceipt->created_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
+//            $date = CommonProcess::convertDateTime($mReceipt->created_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
+            $date = $mReceipt->process_date;
 //            set money RECEIPT
             if(!empty($aData['RECEIPT']['VALUES'][$date][$doctor_id])){
                 $aData['RECEIPT']['VALUES'][$date][$doctor_id] += (int)$money;
@@ -364,8 +398,8 @@ class Agents extends BaseActiveRecord
         $aData['GENERAL']['IMPORT'] = array();
         $aData['GENERAL']['EXPORT'] = array();
         $aData['EXPORT_DETAIL'] = array();
-        $moneys = $this->getMoney($from, $to, array(DomainConst::NUMBER_ONE_VALUE,DomainConst::NUMBER_ZERO_VALUE));
-        $moneys->pagination = false;
+        $moneys = $this->getMoney($from, $to, array(DomainConst::NUMBER_ONE_VALUE,DomainConst::NUMBER_ZERO_VALUE),true);
+//        $moneys->pagination = false;
         $aMoneys = $moneys->getData();
         foreach ($aMoneys as $key => $mMoney) {
             $date = $mMoney->action_date;
