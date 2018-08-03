@@ -16,7 +16,7 @@ if (!empty($to)) {
 <h3><?php echo $this->pageTitle . ' ngày: ' . $dateFrom . ' đến ' . $dateTo; ?></h3>
 <!--//-- BUG0046-IMT (DuongNV 20180803) Update UI reports-->
 
-<div class="form">
+<!--<div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'revenue-form',
@@ -132,7 +132,10 @@ if (!empty($to)) {
 
 <?php $this->endWidget(); ?>
 
-</div><!-- form -->
+</div> form -->
+<?php 
+ $this->widget('ReportSearchWidget', array('dateFrom' => $dateFrom, 'dateTo' => $dateTo));
+ ?>
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'receipts-grid',

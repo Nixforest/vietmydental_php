@@ -12,7 +12,7 @@ if (!empty($to)) {
 ?>
 <h3><?php echo $this->pageTitle . ' ngày: ' . $dateFrom . ' đến ' . $dateTo; ?></h3>
 
-<div class="form">
+<!--<div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'money-form',
@@ -128,7 +128,10 @@ if (!empty($to)) {
 
 <?php $this->endWidget(); ?>
 
-</div><!-- form -->
+</div> form -->
+<?php 
+ $this->widget('ReportSearchWidget', array('dateFrom' => $dateFrom, 'dateTo' => $dateTo));
+ ?>
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'grid-new',
@@ -182,7 +185,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
     </table>
 </div>
 
-<h1><?php echo DomainConst::CONTENT00400; ?></h1>
+<h3><?php echo DomainConst::CONTENT00400; ?></h3>
 <div class="grid-view">
     <table class="items">
         <thead>
@@ -215,7 +218,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
     </table>
 </div>
 
-<h1><?php echo DomainConst::CONTENT00401; ?></h1>
+<h3><?php echo DomainConst::CONTENT00401; ?></h3>
 <div class="grid-view">
     <table class="items">
         <thead>

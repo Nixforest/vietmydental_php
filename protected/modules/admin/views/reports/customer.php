@@ -14,9 +14,8 @@ if (!empty($to)) {
 <!--//++ BUG0046-IMT (DuongNV 20180803) Update UI reports-->
 <h1><?php // echo 'Báo cáo bệnh nhân' . ' ngày: ' . $dateFrom . ' đến ' . $dateTo; ?></h1>
 <h2><?php echo 'Báo cáo bệnh nhân' . ' ngày: ' . $dateFrom . ' đến ' . $dateTo; ?></h2>
-<!--//-- BUG0046-IMT (DuongNV 20180803) Update UI reports-->
 
-<div class="form">
+<!--<div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'grid-old',
@@ -132,7 +131,11 @@ if (!empty($to)) {
 
 <?php $this->endWidget(); ?>
 
-</div><!-- form -->
+</div> form -->
+<?php 
+ $this->widget('ReportSearchWidget', array('dateFrom' => $dateFrom, 'dateTo' => $dateTo));
+ ?>
+<!--//-- BUG0046-IMT (DuongNV 20180803) Update UI reports-->
 <!--khách hàng mới-->
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
