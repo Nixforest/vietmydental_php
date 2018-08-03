@@ -11,39 +11,39 @@ class LaboServiceTypesController extends AdminController
 	/**
 	 * @return array action filters
 	 */
-	public function filters()
-	{
-		return array(
-			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
-		);
-	}
+//	public function filters()
+//	{
+//		return array(
+//			'accessControl', // perform access control for CRUD operations
+//			'postOnly + delete', // we only allow deletion via POST request
+//		);
+//	}
 
 	/**
 	 * Specifies the access control rules.
 	 * This method is used by the 'accessControl' filter.
 	 * @return array access control rules
 	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
+//	public function accessRules()
+//	{
+//		return array(
+//			array('allow',  // allow all users to perform 'index' and 'view' actions
+//				'actions'=>array('index','view'),
+//				'users'=>array('*'),
+//			),
+//			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+//				'actions'=>array('create','update'),
+//				'users'=>array('@'),
+//			),
+//			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+//				'actions'=>array('admin','delete'),
+//				'users'=>array('admin'),
+//			),
+//			array('deny',  // deny all users
+//				'users'=>array('*'),
+//			),
+//		);
+//	}
 
 	/**
 	 * Displays a particular model.
@@ -62,7 +62,7 @@ class LaboServiceTypesController extends AdminController
 	 */
 	public function actionCreate()
 	{
-		$model=new LaboServiceTypes;
+		$model=new LaboServiceTypes('create');
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -70,10 +70,13 @@ class LaboServiceTypesController extends AdminController
 		if(isset($_POST['LaboServiceTypes']))
 		{
 			$model->attributes=$_POST['LaboServiceTypes'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+                        $model->validate();
+                        if(!$model->hasErrors()){
+                            if($model->save()){
+                                $this->redirect(array('view','id'=>$model->id));
+                            }
+                        }
 		}
-
 		$this->render('create',array(
 			'model'=>$model,
 		));
@@ -87,15 +90,18 @@ class LaboServiceTypesController extends AdminController
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-
+                $model->scenario = 'update';
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['LaboServiceTypes']))
 		{
 			$model->attributes=$_POST['LaboServiceTypes'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if(!$model->hasErrors()){
+                            if($model->save()){
+                                $this->redirect(array('view','id'=>$model->id));
+                            }
+                        }
 		}
 
 		$this->render('update',array(
@@ -122,10 +128,19 @@ class LaboServiceTypesController extends AdminController
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('LaboServiceTypes');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
+//		$dataProvider=new CActiveDataProvider('LaboServiceTypes');
+//		$this->render('index',array(
+//			'dataProvider'=>$dataProvider,
+//		));
+            $model=new LaboServiceTypes('search');
+            $model->unsetAttributes();  // clear any default values
+            if(isset($_GET['LaboServiceTypes']))
+                    $model->attributes=$_GET['LaboServiceTypes'];
+
+            $this->render('index',array(
+                    'model'=>$model,
+                    DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+            ));
 	}
 
 	/**

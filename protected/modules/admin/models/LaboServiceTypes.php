@@ -39,12 +39,10 @@ class LaboServiceTypes extends BaseActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, created_date', 'required'),
-			array('status, created_by', 'numerical', 'integerOnly'=>true),
-			array('name, description', 'length', 'max'=>255),
+			array('name', 'required','on'=>'update,create'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, description, status, created_date, created_by', 'safe', 'on'=>'search'),
+			array('id, name, description, status, created_date, created_by', 'safe'),
 		);
 	}
 
