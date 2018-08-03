@@ -11,7 +11,9 @@ if (!empty($to)) {
     $dateTo = CommonProcess::convertDateTime($to, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_BACK_END);
 }
 ?>
-<h1><?php echo 'Báo cáo bệnh nhân' . ' ngày: ' . $dateFrom . ' đến ' . $dateTo; ?></h1>
+<!--//++ BUG0046-IMT (DuongNV 20180803) Update UI reports-->
+<h2><?php echo 'Báo cáo bệnh nhân' . ' ngày: ' . $dateFrom . ' đến ' . $dateTo; ?></h2>
+<!--//-- BUG0046-IMT (DuongNV 20180803) Update UI reports-->
 
 <div class="form">
 
@@ -69,41 +71,50 @@ if (!empty($to)) {
     </div>
 
 	<div class="row buttons">
+<!--//++ BUG0046-IMT (DuongNV 20180803) Update UI reports-->
 		<?php
                 echo CHtml::submitButton(DomainConst::CONTENT00349, array(
                     'name' => DomainConst::KEY_SUBMIT,
+                    'style' => 'margin: 10px 10px 10px 154px; background: teal',
                 ));
                 ?>
 		<?php
                 echo CHtml::submitButton(DomainConst::CONTENT00359, array(
                     'name' => DomainConst::KEY_SUBMIT_DATE_BEFORE_YESTERDAY,
+                    'style' => 'margin: 10px; background: #65a5cc',
                 ));
                 ?>
 		<?php
                 echo CHtml::submitButton(DomainConst::CONTENT00357, array(
                     'name' => DomainConst::KEY_SUBMIT_DATE_YESTERDAY,
+                    'style' => 'margin: 10px; background: #65a5cc',
                 ));
                 ?>
 		<?php
                 echo CHtml::submitButton(DomainConst::CONTENT00358, array(
                     'name' => DomainConst::KEY_SUBMIT_TODATE,
+                    'style' => 'margin: 10px; background: #65a5cc',
                 ));
                 ?>
 		<?php
                 echo CHtml::submitButton(DomainConst::CONTENT00350, array(
                     'name' => DomainConst::KEY_SUBMIT_MONTH,
+                    'style' => 'margin: 10px; background: #65a5cc',
                 ));
                 ?>
 		<?php
                 echo CHtml::submitButton(DomainConst::CONTENT00351, array(
                     'name' => DomainConst::KEY_SUBMIT_LAST_MONTH,
+                    'style' => 'margin: 10px; background: #65a5cc',
                 ));
                 ?>
 		<?php
                 echo CHtml::submitButton(DomainConst::CONTENT00389, array(
                     'name' => DomainConst::KEY_SUBMIT_EXCEL,
+                    'style' => 'margin: 10px; background: #65a5cc',
                 ));
                 ?>
+<!--//-- BUG0046-IMT (DuongNV 20180803) Update UI reports-->
 	</div>
 
 <?php $this->endWidget(); ?>
@@ -185,7 +196,9 @@ $this->widget('zii.widgets.grid.CGridView', array(
     ),
 ));
 ?>
-<h1><?php echo DomainConst::CONTENT00386; ?></h1>
+<!--//++ BUG0046-IMT (DuongNV 20180803) Update UI reports-->
+<h3><?php echo DomainConst::CONTENT00386; ?></h2>
+<!--//-- BUG0046-IMT (DuongNV 20180803) Update UI reports-->
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'receipts-grid',
@@ -260,7 +273,9 @@ $this->widget('zii.widgets.grid.CGridView', array(
     ),
 ));
 ?>
-<h1><?php echo DomainConst::CONTENT00254; ?></h1>
+<!--//++ BUG0046-IMT (DuongNV 20180803) Update UI reports-->
+<h3><?php echo DomainConst::CONTENT00254; ?></h3>
+<!--//-- BUG0046-IMT (DuongNV 20180803) Update UI reports-->
 <div class="grid-view">
     <table class="items">
         <thead>
