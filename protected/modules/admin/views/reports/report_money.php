@@ -11,124 +11,128 @@ if (!empty($to)) {
 }
 ?>
 <h3><?php echo $this->pageTitle . ' ngày: ' . $dateFrom . ' đến ' . $dateTo; ?></h3>
+<!--//++ BUG0046-IMT (DuongNV 20180803) Create widget ReportSearch-->
+<?php 
+$this->widget('ReportSearchWidget', array('dateFrom' => $dateFrom, 'dateTo' => $dateTo));
+?>
+<!--<div class="form">-->
 
-<div class="form">
-
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'money-form',
-	'enableAjaxValidation'=>false,
-)); ?>
-    <div class="row">
+<?php // $form=$this->beginWidget('CActiveForm', array(
+//	'id'=>'money-form',
+//	'enableAjaxValidation'=>false,
+//)); ?>
+<!--    <div class="row">
         <div class="col-md-6">
             <label for="from_date" class="required">Từ </label>
             <?php
-            $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-                'name' => 'from_date',
-                'options'   => array(
-                    'showAnim'      => 'fold',
-                    'dateFormat'    => DomainConst::DATE_FORMAT_2,
-                    'maxDate'       => '0',
-                    'changeMonth'   => true,
-                    'changeYear'    => true,
-                    'showOn'        => 'button',
-                    'buttonImage'   => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
-                    'buttonImageOnly' => true,
-                ),
-                'htmlOptions'=>array(
-                            'class'=>'w-16',
-                            'readonly'=>'readonly',
-                        ),
-                'value' => $dateFrom,
-            ));
+//            $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+//                'name' => 'from_date',
+//                'options'   => array(
+//                    'showAnim'      => 'fold',
+//                    'dateFormat'    => DomainConst::DATE_FORMAT_2,
+//                    'maxDate'       => '0',
+//                    'changeMonth'   => true,
+//                    'changeYear'    => true,
+//                    'showOn'        => 'button',
+//                    'buttonImage'   => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
+//                    'buttonImageOnly' => true,
+//                ),
+//                'htmlOptions'=>array(
+//                            'class'=>'w-16',
+//                            'readonly'=>'readonly',
+//                        ),
+//                'value' => $dateFrom,
+//            ));
             ?>
         </div>
         <div class="col-md-6">
             <label for="to_date" class="required">Đến </label>
             <?php
-            $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-                'name' => 'to_date',
-                'options'   => array(
-                    'showAnim'      => 'fold',
-                    'dateFormat'    => DomainConst::DATE_FORMAT_2,
-//                    'maxDate'       => '0',
-                    'changeMonth'   => true,
-                    'changeYear'    => true,
-                    'showOn'        => 'button',
-                    'buttonImage'   => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
-                    'buttonImageOnly' => true,
-                ),
-                'htmlOptions'=>array(
-                            'class'=>'w-16',
-                            'readonly'=>'readonly',
-                        ),
-                'value' => $dateTo,
-            ));
+//            $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+//                'name' => 'to_date',
+//                'options'   => array(
+//                    'showAnim'      => 'fold',
+//                    'dateFormat'    => DomainConst::DATE_FORMAT_2,
+////                    'maxDate'       => '0',
+//                    'changeMonth'   => true,
+//                    'changeYear'    => true,
+//                    'showOn'        => 'button',
+//                    'buttonImage'   => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
+//                    'buttonImageOnly' => true,
+//                ),
+//                'htmlOptions'=>array(
+//                            'class'=>'w-16',
+//                            'readonly'=>'readonly',
+//                        ),
+//                'value' => $dateTo,
+//            ));
             ?>
         </div>
-    </div>
+    </div>-->
 
-	<div class="row buttons">
+<!--	<div class="row buttons">
 		<?php
-                echo CHtml::submitButton(DomainConst::CONTENT00349, array(
-                    'name' => DomainConst::KEY_SUBMIT,
-                    //++ BUG0046-IMT (DuongNV 20180803) Update UI reports
-                    'style' => 'margin: 10px 10px 10px 154px; background: teal',
-                    //-- BUG0046-IMT (DuongNV 20180803) Update UI reports
-                ));
+//                echo CHtml::submitButton(DomainConst::CONTENT00349, array(
+//                    'name' => DomainConst::KEY_SUBMIT,
+//                    //++ BUG0046-IMT (DuongNV 20180803) Update UI reports
+//                    'style' => 'margin: 10px 10px 10px 154px; background: teal',
+//                    //-- BUG0046-IMT (DuongNV 20180803) Update UI reports
+//                ));
+//                ?>
+		//<?php
+//                echo CHtml::submitButton(DomainConst::CONTENT00359, array(
+//                    'name' => DomainConst::KEY_SUBMIT_DATE_BEFORE_YESTERDAY,
+//                    //++ BUG0046-IMT (DuongNV 20180803) Update UI reports
+//                    'style' => 'margin: 10px; background: #65a5cc',
+//                    //-- BUG0046-IMT (DuongNV 20180803) Update UI reports
+//                ));
                 ?>
 		<?php
-                echo CHtml::submitButton(DomainConst::CONTENT00359, array(
-                    'name' => DomainConst::KEY_SUBMIT_DATE_BEFORE_YESTERDAY,
-                    //++ BUG0046-IMT (DuongNV 20180803) Update UI reports
-                    'style' => 'margin: 10px; background: #65a5cc',
-                    //-- BUG0046-IMT (DuongNV 20180803) Update UI reports
-                ));
+//                echo CHtml::submitButton(DomainConst::CONTENT00357, array(
+//                    'name' => DomainConst::KEY_SUBMIT_DATE_YESTERDAY,
+//                    //++ BUG0046-IMT (DuongNV 20180803) Update UI reports
+//                    'style' => 'margin: 10px; background: #65a5cc',
+//                    //-- BUG0046-IMT (DuongNV 20180803) Update UI reports
+//                ));
                 ?>
 		<?php
-                echo CHtml::submitButton(DomainConst::CONTENT00357, array(
-                    'name' => DomainConst::KEY_SUBMIT_DATE_YESTERDAY,
-                    //++ BUG0046-IMT (DuongNV 20180803) Update UI reports
-                    'style' => 'margin: 10px; background: #65a5cc',
-                    //-- BUG0046-IMT (DuongNV 20180803) Update UI reports
-                ));
+//                echo CHtml::submitButton(DomainConst::CONTENT00358, array(
+//                    'name' => DomainConst::KEY_SUBMIT_TODATE,
+//                    //++ BUG0046-IMT (DuongNV 20180803) Update UI reports
+//                    'style' => 'margin: 10px; background: #65a5cc',
+//                    //-- BUG0046-IMT (DuongNV 20180803) Update UI reports
+//                ));
                 ?>
 		<?php
-                echo CHtml::submitButton(DomainConst::CONTENT00358, array(
-                    'name' => DomainConst::KEY_SUBMIT_TODATE,
-                    //++ BUG0046-IMT (DuongNV 20180803) Update UI reports
-                    'style' => 'margin: 10px; background: #65a5cc',
-                    //-- BUG0046-IMT (DuongNV 20180803) Update UI reports
-                ));
+//                echo CHtml::submitButton(DomainConst::CONTENT00350, array(
+//                    'name' => DomainConst::KEY_SUBMIT_MONTH,
+//                    //++ BUG0046-IMT (DuongNV 20180803) Update UI reports
+//                    'style' => 'margin: 10px; background: #65a5cc',
+//                    //-- BUG0046-IMT (DuongNV 20180803) Update UI reports
+//                ));
                 ?>
 		<?php
-                echo CHtml::submitButton(DomainConst::CONTENT00350, array(
-                    'name' => DomainConst::KEY_SUBMIT_MONTH,
-                    //++ BUG0046-IMT (DuongNV 20180803) Update UI reports
-                    'style' => 'margin: 10px; background: #65a5cc',
-                    //-- BUG0046-IMT (DuongNV 20180803) Update UI reports
-                ));
+//                echo CHtml::submitButton(DomainConst::CONTENT00351, array(
+//                    'name' => DomainConst::KEY_SUBMIT_LAST_MONTH,
+//                    //++ BUG0046-IMT (DuongNV 20180803) Update UI reports
+//                    'style' => 'margin: 10px; background: #65a5cc',
+//                    //-- BUG0046-IMT (DuongNV 20180803) Update UI reports
+//                ));
                 ?>
 		<?php
-                echo CHtml::submitButton(DomainConst::CONTENT00351, array(
-                    'name' => DomainConst::KEY_SUBMIT_LAST_MONTH,
-                    //++ BUG0046-IMT (DuongNV 20180803) Update UI reports
-                    'style' => 'margin: 10px; background: #65a5cc',
-                    //-- BUG0046-IMT (DuongNV 20180803) Update UI reports
-                ));
+//                echo CHtml::submitButton(DomainConst::CONTENT00397, array(
+//                    'name' => DomainConst::KEY_SUBMIT_EXCEL,
+//                    //++ BUG0046-IMT (DuongNV 20180803) Update UI reports
+//                    'style' => 'margin: 10px; background: #65a5cc',
+//                    //-- BUG0046-IMT (DuongNV 20180803) Update UI reports
+//                ));
                 ?>
-		<?php
-                echo CHtml::submitButton(DomainConst::CONTENT00397, array(
-                    'name' => DomainConst::KEY_SUBMIT_EXCEL,
-                    //++ BUG0046-IMT (DuongNV 20180803) Update UI reports
-                    'style' => 'margin: 10px; background: #65a5cc',
-                    //-- BUG0046-IMT (DuongNV 20180803) Update UI reports
-                ));
-                ?>
-	</div>
+	</div>-->
 
-<?php $this->endWidget(); ?>
+<?php // $this->endWidget(); ?>
 
-</div><!-- form -->
+<!--</div> form -->
+<!--//-- BUG0046-IMT (DuongNV 20180803) Create widget ReportSearch-->
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'grid-new',
