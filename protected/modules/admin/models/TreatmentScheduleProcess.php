@@ -174,6 +174,15 @@ class TreatmentScheduleProcess extends BaseActiveRecord
         }
         return '';
     }
+    
+    /**
+     * Get process date string
+     * @return String Time and Start date
+     */
+    public function getDate() {
+        $retVal = CommonProcess::convertDateTime($this->process_date, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_VIEW);
+        return $retVal;
+    }
 
     //-----------------------------------------------------
     // Static methods
@@ -250,5 +259,25 @@ class TreatmentScheduleProcess extends BaseActiveRecord
             $this->status != TreatmentScheduleProcess::STATUS_COMPLETED
             ? DomainConst::NUMBER_ONE_VALUE : DomainConst::NUMBER_ZERO_VALUE);
         return $info;
+    }
+    
+    /**
+     * Get html information
+     * @return string Html string
+     */
+    public function getHtmlInfo() {
+        $teethInfo = !empty($this->teeth_id) ? '<p><i class="fas fa-tooth" title='.DomainConst::CONTENT00284.'></i> '. $this->getTeeth() .'</p>' : '';
+        $description = !empty($this->description) ? '<p><i class="fas fa-sticky-note" title='.DomainConst::CONTENT00062.'></i> '. $this->description .'</p>' : '';
+        $doctorInfo = !empty($this->doctor_id) ? '<p><i class="fas fa-user-md" title="' . DomainConst::CONTENT00143
+                . '"></i> '. $this->rDoctor->first_name .'</p>' : '';
+        
+        $retVal = '<div class="lp-list-item" style=" width: 45%; margin: 10px 15px;float:left;>'
+                    .       '<i class="fas fa-calendar-check lp-list-item-icon"></i>'
+                    .       '<p><i class="fas fa-angle-double-right" title="Tên"></i> '. $this->name .'</p>'
+                    .       '<p><i class="fas fa-calendar-alt" title="' . DomainConst::CONTENT00147 . '"></i> '. $this->getDate() .'</p>'
+                    .       $teethInfo . $description
+                    .       $doctorInfo
+                    . '</div>';
+        return $retVal;
     }
 }

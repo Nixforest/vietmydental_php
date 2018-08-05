@@ -84,6 +84,7 @@ class TreatmentScheduleDetails extends BaseActiveRecord
                     'rProcess' => array(
                         self::HAS_MANY, 'TreatmentScheduleProcess', 'detail_id',
                         'on'    => 'status = ' . DomainConst::DEFAULT_STATUS_ACTIVE,
+                        'order' => 'process_date DESC'
                     ),
                     'rTime' => array(
                         self::BELONGS_TO, 'ScheduleTimes', 'time_id'

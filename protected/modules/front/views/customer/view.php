@@ -195,6 +195,21 @@
                         </div>
                         <!--Qua trinh dieu tri -->
                         <div id="treatment-process" class="tab-pane fade">
+                            <div class="lp-list-container" id="treatment_schedule_detail-info">
+                                <?php
+                                $treatmentProcess = '';
+                                foreach ($treatment as $treatmentSchedule) {
+                                    foreach ($treatmentSchedule->rDetail as $detail) {
+                                        foreach ($detail->rProcess as $process) {
+                                            $treatmentProcess .= $process->getHtmlInfo();
+                                        }
+                                    }
+                                }
+                                echo $treatmentProcess;
+                                ?>
+
+                                <!--<a href="#">(Xem Thêm)</a>-->
+                            </div>
                             <!--                        <div class="list__2__info">
                                                         <div class="list__2__des">
                                                             <div class="list__2__item">
