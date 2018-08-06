@@ -53,7 +53,28 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'headerHtmlOptions' => array('width' => '30px','style' => 'text-align:center;'),
                     'htmlOptions' => array('style' => 'text-align:center;')
                 ),
-            
+                array(
+                    'name'      => 'name',
+                    'header'    => DomainConst::CONTENT00042,
+                    'type'      => 'raw',
+                    'value'     => '$data->getField(\'name\')',
+                ),
+                array(
+                    'name'      => 'description',
+                    'header'    => DomainConst::CONTENT00062,
+                    'type'      => 'raw',
+                    'value'     => '$data->getField(\'description\')',
+                ),
+                array(
+                    'header'    => DomainConst::CONTENT00010,
+                    'type'      => 'raw',
+                    'value'     => '$data->getCreatedDate()',
+                ),
+                array(
+                    'header'    => DomainConst::CONTENT00054,
+                    'type'      => 'raw',
+                    'value'     => '$data->getCreatedBy()',
+                ),
                 array(
                     'header' => 'Actions',
                     'class'=>'CButtonColumn',

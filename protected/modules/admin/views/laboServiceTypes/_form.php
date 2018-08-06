@@ -27,24 +27,6 @@
 		<?php echo $form->error($model,'description'); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'status'); ?>
-		<?php echo $form->textField($model,'status'); ?>
-		<?php echo $form->error($model,'status'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'created_date'); ?>
-		<?php echo $form->textField($model,'created_date'); ?>
-		<?php echo $form->error($model,'created_date'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'created_by'); ?>
-		<?php echo $form->textField($model,'created_by'); ?>
-		<?php echo $form->error($model,'created_by'); ?>
-	</div>
-
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
 	</div>

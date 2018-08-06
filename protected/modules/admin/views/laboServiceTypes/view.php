@@ -23,11 +23,21 @@ $this->createMenu('view', $model);
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
-		'id',
-		'name',
-		'description',
-		'status',
-		'created_date',
-		'created_by',
+		array(
+                    'name'    => DomainConst::CONTENT00042,
+                    'value'     => $model->getField('name'),
+                ),
+                array(
+                    'name'    => DomainConst::CONTENT00062,
+                    'value'     => $model->getField('description'),
+                ),
+                array(
+                    'name'    => DomainConst::CONTENT00054,
+                    'value'     => $model->getCreatedBy(),
+                ),
+                array(
+                    'name'    => DomainConst::CONTENT00010,
+                    'value'     => $model->getCreatedDate(),
+                ),
 	),
 )); ?>

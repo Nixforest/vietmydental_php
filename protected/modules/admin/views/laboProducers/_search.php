@@ -22,28 +22,18 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'description'); ?>
-		<?php echo $form->textField($model,'description',array('size'=>60,'maxlength'=>255)); ?>
+		<?php echo $form->label($model,'address'); ?>
+		<?php echo $form->textField($model,'address',array('size'=>60,'maxlength'=>255)); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'price'); ?>
-		<?php echo $form->textField($model,'price'); ?>
+		<?php echo $form->label($model,'phone'); ?>
+		<?php echo $form->textField($model,'phone',array('size'=>60,'maxlength'=>255)); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'type_id'); ?>
-		<?php echo $form->textField($model,'type_id',array('size'=>10,'maxlength'=>10)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'producer_id'); ?>
-		<?php echo $form->textField($model,'producer_id',array('size'=>10,'maxlength'=>10)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'time'); ?>
-		<?php echo $form->textField($model,'time',array('size'=>10,'maxlength'=>10)); ?>
+		<?php echo $form->label($model,'admin_id'); ?>
+		<?php echo $form->textField($model,'admin_id',array('size'=>10,'maxlength'=>10)); ?>
 	</div>
 
 	<div class="row">

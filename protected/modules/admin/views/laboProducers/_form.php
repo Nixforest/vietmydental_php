@@ -22,33 +22,21 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'description'); ?>
-		<?php echo $form->textField($model,'description',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'description'); ?>
+		<?php echo $form->labelEx($model,'address'); ?>
+		<?php echo $form->textField($model,'address',array('size'=>60,'maxlength'=>255)); ?>
+		<?php echo $form->error($model,'address'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'price'); ?>
-		<?php echo $form->textField($model,'price'); ?>
-		<?php echo $form->error($model,'price'); ?>
+		<?php echo $form->labelEx($model,'phone'); ?>
+		<?php echo $form->textField($model,'phone',array('size'=>60,'maxlength'=>255)); ?>
+		<?php echo $form->error($model,'phone'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'type_id'); ?>
-		<?php echo $form->textField($model,'type_id',array('size'=>10,'maxlength'=>10)); ?>
-		<?php echo $form->error($model,'type_id'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'producer_id'); ?>
-		<?php echo $form->textField($model,'producer_id',array('size'=>10,'maxlength'=>10)); ?>
-		<?php echo $form->error($model,'producer_id'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'time'); ?>
-		<?php echo $form->textField($model,'time',array('size'=>10,'maxlength'=>10)); ?>
-		<?php echo $form->error($model,'time'); ?>
+		<?php echo $form->labelEx($model,'admin_id'); ?>
+		<?php echo $form->textField($model,'admin_id',array('size'=>10,'maxlength'=>10)); ?>
+		<?php echo $form->error($model,'admin_id'); ?>
 	</div>
 
 	<div class="row">

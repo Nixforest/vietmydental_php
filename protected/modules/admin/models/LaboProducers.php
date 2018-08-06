@@ -1,16 +1,14 @@
 <?php
 
 /**
- * This is the model class for table "labo_services".
+ * This is the model class for table "labo_producers".
  *
- * The followings are the available columns in table 'labo_services':
+ * The followings are the available columns in table 'labo_producers':
  * @property string $id
  * @property string $name
- * @property string $description
- * @property double $price
- * @property string $type_id
- * @property string $producer_id
- * @property string $time
+ * @property string $address
+ * @property string $phone
+ * @property string $admin_id
  * @property integer $status
  * @property string $created_date
  * @property string $created_by
@@ -32,7 +30,7 @@ class LaboProducers extends BaseActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'labo_services';
+		return 'labo_producers';
 	}
 
 	/**
@@ -43,14 +41,13 @@ class LaboProducers extends BaseActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, price, time, status, created_date', 'required'),
+			array('name, address, phone, created_date, created_by', 'required'),
 			array('status', 'numerical', 'integerOnly'=>true),
-			array('price', 'numerical'),
-			array('name, description', 'length', 'max'=>255),
-			array('type_id, producer_id, time, created_by', 'length', 'max'=>10),
+			array('name, address, phone', 'length', 'max'=>255),
+			array('admin_id, created_by', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, description, price, type_id, producer_id, time, status, created_date, created_by', 'safe', 'on'=>'search'),
+			array('id, name, address, phone, admin_id, status, created_date, created_by', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -73,11 +70,9 @@ class LaboProducers extends BaseActiveRecord
 		return array(
 			'id' => 'ID',
 			'name' => 'Name',
-			'description' => 'Description',
-			'price' => 'Price',
-			'type_id' => 'Type',
-			'producer_id' => 'Producer',
-			'time' => 'Time',
+			'address' => 'Address',
+			'phone' => 'Phone',
+			'admin_id' => 'Admin',
 			'status' => 'Status',
 			'created_date' => 'Created Date',
 			'created_by' => 'Created By',
@@ -97,11 +92,9 @@ class LaboProducers extends BaseActiveRecord
 
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('description',$this->description,true);
-		$criteria->compare('price',$this->price);
-		$criteria->compare('type_id',$this->type_id,true);
-		$criteria->compare('producer_id',$this->producer_id,true);
-		$criteria->compare('time',$this->time,true);
+		$criteria->compare('address',$this->address,true);
+		$criteria->compare('phone',$this->phone,true);
+		$criteria->compare('admin_id',$this->admin_id,true);
 		$criteria->compare('status',$this->status);
 		$criteria->compare('created_date',$this->created_date,true);
 		$criteria->compare('created_by',$this->created_by,true);
