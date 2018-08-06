@@ -1125,7 +1125,9 @@ a:hover{
     left: 7px;
     right: 5px;
     float: right;
-    z-index: 1;
+    /*//++ BUG0054-IMT (DuongNV 20180806) Update UI treatment history*/
+    /*z-index: 1;*/ 
+    /*//++ BUG0054-IMT (DuongNV 20180806) Update UI treatment history*/
 }
 .create-treatment-btn{text-align: right;}
 .round-container {
