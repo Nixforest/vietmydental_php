@@ -139,8 +139,8 @@ class HtmlHandler {
                     .        '<ul class="dropdown-menu" style="min-width:100px;">'
                     .           '<li class="createPrescription">' . $prescriptItem . '</li>'
                     .           '<li class="createProcess"><a style="cursor:pointer;"><i class="fas fa-stethoscope"></i> Tạo Tiến trình điều trị</a></li>'
-                    .           '<li class="imageCamera"><a style="cursor:pointer;"> <i class="fas fa-camera" style="margin:0 1px;"></i> Hình ảnh Camera</a></li>'
-                    .           '<li class="imageXQuang"><a style="cursor:pointer;"><i class="fas fa-x-ray"></i> Hình ảnh X-Quang</a></li>'
+                    .           '<li class="imageCamera" data-id="'.$id.'"><a style="cursor:pointer;"> <i class="fas fa-camera" style="margin:0 1px;"></i> Hình ảnh Camera</a></li>'
+                    .           '<li class="imageXQuang" data-id="'.$id.'"><a style="cursor:pointer;"><i class="fas fa-x-ray"></i> Hình ảnh X-Quang</a></li>'
                     .       '</ul>'
                     .    '</div>';
         //-- BUG0054-IMT (DuongNV 20180806) Update UI treatment history
@@ -151,8 +151,8 @@ class HtmlHandler {
         //++ BUG0054-IMT (DuongNV 20180806) Update UI treatment history
         $paymentItem = '<a href="' . $paymentHref . '" class="btn btn-xs btn-primary mr-1"><i class="fas fa-dollar-sign" title="' . DomainConst::CONTENT00251 . '"></i></a>';
         if (!empty($paymentClick)) {
-//            $paymentItem = '<a onclick="' . $paymentClick . '" class="btn btn-xs btn-primary mr-1">' . DomainConst::CONTENT00251 . '</a>';
-            $paymentItem = '<a onclick="' . $paymentClick . '" class="btn btn-xs btn-primary mr-1"><i class="fas fa-dollar-sign" title="' . DomainConst::CONTENT00251 . '"></i></a>';
+            $paymentItem = '<a onclick="' . $paymentClick . '" class="btn btn-xs btn-primary mr-1">' . DomainConst::CONTENT00251 . '</a>';
+//            $paymentItem = '<a onclick="' . $paymentClick . '" class="btn btn-xs btn-primary mr-1"><i class="fas fa-dollar-sign" title="' . DomainConst::CONTENT00251 . '"></i></a>';
         }
 //        $prescriptItem = '<a href="' . $prescriptHref . '" class="btn btn-xs btn-success mr-1">' . DomainConst::CONTENT00379 . '</a>';
 //        if (!empty($prescriptClick)) {
@@ -204,9 +204,9 @@ class HtmlHandler {
                 break;
             }
             $resVal .= '<div class="treatment-process-item">'
-                    .   '<p><b>' . $value->name.':</b>'
-                    .   ' <span>' . $value->process_date.',</span>'
-                    .   ' <span>răng ' . $value->teeth_id.'</span></p>'
+                    .   '<p><b>' . $value->process_date.':</b>'
+                    .   ' <span>' . $value->name.',</span>'
+//                    .   ' <span>răng ' . $value->teeth_id.'</span></p>'
                     .'</div>';
         }
         return $resVal;

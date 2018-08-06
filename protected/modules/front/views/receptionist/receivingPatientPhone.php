@@ -623,10 +623,18 @@
             alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
         });
         $(document).on('click', '.imageCamera', function(){
-            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
+//            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
+            var id = $(this).data('id');
+            $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
+                    'admin/treatmentScheduleDetails/updateImageReal',
+                    array('id' => '')) ?>/' + id);
         });
         $(document).on('click', '.imageXQuang', function(){
-            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
+//            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
+            var id = $(this).data('id');
+            $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
+                    'admin/treatmentScheduleDetails/updateImageXRay',
+                    array('id' => '')) ?>/' + id);
         });
         $(document).on('click', '.vm-btn', function(){
             alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
