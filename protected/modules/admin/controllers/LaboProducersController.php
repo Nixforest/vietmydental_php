@@ -91,7 +91,7 @@ class LaboProducersController extends AdminController
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-
+                $model->scenario = 'update';
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -130,10 +130,19 @@ class LaboProducersController extends AdminController
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('LaboProducers');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
+//		$dataProvider=new CActiveDataProvider('LaboProducers');
+//		$this->render('index',array(
+//			'dataProvider'=>$dataProvider,
+//		));
+            $model=new LaboProducers('search');
+            $model->unsetAttributes();  // clear any default values
+            if(isset($_GET['LaboProducers']))
+                    $model->attributes=$_GET['LaboProducers'];
+
+            $this->render('index',array(
+                    'model'=>$model,
+                    DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+            ));
 	}
 
 	/**

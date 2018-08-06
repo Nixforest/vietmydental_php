@@ -143,4 +143,21 @@ class LaboServiceTypes extends BaseActiveRecord
             }
             return parent::beforeSave();
         }
+        
+        /**
+         * 
+         * @param type $emptyOption
+         * @return string
+         */
+        public static function loadItems() {
+            $_items = array();
+            $criteria = new CDbCriteria;
+            $criteria->compare('t.status', self::STATUS_ACTIVE);
+            $criteria->order = 't.id ASC';
+            $models = self::model()->findAll($criteria);
+            foreach ($models as $model) {
+                $_items[$model->id] = $model->name;
+            }
+            return $_items;
+        }
 }

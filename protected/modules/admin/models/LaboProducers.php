@@ -15,7 +15,10 @@
  */
 class LaboProducers extends BaseActiveRecord
 {
-	/**
+    const STATUS_ACTIVE     = 1;
+    const STATUS_INACTIVE   = 2;
+    public $autocomplete_name_admin;
+    /**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
 	 * @return LaboProducers the static model class
@@ -41,13 +44,10 @@ class LaboProducers extends BaseActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, address, phone, created_date, created_by', 'required'),
-			array('status', 'numerical', 'integerOnly'=>true),
-			array('name, address, phone', 'length', 'max'=>255),
-			array('admin_id, created_by', 'length', 'max'=>10),
+			array('name, address, phone', 'required','on'=>'create,update'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, address, phone, admin_id, status, created_date, created_by', 'safe', 'on'=>'search'),
+			array('id, name, address, phone, admin_id, status, created_date, created_by', 'safe'),
 		);
 	}
 
@@ -59,6 +59,8 @@ class LaboProducers extends BaseActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    'rAdmin' => array(self::BELONGS_TO, 'Users', 'admin_id'),
+                    'rCreatedBy' => array(self::BELONGS_TO, 'Users', 'created_by'),
 		);
 	}
 
@@ -68,14 +70,14 @@ class LaboProducers extends BaseActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'name' => 'Name',
-			'address' => 'Address',
-			'phone' => 'Phone',
-			'admin_id' => 'Admin',
-			'status' => 'Status',
-			'created_date' => 'Created Date',
-			'created_by' => 'Created By',
+			'id' => DomainConst::KEY_ID,
+			'name' => DomainConst::CONTENT00042,
+			'address' => DomainConst::CONTENT00045,
+			'phone' => DomainConst::CONTENT00170,
+			'admin_id' => DomainConst::CONTENT00409,
+			'status' => DomainConst::CONTENT00026,
+			'created_date' => DomainConst::CONTENT00010,
+			'created_by' => DomainConst::CONTENT00054,
 		);
 	}
 
@@ -90,17 +92,76 @@ class LaboProducers extends BaseActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id,true);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('address',$this->address,true);
 		$criteria->compare('phone',$this->phone,true);
-		$criteria->compare('admin_id',$this->admin_id,true);
+		$criteria->compare('admin_id',$this->admin_id);
 		$criteria->compare('status',$this->status);
-		$criteria->compare('created_date',$this->created_date,true);
-		$criteria->compare('created_by',$this->created_by,true);
+		$criteria->compare('created_by',$this->created_by);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
+        
+        /**
+         * get created date
+         * @return date
+         */
+        public function getCreatedDate(){
+            return CommonProcess::convertDateTime($this->created_date,DomainConst::DATE_FORMAT_1,DomainConst::DATE_FORMAT_11);
+        }
+        
+        /**
+         * get full name of created by users
+         * @return string
+         */
+        public function getCreatedBy(){
+            return !empty($this->rCreatedBy) ? $this->rCreatedBy->getFullName() : '';
+        }
+        
+        /**
+         * get full name of created by users
+         * @return string
+         */
+        public function getAdmin(){
+            return !empty($this->rAdmin) ? $this->rAdmin->getFullName() : '';
+        }
+        
+        /**
+         * get field name of table
+         * @param string $fieldName
+         * @return string
+         */
+        public function getField($fieldName){
+            return !empty($this->$fieldName) ? $this->$fieldName : '';
+        }
+        
+        /**
+         * before save
+         * @return parent
+         */
+        protected function beforeSave() {
+            if($this->isNewRecord){
+                $this->created_by = Yii::app()->user->id;
+            }
+            return parent::beforeSave();
+        }
+        
+        /**
+         * 
+         * @param type $emptyOption
+         * @return string
+         */
+        public static function loadItems() {
+            $_items = array();
+            $criteria = new CDbCriteria;
+            $criteria->compare('t.status', self::STATUS_ACTIVE);
+            $criteria->order = 't.id ASC';
+            $models = self::model()->findAll($criteria);
+            foreach ($models as $model) {
+                $_items[$model->id] = $model->name;
+            }
+            return $_items;
+        }
 }

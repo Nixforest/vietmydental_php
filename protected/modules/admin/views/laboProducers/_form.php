@@ -34,27 +34,21 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'admin_id'); ?>
-		<?php echo $form->textField($model,'admin_id',array('size'=>10,'maxlength'=>10)); ?>
-		<?php echo $form->error($model,'admin_id'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'status'); ?>
-		<?php echo $form->textField($model,'status'); ?>
-		<?php echo $form->error($model,'status'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'created_date'); ?>
-		<?php echo $form->textField($model,'created_date'); ?>
-		<?php echo $form->error($model,'created_date'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'created_by'); ?>
-		<?php echo $form->textField($model,'created_by',array('size'=>10,'maxlength'=>10)); ?>
-		<?php echo $form->error($model,'created_by'); ?>
+		<?php echo $form->label($model,'admin_id'); ?>
+		<?php echo $form->hiddenField($model, 'admin_id', array('class' => '')); ?>
+                <?php
+                    $userName = !empty($model->rAdmin) ? $model->rAdmin->getAutoCompleteUserName() : '';
+                    $aData = array(
+                        'model'             => $model,
+                        'field_id'          => 'admin_id',
+                        'update_value'      => $userName,
+                        'ClassAdd'          => 'w-400',
+                        'url'               => Yii::app()->createAbsoluteUrl('admin/ajax/searchUser'),
+                        'field_autocomplete_name' => 'autocomplete_name_admin',
+                    );
+                    $this->widget('ext.AutocompleteExt.AutocompleteExt',
+                            array('data' => $aData));
+                ?>
 	</div>
 
 	<div class="row buttons">

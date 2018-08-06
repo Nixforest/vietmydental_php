@@ -2,6 +2,8 @@
 /* @var $this LaboServicesController */
 /* @var $model LaboServices */
 /* @var $form CActiveForm */
+$mLaboProducers = new LaboProducers();
+$mLaboServiceTypes = new LaboServiceTypes();
 ?>
 
 <div class="form">
@@ -32,41 +34,23 @@
 		<?php echo $form->textField($model,'price'); ?>
 		<?php echo $form->error($model,'price'); ?>
 	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'type_id'); ?>
-		<?php echo $form->textField($model,'type_id',array('size'=>10,'maxlength'=>10)); ?>
-		<?php echo $form->error($model,'type_id'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'producer_id'); ?>
-		<?php echo $form->textField($model,'producer_id',array('size'=>10,'maxlength'=>10)); ?>
-		<?php echo $form->error($model,'producer_id'); ?>
-	</div>
-
-	<div class="row">
+        
+        <div class="row">
 		<?php echo $form->labelEx($model,'time'); ?>
 		<?php echo $form->textField($model,'time',array('size'=>10,'maxlength'=>10)); ?>
 		<?php echo $form->error($model,'time'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'status'); ?>
-		<?php echo $form->textField($model,'status'); ?>
-		<?php echo $form->error($model,'status'); ?>
+		<?php echo $form->labelEx($model,'type_id'); ?>
+		<?php echo $form->dropDownList($model,'type_id', $mLaboServiceTypes->loadItems(), array('class'=>'','empty'=>'Select')); ?>
+		<?php echo $form->error($model,'type_id'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'created_date'); ?>
-		<?php echo $form->textField($model,'created_date'); ?>
-		<?php echo $form->error($model,'created_date'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'created_by'); ?>
-		<?php echo $form->textField($model,'created_by',array('size'=>10,'maxlength'=>10)); ?>
-		<?php echo $form->error($model,'created_by'); ?>
+		<?php echo $form->labelEx($model,'producer_id'); ?>
+		<?php echo $form->dropDownList($model,'producer_id', $mLaboProducers->loadItems(), array('class'=>'','empty'=>'Select')); ?>
+		<?php echo $form->error($model,'producer_id'); ?>
 	</div>
 
 	<div class="row buttons">

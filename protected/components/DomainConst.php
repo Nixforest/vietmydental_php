@@ -1420,4 +1420,6 @@ class DomainConst {
     const CONTENT00406  = 'KM khấu trừ';
     const CONTENT00407  = 'Hoạt động';
     const CONTENT00408  = 'Không hoạt động';
+    const CONTENT00409  = 'Người quản lý';
+    const CONTENT00410  = 'Phòng Lab';
 }
