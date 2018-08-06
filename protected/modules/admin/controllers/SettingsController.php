@@ -25,6 +25,7 @@ class SettingsController extends AdminController
                     Settings::KEY_PASSWORD_LEN_MAX,
                     Settings::KEY_NUM_QRCODE_DOWNLOAD_MAX,
                     Settings::KEY_PRINT_RECEIPT_FONT_SIZE_RATE,
+                    Settings::KEY_SMS_PROVIDER,
                     /** Test */
 //                    Settings::KEY_APP_MOBILE_VERSION_IOS,
 //                    Settings::KEY_ADMIN_EMAIL,
@@ -66,6 +67,15 @@ class SettingsController extends AdminController
                 DomainConst::KEY_ALIAS      => DomainConst::CONTENT00261,
                 DomainConst::KEY_CHILDREN   => array(
                     Settings::KEY_SMS_SERVER_URL,
+                    Settings::KEY_VIVAS_SMS_SERVER_URL,
+                    Settings::KEY_VIVAS_URL_LOGIN,
+                    Settings::KEY_VIVAS_URL_SEND_SMS,
+                    Settings::KEY_VIVAS_URL_SEND_SMS_EXT,
+                    Settings::KEY_VIVAS_URL_VERIFY,
+                    Settings::KEY_VIVAS_URL_LOGOUT,
+                    Settings::KEY_VIVAS_USERNAME,
+                    Settings::KEY_VIVAS_PASSWORD,
+                    Settings::KEY_VIVAS_SHARE_KEY,
                 ),
             ),
             // TODO: Add more group here

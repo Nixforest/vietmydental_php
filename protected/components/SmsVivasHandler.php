@@ -54,7 +54,42 @@ class SmsVivasHandler {
     // Properties
     public $response                        = NULL;
     public $curl_info                       = NULL;
-    public $body                            = NULL;    
+    public $body                            = NULL;
+    /** Url */
+    private $url                            = '';
+    /** Url Login */
+    private $urlLogin                       = '';
+    /** Url send sms */
+    private $urlSend                        = '';
+    /** Url send sms extend */
+    private $urlSendExt                     = '';
+    /** Url verify */
+    private $urlVerify                      = '';
+    /** Url logout */
+    private $urlLogout                      = '';
+    /** Username */
+    private $username                       = '';
+    /** Password */
+    private $password                       = '';
+    /** Shared key */
+    private $sharekey                       = '';
+    
+    
+    /**
+     * Constructor
+     */
+    function __construct() {
+        Loggers::info('Constructor', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        $this->url          = Settings::getItem(Settings::KEY_VIVAS_SMS_SERVER_URL);
+        $this->urlLogin     = Settings::getItem(Settings::KEY_VIVAS_URL_LOGIN);
+        $this->urlSend      = Settings::getItem(Settings::KEY_VIVAS_URL_SEND_SMS);
+        $this->urlSendExt   = Settings::getItem(Settings::KEY_VIVAS_URL_SEND_SMS_EXT);
+        $this->urlVerify    = Settings::getItem(Settings::KEY_VIVAS_URL_VERIFY);
+        $this->urlLogout    = Settings::getItem(Settings::KEY_VIVAS_URL_LOGOUT);
+        $this->username     = Settings::getItem(Settings::KEY_VIVAS_USERNAME);
+        $this->password     = Settings::getItem(Settings::KEY_VIVAS_PASSWORD);
+        $this->sharekey     = Settings::getItem(Settings::KEY_VIVAS_SHARE_KEY);
+    }
     /**
      * Check if request is success.
      * @return True if response code is '0', False otherwise
@@ -63,7 +98,7 @@ class SmsVivasHandler {
         if ($this->response == self::STATUS_SUCCESS) {
             return true;
         } else {
-            if (!empty($this->body->STATUS) && $this->body->STATUS == self::STATUS_SUCCESS) {
+            if ($this->body->STATUS == self::STATUS_SUCCESS) {
                 return true;
             }
         }
@@ -129,24 +164,23 @@ class SmsVivasHandler {
      */
     public function login() {
         $input_xml = '<RQST>'
-                . '<USERNAME>' . VIVAS_USERNAME . '</USERNAME>'
-                . '<PASSWORD>' . $this->getSha1(VIVAS_PASSWORD) . '</PASSWORD>'
+                . '<USERNAME>' . $this->username . '</USERNAME>'
+                . '<PASSWORD>' . $this->getSha1($this->password) . '</PASSWORD>'
                 . '</RQST>';
         $headers = array(
             "Content-type: text/xml",
             "Content-length: " . strlen($input_xml),
-//            'Cookie:' . $this->getSessionId(),
             "Connection: close",
         );
-        $this->executeCurl(VIVAS_URL_LOGIN, $input_xml, $headers);
+        $this->executeCurl($this->urlLogin, $input_xml, $headers);
         // Thực hiện lưu sestion
         if ($this->isSuccess()) {
-            Loggers::info('Loggin success', __FILE__ . '::' . __FUNCTION__, __LINE__);
+            Loggers::info('Loggin success', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             $this->saveCookie();
         } else if (is_numeric($this->response)) {
-            Loggers::info('Loggin error: ' . $this->getErrorMsg(), __FILE__ . '::' . __FUNCTION__, __LINE__);
+            Loggers::info('Loggin error: ' . $this->getErrorMsg(), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         } else {
-            Loggers::info('Loggin success before', __FILE__ . '::' . __FUNCTION__, __LINE__);
+            Loggers::info('Loggin success', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             $this->saveCookie();
         }
     }
@@ -158,8 +192,26 @@ class SmsVivasHandler {
         $aHeaders = $this->get_headers_from_curl_response($this->response);
         if (!empty($aHeaders[self::NAME_COOKIE])) {
             $_SESSION[self::NAME_COOKIE] = $aHeaders[self::NAME_COOKIE];
-            Loggers::info('Save cookie: ' . $aHeaders[self::NAME_COOKIE], __FILE__ . '::' . __FUNCTION__, __LINE__);
+            Loggers::info('Save cookie', $aHeaders[self::NAME_COOKIE], __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         }
+    }
+    
+    /**
+     * Create checksum string
+     * @param String $brandName Brand name
+     * @param String $time      Time
+     * @param String $msgId     Message id
+     * @param String $msg       Message
+     * @param String $phone     Phone
+     */
+    public function createChecksum($brandName, $time, $msgId, $msg, $phone) {
+        $strCheckSum = 'username=' . $this->username
+                . '&password=' . $this->getSha1($this->password)
+                . '&brandname=' . $brandName . '&sendtime=' . $time
+                . '&msgid=' . $msgId . '&msg=' . $msg . '&msisdn=' . $phone
+                . '&sharekey=' . $this->sharekey;
+        Loggers::info('Viewable checksum', $strCheckSum, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        return $this->getMd5($strCheckSum);
     }
 
     /**
@@ -168,25 +220,20 @@ class SmsVivasHandler {
      * @param string $phone remove 0
      * @param string $msg
      */
-    public function sendSms($type = 'CSKH', $phone, $msg) {
+    public function sendSms($type, $phone, $msg) {
         // Đăng nhập
-//        $this->login();
-        // id cần được lưu trử lại để kiểm tra bằng verify
-//        $REQID = $phone;    // ID của request của hệ thống phía bên đối tác
+        if (empty($this->getSessionId())) {
+           $this->login(); 
+        }
+        // Id cần được lưu trử lại để kiểm tra bằng verify
         $REQID = CommonProcess::generateUniqId();    // ID của request của hệ thống phía bên đối tác
-//        $MSGID = $phone;    // ID của SMS phía hệ thống đối tác
         $MSGID = CommonProcess::generateUniqId();    // ID của SMS phía hệ thống đối tác
         Loggers::info('Message id send sms: ', $MSGID, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-//        $time = date('YmdHis');
         $time = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_9);
         Loggers::info('Time send sms: ', $time, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-        $phone = self::START_PHONE . $phone;
-        $BRANDNAME = self::BRAND_NAME;  //Tên Brandname
-        $sharekey = VIVAS_SHARE_KEY;
-        $strCheckSum = 'username=' . VIVAS_USERNAME . '&password=' . $this->getSha1(VIVAS_PASSWORD) . '&brandname=' . $BRANDNAME . '&sendtime=' . $time . '&msgid=' . $MSGID . '&msg=' . $msg . '&msisdn=' . $phone . '&sharekey=' . $sharekey;
-//        $strCheckSum = 'username=' . VIVAS_USERNAME . '&password=' . $this->getSha1(VIVAS_PASSWORD) . '&brandname=' . $BRANDNAME . '&sendtime=' . $time . '&msgid=' . $MSGID . '&msg=' . $msg . '&msisdn=' . $phone;
-        Loggers::info('Viewable checksum send sms: ', $strCheckSum, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-        $checkSum = $this->getMd5($strCheckSum);
+        $inputPhone      = self::START_PHONE . $phone;
+        $BRANDNAME  = self::BRAND_NAME;  //Tên Brandname
+        $checkSum = $this->createChecksum($BRANDNAME, $time, $MSGID, $msg, $inputPhone);
         Loggers::info('Checksum send sms: ', $checkSum, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         $input_xml = '<RQST>'
                 . '<REQID>' . $REQID . '</REQID>'
@@ -196,25 +243,32 @@ class SmsVivasHandler {
                 . '<TYPE>' . $type . '</TYPE>'
                 . '<DESTINATION>'
                     . '<MSGID>' . $MSGID . '</MSGID>'
-                    . '<MSISDN>' . $phone . '</MSISDN>'
+                    . '<MSISDN>' . $inputPhone . '</MSISDN>'
                     . '<CHECKSUM>' . $checkSum . '</CHECKSUM>'
                 . '</DESTINATION>'
                 . '</RQST>';
         Loggers::info('Message input send sms: ', $input_xml, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-//        CommonProcess::dumpVariable($input_xml);
         $headers = array(
             "Content-type: text/xml",
             "Content-length: " . strlen($input_xml),
             'Cookie:' . $this->getSessionId(),
             "Connection: close",
         );
-        $this->executeCurl(VIVAS_URL_SEND_SMS, $input_xml, $headers);
+        $this->executeCurl($this->urlSend, $input_xml, $headers);
         if ($this->isSuccess()) {
-            Loggers::info('Send sms success', __FILE__ . '::' . __FUNCTION__, __LINE__);
-//            $this->saveCookie();
+            Loggers::info('Send sms success', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         } else {
-            Loggers::info('Send sms error: ' . $this->getErrorMsg(), __FILE__ . '::' . __FUNCTION__, __LINE__);
-//            $this->saveCookie();
+            Loggers::error('Send sms error', $this->getErrorMsg(), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            switch ($this->body->STATUS) {
+                case self::RESP_SEND_LOGIN_ERR:
+                    $this->login();
+                    $this->sendSms($type, $phone, $msg);
+                    break;
+
+                default:
+                    Loggers::error('Stop send sms', $this->getErrorMsg(), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                    break;
+            }
         }
     }
 
@@ -293,39 +347,29 @@ class SmsVivasHandler {
      */
     public function logout() {
         $input_xml = '';
-//        $sesionId = '08EF672E31E090A9B6C2122E17CE46CF';
         $headers = array(
             "Content-type: text/xml",
             "Content-length: " . strlen($input_xml),
             'Cookie:' . $this->getSessionId(),
-//            'Cookie:' . $sesionId,
             "Connection: close",
         );
-        $this->executeCurl(VIVAS_URL_LOGOUT, $input_xml, $headers);
+        $this->executeCurl($this->urlLogout, $input_xml, $headers);
         if ($this->isSuccess()) {
-            Loggers::info('Logout success', __FILE__ . '::' . __FUNCTION__, __LINE__);
-//            $this->saveCookie();
+            Loggers::info('Logout success', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         } else {
-            Loggers::info('Logout error: ' . $this->getErrorMsg(), __FILE__ . '::' . __FUNCTION__, __LINE__);
-//            $this->saveCookie();
+            Loggers::error('Logout error: ', $this->getErrorMsg(), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         }
     }
     
+    /**
+     * Get session id
+     * @return String Session id
+     */
     public function getSessionId() {
         $COOKIE = '';
         if (!empty($_SESSION[self::NAME_COOKIE])) {
             $COOKIE = $_SESSION[self::NAME_COOKIE];
         }
-//        if (!empty($COOKIE)) {
-//            $arr = explode(';', $COOKIE);
-//            if (count($arr) == 2) {
-//                $arrSession = explode('=', $arr[0]);
-//                if (count($arrSession)) {
-//                    return $arrSession[1];
-//                }
-//            }
-//        }
-//        return '';
         return $COOKIE;
     }
 
@@ -344,8 +388,7 @@ class SmsVivasHandler {
      * @return string
      */
     public function getMd5($strInput) {
-//        return base64_encode(md5($strInput, true));
-        return (md5($strInput, false));
+        return md5($strInput, false);
     }
 
     /**
@@ -358,14 +401,15 @@ class SmsVivasHandler {
 
         $header_text = substr($response, 0, strpos($response, "\r\n\r\n"));
 
-        foreach (explode("\r\n", $header_text) as $i => $line)
-            if ($i === 0)
+        foreach (explode("\r\n", $header_text) as $i => $line) {
+            if ($i === 0) {
                 $headers['http_code'] = $line;
-            else {
+            } else {
                 list ($key, $value) = explode(': ', $line);
 
                 $headers[$key] = $value;
             }
+        }
 
         return $headers;
     }
@@ -394,17 +438,17 @@ class SmsVivasHandler {
         if (curl_errno($ch)) {
             print curl_error($ch);
         } else {
-            Loggers::info('Request: ' . $url, __FILE__ . '::' . __FUNCTION__, __LINE__);
-            Loggers::info('Response: ' . $this->response, __FILE__ . '::' . __FUNCTION__, __LINE__);
+            Loggers::info('Request', $url, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            Loggers::info('Response', $this->response, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             $this->curl_info = curl_getinfo($ch);
             curl_close($ch);
             $header_size = $this->curl_info['header_size'];
             $header = substr($this->response, 0, $header_size);
             $body = substr($this->response, $header_size);
-            Loggers::info('Header: ' . $header, __FILE__ . '::' . __FUNCTION__, __LINE__);
-            Loggers::info('Body: ' . $body, __FILE__ . '::' . __FUNCTION__, __LINE__);
+            Loggers::info('Header', $header, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            Loggers::info('Body', $body, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             $this->body = simplexml_load_string($body);
-            Loggers::info('Status: ' . $this->body->STATUS, __FILE__ . '::' . __FUNCTION__, __LINE__);
+            Loggers::info('Status', $this->body->STATUS, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         }
     }
 
