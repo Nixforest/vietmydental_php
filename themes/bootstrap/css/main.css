@@ -1125,7 +1125,9 @@ a:hover{
     left: 7px;
     right: 5px;
     float: right;
-    z-index: 1;
+    /*//++ BUG0054-IMT (DuongNV 20180806) Update UI treatment history*/
+    /*z-index: 1;*/ 
+    /*//++ BUG0054-IMT (DuongNV 20180806) Update UI treatment history*/
 }
 .create-treatment-btn{text-align: right;}
 .round-container {
@@ -1323,3 +1325,22 @@ svg.mark-icon {
     background: #eaeaea;
 }
 /*--BUG0036-IMT (DuongNV 20180719) UI birthday today*/
+/*++BUG0054-IMT (DuongNV 20180806) Update UI treatment history*/
+.treatment-process-item{
+    background: #d3dbf9;
+    margin: 10px 10px 10px 40px;
+    padding: 10px;
+    border-radius: 35px;
+}
+.treatment-process-item p { margin: 0px; }
+.view-more{width: 100%; text-align: center; padding: 10px;}
+.view-more .vm-btn{
+    padding: 10px;
+    border-radius: 20px;
+    border: 2px solid #adadad;
+    color: #4e4e4e;
+    transition: .3s;
+    cursor: pointer;
+}
+.view-more .vm-btn:hover{border-color: black; color: black; transition: .3s;}
+/*--BUG0054-IMT (DuongNV 20180806) Update UI treatment history*/

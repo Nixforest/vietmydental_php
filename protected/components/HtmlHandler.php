@@ -99,7 +99,7 @@ class HtmlHandler {
      * @param String $status
      * @return String Html string generate button
      */
-    public static function createCustomButton($href, $title, $time, $doctor, $paymentHref, $prescriptHref, $paymentClick = '', $prescriptClick = '', $status = '', $id = '') {
+    public static function createCustomButton($href, $title, $time, $doctor, $paymentHref, $prescriptHref, $paymentClick = '', $prescriptClick = '', $status = '', $id = '', $mTreatmentProcess = []) {
         $retVal = '';
         $target = '';
         $target = 'target=""';
@@ -128,18 +128,37 @@ class HtmlHandler {
                     .           $dropdownMenu
                     .       '</ul>'
                     .    '</div>';
+        //++ BUG0054-IMT (DuongNV 20180806) Update UI treatment history
+        $prescriptItem = '<a href="' . $prescriptHref . '" style="cursor:pointer;"><i class="fas fa-capsules"></i> ' . DomainConst::CONTENT00379 . '</a>';
+        if (!empty($prescriptClick)) {
+            $prescriptItem = '<a onclick="' . $prescriptClick . '" style="cursor:pointer;"><i class="fas fa-capsules"></i> ' . DomainConst::CONTENT00379 . '</a>';
+        }
+        $addDropDown = '<div class="dropdown" style="display:inline-block;margin-right:3px;">'
+                    .        '<button class="btn btn-xs btn-success dropdown-toggle" type="button" data-toggle="dropdown">Thêm'
+                    .        ' <span class="caret"></span></button>'
+                    .        '<ul class="dropdown-menu" style="min-width:100px;">'
+                    .           '<li class="createPrescription">' . $prescriptItem . '</li>'
+                    .           '<li class="createProcess"><a style="cursor:pointer;"><i class="fas fa-stethoscope"></i> Tạo Tiến trình điều trị</a></li>'
+                    .           '<li class="imageCamera" data-id="'.$id.'"><a style="cursor:pointer;"> <i class="fas fa-camera" style="margin:0 1px;"></i> Hình ảnh Camera</a></li>'
+                    .           '<li class="imageXQuang" data-id="'.$id.'"><a style="cursor:pointer;"><i class="fas fa-x-ray"></i> Hình ảnh X-Quang</a></li>'
+                    .       '</ul>'
+                    .    '</div>';
+        //-- BUG0054-IMT (DuongNV 20180806) Update UI treatment history
         //--BUG0017 (DuongNV 20180717) add
 //        if(!empty($status)){ //use for label, now is dropdown
 //            $sttClass = $aCssClass[$status['type']];
 //        }
-        $paymentItem = '<a href="' . $paymentHref . '" class="btn btn-xs btn-primary mr-1">' . DomainConst::CONTENT00251 . '</a>';
+        //++ BUG0054-IMT (DuongNV 20180806) Update UI treatment history
+        $paymentItem = '<a href="' . $paymentHref . '" class="btn btn-xs btn-primary mr-1"><i class="fas fa-dollar-sign" title="' . DomainConst::CONTENT00251 . '"></i></a>';
         if (!empty($paymentClick)) {
             $paymentItem = '<a onclick="' . $paymentClick . '" class="btn btn-xs btn-primary mr-1">' . DomainConst::CONTENT00251 . '</a>';
+//            $paymentItem = '<a onclick="' . $paymentClick . '" class="btn btn-xs btn-primary mr-1"><i class="fas fa-dollar-sign" title="' . DomainConst::CONTENT00251 . '"></i></a>';
         }
-        $prescriptItem = '<a href="' . $prescriptHref . '" class="btn btn-xs btn-success mr-1">' . DomainConst::CONTENT00379 . '</a>';
-        if (!empty($prescriptClick)) {
-            $prescriptItem = '<a onclick="' . $prescriptClick . '" class="btn btn-xs btn-success mr-1">' . DomainConst::CONTENT00379 . '</a>';
-        }
+//        $prescriptItem = '<a href="' . $prescriptHref . '" class="btn btn-xs btn-success mr-1">' . DomainConst::CONTENT00379 . '</a>';
+//        if (!empty($prescriptClick)) {
+//            $prescriptItem = '<a onclick="' . $prescriptClick . '" class="btn btn-xs btn-success mr-1">' . DomainConst::CONTENT00379 . '</a>';
+//        }
+        //-- BUG0054-IMT (DuongNV 20180806) Update UI treatment history
 
         $paymentLink = Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/payment");
         $createPrescriptionLink = Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/createPrescription");
@@ -153,18 +172,46 @@ class HtmlHandler {
 //                .               '<a href="#" onclick="alert(\'' . DomainConst::CONTENT00375 . '\')" class="btn btn-xs btn-primary mr-1">Thanh toán</a>'
 //                .               '<a href="#" onclick="alert(\'' . DomainConst::CONTENT00375 . '\')" class="btn btn-xs btn-success mr-1">Tạo toa thuốc</a>'
                 .               $paymentItem
-                .               $prescriptItem
+                //++ BUG0054-IMT (DuongNV 20180806) Update UI treatment history
+//                .               $prescriptItem
+                .               $addDropDown
+                //-- BUG0054-IMT (DuongNV 20180806) Update UI treatment history
 //                .               $dropDown
                 .           '</div>'
 //                .           '<h4><b><a ' . $target . ' href="' . $href . '">' . $title . '</a></b></h4>'
                 .           '<h4><b><a ' . $target . ' onclick="' . $href . '" style="cursor:pointer;">' . $title . '</a></b></h4>'
                 .           '<span>Bác sĩ <b>'.$doctor.'</b> thực hiện lúc <b>'.$time.'</b>.</span>'
+                //++BUG0054-IMT (DuongNV 20180806) Update UI treatment history
+                .           self::createHtmlTreatmentProcess($mTreatmentProcess)
+                //--BUG0054-IMT (DuongNV 20180806) Update UI treatment history
                 .       '</div>'
                 . '</div>';
 //                . '</a>';
         //--BUG0017 (DuongNV 20180717) modify
         return $retVal;
     }
+    
+    //++BUG0054-IMT (DuongNV 20180806) Update UI treatment history
+    public static function createHtmlTreatmentProcess($mTreatmentProcess){
+        $resVal = '';
+        if(empty($mTreatmentProcess)) {
+            return $resVal;
+        }
+        $i = 0;
+        foreach ($mTreatmentProcess as $value) {
+            if($i++ == 3){
+                $resVal .= '<div class="view-more"><span class="vm-btn">Xem thêm <i class="fas fa-angle-double-down"></i></span></div>';
+                break;
+            }
+            $resVal .= '<div class="treatment-process-item">'
+                    .   '<p><b>' . $value->process_date.':</b>'
+                    .   ' <span>' . $value->name.',</span>'
+//                    .   ' <span>răng ' . $value->teeth_id.'</span></p>'
+                    .'</div>';
+        }
+        return $resVal;
+    }
+    //--BUG0054-IMT (DuongNV 20180806) Update UI treatment history
     
     public static function createAjaxButtonWithImage($title, $image, $onClick, $style, $class = self::CLASS_GROUP_BUTTON) {
         $retVal = '';
