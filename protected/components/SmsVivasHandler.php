@@ -232,7 +232,7 @@ class SmsVivasHandler {
         $time = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_9);
         Loggers::info('Time send sms: ', $time, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         $inputPhone      = self::START_PHONE . $phone;
-        $BRANDNAME  = self::BRAND_NAME;  //Tên Brandname
+        $BRANDNAME  = $this->getBrandName($phone);
         $checkSum = $this->createChecksum($BRANDNAME, $time, $MSGID, $msg, $inputPhone);
         Loggers::info('Checksum send sms: ', $checkSum, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         $input_xml = '<RQST>'
@@ -359,6 +359,23 @@ class SmsVivasHandler {
         } else {
             Loggers::error('Logout error: ', $this->getErrorMsg(), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         }
+    }
+    
+    /**
+     * Get brandname from phone number
+     * @param String $phone Phone number
+     * @return String Brandname
+     */
+    public function getBrandName($phone) {
+        $retVal = self::BRAND_NAME;
+        $phoneHandler = new PhoneHandler();
+        $carrier = $phoneHandler->detect_number(DomainConst::NUMBER_ZERO_VALUE . $phone);
+        if ($carrier != false) {
+            if ($carrier == 'Vietnamobile') {
+                $retVal = self::BRAND_NAME_VIETNAM_MOBILE;
+            }
+        }
+        return $retVal;
     }
     
     /**

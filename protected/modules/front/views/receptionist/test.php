@@ -33,7 +33,15 @@
 //        $sms->login();
 //        $sms->logout();
 //        $sms->sendSms('1', '976994876', 'Test 123');
-        SMSHandler::sendSMSOnce('976994876', 'SMSHandler');
+//        SMSHandler::sendSMSOnce('976994876', 'SMSHandler');
+        $number = '0987654321';
+    $phoneHandler = new PhoneHandler();
+        $carrier = $phoneHandler->detect_number($number);
+        echo $carrier; // Viettel
+
+        $wrong_number = '01869453611';
+        $carrier = $phoneHandler->detect_number($wrong_number);
+        echo $carrier; // false
 //        $COOKIE = '';
 //        if (!empty($_SESSION['Set-Cookie'])) {
 //            $COOKIE = $_SESSION['Set-Cookie'];
