@@ -208,9 +208,9 @@ class ReceptionistController extends FrontController {
                                 $schedule->rDoctor);
                         // Inform for customer
                         SMSHandler::sendSMSOnce($mMedicalRecord->rCustomer->getPhone(),
-                                'Quý khách hàng đã đặt hẹn trên Hệ thống Nha Khoa Việt Mỹ vào lúc '
+                                'Quý Khách hàng đã đặt hẹn trên Hệ thống Nha Khoa Việt Mỹ vào lúc '
                                 . $detail->getStartTime() . ' với bác sĩ ' . $schedule->rDoctor->first_name
-                                . '. Xin Quý Khách hàng vui lòng sắp xếp thời gian đến đúng hẹn');
+                                . '. Quý Khách hàng vui lòng sắp xếp thời gian đến đúng hẹn');
                     }
                     echo CJavaScript::jsonEncode(array(
                         DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
