@@ -41,6 +41,8 @@ class Settings extends BaseActiveRecord
     const KEY_PRINT_RECEIPT_FONT_SIZE_RATE      = 'PRINT_RECEIPT_FONT_SIZE_RATE';
     /** Key Website for sale */
     const KEY_DOMAIN_SALE_WEBSITE               = 'DOMAIN_SALE_WEBSITE';
+    /** Key SMS provider */
+    const KEY_SMS_PROVIDER                      = 'SMS_PROVIDER';
     
     /* --- App settings --- */
     /** Key Mobile app version iOS */
@@ -75,6 +77,24 @@ class Settings extends BaseActiveRecord
     /* --- SMS settings --- */
     /** Key SMS server url */
     const KEY_SMS_SERVER_URL                    = 'SMS_SERVER_URL';
+    /** Key VIVAS SMS server url */
+    const KEY_VIVAS_SMS_SERVER_URL              = 'VIVAS_SMS_SERVER_URL';
+    /** Key VIVAS SMS server url: login */
+    const KEY_VIVAS_URL_LOGIN                   = 'VIVAS_URL_LOGIN';
+    /** Key VIVAS SMS server url: send sms */
+    const KEY_VIVAS_URL_SEND_SMS                = 'VIVAS_URL_SEND_SMS';
+    /** Key VIVAS SMS server url: send sms extend */
+    const KEY_VIVAS_URL_SEND_SMS_EXT            = 'VIVAS_URL_SEND_SMS_EXT';
+    /** Key VIVAS SMS server url: verify */
+    const KEY_VIVAS_URL_VERIFY                  = 'VIVAS_URL_VERIFY';
+    /** Key VIVAS SMS server url: logout */
+    const KEY_VIVAS_URL_LOGOUT                  = 'VIVAS_URL_LOGOUT';
+    /** Key VIVAS SMS username */
+    const KEY_VIVAS_USERNAME                    = 'VIVAS_USERNAME';
+    /** Key VIVAS SMS password */
+    const KEY_VIVAS_PASSWORD                    = 'VIVAS_PASSWORD';
+    /** Key VIVAS SMS sharekey */
+    const KEY_VIVAS_SHARE_KEY                   = 'VIVAS_SHARE_KEY';
     
 	/**
 	 * @return string the associated database table name
