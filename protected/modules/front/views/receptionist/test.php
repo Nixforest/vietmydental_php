@@ -31,15 +31,14 @@
     <?php
         $sms = new SmsVivasHandler();
 //        $sms->login();
-        $sms->logout();
-        $sms->logout();
+//        $sms->logout();
+        $sms->sendSms('1', '976994876', 'Test 123');
         $COOKIE = '';
         if (!empty($_SESSION['Set-Cookie'])) {
             $COOKIE = $_SESSION['Set-Cookie'];
         }
         CommonProcess::echoTest('Set cookie: ', $COOKIE);
         CommonProcess::echoTest('Session id: ', $sms->getSessionId());
-//        $sms->sendSms('CSKH', '0976994876', 'Test msg');
 //    CommonProcess::echoTest("First date of current month: ", CommonProcess::getFirstDateOfCurrentMonth(DomainConst::DATE_FORMAT_6));
 //        $detail = TreatmentScheduleDetails::model()->findByPk(22);
 //        if ($detail) {
