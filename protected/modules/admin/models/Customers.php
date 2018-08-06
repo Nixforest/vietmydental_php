@@ -622,6 +622,9 @@ class Customers extends BaseActiveRecord
                                 $updateTreatment = '{fnOpenUpdateTreatment(\'' . $detail->id . '\');}';
                                 $createReceipt = '{fnOpenCreateReceipt(\'' . $detail->id . '\')}';
                                 // Show item was completed
+                                //++BUG0054-IMT (DuongNV 20180806) Update UI treatment history
+                                $mTreatmentProcess = empty($detail->rProcess) ? [] : $detail->rProcess;
+                                //--BUG0054-IMT (DuongNV 20180806) Update UI treatment history
                                 if ($detail->isCompleted()) {
                                     $updateTag = 
                                             HtmlHandler::createCustomButton(
@@ -639,6 +642,9 @@ class Customers extends BaseActiveRecord
                                                 //++ BUG0017-IMT (DuongNV 20180717) Add id to change status treatment history
                                                 $detail->id
                                                 //-- BUG0017-IMT (DuongNV 20180717) Add id to change status treatment history
+                                                //++BUG0054-IMT (DuongNV 20180806) Update UI treatment history
+                                                ,$mTreatmentProcess
+                                                //--BUG0054-IMT (DuongNV 20180806) Update UI treatment history
                                                 );
                                 } else {    // Normal item
                                     $updateTag =
@@ -657,6 +663,9 @@ class Customers extends BaseActiveRecord
                                                 //++ BUG0017-IMT (DuongNV 20180717) Add id to change status treatment history
                                                 $detail->id
                                                 //-- BUG0017-IMT (DuongNV 20180717) Add id to change status treatment history
+                                                //++BUG0054-IMT (DuongNV 20180806) Update UI treatment history
+                                                ,$mTreatmentProcess
+                                                //--BUG0054-IMT (DuongNV 20180806) Update UI treatment history
                                                 );
                                 }
                             default:

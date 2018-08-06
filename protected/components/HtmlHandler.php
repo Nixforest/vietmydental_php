@@ -99,7 +99,7 @@ class HtmlHandler {
      * @param String $status
      * @return String Html string generate button
      */
-    public static function createCustomButton($href, $title, $time, $doctor, $paymentHref, $prescriptHref, $paymentClick = '', $prescriptClick = '', $status = '', $id = '') {
+    public static function createCustomButton($href, $title, $time, $doctor, $paymentHref, $prescriptHref, $paymentClick = '', $prescriptClick = '', $status = '', $id = '', $mTreatmentProcess = []) {
         $retVal = '';
         $target = '';
         $target = 'target=""';
@@ -181,12 +181,37 @@ class HtmlHandler {
 //                .           '<h4><b><a ' . $target . ' href="' . $href . '">' . $title . '</a></b></h4>'
                 .           '<h4><b><a ' . $target . ' onclick="' . $href . '" style="cursor:pointer;">' . $title . '</a></b></h4>'
                 .           '<span>Bác sĩ <b>'.$doctor.'</b> thực hiện lúc <b>'.$time.'</b>.</span>'
+                //++BUG0054-IMT (DuongNV 20180806) Update UI treatment history
+                .           self::createHtmlTreatmentProcess($mTreatmentProcess)
+                //--BUG0054-IMT (DuongNV 20180806) Update UI treatment history
                 .       '</div>'
                 . '</div>';
 //                . '</a>';
         //--BUG0017 (DuongNV 20180717) modify
         return $retVal;
     }
+    
+    //++BUG0054-IMT (DuongNV 20180806) Update UI treatment history
+    public static function createHtmlTreatmentProcess($mTreatmentProcess){
+        $resVal = '';
+        if(empty($mTreatmentProcess)) {
+            return $resVal;
+        }
+        $i = 0;
+        foreach ($mTreatmentProcess as $value) {
+            if($i++ == 3){
+                $resVal .= '<div class="view-more"><span class="vm-btn">Xem thêm <i class="fas fa-angle-double-down"></i></span></div>';
+                break;
+            }
+            $resVal .= '<div class="treatment-process-item">'
+                    .   '<p><b>' . $value->name.':</b>'
+                    .   ' <span>' . $value->process_date.',</span>'
+                    .   ' <span>răng ' . $value->teeth_id.'</span></p>'
+                    .'</div>';
+        }
+        return $resVal;
+    }
+    //--BUG0054-IMT (DuongNV 20180806) Update UI treatment history
     
     public static function createAjaxButtonWithImage($title, $image, $onClick, $style, $class = self::CLASS_GROUP_BUTTON) {
         $retVal = '';
