@@ -41,6 +41,8 @@ class Settings extends BaseActiveRecord
     const KEY_PRINT_RECEIPT_FONT_SIZE_RATE      = 'PRINT_RECEIPT_FONT_SIZE_RATE';
     /** Key Website for sale */
     const KEY_DOMAIN_SALE_WEBSITE               = 'DOMAIN_SALE_WEBSITE';
+    /** key TOOTH COLOR */
+    const KEY_TOOTH_COLOR                       = 'TOOTH_COLOR';
     
     /* --- App settings --- */
     /** Key Mobile app version iOS */

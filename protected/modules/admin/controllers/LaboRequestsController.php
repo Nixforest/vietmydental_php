@@ -11,39 +11,39 @@ class LaboRequestsController extends AdminController
 	/**
 	 * @return array action filters
 	 */
-	public function filters()
-	{
-		return array(
-			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
-		);
-	}
+//	public function filters()
+//	{
+//		return array(
+//			'accessControl', // perform access control for CRUD operations
+//			'postOnly + delete', // we only allow deletion via POST request
+//		);
+//	}
 
 	/**
 	 * Specifies the access control rules.
 	 * This method is used by the 'accessControl' filter.
 	 * @return array access control rules
 	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
+//	public function accessRules()
+//	{
+//		return array(
+//			array('allow',  // allow all users to perform 'index' and 'view' actions
+//				'actions'=>array('index','view'),
+//				'users'=>array('*'),
+//			),
+//			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+//				'actions'=>array('create','update'),
+//				'users'=>array('@'),
+//			),
+//			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+//				'actions'=>array('admin','delete'),
+//				'users'=>array('admin'),
+//			),
+//			array('deny',  // deny all users
+//				'users'=>array('*'),
+//			),
+//		);
+//	}
 
 	/**
 	 * Displays a particular model.
@@ -62,7 +62,7 @@ class LaboRequestsController extends AdminController
 	 */
 	public function actionCreate()
 	{
-		$model=new LaboRequests;
+		$model=new LaboRequests('create');
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -70,15 +70,88 @@ class LaboRequestsController extends AdminController
 		if(isset($_POST['LaboRequests']))
 		{
 			$model->attributes=$_POST['LaboRequests'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+                        $model->validate();
+			if(!$model->hasErrors()){
+                            if($model->save()){
+                                $this->redirect(array('view','id'=>$model->id));
+                            }
+                        }
 		}
 
 		$this->render('create',array(
 			'model'=>$model,
 		));
 	}
+        
+        /**
+         * create ajax
+         */
+	public function actionCreateAjax($id)
+	{
+		$model=new LaboRequests('create');
+                $model->treatment_detail_id = $id;
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
 
+		if(isset($_POST['LaboRequests']))
+		{
+			$model->attributes=$_POST['LaboRequests'];
+                        if(isset($_POST['teethData'])){
+                            $model->teeths = $_POST['teethData'];
+                        }
+                        $model->handleBeforeSave();
+                        $model->validate();
+			if(!$model->hasErrors()){
+                            $model->Handlesave();
+                            $this->redirect(array('updateAjax','id'=>$model->id));
+                        }
+		}
+                $this->render('_form_ajax',array(
+			'model'=>$model,
+		));
+//		echo CJSON::encode(array(
+//                    DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
+//                    DomainConst::KEY_CONTENT => $this->renderPartial('_form_ajax',
+//                        array(
+//                            'model' => $model,
+//                            DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+//                        ),
+//                        true, true),
+//                ));
+//                exit;
+	}
+        
+        /**
+	 * Updates a particular model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id the ID of the model to be updated
+	 */
+	public function actionUpdateAjax($id)
+	{
+		$model=$this->loadModel($id);
+                $model->scenario = 'update';
+                $model->handleSearch();
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		if(isset($_POST['LaboRequests']))
+		{
+			$model->attributes=$_POST['LaboRequests'];
+                        if(isset($_POST['teethData'])){
+                            $model->teeths = $_POST['teethData'];
+                        }
+                        $model->handleBeforeSave();
+                        $model->validate();
+			if(!$model->hasErrors()){
+                            $model->Handlesave();
+                            $this->redirect(array('updateAjax','id'=>$id));
+                        }
+		}
+                $this->render('_form_ajax',array(
+			'model'=>$model,
+		));
+	}
+        
 	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
@@ -87,15 +160,23 @@ class LaboRequestsController extends AdminController
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-
+                $model->scenario = 'update';
+                $model->handleSearch();
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['LaboRequests']))
 		{
 			$model->attributes=$_POST['LaboRequests'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+                        if(isset($_POST['teethData'])){
+                            $model->teeths = $_POST['teethData'];
+                        }
+                        $model->handleBeforeSave();
+                        $model->validate();
+			if(!$model->hasErrors()){
+                            $model->Handlesave();
+                            $this->redirect(array('update','id'=>$id));
+                        }
 		}
 
 		$this->render('update',array(
@@ -122,10 +203,19 @@ class LaboRequestsController extends AdminController
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('LaboRequests');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
+//		$dataProvider=new CActiveDataProvider('LaboRequests');
+//		$this->render('index',array(
+//			'dataProvider'=>$dataProvider,
+//		));
+            $model=new LaboRequests('search');
+            $model->unsetAttributes();  // clear any default values
+            if(isset($_GET['LaboRequests']))
+                    $model->attributes=$_GET['LaboRequests'];
+
+            $this->render('index',array(
+                    'model'=>$model,
+                    DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+            ));
 	}
 
 	/**

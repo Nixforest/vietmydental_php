@@ -168,7 +168,24 @@ class LaboServices extends BaseActiveRecord
             if($this->isNewRecord){
                 $this->created_by = Yii::app()->user->id;
             }
+            $this->price = str_replace(DomainConst::SPLITTER_TYPE_2, '', $this->price);
             return parent::beforeSave();
         }
         
+        /**
+         * 
+         * @param type $emptyOption
+         * @return string
+         */
+        public static function loadItems() {
+            $_items = array();
+            $criteria = new CDbCriteria;
+            $criteria->compare('t.status', self::STATUS_ACTIVE);
+            $criteria->order = 't.id ASC';
+            $models = self::model()->findAll($criteria);
+            foreach ($models as $model) {
+                $_items[$model->id] = $model->name;
+            }
+            return $_items;
+        }
 }

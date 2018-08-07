@@ -185,4 +185,15 @@ class LaboServicesController extends AdminController
 			Yii::app()->end();
 		}
 	}
+        
+        /**
+         * get price of service
+         */
+        public function actionGetPriceOfService($id){
+            $model  = LaboServices::model()->findByPk($id);
+            if(!empty($model)){
+                echo CommonProcess::formatCurrency($model->price);
+            }
+            exit();
+        }
 }

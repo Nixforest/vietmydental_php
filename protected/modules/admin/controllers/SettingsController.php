@@ -25,6 +25,7 @@ class SettingsController extends AdminController
                     Settings::KEY_PASSWORD_LEN_MAX,
                     Settings::KEY_NUM_QRCODE_DOWNLOAD_MAX,
                     Settings::KEY_PRINT_RECEIPT_FONT_SIZE_RATE,
+                    Settings::KEY_TOOTH_COLOR,
                     /** Test */
 //                    Settings::KEY_APP_MOBILE_VERSION_IOS,
 //                    Settings::KEY_ADMIN_EMAIL,

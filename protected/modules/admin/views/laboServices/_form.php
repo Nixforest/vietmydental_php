@@ -60,3 +60,9 @@ $mLaboServiceTypes = new LaboServiceTypes();
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/autoNumeric/autoNumeric.js'); ?>
+<script>
+    $(document).ready(function(){
+        $('#LaboServices_price').autoNumeric('init', {lZero:"deny", aPad: false} ); 
+    });
+</script>

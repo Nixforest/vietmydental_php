@@ -1422,4 +1422,9 @@ class DomainConst {
     const CONTENT00408  = 'Không hoạt động';
     const CONTENT00409  = 'Người quản lý';
     const CONTENT00410  = 'Phòng Lab';
+    const CONTENT00411  = 'Ngày yêu cầu';
+    const CONTENT00412  = 'Ngày giờ nhận';
+    const CONTENT00413  = 'Ngày giờ thử răng';
+    const CONTENT00414  = 'Màu răng';
+    const CONTENT00415  = 'Số răng';
 }
