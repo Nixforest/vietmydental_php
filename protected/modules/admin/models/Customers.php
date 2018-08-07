@@ -621,9 +621,6 @@ class Customers extends BaseActiveRecord
                         $updateTag = '';
                         switch (Yii::app()->user->role_name) {
                             case Roles::ROLE_ASSISTANT:
-                                $updateTag = '<a target="_blank" href="' . Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/updateImageXRay",
-                                        array("id" => $detail->id)) . '">' . DomainConst::CONTENT00272 . '</a>';
-                                break;
                             case Roles::ROLE_RECEPTIONIST:
                                 $createPrescription = '{fnOpenCreatePrescription(\'' . $detail->id . '\');}';
                                 $updateTreatment = '{fnOpenUpdateTreatment(\'' . $detail->id . '\');}';
