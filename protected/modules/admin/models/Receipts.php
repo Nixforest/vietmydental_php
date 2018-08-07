@@ -860,4 +860,14 @@ class Receipts extends CActiveRecord
     public function isCompleted() {
         return $this->status == self::STATUS_RECEIPTIONIST;
     }
+    
+    public function changeStatus() {
+        switch ($this->status) {
+            case self::STATUS_INACTIVE:
+                OneMany::deleteAllManyOldRecords($this->id, OneMany::TYPE_AGENT_RECEIPT);
+                break;
+            default:
+                break;
+        }
+    }
 }

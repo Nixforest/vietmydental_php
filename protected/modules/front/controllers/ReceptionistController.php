@@ -649,6 +649,7 @@ class ReceptionistController extends FrontController {
             $model = TreatmentScheduleDetails::model()->findByPk($id);
             if ($model) {
                 $model->status = $status;
+                $model->changeStatus();
                 if ($model->save()) {   // Save success
                     $customer = $model->getCustomerModel();
                     if (isset($customer)) {

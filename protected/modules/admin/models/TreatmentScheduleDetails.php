@@ -763,6 +763,50 @@ class TreatmentScheduleDetails extends BaseActiveRecord
     public function canUpdate() {
         return !$this->isCompleted();
     }
+    
+    /**
+     * Change status
+     */
+    public function changeStatus() {
+        switch ($this->status) {
+            case self::STATUS_INACTIVE:
+                // Remove old record
+                OneMany::deleteAllOldRecords($this->id, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+                if (isset($this->rProcess)) {
+                    foreach ($this->rProcess as $process) {
+                        $process->status = DomainConst::DEFAULT_STATUS_INACTIVE;
+                        $process->save();
+                    }
+                }
+                if (isset($this->rReceipt)) {
+                    $this->rReceipt->status = DomainConst::DEFAULT_STATUS_INACTIVE;
+                    $this->rReceipt->changeStatus();
+                    $this->rReceipt->save();
+                }
+                // Delete images XRay
+                if (isset($this->rImgXRayFile)) {
+                    foreach ($this->rImgXRayFile as $image) {
+                        $image->status = DomainConst::DEFAULT_STATUS_INACTIVE;
+                        $image->save();
+                    }
+                }
+                // Delete images before and after treatment
+                if (isset($this->rImgRealFile)) {
+                    foreach ($this->rImgRealFile as $image) {
+                        $image->status = DomainConst::DEFAULT_STATUS_INACTIVE;
+                        $image->save();
+                    }
+                }
+                break;
+            case self::STATUS_COMPLETED:
+                if (isset($this->rReceipt)) {
+                    $this->rReceipt->status = Receipts::STATUS_RECEIPTIONIST;
+                    $this->rReceipt->save();
+                }
+            default:
+                break;
+        }
+    }
 
     //-----------------------------------------------------
     // Static methods
