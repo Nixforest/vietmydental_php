@@ -66,6 +66,10 @@ class SMSHandler {
      * @param String $message Message sms
      */
     public static function sendSMSOnce($phone, $message, $type = '1') {
+        if (!Settings::canSendSMS()) {
+            Loggers::info('Can not send SMS', 'Send sms function is off', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            return;
+        }
         $provider = Settings::getItem(Settings::KEY_SMS_PROVIDER);
         $formatedPhone = self::formatPhone($phone);
         $formatedMsg = CommonProcess::removeSignOnly($message);

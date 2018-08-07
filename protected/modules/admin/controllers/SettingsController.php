@@ -66,6 +66,7 @@ class SettingsController extends AdminController
             Settings::KEY_SMS_SETTINGS      => array(
                 DomainConst::KEY_ALIAS      => DomainConst::CONTENT00261,
                 DomainConst::KEY_CHILDREN   => array(
+                    Settings::KEY_SMS_FUNC_ON_OFF,
                     Settings::KEY_SMS_SERVER_URL,
                     Settings::KEY_VIVAS_SMS_SERVER_URL,
                     Settings::KEY_VIVAS_URL_LOGIN,

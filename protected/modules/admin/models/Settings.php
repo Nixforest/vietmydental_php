@@ -95,6 +95,8 @@ class Settings extends BaseActiveRecord
     const KEY_VIVAS_PASSWORD                    = 'VIVAS_PASSWORD';
     /** Key VIVAS SMS sharekey */
     const KEY_VIVAS_SHARE_KEY                   = 'VIVAS_SHARE_KEY';
+    /** Key SMS function on/off */
+    const KEY_SMS_FUNC_ON_OFF                   = 'SMS_FUNC_ON_OFF';
     
 	/**
 	 * @return string the associated database table name
@@ -419,5 +421,17 @@ class Settings extends BaseActiveRecord
             return $retVal;
         }
         return DomainConst::CONTENT_WEBSITE;
+    }
+    
+    /**
+     * Check if system can send SMS
+     * @return True if setting value is '1', False otherwise
+     */
+    public static function canSendSMS() {
+        $retVal = Settings::getItem(Settings::KEY_SMS_FUNC_ON_OFF);
+        if (!empty($retVal) && ($retVal == DomainConst::NUMBER_ONE_VALUE)) {
+            return true;
+        }
+        return false;
     }
 }

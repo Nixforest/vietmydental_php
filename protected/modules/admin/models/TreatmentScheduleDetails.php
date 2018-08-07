@@ -756,6 +756,13 @@ class TreatmentScheduleDetails extends BaseActiveRecord
         }
         return $retVal;
     }
+    /**
+     * Check model can update
+     * @return boolean
+     */
+    public function canUpdate() {
+        return !$this->isCompleted();
+    }
 
     //-----------------------------------------------------
     // Static methods

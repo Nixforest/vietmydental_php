@@ -71,6 +71,8 @@ class CustomersController extends AdminController
 		if(isset($_POST['Customers']))
 		{
 			$model->attributes=$_POST['Customers'];
+                        // Convert value of debt from formated value to save value
+                        $model->debt = str_replace(DomainConst::SPLITTER_TYPE_MONEY, '', $_POST['Customers']['debt']);
 //                        Import::importCustomer();
 			if($model->save()) {
                             if (filter_input(INPUT_POST, 'submit')) {
@@ -115,6 +117,8 @@ class CustomersController extends AdminController
 		if(isset($_POST['Customers']))
 		{
 			$model->attributes=$_POST['Customers'];
+                        // Convert value of debt from formated value to save value
+                        $model->debt = str_replace(DomainConst::SPLITTER_TYPE_MONEY, '', $_POST['Customers']['debt']);
 			if($model->save()) {                            
                             if (filter_input(INPUT_POST, 'submit')) {
                                 // Remove old record

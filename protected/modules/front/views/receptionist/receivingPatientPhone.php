@@ -640,6 +640,6 @@
             alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
         });
         //-- BUG0054-IMT (DuongNV 20180806) Update UI treatment history
-    })
+    });
     //-- BUG0017-IMT (DuongNV 20180717) Add event to status btn
 </script>

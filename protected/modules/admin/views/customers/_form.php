@@ -69,10 +69,15 @@
             </div>
 	</div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <?php echo $form->labelEx($model,'characteristics'); ?>
 		<?php echo $form->textField($model,'characteristics',array('size'=>60,'maxlength'=>200)); ?>
 		<?php echo $form->error($model,'characteristics'); ?>
+            </div>
+            <div class="col-md-6">
+                <?php echo $form->labelEx($model,'debt'); ?>
+		<?php echo $form->textField($model,'debt',array('size'=>60,'maxlength'=>200, 'class'=>'format-currency number_only')); ?>
+		<?php echo $form->error($model,'debt'); ?>
             </div>
         </div>
 
@@ -284,4 +289,25 @@
             '#Customers_ward_id',
             "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/searchWardsByDistrict'); ?>");
     });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        formatNumber("#Customers_debt");
+    });
+    //++ BUG0045-IMT  (DuongNV 201807) Format currency when input
+    $(document).on('input', '.format-currency', function(){
+        var t = $(this).val();
+        t = t.replace(/[,]/g,'');
+        t = t.replace(/[.]/g,'');
+        $(this).val(fnFormatNumber(t));
+    });
+    function formatNumber(_id) {
+        var t = $(_id).val();
+        t = t.replace(/[,]/g,'');
+        t = t.replace(/[.]/g,'');
+        $(_id).val(fnFormatNumber(t));
+    };
+    fnNumberOnly();
+
 </script>

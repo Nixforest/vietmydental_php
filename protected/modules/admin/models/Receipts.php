@@ -852,4 +852,12 @@ class Receipts extends CActiveRecord
         }
         return NULL;
     }
+    
+    /**
+     * Check if model is completed
+     * @return boolean True if current status is receptionist, False otherwise
+     */
+    public function isCompleted() {
+        return $this->status == self::STATUS_RECEIPTIONIST;
+    }
 }

@@ -109,9 +109,11 @@
 	<div class="row buttons">
 		<?php // echo CHtml::submitButton($model->isNewRecord ? 'Create' : DomainConst::CONTENT00377); ?>
                 <?php
+                if ($model->canUpdate()) {
                     echo CHtml::submitButton(DomainConst::CONTENT00377, array(
                         'name' => DomainConst::KEY_SUBMIT_SAVE,
                     ));
+                }
 //                    echo CHtml::submitButton(DomainConst::CONTENT00283, array(
 //                        'name' => DomainConst::KEY_SUBMIT,
 //                    ));
