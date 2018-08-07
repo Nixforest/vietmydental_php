@@ -185,10 +185,15 @@
                         <!--Chi tiet thanh toan -->
                         <div id="payment-detail" class="tab-pane fade">
                             <div class="lp-list-container">
+                                <div class="lp-list-item">
+                                    <i class="fa fa-dollar lp-list-item-icon"></i>
+                                    <strong> <?php echo DomainConst::CONTENT00300; ?>: </strong><br>
+                                    <span><?php echo $model->getDebt(); ?></span>
+                                </div>
                                 <?php $idx = count($model->getReceipts()); ?>
                                 <?php foreach ($model->getReceipts() as $receipt): ?>
                                     <div class="lp-list-item">
-                                        <i class="fas fa-credit-card lp-list-item-icon"></i>
+                                        <i class="fa fa-credit-card custom lp-list-item-icon"></i>
                                         <strong>Thanh Toán Lần <?php echo $idx--; ?>: </strong><br>
                                         <span><?php echo CommonProcess::formatCurrency($receipt->final); ?> (Ngày Thanh Toán: <?php echo $receipt->process_date; ?>)</span>
                                     </div>

@@ -557,6 +557,12 @@ class Customers extends BaseActiveRecord
         $rightContent .=                '<b>' . $recordNumber . '<b>';
         $rightContent .=                '</td>';
         $rightContent .=            '</tr>';
+        $rightContent .=            '<tr>';
+        $rightContent .=                '<td><i title="'.DomainConst::CONTENT00300.'" class="fa fa-dollar"></i></td>';
+        $rightContent .=                '<td>';
+        $rightContent .=                '<b>' . $this->getDebt() . '<b>';
+        $rightContent .=                '</td>';
+        $rightContent .=            '</tr>';
         $pathological = '';
         if (isset($this->rMedicalRecord)) {
             $pathological = $this->rMedicalRecord->generateMedicalHistory(", ");
