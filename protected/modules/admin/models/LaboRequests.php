@@ -107,7 +107,7 @@ class LaboRequests extends BaseActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id,true);
-		$criteria->compare('treatment_detail_id',$this->treatment_detail_id,true);
+		$criteria->compare('treatment_detail_id',$this->treatment_detail_id);
 		$criteria->compare('date_request',$this->date_request,true);
 		$criteria->compare('date_receive',$this->date_receive,true);
 		$criteria->compare('date_test',$this->date_test,true);

@@ -88,8 +88,13 @@ class LaboRequestsController extends AdminController
          */
 	public function actionCreateAjax($id)
 	{
-		$model=new LaboRequests('create');
-                $model->treatment_detail_id = $id;
+                $model = $this->getLaboRequests($id);
+                if(empty($model)){
+                    $model=new LaboRequests('create');
+                    $model->treatment_detail_id = $id;
+                }else{
+                    $model->handleSearch();
+                }
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -103,7 +108,7 @@ class LaboRequestsController extends AdminController
                         $model->validate();
 			if(!$model->hasErrors()){
                             $model->Handlesave();
-                            $this->redirect(array('updateAjax','id'=>$model->id));
+                            $this->redirect(array('createAjax','id'=>$id));
                         }
 		}
                 $this->render('_form_ajax',array(
@@ -270,4 +275,14 @@ class LaboRequestsController extends AdminController
 			Yii::app()->end();
 		}
 	}
+        
+        /**
+         * get LaboRequests by detail id
+         * @param int $detail_id
+         */
+        public function getLaboRequests($detail_id){
+            $criteria=new CDbCriteria;
+            $criteria->compare('treatment_detail_id',$detail_id);
+            return LaboRequests::model()->find($criteria);
+        }
 }
