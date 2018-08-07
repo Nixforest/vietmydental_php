@@ -592,7 +592,8 @@ class Customers extends BaseActiveRecord
         if (isset($this->rMedicalRecord) && isset($this->rMedicalRecord->rTreatmentSchedule)) {
             $i = count($this->rMedicalRecord->rTreatmentSchedule);
             foreach ($this->rMedicalRecord->rTreatmentSchedule as $schedule) {
-                if (isset($schedule->rDetail)) {
+//                if (isset($schedule->rDetail)) {
+                if (!empty($schedule->rDetail)) {
                     $rightContent .= '<b style="float: left">';
                     if ($schedule->rPathological) {
                         $rightContent .= $htmlIcon.'<span class="round-txt">Đợt ' . $i . ': ' . $schedule->getStartDate() . ' - ' . $schedule->rPathological->name . '</span>';

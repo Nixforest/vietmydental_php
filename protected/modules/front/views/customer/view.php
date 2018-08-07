@@ -149,18 +149,21 @@
                             <div class="lp-list-container" id="treatment_schedule-info">
                                 <?php $treatmentCnt = count($treatment); ?>
                                 <?php foreach ($treatment as $value): ?>
-                                    <?php
-                                    $title = 'Đợt ' . $treatmentCnt-- . ': ' . $value->getStartDate();
-                                    $info = '';
-                                    if (isset($value->rDetail) && (count($value->rDetail) > 0)) {
-                                        $info = $value->rDetail[0]->getTreatmentInfo();
-                                    }
-                                    ?>
-                                    <div class="lp-list-item" id="<?php echo $value->id; ?>">
-                                        <i class="fas fa-list-ol lp-list-item-icon"></i>
-                                        <strong><?php echo $title; ?></strong><br>
-                                        <span><?php echo $info; ?></span>
-                                    </div>
+                                    <?php if (!empty($value->rDetail)): ?>
+                                        <?php
+                                            $title = 'Đợt ' . $treatmentCnt . ': ' . $value->getStartDate();
+                                            $info = '';
+                                            if (!empty($value->rDetail)) {
+                                                $info = $value->rDetail[0]->getTreatmentInfo();
+                                            }
+                                        ?>
+                                        <div class="lp-list-item" id="<?php echo $value->id; ?>">
+                                            <i class="fas fa-list-ol lp-list-item-icon"></i>
+                                            <strong><?php echo $title; ?></strong><br>
+                                            <span><?php echo $info; ?></span>
+                                        </div>
+                                    <?php endif; // endif ?>
+                                    <?php $treatmentCnt--; ?>
                                 <?php endforeach; // end foreach ($treatment as $value) ?>
                                 <!--<a href="#">(Xem Thêm)</a>-->
                             </div>
