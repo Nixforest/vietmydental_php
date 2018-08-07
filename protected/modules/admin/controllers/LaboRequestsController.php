@@ -150,6 +150,16 @@ class LaboRequestsController extends AdminController
                 $this->render('_form_ajax',array(
 			'model'=>$model,
 		));
+//		echo CJSON::encode(array(
+//                    DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
+//                    DomainConst::KEY_CONTENT => $this->renderPartial('_form_ajax',
+//                        array(
+//                            'model' => $model,
+//                            DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+//                        ),
+//                        true, true),
+//                ));
+//                exit;
 	}
         
 	/**
