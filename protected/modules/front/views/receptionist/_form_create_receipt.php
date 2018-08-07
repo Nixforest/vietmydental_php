@@ -72,8 +72,15 @@
 	</div>
 
 	<div class="row">
-		<label for="debit">Bệnh nhân còn nợ</label>
-                <input size="11" maxlength="11" value="<?php echo $customer->getDebt() ?>" id="Receipts_debit" type="text" readonly="true">
+		<label for="debit_new">Nợ mới</label>
+                <input size="11" maxlength="11" value="" id="Receipts_debit_new" type="text" readonly="true" class="format-currency">
+                <h4>&#8363;</h4><!--VND Sign-->
+	</div>
+
+	<div class="row">
+		<label for="debit">Nợ cũ</label>
+                <input size="11" maxlength="11" value="<?php echo CommonProcess::formatCurrency($customer->debt) ?>" id="Receipts_debit" type="text" readonly="true">
+                <h4>&#8363;</h4><!--VND Sign-->
 	</div>
 
 	<div class="row">
@@ -193,6 +200,26 @@
         discount = discount.replace(/[,]/g,'');
         discount = discount.replace(/[.]/g,'');
         $('#Receipts_final').val(fnFormatNumber(total-discount));
+        var final = $('#Receipts_final').val();
+        final = final.replace(/[,]/g,'');
+        final = final.replace(/[.]/g,'');
+        if ((total-discount-final) > 0) {
+            $('#Receipts_debit_new').val(fnFormatNumber(total-discount-final));
+        }
+    });
+    $(document).on('input', '#Receipts_final', function(){
+        var total = $('#Receipts_total').val();
+        total = total.replace(/[,]/g,'');
+        total = total.replace(/[.]/g,'');
+        var discount = $('#Receipts_discount').val();
+        discount = discount.replace(/[,]/g,'');
+        discount = discount.replace(/[.]/g,'');
+        var final = $('#Receipts_final').val();
+        final = final.replace(/[,]/g,'');
+        final = final.replace(/[.]/g,'');
+        if ((total-discount-final) > 0) {
+            $('#Receipts_debit_new').val(fnFormatNumber(total-discount-final));
+        }
     });
     fnNumberOnly();
     //-- BUG0045-IMT  (DuongNV 201807) Format currency when input
