@@ -63,20 +63,19 @@ class ImageHandler {
                     . $this->folder . DIRECTORY_SEPARATOR;
             // Get file path
             $pathFile = $rootPath . $this->file;
-            Loggers::info($pathFile, __FUNCTION__, __LINE__);
+            Loggers::info('File path', $pathFile, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             // Check path is not exist or file is empty
             if (!file_exists($pathFile) || empty($this->file)) {
                 return false;
             }
             DirectoryHandler::createDirectoryByPath($this->folder);
-            Loggers::info($this->folder, __FUNCTION__, __LINE__);
+            Loggers::info('Folder', $this->folder, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             // Loop for all thumbs
             foreach ($this->thumbs as $folderThumb => $size) {
-                Loggers::info($this->folder, __FUNCTION__, __LINE__);
-                Loggers::info($folderThumb, __FUNCTION__, __LINE__);
+                Loggers::info('Folder thumb', $folderThumb, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
                 // Temp path
                 $tempPath = $this->folder . DIRECTORY_SEPARATOR . $folderThumb;
-                Loggers::info($tempPath, __FUNCTION__, __LINE__);
+                Loggers::info('Temp path', $tempPath, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
                 if (DirectoryHandler::createSingleDirectoryByPath($tempPath)) {
                     // Get size
                     $width = $size[self::WIDTH];
@@ -88,9 +87,9 @@ class ImageHandler {
                     if ($thumb->create($pathFile)
                             ->resize($width, $height)
                             ->save($thumPath)) {
-                        Loggers::info('Create thumb success', __FUNCTION__, __LINE__);
+                        Loggers::info('Create thumb success', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
                     } else {
-                        Loggers::info('Create thumb failed', __FUNCTION__, __LINE__);
+                        Loggers::error('Create thumb failed', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
                     }
                     self::createNoImage($width, $height);
                     // Create full image
@@ -313,14 +312,13 @@ class ImageHandler {
      */
     public static function bindImage($path, $width, $height) {
         $baseUrl = CommonProcess::getHostUrl();
-        Loggers::info($baseUrl, __FUNCTION__, __LINE__);
+        Loggers::info('Base url', $baseUrl, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         $noImagePath = self::NO_IMAGE_PATH . $width . self::SIZE_SPLITTER . $height . self::IMG_EXT_JPG;
         $rootPath = DirectoryHandler::getRootPath() . DIRECTORY_SEPARATOR;
         
-        Loggers::info($rootPath . $path, __FUNCTION__, __LINE__);
+        Loggers::info('Path', $rootPath . $path, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         if (!file_exists($rootPath . $path)) {
-            
-            Loggers::info("file_exists no exist", __FUNCTION__, __LINE__);
+            Loggers::info('File not exist', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             if (!file_exists($rootPath . $noImagePath)) {
                 return Yii::app()->createAbsoluteUrl(DIRECTORY_SEPARATOR)
                         . self::NO_IMAGE_PATH . self::NO_IMAGE_NAME;
@@ -328,7 +326,7 @@ class ImageHandler {
                 return Yii::app()->baseUrl . $noImagePath;
             }
         }
-        Loggers::info($baseUrl . $path, __FUNCTION__, __LINE__);
+        Loggers::info('Base path', $baseUrl . $path, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         return $baseUrl . $path;
     }
     
@@ -343,10 +341,10 @@ class ImageHandler {
     public static function bindImageByModel($model, $width = null, $height = null, $customField = array()) {
         $className = get_class($model);
         if ($className == 'Files' && !empty($model->file_name) && !empty($model->created_date)) {
-            Loggers::info('$className == Files', __FUNCTION__, __LINE__);
+            Loggers::info('Start bind image', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             $aDate = explode('-', $model->created_date);
             $pathUpload = Files::UPLOAD_PATH . "/$aDate[0]/$aDate[1]";
-            Loggers::info($pathUpload, __FUNCTION__, __LINE__);
+            Loggers::info('Upload path', $pathUpload, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             $path = $pathUpload . '/size128x96' . DIRECTORY_SEPARATOR . $model->file_name;
             if (isset($customField['size'])) {
                 $path = $pathUpload . DIRECTORY_SEPARATOR . $customField['size'] . DIRECTORY_SEPARATOR . $model->file_name;

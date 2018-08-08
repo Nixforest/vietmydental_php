@@ -258,10 +258,10 @@ class Files extends CActiveRecord
     public static function saveRecordFile($mBelongTo, $type) {
         $className = get_class($mBelongTo);
         $mBelongTo = BaseActiveRecord::loadModelByClass($mBelongTo->id, $className, 'admin');
-        Loggers::info($className, __FUNCTION__, __CLASS__);
         set_time_limit(7200);
         if (isset($_POST[$className][self::KEY_FILE_NAME]) && count($_POST[$className][self::KEY_FILE_NAME])) {
-            Loggers::info('isset($_POST[$className][self::KEY_FILE_NAME])', __FUNCTION__, __CLASS__);
+            Loggers::info('Start save number of file', count($_POST[$className][self::KEY_FILE_NAME]),
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             foreach ($_POST[$className][self::KEY_FILE_NAME] as $key => $item) {
                 $mFile = new Files();
                 $mFile->type = $type;
@@ -270,17 +270,18 @@ class Files extends CActiveRecord
                 $mFile->created_date = $created_date[0];
                 $mFile->order_number = $key + 1;
                 $mFile->file_name = CUploadedFile::getInstance($mBelongTo, self::KEY_FILE_NAME . '[' . $key . ']');
-                Loggers::info($mFile->file_name, __FUNCTION__, __CLASS__);
                 if (!is_null($mFile->file_name)) {
-                    Loggers::info('!is_null($mFile->file_name', __FUNCTION__, __CLASS__);
+                    Loggers::info('File name', $mFile->file_name, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
                     $mFile->file_name = self::saveFile($mFile, 'file_name', $key);
                     if ($mFile->save()) {
-                        Loggers::info('$mFile->save success', __FUNCTION__, __LINE__);
+                        Loggers::info('Save file success', $mFile->file_name, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
                         if (in_array($type, self::$TYPE_RESIZE_IMAGE)) {
                             self::resizeImage($mFile, 'file_name');
                         }
                     } else {
-                        Loggers::info(CommonProcess::json_encode_unicode($mFile->getErrors()), __FUNCTION__, __LINE__);
+                        Loggers::error('Save file failed', 
+                                CommonProcess::json_encode_unicode($mFile->getErrors()),
+                                __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
                     }
                 }
             }
@@ -311,12 +312,15 @@ class Files extends CActiveRecord
             $fileName = time() . "$count-" . CommonProcess::slugify($fileNameClient) . '.' . $ext;
 //        }
         DirectoryHandler::createDirectoryByPath($pathUpload);
-        Loggers::info($pathUpload. DIRECTORY_SEPARATOR . $fileName, __FUNCTION__, __LINE__);
+        Loggers::info('Upload path', $pathUpload. DIRECTORY_SEPARATOR . $fileName,
+                __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         if ($model->$fieldName->saveAs($pathUpload. DIRECTORY_SEPARATOR . $fileName)) {
-            Loggers::info("Save image success", __FUNCTION__, __LINE__);
+            Loggers::info('Save image success', '',
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             return $fileName;
         } else {
-            Loggers::info("Save image failed", __FUNCTION__, __LINE__);
+            Loggers::error('Save image failed', $pathUpload. DIRECTORY_SEPARATOR . $fileName,
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         }
         return '';
     }
@@ -336,9 +340,10 @@ class Files extends CActiveRecord
         $imageHandler->file = $model->$fieldName;
         $imageHandler->aRGB = array(0, 0, 0);   // Full black background
         $imageHandler->thumbs = self::IMAGE_SIZES;
-        Loggers::info("Try create thumb: " . $imageHandler->folder, __FUNCTION__, __LINE__);
+        Loggers::info('Try create thumb', $imageHandler->folder, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         $imageHandler->createThumbs();
-        Loggers::info("Delete file: " . $imageHandler->folder . DIRECTORY_SEPARATOR . $model->$fieldName, __FUNCTION__, __LINE__);
+        Loggers::info("Delete file: ", $imageHandler->folder . DIRECTORY_SEPARATOR . $model->$fieldName,
+                __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         DirectoryHandler::deleteFile($imageHandler->folder . DIRECTORY_SEPARATOR . $model->$fieldName);
     }
     
@@ -473,10 +478,11 @@ class Files extends CActiveRecord
      * @param type $mBelongTo
      */
     public static function deleteFileInUpdateNotIn($mBelongTo, $type = '') {
-        Loggers::info(isset($_POST['delete_file']) . "", __FUNCTION__, __LINE__);
+        Loggers::info('Prepare delete file', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
 //        Loggers::info(CommonProcess::json_encode_unicode($_POST['delete_file']), __FUNCTION__, __LINE__);
-        if (isset($_POST['delete_file']) && is_array($_POST['delete_file']) && count($_POST['delete_file'])) {
-            Loggers::info('Start delete file', __FUNCTION__, __LINE__);
+//        if (isset($_POST['delete_file']) && is_array($_POST['delete_file']) && count($_POST['delete_file'])) {
+        if (!empty($_POST['delete_file'])) {
+            Loggers::info('Number of delete file', count($_POST['delete_file']), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             $criteria = new CDbCriteria;
             $criteria->compare('t.belong_id', $mBelongTo->id);
             $sParamsIn = implode(',', $_POST['delete_file']);
@@ -489,6 +495,8 @@ class Files extends CActiveRecord
             foreach ($models as $model) {
                 $model->delete();
             }
+        } else {
+            Loggers::error('Post variable empty', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         }
     }
     

@@ -71,7 +71,7 @@ class DirectoryHandler {
     public static function deleteFile($source) {
 //        $path = DirectoryHandler::getRootPath() . DIRECTORY_SEPARATOR . $source;
         $path = DirectoryHandler::getRootPath() . DIRECTORY_SEPARATOR . $source;
-        Loggers::info($path, __FUNCTION__, __LINE__);
+        Loggers::info('Try to delete file at path', $path, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         if (file_exists($path) && !is_dir($path)) {
             if (!unlink($path)) {
                 return false;
