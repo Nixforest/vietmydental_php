@@ -876,8 +876,8 @@ class Receipts extends CActiveRecord
         if(!$searchFull){
             $criteria->compare('t.customer_types_id', $customer_type_id,false,'OR');
             $criteria->compare('t.customer_types_id', 0,false,'OR');
+	    $criteria->compare('o.many_id', $treatment_type_id);
         }
-        $criteria->compare('o.many_id', $treatment_type_id);
         $criteria->join = 'JOIN '.$tblPromotion.' p ON p.id = t.promotion_id';
         $criteria->addCondition('p.start_date <=\''.$dateCurrent.'\'');
         $criteria->addCondition('p.end_date >=\''.$dateCurrent.'\'');
