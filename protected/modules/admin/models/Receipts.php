@@ -858,14 +858,14 @@ class Receipts extends CActiveRecord
      * @return array
      */
     public function getArrayDiscount($customer,$mDetail){
-        $aPromotionDetails = $this->getPromotionDetails($customer,$mDetail);
+        $aPromotionDetails = $this->getPromotionDetails($customer,$mDetail,true);
         foreach ($aPromotionDetails as $key => $mPromotion) {
             $result[$mPromotion->id] = $mPromotion->description;
         }
         return $result;
     }
     
-    public function getPromotionDetails($customer,$mDetail){
+    public function getPromotionDetails($customer,$mDetail,$searchFull=false){
         $dateCurrent = !empty($this->created_date) ? $this->created_date : date('Y-m-d');
         $tblPromotion = Promotions::model()->tableName();
         $tblOneMany = OneMany::model()->tableName();
@@ -873,14 +873,16 @@ class Receipts extends CActiveRecord
         $treatment_type_id = $mDetail->treatment_type_id;
 //        get array promotion
         $criteria = new CDbCriteria;
-        $criteria->compare('t.customer_types_id', $customer_type_id,false,'OR');
-        $criteria->compare('t.customer_types_id', 0,false,'OR');
+        if(!$searchFull){
+            $criteria->compare('t.customer_types_id', $customer_type_id,false,'OR');
+            $criteria->compare('t.customer_types_id', 0,false,'OR');
+        }
+        $criteria->compare('o.many_id', $treatment_type_id);
         $criteria->join = 'JOIN '.$tblPromotion.' p ON p.id = t.promotion_id';
         $criteria->addCondition('p.start_date <=\''.$dateCurrent.'\'');
         $criteria->addCondition('p.end_date >=\''.$dateCurrent.'\'');
         $criteria->join .= ' JOIN '.$tblOneMany.' o ON t.id = o.one_id';
         $criteria->compare('o.type', OneMany::TYPE_PROMOTION_TREATMENT_TYPE);
-        $criteria->compare('o.many_id', $treatment_type_id);
         $aPromotionDetails = PromotionDetails::model()->findAll($criteria);
         return $aPromotionDetails;
     }
