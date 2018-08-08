@@ -68,7 +68,7 @@
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
-<?php include '_view_list.php'; ?> 		<?php include '_view_list.php'; ?>
+<?php include '_view_list.php'; ?>
 <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/autoNumeric/autoNumeric.js'); ?>
 <script>
     $(document).ready(function(){
