@@ -58,7 +58,7 @@ class Receipts extends CActiveRecord
 			array('need_approve, customer_confirm, status', 'numerical', 'integerOnly'=>true),
 			array('detail_id, discount, created_by, receiptionist_id', 'length', 'max'=>11),
 			array('total, final', 'length', 'max'=>10),
-			array('description', 'safe'),
+			array('description, promotion_id', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, detail_id, process_date, total, discount, final, need_approve, customer_confirm, description, created_date, created_by, receiptionist_id, status', 'safe', 'on'=>'search'),
@@ -109,6 +109,7 @@ class Receipts extends CActiveRecord
 			'created_by' => DomainConst::CONTENT00054,
 			'receiptionist_id' => DomainConst::CONTENT00246,
 			'status' => DomainConst::CONTENT00026,
+			'promotion_id' => DomainConst::CONTENT00411,
 		);
 	}
 
@@ -870,4 +871,76 @@ class Receipts extends CActiveRecord
                 break;
         }
     }
+    
+    /**
+     * Get array promotion
+     * @return array
+     */
+    public function getArrayDiscount($customer, $mDetail, $empty = false) {
+        $aPromotionDetails = $this->getPromotionDetails($customer, $mDetail, true);
+        $result = array();
+        if ($empty) {
+            $result[''] = DomainConst::CONTENT00412;
+        }
+        foreach ($aPromotionDetails as $mPromotion) {
+            $result[$mPromotion->id] = $mPromotion->description;
+        }
+        return $result;
+    }
+
+    public function getPromotionDetails($customer, $mDetail, $searchFull = false) {
+        // Get date of receipt
+        $dateCurrent = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
+        if (!empty($this->created_date)) {
+            $dateCurrent = CommonProcess::convertDateTime($this->created_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
+        }
+        $tblPromotion = Promotions::model()->tableName();
+        $tblOneMany = OneMany::model()->tableName();
+        $customer_type_id = $customer->type_id;
+        $treatment_type_id = $mDetail->treatment_type_id;
+        // Get array promotion
+        $criteria = new CDbCriteria;
+        if (!$searchFull) {
+            $criteria->compare('t.customer_types_id', $customer_type_id, false, 'OR');
+            $criteria->compare('t.customer_types_id', 0, false, 'OR');
+            $criteria->compare('o.many_id', $treatment_type_id);
+        }
+        $criteria->join = 'JOIN ' . $tblPromotion . ' p ON p.id = t.promotion_id';
+        $criteria->addCondition('p.start_date <=\'' . $dateCurrent . '\'');
+        $criteria->addCondition('p.end_date >=\'' . $dateCurrent . '\'');
+        $criteria->join .= ' JOIN ' . $tblOneMany . ' o ON t.id = o.one_id';
+        $criteria->compare('o.type', OneMany::TYPE_PROMOTION_TREATMENT_TYPE);
+//        $aPromotionDetails = PromotionDetails::model()->findAll($criteria);
+        $aPromotionDetails = PromotionDetails::model()->findAll();
+        return $aPromotionDetails;
+    }
+
+    /**
+     * Set promotion max
+     * @param model $customer
+     * @param model $detail
+     */
+    public function setPromotion($customer, $detail, $total) {
+        if (!$this->isNewRecord)
+            return;
+        $aPromotion = $this->getPromotionDetails($customer, $detail);
+        $max = 0;
+        foreach ($aPromotion as $key => $mPromotionDetails) {
+            if ($mPromotionDetails->type == PromotionDetails::TYPE_DISCOUNT) {
+                $discountCurrent = $total / 100 * $mPromotionDetails->discount;
+                if ($max < $discountCurrent) {
+                    $max = $discountCurrent;
+                    $this->promotion_id = $mPromotionDetails->id;
+                }
+            }
+            if ($mPromotionDetails->type == PromotionDetails::TYPE_SERVICE) {
+                if ($max < $mPromotionDetails->discount) {
+                    $max = $mPromotionDetails->discount;
+                    $this->promotion_id = $mPromotionDetails->id;
+                }
+            }
+        }
+        $this->discount = $max;
+    }
+
 }

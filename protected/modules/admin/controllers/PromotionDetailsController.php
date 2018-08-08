@@ -183,6 +183,7 @@ class PromotionDetailsController extends AdminController
             if(isset($_POST['PromotionDetails']))
             {
                     $model->attributes=$_POST['PromotionDetails'];
+                    $model->convertDiscount();
                     $model->validate();
                     if(!$model->hasErrors()){
                         $model->handleSave();
@@ -207,6 +208,7 @@ class PromotionDetailsController extends AdminController
             {
                     $model->treatments  = '';
                     $model->attributes=$_POST['PromotionDetails'];
+                    $model->convertDiscount();
                     $model->validate();
                     if(!$model->hasErrors()){
                         $model->handleSave();
@@ -217,5 +219,19 @@ class PromotionDetailsController extends AdminController
             $this->render('createDetail/update',array(
                     'model'=>$model,
             ));
+        }
+        
+        /**
+         * get json promotion detail 
+         * @param int $id
+         */
+        public function actionGetPromotionDetail($id){
+            $result = [];
+            $model = PromotionDetails::model()->findByPk($id);
+            if(!empty($model)){
+                $result['type'] = $model->type;
+                $result['value'] = $model->discount;
+            }
+            echo json_encode($result);
         }
 }

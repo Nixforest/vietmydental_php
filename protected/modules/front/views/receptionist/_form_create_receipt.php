@@ -90,6 +90,14 @@
     </div>
 
     <div class="row">
+        <div class="col-md-12">
+            <?php echo $form->labelEx($model, 'promotion_id'); ?>
+            <?php // echo $form->radioButtonList($model, 'promotion_id', $model->getArrayDiscount($customer, $detail, true), ['separator' => '<br><br>',]); ?>
+            <?php echo $form->dropDownList($model, 'promotion_id', $model->getArrayDiscount($customer, $detail, true)); ?>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-md-6">
             <?php echo $form->labelEx($model, 'final'); ?>
             <!--//++ BUG0045-IMT (DuongNV 201807) Format currency when input-->
@@ -180,6 +188,11 @@
 </div><!-- form -->
 <!--<script type="text/javascript">-->
 <script>
+    $(function(){
+        $('#Receipts_promotion_id').change(function () {
+            changeByClickPromotion();
+        });
+    });
     $(document).ready(function () {
         //++ BUG0043-IMT (DuongNV 20180730) Show tooth in receipt screen
         var style = '<style>' +
@@ -258,4 +271,32 @@
     }
     fnNumberOnly();
     //-- BUG0045-IMT  (DuongNV 201807) Format currency when input
+    //++ BUG0024-IMT (NamNH 20180807) add discount-->
+    $('input[name="Receipts[promotion_id]"]').on('change',function(){
+        changeByClickPromotion();
+    });
+    function changeByClickPromotion(){
+        var discount_id = $('#Receipts_promotion_id').val();
+        $.ajax({
+            'url': '<?php echo Yii::app()->createAbsoluteUrl('admin/promotionDetails/getPromotionDetail');?>',
+            'data': {'id':discount_id},
+            'success':function(data){
+                var discountValue = 0;
+                var aRes = JSON.parse(data);
+                if (typeof aRes['type'] != "undefined" || aRes['type'] != null){
+                    var total = $('#Receipts_total').val();
+                    total = total.replace(/[,]/g,'');
+                    total = total.replace(/[.]/g,'');
+                    if(aRes['type'] == <?php echo PromotionDetails::TYPE_DISCOUNT; ?>){
+                        discountValue = total / 100 * aRes['value'];
+                    }
+                    if(aRes['type'] == <?php echo PromotionDetails::TYPE_SERVICE; ?>){
+                        discountValue = aRes['value'];
+                    }
+                }
+                $('#Receipts_discount').val(fnFormatNumber(discountValue));
+            }
+        });
+    }
+    //-- BUG0024-IMT (NamNH 20180807) add discount-->
 </script>

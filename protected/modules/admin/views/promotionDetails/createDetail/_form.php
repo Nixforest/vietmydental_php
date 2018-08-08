@@ -68,4 +68,23 @@
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
-<?php include '_view_list.php'; ?>
+<?php include '_view_list.php'; ?> 		<?php include '_view_list.php'; ?>
+<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl.'/js/autoNumeric/autoNumeric.js'); ?>
+<script>
+    $(document).ready(function(){
+        <?php if($model->type == PromotionDetails::TYPE_SERVICE){?> 
+            $('#PromotionDetails_discount').autoNumeric('init', {lZero:"deny", aPad: false} ); 
+        <?php } ?>
+        $('#PromotionDetails_type').on('change',function(){
+            $('#PromotionDetails_discount').val('');
+            $('#PromotionDetails_discount').autoNumeric('destroy'); 
+            $('#PromotionDetails_discount').next('.autoDiscount').remove();
+            if($(this).val() == <?php echo PromotionDetails::TYPE_DISCOUNT; ?>){
+                $('#PromotionDetails_discount').after('<b class="autoDiscount" style="color:red;font-size:1.2em;margin-left:10px;"><?php echo DomainConst::CONTENT00410; ?><b>');
+            }
+            if($(this).val() == <?php echo PromotionDetails::TYPE_SERVICE; ?>){
+                $('#PromotionDetails_discount').autoNumeric('init', {lZero:"deny", aPad: false} ); 
+            }
+        });
+    });
+</script> 
