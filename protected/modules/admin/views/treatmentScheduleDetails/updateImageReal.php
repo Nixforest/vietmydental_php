@@ -87,17 +87,19 @@ $this->createMenu('update', $model);
                         <?php endif;?>
                         <?php echo $form->error($item,'file_name'); ?>
                         <?php // echo $form->hiddenField($model,'aIdNotIn[]', array('value'=>$item->id)); ?>
-                        <input value="<?php echo $item->id ?>" name="delete_file[]" id="delete_file" type="hidden">
+                        <!--<input value="<?php echo $item->id ?>" name="delete_file[]" id="delete_file" type="hidden">-->
                     </td>
                     <td class="item_c" style="display: none;">
                         <?php echo $form->dropDownList($model,'order_number[]', $aOrderNumber,array('class'=>'w-50', 
                              'options' => array($item->order_number=>array('selected'=>true))
                                 )); ?>
                     </td>
-                    <td class="item_c last"><span class="remove_icon_only"></span></td>
+                    <td class="item_c last"><span data-id='<?php echo$item->id;  ?>' class="remove_icon_only"></span></td>
+                    <!--<td class="item_c last"><span class="remove_icon_only"></span></td>-->
                 </tr> 
                 <?php // $max_upload_show--;?>
                 <?php endforeach;?>
+                <div id='divRemove' style='display: none;'></div>
                 <?php endif;?>
 
                 <?php for($i=count($model->rImgRealFile) + 1; $i<=$max_upload; $i++): ?>
@@ -151,4 +153,10 @@ $this->createMenu('update', $model);
                 $('.materials_table tbody').find('.display_none').eq(0).removeClass('display_none');
         <?php endif; ?>
     }
+    function fnBeforeRemoveActionUploadFile($this){
+         $idRemove = $($this).data('id');
+         if($idRemove != 'undefined' && $idRemove != null){
+             $('#divRemove').append('<input value="'+$idRemove+'" name="delete_file[]">');
+         }
+     }
 </script>

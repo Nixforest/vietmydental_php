@@ -216,7 +216,7 @@ class TreatmentScheduleDetailsController extends AdminController
         public function actionUpdateImageReal($id) {
             $model = $this->loadModel($id);
             if (isset($_POST['TreatmentScheduleDetails'])) {
-                Files::deleteFileInUpdateNotIn($model, Files::TYPE_3_TREATMENT_SCHEDULE_REAL_IMG);
+                Files::deleteFileInUpdateNotIn($model, Files::TYPE_3_TREATMENT_SCHEDULE_REAL_IMG, true);
                 Files::saveRecordFile($model, Files::TYPE_3_TREATMENT_SCHEDULE_REAL_IMG);
                 $this->redirect(array('view', 'id' => $model->id));
             }
