@@ -132,7 +132,8 @@
         </div>
             <h4><?php echo DomainConst::CONTENT00411; ?></h4>
             <div class="col-xs-6">
-                <?php echo $form->radioButtonList($model,'promotion_id',$model->getArrayDiscount($customer,$detail),['separator'=>'<br><br>',]); ?>
+                <?php echo $form->radioButtonList($model, 'promotion_id', $model->getArrayDiscount($customer, $detail, true), ['separator' => '<br><br>',]); ?>
+                <?php // echo $form->dropDownList($model, 'promotion_id', $model->getArrayDiscount($customer, $detail, true)); ?>
             </div>
         </div>
 <!--//-- BUG0024-IMT  (NamNH 201807) add disscount-->

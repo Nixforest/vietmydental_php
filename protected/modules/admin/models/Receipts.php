@@ -854,58 +854,70 @@ class Receipts extends CActiveRecord
     }
     
     /**
-     * get array promotion
+     * Get array promotion
      * @return array
      */
-    public function getArrayDiscount($customer,$mDetail){
-        $aPromotionDetails = $this->getPromotionDetails($customer,$mDetail,true);
-        foreach ($aPromotionDetails as $key => $mPromotion) {
+    public function getArrayDiscount($customer, $mDetail, $empty = false) {
+        $aPromotionDetails = $this->getPromotionDetails($customer, $mDetail, true);
+        $result = array();
+        if ($empty) {
+            $result[''] = DomainConst::CONTENT00412;
+        }
+        foreach ($aPromotionDetails as $mPromotion) {
             $result[$mPromotion->id] = $mPromotion->description;
         }
         return $result;
     }
-    
-    public function getPromotionDetails($customer,$mDetail,$searchFull=false){
-        $dateCurrent = !empty($this->created_date) ? $this->created_date : date('Y-m-d');
-        $tblPromotion = Promotions::model()->tableName();
-        $tblOneMany = OneMany::model()->tableName();
-        $customer_type_id = $customer->type_id;
-        $treatment_type_id = $mDetail->treatment_type_id;
-//        get array promotion
-        $criteria = new CDbCriteria;
-        if(!$searchFull){
-            $criteria->compare('t.customer_types_id', $customer_type_id,false,'OR');
-            $criteria->compare('t.customer_types_id', 0,false,'OR');
-	    $criteria->compare('o.many_id', $treatment_type_id);
+
+    public function getPromotionDetails($customer, $mDetail, $searchFull = false) {
+        // Get date of receipt
+        $dateCurrent = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
+        if (!empty($this->created_date)) {
+            $dateCurrent = CommonProcess::convertDateTime($this->created_date,
+                    DomainConst::DATE_FORMAT_1,
+                    DomainConst::DATE_FORMAT_4);
         }
-        $criteria->join = 'JOIN '.$tblPromotion.' p ON p.id = t.promotion_id';
-        $criteria->addCondition('p.start_date <=\''.$dateCurrent.'\'');
-        $criteria->addCondition('p.end_date >=\''.$dateCurrent.'\'');
-        $criteria->join .= ' JOIN '.$tblOneMany.' o ON t.id = o.one_id';
+        $tblPromotion       = Promotions::model()->tableName();
+        $tblOneMany         = OneMany::model()->tableName();
+        $customer_type_id   = $customer->type_id;
+        $treatment_type_id  = $mDetail->treatment_type_id;
+        // Get array promotion
+        $criteria = new CDbCriteria;
+        if (!$searchFull) {
+            $criteria->compare('t.customer_types_id', $customer_type_id, false, 'OR');
+            $criteria->compare('t.customer_types_id', 0, false, 'OR');
+            $criteria->compare('o.many_id', $treatment_type_id);
+        }
+        $criteria->join = 'JOIN ' . $tblPromotion . ' p ON p.id = t.promotion_id';
+        $criteria->addCondition('p.start_date <=\'' . $dateCurrent . '\'');
+        $criteria->addCondition('p.end_date >=\'' . $dateCurrent . '\'');
+        $criteria->join .= ' JOIN ' . $tblOneMany . ' o ON t.id = o.one_id';
         $criteria->compare('o.type', OneMany::TYPE_PROMOTION_TREATMENT_TYPE);
-        $aPromotionDetails = PromotionDetails::model()->findAll($criteria);
+//        $aPromotionDetails = PromotionDetails::model()->findAll($criteria);
+        $aPromotionDetails = PromotionDetails::model()->findAll();
         return $aPromotionDetails;
     }
-    
+
     /**
-     * set promotion max
+     * Set promotion max
      * @param model $customer
      * @param model $detail
      */
-    public function setPromotion($customer,$detail,$total){
-        if(!$this->isNewRecord) return;
-        $aPromotion = $this->getPromotionDetails($customer,$detail);
+    public function setPromotion($customer, $detail, $total) {
+        if (!$this->isNewRecord)
+            return;
+        $aPromotion = $this->getPromotionDetails($customer, $detail);
         $max = 0;
-        foreach ($aPromotion as $key => $mPromotionDetails){
-            if($mPromotionDetails->type == PromotionDetails::TYPE_DISCOUNT){
-                $discountCurrent = $total /100 * $mPromotionDetails->discount;
-                if($max < $discountCurrent){
+        foreach ($aPromotion as $key => $mPromotionDetails) {
+            if ($mPromotionDetails->type == PromotionDetails::TYPE_DISCOUNT) {
+                $discountCurrent = $total / 100 * $mPromotionDetails->discount;
+                if ($max < $discountCurrent) {
                     $max = $discountCurrent;
                     $this->promotion_id = $mPromotionDetails->id;
                 }
             }
-            if($mPromotionDetails->type == PromotionDetails::TYPE_SERVICE){
-                if($max < $mPromotionDetails->discount){
+            if ($mPromotionDetails->type == PromotionDetails::TYPE_SERVICE) {
+                if ($max < $mPromotionDetails->discount) {
                     $max = $mPromotionDetails->discount;
                     $this->promotion_id = $mPromotionDetails->id;
                 }
@@ -913,4 +925,5 @@ class Receipts extends CActiveRecord
         }
         $this->discount = $max;
     }
+
 }
