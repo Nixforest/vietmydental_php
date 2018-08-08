@@ -198,7 +198,7 @@ class TreatmentScheduleDetailsController extends AdminController
 //                        $mImageXRayFile->attributes = $_POST['Files'];
                         Loggers::info('Post value', CommonProcess::json_encode_unicode($_POST), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
 //                        die;
-                        Files::deleteFileInUpdateNotIn($model, Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY);
+                        Files::deleteFileInUpdateNotIn($model, Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY,true);
                         Files::saveRecordFile($model, Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY);
 			$this->redirect(array('view','id'=>$model->id));
 		}

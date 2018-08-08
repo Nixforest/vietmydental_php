@@ -92,17 +92,24 @@ $this->createMenu('update', $model);
                         <?php endif;?>
                         <?php echo $form->error($item,'file_name'); ?>
                         <?php // echo $form->hiddenField($model,'aIdNotIn[]', array('value'=>$item->id)); ?>
-                        <input value="<?php echo $item->id ?>" name="delete_file[]" id="delete_file" type="hidden">
+                        <!-- //++ BUG0061-IMT (NamNH 20180808) --> 
+                        <!--<input value="<?php // echo $item->id ?>" name="delete_file[]" id="delete_file" type="hidden">-->
+                        <!-- //-- BUG0061-IMT (NamNH 20180808) -->
                     </td>
                     <td class="item_c" style="display: none;">
                         <?php echo $form->dropDownList($model,'order_number[]', $aOrderNumber,array('class'=>'w-50', 
                              'options' => array($item->order_number=>array('selected'=>true))
                                 )); ?>
                     </td>
-                    <td class="item_c last"><span class="remove_icon_only"></span></td>
+                    <!-- //++ BUG0061-IMT (NamNH 20180808) -->
+                    <td class="item_c last"><span data-id='<?php echo$item->id;  ?>' class="remove_icon_only"></span></td>
+                    <!-- //-- BUG0061-IMT (NamNH 20180808) -->
                 </tr> 
                 <?php // $max_upload_show--;?>
                 <?php endforeach;?>
+                <!-- //++ BUG0061-IMT (NamNH 20180808) -->
+                <div id='divRemove' style='display: none;'></div>
+                <!-- //-- BUG0061-IMT (NamNH 20180808) -->
                 <?php endif;?>
 
                 <?php for($i=count($model->rImgXRayFile) + 1; $i<=$max_upload; $i++): ?>
@@ -156,4 +163,12 @@ $this->createMenu('update', $model);
                 $('.materials_table tbody').find('.display_none').eq(0).removeClass('display_none');
         <?php endif; ?>
     }
+    //++ BUG0061-IMT (NamNH 20180808)
+    function fnBeforeRemoveActionUploadFile($this){
+        $idRemove = $($this).data('id');
+        if($idRemove != 'undefined' && $idRemove != null){
+            $('#divRemove').append('<input value="'+$idRemove+'" name="delete_file[]">');
+        }
+    }
+    //-- BUG0061-IMT (NamNH 20180808)
 </script>

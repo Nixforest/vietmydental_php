@@ -477,7 +477,7 @@ class Files extends CActiveRecord
      * Delete file in update action (with not in array param)
      * @param type $mBelongTo
      */
-    public static function deleteFileInUpdateNotIn($mBelongTo, $type = '') {
+    public static function deleteFileInUpdateNotIn($mBelongTo, $type = '',$isIn = false) {
         Loggers::info('Prepare delete file', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
 //        Loggers::info(CommonProcess::json_encode_unicode($_POST['delete_file']), __FUNCTION__, __LINE__);
 //        if (isset($_POST['delete_file']) && is_array($_POST['delete_file']) && count($_POST['delete_file'])) {
@@ -487,7 +487,13 @@ class Files extends CActiveRecord
             $criteria->compare('t.belong_id', $mBelongTo->id);
             $sParamsIn = implode(',', $_POST['delete_file']);
             Loggers::info($sParamsIn, __FUNCTION__, __LINE__);
-            $criteria->addCondition("t.id NOT IN ($sParamsIn)");
+            //++ BUG0061 -IMT (NamNH 20180808)
+            if($isIn){
+                $criteria->addCondition("t.id IN ($sParamsIn)");
+            }else{
+                $criteria->addCondition("t.id NOT IN ($sParamsIn)");
+            }
+            //-- BUG0061 -IMT (NamNH 20180808)
             if (!empty($type)) {
                 $criteria->compare('t.type', $type);
             }
