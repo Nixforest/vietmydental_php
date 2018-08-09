@@ -23,6 +23,7 @@ class Receipts extends CActiveRecord
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
+    const DEFAULT_COLUMN                = 0;
     const STATUS_INACTIVE               = 0;
     const STATUS_ACTIVE                 = 1;
     const STATUS_DOCTOR                 = 2;
@@ -889,6 +890,7 @@ class Receipts extends CActiveRecord
     }
 
     public function getPromotionDetails($customer, $mDetail, $searchFull = false) {
+        $agent_id = Yii::app()->user->agent_id;
         // Get date of receipt
         $dateCurrent = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
         if (!empty($this->created_date)) {
@@ -896,23 +898,47 @@ class Receipts extends CActiveRecord
         }
         $tblPromotion = Promotions::model()->tableName();
         $tblOneMany = OneMany::model()->tableName();
-        $customer_type_id = $customer->type_id;
-        $treatment_type_id = $mDetail->treatment_type_id;
+        $customer_type_id = !empty($customer->type_id) ? $customer->type_id : 0;
+        $treatment_type_id = !empty($mDetail->treatment_type_id) ? $mDetail->treatment_type_id : 0;
         // Get array promotion
         $criteria = new CDbCriteria;
+        $criteria->select = 'DISTINCT t.*';
         $criteria->join = 'JOIN ' . $tblPromotion . ' p ON p.id = t.promotion_id';
         if (!$searchFull) {
-            $criteria->compare('t.customer_types_id', $customer_type_id, false, 'OR');
-            $criteria->compare('t.customer_types_id', 0, false, 'OR');
-            $criteria->compare('o.many_id', $treatment_type_id, false, 'OR');
-            
-            $criteria->join .= ' JOIN ' . $tblOneMany . ' o ON t.id = o.one_id';
-            $criteria->compare('o.type', OneMany::TYPE_PROMOTION_TREATMENT_TYPE);
+//            check customer type
+            $criteria->addCondition(
+                      't.customer_types_id = '.$customer_type_id
+                    . ' OR '
+                    . 't.customer_types_id = '.self::DEFAULT_COLUMN
+                    );
         }
+//        select by agent current
+        $criteria->join .= ' JOIN ' . $tblOneMany . ' ag ON p.id = ag.one_id';
+        $criteria->compare('ag.type', OneMany::TYPE_PROMOTION_AGENT);
+        $criteria->compare('ag.many_id', $agent_id);
+//        Check date
         $criteria->addCondition('p.start_date <=\'' . $dateCurrent . '\'');
         $criteria->addCondition('p.end_date >=\'' . $dateCurrent . '\'');
         $aPromotionDetails = PromotionDetails::model()->findAll($criteria);
 //        $aPromotionDetails = PromotionDetails::model()->findAll();
+//            check treatment type
+        foreach ($aPromotionDetails as $key => $mPromotionDetails) {
+            $aJoin = $mPromotionDetails->rJoinTreatmentType;
+            $remove = true;
+            if(!empty($aJoin)){
+                foreach ($aJoin as $mJoin) {
+                    if($mJoin->many_id == $treatment_type_id){
+                        $remove = false;
+                        break;
+                    }
+                }
+            }else{
+                $remove = false;
+            }
+            if($remove){
+                unset($aPromotionDetails[$key]);
+            }
+        }
         return $aPromotionDetails;
     }
 
