@@ -412,7 +412,8 @@ class CommonProcess {
      * @return type
      */
     public static function convertDateTimeWithFormat($datetime, $format = DomainConst::DATE_FORMAT_3) {
-        $time = DateTime::createFromFormat(DomainConst::DATE_FORMAT_1, $datetime)->format($format);
+//        $time = DateTime::createFromFormat(DomainConst::DATE_FORMAT_1, $datetime)->format($format);
+        $time = self::convertDateTime($datetime, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_3);
         return $time;
     }
     
