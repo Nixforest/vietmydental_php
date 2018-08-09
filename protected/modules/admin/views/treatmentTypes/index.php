@@ -69,10 +69,14 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                 ),
                 array(
                     'name'=>'status',
-                    'type' => 'Status',
+                    //++ BUG0059-IMT (NguyenPT 20180809) Add new status of TreatmentTypes
+//                    'type' => 'Status',
+                    'value'     => 'TreatmentTypes::getStatus()[$data->status]',
                     'htmlOptions' => array('style' => 'text-align:center;'),
                     'visible' => CommonProcess::isUserAdmin(),
-                    'filter'=> CommonProcess::getDefaultStatus(true),
+//                    'filter'=> CommonProcess::getDefaultStatus(true),
+                    'filter'=> TreatmentTypes::getStatus(),
+                    //-- BUG0059-IMT (NguyenPT 20180809) Add new status of TreatmentTypes
 		),
                 array(
                     'header' => DomainConst::CONTENT00239,

@@ -595,7 +595,10 @@ class AjaxController extends AdminController
         $criteria = new CDbCriteria();
         $criteria->addCondition("t.name like '%$keyword%'");
         $criteria->limit = 50;
-        $criteria->compare("t.status", DomainConst::DEFAULT_STATUS_ACTIVE);
+        //++ BUG0059-IMT (NguyenPT 20180809) Add new status of TreatmentTypes
+        //$criteria->compare("t.status", DomainConst::DEFAULT_STATUS_ACTIVE);
+        $criteria->addCondition('t.status = ' . TreatmentTypes::STATUS_ACTIVE);
+        //-- BUG0059-IMT (NguyenPT 20180809) Add new status of TreatmentTypes
         $criteria->order = 'name ASC';
         $models = TreatmentTypes::model()->findAll($criteria);
         if (empty($models)) {

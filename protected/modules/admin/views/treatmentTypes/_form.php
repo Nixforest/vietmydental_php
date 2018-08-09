@@ -58,11 +58,13 @@
 		<?php echo $form->error($model,'group_id'); ?>
 	</div>
 
-<!--	<div class="row">
+        <!--//++ BUG0059-IMT (NguyenPT 20180809) Add new status of TreatmentTypes-->
+	<div class="row">
 		<?php echo $form->labelEx($model,'status'); ?>
-		<?php echo $form->textField($model,'status'); ?>
+		<?php echo $form->dropDownList($model,'status', TreatmentTypes::getStatus()); ?>
 		<?php echo $form->error($model,'status'); ?>
-	</div>-->
+	</div>
+        <!--//-- BUG0059-IMT (NguyenPT 20180809) Add new status of TreatmentTypes-->
 
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>

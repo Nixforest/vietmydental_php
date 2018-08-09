@@ -1424,4 +1424,5 @@ class DomainConst {
     const CONTENT00410  = '%';
     const CONTENT00411  = 'Áp dụng khuyến mãi';
     const CONTENT00412  = 'Không áp dụng';
+    const CONTENT00413  = 'Loại điều trị cũ';
 }
