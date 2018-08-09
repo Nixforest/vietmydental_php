@@ -80,7 +80,9 @@ class TreatmentScheduleDetails extends BaseActiveRecord
 		return array(
                     'rSchedule' => array(self::BELONGS_TO, 'TreatmentSchedules', 'schedule_id'),
                     'rDiagnosis' => array(self::BELONGS_TO, 'Diagnosis', 'diagnosis_id'),
-                    'rTreatmentType' => array(self::BELONGS_TO, 'TreatmentTypes', 'treatment_type_id'),
+                    'rTreatmentType' => array(self::BELONGS_TO, 'TreatmentTypes', 'treatment_type_id',
+                        'on' => 'status !=' . TreatmentTypes::STATUS_INACTIVE,
+                    ),
                     'rProcess' => array(
                         self::HAS_MANY, 'TreatmentScheduleProcess', 'detail_id',
                         'on'    => 'status = ' . DomainConst::DEFAULT_STATUS_ACTIVE,

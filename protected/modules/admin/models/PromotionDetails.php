@@ -211,6 +211,9 @@ class PromotionDetails extends CActiveRecord
             }
             $criteria = new CDbCriteria;
             $criteria->addInCondition('id', $agent);
+            //++ BUG0059-IMT (NguyenPT 20180809) Add new status of TreatmentTypes
+            $criteria->addCondition('t.status !=' . TreatmentTypes::STATUS_INACTIVE);
+            //-- BUG0059-IMT (NguyenPT 20180809) Add new status of TreatmentTypes
             $aTreatmentTypes = TreatmentTypes::model()->findAll($criteria);
             foreach ($aTreatmentTypes as $key => $mTreatmentTypes) {
                 $strResult[] = $mTreatmentTypes->name;

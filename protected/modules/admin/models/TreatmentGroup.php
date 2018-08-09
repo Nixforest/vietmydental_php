@@ -54,7 +54,7 @@ class TreatmentGroup extends BaseActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
                     'rTreatmentType' => array(self::HAS_MANY, 'TreatmentTypes', 'group_id',
-                        'on' => 'status = 1'
+                        'on' => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE
                         ),
 		);
 	}

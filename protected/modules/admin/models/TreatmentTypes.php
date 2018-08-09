@@ -15,6 +15,14 @@
  */
 class TreatmentTypes extends BaseActiveRecord
 {
+    //++ BUG0059-IMT (NguyenPT 20180809) Add new status of TreatmentTypes
+    //-----------------------------------------------------
+    // Constants
+    //-----------------------------------------------------
+    const STATUS_INACTIVE               = 0;
+    const STATUS_ACTIVE                 = 1;
+    const STATUS_OLD                    = 2;
+    //-- BUG0059-IMT (NguyenPT 20180809) Add new status of TreatmentTypes
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -112,6 +120,10 @@ class TreatmentTypes extends BaseActiveRecord
     //-----------------------------------------------------
     // Utility methods
     //-----------------------------------------------------
+    /**
+     * Get price of treatment type
+     * @return String Value of price after formated.
+     */
     public function getPrice() {
         return CommonProcess::formatCurrency($this->price);
     }
@@ -121,8 +133,27 @@ class TreatmentTypes extends BaseActiveRecord
      * @return String [id - last_name first_name]
      */
     public function getAutoCompleteView() {
-        return $this->name . " - " . CommonProcess::formatCurrency($this->price);
+        //++ BUG0059-IMT (NguyenPT 20180809) Add new status of TreatmentTypes
+        //return $this->name . " - " . CommonProcess::formatCurrency($this->price);
+        $old = ($this->status == self::STATUS_OLD) ? ' (Cũ)' : '';
+        return $this->name . $old . " - " . CommonProcess::formatCurrency($this->price);
+        //-- BUG0059-IMT (NguyenPT 20180809) Add new status of TreatmentTypes
     }
+    
+    //++ BUG0059-IMT (NguyenPT 20180809) Add new status of TreatmentTypes
+    /**
+     * Get status string
+     * @return Array Status list
+     */
+    public static function getStatus() {
+        $retVal = array(
+            self::STATUS_INACTIVE   => DomainConst::CONTENT00028,
+            self::STATUS_ACTIVE     => DomainConst::CONTENT00027,
+            self::STATUS_OLD        => DomainConst::CONTENT00413,
+        );
+        return $retVal;
+    }
+    //-- BUG0059-IMT (NguyenPT 20180809) Add new status of TreatmentTypes
 
     //-----------------------------------------------------
     // Static methods
@@ -148,6 +179,11 @@ class TreatmentTypes extends BaseActiveRecord
         return $_items;
     }
     
+    /**
+     * Get model by name
+     * @param String $name Name value
+     * @return Object Model object if found, NULL otherwise
+     */
     public static function getModelByName($name) {
         $model = self::model()->findByAttributes(array(
             'name' => $name,
