@@ -205,6 +205,9 @@
         formatNumber("#Receipts_discount");
         formatNumber("#Receipts_final");
         fnCalculateValue();
+        <?php if ($model->isNewRecord) : ?>
+            changeByClickPromotion();
+        <?php endif; ?>
     });
     //++ BUG0045-IMT  (DuongNV 201807) Format currency when input
     $(document).on('input', '.format-currency', function () {
@@ -217,13 +220,17 @@
      * Handle when edit total or discount
      */
     $(document).on('input', '#Receipts_total, #Receipts_discount', function () {
+        fnChangeDiscountOrTotal();
+    });
+    
+    function fnChangeDiscountOrTotal() {
         var total       = fnGetValue('#Receipts_total');
         var discount    = fnGetValue('#Receipts_discount');
         $('#Receipts_final').val(fnFormatNumber(total - discount));
         var oldDebt     = fnGetValue('#Receipts_debit');
         $('#Receipts_debit_new').val(0);
         $('#Receipts_debit_total').val(fnFormatNumber(oldDebt));
-    });
+    }
     
     /**
      * Handle when edit final
@@ -272,9 +279,7 @@
     fnNumberOnly();
     //-- BUG0045-IMT  (DuongNV 201807) Format currency when input
     //++ BUG0024-IMT (NamNH 20180807) add discount-->
-    $('input[name="Receipts[promotion_id]"]').on('change',function(){
-        changeByClickPromotion();
-    });
+
     function changeByClickPromotion(){
         var discount_id = $('#Receipts_promotion_id').val();
         $.ajax({
@@ -295,6 +300,7 @@
                     }
                 }
                 $('#Receipts_discount').val(fnFormatNumber(discountValue));
+                fnChangeDiscountOrTotal();
             }
         });
     }

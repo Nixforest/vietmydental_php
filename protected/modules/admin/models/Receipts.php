@@ -900,18 +900,19 @@ class Receipts extends CActiveRecord
         $treatment_type_id = $mDetail->treatment_type_id;
         // Get array promotion
         $criteria = new CDbCriteria;
+        $criteria->join = 'JOIN ' . $tblPromotion . ' p ON p.id = t.promotion_id';
         if (!$searchFull) {
             $criteria->compare('t.customer_types_id', $customer_type_id, false, 'OR');
             $criteria->compare('t.customer_types_id', 0, false, 'OR');
-            $criteria->compare('o.many_id', $treatment_type_id);
+            $criteria->compare('o.many_id', $treatment_type_id, false, 'OR');
+            
+            $criteria->join .= ' JOIN ' . $tblOneMany . ' o ON t.id = o.one_id';
+            $criteria->compare('o.type', OneMany::TYPE_PROMOTION_TREATMENT_TYPE);
         }
-        $criteria->join = 'JOIN ' . $tblPromotion . ' p ON p.id = t.promotion_id';
         $criteria->addCondition('p.start_date <=\'' . $dateCurrent . '\'');
         $criteria->addCondition('p.end_date >=\'' . $dateCurrent . '\'');
-        $criteria->join .= ' JOIN ' . $tblOneMany . ' o ON t.id = o.one_id';
-        $criteria->compare('o.type', OneMany::TYPE_PROMOTION_TREATMENT_TYPE);
-//        $aPromotionDetails = PromotionDetails::model()->findAll($criteria);
-        $aPromotionDetails = PromotionDetails::model()->findAll();
+        $aPromotionDetails = PromotionDetails::model()->findAll($criteria);
+//        $aPromotionDetails = PromotionDetails::model()->findAll();
         return $aPromotionDetails;
     }
 
@@ -940,7 +941,7 @@ class Receipts extends CActiveRecord
                 }
             }
         }
-        $this->discount = $max;
+//        $this->discount = $max;
     }
 
 }
