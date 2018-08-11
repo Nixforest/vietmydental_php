@@ -173,4 +173,12 @@ class BaseActiveRecord extends CActiveRecord {
         return $total;
     }
 
+    /**
+     * Get field name of table
+     * @param string $fieldName
+     * @return string
+     */
+    public function getField($fieldName) {
+        return isset($this->$fieldName) ? $this->$fieldName : '';
+    }
 }
