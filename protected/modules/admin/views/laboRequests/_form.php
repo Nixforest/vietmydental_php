@@ -70,12 +70,6 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'total'); ?>
-		<?php echo $form->textField($model,'total'); ?>
-		<?php echo $form->error($model,'total'); ?>
-	</div>
-
-	<div class="row">
 		<?php echo $form->labelEx($model,'status'); ?>
 		<?php echo $form->textField($model,'status'); ?>
 		<?php echo $form->error($model,'status'); ?>

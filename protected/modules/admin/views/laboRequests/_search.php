@@ -62,11 +62,6 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'total'); ?>
-		<?php echo $form->textField($model,'total'); ?>
-	</div>
-
-	<div class="row">
 		<?php echo $form->label($model,'status'); ?>
 		<?php echo $form->textField($model,'status'); ?>
 	</div>
