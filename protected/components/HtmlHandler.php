@@ -133,16 +133,21 @@ class HtmlHandler {
         if (!empty($prescriptClick)) {
             $prescriptItem = '<a onclick="' . $prescriptClick . '" style="cursor:pointer;"><i class="fas fa-capsules"></i> ' . DomainConst::CONTENT00379 . '</a>';
         }
+            //++ BUG0056-IMT (DuongNV 20180811) Update image data treatment
+        $urlXRay = Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/updateImageXRay", array('id' => $id, 'ajax' => true));
+        $urlReal = Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/updateImageReal", array('id' => $id, 'ajax' => true));
         $addDropDown = '<div class="dropdown" style="display:inline-block;margin-right:3px;">'
                     .        '<button class="btn btn-xs btn-success dropdown-toggle" type="button" data-toggle="dropdown">Thêm'
                     .        ' <span class="caret"></span></button>'
                     .        '<ul class="dropdown-menu" style="min-width:100px;">'
                     .           '<li class="createPrescription">' . $prescriptItem . '</li>'
                     .           '<li class="createProcess"><a style="cursor:pointer;"><i class="fas fa-stethoscope"></i> Tạo Tiến trình điều trị</a></li>'
-                    .           '<li class="imageCamera" data-id="'.$id.'"><a style="cursor:pointer;"> <i class="fas fa-camera" style="margin:0 1px;"></i> Hình ảnh Camera</a></li>'
-                    .           '<li class="imageXQuang" data-id="'.$id.'"><a style="cursor:pointer;"><i class="fas fa-x-ray"></i> Hình ảnh X-Quang</a></li>'
+                    .           '<li><a class="imageCamera" style="cursor:pointer;" href="' . $urlReal . '"> <i class="fas fa-camera" style="margin:0 1px;"></i> Hình ảnh Camera</a></li>'
+                    .           '<li><a class="imageXQuang" style="cursor:pointer;" href="' . $urlXRay . '"><i class="fas fa-x-ray"></i> Hình ảnh X-Quang</a></li>'
+                    .           '<li class="requestRecoveryImage" data-id="'.$id.'"><a style="cursor:pointer;"><i class="fas fa-exchange-alt"></i> Tạo yêu cầu phục hình</a></li>'
                     .       '</ul>'
                     .    '</div>';
+            //-- BUG0056-IMT (DuongNV 20180811) Update image data treatment
         //-- BUG0054-IMT (DuongNV 20180806) Update UI treatment history
         //--BUG0017 (DuongNV 20180717) add
 //        if(!empty($status)){ //use for label, now is dropdown
@@ -188,6 +193,10 @@ class HtmlHandler {
                 . '</div>';
 //                . '</a>';
         //--BUG0017 (DuongNV 20180717) modify
+        //++ BUG0056-IMT (DuongNV 20180811) Update image data treatment
+        $scriptColorbox = '<script>afterShowCustomerInfo();</script>';
+        $retVal .= $scriptColorbox;
+        //-- BUG0056-IMT (DuongNV 20180811) Update image data treatment
         return $retVal;
     }
     

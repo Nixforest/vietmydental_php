@@ -49,13 +49,18 @@ class TreatmentScheduleDetailsController extends AdminController
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
-	public function actionView($id)
+        //++ BUG0056-IMT (DuongNV 20180811) Update image data treatment
+	public function actionView($id, $ajax = false)
 	{
+                if($ajax){
+                    $this->layout='//layouts/ajax';
+                }
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
                         DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
 		));
 	}
+        //-- BUG0056-IMT (DuongNV 20180811) Update image data treatment
 
 	/**
 	 * Creates a new model.
@@ -187,7 +192,8 @@ class TreatmentScheduleDetailsController extends AdminController
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
          */
-        public function actionUpdateImageXRay($id) {
+        //++ BUG0056-IMT (DuongNV 20180811) Update image data treatment
+        public function actionUpdateImageXRay($id, $ajax = false) {
 		$model=$this->loadModel($id);
 //                $mImageXRayFile = new Files();
 		// Uncomment the following line if AJAX validation is needed
@@ -200,32 +206,58 @@ class TreatmentScheduleDetailsController extends AdminController
 //                        die;
                         Files::deleteFileInUpdateNotIn($model, Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY,true);
                         Files::saveRecordFile($model, Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY);
-			$this->redirect(array('view','id'=>$model->id));
+                        if($ajax){
+                            $this->redirect(array('view','id'=>$model->id, 'ajax' => true));
+                        } else {
+                            $this->redirect(array('view','id'=>$model->id));
+                        }
 		}
-
-		$this->render('updateImageXRay',array(
-			'model'=>$model,
-                        DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-		));
+                if($ajax){
+                    $this->layout='//layouts/ajax';
+                    $this->render('updateImageXRay',array(
+                            'model'=>$model,
+                            DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                    ));
+                } else {
+                    $this->render('updateImageXRay',array(
+                            'model'=>$model,
+                            DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                    ));
+                }
         }
+        //-- BUG0056-IMT (DuongNV 20180811) Update image data treatment
         
         /**
          * Update image before and after treatment.
          * @param String $id Id of treatment schedule detail
          */
-        public function actionUpdateImageReal($id) {
+        //++ BUG0056-IMT (DuongNV 20180811) Update image data treatment
+        public function actionUpdateImageReal($id, $ajax = false) {
             $model = $this->loadModel($id);
             if (isset($_POST['TreatmentScheduleDetails'])) {
                 Files::deleteFileInUpdateNotIn($model, Files::TYPE_3_TREATMENT_SCHEDULE_REAL_IMG, true);
                 Files::saveRecordFile($model, Files::TYPE_3_TREATMENT_SCHEDULE_REAL_IMG);
-                $this->redirect(array('view', 'id' => $model->id));
+                if($ajax){
+                    $this->redirect(array('view','id'=>$model->id, 'ajax' => true));
+                } else {
+                    $this->redirect(array('view','id'=>$model->id));
+                }
             }
             
-            $this->render('updateImageReal', array(
-                'model' => $model,
-                DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-            ));
+            if($ajax){
+                $this->layout='//layouts/ajax';
+                $this->render('updateImageReal', array(
+                    'model' => $model,
+                    DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                ));
+            } else {
+                $this->render('updateImageReal', array(
+                    'model' => $model,
+                    DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                ));
+            }
         }
+        //-- BUG0056-IMT (DuongNV 20180811) Update image data treatment
 
 	/**
 	 * Deletes a particular model.
