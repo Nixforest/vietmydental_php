@@ -43,6 +43,8 @@ class Settings extends BaseActiveRecord
     const KEY_DOMAIN_SALE_WEBSITE               = 'DOMAIN_SALE_WEBSITE';
     /** Key SMS provider */
     const KEY_SMS_PROVIDER                      = 'SMS_PROVIDER';
+    /** key TOOTH COLOR */
+    const KEY_TOOTH_COLOR                       = 'TOOTH_COLOR';
     
     /* --- App settings --- */
     /** Key Mobile app version iOS */

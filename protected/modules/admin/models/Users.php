@@ -421,6 +421,9 @@ class Users extends BaseActiveRecord
         } else {
             $retVal = $this->first_name;
         }
+        if (empty($retVal)) {
+            $retVal = $this->username;
+        }
         
         return $retVal;
     }

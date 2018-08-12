@@ -1425,4 +1425,11 @@ class DomainConst {
     const CONTENT00411  = 'Áp dụng khuyến mãi';
     const CONTENT00412  = 'Không áp dụng';
     const CONTENT00413  = 'Loại điều trị cũ';
+    const CONTENT00414  = 'Người quản lý';
+    const CONTENT00415  = 'Phòng Lab';
+    const CONTENT00416  = 'Ngày yêu cầu';
+    const CONTENT00417  = 'Ngày giờ nhận';
+    const CONTENT00418  = 'Ngày giờ thử răng';
+    const CONTENT00419  = 'Màu răng';
+    const CONTENT00420  = 'Số răng';
 }
