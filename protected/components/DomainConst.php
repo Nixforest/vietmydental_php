@@ -1432,4 +1432,8 @@ class DomainConst {
     const CONTENT00418  = 'Ngày giờ thử răng';
     const CONTENT00419  = 'Màu răng';
     const CONTENT00420  = 'Số răng';
+    const CONTENT00421  = 'Số CMND';
+    const CONTENT00422  = 'Ngày cấp';
+    const CONTENT00423  = 'Nơi cấp';
+    const CONTENT00424  = 'Ngày vào làm';
 }

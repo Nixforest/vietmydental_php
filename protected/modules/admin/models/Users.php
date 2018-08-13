@@ -4,13 +4,18 @@
  * This is the model class for table "users".
  *
  * The followings are the available columns in table 'users':
- * @property string $id
+ * @property string $id                 
  * @property string $username
  * @property string $email
  * @property string $password_hash
  * @property string $temp_password
  * @property string $first_name
  * @property string $last_name
+ * @property string $birthday
+ * @property string $identity_number
+ * @property string $date_of_issue
+ * @property integer $place_of_issue
+ * @property string $date_in
  * @property string $code_account
  * @property string $img_avatar
  * @property string $address
@@ -33,234 +38,255 @@
  * @property string $slug
  * @property string $address_temp
  * @property string $created_by
+ * 
+ * The followings are the available model relations:
+ * @property Users                  $rCreatedBy         User created this record
+ * @property Cities                 $rPlaceIssue        Place of issue
+ * @property Roles                  $rRole              Role of user
+ * @property ActionsUsers           $rActionsUser       Action of user
+ * @property Cities                 $rCity              City of user
+ * @property Districts              $rDistrict          District of user
+ * @property Wards                  $rWard              Ward of user
+ * @property Streets                $rStreet            Street of user
+ * @property OneMany[]              $rJoinAgent         Join relation of User-Agent (Will be remove soon)
+ * @property TreatmentSchedules[]   $rTreatmentSchedule Treatment schedules of user
+ * @property SocialNetworks[]       $rSocialNetwork     Social network information of user
+ * @property Files                  $rImgAvatarFile     Avatar of user
+ * @property ApiUserTokens[]        $rToken             Token of user
+ * @property Agents[]               $rAgents            List of agent of user (replace for rJoinAgent)
  */
-class Users extends BaseActiveRecord
-{
+class Users extends BaseActiveRecord {
+
     public $password_confirm, $currentpassword, $newpassword; /* for change pass in admin */
     public $agent;
-    
     //-----------------------------------------------------
     // Autocomplete fields
     //-----------------------------------------------------
     public $autocomplete_name_street;
-    
+
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
-    const STATUS_INACTIVE               = 0;
-    const STATUS_ACTIVE                 = 1;
-    const STATUS_NEED_CHANGE_PASS       = 2;
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
+    const STATUS_NEED_CHANGE_PASS = 2;
 //    const STATUS_COMPLETED              = 3;
-    const UPLOAD_FOLDER                 = 'upload/admin/users/';
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return 'users';
-	}
+    const UPLOAD_FOLDER = 'upload/admin/users/';
 
-	/**
-	 * @return array validation rules for model attributes.
-	 */
-	public function rules()
-	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-			array('username, password_hash, created_date, ip_address, role_id, application_id', 'required'),
-			array('province_id, district_id, ward_id, street_id, login_attemp, role_id, application_id, status', 'numerical', 'integerOnly'=>true),
-			array('username, last_name', 'length', 'max'=>50),
-			array('email', 'length', 'max'=>80),
-			array('first_name', 'length', 'max'=>150),
-			array('code_account, ip_address', 'length', 'max'=>30),
-			array('img_avatar, address_vi', 'length', 'max'=>255),
-			array('gender', 'length', 'max'=>6),
-			array('phone', 'length', 'max'=>200),
-			array('verify_code', 'length', 'max'=>100),
-			array('slug', 'length', 'max'=>300),
-			array('created_by', 'length', 'max'=>11),
-			array('address, house_numbers, last_logged_in, address_temp', 'safe'),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('id, username, email, first_name, last_name, code_account, address, address_vi, house_numbers, province_id, district_id, ward_id, street_id, login_attemp, created_date, last_logged_in, ip_address, role_id, application_id, status, gender, phone, verify_code, slug, address_temp, created_by', 'safe', 'on'=>'search'),
-                        array('currentpassword', 'comparePassword', 'on'=>'changeMyPassword'),
-                        array('currentpassword, newpassword, password_confirm', 'required','on' => "changeMyPassword"),
-                        array('newpassword','length', 'min'=>DomainConst::PASSW_LENGTH_MIN, 'max'=>DomainConst::PASSW_LENGTH_MAX,
-                            'tooLong'=>'Mật khẩu mới quá dài (tối đa '.DomainConst::PASSW_LENGTH_MAX.' ký tự).',
-                            'tooShort'=>'Mật khẩu mới quá ngắn (tối thiểu '.DomainConst::PASSW_LENGTH_MIN.' ký tự).',
-                            'on'=>'changeMyPassword'),
-                        array('password_confirm', 'compare', 'compareAttribute'=>'newpassword','message'=>'Xác nhận mật khẩu mới không đúng.' ,'on'=>'changeMyPassword'),
-                        array('newpassword, password_confirm', 'required','on' => "resetPassword"),
-                        array('newpassword','length', 'min'=>DomainConst::PASSW_LENGTH_MIN, 'max'=>DomainConst::PASSW_LENGTH_MAX,
-                            'tooLong'=>'Mật khẩu mới quá dài (tối đa '.DomainConst::PASSW_LENGTH_MAX.' ký tự).',
-                            'tooShort'=>'Mật khẩu mới quá ngắn (tối thiểu '.DomainConst::PASSW_LENGTH_MIN.' ký tự).',
-                            'on'=>'resetPassword'),
-                        array('password_confirm', 'compare', 'compareAttribute'=>'newpassword','message'=>'Xác nhận mật khẩu mới không đúng.' ,'on'=>'resetPassword'),
-                        array('first_name, province_id, district_id, house_numbers', 'required','on'=>'updateProfile'),
-                        array('img_avatar', 'file', 'types'=>'jpg, gif, png', 'allowEmpty'=>true, 'safe' => true),
-		);
-	}
+    /**
+     * @return string the associated database table name
+     */
+    public function tableName() {
+        return 'users';
+    }
 
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-                    'rRole' => array(self::BELONGS_TO, 'Roles', 'role_id'),
-                    'application' => array(self::BELONGS_TO, 'Applications', 'application_id'),
-                    'rActionsUser'  => array(self::HAS_MANY, 'ActionsUsers', 'user_id'),
-                    'rCity' => array(self::BELONGS_TO, 'Cities', 'province_id'),
-                    'rDistrict' => array(self::BELONGS_TO, 'Districts', 'district_id'),
-                    'rWard' => array(self::BELONGS_TO, 'Wards', 'ward_id'),
-                    'rStreet' => array(self::BELONGS_TO, 'Streets', 'street_id'),
-                    'rJoinAgent' => array(
-                        self::HAS_MANY, 'OneMany', 'many_id',
-                        'on'    => 'type = ' . OneMany::TYPE_AGENT_USER,
-                        'order' => 'id DESC',
-                    ),
-                    'rTreatmentSchedule' => array(
-                        self::HAS_MANY, 'TreatmentSchedules', 'doctor_id',
-                        'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
-                        'order' => 'id DESC',
-                    ),
-                    'rSocialNetwork' => array(
-                        self::HAS_MANY, 'SocialNetworks', 'object_id',
-                        'on'    => 'type = ' . SocialNetworks::TYPE_USER,
-                    ),
-                    'rImgAvatarFile' => array(
-                        self::HAS_ONE, 'Files', 'belong_id',
-                        'on' => 'type=' . Files::TYPE_1_USER_AVATAR,
-                        'order' => 'id DESC',
-                    ),
-                    'rToken' => array(
-                        self::HAS_MANY, 'ApiUserTokens', 'user_id',
-                        'order' => 'id DESC',
-                    ),
-                    'rAgents' =>array(self::MANY_MANY, 'Agents', 'one_many(many_id,one_id)',
-                        'condition' => 'rAgents_rAgents.type = ' . OneMany::TYPE_AGENT_USER,
-                        'order'=> 'rAgents_rAgents.id DESC') ,
-		);
-	}
+    /**
+     * @return array validation rules for model attributes.
+     */
+    public function rules() {
+        // NOTE: you should only define rules for those attributes that
+        // will receive user inputs.
+        return array(
+            array('username, password_hash, created_date, ip_address, role_id, application_id', 'required'),
+            array('place_of_issue, province_id, district_id, ward_id, street_id, login_attemp, role_id, application_id, status', 'numerical', 'integerOnly' => true),
+            array('username, last_name', 'length', 'max' => 50),
+            array('email', 'length', 'max' => 80),
+            array('first_name', 'length', 'max' => 150),
+            array('identity_number', 'length', 'max'=>256),
+            array('code_account, ip_address', 'length', 'max' => 30),
+            array('img_avatar, address_vi', 'length', 'max' => 255),
+            array('gender', 'length', 'max' => 6),
+            array('phone', 'length', 'max' => 200),
+            array('verify_code', 'length', 'max' => 100),
+            array('slug', 'length', 'max' => 300),
+            array('created_by', 'length', 'max' => 11),
+            array('birthday, date_of_issue, date_in, address, house_numbers, last_logged_in, address_temp', 'safe'),
+            // The following rule is used by search().
+            // @todo Please remove those attributes that should not be searched.
+            array('id, username, email, first_name, last_name, code_account, address, address_vi, house_numbers, province_id, district_id, ward_id, street_id, login_attemp, created_date, last_logged_in, ip_address, role_id, application_id, status, gender, phone, verify_code, slug, address_temp, created_by', 'safe', 'on' => 'search'),
+            array('currentpassword', 'comparePassword', 'on' => 'changeMyPassword'),
+            array('currentpassword, newpassword, password_confirm', 'required', 'on' => "changeMyPassword"),
+            array('newpassword', 'length', 'min' => DomainConst::PASSW_LENGTH_MIN, 'max' => DomainConst::PASSW_LENGTH_MAX,
+                'tooLong' => 'Mật khẩu mới quá dài (tối đa ' . DomainConst::PASSW_LENGTH_MAX . ' ký tự).',
+                'tooShort' => 'Mật khẩu mới quá ngắn (tối thiểu ' . DomainConst::PASSW_LENGTH_MIN . ' ký tự).',
+                'on' => 'changeMyPassword'),
+            array('password_confirm', 'compare', 'compareAttribute' => 'newpassword', 'message' => 'Xác nhận mật khẩu mới không đúng.', 'on' => 'changeMyPassword'),
+            array('newpassword, password_confirm', 'required', 'on' => "resetPassword"),
+            array('newpassword', 'length', 'min' => DomainConst::PASSW_LENGTH_MIN, 'max' => DomainConst::PASSW_LENGTH_MAX,
+                'tooLong' => 'Mật khẩu mới quá dài (tối đa ' . DomainConst::PASSW_LENGTH_MAX . ' ký tự).',
+                'tooShort' => 'Mật khẩu mới quá ngắn (tối thiểu ' . DomainConst::PASSW_LENGTH_MIN . ' ký tự).',
+                'on' => 'resetPassword'),
+            array('password_confirm', 'compare', 'compareAttribute' => 'newpassword', 'message' => 'Xác nhận mật khẩu mới không đúng.', 'on' => 'resetPassword'),
+            array('first_name, province_id, district_id, house_numbers', 'required', 'on' => 'updateProfile'),
+            array('img_avatar', 'file', 'types' => 'jpg, gif, png', 'allowEmpty' => true, 'safe' => true),
+        );
+    }
 
-	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return array(
-			'id' => 'ID',
-			'username' => DomainConst::CONTENT00195,
-			'email' => DomainConst::CONTENT00040,
-			'password_hash' => DomainConst::CONTENT00041,
-			'temp_password' => DomainConst::CONTENT00196,
-			'first_name' => DomainConst::CONTENT00042,
-			'last_name' => DomainConst::CONTENT00043,
-			'code_account' => DomainConst::CONTENT00044,
-			'address' => DomainConst::CONTENT00045,
-			'address_vi' => 'Address Vi',
-			'house_numbers' => DomainConst::CONTENT00106,
-			'province_id' => DomainConst::CONTENT00102,
-			'district_id' => DomainConst::CONTENT00103,
-			'ward_id' => DomainConst::CONTENT00104,
-			'street_id' => DomainConst::CONTENT00105,
-			'login_attemp' => 'Login Attemp',
-			'created_date' => DomainConst::CONTENT00010,
-			'last_logged_in' => 'Last Logged In',
-			'ip_address' => 'Ip Address',
-			'role_id' => DomainConst::CONTENT00046,
-			'application_id' => 'Application',
-			'status' => DomainConst::CONTENT00026,
-			'gender' => DomainConst::CONTENT00047,
-			'phone' => DomainConst::CONTENT00048,
-                        'img_avatar' => DomainConst::CONTENT00252,
-			'verify_code' => 'Verify Code',
-			'slug' => 'Slug',
-			'address_temp' => 'Address Temp',
-			'created_by' => 'Created By',
-                        'agent' => DomainConst::CONTENT00199,
-		);
-	}
+    /**
+     * @return array relational rules.
+     */
+    public function relations() {
+        // NOTE: you may need to adjust the relation name and the related
+        // class name for the relations automatically generated below.
+        return array(
+            'rRole' => array(self::BELONGS_TO, 'Roles', 'role_id'),
+            'application' => array(self::BELONGS_TO, 'Applications', 'application_id'),
+            'rActionsUser' => array(self::HAS_MANY, 'ActionsUsers', 'user_id'),
+            'rCity' => array(self::BELONGS_TO, 'Cities', 'province_id'),
+            'rDistrict' => array(self::BELONGS_TO, 'Districts', 'district_id'),
+            'rWard' => array(self::BELONGS_TO, 'Wards', 'ward_id'),
+            'rStreet' => array(self::BELONGS_TO, 'Streets', 'street_id'),
+            'rJoinAgent' => array(
+                self::HAS_MANY, 'OneMany', 'many_id',
+                'on' => 'type = ' . OneMany::TYPE_AGENT_USER,
+                'order' => 'id DESC',
+            ),
+            'rTreatmentSchedule' => array(
+                self::HAS_MANY, 'TreatmentSchedules', 'doctor_id',
+                'on' => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
+                'order' => 'id DESC',
+            ),
+            'rSocialNetwork' => array(
+                self::HAS_MANY, 'SocialNetworks', 'object_id',
+                'on' => 'type = ' . SocialNetworks::TYPE_USER,
+            ),
+            'rImgAvatarFile' => array(
+                self::HAS_ONE, 'Files', 'belong_id',
+                'on' => 'type=' . Files::TYPE_1_USER_AVATAR,
+                'order' => 'id DESC',
+            ),
+            'rToken' => array(
+                self::HAS_MANY, 'ApiUserTokens', 'user_id',
+                'order' => 'id DESC',
+            ),
+            'rAgents' => array(self::MANY_MANY, 'Agents', 'one_many(many_id,one_id)',
+                'condition' => 'rAgents_rAgents.type = ' . OneMany::TYPE_AGENT_USER,
+                'order' => 'rAgents_rAgents.id DESC'),
+            'rPlaceIssue' => array(self::BELONGS_TO, 'Cities', 'place_of_issue'),
+        );
+    }
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels() {
+        return array(
+            'id'                => 'ID',
+            'username'          => DomainConst::CONTENT00195,
+            'email'             => DomainConst::CONTENT00040,
+            'password_hash'     => DomainConst::CONTENT00041,
+            'temp_password'     => DomainConst::CONTENT00196,
+            'first_name'        => DomainConst::CONTENT00042,
+            'last_name'         => DomainConst::CONTENT00043,
+            'birthday'          => DomainConst::CONTENT00101,
+            'identity_number'   => DomainConst::CONTENT00421,
+            'date_of_issue'     => DomainConst::CONTENT00422,
+            'place_of_issue'    => DomainConst::CONTENT00423,
+            'date_in'           => DomainConst::CONTENT00424,
+            'code_account'      => DomainConst::CONTENT00044,
+            'address'           => DomainConst::CONTENT00045,
+            'address_vi'        => 'Address Vi',
+            'house_numbers'     => DomainConst::CONTENT00106,
+            'province_id'       => DomainConst::CONTENT00102,
+            'district_id'       => DomainConst::CONTENT00103,
+            'ward_id'           => DomainConst::CONTENT00104,
+            'street_id'         => DomainConst::CONTENT00105,
+            'login_attemp'      => 'Login Attemp',
+            'created_date'      => DomainConst::CONTENT00010,
+            'last_logged_in'    => 'Last Logged In',
+            'ip_address'        => 'Ip Address',
+            'role_id'           => DomainConst::CONTENT00046,
+            'application_id'    => 'Application',
+            'status'            => DomainConst::CONTENT00026,
+            'gender'            => DomainConst::CONTENT00047,
+            'phone'             => DomainConst::CONTENT00048,
+            'img_avatar'        => DomainConst::CONTENT00252,
+            'verify_code'       => 'Verify Code',
+            'slug'              => 'Slug',
+            'address_temp'      => 'Address Temp',
+            'created_by'        => DomainConst::CONTENT00010,
+            'agent'             => DomainConst::CONTENT00199,
+        );
+    }
 
-		$criteria=new CDbCriteria;
+    /**
+     * Retrieves a list of models based on the current search/filter conditions.
+     *
+     * Typical usecase:
+     * - Initialize the model fields with values from filter form.
+     * - Execute this method to get CActiveDataProvider instance which will filter
+     * models according to data in model fields.
+     * - Pass data provider to CGridView, CListView or any similar widget.
+     *
+     * @return CActiveDataProvider the data provider that can return the models
+     * based on the search/filter conditions.
+     */
+    public function search() {
+        // @todo Please modify the following code to remove attributes that should not be searched.
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('username',$this->username,true);
-		$criteria->compare('email',$this->email,true);
-		$criteria->compare('password_hash',$this->password_hash,true);
-		$criteria->compare('temp_password',$this->temp_password,true);
-		$criteria->compare('first_name',$this->first_name,true);
-		$criteria->compare('last_name',$this->last_name,true);
-		$criteria->compare('code_account',$this->code_account,true);
-		$criteria->compare('img_avatar',$this->img_avatar,true);
-		$criteria->compare('address',$this->address,true);
-		$criteria->compare('address_vi',$this->address_vi,true);
-		$criteria->compare('house_numbers',$this->house_numbers,true);
-		$criteria->compare('province_id',$this->province_id);
-		$criteria->compare('district_id',$this->district_id);
-		$criteria->compare('ward_id',$this->ward_id);
-		$criteria->compare('street_id',$this->street_id);
-		$criteria->compare('login_attemp',$this->login_attemp);
-		$criteria->compare('created_date',$this->created_date,true);
-		$criteria->compare('last_logged_in',$this->last_logged_in,true);
-		$criteria->compare('ip_address',$this->ip_address,true);
-		$criteria->compare('role_id',$this->role_id);
-                if (CommonProcess::isUserAdmin()) {
-                    // Root admin
-                    
-                } else {
-                    // The other roles
-                    $criteria->addCondition('t.role_id !=' . Roles::getRoleByName(Roles::ROLE_ADMIN)->id);
-                    $criteria->addCondition('t.role_id !=' . Roles::getRoleByName(Roles::ROLE_MANAGER)->id);
-                }
-		$criteria->compare('application_id',$this->application_id);
-		$criteria->compare('status',$this->status);
-		$criteria->compare('gender',$this->gender,true);
-		$criteria->compare('phone',$this->phone,true);
-		$criteria->compare('verify_code',$this->verify_code,true);
-		$criteria->compare('slug',$this->slug,true);
-		$criteria->compare('address_temp',$this->address_temp,true);
-		$criteria->compare('created_by',$this->created_by,true);
-                $criteria->order = 'id DESC';
+        $criteria = new CDbCriteria;
 
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-                        'pagination' => array(
-                            'pageSize' => Settings::getListPageSize(),
-                        ),
-		));
-	}
+        $criteria->compare('id', $this->id, true);
+        $criteria->compare('username', $this->username, true);
+        $criteria->compare('email', $this->email, true);
+        $criteria->compare('password_hash', $this->password_hash, true);
+        $criteria->compare('temp_password', $this->temp_password, true);
+        $criteria->compare('first_name', $this->first_name, true);
+        $criteria->compare('last_name', $this->last_name, true);
+        $criteria->compare('birthday', $this->birthday, true);
+        $criteria->compare('identity_number', $this->identity_number, true);
+        $criteria->compare('date_of_issue', $this->date_of_issue, true);
+        $criteria->compare('place_of_issue', $this->place_of_issue, true);
+        $criteria->compare('date_in', $this->date_in, true);
+        $criteria->compare('code_account', $this->code_account, true);
+        $criteria->compare('img_avatar', $this->img_avatar, true);
+        $criteria->compare('address', $this->address, true);
+        $criteria->compare('address_vi', $this->address_vi, true);
+        $criteria->compare('house_numbers', $this->house_numbers, true);
+        $criteria->compare('province_id', $this->province_id);
+        $criteria->compare('district_id', $this->district_id);
+        $criteria->compare('ward_id', $this->ward_id);
+        $criteria->compare('street_id', $this->street_id);
+        $criteria->compare('login_attemp', $this->login_attemp);
+        $criteria->compare('created_date', $this->created_date, true);
+        $criteria->compare('last_logged_in', $this->last_logged_in, true);
+        $criteria->compare('ip_address', $this->ip_address, true);
+        $criteria->compare('role_id', $this->role_id);
+        if (CommonProcess::isUserAdmin()) {
+            // Root admin
+        } else {
+            // The other roles
+            $criteria->addCondition('t.role_id !=' . Roles::getRoleByName(Roles::ROLE_ADMIN)->id);
+            $criteria->addCondition('t.role_id !=' . Roles::getRoleByName(Roles::ROLE_MANAGER)->id);
+        }
+        $criteria->compare('application_id', $this->application_id);
+        $criteria->compare('status', $this->status);
+        $criteria->compare('gender', $this->gender, true);
+        $criteria->compare('phone', $this->phone, true);
+        $criteria->compare('verify_code', $this->verify_code, true);
+        $criteria->compare('slug', $this->slug, true);
+        $criteria->compare('address_temp', $this->address_temp, true);
+        $criteria->compare('created_by', $this->created_by, true);
+        $criteria->order = 'id DESC';
 
-	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return Users the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
-        
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+            'pagination' => array(
+                'pageSize' => Settings::getListPageSize(),
+            ),
+        ));
+    }
+
+    /**
+     * Returns the static model of the specified AR class.
+     * Please note that you should have this exact method in all your CActiveRecord descendants!
+     * @param string $className active record class name.
+     * @return Users the static model class
+     */
+    public static function model($className = __CLASS__) {
+        return parent::model($className);
+    }
+
     //-----------------------------------------------------
     // Parent override methods
     //-----------------------------------------------------
@@ -271,21 +297,33 @@ class Users extends BaseActiveRecord
     public function beforeSave() {
         $userId = isset(Yii::app()->user) ? Yii::app()->user->id : '';
         $this->address = CommonProcess::createAddressString(
-                $this->province_id, $this->district_id,
-                $this->ward_id, $this->street_id,
-                $this->house_numbers);
+                        $this->province_id, $this->district_id, $this->ward_id, $this->street_id, $this->house_numbers);
         $this->address_vi = CommonProcess::removeSign(
-                $this->first_name . ' ' .
-                $this->username . ' ' .
-                $this->phone . ' ' .
-                $this->email . ' ' .
-                $this->address);
+                        $this->first_name . ' ' .
+                        $this->username . ' ' .
+                        $this->phone . ' ' .
+                        $this->email . ' ' .
+                        $this->address);
+        $this->formatDate('birthday');
+        $this->formatDate('date_of_issue');
+        $this->formatDate('date_in');
+//        // Format birthday value
+//        $date = $this->birthday;
+//        $this->birthday = CommonProcess::convertDateTimeToMySqlFormat(
+//                $date, DomainConst::DATE_FORMAT_3);
+//        if (empty($this->birthday)) {
+//            $this->birthday = CommonProcess::convertDateTimeToMySqlFormat(
+//                        $date, DomainConst::DATE_FORMAT_4);
+//        }
+//        if (empty($this->birthday)) {
+//            $this->birthday = $date;
+//        }
         if ($this->isNewRecord) {   // Add
             // Handle password
             $this->temp_password = CommonProcess::generateTempPassword();
             $this->password_hash = CommonProcess::hashPassword(
                             $this->password_hash, $this->temp_password);
-            
+
             // Handle username
             $this->username = self::generateUsername($this->first_name);
             // Handle created by
@@ -294,13 +332,11 @@ class Users extends BaseActiveRecord
             }
             // Handle created date
             $this->created_date = CommonProcess::getCurrentDateTimeWithMySqlFormat();
-            
         } else {                    // Update
-            
         }
         return parent::beforeSave();
     }
-    
+
     /**
      * Override before validate method
      * @return Parent result
@@ -308,7 +344,7 @@ class Users extends BaseActiveRecord
     public function beforeValidate() {
         return parent::beforeValidate();
     }
-    
+
     /**
      * Override before delete method
      * @return Parent result
@@ -323,7 +359,7 @@ class Users extends BaseActiveRecord
         OneMany::deleteAllManyOldRecords($this->id, OneMany::TYPE_AGENT_USER);
         // Handle Social network relation
         SocialNetworks::deleteAllOldRecord($this->id, SocialNetworks::TYPE_USER);
-        
+
         return parent::beforeDelete();
     }
 
@@ -338,7 +374,7 @@ class Users extends BaseActiveRecord
     public function validatePassword($password) {
         return CommonProcess::hashPassword($password, $this->temp_password) === $this->password_hash;
     }
-    
+
     /**
      * Validate password change
      * @param String $password      Password string
@@ -356,11 +392,11 @@ class Users extends BaseActiveRecord
         } else if (in_array($new_password, CommonProcess::getSimplePassword())) {
             $error = DomainConst::CONTENT00211;
         }
-        
+
         if (!empty($error)) {
             $this->addError('password_hash', $error);
         }
-        
+
         return $error;
     }
 
@@ -372,7 +408,7 @@ class Users extends BaseActiveRecord
     public function changePassword($new_password) {
         $this->temp_password = CommonProcess::generateTempPassword();
         $this->password_hash = CommonProcess::hashPassword(
-                $new_password, $this->temp_password);
+                        $new_password, $this->temp_password);
         $this->status = Users::STATUS_ACTIVE;
         $aUpdate = array('password_hash', 'temp_password', 'status');
         return $this->update($aUpdate);
@@ -407,10 +443,10 @@ class Users extends BaseActiveRecord
         if (!empty($this->first_name)) {
             $retVal .= ' ' . $this->first_name;
         }
-        
+
         return $retVal;
     }
-    
+
     /**
      * Get full name
      */
@@ -424,10 +460,10 @@ class Users extends BaseActiveRecord
         if (empty($retVal)) {
             $retVal = $this->username;
         }
-        
+
         return $retVal;
     }
-    
+
     /**
      * Get name of agent
      * @return Name of agent
@@ -440,7 +476,7 @@ class Users extends BaseActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get name of agent
      * @return Name of agent
@@ -456,7 +492,7 @@ class Users extends BaseActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get id of agent
      * @return Id of agent
@@ -469,7 +505,7 @@ class Users extends BaseActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Check if user need change pass
      * @return 0 -> Dont need/1 -> Need change
@@ -481,7 +517,7 @@ class Users extends BaseActiveRecord
         }
         return $retVal;
     }
-    
+
     /**
      * Get list customer of doctor
      * @return Array Array of customer id
@@ -525,8 +561,7 @@ class Users extends BaseActiveRecord
                 $compareFrom = DateTimeExt::compare($date, $from);
                 $compareTo = DateTimeExt::compare($date, $to);
                 // Check if treatment schedule is between date range
-                if (($compareFrom == 1 || $compareFrom == 0)
-                        && ($compareTo == 0 || $compareTo == -1)) {
+                if (($compareFrom == 1 || $compareFrom == 0) && ($compareTo == 0 || $compareTo == -1)) {
                     // Check relation rMedicalRecord is set
                     if (isset($treatmentSchedule->rMedicalRecord)) {
                         $medicalRecord = $treatmentSchedule->rMedicalRecord;
@@ -542,24 +577,24 @@ class Users extends BaseActiveRecord
                 }
             }
         }
-        
+
         return $retVal;
     }
-    
+
     /**
      * Check if a user is a test user
      * @return boolean True if user have username is appletest, False otherwise
      */
     public function isTestUser() {
         $retVal = false;
-        
+
         if (strtolower($this->username) == 'appletest') {
             $retVal = true;
         }
-        
+
         return $retVal;
     }
-    
+
     /**
      * Get social network information
      * @return String
@@ -574,7 +609,7 @@ class Users extends BaseActiveRecord
         }
         return implode('<br>', $retVal);
     }
-    
+
     /**
      * Get social network value
      * @param Int $type_network Network type
@@ -590,7 +625,7 @@ class Users extends BaseActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get image avatar path
      * @return String upload/admin/user/filename/png
@@ -598,7 +633,7 @@ class Users extends BaseActiveRecord
     public function getImageAvatarPath() {
         return self::UPLOAD_FOLDER . $this->img_avatar;
     }
-    
+
     /**
      * Get full image url
      * @return String http://hostname/upload/admin/user/filename/png
@@ -606,25 +641,40 @@ class Users extends BaseActiveRecord
     public function getImageAvatarUrl() {
         return CommonProcess::getHostUrl() . $this->getImageAvatarPath();
     }
-    
+
     /**
      * Get last token
      * @return ApiUserTokens object, empty if failed
      */
     public function getLastToken() {
-        if (isset($this->rToken)
-                && count($this->rToken) > 0) {
+        if (isset($this->rToken) && count($this->rToken) > 0) {
             return $this->rToken[0]->gcm_device_token;
         }
         return "";
     }
-    
+
     /**
      * Check if user is staff role
      * @return True if user is staff, false otherwise
      */
     public function isStaff() {
         return Roles::isStaff($this->role_id);
+    }
+    
+    public function getPlaceIssue() {
+        return isset($this->rPlaceIssue) ? $this->rPlaceIssue->name : '';
+    }
+    
+    public function getIdentityInfo() {
+        $retVal = array();
+        $retVal[] = $this->identity_number;
+        $retVal[] = DomainConst::CONTENT00422 . ': ' . CommonProcess::convertDateTime($this->date_of_issue,
+                DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_3);
+        if (isset($this->rPlaceIssue)) {
+            $retVal[] = DomainConst::CONTENT00423 . ': ' . $this->getPlaceIssue();
+        }
+        
+        return implode('<br>', $retVal);
     }
 
     //-----------------------------------------------------
@@ -636,12 +686,12 @@ class Users extends BaseActiveRecord
      */
     public static function getStatus() {
         return array(
-            Users::STATUS_INACTIVE          => DomainConst::CONTENT00028,
-            Users::STATUS_ACTIVE            => DomainConst::CONTENT00027,
-            Users::STATUS_NEED_CHANGE_PASS  => DomainConst::CONTENT00212,
+            Users::STATUS_INACTIVE => DomainConst::CONTENT00028,
+            Users::STATUS_ACTIVE => DomainConst::CONTENT00027,
+            Users::STATUS_NEED_CHANGE_PASS => DomainConst::CONTENT00212,
         );
     }
-    
+
     /**
      * Loads the application items for the specified type from the database
      * @param type $emptyOption boolean the item is empty
@@ -662,7 +712,7 @@ class Users extends BaseActiveRecord
         }
         return $_items;
     }
-    
+
     /**
      * Get current user object
      * @return Users Model of user
@@ -673,7 +723,7 @@ class Users extends BaseActiveRecord
                     DomainConst::KEY_USERNAME => Yii::app()->user->id
         ));
     }
-    
+
     /**
      * Get user by user name
      * @param String $username Username value
@@ -681,10 +731,10 @@ class Users extends BaseActiveRecord
      */
     public static function getUserByUsername($username) {
         return Users::model()->findByAttributes(array(
-            DomainConst::KEY_USERNAME => $username
+                    DomainConst::KEY_USERNAME => $username
         ));
     }
-    
+
     /**
      * Get list of user
      * @param String $roleId Id of role
@@ -704,7 +754,7 @@ class Users extends BaseActiveRecord
         }
         return $retVal;
     }
-    
+
     /**
      * Get array users by array id
      * @param Array $aId    Array id
@@ -720,12 +770,12 @@ class Users extends BaseActiveRecord
                 return array();
             }
         }
-        
+
 //        $criteria->compare("t.status", DomainConst::DEFAULT_STATUS_ACTIVE);
         $criteria->addCondition("t.status!=" . DomainConst::DEFAULT_STATUS_INACTIVE);
         return Users::model()->findAll($criteria);
     }
-    
+
     /**
      * Get list user have username start with parameter $username
      * @param String $username Username value
@@ -743,7 +793,7 @@ class Users extends BaseActiveRecord
         }
         return $retVal;
     }
-    
+
     /**
      * Generate username string from fullname and database
      * @param String $fullName
@@ -757,7 +807,7 @@ class Users extends BaseActiveRecord
         }
         return $username . count($arrUser);
     }
-    
+
     /**
      * Get list of user's emails
      * @param Array $except List of exception condition
@@ -777,10 +827,10 @@ class Users extends BaseActiveRecord
             }
         }
         $criteria->addCondition('t.email <> "" AND t.email IS NOT NULL');
-        
+
         return Users::model()->findAll($criteria);
     }
-    
+
     /**
      * Get doctor by name (and agent id)
      * @param String $name Name of doctor
@@ -804,4 +854,5 @@ class Users extends BaseActiveRecord
         }
         return $user;
     }
+
 }

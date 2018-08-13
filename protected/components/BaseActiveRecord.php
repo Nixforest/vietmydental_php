@@ -181,5 +181,22 @@ class BaseActiveRecord extends CActiveRecord {
     public function getField($fieldName) {
         return isset($this->$fieldName) ? $this->$fieldName : '';
     }
-
+    
+    /**
+     * Format date
+     * @param String $field Name of field date
+     */
+    public function formatDate($field) {
+        // Format birthday value
+        $date = $this->$field;
+        $this->$field = CommonProcess::convertDateTimeToMySqlFormat(
+                $date, DomainConst::DATE_FORMAT_3);
+        if (empty($this->$field)) {
+            $this->$field = CommonProcess::convertDateTimeToMySqlFormat(
+                        $date, DomainConst::DATE_FORMAT_4);
+        }
+        if (empty($this->$field)) {
+            $this->$field = $date;
+        }
+    }
 }
