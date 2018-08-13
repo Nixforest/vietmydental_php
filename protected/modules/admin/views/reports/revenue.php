@@ -353,3 +353,73 @@ $this->widget('zii.widgets.grid.CGridView', array(
     ),
 ));
 ?>
+<!--//++BUG0062-IMT (DuongNV 20180813) Select row report-->
+<script>
+    $(function(){
+        var currentSelectedElm = '';
+        var indexCell = 0;
+        $('.grid-view table.items tr').on('click', function(event){
+            var anotherSelected = ($(this).closest('.grid-view').siblings('.grid-view').find('table.items tr.selected'));
+            if(anotherSelected.length != 0){
+                anotherSelected.removeClass('selected');
+            }
+            indexCell = 0;
+            if($(this).hasClass('selected')){ // Not select
+                currentSelectedElm = '';
+            } else { // Selected
+                currentSelectedElm = $(this);
+                currentSelectedElm.find('td.selected').removeClass('selected')
+            }
+        });
+        $(document).keyup(function(event){
+            switch(event.which){
+                case 37: // Left arrow 
+                    prevCell(currentSelectedElm);
+                    break;
+                case 38: // Up arrow 
+                    indexCell = 0; // Init index cell
+                    if(typeof currentSelectedElm.prev()[0] != 'undefined'){
+                        currentSelectedElm.removeClass('selected');
+                        currentSelectedElm.find('td.selected').removeClass('selected'); // Remove selected cell
+                        currentSelectedElm = currentSelectedElm.prev();
+                        currentSelectedElm.addClass('selected');
+                    }
+                    break;
+                case 39: // Right arrow 
+                    prevCell(currentSelectedElm, true); // Next cell
+                    break;
+                case 40: // Down arrow 
+                    indexCell = 0; // Init index cell
+                    if(typeof currentSelectedElm.next()[0] != 'undefined'){
+                        currentSelectedElm.removeClass('selected');
+                        currentSelectedElm.find('td.selected').removeClass('selected'); // Remove selected cell
+                        currentSelectedElm = currentSelectedElm.next();
+                        currentSelectedElm.addClass('selected');
+                    }
+                    break;
+                    
+            }
+        });
+    });
+    
+    function prevCell(currentSelectedElm, next = false){
+        var initIndex = currentSelectedElm.children().last().index();
+        var limit = 0, step = -1;
+        if(next){
+            limit = initIndex;
+            initIndex = 0;
+            step = 1;
+        }
+        if(currentSelectedElm.find('td.selected').length == 0){ // cell not select
+            currentSelectedElm.children().eq(initIndex).addClass('selected');
+        } else { // cell selected
+            indexCell = currentSelectedElm.find('td.selected').index();
+            if( indexCell != limit ){ // Not final cell
+                currentSelectedElm.children().eq(indexCell).removeClass('selected');
+                indexCell += step;
+                currentSelectedElm.children().eq(indexCell).addClass('selected');
+            }
+        }
+    }
+</script>
+<!--//--BUG0062-IMT (DuongNV 20180813) Select row report-->

@@ -657,3 +657,8 @@ img{
 .login-submit input[type="submit"]{width: 100%;margin-left:0;padding: 10px;font-size: 15px;}
 .login-submit input[type="submit"]:hover{background: #3c3c3c;}
 /*--BUG0039-IMT (DuongNV 20180724) UI login*/
+
+/*//++BUG0062-IMT (DuongNV 20180813) Select row report*/
+.grid-view table.items tr.selected td{background: #04639a; color: white;}
+.grid-view table.items tr.selected td.selected{box-shadow: inset 0px 0px 0px 2px #fdd307;}
+/*//++BUG0062-IMT (DuongNV 20180813) Select row report*/
