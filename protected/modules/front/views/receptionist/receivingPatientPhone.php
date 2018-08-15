@@ -654,13 +654,37 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
     * call colorbox 
     * @returns {undefined}     
     */
-    function afterShowCustomerInfo(){
+        //++ BUG0056-IMT (DuongNV 20180815) Fix colorbox error
+    function load_js(){ // reload js
+      var script= document.createElement('script');
+      script.src= '<?php echo Yii::app()->theme->baseUrl . '/js/jquery.colorbox-min.js' ?>';
+      $('#right-content').append(script);
+    }
+    function afterShowCustomerInfo(e){
+        var scr = $('script[src="<?php echo Yii::app()->theme->baseUrl . '/js/jquery.colorbox-min.js' ?>"]');
+        scr.remove(); // Remove colorbox script
+        // Remove duplicate elem
+        var i = 0;
+        $('div#colorbox').each(function(){
+            i++;
+            theHidden = $(this).attr('id');
+            if( i == 2 ) $(this).remove();
+        });
+        i = 0;
+        $('div#cboxOverlay').each(function(){
+            i++;
+            theHidden = $(this).attr('id');
+            if( i == 2 ) $(this).remove();
+        }); // End remove duplicate elem
+        e.preventDefault();
+        load_js(); // Reload script
         $(".imageXQuang, .imageCamera").colorbox({
            iframe:true,
            innerHeight:'600', 
            innerWidth: '1000',
-           close: "<span title='close'>close</span>"
+           close: "<span title='close'>close</span>",
        });
     }
+        //-- BUG0056-IMT (DuongNV 20180815) Fix colorbox error
     //-- BUG0056-IMT (DuongNV 20180811) Update image data treatment
 </script>

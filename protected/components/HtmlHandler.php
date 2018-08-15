@@ -142,8 +142,10 @@ class HtmlHandler {
                     .        '<ul class="dropdown-menu" style="min-width:100px;">'
                     .           '<li class="createPrescription">' . $prescriptItem . '</li>'
                     .           '<li class="createProcess"><a style="cursor:pointer;"><i class="fas fa-stethoscope"></i> Tạo Tiến trình điều trị</a></li>'
-                    .           '<li><a class="imageCamera" style="cursor:pointer;" href="' . $urlReal . '"> <i class="fas fa-camera" style="margin:0 1px;"></i> Hình ảnh Camera</a></li>'
-                    .           '<li><a class="imageXQuang" style="cursor:pointer;" href="' . $urlXRay . '"><i class="fas fa-x-ray"></i> Hình ảnh X-Quang</a></li>'
+                    //++ BUG0056-IMT (DuongNV 20180815) Fix colorbox error
+                    .           '<li><a class="imageCamera" style="cursor:pointer;" href="' . $urlReal . '" onclick="afterShowCustomerInfo(event)"> <i class="fas fa-camera" style="margin:0 1px;"></i> Hình ảnh Camera</a></li>'
+                    .           '<li><a class="imageXQuang" style="cursor:pointer;" href="' . $urlXRay . '" onclick="afterShowCustomerInfo(event)"><i class="fas fa-x-ray"></i> Hình ảnh X-Quang</a></li>'
+                    //-- BUG0056-IMT (DuongNV 20180815) Fix colorbox error
                     .           '<li class="requestRecoveryImage" data-id="'.$id.'"><a style="cursor:pointer;"><i class="fas fa-exchange-alt"></i> Tạo yêu cầu phục hình</a></li>'
                     .       '</ul>'
                     .    '</div>';
@@ -194,8 +196,10 @@ class HtmlHandler {
 //                . '</a>';
         //--BUG0017 (DuongNV 20180717) modify
         //++ BUG0056-IMT (DuongNV 20180811) Update image data treatment
-        $scriptColorbox = '<script>afterShowCustomerInfo();</script>';
-        $retVal .= $scriptColorbox;
+            //++ BUG0056-IMT (DuongNV 20180815) Fix colorbox error
+//        $scriptColorbox = '<script>afterShowCustomerInfo();</script>';
+//        $retVal .= $scriptColorbox;
+            //-- BUG0056-IMT (DuongNV 20180815) Fix colorbox error
         //-- BUG0056-IMT (DuongNV 20180811) Update image data treatment
         return $retVal;
     }
