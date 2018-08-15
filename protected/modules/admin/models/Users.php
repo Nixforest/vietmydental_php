@@ -661,15 +661,26 @@ class Users extends BaseActiveRecord {
         return Roles::isStaff($this->role_id);
     }
     
+    /**
+     * Get place issue Identity info
+     * @return String City name
+     */
     public function getPlaceIssue() {
         return isset($this->rPlaceIssue) ? $this->rPlaceIssue->name : '';
     }
     
+    /**
+     * Identity information
+     * @return String Html string
+     */
     public function getIdentityInfo() {
         $retVal = array();
         $retVal[] = $this->identity_number;
-        $retVal[] = DomainConst::CONTENT00422 . ': ' . CommonProcess::convertDateTime($this->date_of_issue,
+        if (isset($this->date_of_issue)) {
+            $retVal[] = DomainConst::CONTENT00422 . ': ' . CommonProcess::convertDateTime($this->date_of_issue,
                 DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_3);
+        }
+        
         if (isset($this->rPlaceIssue)) {
             $retVal[] = DomainConst::CONTENT00423 . ': ' . $this->getPlaceIssue();
         }

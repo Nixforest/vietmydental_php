@@ -46,6 +46,12 @@ $this->createMenu('view', $model);
 //		'temp_password',
 		'last_name',
 		'first_name',
+                'birthday',
+                array(
+                    'name' => 'identity_number',
+                    'value' => $model->getIdentityInfo(),
+                ),
+                'date_in',
 		'code_account',
 //                array(
 //                    'name'=>'img_avatar',
