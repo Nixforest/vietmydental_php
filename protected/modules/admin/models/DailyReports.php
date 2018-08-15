@@ -75,21 +75,21 @@ class DailyReports extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'receipt_customer_total' => 'Receipt Customer Total',
-			'receipt_total_total' => 'Receipt Total Total',
-			'receipt_discount_total' => 'Receipt Discount Total',
-			'receipt_final_total' => 'Receipt Final Total',
-			'receipt_debit_total' => 'Receipt Debit Total',
-			'new_customer_total' => 'New Customer Total',
-			'new_total_total' => 'New Total Total',
-			'new_discount_total' => 'New Discount Total',
-			'new_final_total' => 'New Final Total',
-			'new_debit_total' => 'New Debit Total',
-			'approve_id' => 'Approve',
-			'status' => 'Status',
-			'created_by' => 'Created By',
-			'created_date' => 'Created Date',
+			'id' => DomainConst::KEY_ID,
+			'receipt_customer_total' => DomainConst::CONTENT00352,
+			'receipt_total_total' => DomainConst::CONTENT00353,
+			'receipt_discount_total' => DomainConst::CONTENT00354,
+			'receipt_final_total' => DomainConst::CONTENT00355,
+			'receipt_debit_total' => DomainConst::CONTENT00356,
+			'new_customer_total' => DomainConst::CONTENT00352,
+			'new_total_total' => DomainConst::CONTENT00353,
+			'new_discount_total' => DomainConst::CONTENT00354,
+			'new_final_total' => DomainConst::CONTENT00355,
+			'new_debit_total' => DomainConst::CONTENT00356,
+			'approve_id' => 'Người duyệt',
+			'status' => DomainConst::CONTENT00026,
+			'created_by' => DomainConst::CONTENT00054,
+			'created_date' => DomainConst::CONTENT00010,
 		);
 	}
 
