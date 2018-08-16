@@ -46,22 +46,11 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
-		'receipt_customer_total',
-		'receipt_total_total',
-		'receipt_discount_total',
-		'receipt_final_total',
-		'receipt_debit_total',
-		/*
-		'new_customer_total',
-		'new_total_total',
-		'new_discount_total',
-		'new_final_total',
 		'new_debit_total',
 		'approve_id',
 		'status',
 		'created_by',
 		'created_date',
-		*/
 		array(
 			'class'=>'CButtonColumn',
 		),

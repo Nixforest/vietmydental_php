@@ -17,53 +17,13 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'receipt_customer_total'); ?>
-		<?php echo $form->textField($model,'receipt_customer_total'); ?>
+		<?php echo $form->label($model,'receipt_total'); ?>
+		<?php echo $form->textField($model,'receipt_total'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'receipt_total_total'); ?>
-		<?php echo $form->textField($model,'receipt_total_total'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'receipt_discount_total'); ?>
-		<?php echo $form->textField($model,'receipt_discount_total'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'receipt_final_total'); ?>
-		<?php echo $form->textField($model,'receipt_final_total'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'receipt_debit_total'); ?>
-		<?php echo $form->textField($model,'receipt_debit_total'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'new_customer_total'); ?>
-		<?php echo $form->textField($model,'new_customer_total'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'new_total_total'); ?>
-		<?php echo $form->textField($model,'new_total_total'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'new_discount_total'); ?>
-		<?php echo $form->textField($model,'new_discount_total'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'new_final_total'); ?>
-		<?php echo $form->textField($model,'new_final_total'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'new_debit_total'); ?>
-		<?php echo $form->textField($model,'new_debit_total'); ?>
+		<?php echo $form->label($model,'receipt_total_confirm'); ?>
+		<?php echo $form->textField($model,'receipt_total_confirm'); ?>
 	</div>
 
 	<div class="row">

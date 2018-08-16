@@ -5,16 +5,8 @@
  *
  * The followings are the available columns in table 'daily_reports':
  * @property string $id
- * @property double $receipt_customer_total
- * @property double $receipt_total_total
- * @property double $receipt_discount_total
- * @property double $receipt_final_total
- * @property double $receipt_debit_total
- * @property double $new_customer_total
- * @property double $new_total_total
- * @property double $new_discount_total
- * @property double $new_final_total
- * @property double $new_debit_total
+ * @property double receipt_total
+ * @property double receipt_total_confirm
  * @property string $approve_id
  * @property integer $status
  * @property string $created_by
@@ -76,16 +68,8 @@ class DailyReports extends CActiveRecord
 	{
 		return array(
 			'id' => DomainConst::KEY_ID,
-			'receipt_customer_total' => DomainConst::CONTENT00352,
-			'receipt_total_total' => DomainConst::CONTENT00353,
-			'receipt_discount_total' => DomainConst::CONTENT00354,
-			'receipt_final_total' => DomainConst::CONTENT00355,
-			'receipt_debit_total' => DomainConst::CONTENT00356,
-			'new_customer_total' => DomainConst::CONTENT00352,
-			'new_total_total' => DomainConst::CONTENT00353,
-			'new_discount_total' => DomainConst::CONTENT00354,
-			'new_final_total' => DomainConst::CONTENT00355,
-			'new_debit_total' => DomainConst::CONTENT00356,
+			'receipt_total' => DomainConst::CONTENT00353,
+			'receipt_total' => 'Tổng tiền xác thực',
 			'approve_id' => 'Người duyệt',
 			'status' => DomainConst::CONTENT00026,
 			'created_by' => DomainConst::CONTENT00054,
@@ -104,21 +88,10 @@ class DailyReports extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('receipt_customer_total',$this->receipt_customer_total);
-		$criteria->compare('receipt_total_total',$this->receipt_total_total);
-		$criteria->compare('receipt_discount_total',$this->receipt_discount_total);
-		$criteria->compare('receipt_final_total',$this->receipt_final_total);
-		$criteria->compare('receipt_debit_total',$this->receipt_debit_total);
-		$criteria->compare('new_customer_total',$this->new_customer_total);
-		$criteria->compare('new_total_total',$this->new_total_total);
-		$criteria->compare('new_discount_total',$this->new_discount_total);
-		$criteria->compare('new_final_total',$this->new_final_total);
-		$criteria->compare('new_debit_total',$this->new_debit_total);
-		$criteria->compare('approve_id',$this->approve_id,true);
+		$criteria->compare('approve_id',$this->approve_id);
 		$criteria->compare('status',$this->status);
-		$criteria->compare('created_by',$this->created_by,true);
-		$criteria->compare('created_date',$this->created_date,true);
+		$criteria->compare('created_by',$this->created_by);
+		$criteria->compare('created_date',$this->created_date);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
