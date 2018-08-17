@@ -1174,7 +1174,8 @@ class Customers extends BaseActiveRecord
             }
         }
         if (isset($renoTreatment->treatmentProfiles)) {
-            $detail->description    = $renoTreatment->treatmentProfiles->Reason;
+            $detail->description    = 'BS ' . (isset($renoTreatment->rDoctor) ? $renoTreatment->rDoctor->Name : '') . ' thực hiện: ';
+            $detail->description    .= $renoTreatment->treatmentProfiles->Reason;
         }
         $detail->status = TreatmentScheduleDetails::STATUS_COMPLETED;
         if ($detail->save()) {

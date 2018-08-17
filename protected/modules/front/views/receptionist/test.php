@@ -34,14 +34,14 @@
 //        $sms->logout();
 //        $sms->sendSms('1', '976994876', 'Test 123');
 //        SMSHandler::sendSMSOnce('976994876', 'SMSHandler');
-        $number = '0987654321';
-    $phoneHandler = new PhoneHandler();
-        $carrier = $phoneHandler->detect_number($number);
-        echo $carrier; // Viettel
+//        $number = '0987654321';
+//    $phoneHandler = new PhoneHandler();
+//        $carrier = $phoneHandler->detect_number($number);
+//        echo $carrier; // Viettel
 
-        $wrong_number = '01869453611';
-        $carrier = $phoneHandler->detect_number($wrong_number);
-        echo $carrier; // false
+//        $wrong_number = '01869453611';
+//        $carrier = $phoneHandler->detect_number($wrong_number);
+//        echo $carrier; // false
 //        $COOKIE = '';
 //        if (!empty($_SESSION['Set-Cookie'])) {
 //            $COOKIE = $_SESSION['Set-Cookie'];
@@ -224,9 +224,9 @@
     <?php $this->endWidget(); ?>
 </div><!-- form -->
 <?php
-    $doctorName = 'Dinh Tan Khoa';
+    $doctorName = 'Nguyen dinh Troi';
 //    $doctorName = '';
-    $doctor = Users::getDoctorByName($doctorName, '1');
+    $doctor = Users::getDoctorByName($doctorName, '3');
     if (!empty($doctor)) {
         CommonProcess::echoTest("Tên của bác sĩ $doctorName: ", $doctor->first_name);
     }

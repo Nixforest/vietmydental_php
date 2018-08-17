@@ -274,7 +274,11 @@ class Renodcm3TbPatient extends CActiveRecord {
         $fields[] = isset($this->rCity) ? $this->rCity->Name : '';
         $fields[] = isset($this->rDistrict) ? $this->rDistrict->Name : '';
         $fields[] = $this->Address;
-        $fields[] = $this->rCreatedBy->Name;
+        if (isset($this->rCreatedBy)) {
+            $fields[] = $this->rCreatedBy->Name;
+        } else {
+            $fields[] = '';
+        }
         $fields[] = $this->CreateDate;
         return $fields;
     }
@@ -309,12 +313,12 @@ class Renodcm3TbPatient extends CActiveRecord {
         $models = self::model()->findAll(array(
             'order' => 'id desc',
 //            'limit' => 200,
-//            'condition'  => 't.Code = ' . '017173',
+            'condition'  => 't.Code = ' . '00005',
 //            'condition'  => 't.Code = ' . '017841',
 //            'condition' => 't.Id >= 1 AND t.Id <= 5000',
 //            'condition' => 't.Id >= 5001 AND t.Id <= 10000',
 //            'condition' => 't.Id >= 10001 AND t.Id <= 15000',
-            'condition' => 't.Id >= 15001 AND t.Id <= 20000',
+//            'condition' => 't.Id >= 15001 AND t.Id <= 20000',
             
         ));
         $print = array();

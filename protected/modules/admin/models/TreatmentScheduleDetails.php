@@ -763,7 +763,8 @@ class TreatmentScheduleDetails extends BaseActiveRecord
      * @return boolean
      */
     public function canUpdate() {
-        return !$this->isCompleted();
+//        return !$this->isCompleted();
+        return true;
     }
     
     /**
@@ -803,6 +804,8 @@ class TreatmentScheduleDetails extends BaseActiveRecord
             case self::STATUS_COMPLETED:
                 if (isset($this->rReceipt)) {
                     $this->rReceipt->status = Receipts::STATUS_RECEIPTIONIST;
+                    // Update customer's debt
+                    $this->rReceipt->updateCustomerDebt();
                     $this->rReceipt->save();
                 }
             default:

@@ -134,8 +134,8 @@ class HtmlHandler {
             $prescriptItem = '<a onclick="' . $prescriptClick . '" style="cursor:pointer;"><i class="fas fa-capsules"></i> ' . DomainConst::CONTENT00379 . '</a>';
         }
             //++ BUG0056-IMT (DuongNV 20180811) Update image data treatment
-        $urlXRay = Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/updateImageXRay", array('id' => $id, 'ajax' => true));
-        $urlReal = Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/updateImageReal", array('id' => $id, 'ajax' => true));
+        $urlXRay = Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/updateImageXRay", array('id' => $id, 'ajax' => false));
+        $urlReal = Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/updateImageReal", array('id' => $id, 'ajax' => false));
         $addDropDown = '<div class="dropdown" style="display:inline-block;margin-right:3px;">'
                     .        '<button class="btn btn-xs btn-success dropdown-toggle" type="button" data-toggle="dropdown">Thêm'
                     .        ' <span class="caret"></span></button>'
@@ -194,8 +194,8 @@ class HtmlHandler {
 //                . '</a>';
         //--BUG0017 (DuongNV 20180717) modify
         //++ BUG0056-IMT (DuongNV 20180811) Update image data treatment
-        $scriptColorbox = '<script>afterShowCustomerInfo();</script>';
-        $retVal .= $scriptColorbox;
+//        $scriptColorbox = '<script>afterShowCustomerInfo();</script>';
+//        $retVal .= $scriptColorbox;
         //-- BUG0056-IMT (DuongNV 20180811) Update image data treatment
         return $retVal;
     }

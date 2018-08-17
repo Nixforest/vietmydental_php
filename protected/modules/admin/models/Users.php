@@ -676,7 +676,7 @@ class Users extends BaseActiveRecord {
     public function getIdentityInfo() {
         $retVal = array();
         $retVal[] = $this->identity_number;
-        if (isset($this->date_of_issue)) {
+        if (!DateTimeExt::isDateNull($this->date_of_issue)) {
             $retVal[] = DomainConst::CONTENT00422 . ': ' . CommonProcess::convertDateTime($this->date_of_issue,
                 DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_3);
         }
@@ -857,6 +857,7 @@ class Users extends BaseActiveRecord {
         $criteria->compare('address_vi', $name, true, 'AND');
         $user = NULL;
         $models = Users::model()->findAll($criteria);
+//        $models = self::model()->findAll('LOWER(first_name)="'.  strtolower($name).'"');
         foreach ($models as $model) {
             if ($model->getAgentId() == $agentId) {
                 $user = $model;

@@ -627,20 +627,20 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
             alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
         });
         //++ BUG0056-IMT (DuongNV 20180811) Update image data treatment
-//        $(document).on('click', '.imageCamera', function(){
-////            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
-//            var id = $(this).data('id');
-//            $(location).attr('href', '<?php // echo Yii::app()->createAbsoluteUrl(
-//                    'admin/treatmentScheduleDetails/updateImageReal',
-//                    array('id' => '')) ?>///' + id);
-//        });
-//        $(document).on('click', '.imageXQuang', function(){
-////            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
-//            var id = $(this).data('id');
-//            $(location).attr('href', '<?php // echo Yii::app()->createAbsoluteUrl(
-//                    'admin/treatmentScheduleDetails/updateImageXRay',
-//                    array('id' => '')) ?>///' + id);
-//        });
+        $(document).on('click', '.imageCamera', function(){
+//            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
+            var id = $(this).data('id');
+            $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
+                    'admin/treatmentScheduleDetails/updateImageReal',
+                    array('id' => '')) ?>/' + id);
+        });
+        $(document).on('click', '.imageXQuang', function(){
+//            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
+            var id = $(this).data('id');
+            $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
+                    'admin/treatmentScheduleDetails/updateImageXRay',
+                    array('id' => '')) ?>/' + id);
+        });
         //-- BUG0056-IMT (DuongNV 20180811) Update image data treatment
         $(document).on('click', '.vm-btn', function(){
             alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
@@ -654,13 +654,13 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
     * call colorbox 
     * @returns {undefined}     
     */
-    function afterShowCustomerInfo(){
-        $(".imageXQuang, .imageCamera").colorbox({
-           iframe:true,
-           innerHeight:'600', 
-           innerWidth: '1000',
-           close: "<span title='close'>close</span>"
-       });
-    }
+//    function afterShowCustomerInfo(){
+//        $(".imageXQuang, .imageCamera").colorbox({
+//           iframe:true,
+//           innerHeight:'600', 
+//           innerWidth: '1000',
+//           close: "<span title='close'>close</span>"
+//       });
+//    }
     //-- BUG0056-IMT (DuongNV 20180811) Update image data treatment
 </script>
