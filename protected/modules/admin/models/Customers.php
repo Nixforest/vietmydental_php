@@ -599,8 +599,8 @@ class Customers extends BaseActiveRecord
         if (isset($this->rMedicalRecord) && isset($this->rMedicalRecord->rTreatmentSchedule)) {
             $i = count($this->rMedicalRecord->rTreatmentSchedule);
             foreach ($this->rMedicalRecord->rTreatmentSchedule as $schedule) {
-//                if (isset($schedule->rDetail)) {
-                if (!empty($schedule->rDetail)) {
+                if (isset($schedule->rDetail)) {
+//                if (!empty($schedule->rDetail)) {
                     $rightContent .= '<b style="float: left">';
                     if ($schedule->rPathological) {
                         $rightContent .= $htmlIcon.'<span class="round-txt">Đợt ' . $i . ': ' . $schedule->getStartDate() . ' - ' . $schedule->rPathological->name . '</span>';
@@ -1174,8 +1174,13 @@ class Customers extends BaseActiveRecord
             }
         }
         if (isset($renoTreatment->treatmentProfiles)) {
-            $detail->description    = 'BS ' . (isset($renoTreatment->rDoctor) ? $renoTreatment->rDoctor->Name : '') . ' thực hiện: ';
-            $detail->description    .= $renoTreatment->treatmentProfiles->Reason;
+            $detail->description    = '';
+            if (!empty($name)) {
+                $detail->description    .= 'Loại điều trị: ' . $name . '. ';
+            }
+            $detail->description    .= $renoTreatment->treatmentProfiles->Reason . '. ';
+            
+            $detail->description    .= 'BS ' . (isset($renoTreatment->rDoctor) ? $renoTreatment->rDoctor->Name : '') . ' thực hiện: ';
         }
         $detail->status = TreatmentScheduleDetails::STATUS_COMPLETED;
         if ($detail->save()) {
@@ -1214,6 +1219,25 @@ class Customers extends BaseActiveRecord
             return $detail->id;
         } else {
             Loggers::info("Lỗi khi lưu Treatment: " , $renoTreatment->Treatment_Id, __FUNCTION__ . __LINE__);
+            Loggers::info(CommonProcess::json_encode_unicode($detail->getErrors()), '', __FUNCTION__ . __LINE__);
+        }
+    }
+    
+    public static function createNewTreatmentDetail($renoTreatmentProfile, $treatmentId) {
+        $detail = new TreatmentScheduleDetails();
+        $detail->schedule_id    = $treatmentId;
+        $detail->time_id        = 1;
+        $detail->start_date     = $renoTreatmentProfile->DateOfProfiles;
+        $detail->end_date       = $renoTreatmentProfile->EndDateOfProfiles;
+        $detail->description    = 'BS ' . (isset($renoTreatmentProfile->rDoctor) ? $renoTreatmentProfile->rDoctor->Name : '') . ' thực hiện: ';
+        $detail->description    .= $renoTreatmentProfile->Reason;
+        $detail->status = TreatmentScheduleDetails::STATUS_COMPLETED;
+        if ($detail->save()) {
+            Loggers::info("Lưu Treatment thành công: " , $detail->id, __FUNCTION__ . __LINE__);
+                
+            return $detail->id;
+        } else {
+            Loggers::info("Lỗi khi lưu Treatment: " , $renoTreatmentProfile->TreatmentProfiles_ID, __FUNCTION__ . __LINE__);
             Loggers::info(CommonProcess::json_encode_unicode($detail->getErrors()), '', __FUNCTION__ . __LINE__);
         }
     }

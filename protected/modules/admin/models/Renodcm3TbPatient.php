@@ -312,8 +312,8 @@ class Renodcm3TbPatient extends CActiveRecord {
         ini_set('max_execution_time', 600);
         $models = self::model()->findAll(array(
             'order' => 'id desc',
-//            'limit' => 200,
-            'condition'  => 't.Code = ' . '00005',
+            'limit' => 200,
+//            'condition'  => 't.Code = ' . '01999',
 //            'condition'  => 't.Code = ' . '017841',
 //            'condition' => 't.Id >= 1 AND t.Id <= 5000',
 //            'condition' => 't.Id >= 5001 AND t.Id <= 10000',
@@ -341,9 +341,13 @@ class Renodcm3TbPatient extends CActiveRecord {
                         $treatmentId = Customers::transferTreatmentSchedule($renoTreatmentProfile, $medicalRecordId, $agentId);
                         if (!empty($treatmentId)) {
                             $detailId = '';
-                            // Transfer treatment
-                            foreach ($renoTreatmentProfile->renodcm3TbTreatment as $treatment) {
-                                $detailId = Customers::transferTreatmentScheduleDetail($treatment, $treatmentId, $agentId);
+                            if (!empty($renoTreatmentProfile->renodcm3TbTreatment)) {
+                                // Transfer treatment
+                                foreach ($renoTreatmentProfile->renodcm3TbTreatment as $treatment) {
+                                    $detailId = Customers::transferTreatmentScheduleDetail($treatment, $treatmentId, $agentId);
+                                }
+                            } else {
+                                $detailId = Customers::createNewTreatmentDetail($renoTreatmentProfile, $treatmentId);
                             }
                             if (!empty($detailId)) {
                                 foreach ($renoTreatmentProfile->renodcm3TbTreatmentdetails as $treatmentDetail) {
