@@ -801,6 +801,8 @@ class DomainConst {
     const KEY_NEXT_UPDATE_STORECARD_HGD     = 'next_time_update_storecard_hgd';
     /** Setting key: discount */
     const KEY_DISCOUNT                      = 'discount';
+    /** Setting key: debt */
+    const KEY_DEBT                          = 'debt';
     /** Setting key: final */
     const KEY_FINAL                         = 'final';
     /** Key amount of bu vo */
@@ -917,6 +919,10 @@ class DomainConst {
     const KEY_INFO_SCHEDULE                 = 'infoSchedule';
     /** Ajax */
     const KEY_AJAX                          = 'ajax';
+    /** Setting key: Can select agent */
+    const KEY_CAN_SELECT_AGENT              = 'canSelectAgent';
+    /** Setting key: List receipts */
+    const KEY_LIST_RECEIPTS                 = 'listReceipts';
     
     //-----------------------------------------------------
     // List domain const

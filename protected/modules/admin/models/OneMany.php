@@ -378,7 +378,7 @@ class OneMany extends BaseActiveRecord
         foreach ($arrData as $value) {
             $retVal += $value->getReceiptTotal();
         }
-        return CommonProcess::formatCurrency($retVal) . " " . DomainConst::CONTENT00134;
+        return CommonProcess::formatCurrency($retVal);
     }
     
     /**
@@ -422,7 +422,7 @@ class OneMany extends BaseActiveRecord
         foreach ($arrData as $value) {
             $retVal += $value->getReceiptDiscount();
         }
-        return CommonProcess::formatCurrency($retVal) . " " . DomainConst::CONTENT00134;
+        return CommonProcess::formatCurrency($retVal);
     }
     
     /**
@@ -466,7 +466,7 @@ class OneMany extends BaseActiveRecord
         foreach ($arrData as $value) {
             $retVal += $value->getReceiptFinal();
         }
-        return CommonProcess::formatCurrency($retVal) . " " . DomainConst::CONTENT00134;
+        return CommonProcess::formatCurrency($retVal);
     }
     
     /**
@@ -510,6 +510,6 @@ class OneMany extends BaseActiveRecord
         foreach ($arrData as $value) {
             $retVal += $value->getReceiptDebit();
         }
-        return CommonProcess::formatCurrency($retVal) . " " . DomainConst::CONTENT00134;
+        return CommonProcess::formatCurrency($retVal);
     }
 }
