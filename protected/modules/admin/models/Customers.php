@@ -25,6 +25,11 @@
  * @property string $characteristics
  * @property string $created_by
  * @property string $created_date
+ * 
+ * The followings are the available model relations:
+ * @property Cities                 $rCity              City of customer
+ * @property Districts              $rDistrict          District of customer
+ * @property Users                  $rCreatedBy         User created this record
  */
 class Customers extends BaseActiveRecord
 {
@@ -224,8 +229,9 @@ class Customers extends BaseActiveRecord
                 $this->created_by = $userId;
             }
             // Handle created date
-            $this->created_date = CommonProcess::getCurrentDateTime();
-            
+            if (empty($this->created_date)) {
+                $this->created_date = CommonProcess::getCurrentDateTime();
+            }
         } else {                    // Update
             
         }
@@ -1095,11 +1101,11 @@ class Customers extends BaseActiveRecord
             // Create new
             $customer = new Customers();
             Loggers::info("Tạo mới Bệnh nhân: " , $renoPatient->Code, __FUNCTION__ . __LINE__);
-            return self::saveCustomer($renoPatient, $agentId, $customer);
+            return self::saveCustomer($renoPatient, $agentId, $customer, true);
         }
     }
     
-    public static function saveCustomer($renoPatient, $agentId, &$customer, $needCreateMedicalRecord = true) {
+    public static function saveCustomer($renoPatient, $agentId, &$customer, $needCreateMedicalRecord = true, $isValidate = false) {
         $customer->name = $renoPatient->FullName;
         $customer->gender = DomainConst::GENDER_FEMALE;
         if ($renoPatient->Sex == '1') {
@@ -1108,61 +1114,92 @@ class Customers extends BaseActiveRecord
         $customer->date_of_birth    = $renoPatient->DateOfBirth;
         $customer->year_of_birth    = $renoPatient->YearOfBirth;
         $customer->phone            = $renoPatient->Mobile;
+        $customer->city_id          = '2';
         if (!empty($renoPatient->ProvinceId)) {
-            $customer->city_id          = $renoPatient->ProvinceId;
-        } else {
-            $customer->city_id          = '2';
+            $city = Cities::getModelByName($renoPatient->rCity->Name);
+            if (isset($city)) {
+                $customer->city_id = $city->id;
+            }
         }
-        $customer->district_id      = $renoPatient->DistrictId;
+        if (isset($renoPatient->rDistrict)) {
+            $district = Districts::getModelByName($renoPatient->rDistrict->Name);
+            if (isset($district)) {
+                $customer->district_id = $district->id;
+            }
+        }
         $customer->house_numbers    = $renoPatient->Address;
-        if ($customer->save()) {
-            Loggers::info("Lưu Bệnh nhân thành công: " , $renoPatient->Code, __FUNCTION__ . __LINE__);
-            OneMany::insertOne($agentId, $customer->id, OneMany::TYPE_AGENT_CUSTOMER);
-            if ($needCreateMedicalRecord) {
-                $medicalRecord = new MedicalRecords();
-                $medicalRecord->customer_id = $customer->id;
-                $medicalRecord->record_number = $renoPatient->Code;
-                if ($medicalRecord->save()) {
-                    Loggers::info("Lưu Hồ sơ Bệnh án thành công: " , $medicalRecord->id, __FUNCTION__ . __LINE__);
-                    return $medicalRecord->id;
+        if (isset($renoPatient->CreateDate)) {
+            $customer->created_date = $renoPatient->CreateDate;
+        }
+        if (isset($renoPatient->rCreatedBy)) {
+            $user = Users::getUserByName($renoPatient->getCreatedBy());
+            if (isset($user)) {
+                $customer->created_by = $user->id;
+            }
+        }
+        if (!$isValidate) {
+            if ($customer->save()) {
+                Loggers::info("Lưu Bệnh nhân thành công: " , $renoPatient->Code, __FUNCTION__ . __LINE__);
+                OneMany::insertOne($agentId, $customer->id, OneMany::TYPE_AGENT_CUSTOMER);
+                if ($needCreateMedicalRecord) {
+                    $medicalRecord = new MedicalRecords();
+                    $medicalRecord->customer_id = $customer->id;
+                    $medicalRecord->record_number = $renoPatient->Code;
+                    if ($medicalRecord->save()) {
+                        Loggers::info("Lưu Hồ sơ Bệnh án thành công: " , $medicalRecord->id, __FUNCTION__ . __LINE__);
+                        return $medicalRecord->id;
+                    } else {
+                        Loggers::info("Lỗi khi lưu Hồ sơ Bệnh án: " , $customer->id, __FUNCTION__ . __LINE__);
+                        Loggers::info(CommonProcess::json_encode_unicode($medicalRecord->getErrors()), '', __FUNCTION__ . __LINE__);
+                    }
                 } else {
-                    Loggers::info("Lỗi khi lưu Hồ sơ Bệnh án: " , $customer->id, __FUNCTION__ . __LINE__);
-                    Loggers::info(CommonProcess::json_encode_unicode($medicalRecord->getErrors()), '', __FUNCTION__ . __LINE__);
+                    return isset($customer->rMedicalRecord) ? $customer->rMedicalRecord->id : '';
                 }
             } else {
-                return isset($customer->rMedicalRecord) ? $customer->rMedicalRecord->id : '';
+                Loggers::info("Lỗi khi lưu Bệnh nhân: " , $renoPatient->Code, __FUNCTION__ . __LINE__);
+                Loggers::info(CommonProcess::json_encode_unicode($customer->getErrors()), '', __FUNCTION__ . __LINE__);
             }
+            return '';
         } else {
-            Loggers::info("Lỗi khi lưu Bệnh nhân: " , $renoPatient->Code, __FUNCTION__ . __LINE__);
-            Loggers::info(CommonProcess::json_encode_unicode($customer->getErrors()), '', __FUNCTION__ . __LINE__);
+            return $customer->createFields();
         }
-        return '';
     }
     
-    public static function transferTreatmentSchedule($renoTreatmentProfile, $medicalRecord, $agentId) {
+    public static function transferTreatmentSchedule($renoTreatmentProfile, $medicalRecord, $agentId, $isValidate = false) {
         $treatment = new TreatmentSchedules();
-        $treatment->record_id   = $medicalRecord;
+        if (!$isValidate) {
+            $treatment->record_id   = $medicalRecord;
+        }
+        
         $treatment->time_id     = 1;
         $treatment->start_date  = $renoTreatmentProfile->DateOfProfiles;
         $treatment->end_date    = $renoTreatmentProfile->EndDateOfProfiles;
-        $doctor = Users::getDoctorByName($renoTreatmentProfile->getDoctorName(), $agentId);
+//        $doctor = Users::getDoctorByName($renoTreatmentProfile->getDoctorName(), $agentId);
+        $doctor = Users::getUserByName($renoTreatmentProfile->getDoctorName());
         if (!empty($doctor)) {
             $treatment->doctor_id   = $doctor->id;
         }
-        if ($treatment->save()) {
-            Loggers::info("Lưu TreatmentProfile thành công: " , $treatment->id, __FUNCTION__ . __LINE__);
-            return $treatment->id;
+        if (!$isValidate) {
+            if ($treatment->save()) {
+                Loggers::info("Lưu TreatmentProfile thành công: " , $treatment->id, __FUNCTION__ . __LINE__);
+                return $treatment->id;
+            } else {
+                Loggers::info("Lỗi khi lưu TreatmentProfile: " , $renoTreatmentProfile->TreatmentProfiles_ID, __FUNCTION__ . __LINE__);
+                Loggers::info(CommonProcess::json_encode_unicode($treatment->getErrors()), '', __FUNCTION__ . __LINE__);
+                Loggers::info("Doctor: " , $renoTreatmentProfile->getDoctorName(), __FUNCTION__ . __LINE__);
+            }
+            return '';
         } else {
-            Loggers::info("Lỗi khi lưu TreatmentProfile: " , $renoTreatmentProfile->TreatmentProfiles_ID, __FUNCTION__ . __LINE__);
-            Loggers::info(CommonProcess::json_encode_unicode($treatment->getErrors()), '', __FUNCTION__ . __LINE__);
-            Loggers::info("Doctor: " , $renoTreatmentProfile->getDoctorName(), __FUNCTION__ . __LINE__);
+            return $treatment->createFields();
         }
-        return '';
     }
     
-    public static function transferTreatmentScheduleDetail($renoTreatment, $treatmentId, $agentId) {
+    public static function transferTreatmentScheduleDetail($renoTreatment, $treatmentId, $agentId, $isValidate = false) {
         $detail = new TreatmentScheduleDetails();
-        $detail->schedule_id    = $treatmentId;
+        if (!$isValidate) {
+            $detail->schedule_id    = $treatmentId;
+        }
+        
         $detail->time_id        = 1;
         $detail->start_date     = $renoTreatment->TreatmentDate;
         $detail->end_date       = $renoTreatment->FinishDate;
@@ -1176,50 +1213,60 @@ class Customers extends BaseActiveRecord
         if (isset($renoTreatment->treatmentProfiles)) {
             $detail->description    = '';
             if (!empty($name)) {
-                $detail->description    .= 'Loại điều trị: ' . $name . '. ';
+                $detail->description    .= $name . '. ';
             }
-            $detail->description    .= $renoTreatment->treatmentProfiles->Reason . '. ';
+//            $detail->description    .= $renoTreatment->treatmentProfiles->Reason . '. ';
             
-            $detail->description    .= 'BS ' . (isset($renoTreatment->rDoctor) ? $renoTreatment->rDoctor->Name : '') . ' thực hiện: ';
+//            $detail->description    .= 'BS ' . $renoTreatment->getDoctorName() . ' thực hiện. ';
         }
         $detail->status = TreatmentScheduleDetails::STATUS_COMPLETED;
-        if ($detail->save()) {
-            Loggers::info("Lưu Treatment thành công: " , $detail->id, __FUNCTION__ . __LINE__);
-            // Teeth
-            if (!empty($renoTreatment->TreatmentTooth)) {
-                $arrTeeth = explode(',', $renoTreatment->TreatmentTooth);
-                foreach ($arrTeeth as $teeth) {
-                    $teethIndex = CommonProcess::convertTeethIndex($teeth);
-                    if (!empty($teethIndex)) {
-                        OneMany::insertOne($detail->id, $teethIndex, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+        if (!$isValidate) {
+            if ($detail->save()) {
+                Loggers::info("Lưu Treatment thành công: " , $detail->id, __FUNCTION__ . __LINE__);
+                // Teeth
+                if (!empty($renoTreatment->TreatmentTooth)) {
+                    $arrTeeth = explode(',', $renoTreatment->TreatmentTooth);
+                    foreach ($arrTeeth as $teeth) {
+                        $teethIndex = CommonProcess::convertTeethIndex($teeth);
+                        if (!empty($teethIndex)) {
+                            OneMany::insertOne($detail->id, $teethIndex, OneMany::TYPE_TREATMENT_DETAIL_TEETH);
+                        }
                     }
                 }
-            }
-            $receipt = new Receipts();
-            $receipt->detail_id = $detail->id;
-            $receipt->process_date  = CommonProcess::convertDateTime($detail->start_date,
-            DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
-            $receipt->total         = $renoTreatment->TotalMoney + $renoTreatment->Decrease;
-            $receipt->discount      = $renoTreatment->Decrease;
-            $receipt->final         = '0';
-            if (!empty($renoTreatment->Payed)) {
-                $receipt->final         = $renoTreatment->Payed;
-            }
-            $receipt->status        = Receipts::STATUS_RECEIPTIONIST;
-            if ($receipt->save()) {
-                Loggers::info("Lưu Phiếu thu thành công: " , $receipt->id, __FUNCTION__ . __LINE__);
-                // Update customer's debt
-                $receipt->updateCustomerDebt();
-                $receipt->connectAgent($agentId);
+                $receipt = new Receipts();
+                $receipt->detail_id = $detail->id;
+                $receipt->process_date  = CommonProcess::convertDateTime($detail->start_date,
+                DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
+                $receipt->total         = $renoTreatment->TotalMoney + $renoTreatment->Decrease;
+                $receipt->discount      = $renoTreatment->Decrease;
+                $receipt->final         = '0';
+                if (!empty($renoTreatment->Payed)) {
+                    $receipt->final         = $renoTreatment->Payed;
+                }
+                $receipt->status        = Receipts::STATUS_RECEIPTIONIST;
+                if ($receipt->save()) {
+                    Loggers::info("Lưu Phiếu thu thành công: " , $receipt->id, __FUNCTION__ . __LINE__);
+                    // Update customer's debt
+                    $receipt->updateCustomerDebt();
+                    $receipt->connectAgent($agentId);
+                } else {
+                    Loggers::info("Lỗi khi lưu Phiếu thu: " , $detail->id, __FUNCTION__ . __LINE__);
+                    Loggers::info(CommonProcess::json_encode_unicode($receipt->getErrors()), '', __FUNCTION__ . __LINE__);
+                }
+
+                return $detail->id;
             } else {
-                Loggers::info("Lỗi khi lưu Phiếu thu: " , $detail->id, __FUNCTION__ . __LINE__);
-                Loggers::info(CommonProcess::json_encode_unicode($receipt->getErrors()), '', __FUNCTION__ . __LINE__);
+                Loggers::info("Lỗi khi lưu Treatment: " , $renoTreatment->Treatment_Id, __FUNCTION__ . __LINE__);
+                Loggers::info(CommonProcess::json_encode_unicode($detail->getErrors()), '', __FUNCTION__ . __LINE__);
             }
-                
-            return $detail->id;
         } else {
-            Loggers::info("Lỗi khi lưu Treatment: " , $renoTreatment->Treatment_Id, __FUNCTION__ . __LINE__);
-            Loggers::info(CommonProcess::json_encode_unicode($detail->getErrors()), '', __FUNCTION__ . __LINE__);
+            // Teeth
+            if (!empty($renoTreatment->TreatmentTooth)) {
+                $detail->description .= 'Răng: ' . $renoTreatment->TreatmentTooth;
+            }
+            $fields = $detail->createFields();
+            
+            return $fields;
         }
     }
     
@@ -1242,9 +1289,12 @@ class Customers extends BaseActiveRecord
         }
     }
     
-    public static function transferTreatmentProcess($renoTreatmentDetail, $detailId, $agentId) {
+    public static function transferTreatmentProcess($renoTreatmentDetail, $detailId, $agentId, $isValidate = false) {
         $process = new TreatmentScheduleProcess();
-        $process->detail_id     = $detailId;
+        if (!$isValidate) {
+            $process->detail_id     = $detailId;
+        }
+        
         if (!empty($renoTreatmentDetail->Date)) {
             $process->process_date  = $renoTreatmentDetail->Date;
         } else {
@@ -1255,16 +1305,39 @@ class Customers extends BaseActiveRecord
         
         $process->name          = $renoTreatmentDetail->ContentOfWork;
         $process->description   = $renoTreatmentDetail->Teeth;
-        $doctor = Users::getDoctorByName($renoTreatmentDetail->getDoctorName(), $agentId);
+//        $doctor = Users::getDoctorByName($renoTreatmentDetail->getDoctorName(), $agentId);
+        $doctor = Users::getUserByName($renoTreatmentDetail->getDoctorName());
         if (!empty($doctor)) {
             $process->doctor_id   = $doctor->id;
         }
         $process->note          = $renoTreatmentDetail->Note;
-        if ($process->save()) {
-            Loggers::info("Lưu TreatmentDetail thành công: " , $process->id, __FUNCTION__ . __LINE__);
+        if (!$isValidate) {
+            if ($process->save()) {
+                Loggers::info("Lưu TreatmentDetail thành công: " , $process->id, __FUNCTION__ . __LINE__);
+            } else {
+                Loggers::info("Lỗi khi lưu TreatmentDetail: " , $renoTreatmentDetail->Id, __FUNCTION__ . __LINE__);
+                Loggers::info(CommonProcess::json_encode_unicode($process->getErrors()), '', __FUNCTION__ . __LINE__);
+            }
         } else {
-            Loggers::info("Lỗi khi lưu TreatmentDetail: " , $renoTreatmentDetail->Id, __FUNCTION__ . __LINE__);
-            Loggers::info(CommonProcess::json_encode_unicode($process->getErrors()), '', __FUNCTION__ . __LINE__);
+            return $process->createFields();
         }
+            
+    }
+    
+    public function createFields() {
+        $fields = array();
+        
+        $fields[] = 'name: ' . $this->name;
+        $fields[] = 'gender: ' . $this->gender;
+        $fields[] = 'date_of_birth: ' . $this->date_of_birth;
+        $fields[] = 'year_of_birth: ' . $this->year_of_birth;
+        $fields[] = 'phone: ' . $this->phone;
+        $fields[] = 'city: ' . (isset($this->rCity) ? $this->rCity->name : '');
+        $fields[] = 'district: ' . (isset($this->rDistrict) ? $this->rDistrict->name : '');
+        $fields[] = 'house_numbers: ' . $this->house_numbers;
+        $fields[] = 'created_date: ' . $this->created_date;
+        $fields[] = 'created_by: ' . (isset($this->rCreatedBy) ? $this->rCreatedBy->first_name : '');
+        
+        return $fields;
     }
 }

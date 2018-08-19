@@ -238,18 +238,22 @@ class Cities extends BaseActiveRecord
     // Static methods
     //-----------------------------------------------------
     /**
-     * Get model id by name
+     * Get model by name
      * @param type $name Name of model
-     * @return string
+     * @return Object Model if found, NULL otherwise
      */
-    public static function getModelIdByName($name) {
-        $models = self::model()->findAll();
-        foreach ($models as $model) {
-            if ($model->name === $name) {
-                return $model->id;
-            }
-        }
-        return "";
+    public static function getModelByName($name) {
+        $criteria = new CDbCriteria();
+        $criteria->addSearchCondition('t.name', $name, true);
+        $model = self::model()->find($criteria);
+        return $model;
+//        $models = self::model()->findAll();
+//        foreach ($models as $model) {
+//            if ($model->name === $name) {
+//                return $model->id;
+//            }
+//        }
+//        return "";
     }
 
     //-----------------------------------------------------

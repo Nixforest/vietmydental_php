@@ -457,22 +457,24 @@ class ReceptionistController extends FrontController {
     public function actionTest() {
         $msg = '';
         $agent = '';
+        $result = '';
         if (isset($_POST['agent'])) {
             $agent = $_POST['agent'];
         }
         if (filter_input(INPUT_POST, 'import')) {
             $msg = "Import";
             $msg .= "\nĐang chọn chi nhánh: " . $agent;
-            Renodcm3TbPatient::import($agent, false);
+            $result = Renodcm3TbPatient::import($agent, false);
         }
         if (filter_input(INPUT_POST, 'validate')) {
             $msg = "Validate";
             $msg .= "\nĐang chọn chi nhánh: " . $agent;
-            Renodcm3TbPatient::import($agent);
+            $result = Renodcm3TbPatient::import($agent);
         }
         $this->render('test', array(
             'message'   => $msg,
             'agentId'   => $agent,
+            'result'    => $result,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }

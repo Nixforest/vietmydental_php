@@ -16,6 +16,9 @@
  * @property string $type_schedule
  * @property string $created_date
  * @property integer $status
+ * 
+ * The followings are the available model relations:
+ * @property TreatmentTypes                  $rTreatmentType            Treatment Type
  */
 class TreatmentScheduleDetails extends BaseActiveRecord
 {
@@ -929,5 +932,16 @@ class TreatmentScheduleDetails extends BaseActiveRecord
             $retVal[] = CommonProcess::createConfigJson($key, $value);
         }
         return $retVal;
+    }
+    
+    public function createFields() {
+        $fields = array();
+        
+        $fields[] = 'start_date: ' . $this->start_date;
+        $fields[] = 'end_date: ' . $this->end_date;
+        $fields[] = 'treatment_type: ' . (isset($this->rTreatmentType) ? $this->rTreatmentType->name : '');
+        $fields[] = 'description: ' . $this->description;
+        
+        return $fields;
     }
 }

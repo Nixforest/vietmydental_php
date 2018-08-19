@@ -16,6 +16,10 @@
  * @property string $created_date
  * @property string $created_by
  * @property integer $status
+ * 
+ * The followings are the available model relations:
+ * @property Users                  $rDoctor            Doctor of treatment
+ * @property Users                  $rCreatedBy         User created this record
  */
 class TreatmentSchedules extends BaseActiveRecord
 {
@@ -760,5 +764,15 @@ class TreatmentSchedules extends BaseActiveRecord
             return $this->rDoctor->getFullname();
         }
         return '';
+    }
+    
+    public function createFields() {
+        $fields = array();
+        
+        $fields[] = 'start_date: ' . $this->start_date;
+        $fields[] = 'end_date: ' . $this->end_date;
+        $fields[] = 'doctor: ' . $this->getDoctor();
+        
+        return $fields;
     }
 }

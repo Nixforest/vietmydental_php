@@ -214,17 +214,41 @@ class Districts extends BaseActiveRecord
     // Static methods
     //-----------------------------------------------------
     /**
-     * Get model id by name
+     * Get model by name
      * @param type $name Name of model
-     * @return string
+     * @return Object Model if found, NULL otherwise
      */
-    public static function getModelIdByName($name) {
-        $models = self::model()->findAll();
-        foreach ($models as $model) {
-            if ($model->name === $name) {
-                return $model->id;
-            }
+    public static function getModelByName($name) {
+        $nameArr = array(
+            'Q1'    => 'Quận 1',
+            'Q2'    => 'Quận 2',
+            'Q3'    => 'Quận 3',
+            'Q4'    => 'Quận 4',
+            'Q5'    => 'Quận 5',
+            'Q6'    => 'Quận 6',
+            'Q7'    => 'Quận 7',
+            'Q8'    => 'Quận 8',
+            'Q9'    => 'Quận 9',
+            'Q10'    => 'Quận 10',
+            'Q11'    => 'Quận 11',
+            'Q12'    => 'Quận 12',
+        );
+        $name = str_replace('Q. ', '', $name);
+        $name = str_replace('H. ', '', $name);
+        if (isset($nameArr[$name])) {
+            $name = $nameArr[$name];
         }
-        return "";
+//        CommonProcess::echoTest("Đang tìm quận: ", $name);
+        $criteria = new CDbCriteria();
+        $criteria->addSearchCondition('t.name', $name, true);
+        $model = self::model()->find($criteria);
+        return $model;
+//        $models = self::model()->findAll();
+//        foreach ($models as $model) {
+//            if ($model->name === $name) {
+//                return $model->id;
+//            }
+//        }
+//        return "";
     }
 }

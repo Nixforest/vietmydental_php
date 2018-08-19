@@ -159,7 +159,7 @@ class Renodcm3TbTreatmentprofiles extends CActiveRecord
                     'renodcm3TbTreatmentdetails' => array(self::HAS_MANY, 'Renodcm3TbTreatmentdetails', 'TreatmentProfiles_ID'),
                     'renodcm3TbTreatment' => array(self::HAS_MANY, 'Renodcm3TbTreatment', 'TreatmentProfiles_ID'),
                     'renodcm3TbPhieuthu' => array(self::HAS_MANY, 'Renodcm3TbPhieuthu', 'TreatmentProfiles_ID'),
-                    'rDoctor' => array(self::BELONGS_TO, 'RsTbAccount', 'Doctor_ID'),
+                    'rDoctor' => array(self::BELONGS_TO, 'Renodcm3TbStaff', 'Doctor_ID'),
 		);
 	}
     
@@ -167,13 +167,16 @@ class Renodcm3TbTreatmentprofiles extends CActiveRecord
         $retVal = array();
         
         foreach ($this->$relation as $model) {
-            $retVal[] = '[' . implode('][', $model->createFieldsLbl()) . ']';
-            $retVal[$model->$fieldId] = '[' . implode('][', $model->createFields()) . ']';
+//            $retVal[] = '[' . implode('][', $model->createFieldsLbl()) . ']';
+            $retVal[$model->$fieldId] = $model->createFields();
             switch ($relation) {
                 case 'renodcm3TbTreatment':
+                    $retVal['-TreatmentScheduleDetail-' . $model->$fieldId] = Customers::transferTreatmentScheduleDetail($model, '', '', true);
                     $retVal['-Chi tiet phieu thu-' . $model->$fieldId] = $model->createChildData('renodcm3TbChitietphieuthus', 'Id');
                     break;
-
+                case 'renodcm3TbTreatmentdetails';
+                    $retVal['-TreatmentScheduleProcess-' . $model->$fieldId] = Customers::transferTreatmentProcess($model, '', '', true);
+                    break;
                 default:
                     break;
             }
@@ -193,15 +196,15 @@ class Renodcm3TbTreatmentprofiles extends CActiveRecord
     
     public function createFields() {
         $fields = array();
-        $fields[] = $this->DateOfProfiles;
-        $fields[] = $this->EndDateOfProfiles;
-        $fields[] = $this->Reason;
-        $fields[] = isset($this->rDoctor) ? $this->rDoctor->Name : '';
+        $fields[] = 'DateOfProfiles: ' . $this->DateOfProfiles;
+        $fields[] = 'EndDateOfProfiles: ' .$this->EndDateOfProfiles;
+        $fields[] = 'Reason: ' . $this->Reason;
+        $fields[] = 'Doctor: ' . $this->getDoctorName();
         
         return $fields;
     }
     
     public function getDoctorName() {
-        return isset($this->rDoctor) ? $this->rDoctor->Name : '';
+        return isset($this->rDoctor) ? $this->rDoctor->LastName . ' ' . $this->rDoctor->FirstName : '';
     }
 }

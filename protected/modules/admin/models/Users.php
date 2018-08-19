@@ -866,5 +866,21 @@ class Users extends BaseActiveRecord {
         }
         return $user;
     }
+    
+    public static function getUserByName($name, $role_id = '') {
+        if (empty($name)) {
+            return NULL;
+        }
+        $nameArr = array(
+            'Nguyen Dinh Troi'  => 'Nguyễn Đình Trợi',
+        );
+        if (isset($nameArr[$name])) {
+            $name = $nameArr[$name];
+        }
+        $criteria = new CDbCriteria();
+        $criteria->addSearchCondition('t.first_name', $name, true);
+        $model = self::model()->find($criteria);
+        return $model;
+    }
 
 }

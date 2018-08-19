@@ -233,7 +233,7 @@ class Renodcm3TbPatient extends CActiveRecord {
         return array(
                     'rCity' => array(self::BELONGS_TO, 'Renodcm3TbProvince', 'ProvinceId'),
                     'rDistrict' => array(self::BELONGS_TO, 'Renodcm3TbDistrict', 'DistrictId'),
-                    'rCreatedBy' => array(self::BELONGS_TO, 'RsTbAccount', 'Creater'),
+                    'rCreatedBy' => array(self::BELONGS_TO, 'Renodcm3TbStaff', 'Creater'),
                     'rTreatmentProfiles' => array(
                         self::HAS_MANY, 'Renodcm3TbTreatmentprofiles', 'Patient_ID',
                     ),
@@ -264,33 +264,34 @@ class Renodcm3TbPatient extends CActiveRecord {
     public function createFields() {
         $fields = array();
         
-        $fields[] = $this->Code;
-        $fields[] = $this->FullName;
-        $fields[] = $this->Sex;
-        $fields[] = $this->DateOfBirth;
-        $fields[] = $this->YearOfBirth;
-        $fields[] = $this->Mobile;
-        $fields[] = $this->Email;
-        $fields[] = isset($this->rCity) ? $this->rCity->Name : '';
-        $fields[] = isset($this->rDistrict) ? $this->rDistrict->Name : '';
-        $fields[] = $this->Address;
-        if (isset($this->rCreatedBy)) {
-            $fields[] = $this->rCreatedBy->Name;
-        } else {
-            $fields[] = '';
-        }
-        $fields[] = $this->CreateDate;
+        $fields[] = 'Code: ' . $this->Code;
+        $fields[] = 'FullName: ' . $this->FullName;
+        $fields[] = 'Sex: ' . $this->Sex;
+        $fields[] = 'DateOfBirth: ' . $this->DateOfBirth;
+        $fields[] = 'YearOfBirth: ' . $this->YearOfBirth;
+        $fields[] = 'Mobile: ' . $this->Mobile;
+        $fields[] = 'Email: ' . $this->Email;
+        $fields[] = 'City: ' . (isset($this->rCity) ? $this->rCity->Name : '');
+        $fields[] = 'District: ' . (isset($this->rDistrict) ? $this->rDistrict->Name : '');
+        $fields[] = 'Address: ' . $this->Address;
+        $fields[] = 'Created by: ' . $this->getCreatedBy();
+        $fields[] = 'CreateDate: ' . $this->CreateDate;
         return $fields;
+    }
+    
+    public function getCreatedBy() {
+        return isset($this->rCreatedBy) ? $this->rCreatedBy->LastName . ' ' . $this->rCreatedBy->FirstName : '';
     }
     
     public function createChildData($relation, $fieldId) {
         $retVal = array();
         
         foreach ($this->$relation as $model) {
-            $retVal[] = '[' . implode('][', $model->createFieldsLbl()) . ']';
-            $retVal[$model->$fieldId] = '[' . implode('][', $model->createFields()) . ']';
+//            $retVal[] = '[' . implode('][', $model->createFieldsLbl()) . ']';
+            $retVal[$model->$fieldId] = $model->createFields();
             switch ($relation) {
                 case 'rTreatmentProfiles':
+                    $retVal['-TreatmentSchedule-' . $model->$fieldId] = Customers::transferTreatmentSchedule($model, NULL, '', true);
                     $retVal['-Treatment-' . $model->$fieldId] = $model->createChildData('renodcm3TbTreatment', 'Treatment_Id');
                     $retVal['-TreatmentDetail-' . $model->$fieldId] = $model->createChildData('renodcm3TbTreatmentdetails', 'Id');
                     $retVal['-Phieu thu-' . $model->$fieldId] = $model->createChildData('renodcm3TbPhieuthu', 'Id');
@@ -312,7 +313,7 @@ class Renodcm3TbPatient extends CActiveRecord {
         ini_set('max_execution_time', 600);
         $models = self::model()->findAll(array(
             'order' => 'id desc',
-            'limit' => 200,
+            'limit' => 100,
 //            'condition'  => 't.Code = ' . '01999',
 //            'condition'  => 't.Code = ' . '017841',
 //            'condition' => 't.Id >= 1 AND t.Id <= 5000',
@@ -327,8 +328,11 @@ class Renodcm3TbPatient extends CActiveRecord {
         foreach ($models as $model) {
             if ($isValidate) {
                 $fields = $model->createFields();
-                $print[] = '[' . implode('][', $model->createFieldsLbl()) . ']';
-                $print[$model->Id] = '[' . implode('][', $fields) . ']';
+//                $print[] = '[' . implode('][', $model->createFieldsLbl()) . ']';
+//                $print[$model->Id] = '[' . implode('][', $fields) . ']';
+                $print[$model->Id] = $fields;
+//                $print['-Customer-' . $model->Id] = self::validateCustomer($model);
+                $print['-Customer-' . $model->Id] = Customers::saveCustomer($model, $agentId, new Customers(), true, true);
                 $print['-TreatmentProfile-' . $model->Id] = $model->createChildData('rTreatmentProfiles', 'TreatmentProfiles_ID');
 //                $print['-Treatment-' . $model->Id] = $model->createChildData('rTreatment', 'Treatment_Id');
             } else {
@@ -360,9 +364,9 @@ class Renodcm3TbPatient extends CActiveRecord {
             }
         }
         
-        echo '<pre>';
-        print_r($print);
-        echo '</pre>';
+//        echo '<pre>';
+//        print_r($print);
+//        echo '</pre>';
+        return $print;
     }
-
 }

@@ -118,12 +118,12 @@ class Renodcm3TbChitietphieuthu extends CActiveRecord
     public function createFields() {
         $fields = array();
         
-        $fields[] = $this->Content;
-        $fields[] = CommonProcess::formatCurrency($this->UnitPrice);
-        $fields[] = $this->Quantity;
-        $fields[] = CommonProcess::formatCurrency($this->OldRemain);
-        $fields[] = CommonProcess::formatCurrency($this->Payed);
-        $fields[] = CommonProcess::formatCurrency($this->NewRemain);
+        $fields[] = 'Content: ' . $this->Content;
+        $fields[] = 'UnitPrice: ' . CommonProcess::formatCurrency($this->UnitPrice);
+        $fields[] = 'Quantity: ' . $this->Quantity;
+        $fields[] = 'OldRemain: ' . CommonProcess::formatCurrency($this->OldRemain);
+        $fields[] = 'Payed: ' . CommonProcess::formatCurrency($this->Payed);
+        $fields[] = 'NewRemain: ' . CommonProcess::formatCurrency($this->NewRemain);
         return $fields;
     }
     

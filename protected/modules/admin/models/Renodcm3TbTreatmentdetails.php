@@ -66,7 +66,7 @@ class Renodcm3TbTreatmentdetails extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'treatmentProfiles' => array(self::BELONGS_TO, 'Renodcm3TbTreatmentprofiles', 'TreatmentProfiles_ID'),
-                        'rDoctor' => array(self::BELONGS_TO, 'RsTbAccount', 'Doctor'),
+                        'rDoctor' => array(self::BELONGS_TO, 'Renodcm3TbStaff', 'Doctor'),
 		);
 	}
 
@@ -123,12 +123,16 @@ class Renodcm3TbTreatmentdetails extends CActiveRecord
     public function createFields() {
         $fields = array();
         
-        $fields[] = $this->Date;
-        $fields[] = $this->Teeth;
-        $fields[] = $this->ContentOfWork;
-        $fields[] = isset($this->rDoctor) ? $this->rDoctor->Name : '';
-        $fields[] = $this->Note;
+        $fields[] = 'Date: ' . $this->Date;
+        $fields[] = 'Teeth: ' . $this->Teeth;
+        $fields[] = 'ContentOfWork: ' . $this->ContentOfWork;
+        $fields[] = 'Doctor: ' . $this->getDoctorName();
+        $fields[] = 'Note: ' . $this->Note;
         return $fields;
+    }
+    
+    public function getDoctorName() {
+        return isset($this->rDoctor) ? $this->rDoctor->LastName . ' ' . $this->rDoctor->FirstName : '';
     }
     
     public function createFieldsLbl() {
@@ -140,9 +144,5 @@ class Renodcm3TbTreatmentdetails extends CActiveRecord
         $fields[] = 'Doctor';
         $fields[] = 'Note';
         return $fields;
-    }
-    
-    public function getDoctorName() {
-        return isset($this->rDoctor) ? $this->rDoctor->Name : '';
     }
 }

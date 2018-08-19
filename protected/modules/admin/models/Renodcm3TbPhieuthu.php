@@ -143,8 +143,8 @@ class Renodcm3TbPhieuthu extends CActiveRecord
     public function createFields() {
         $fields = array();
         
-        $fields[] = $this->PhieuThuNgay;
-        $fields[] = CommonProcess::formatCurrency($this->Money);
+        $fields[] = 'PhieuThuNgay: ' . $this->PhieuThuNgay;
+        $fields[] = 'Money: ' . CommonProcess::formatCurrency($this->Money);
         return $fields;
     }
     

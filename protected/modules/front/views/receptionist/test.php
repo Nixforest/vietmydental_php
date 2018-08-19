@@ -224,7 +224,10 @@
     <?php $this->endWidget(); ?>
 </div><!-- form -->
 <?php
-    $doctorName = 'Nguyen dinh Troi';
+        echo '<pre style="max-height: 1000px;">';
+        print_r($result);
+        echo '</pre>';
+    $doctorName = 'Nguyen Thi Nhu Khanh';
 //    $doctorName = '';
     $doctor = Users::getDoctorByName($doctorName, '3');
     if (!empty($doctor)) {
@@ -235,5 +238,11 @@
     if (!empty($teethIndex)) {
         CommonProcess::echoTest("Răng số $teeth có tên là: ", CommonProcess::getListTeeth(false, '')[$teethIndex]);
     }
-        
+    $districtName = 'Q. Thủ Đức';
+    $district = Districts::getModelByName($districtName);
+    CommonProcess::echoTest("Tên quận: ", isset($district) ? $district->name : 'Không tìm thấy');
+    $name = 'Nguyen Dinh Troi';
+    $user = Users::getUserByName($name);
+    CommonProcess::echoTest("User: ", isset($user) ? $user->getFullName() : 'Không tìm thấy');
+
 ?>

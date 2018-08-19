@@ -13,6 +13,9 @@
  * @property string $doctor_id
  * @property string $note
  * @property integer $status
+ * 
+ * The followings are the available model relations:
+ * @property Users                  $rDoctor            Doctor of treatment
  */
 class TreatmentScheduleProcess extends BaseActiveRecord
 {
@@ -279,5 +282,16 @@ class TreatmentScheduleProcess extends BaseActiveRecord
                     .       $doctorInfo
                     . '</div>';
         return $retVal;
+    }
+    
+    public function createFields() {
+        $fields = array();
+        
+        $fields[] = 'process_date: ' . $this->process_date;
+        $fields[] = 'name: ' . $this->name;
+        $fields[] = 'doctor: ' . (isset($this->rDoctor) ? $this->rDoctor->first_name : '');
+        $fields[] = 'description: ' . $this->description;
+        
+        return $fields;
     }
 }
