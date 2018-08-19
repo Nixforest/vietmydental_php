@@ -641,6 +641,13 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
                     'admin/treatmentScheduleDetails/updateImageXRay',
                     array('id' => '')) ?>/' + id);
         });
+        
+         $(document).on('click', '.requestRecoveryImage', function(){
+             var id = $(this).data('id');
+             $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
+                     'admin/laboRequests/createAjax',
+                     array('id' => '')) ?>/' + id);
+         });
         //-- BUG0056-IMT (DuongNV 20180811) Update image data treatment
         $(document).on('click', '.vm-btn', function(){
             alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
