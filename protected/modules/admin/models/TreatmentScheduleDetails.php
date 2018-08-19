@@ -18,7 +18,8 @@
  * @property integer $status
  * 
  * The followings are the available model relations:
- * @property TreatmentTypes                  $rTreatmentType            Treatment Type
+ * @property TreatmentTypes                 $rTreatmentType             Treatment Type
+ * @property LaboRequests                   $rLaboRequest               Labo request
  */
 class TreatmentScheduleDetails extends BaseActiveRecord
 {
@@ -114,6 +115,14 @@ class TreatmentScheduleDetails extends BaseActiveRecord
                     ),
                     'rPrescription' => array(
                         self::HAS_ONE, 'Prescriptions', 'process_id',
+                        'on'    => 'status = ' . DomainConst::DEFAULT_STATUS_ACTIVE,
+                    ),
+                    'rPrescription' => array(
+                        self::HAS_ONE, 'Prescriptions', 'process_id',
+                        'on'    => 'status = ' . DomainConst::DEFAULT_STATUS_ACTIVE,
+                    ),
+                    'rLaboRequest' => array(
+                        self::HAS_ONE, 'LaboRequests', 'treatment_detail_id',
                         'on'    => 'status = ' . DomainConst::DEFAULT_STATUS_ACTIVE,
                     ),
 		);

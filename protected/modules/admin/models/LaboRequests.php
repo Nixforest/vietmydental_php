@@ -18,9 +18,10 @@
  * @property string $created_by             Created by
  *
  * The followings are the available model relations:
- * @property Users          $rCreatedBy     User created this record
- * @property OneMany[]      $rJoinTeeth     List of teeth
- * @property LaboServices   $rService       Labo service
+ * @property Users                      $rCreatedBy                     User created this record
+ * @property OneMany[]                  $rJoinTeeth                     List of teeth
+ * @property LaboServices               $rService                       Labo service
+ * @property TreatmentScheduleDetails   $rTreatmentScheduleDetail       Treatment schedule detail
  */
 class LaboRequests extends BaseActiveRecord {
     //-----------------------------------------------------
@@ -78,6 +79,7 @@ class LaboRequests extends BaseActiveRecord {
                 'on' => 'type = ' . OneMany::TYPE_LABO_REQUEST_TEETH,
             ),
             'rService' => array(self::BELONGS_TO, 'LaboServices', 'service_id'),
+            'rTreatmentScheduleDetail' => array(self::BELONGS_TO, 'TreatmentScheduleDetails', 'treatment_detail_id'),
         );
     }
 

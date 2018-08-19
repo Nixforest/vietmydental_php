@@ -603,6 +603,46 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
     }
     //-- BUG0017-IMT (NguyenPT 20170717) Handle update treatment detail status
     
+    
+    
+    /**
+     * Open labo request
+     * @param {String} _id Id of treatment schedule detail need to create labo request
+     * @returns {Boolean}
+     */
+    function fnOpenLaboRequest(_id = '') {
+        createLaboRequestDialog(_id);
+        $("#dialogId").dialog(opt).dialog("open");
+    }
+    
+    /**
+     * Create labo request dialog
+     * @param {String} _id Id of treatment schedule detail need to create labo request
+     * @returns {Boolean}
+     */
+    function createLaboRequestDialog(_id = '') {
+        fnLoadFormCSS();
+        $.ajax({
+            url: "<?php echo Yii::app()->createAbsoluteUrl(
+                    'front/receptionist/createLaboRequest'); ?>",
+            data: $(this).serialize() + '&id=' + _id,
+            type: "post",
+            dataType: "json",
+            success: function(data) {
+                // After submit
+                if (fnIsDataSuccess(data)) {
+                    fnUpdateCustomerData(data);
+                } else {    // Load first time
+                    fnLoadDialogContent(data,
+                       '<?php echo DomainConst::CONTENT00425; ?>',
+                       createLaboRequestDialog);
+                }
+            },
+            cache: false
+        });
+        return false;
+    }
+    
     //++ BUG0017-IMT (DuongNV 20180717) Add event to status btn
     $(function(){
         $(document).on('click', '.ts-stt-btn', function(){
@@ -642,12 +682,12 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
                     array('id' => '')) ?>/' + id);
         });
         
-         $(document).on('click', '.requestRecoveryImage', function(){
-             var id = $(this).data('id');
-             $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
-                     'admin/laboRequests/createAjax',
-                     array('id' => '')) ?>/' + id);
-         });
+//         $(document).on('click', '.requestRecoveryImage', function(){
+//             var id = $(this).data('id');
+//             $(location).attr('href', '<?php // echo Yii::app()->createAbsoluteUrl(
+//                     'admin/laboRequests/createAjax',
+//                     array('id' => '')) ?>///' + id);
+//         });
         //-- BUG0056-IMT (DuongNV 20180811) Update image data treatment
         $(document).on('click', '.vm-btn', function(){
             alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');

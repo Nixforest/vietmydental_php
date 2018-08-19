@@ -1436,4 +1436,5 @@ class DomainConst {
     const CONTENT00422  = 'Ngày cấp';
     const CONTENT00423  = 'Nơi cấp';
     const CONTENT00424  = 'Ngày vào làm';
+    const CONTENT00425  = 'Tạo yêu cầu phục hình';
 }

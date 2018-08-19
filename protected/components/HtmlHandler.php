@@ -133,6 +133,8 @@ class HtmlHandler {
         if (!empty($prescriptClick)) {
             $prescriptItem = '<a onclick="' . $prescriptClick . '" style="cursor:pointer;"><i class="fas fa-capsules"></i> ' . DomainConst::CONTENT00379 . '</a>';
         }
+        $laboRequestEvent = '{fnOpenLaboRequest(\'' . $id . '\');}';
+        $laboRequestItem = '<a onclick="' . $laboRequestEvent . '" style="cursor:pointer;"><i class="fas fa-exchange-alt"></i> ' . DomainConst::CONTENT00425 . '</a>';;
             //++ BUG0056-IMT (DuongNV 20180811) Update image data treatment
         $urlXRay = Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/updateImageXRay", array('id' => $id, 'ajax' => false));
         $urlReal = Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/updateImageReal", array('id' => $id, 'ajax' => false));
@@ -144,7 +146,7 @@ class HtmlHandler {
                     .           '<li class="createProcess"><a style="cursor:pointer;"><i class="fas fa-stethoscope"></i> Tạo Tiến trình điều trị</a></li>'
                     .           '<li><a class="imageCamera" style="cursor:pointer;" href="' . $urlReal . '"> <i class="fas fa-camera" style="margin:0 1px;"></i> Hình ảnh Camera</a></li>'
                     .           '<li><a class="imageXQuang" style="cursor:pointer;" href="' . $urlXRay . '"><i class="fas fa-x-ray"></i> Hình ảnh X-Quang</a></li>'
-                    .           '<li class="requestRecoveryImage" data-id="'.$id.'"><a style="cursor:pointer;"><i class="fas fa-exchange-alt"></i> Tạo yêu cầu phục hình</a></li>'
+                    .           '<li class="requestRecoveryImage" data-id="'.$id.'">' . $laboRequestItem . '</li>'
                     .       '</ul>'
                     .    '</div>';
             //-- BUG0056-IMT (DuongNV 20180811) Update image data treatment

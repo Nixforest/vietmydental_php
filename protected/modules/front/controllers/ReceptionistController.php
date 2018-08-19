@@ -899,6 +899,59 @@ class ReceptionistController extends FrontController {
             exit;
         }
     }
+    
+    /**
+     * Action create labo request.
+     */
+    public function actionCreateLaboRequest() {
+        $id = '';
+        $this->validateUpdateUrl($id, 'LaboRequest');
+        $mTreatmentDetail = TreatmentScheduleDetails::model()->findByPk($id);
+        if ($mTreatmentDetail) {
+            if (isset($mTreatmentDetail->rLaboRequest)) {
+                $model = $mTreatmentDetail->rLaboRequest;
+                $model->handleSearch();
+            } else {
+                $model = new LaboRequests('create');
+                $model->treatment_detail_id = $id;
+            }
+            
+            if (isset($_POST['LaboRequests'])) {
+                $model->attributes = $_POST['LaboRequests'];
+                if (isset($_POST['teethData'])) {
+                    $model->teeths = $_POST['teethData'];
+                }
+                $model->handleBeforeSave();
+                $model->validate();
+                if (!$model->hasErrors()) {
+                    $model->Handlesave();
+                    $customer = $mTreatmentDetail->getCustomerModel();
+                    if (isset($customer)) {
+                        $rightContent = $customer->getCustomerAjaxInfo();
+                        $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
+                    }
+                    echo CJavaScript::jsonEncode(array(
+                        DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
+                        DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
+                        DomainConst::KEY_RIGHT_CONTENT  => $rightContent,
+                        DomainConst::KEY_INFO_SCHEDULE => $infoSchedule,
+                    ));
+                    exit;
+                }
+            }
+            echo CJSON::encode(array(
+            DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
+            DomainConst::KEY_CONTENT => $this->renderPartial('_form_create_labo_request',
+                array(
+                    'model'     => $model,
+                    DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                ), true, true)
+            ));
+            exit;
+        } else {
+            throw new CHttpException(404, 'The requested page does not exist.');
+        }
+    }
 
     // Uncomment the following methods and override them if needed
 	/*
