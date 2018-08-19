@@ -45,7 +45,10 @@ class Money extends BaseActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, isIncomming, action_date, description', 'required'),
+                        //++ BUG0065-IMT (DuongNV 20180815) Unrequired description in create
+//			array('name, isIncomming, action_date, description', 'required'),
+			array('name, isIncomming, action_date', 'required'),
+                        //-- BUG0065-IMT (DuongNV 20180815) Unrequired description in create
 			array('user_id, isIncomming, account_id, status', 'numerical', 'integerOnly'=>true),
 			array('amount', 'length', 'max'=>11),
 			array('created_date', 'safe'),
