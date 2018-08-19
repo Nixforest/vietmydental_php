@@ -1276,7 +1276,7 @@ class Customers extends BaseActiveRecord
         $detail->time_id        = 1;
         $detail->start_date     = $renoTreatmentProfile->DateOfProfiles;
         $detail->end_date       = $renoTreatmentProfile->EndDateOfProfiles;
-        $detail->description    = 'BS ' . (isset($renoTreatmentProfile->rDoctor) ? $renoTreatmentProfile->rDoctor->Name : '') . ' thực hiện: ';
+        $detail->description    = 'BS ' . $renoTreatmentProfile->getDoctorName() . ' thực hiện. ';
         $detail->description    .= $renoTreatmentProfile->Reason;
         $detail->status = TreatmentScheduleDetails::STATUS_COMPLETED;
         if ($detail->save()) {

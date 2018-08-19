@@ -2,9 +2,6 @@
 /* @var $this ReceptionistController */
 ?>
 <div class="form">
-    <pre>
-        <?php echo $message; ?>
-    </pre>
     <?php
     $form = $this->beginWidget('CActiveForm', array(
         'id' => 'medical-records-form',
@@ -225,6 +222,7 @@
 </div><!-- form -->
 <?php
         echo '<pre style="max-height: 1000px;">';
+        echo $message;
         print_r($result);
         echo '</pre>';
     $doctorName = 'Nguyen Thi Nhu Khanh';

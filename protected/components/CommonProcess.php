@@ -853,7 +853,9 @@ class CommonProcess {
             // Loop for all first name and sub name
             for ($index = 0; $index < $len - 1; $index++) {
                 // Take first character and append to return value
-                $retVal .= $arrStr[$index][0];
+                if (isset($arrStr[$index][0])) {
+                    $retVal .= $arrStr[$index][0];
+                }
             }
         }
         

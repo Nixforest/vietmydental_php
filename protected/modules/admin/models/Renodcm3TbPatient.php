@@ -233,7 +233,7 @@ class Renodcm3TbPatient extends CActiveRecord {
         return array(
                     'rCity' => array(self::BELONGS_TO, 'Renodcm3TbProvince', 'ProvinceId'),
                     'rDistrict' => array(self::BELONGS_TO, 'Renodcm3TbDistrict', 'DistrictId'),
-                    'rCreatedBy' => array(self::BELONGS_TO, 'Renodcm3TbStaff', 'Creater'),
+                    'rCreatedBy' => array(self::BELONGS_TO, 'RsTbAccount', 'Creater'),
                     'rTreatmentProfiles' => array(
                         self::HAS_MANY, 'Renodcm3TbTreatmentprofiles', 'Patient_ID',
                     ),
@@ -280,7 +280,7 @@ class Renodcm3TbPatient extends CActiveRecord {
     }
     
     public function getCreatedBy() {
-        return isset($this->rCreatedBy) ? $this->rCreatedBy->LastName . ' ' . $this->rCreatedBy->FirstName : '';
+        return isset($this->rCreatedBy) ? $this->rCreatedBy->Name : '';
     }
     
     public function createChildData($relation, $fieldId) {
@@ -313,7 +313,7 @@ class Renodcm3TbPatient extends CActiveRecord {
         ini_set('max_execution_time', 600);
         $models = self::model()->findAll(array(
             'order' => 'id desc',
-            'limit' => 100,
+             'limit' => 100,
 //            'condition'  => 't.Code = ' . '01999',
 //            'condition'  => 't.Code = ' . '017841',
 //            'condition' => 't.Id >= 1 AND t.Id <= 5000',
@@ -332,7 +332,8 @@ class Renodcm3TbPatient extends CActiveRecord {
 //                $print[$model->Id] = '[' . implode('][', $fields) . ']';
                 $print[$model->Id] = $fields;
 //                $print['-Customer-' . $model->Id] = self::validateCustomer($model);
-                $print['-Customer-' . $model->Id] = Customers::saveCustomer($model, $agentId, new Customers(), true, true);
+                $customer = new Customers();
+                $print['-Customer-' . $model->Id] = Customers::saveCustomer($model, $agentId, $customer, true, true);
                 $print['-TreatmentProfile-' . $model->Id] = $model->createChildData('rTreatmentProfiles', 'TreatmentProfiles_ID');
 //                $print['-Treatment-' . $model->Id] = $model->createChildData('rTreatment', 'Treatment_Id');
             } else {
