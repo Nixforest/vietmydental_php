@@ -120,7 +120,7 @@ class DailyReportsController extends AdminController
 	{
 		$this->loadModel($id)->delete();
 
-		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+                // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 	}
@@ -136,8 +136,14 @@ class DailyReportsController extends AdminController
 //		));
             $model=new DailyReports('search');
             $model->unsetAttributes();  // clear any default values
-            if(isset($_GET['DailyReports']))
-                    $model->attributes=$_GET['DailyReports'];
+            $model->date_report = date('d/m/Y');
+            if(isset($_GET['DailyReports'])){
+                $model->attributes=$_GET['DailyReports'];
+            }
+            if(isset($_POST['DailyReports'])){
+                $model->attributes=$_POST['DailyReports'];
+                $model->createDailyReport();
+            }
 
             $this->render('index',array(
                     'model'=>$model,
@@ -187,4 +193,27 @@ class DailyReportsController extends AdminController
 			Yii::app()->end();
 		}
 	}
+        
+        /**
+         * confirm
+         * @param int $id
+         */
+        public function actionConfirm($id)
+	{
+            $model = $this->loadModel($id);
+            $model->status = DailyReports::STATUS_CONFIRM;
+            $model->update();
+	}
+        
+        /**
+         * process
+         * @param int $id
+         */
+        public function actionProcess($id)
+	{
+            $model = $this->loadModel($id);
+            $model->status = DailyReports::STATUS_PROCESS;
+            $model->update();
+	}
+
 }

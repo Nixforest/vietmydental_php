@@ -10,19 +10,20 @@
 //	array('label'=>'Create DailyReports', 'url'=>array('create')),
 //	array('label'=>'Manage DailyReports', 'url'=>array('admin')),
 //);
-$this->createMenu('index', $model);
+$aData  = $model->getDataReport();
+$this->createMenu('', $model);
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();
 	return false;
 });
-$('.search-form form').submit(function(){
-	$('#labo-grid').yiiGridView('update', {
-		data: $(this).serialize()
-	});
-	return false;
-});
+//$('.search-form form').submit(function(){
+//	$('#daily-report-grid').yiiGridView('update', {
+//		data: $(this).serialize()
+//	});
+//	return false;
+//});
 ");
 ?>
 
@@ -34,15 +35,46 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 </p>
 
 <?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
-<div class="search-form" style="display:none">
+<div class="search-form">
 <?php $this->renderPartial('_search',array(
 	'model'=>$model,
 )); ?>
 </div><!-- search-form -->
 
+<h1>Danh sách báo cáo</h1>
+<?php
+    $approveJs = 'js:function(__event)
+    {
+        __event.preventDefault(); // disable default action
+
+        var $this = $(this), // link/button
+                confirm_message = $this.data("confirm"), // read confirmation message from custom attribute
+                url = $this.attr("href"); // read AJAX URL with parameters from HREF attribute on the link
+
+        if(confirm(confirm_message)) // if user confirmed operation, then...
+        {
+            // perform AJAX request
+            $("#dailyreport-grid").yiiGridView("update",
+            {
+                type	: "POST", // importatnt! we only allow POST in filters()
+                dataType    : "json",
+                url		: url,
+                success	: function(data)
+                {
+                        $("#dailyreport-grid").yiiGridView("update"); // refresh gridview via AJAX
+                },
+                error	: function(xhr)
+                {
+                        console.log("Error:", xhr);
+                }
+            });
+        }
+    }';
+?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'labo-grid',
+	'id'=>'dailyreport-grid',
 	'dataProvider'=>$model->search(),
+        'afterAjaxUpdate'=>'function(id, data){ fnUpdateColorbox();}',
 	'filter'=>$model,
 	'columns'=>array(
                 array(
@@ -50,20 +82,127 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'type' => 'raw',
                     'value' => '$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
                     'headerHtmlOptions' => array('width' => '30px','style' => 'text-align:center;'),
-                    'htmlOptions' => array('style' => 'text-align:center;')
+                    'htmlOptions' => array(
+                        'style' => 'text-align:center;'
+                    )
                 ),
+                array(
+                    'header'    => 'Người duyệt',
+                    'type'      => 'raw',
+                    'value'     => '$data->getApprove().$data->canHighLight()',
+                ),
+                array(
+                    'header'    => DomainConst::CONTENT00353,
+                    'type'      => 'raw',
+                    'value'     => '$data->getReceiptTotal()',
+                    'htmlOptions' => array('style' => 'text-align:right;')
+                ),
+                array(
+                    'header'    => 'Tổng tiền xác thực',
+                    'type'      => 'raw',
+                    'value'     => '$data->getReceiptTotalConfirm()',
+                    'htmlOptions' => array('style' => 'text-align:right;')
+                ),
+                array(
+                    'header'    => 'Ngày báo cáo',
+                    'type'      => 'raw',
+                    'value'     => '$data->getDateReport()',
+                ),
+                array(
+                    'header'    => DomainConst::CONTENT00199,
+                    'type'      => 'raw',
+                    'value'     => '$data->getAgent()',
+                ),
+                array(
+                    'header'    => DomainConst::CONTENT00026,
+                    'type'      => 'raw',
+                    'value'     => '$data->getStatus()',
+                ),
+           
                 array(
                     'header' => 'Actions',
                     'class'=>'CButtonColumn',
-                    'template'=> $this->createActionButtons(),
-//                    'buttons'=>array(
-//                        'update'=>array(
-//                            'visible'=> '$data->canUpdate()',
-//                        ),
-//                        'delete'=>array(
-//                            'visible'=> '$data->canDelete()',
-//                        ),
-//                    ),
+                    'template'=> $this->createActionButtons(array('confirm','process')),
+                    'buttons'=>array(
+                        'confirm'=>array(
+                            'click'   => $approveJs,
+                            'label'=>'Xác nhận',
+                            'imageUrl'=>Yii::app()->theme->baseUrl . '/img/icon_completed_24.png',
+                            'options'=>array(
+                                'class'=>'confirm',
+                                'data-confirm' => 'Bạn chắc chắn muốn xác nhận?'
+                            ),
+                            'url'=>'Yii::app()->createAbsoluteUrl("admin/dailyReports/confirm",
+                                array("id"=>$data->id) )',
+                            'visible' => '$data->canUpdateStatus()',
+                        ),
+                        'process'=>array(
+                            'click'   => $approveJs,
+                            'label'=>'Đang xử lý',
+                            'imageUrl'=>Yii::app()->theme->baseUrl . '/img/icon_appointment_24.png',
+                            'options'=>array(
+                                'class'=>'process',
+                                'data-confirm' => 'Bạn chắc chắn muốn chuyển sang đang xử lý?'
+                                ),
+                            'url'=>'Yii::app()->createAbsoluteUrl("admin/dailyReports/process",
+                                array("id"=>$data->id) )',
+                            'visible' => '$data->canUpdateStatus()',
+                        ),
+                    ),
                 ),
     ),
 )); ?>
+<?php if($model->canCreateNew()): ?>
+
+<h1>Danh sách chưa tạo</h1>
+<?php $form=$this->beginWidget('CActiveForm', array(
+            'id'=>'new-form',
+            'enableAjaxValidation'=>false,
+            'htmlOptions' => array('enctype' => 'multipart/form-data'),
+    )); ?>
+    <div id="labo-grid-new" class="grid-view">
+        <input style="display: none;" value="<?php echo $model->date_report; ?>" name="DailyReports[date_report]">
+        <table class="items">
+            <thead>
+                <tr>
+                    <th style="text-align:center;width:15px;" id="labo-grid_c0"><input type="checkbox" name="" id="DailyReports_all"></th>
+                    <th style="text-align:center;" id="labo-grid_c0">Người duyệt</th>
+                    <th style="text-align:center;" id="labo-grid_c0"><?php echo DomainConst::CONTENT00353; ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if(!empty($aData['RECEIPT'])): ?>
+                    <?php foreach ($aData['RECEIPT'] as $doctor_id => $revenue): ?>
+                        <tr>
+                            <td style="text-align:center;width:15px;"><input type="checkbox" value="<?php echo $doctor_id; ?>" name="DailyReports[doctors][]"></td>
+                            <td style=""><?php echo !empty($aData['DOCTOR'][$doctor_id]) ? $aData['DOCTOR'][$doctor_id] : DomainConst::CONTENT00218; ?></td>
+                            <td style="text-align:right;">
+                                <input style="display: none;" value="<?php echo $revenue; ?>" name="DailyReports[revenue][<?php echo $doctor_id; ?>]">
+                                <?php echo CommonProcess::formatCurrency($revenue) . ' ' . DomainConst::CONTENT00134; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+
+            </tbody>
+        </table>
+    </div>
+    <div class="row buttons">
+        <?php echo CHtml::submitButton('Submit'); ?>
+    </div>
+<?php $this->endWidget(); ?>
+<script>
+//    check all of select
+    $("#DailyReports_all").click(function(){
+        $('input:checkbox:enabled[name="DailyReports[doctors][]"]').not(this).prop('checked', this.checked);
+    });
+</script>
+<?php endif; ?>
+<script>
+    function fnUpdateColorbox(){
+        $('.highlight').closest('tr').css({"background-color":"red"});
+    }
+    $(document).ready(function(){
+        fnUpdateColorbox();
+    });
+</script>

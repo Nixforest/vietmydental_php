@@ -12,38 +12,36 @@
 )); ?>
 
 	<div class="row">
-		<?php echo $form->label($model,'id'); ?>
-		<?php echo $form->textField($model,'id',array('size'=>10,'maxlength'=>10)); ?>
+                <?php echo $form->labelEx($model,'date_report'); ?>
+                <?php
+                $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+                    'attribute' => 'date_report',
+                    'model' =>$model,
+                    'options'   => array(
+                        'showAnim'      => 'fold',
+                        'dateFormat'    => DomainConst::DATE_FORMAT_2,
+                        'changeMonth'   => true,
+                        'changeYear'    => true,
+                        'showOn'        => 'button',
+                        'buttonImage'   => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
+                        'buttonImageOnly' => true,
+                    ),
+                    'htmlOptions'=>array(
+                                'class'=>'w-16',
+                                'readonly'=>true,
+                            ),
+                ));
+                ?>
 	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'receipt_total'); ?>
-		<?php echo $form->textField($model,'receipt_total'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'receipt_total_confirm'); ?>
-		<?php echo $form->textField($model,'receipt_total_confirm'); ?>
-	</div>
-
-	<div class="row">
+    
+        <div class="row">
 		<?php echo $form->label($model,'approve_id'); ?>
-		<?php echo $form->textField($model,'approve_id',array('size'=>10,'maxlength'=>10)); ?>
+                <?php echo $form->dropDownList($model,'approve_id', $model->getArrayDoctor(), array('class'=>'','empty'=>'Select')); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->label($model,'status'); ?>
-		<?php echo $form->textField($model,'status'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'created_by'); ?>
-		<?php echo $form->textField($model,'created_by',array('size'=>10,'maxlength'=>10)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'created_date'); ?>
-		<?php echo $form->textField($model,'created_date'); ?>
+		<?php echo $form->dropDownList($model,'status', $model->getArrayStatus(), array('class'=>'','empty'=>'Select')); ?>
 	</div>
 
 	<div class="row buttons">
