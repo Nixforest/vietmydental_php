@@ -205,17 +205,24 @@ class TreatmentScheduleDetailsController extends AdminController
                         Files::deleteFileInUpdateNotIn($model, Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY);
                         Files::saveRecordFile($model, Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY);
                         if($ajax){
-                            $this->redirect(array('view','id'=>$model->id, 'ajax' => true));
+                            echo CJavaScript::jsonEncode(array(
+                                DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
+                                DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
+                            ));
+                            exit;
                         } else {
                             $this->redirect(array('view','id'=>$model->id));
                         }
 		}
                 if($ajax){
-                    $this->layout='//layouts/ajax';
-                    $this->render('updateImageXRay',array(
-                            'model'=>$model,
-                            DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                    echo CJSON::encode(array(
+                        DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
+                        DomainConst::KEY_CONTENT => $this->renderPartial('updateImageXRay',array(
+                                'model'=>$model,
+                                DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                            ), true, true),
                     ));
+                    exit;
                 } else {
                     $this->render('updateImageXRay',array(
                             'model'=>$model,
@@ -236,18 +243,25 @@ class TreatmentScheduleDetailsController extends AdminController
                 Files::deleteFileInUpdateNotIn($model, Files::TYPE_3_TREATMENT_SCHEDULE_REAL_IMG);
                 Files::saveRecordFile($model, Files::TYPE_3_TREATMENT_SCHEDULE_REAL_IMG);
                 if($ajax){
-                    $this->redirect(array('view','id'=>$model->id, 'ajax' => true));
+                    echo CJavaScript::jsonEncode(array(
+                        DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
+                        DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
+                    ));
+                    exit;
                 } else {
                     $this->redirect(array('view','id'=>$model->id));
                 }
             }
             
             if($ajax){
-                $this->layout='//layouts/ajax';
-                $this->render('updateImageReal', array(
-                    'model' => $model,
-                    DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                echo CJSON::encode(array(
+                    DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
+                    DomainConst::KEY_CONTENT => $this->renderPartial('updateImageReal',array(
+                            'model'=>$model,
+                            DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                        ), true, true),
                 ));
+                exit;
             } else {
                 $this->render('updateImageReal', array(
                     'model' => $model,

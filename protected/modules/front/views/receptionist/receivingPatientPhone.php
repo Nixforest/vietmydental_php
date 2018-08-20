@@ -651,40 +651,67 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
     
     //++ BUG0056-IMT (DuongNV 20180811) Update image data treatment
     /**
-    * call colorbox 
-    * @returns {undefined}     
+    * Update camera and XRay image
     */
-        //++ BUG0056-IMT (DuongNV 20180815) Fix colorbox error
-    function load_js(){ // reload js
-      var script= document.createElement('script');
-      script.src= '<?php echo Yii::app()->theme->baseUrl . '/js/jquery.colorbox-min.js' ?>';
-      $('#right-content').append(script);
-    }
-    function afterShowCustomerInfo(e){
-        var scr = $('script[src="<?php echo Yii::app()->theme->baseUrl . '/js/jquery.colorbox-min.js' ?>"]');
-        scr.remove(); // Remove colorbox script
-        // Remove duplicate elem
-        var i = 0;
-        $('div#colorbox').each(function(){
-            i++;
-            theHidden = $(this).attr('id');
-            if( i == 2 ) $(this).remove();
-        });
-        i = 0;
-        $('div#cboxOverlay').each(function(){
-            i++;
-            theHidden = $(this).attr('id');
-            if( i == 2 ) $(this).remove();
-        }); // End remove duplicate elem
+    $(document).on('click', '.imageXQuang, .imageCamera', function(e){
+        $('form#treatment-schedule-details-form').remove();
         e.preventDefault();
-        load_js(); // Reload script
-        $(".imageXQuang, .imageCamera").colorbox({
-           iframe:true,
-           innerHeight:'600', 
-           innerWidth: '1000',
-           close: "<span title='close'>close</span>",
-       });
+        $("#dialogId").dialog(opt).dialog("open");
+        var id = $(this).data('id');
+        ($(this).data('type') == 'xray') ? updateXRayImage(id) : updateCameraImage(id);
+    });
+    function updateCameraImage(_id = '') {
+        fnLoadFormCSS();
+        url = '<?php echo Yii::app()->createAbsoluteUrl(
+                'admin/treatmentScheduleDetails/updateImageReal'); ?>';
+        title = 'Cập nhật hình ảnh Camera';
+        url += '/id/' + _id + '/ajax/1';
+        requestAjax(url, title, updateCameraImage, _id);
+        return false;
     }
-        //-- BUG0056-IMT (DuongNV 20180815) Fix colorbox error
+    function updateXRayImage(_id = '') {
+        fnLoadFormCSS();
+        url = '<?php echo Yii::app()->createAbsoluteUrl(
+                'admin/treatmentScheduleDetails/updateImageXRay'); ?>';
+        title = 'Cập nhật hình ảnh XQuang';
+        url += '/id/' + _id + '/ajax/1';
+        requestAjax(url, title, updateXRayImage, _id);
+        return false;
+    }
+    function fnLoadDialogContentWithParams(data, title, fnHandler, params) {
+        // Set content of dialog
+        $('#dialogId div.divForFormClass').html(
+                data['<?php echo DomainConst::KEY_CONTENT; ?>']);
+        // Set title of dialog
+        $('.ui-dialog-title').html(title);
+        // Here is the trick: on submit-> once again this function!
+        $('#dialogId div.divForFormClass form').submit(function(e){
+            fnHandler(params);
+            e.preventDefault();
+        });
+    }
+    function requestAjax(url, title, callback, params){
+        var data = new FormData($('form#treatment-schedule-details-form')[0]);
+        $.ajax({
+            url: url,
+            data: data,
+            type: 'post',
+            dataType: "json",
+            success: function(data) {
+                // After submit
+                if (fnIsDataSuccess(data)) {
+                    $('#dialogId div.divForFormClass').html(data['<?php echo DomainConst::KEY_CONTENT; ?>']);
+                    setTimeout("$('.ui-icon.ui-icon-closethick').click()", 1000);
+                } else {    // Load first time
+                    fnLoadDialogContentWithParams(data,
+                       title,
+                       callback, params);
+                }
+            },
+            cache: false,
+            contentType: false,
+            processData: false,
+        });
+    }
     //-- BUG0056-IMT (DuongNV 20180811) Update image data treatment
 </script>

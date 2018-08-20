@@ -142,10 +142,10 @@ class HtmlHandler {
                     .        '<ul class="dropdown-menu" style="min-width:100px;">'
                     .           '<li class="createPrescription">' . $prescriptItem . '</li>'
                     .           '<li class="createProcess"><a style="cursor:pointer;"><i class="fas fa-stethoscope"></i> Tạo Tiến trình điều trị</a></li>'
-                    //++ BUG0056-IMT (DuongNV 20180815) Fix colorbox error
-                    .           '<li><a class="imageCamera" style="cursor:pointer;" href="' . $urlReal . '" onclick="afterShowCustomerInfo(event)"> <i class="fas fa-camera" style="margin:0 1px;"></i> Hình ảnh Camera</a></li>'
-                    .           '<li><a class="imageXQuang" style="cursor:pointer;" href="' . $urlXRay . '" onclick="afterShowCustomerInfo(event)"><i class="fas fa-x-ray"></i> Hình ảnh X-Quang</a></li>'
-                    //-- BUG0056-IMT (DuongNV 20180815) Fix colorbox error
+                    //++ BUG0056-IMT (DuongNV 20180815) Load dialog
+                    .           '<li><a class="imageCamera" data-type="camera" style="cursor:pointer;" data-id="' . $id . '"> <i class="fas fa-camera" style="margin:0 1px;"></i> Hình ảnh Camera</a></li>'
+                    .           '<li><a class="imageXQuang" data-type="xray" style="cursor:pointer;" data-id="' . $id . '"> <i class="fas fa-x-ray"></i> Hình ảnh X-Quang</a></li>'
+                    //-- BUG0056-IMT (DuongNV 20180815) Load dialog
                     .           '<li class="requestRecoveryImage" data-id="'.$id.'"><a style="cursor:pointer;"><i class="fas fa-exchange-alt"></i> Tạo yêu cầu phục hình</a></li>'
                     .       '</ul>'
                     .    '</div>';
