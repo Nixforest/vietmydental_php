@@ -667,20 +667,22 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
             alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
         });
         //++ BUG0056-IMT (DuongNV 20180811) Update image data treatment
-        $(document).on('click', '.imageCamera', function(){
-//            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
-            var id = $(this).data('id');
-            $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
+            //++ BUG0056-IMT (DuongNV 20180820) Load dialog update image
+//        $(document).on('click', '.imageCamera', function(){
+////            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
+//            var id = $(this).data('id');
+//            $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
                     'admin/treatmentScheduleDetails/updateImageReal',
-                    array('id' => '')) ?>/' + id);
-        });
-        $(document).on('click', '.imageXQuang', function(){
-//            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
-            var id = $(this).data('id');
-            $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
+                    array('id' => '')) ?>///' + id);
+//        });
+//        $(document).on('click', '.imageXQuang', function(){
+////            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
+//            var id = $(this).data('id');
+//            $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
                     'admin/treatmentScheduleDetails/updateImageXRay',
-                    array('id' => '')) ?>/' + id);
-        });
+                    array('id' => '')) ?>///' + id);
+//        });
+            //-- BUG0056-IMT (DuongNV 20180820) Load dialog update image
         
 //         $(document).on('click', '.requestRecoveryImage', function(){
 //             var id = $(this).data('id');
@@ -709,5 +711,77 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
 //           close: "<span title='close'>close</span>"
 //       });
 //    }
+        //++ BUG0056-IMT (DuongNV 20180820) Load dialog update image
+    /**
+    * Update camera and XRay image
+    */
+    $(document).on('click', '.imageXQuang, .imageCamera', function(e){
+        $('form#treatment-schedule-details-form').remove();
+        e.preventDefault();
+        $("#dialogId").dialog(opt).dialog("open");
+        var id = $(this).data('id');
+        ($(this).data('type') == 'xray') ? updateXRayImage(id) : updateCameraImage(id);
+    });
+    
+    function updateCameraImage(_id = '') {
+        fnLoadFormCSS();
+        url = '<?php echo Yii::app()->createAbsoluteUrl(
+                'admin/treatmentScheduleDetails/updateImageReal'); ?>';
+        title = 'Cập nhật hình ảnh Camera';
+        url += '/id/' + _id + '/ajax/1';
+        requestAjax(url, title, updateCameraImage, _id);
+        return false;
+    }
+    
+    function updateXRayImage(_id = '') {
+        fnLoadFormCSS();
+        url = '<?php echo Yii::app()->createAbsoluteUrl(
+                'admin/treatmentScheduleDetails/updateImageXRay'); ?>';
+        title = 'Cập nhật hình ảnh XQuang';
+        url += '/id/' + _id + '/ajax/1';
+        requestAjax(url, title, updateXRayImage, _id);
+        return false;
+    }
+    
+    /*
+     * Load dialog content with params
+     */
+    function fnLoadDialogContentWithParams(data, title, fnHandler, params) {
+        // Set content of dialog
+        $('#dialogId div.divForFormClass').html(
+                data['<?php echo DomainConst::KEY_CONTENT; ?>']);
+        // Set title of dialog
+        $('.ui-dialog-title').html(title);
+        // Here is the trick: on submit-> once again this function!
+        $('#dialogId div.divForFormClass form').submit(function(e){
+            fnHandler(params);
+            e.preventDefault();
+        });
+    }
+    
+    function requestAjax(url, title, callback, params){
+        var data = new FormData($('form#treatment-schedule-details-form')[0]);
+        $.ajax({
+            url: url,
+            data: data,
+            type: 'post',
+            dataType: "json",
+            success: function(data) {
+                // After submit
+                if (fnIsDataSuccess(data)) {
+                    $('#dialogId div.divForFormClass').html(data['<?php echo DomainConst::KEY_CONTENT; ?>']);
+                    setTimeout("$('.ui-icon.ui-icon-closethick').click()", 1000);
+                } else {    // Load first time
+                    fnLoadDialogContentWithParams(data,
+                       title,
+                       callback, params);
+                }
+            },
+            cache: false,
+            contentType: false,
+            processData: false,
+        });
+    }
+        //-- BUG0056-IMT (DuongNV 20180820) Load dialog update image
     //-- BUG0056-IMT (DuongNV 20180811) Update image data treatment
 </script>
