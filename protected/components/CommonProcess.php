@@ -116,13 +116,13 @@ class CommonProcess {
         if ($emptyOption) {
             return array(
                 '' => '',
-                DomainConst::NUMBER_ONE_VALUE => DomainConst::CONTENT00001,
-                DomainConst::NUMBER_ZERO_VALUE => DomainConst::CONTENT00002
+                DomainConst::NUMBER_ZERO_VALUE => DomainConst::CONTENT00002,
+                DomainConst::NUMBER_ONE_VALUE => DomainConst::CONTENT00001
             );
         } else {
             return array(
-                DomainConst::NUMBER_ONE_VALUE => DomainConst::CONTENT00001,
-                DomainConst::NUMBER_ZERO_VALUE => DomainConst::CONTENT00002
+                DomainConst::NUMBER_ZERO_VALUE => DomainConst::CONTENT00002,
+                DomainConst::NUMBER_ONE_VALUE => DomainConst::CONTENT00001
             );
         }
     }
@@ -352,6 +352,14 @@ class CommonProcess {
             return Yii::app()->user->role_id;
         }
         return '';
+    }
+    
+    /**
+     * Get current agent id
+     * @return String Id of agent
+     */
+    public static function getCurrentAgentId() {
+        return isset(Yii::app()->user) ? Yii::app()->user->agent_id : '';
     }
     
     /**
