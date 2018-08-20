@@ -913,6 +913,7 @@ class ReceptionistController extends FrontController {
                 $model->handleSearch();
             } else {
                 $model = new LaboRequests('create');
+                $model->date_request = date(DomainConst::DATE_FORMAT_3);
                 $model->treatment_detail_id = $id;
             }
             

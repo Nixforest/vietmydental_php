@@ -59,7 +59,6 @@ class LaboRequests extends BaseActiveRecord {
         // will receive user inputs.
         return array(
             array('price, service_id', 'required', 'on' => 'create,update'),
-            array('price', 'numerical'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('id, treatment_detail_id, service_id, date_request, date_receive, date_test, tooth_color, teeths, description, price, status, created_date, created_by', 'safe'),
