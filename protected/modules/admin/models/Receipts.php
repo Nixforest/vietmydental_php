@@ -4,150 +4,152 @@
  * This is the model class for table "receipts".
  *
  * The followings are the available columns in table 'receipts':
- * @property string $id
- * @property string $detail_id
- * @property string $process_date
- * @property string $total
- * @property string $discount
- * @property string $final
- * @property integer $need_approve
- * @property integer $customer_confirm
- * @property string $description
- * @property string $created_date
- * @property string $created_by
- * @property string $receiptionist_id
- * @property integer $status
+ * @property string $id                     Id of record
+ * @property string $detail_id              TreatmentScheduleDetails id
+ * @property string $process_date           Date process
+ * @property string $total                  Total value
+ * @property string $discount               Discount value
+ * @property string $final                  Final value
+ * @property integer $need_approve          Need approve
+ * @property integer $customer_confirm      Confirm from customer
+ * @property string $description            Description
+ * @property string $created_date           Created date
+ * @property string $created_by             Created by
+ * @property string $receiptionist_id       Id of receptionist
+ * @property integer $status                Status
+ * 
+ * The followings are the available model relations:
+ * @property TreatmentScheduleDetails       $rTreatmentScheduleDetail       TreatmentScheduleDetals model
+ * @property OneMany[]                      $rJoinAgent                     List OneMany models with type = OneMany::TYPE_AGENT_RECEIPT
+ * @property Users                          $rCreatedBy                     User created this record
+ * @property Users                          $rReceiptionist                 Receptionist associated with this record
  */
-class Receipts extends CActiveRecord
-{
+class Receipts extends CActiveRecord {
+
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
-    const DEFAULT_COLUMN                = 0;
-    const STATUS_INACTIVE               = 0;
-    const STATUS_ACTIVE                 = 1;
-    const STATUS_DOCTOR                 = 2;
-    const STATUS_RECEIPTIONIST          = 3;
+    const DEFAULT_COLUMN        = 0;
+    const STATUS_INACTIVE       = 0;
+    const STATUS_ACTIVE         = 1;
+    const STATUS_DOCTOR         = 2;
+    const STATUS_RECEIPTIONIST  = 3;
+
     public $agent;
-	/**
-	 * Returns the static model of the specified AR class.
-	 * @param string $className active record class name.
-	 * @return Receipts the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
 
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return 'receipts';
-	}
+    /**
+     * Returns the static model of the specified AR class.
+     * @param string $className active record class name.
+     * @return Receipts the static model class
+     */
+    public static function model($className = __CLASS__) {
+        return parent::model($className);
+    }
 
-	/**
-	 * @return array validation rules for model attributes.
-	 */
-	public function rules()
-	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-			array('detail_id, process_date, final', 'required'),
-			array('need_approve, customer_confirm, status', 'numerical', 'integerOnly'=>true),
-			array('detail_id, discount, created_by, receiptionist_id', 'length', 'max'=>11),
-			array('total, final', 'length', 'max'=>10),
-			array('description, promotion_id', 'safe'),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('id, detail_id, process_date, total, discount, final, need_approve, customer_confirm, description, created_date, created_by, receiptionist_id, status', 'safe', 'on'=>'search'),
-		);
-	}
+    /**
+     * @return string the associated database table name
+     */
+    public function tableName() {
+        return 'receipts';
+    }
 
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-                    'rTreatmentScheduleDetail' => array(
-                        self::BELONGS_TO, 'TreatmentScheduleDetails',
-                        'detail_id'
-                    ),
-                    'rJoinAgent' => array(
-                        self::HAS_ONE, 'OneMany', 'many_id',
-                        'on'    => 'type = ' . OneMany::TYPE_AGENT_RECEIPT,
-                    ),
-                    'rUser' => array(
-                        self::BELONGS_TO, 'Users', 'created_by'
-                    ),
-                    'rReceiptionist' => array(
-                        self::BELONGS_TO, 'Users', 'receiptionist_id'
-                    )
-		);
-	}
+    /**
+     * @return array validation rules for model attributes.
+     */
+    public function rules() {
+        // NOTE: you should only define rules for those attributes that
+        // will receive user inputs.
+        return array(
+            array('detail_id, process_date, final', 'required'),
+            array('need_approve, customer_confirm, status', 'numerical', 'integerOnly' => true),
+            array('detail_id, discount, created_by, receiptionist_id', 'length', 'max' => 11),
+            array('total, final', 'length', 'max' => 10),
+            array('description, promotion_id', 'safe'),
+            // The following rule is used by search().
+            // Please remove those attributes that should not be searched.
+            array('id, detail_id, process_date, total, discount, final, need_approve, customer_confirm, description, created_date, created_by, receiptionist_id, status', 'safe', 'on' => 'search'),
+        );
+    }
 
-	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return array(
-			'id' => 'ID',
-			'detail_id' => DomainConst::CONTENT00146,
-			'process_date' => DomainConst::CONTENT00241,
-			'total' => DomainConst::CONTENT00254,
-			'discount' => DomainConst::CONTENT00242,
-			'final' => DomainConst::CONTENT00259,
-			'need_approve' => DomainConst::CONTENT00243,
-			'customer_confirm' => DomainConst::CONTENT00244,
-			'description' => DomainConst::CONTENT00091,
-			'created_date' => DomainConst::CONTENT00010,
-			'created_by' => DomainConst::CONTENT00054,
-			'receiptionist_id' => DomainConst::CONTENT00246,
-			'status' => DomainConst::CONTENT00026,
-			'promotion_id' => DomainConst::CONTENT00411,
-		);
-	}
+    /**
+     * @return array relational rules.
+     */
+    public function relations() {
+        // NOTE: you may need to adjust the relation name and the related
+        // class name for the relations automatically generated below.
+        return array(
+            'rTreatmentScheduleDetail' => array(
+                self::BELONGS_TO, 'TreatmentScheduleDetails',
+                'detail_id'
+            ),
+            'rJoinAgent' => array(
+                self::HAS_ONE, 'OneMany', 'many_id',
+                'on' => 'type = ' . OneMany::TYPE_AGENT_RECEIPT,
+            ),
+            'rUser' => array(
+                self::BELONGS_TO, 'Users', 'created_by'
+            ),
+            'rReceiptionist' => array(
+                self::BELONGS_TO, 'Users', 'receiptionist_id'
+            )
+        );
+    }
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels() {
+        return array(
+            'id'                => 'ID',
+            'detail_id'         => DomainConst::CONTENT00146,
+            'process_date'      => DomainConst::CONTENT00241,
+            'total'             => DomainConst::CONTENT00254,
+            'discount'          => DomainConst::CONTENT00242,
+            'final'             => DomainConst::CONTENT00259,
+            'need_approve'      => DomainConst::CONTENT00243,
+            'customer_confirm'  => DomainConst::CONTENT00244,
+            'description'       => DomainConst::CONTENT00091,
+            'created_date'      => DomainConst::CONTENT00010,
+            'created_by'        => DomainConst::CONTENT00054,
+            'receiptionist_id'  => DomainConst::CONTENT00246,
+            'status'            => DomainConst::CONTENT00026,
+            'promotion_id'      => DomainConst::CONTENT00411,
+        );
+    }
 
-		$criteria=new CDbCriteria;
+    /**
+     * Retrieves a list of models based on the current search/filter conditions.
+     * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+     */
+    public function search() {
+        // Warning: Please modify the following code to remove attributes that
+        // should not be searched.
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('detail_id',$this->detail_id,true);
-		$criteria->compare('process_date',$this->process_date,true);
-		$criteria->compare('total',$this->total,true);
-		$criteria->compare('discount',$this->discount,true);
-		$criteria->compare('final',$this->final,true);
-		$criteria->compare('need_approve',$this->need_approve);
-		$criteria->compare('customer_confirm',$this->customer_confirm);
-		$criteria->compare('description',$this->description,true);
-		$criteria->compare('created_date',$this->created_date,true);
-		$criteria->compare('created_by',$this->created_by,true);
-		$criteria->compare('receiptionist_id',$this->receiptionist_id,true);
-		$criteria->compare('status',$this->status);
-                $criteria->order = 'id DESC';
+        $criteria = new CDbCriteria;
 
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-                        'pagination' => array(
-                            'pageSize' => Settings::getListPageSize(),
-                        ),
-		));
-	}
-        
+        $criteria->compare('id', $this->id, true);
+        $criteria->compare('detail_id', $this->detail_id, true);
+        $criteria->compare('process_date', $this->process_date, true);
+        $criteria->compare('total', $this->total, true);
+        $criteria->compare('discount', $this->discount, true);
+        $criteria->compare('final', $this->final, true);
+        $criteria->compare('need_approve', $this->need_approve);
+        $criteria->compare('customer_confirm', $this->customer_confirm);
+        $criteria->compare('description', $this->description, true);
+        $criteria->compare('created_date', $this->created_date, true);
+        $criteria->compare('created_by', $this->created_by, true);
+        $criteria->compare('receiptionist_id', $this->receiptionist_id, true);
+        $criteria->compare('status', $this->status);
+        $criteria->order = 'id DESC';
+
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+            'pagination' => array(
+                'pageSize' => Settings::getListPageSize(),
+            ),
+        ));
+    }
+
     //-----------------------------------------------------
     // Parent override methods
     //-----------------------------------------------------
@@ -157,17 +159,16 @@ class Receipts extends CActiveRecord
      */
     public function beforeSave() {
         $userId = isset(Yii::app()->user) ? Yii::app()->user->id : '';
-//        CommonProcess::dumpVariable($this->process_date);
         // Format start date value
         $date = $this->process_date;
         $this->process_date = CommonProcess::convertDateTimeToMySqlFormat(
-                $date, DomainConst::DATE_FORMAT_3);
-        
+                        $date, DomainConst::DATE_FORMAT_3);
+
         if (empty($this->process_date)) {
             $this->process_date = CommonProcess::convertDateTimeToMySqlFormat(
                             $date, DomainConst::DATE_FORMAT_4);
         }
-        
+
         // Calculate total money
 //        if (isset($this->rTreatmentScheduleDetail)) {
 //            $this->total = $this->rTreatmentScheduleDetail->getTotalMoney();
@@ -188,15 +189,15 @@ class Receipts extends CActiveRecord
         }
         return parent::beforeSave();
     }
-    
+
     /**
      * Override before delete method
      */
     public function beforeDelete() {
         // Handle Agent relation
         OneMany::deleteAllManyOldRecords($this->id, OneMany::TYPE_AGENT_RECEIPT);
-        
-        Loggers::info("Deleted " . get_class($this) . " with id = $this->id.", __FUNCTION__, __LINE__);
+
+        Loggers::info("Deleted record", $this->id, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         return parent::beforeDelete();
     }
 
@@ -211,7 +212,7 @@ class Receipts extends CActiveRecord
         if ($this->status == self::STATUS_RECEIPTIONIST) {
             return false;
         }
-        
+
         return true;
     }
 
@@ -223,7 +224,7 @@ class Receipts extends CActiveRecord
         OneMany::deleteAllManyOldRecords($this->id, OneMany::TYPE_AGENT_RECEIPT);
         OneMany::insertOne($agentId, $this->id, OneMany::TYPE_AGENT_RECEIPT);
     }
-    
+
     /**
      * Set status base on created user role
      * @param String $roleName Name of role (can empty)
@@ -241,7 +242,7 @@ class Receipts extends CActiveRecord
         }
         $this->status = self::STATUS_ACTIVE;
     }
-    
+
     /**
      * Get customer model
      * @return Customer model, or NULL
@@ -252,7 +253,7 @@ class Receipts extends CActiveRecord
         }
         return NULL;
     }
-    
+
     /**
      * Get customer name
      * @return Customer name, or empty
@@ -264,7 +265,7 @@ class Receipts extends CActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get customer id
      * @return Customer id, or empty
@@ -276,7 +277,7 @@ class Receipts extends CActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get customer record number
      * @return Customer record number, or empty
@@ -290,7 +291,7 @@ class Receipts extends CActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get receptionist name
      * @return type
@@ -303,7 +304,7 @@ class Receipts extends CActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get receptionist status
      * @return type
@@ -316,7 +317,7 @@ class Receipts extends CActiveRecord
         }
         return DomainConst::CONTENT00267;
     }
-    
+
     /**
      * Get treatment type
      * @return Treatment type model, or NULL
@@ -327,7 +328,7 @@ class Receipts extends CActiveRecord
         }
         return NULL;
     }
-    
+
     /**
      * Get treatment type name
      * @return Treatment type name, or empty
@@ -339,20 +340,19 @@ class Receipts extends CActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get insurrence amount (include unit 'VND')
      * @return String Insurrence amount
      */
     public function getInsuranceAmount() {
         $retVal = 0;
-        if (isset($this->rTreatmentScheduleDetail)
-                && isset($this->rTreatmentScheduleDetail->rSchedule)) {
+        if (isset($this->rTreatmentScheduleDetail) && isset($this->rTreatmentScheduleDetail->rSchedule)) {
             $retVal = $this->rTreatmentScheduleDetail->rSchedule->insurrance;
         }
         return CommonProcess::formatCurrencyWithUnit($retVal);
     }
-    
+
     /**
      * Get ajax information
      * @return string
@@ -374,63 +374,63 @@ class Receipts extends CActiveRecord
         }
         //++ BUG0038-IMT (DuongNV 201807) Update UI receipt
         $rightContent = '<div class="info-result" style="background:white">';
-        $rightContent .=    '<div class="title-2">' . DomainConst::CONTENT00174 . '</div>';
-        $rightContent .=    '<div class="item-search">';
-        $rightContent .=        '<table class="table table-borderless">';
-        $rightContent .=            '<tr>';
+        $rightContent .= '<div class="title-2">' . DomainConst::CONTENT00174 . '</div>';
+        $rightContent .= '<div class="item-search">';
+        $rightContent .= '<table class="table table-borderless">';
+        $rightContent .= '<tr>';
 //        $rightContent .=                '<td>' . DomainConst::CONTENT00145 . ': </td>';
-        $rightContent .=                '<td style="width:35px;"><i class="fas fa-tooth" title="'.DomainConst::CONTENT00145.'"></i></td>';
-        $rightContent .=                '<td>' . $teeth . '' . '</td>';
-        $rightContent .=            '</tr>';
-        $rightContent .=            '<tr>';
+        $rightContent .= '<td style="width:35px;"><i class="fas fa-tooth" title="' . DomainConst::CONTENT00145 . '"></i></td>';
+        $rightContent .= '<td>' . $teeth . '' . '</td>';
+        $rightContent .= '</tr>';
+        $rightContent .= '<tr>';
 //        $rightContent .=                '<td>' . DomainConst::CONTENT00231 . ': </td>';
-        $rightContent .=                '<td><i class="fas fa-diagnoses" title="' . DomainConst::CONTENT00231 . '" style="position:relative;right:3px;"></i></td>';
-        $rightContent .=                '<td>' . $diagnosis . '' . '</td>';
-        $rightContent .=            '</tr>';
-        $rightContent .=            '<tr>';
+        $rightContent .= '<td><i class="fas fa-diagnoses" title="' . DomainConst::CONTENT00231 . '" style="position:relative;right:3px;"></i></td>';
+        $rightContent .= '<td>' . $diagnosis . '' . '</td>';
+        $rightContent .= '</tr>';
+        $rightContent .= '<tr>';
 //        $rightContent .=                '<td>' . DomainConst::CONTENT00128 . ': </td>';
-        $rightContent .=                '<td><i class="fas fa-calendar-check" title="' . DomainConst::CONTENT00128 . '"></i></td>';
-        $rightContent .=                '<td>' . $treatmentType . '' . '</td>';
-        $rightContent .=            '</tr>';
-        $rightContent .=        '</table>';
-        $rightContent .=    '</div>';
-        $rightContent .=    '<div class="title-2">' . DomainConst::CONTENT00251 . '</div>';
-        $rightContent .=    '<div class="item-search">'; 
-        $rightContent .=        '<table>';
-        $rightContent .=            '<tr>';
+        $rightContent .= '<td><i class="fas fa-calendar-check" title="' . DomainConst::CONTENT00128 . '"></i></td>';
+        $rightContent .= '<td>' . $treatmentType . '' . '</td>';
+        $rightContent .= '</tr>';
+        $rightContent .= '</table>';
+        $rightContent .= '</div>';
+        $rightContent .= '<div class="title-2">' . DomainConst::CONTENT00251 . '</div>';
+        $rightContent .= '<div class="item-search">';
+        $rightContent .= '<table>';
+        $rightContent .= '<tr>';
 //        $rightContent .=                '<td>' . DomainConst::CONTENT00254 . ': </td>';
-        $rightContent .=                '<td style="width:35px;"><i class="fas fa-cart-plus" title="' . DomainConst::CONTENT00254 . '"></i></td>';
-        $rightContent .=                '<td align="right">' . CommonProcess::formatCurrency($money) . '' . '</td>';
-        $rightContent .=            '</tr>';
-        $rightContent .=            '<tr>';
+        $rightContent .= '<td style="width:35px;"><i class="fas fa-cart-plus" title="' . DomainConst::CONTENT00254 . '"></i></td>';
+        $rightContent .= '<td align="right">' . CommonProcess::formatCurrency($money) . '' . '</td>';
+        $rightContent .= '</tr>';
+        $rightContent .= '<tr>';
 //        $rightContent .=                '<td>' . DomainConst::CONTENT00257 . ': </td>';
-        $rightContent .=                '<td><i class="fas fa-piggy-bank" title="' . DomainConst::CONTENT00257 . '"></i></td>';
-        $rightContent .=                '<td align="right">' . CommonProcess::formatCurrency($this->discount) . '' . '</td>';
-        $rightContent .=            '</tr>';
-        $rightContent .=            '<tr>';
+        $rightContent .= '<td><i class="fas fa-piggy-bank" title="' . DomainConst::CONTENT00257 . '"></i></td>';
+        $rightContent .= '<td align="right">' . CommonProcess::formatCurrency($this->discount) . '' . '</td>';
+        $rightContent .= '</tr>';
+        $rightContent .= '<tr>';
 //        $rightContent .=                '<td>' . DomainConst::CONTENT00259 . ': </td>';
-        $rightContent .=                '<td><i class="fas fa-credit-card" title="' . DomainConst::CONTENT00259 . '"></i></td>';
-        $rightContent .=                '<td align="right">' . CommonProcess::formatCurrency($this->final) . '' . '</td>';
-        $rightContent .=            '</tr>';
+        $rightContent .= '<td><i class="fas fa-credit-card" title="' . DomainConst::CONTENT00259 . '"></i></td>';
+        $rightContent .= '<td align="right">' . CommonProcess::formatCurrency($this->final) . '' . '</td>';
+        $rightContent .= '</tr>';
         if (!empty($insurance)) {
-            $rightContent .=            '<tr>';
+            $rightContent .= '<tr>';
 //            $rightContent .=                '<td>' . DomainConst::CONTENT00260 . ': </td>';
-            $rightContent .=                '<td><i class="fas fa-notes-medical" title="' . DomainConst::CONTENT00260 . '"></i></td>';;
-            $rightContent .=                '<td align="right">' . $insurance . '' . '</td>';
-            $rightContent .=            '</tr>';
+            $rightContent .= '<td><i class="fas fa-notes-medical" title="' . DomainConst::CONTENT00260 . '"></i></td>';
+            $rightContent .= '<td align="right">' . $insurance . '' . '</td>';
+            $rightContent .= '</tr>';
         }
-        $rightContent .=            '<tr>';
+        $rightContent .= '<tr>';
 //        $rightContent .=                '<td>' . DomainConst::CONTENT00091 . ': </td>';
-        $rightContent .=                '<td><i class="fas fa-sticky-note" title="' . DomainConst::CONTENT00091 . '"></i></td>';;
-        $rightContent .=                '<td align="right">' . $this->description . '' . '</td>';
-        $rightContent .=            '</tr>';
-        $rightContent .=        '</table>';
-        $rightContent .=    '</div>';
-        
-        $rightContent .=        '<table>';
-        $rightContent .=            '<tr>';
+        $rightContent .= '<td><i class="fas fa-sticky-note" title="' . DomainConst::CONTENT00091 . '"></i></td>';
+        $rightContent .= '<td align="right">' . $this->description . '' . '</td>';
+        $rightContent .= '</tr>';
+        $rightContent .= '</table>';
+        $rightContent .= '</div>';
+
+        $rightContent .= '<table>';
+        $rightContent .= '<tr>';
         if ($this->status == self::STATUS_DOCTOR) {
-            $rightContent .=                '<td>';
+            $rightContent .= '<td>';
 //            $rightContent .= HtmlHandler::createButtonWithImage(
 //                    Yii::app()->createAbsoluteUrl("front/receptionist/update", array(
 //                        "id" => $this->id,
@@ -439,16 +439,14 @@ class Receipts extends CActiveRecord
 //                    '<br>' . DomainConst::CONTENT00265,
 //                    DomainConst::IMG_COMPLETED_ICON);
             $rightContent .= HtmlHandler::createBstButton(
-                    Yii::app()->createAbsoluteUrl("front/receptionist/update", array(
-                        "id" => $this->id,
-                        'action'    => DateTimeExt::isToday($this->process_date, DomainConst::DATE_FORMAT_4) ? 'receipt' : 'receiptOld',
-                    )),
-                    DomainConst::CONTENT00265,
-                    'fas fa-check');
-            $rightContent .=                '</td>';
+                            Yii::app()->createAbsoluteUrl("front/receptionist/update", array(
+                                "id" => $this->id,
+                                'action' => DateTimeExt::isToday($this->process_date, DomainConst::DATE_FORMAT_4) ? 'receipt' : 'receiptOld',
+                            )), DomainConst::CONTENT00265, 'fas fa-check');
+            $rightContent .= '</td>';
         }
-        
-        $rightContent .=                '<td>';
+
+        $rightContent .= '<td>';
 //        $rightContent .= HtmlHandler::createButtonWithImage(
 //                Yii::app()->createAbsoluteUrl("front/receptionist/printReceipt", array(
 //                    "id" => $this->id,
@@ -456,66 +454,46 @@ class Receipts extends CActiveRecord
 //                '<br>' . DomainConst::CONTENT00264,
 //                DomainConst::IMG_PRINT_ICON, false);
         $rightContent .= HtmlHandler::createBstButton(
-                Yii::app()->createAbsoluteUrl("front/receptionist/printReceipt", array(
-                    "id" => $this->id,
-                )),
-                DomainConst::CONTENT00264,
-                'glyphicon glyphicon-print', false);
-        $rightContent .=                '</td>';
-        $rightContent .=                '<td>';
-        
+                        Yii::app()->createAbsoluteUrl("front/receptionist/printReceipt", array(
+                            "id" => $this->id,
+                        )), DomainConst::CONTENT00264, 'glyphicon glyphicon-print', false);
+        $rightContent .= '</td>';
+        $rightContent .= '<td>';
+
 //        $rightContent .= HtmlHandler::createAjaxButtonWithImage(
 //                '<br>' . DomainConst::CONTENT00373, DomainConst::IMG_PRINT_ALL_ICON,
 //                '{createPrintDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');}',
 //                'cursor: pointer;');
         $customerId = $this->getCustomerId();
         $rightContent .= HtmlHandler::createBstAjaxButton(
-                DomainConst::CONTENT00373, 'fas fa-print',
+                        DomainConst::CONTENT00373, 'fas fa-print',
 //                '{createPrintDialog(); $(\'#dialogPrintReceipt\').dialog(\'open\');}',
-                '{fnOpenPrintReceipt(\'' . $customerId . '\');}',
-                'cursor: pointer;');
+                        '{fnOpenPrintReceipt(\'' . $customerId . '\');}', 'cursor: pointer;');
         //-- BUG0038-IMT (DuongNV 201807) Update UI receipt
-        $rightContent .=                '</td>';
-        $rightContent .=            '</tr>';
-        $rightContent .=        '</table>';
-        
+        $rightContent .= '</td>';
+        $rightContent .= '</tr>';
+        $rightContent .= '</table>';
+
         $rightContent .= '</div>';
         return $rightContent;
     }
-    
+
     /**
      * Get json information
      * @return type String json
      */
     public function getJsonInfo() {
         $info = array();
-        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_START_DATE,
-                DomainConst::CONTENT00241,
-                CommonProcess::convertDateTime($this->process_date,
-                        DomainConst::DATE_FORMAT_4,
-                        DomainConst::DATE_FORMAT_3));
-        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_DISCOUNT,
-                DomainConst::CONTENT00242,
-                $this->discount);
-        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_FINAL,
-                DomainConst::CONTENT00259,
-                $this->final);
-        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_NEED_APPROVE,
-                DomainConst::CONTENT00243,
-                $this->need_approve);
-        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_CUSTOMER_CONFIRMED,
-                DomainConst::CONTENT00244,
-                $this->customer_confirm);
-        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_DESCRIPTION,
-                DomainConst::CONTENT00091,
-                $this->description);
-        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_CAN_UPDATE,
-                DomainConst::CONTENT00232,
-                $this->status != self::STATUS_RECEIPTIONIST
-                ? DomainConst::NUMBER_ONE_VALUE : DomainConst::NUMBER_ZERO_VALUE);
+        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_START_DATE, DomainConst::CONTENT00241, CommonProcess::convertDateTime($this->process_date, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_3));
+        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_DISCOUNT, DomainConst::CONTENT00242, $this->discount);
+        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_FINAL, DomainConst::CONTENT00259, $this->final);
+        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_NEED_APPROVE, DomainConst::CONTENT00243, $this->need_approve);
+        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_CUSTOMER_CONFIRMED, DomainConst::CONTENT00244, $this->customer_confirm);
+        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_DESCRIPTION, DomainConst::CONTENT00091, $this->description);
+        $info[] = CommonProcess::createConfigJson(CustomerController::ITEM_CAN_UPDATE, DomainConst::CONTENT00232, $this->status != self::STATUS_RECEIPTIONIST ? DomainConst::NUMBER_ONE_VALUE : DomainConst::NUMBER_ZERO_VALUE);
         return $info;
     }
-    
+
     /**
      * Get current status
      * @return String
@@ -523,7 +501,7 @@ class Receipts extends CActiveRecord
     public function getCurrentStatus() {
         return self::getStatus()[$this->status];
     }
-    
+
     /**
      * Get value of id
      * @return String
@@ -532,7 +510,7 @@ class Receipts extends CActiveRecord
         $retVal = CommonProcess::generateID(DomainConst::RECEIPT_ID_PREFIX, $this->id);
         return $retVal;
     }
-    
+
     /**
      * Get discount value
      * @return String
@@ -540,7 +518,7 @@ class Receipts extends CActiveRecord
     public function getDiscount() {
         return CommonProcess::formatCurrency($this->discount);
     }
-    
+
     /**
      * Get final value
      * @return String
@@ -548,13 +526,13 @@ class Receipts extends CActiveRecord
     public function getFinal() {
         return CommonProcess::formatCurrency($this->final);
     }
-    
+
     /**
      * Get total money
      * @return Int Total money
      */
     public function getTotal() {
-        $retVal = 0;
+//        $retVal = 0;
 //        $treatment = $this->getTreatmentType();
 //        if ($this->total == 0) {
 //            if ($treatment != NULL) {
@@ -566,7 +544,7 @@ class Receipts extends CActiveRecord
         $retVal = $this->total;
         return $retVal;
     }
-    
+
     /**
      * Get number of teeth of receipt
      * @return Number of teeth, or "0"
@@ -577,7 +555,7 @@ class Receipts extends CActiveRecord
         }
         return 0;
     }
-    
+
     public function getDebit() {
         $money = $this->getTotal() - $this->discount;                 // Money after discount
         $final = $this->final;      // Final money doctor decide take from customer
@@ -591,7 +569,7 @@ class Receipts extends CActiveRecord
         $debt = $money - $final;
         return $debt;
     }
-    
+
     /**
      * Get debit (in text)
      * @return type
@@ -604,7 +582,7 @@ class Receipts extends CActiveRecord
         return '';
 //            return CommonProcess::formatCurrency($debit) . ' ' . DomainConst::CONTENT00134;
     }
-    
+
     /**
      * Confirm finish Treatment schedule detail
      */
@@ -614,19 +592,22 @@ class Receipts extends CActiveRecord
             $this->rTreatmentScheduleDetail->save();
         }
     }
-    
+
     /**
      * Update customer debt
      */
     public function updateCustomerDebt() {
         $debt = $this->getDebit();
+        Loggers::info('New debit: ', $debt, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         $customer = $this->getCustomer();
         if ($customer != NULL) {
+            Loggers::info('Customer\'s debit (before update): ', $customer->debt, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             $customer->debt = $customer->debt + $debt;
+            Loggers::info('Customer\'s debit (after update): ', $customer->debt, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             $customer->save();
         }
     }
-    
+
     /**
      * Rollback customer debt
      */
@@ -638,7 +619,7 @@ class Receipts extends CActiveRecord
             $customer->save();
         }
     }
-    
+
     /**
      * Get id of agent
      * @return Id of agent
@@ -651,7 +632,7 @@ class Receipts extends CActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get name of agent
      * @return Name of agent
@@ -664,7 +645,7 @@ class Receipts extends CActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get process date
      * @return type
@@ -673,7 +654,7 @@ class Receipts extends CActiveRecord
 //        return CommonProcess::convertDateTime($this->process_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_3);
         return $this->process_date;
     }
-    
+
     /**
      * Check if this model is belong current user
      * @return True if agent id match, False otherwise
@@ -687,7 +668,7 @@ class Receipts extends CActiveRecord
         }
         return false;
     }
-    
+
     /**
      * Check if this model is belong agent
      * @param String agent_id Id of agent
@@ -706,37 +687,36 @@ class Receipts extends CActiveRecord
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
-    public function searchOld()
-    {
-            // Warning: Please modify the following code to remove attributes that
-            // should not be searched.
+    public function searchOld() {
+        // Warning: Please modify the following code to remove attributes that
+        // should not be searched.
 
-            $criteria=new CDbCriteria;
+        $criteria = new CDbCriteria;
 
-            $criteria->compare('id',$this->id,true);
-            $criteria->compare('detail_id',$this->detail_id,true);
-            $now = new CDbExpression("NOW()");
+        $criteria->compare('id', $this->id, true);
+        $criteria->compare('detail_id', $this->detail_id, true);
+//            $now = new CDbExpression("NOW()");
 //            $criteria->addCondition("t.process2_date != " . CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4));
-            $criteria->addCondition('t.process_date < DATE(NOW())');
-            $criteria->compare('total',$this->total,true);
-            $criteria->compare('discount',$this->discount,true);
-            $criteria->compare('final',$this->final,true);
-            $criteria->compare('need_approve',$this->need_approve);
-            $criteria->compare('customer_confirm',$this->customer_confirm);
-            $criteria->compare('description',$this->description,true);
-            $criteria->compare('created_date',$this->created_date,true);
-            $criteria->compare('created_by',$this->created_by,true);
-            $criteria->compare('receiptionist_id',$this->receiptionist_id,true);
-            $criteria->addCondition('t.status != ' . self::STATUS_RECEIPTIONIST);
-            $criteria->addCondition('t.status != ' . self::STATUS_INACTIVE);
-            $criteria->order = 'id DESC';
+        $criteria->addCondition('t.process_date < DATE(NOW())');
+        $criteria->compare('total', $this->total, true);
+        $criteria->compare('discount', $this->discount, true);
+        $criteria->compare('final', $this->final, true);
+        $criteria->compare('need_approve', $this->need_approve);
+        $criteria->compare('customer_confirm', $this->customer_confirm);
+        $criteria->compare('description', $this->description, true);
+        $criteria->compare('created_date', $this->created_date, true);
+        $criteria->compare('created_by', $this->created_by, true);
+        $criteria->compare('receiptionist_id', $this->receiptionist_id, true);
+        $criteria->addCondition('t.status != ' . self::STATUS_RECEIPTIONIST);
+        $criteria->addCondition('t.status != ' . self::STATUS_INACTIVE);
+        $criteria->order = 'id DESC';
 
-            return new CActiveDataProvider($this, array(
-                    'criteria'=>$criteria,
-                    'pagination' => array(
-                        'pageSize' => Settings::getListPageSize(),
-                    ),
-            ));
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+            'pagination' => array(
+                'pageSize' => Settings::getListPageSize(),
+            ),
+        ));
     }
 
     //-----------------------------------------------------
@@ -748,13 +728,13 @@ class Receipts extends CActiveRecord
      */
     public static function getStatus() {
         return array(
-            self::STATUS_INACTIVE       => DomainConst::CONTENT00028,
-            self::STATUS_ACTIVE         => DomainConst::CONTENT00027,
-            self::STATUS_DOCTOR         => DomainConst::CONTENT00247,
-            self::STATUS_RECEIPTIONIST  => DomainConst::CONTENT00248,
+            self::STATUS_INACTIVE => DomainConst::CONTENT00028,
+            self::STATUS_ACTIVE => DomainConst::CONTENT00027,
+            self::STATUS_DOCTOR => DomainConst::CONTENT00247,
+            self::STATUS_RECEIPTIONIST => DomainConst::CONTENT00248,
         );
     }
-    
+
     /**
      * Get list receipts on today
      * @return array List receipts object
@@ -764,14 +744,12 @@ class Receipts extends CActiveRecord
         $models = self::model()->findAll();
         $agentId = isset(Yii::app()->user) ? Yii::app()->user->agent_id : '';
         foreach ($models as $model) {
-            if ($model->status != self::STATUS_INACTIVE
-                    && DateTimeExt::isToday($model->process_date, DomainConst::DATE_FORMAT_4)
-                    && ($model->getAgentId() == $agentId)) {
+            if ($model->status != self::STATUS_INACTIVE && DateTimeExt::isToday($model->process_date, DomainConst::DATE_FORMAT_4) && ($model->getAgentId() == $agentId)) {
 //        CommonProcess::dumpVariable($model->getAgentId());
                 $retVal[] = $model;
             }
         }
-        
+
         return $retVal;
 //        $criteria = new CDbCriteria();
 //        $criteria->addCondition('t.process_date = DATE(NOW())');
@@ -779,7 +757,7 @@ class Receipts extends CActiveRecord
 //        $models = self::model()->findAll($criteria);
 //        return $models;
     }
-    
+
     /**
      * Get list receipts old
      * @return type
@@ -799,7 +777,7 @@ class Receipts extends CActiveRecord
         }
         return $retVal;
     }
-    
+
     /**
      * Get Revenue value
      * @param Date $from From value
@@ -807,24 +785,22 @@ class Receipts extends CActiveRecord
      * @return Final
      */
     public static function getRevenue($from, $to, $agent_id) {
-        Loggers::info(__FUNCTION__ . "($from, $to, $agent_id)", __FUNCTION__, __LINE__);
+        Loggers::info('Revenue', "($from, $to, $agent_id)", __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         $retVal = 0;
         foreach (self::model()->findAll() as $receipt) {
             $date = $receipt->process_date;
             $compareFrom = DateTimeExt::compare($date, $from);
-                $compareTo = DateTimeExt::compare($date, $to);
-                // Check if process date is between date range
-                if (($compareFrom == 1 || $compareFrom == 0)
-                        && ($compareTo == 0 || $compareTo == -1)) {
-                    if (($receipt->status != self::STATUS_INACTIVE)
-                            && $receipt->isBelongAgent($agent_id)) {
-                        $retVal += $receipt->final;
-                    }
+            $compareTo = DateTimeExt::compare($date, $to);
+            // Check if process date is between date range
+            if (($compareFrom == 1 || $compareFrom == 0) && ($compareTo == 0 || $compareTo == -1)) {
+                if (($receipt->status != self::STATUS_INACTIVE) && $receipt->isBelongAgent($agent_id)) {
+                    $retVal += $receipt->final;
                 }
+            }
         }
         return $retVal;
     }
-    
+
     /**
      * Get revenue today
      * @return Final
@@ -833,7 +809,7 @@ class Receipts extends CActiveRecord
         $today = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_6);
         return self::getRevenue($today, $today, $agent_id);
     }
-    
+
     /**
      * Get revenue current month
      * @return Final
@@ -843,18 +819,18 @@ class Receipts extends CActiveRecord
         $today = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_6);
         return self::getRevenue($from, $today, $agent_id);
     }
-    
+
     /**
      * get doctor_id
      * @return Final
      */
-    public function getDoctorId(){
+    public function getDoctorId() {
         if (isset($this->rTreatmentScheduleDetail)) {
             return $this->rTreatmentScheduleDetail->getDoctorId();
         }
         return NULL;
     }
-    
+
     /**
      * Check if model is completed
      * @return boolean True if current status is receptionist, False otherwise
@@ -862,7 +838,10 @@ class Receipts extends CActiveRecord
     public function isCompleted() {
         return $this->status == self::STATUS_RECEIPTIONIST;
     }
-    
+
+    /**
+     * Change status
+     */
     public function changeStatus() {
         switch ($this->status) {
             case self::STATUS_INACTIVE:
@@ -872,7 +851,7 @@ class Receipts extends CActiveRecord
                 break;
         }
     }
-    
+
     /**
      * Get array promotion
      * @return array
@@ -889,6 +868,13 @@ class Receipts extends CActiveRecord
         return $result;
     }
 
+    /**
+     * Get promotion details
+     * @param Object $customer      Customer model
+     * @param Object $mDetail       TreatmentScheduleDetails model
+     * @param boolean $searchFull   Flag search full
+     * @return Array List PromotionDetails objects
+     */
     public function getPromotionDetails($customer, $mDetail, $searchFull = false) {
         $agent_id = Yii::app()->user->agent_id;
         // Get date of receipt
@@ -907,10 +893,10 @@ class Receipts extends CActiveRecord
         if (!$searchFull) {
 //            check customer type
             $criteria->addCondition(
-                      't.customer_types_id = '.$customer_type_id
+                    't.customer_types_id = ' . $customer_type_id
                     . ' OR '
-                    . 't.customer_types_id = '.self::DEFAULT_COLUMN
-                    );
+                    . 't.customer_types_id = ' . self::DEFAULT_COLUMN
+            );
         }
 //        select by agent current
         $criteria->join .= ' JOIN ' . $tblOneMany . ' ag ON p.id = ag.one_id';
@@ -925,17 +911,17 @@ class Receipts extends CActiveRecord
         foreach ($aPromotionDetails as $key => $mPromotionDetails) {
             $aJoin = $mPromotionDetails->rJoinTreatmentType;
             $remove = true;
-            if(!empty($aJoin)){
+            if (!empty($aJoin)) {
                 foreach ($aJoin as $mJoin) {
-                    if($mJoin->many_id == $treatment_type_id){
+                    if ($mJoin->many_id == $treatment_type_id) {
                         $remove = false;
                         break;
                     }
                 }
-            }else{
+            } else {
                 $remove = false;
             }
-            if($remove){
+            if ($remove) {
                 unset($aPromotionDetails[$key]);
             }
         }
@@ -948,11 +934,12 @@ class Receipts extends CActiveRecord
      * @param model $detail
      */
     public function setPromotion($customer, $detail, $total) {
-        if (!$this->isNewRecord)
+        if (!$this->isNewRecord) {
             return;
+        }
         $aPromotion = $this->getPromotionDetails($customer, $detail);
         $max = 0;
-        foreach ($aPromotion as $key => $mPromotionDetails) {
+        foreach ($aPromotion as $mPromotionDetails) {
             if ($mPromotionDetails->type == PromotionDetails::TYPE_DISCOUNT) {
                 $discountCurrent = $total / 100 * $mPromotionDetails->discount;
                 if ($max < $discountCurrent) {
