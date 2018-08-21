@@ -202,6 +202,7 @@ class DailyReportsController extends AdminController
 	{
             $model = $this->loadModel($id);
             $model->status = DailyReports::STATUS_CONFIRM;
+            $model->receipt_total_confirm = $model->receipt_total;
             $model->update();
 	}
         
@@ -213,6 +214,17 @@ class DailyReportsController extends AdminController
 	{
             $model = $this->loadModel($id);
             $model->status = DailyReports::STATUS_PROCESS;
+            $model->update();
+	}
+        
+        /**
+         * process
+         * @param int $id
+         */
+        public function actionCancel($id)
+	{
+            $model = $this->loadModel($id);
+            $model->status = DailyReports::STATUS_CANCEL;
             $model->update();
 	}
 

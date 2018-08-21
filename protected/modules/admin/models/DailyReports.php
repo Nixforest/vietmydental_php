@@ -19,9 +19,11 @@ class DailyReports extends CActiveRecord
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
-    const STATUS_NEW        = 1;
-    const STATUS_PROCESS    = 2;
-    const STATUS_CONFIRM    = 3;
+    const STATUS_NEW                = 1;
+    const STATUS_PROCESS            = 2;
+    const STATUS_CONFIRM            = 3;
+    const STATUS_CANCEL             = 4;
+    const STATUS_SHOULD_REVIEW      = 5;
 
     //-----------------------------------------------------
     // Properties
@@ -108,6 +110,7 @@ class DailyReports extends CActiveRecord
                 $agentId    = isset(Yii::app()->user->agent_id) ? Yii::app()->user->agent_id : 0;
                 $criteria->compare('agent_id',$agentId);
                 if(!$this->canViewAll()){
+                    $criteria->addCondition('status != '.self::STATUS_NEW);
                     $criteria->compare('approve_id',Yii::app()->user->id);
                 }
                 return new CActiveDataProvider($this, array(
@@ -121,9 +124,11 @@ class DailyReports extends CActiveRecord
          */
         public function getArrayStatus(){
             return [
-                self::STATUS_NEW        => 'Mới tạo',
-                self::STATUS_PROCESS    => 'Đang xử lý',
-                self::STATUS_CONFIRM    => 'Đã xác thực',
+                self::STATUS_NEW                => 'Mới tạo',
+                self::STATUS_PROCESS            => 'Đang yêu cầu duyệt',
+                self::STATUS_CONFIRM            => 'Đã xác nhận',
+                self::STATUS_CANCEL             => 'Không duyệt',
+                self::STATUS_SHOULD_REVIEW      => 'Cần xem xét lại',
             ];
         }
         
@@ -269,11 +274,183 @@ class DailyReports extends CActiveRecord
         }
         
         /**
+         * can send notify report
+         * @return boolean
+         */
+        public function canProcess(){
+            switch ($this->status){
+                case self::STATUS_NEW:
+                    switch (CommonProcess::getCurrentRoleId()) {
+                        case Roles::getRoleByName(Roles::ROLE_RECEPTIONIST)->id:
+                            return true;
+
+                        case Roles::getRoleByName(Roles::ROLE_ADMIN)->id:
+                            return true;
+                        
+                        case Roles::getRoleByName(Roles::ROLE_DOCTOR)->id:
+                            return false;
+
+                        default:
+                            break;
+                    }
+                    break;
+                
+                case self::STATUS_PROCESS:
+                    break;
+                
+                case self::STATUS_CONFIRM:
+                    break;
+                
+                case self::STATUS_CANCEL:
+                    switch (CommonProcess::getCurrentRoleId()) {
+                        case Roles::getRoleByName(Roles::ROLE_RECEPTIONIST)->id:
+                            return true;
+
+                        case Roles::getRoleByName(Roles::ROLE_ADMIN)->id:
+                            return true;
+                        
+                        case Roles::getRoleByName(Roles::ROLE_DOCTOR)->id:
+                            return false;
+
+                        default:
+                            break;
+                    }
+                    break;
+                
+                case self::STATUS_SHOULD_REVIEW:
+                    switch (CommonProcess::getCurrentRoleId()) {
+                        case Roles::getRoleByName(Roles::ROLE_RECEPTIONIST)->id:
+                            return true;
+
+                        case Roles::getRoleByName(Roles::ROLE_ADMIN)->id:
+                            return true;
+                        
+                        case Roles::getRoleByName(Roles::ROLE_DOCTOR)->id:
+                            return false;
+
+                        default:
+                            break;
+                    }
+                    break;
+                default :
+                    break;
+            }
+            return false;
+        }
+        /**
          * can update status report
          * @return boolean
          */
-        public function canUpdateStatus(){
-            return true;
+        public function canConfirm(){
+            switch ($this->status){
+                case self::STATUS_NEW:
+                    break;
+                
+                case self::STATUS_PROCESS:
+                    switch (CommonProcess::getCurrentRoleId()) {
+                        case Roles::getRoleByName(Roles::ROLE_RECEPTIONIST)->id:
+                            return false;
+
+                        case Roles::getRoleByName(Roles::ROLE_ADMIN)->id:
+                            return true;
+                        
+                        case Roles::getRoleByName(Roles::ROLE_DOCTOR)->id:
+                            return true;
+
+                        default:
+                            break;
+                    }
+                    break;
+                
+                case self::STATUS_CONFIRM:
+                    break;
+                
+                case self::STATUS_CANCEL:
+                    switch (CommonProcess::getCurrentRoleId()) {
+                        case Roles::getRoleByName(Roles::ROLE_RECEPTIONIST)->id:
+                            return false;
+
+                        case Roles::getRoleByName(Roles::ROLE_ADMIN)->id:
+                            return true;
+                        
+                        case Roles::getRoleByName(Roles::ROLE_DOCTOR)->id:
+                            return true;
+
+                        default:
+                            break;
+                    }
+                    break;
+                
+                case self::STATUS_SHOULD_REVIEW:
+                    switch (CommonProcess::getCurrentRoleId()) {
+                        case Roles::getRoleByName(Roles::ROLE_RECEPTIONIST)->id:
+                            return false;
+
+                        case Roles::getRoleByName(Roles::ROLE_ADMIN)->id:
+                            return true;
+                        
+                        case Roles::getRoleByName(Roles::ROLE_DOCTOR)->id:
+                            return true;
+
+                        default:
+                            break;
+                    }
+                    break;
+                default :
+                    break;
+            }
+            return false;
+        }
+        /**
+         * can cancel daily report
+         * @return boolean
+         */
+        public function canCancel(){
+            switch ($this->status){
+                case self::STATUS_NEW:
+                    break;
+                
+                case self::STATUS_PROCESS:
+                    switch (CommonProcess::getCurrentRoleId()) {
+                        case Roles::getRoleByName(Roles::ROLE_RECEPTIONIST)->id:
+                            return true;
+
+                        case Roles::getRoleByName(Roles::ROLE_ADMIN)->id:
+                            return true;
+                        
+                        case Roles::getRoleByName(Roles::ROLE_DOCTOR)->id:
+                            return true;
+
+                        default:
+                            break;
+                    }
+                    break;
+                
+                case self::STATUS_CONFIRM:
+                    break;
+                
+                case self::STATUS_CANCEL:
+                    break;
+                
+                case self::STATUS_SHOULD_REVIEW:
+                    switch (CommonProcess::getCurrentRoleId()) {
+                        case Roles::getRoleByName(Roles::ROLE_RECEPTIONIST)->id:
+                            return false;
+
+                        case Roles::getRoleByName(Roles::ROLE_ADMIN)->id:
+                            return true;
+                        
+                        case Roles::getRoleByName(Roles::ROLE_DOCTOR)->id:
+                            return true;
+
+                        default:
+                            break;
+                    }
+                    break;
+                default :
+                    break;
+            }
+            return false;
         }
         
         /**
@@ -284,7 +461,10 @@ class DailyReports extends CActiveRecord
             switch (CommonProcess::getCurrentRoleId()) {
                 case Roles::getRoleByName(Roles::ROLE_RECEPTIONIST)->id:
                     return true;
-
+                    
+                case Roles::getRoleByName(Roles::ROLE_ADMIN)->id:
+                    return true;
+                    
                 default:
                     break;
             }
@@ -295,7 +475,17 @@ class DailyReports extends CActiveRecord
          * can confirm all dailyreport
          */
         public function canViewAll(){
-            return true;
+            switch (CommonProcess::getCurrentRoleId()) {
+                case Roles::getRoleByName(Roles::ROLE_RECEPTIONIST)->id:
+                    return true;
+                    
+                case Roles::getRoleByName(Roles::ROLE_ADMIN)->id:
+                    return true;
+                    
+                default:
+                    break;
+            }
+            return false;
         }
         
         /**

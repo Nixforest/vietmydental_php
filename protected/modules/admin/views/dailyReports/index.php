@@ -122,31 +122,44 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                 array(
                     'header' => 'Actions',
                     'class'=>'CButtonColumn',
-                    'template'=> $this->createActionButtons(array('confirm','process')),
+                    'htmlOptions' => array('style' => 'width:120px;text-align:center;'),
+                    'template'=> $this->createActionButtons(array('process','confirm','cancel')),
                     'buttons'=>array(
-                        'confirm'=>array(
-                            'click'   => $approveJs,
-                            'label'=>'Xác nhận',
-                            'imageUrl'=>Yii::app()->theme->baseUrl . '/img/icon_completed_24.png',
-                            'options'=>array(
-                                'class'=>'confirm',
-                                'data-confirm' => 'Bạn chắc chắn muốn xác nhận?'
-                            ),
-                            'url'=>'Yii::app()->createAbsoluteUrl("admin/dailyReports/confirm",
-                                array("id"=>$data->id) )',
-                            'visible' => '$data->canUpdateStatus()',
-                        ),
                         'process'=>array(
                             'click'   => $approveJs,
-                            'label'=>'Đang xử lý',
-                            'imageUrl'=>Yii::app()->theme->baseUrl . '/img/icon_appointment_24.png',
+                            'label'=>'Gửi yêu cầu',
+                            'imageUrl'=>Yii::app()->theme->baseUrl . '/img/send.png',
                             'options'=>array(
                                 'class'=>'process',
-                                'data-confirm' => 'Bạn chắc chắn muốn chuyển sang đang xử lý?'
+                                'data-confirm' => 'Bạn chắc chắn yêu cầu duyệt?'
                                 ),
                             'url'=>'Yii::app()->createAbsoluteUrl("admin/dailyReports/process",
                                 array("id"=>$data->id) )',
-                            'visible' => '$data->canUpdateStatus()',
+                            'visible' => '$data->canProcess()',
+                        ),
+                        'confirm'=>array(
+                            'click'   => $approveJs,
+                            'label'=>'Xác nhận',
+                            'imageUrl'=>Yii::app()->theme->baseUrl . '/img/confirm.gif',
+                            'options'=>array(
+                                'class'=>'confirm',
+                                'data-confirm' => 'Bạn chắc chắn xác nhận?'
+                            ),
+                            'url'=>'Yii::app()->createAbsoluteUrl("admin/dailyReports/confirm",
+                                array("id"=>$data->id) )',
+                            'visible' => '$data->canConfirm()',
+                        ),
+                        'cancel'=>array(
+                            'click'   => $approveJs,
+                            'label'=>'Không duyệt',
+                            'imageUrl'=>Yii::app()->theme->baseUrl . '/img/cancel.png',
+                            'options'=>array(
+                                'class'=>'cancel',
+                                'data-confirm' => 'Bạn chắc chắn không duyệt?'
+                            ),
+                            'url'=>'Yii::app()->createAbsoluteUrl("admin/dailyReports/cancel",
+                                array("id"=>$data->id) )',
+                            'visible' => '$data->canCancel()',
                         ),
                     ),
                 ),
@@ -200,7 +213,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 <?php endif; ?>
 <script>
     function fnUpdateColorbox(){
-        $('.highlight').closest('tr').css({"background-color":"red"});
+        $('.highlight').closest('tr').css({"color":"red"});
     }
     $(document).ready(function(){
         fnUpdateColorbox();
