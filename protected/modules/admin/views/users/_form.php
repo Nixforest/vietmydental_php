@@ -2,6 +2,7 @@
 /* @var $this UsersController */
 /* @var $model Users */
 /* @var $form CActiveForm */
+$mAgents = new Agents();
 ?>
 
 <div class="form">
@@ -180,7 +181,18 @@
     <div class="row">
         <div class="col-md-6">
             <?php echo $form->labelEx($model, 'agent'); ?>
-            <?php echo $form->dropDownList($model, 'agent', Agents::loadItems(true)); ?>
+            <?php // echo $form->dropDownList($model, 'agent', Agents::loadItems(true)); ?>
+            <?php
+            $this->widget('ext.multiselect.JMultiSelect', array(
+                'model' => $model,
+                'attribute' => 'agent',
+                'data' => $mAgents->getAgentList(),
+                // additional javascript options for the MultiSelect plugin
+                'options' => array('selectedList' => 30,),
+                // additional style
+//                'htmlOptions' => array('style' => 'width: 600px;'),
+            ));
+            ?>
             <?php echo $form->error($model, 'agent'); ?>
         </div>
         <div class="col-md-6">
@@ -189,31 +201,29 @@
             if (!isset($model->birthday)) {
                 $date = DomainConst::DATE_FORMAT_3_NULL;
             } else {
-                $date = CommonProcess::convertDateTime($model->birthday,
-                            DomainConst::DATE_FORMAT_4,
-                            DomainConst::DATE_FORMAT_3);
+                $date = CommonProcess::convertDateTime($model->birthday, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_3);
                 if (empty($date)) {
                     $date = DomainConst::DATE_FORMAT_3_NULL;
                 }
             }
             $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-                'model'     => $model,
+                'model' => $model,
                 'attribute' => 'birthday',
-                'options'   => array(
-                    'showAnim'      => 'fold',
-                    'dateFormat'    => DomainConst::DATE_FORMAT_2,
-                    'maxDate'       => '0',
-                    'changeMonth'   => true,
-                    'changeYear'    => true,
-                    'showOn'        => 'button',
-                    'buttonImage'   => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
+                'options' => array(
+                    'showAnim' => 'fold',
+                    'dateFormat' => DomainConst::DATE_FORMAT_2,
+                    'maxDate' => '0',
+                    'changeMonth' => true,
+                    'changeYear' => true,
+                    'showOn' => 'button',
+                    'buttonImage' => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
                     'buttonImageOnly' => true,
                 ),
-                'htmlOptions'=>array(
-                            'class'=>'w-16',
-                            'readonly'=>'readonly',
-                            'value' => $date,
-                        ),
+                'htmlOptions' => array(
+                    'class' => 'w-16',
+                    'readonly' => 'readonly',
+                    'value' => $date,
+                ),
             ));
             ?>
             <?php echo $form->error($model, 'birthday'); ?>
@@ -222,41 +232,39 @@
 
     <div class="row">
         <div class="col-md-6">
-            <?php echo $form->labelEx($model, 'identity_number'); ?>
+<?php echo $form->labelEx($model, 'identity_number'); ?>
             <?php echo $form->textField($model, 'identity_number', array('size' => 60, 'maxlength' => 256)); ?>
             <?php echo $form->error($model, 'identity_number'); ?>
         </div>
         <div class="col-md-6">
-            <?php echo $form->labelEx($model, 'date_of_issue'); ?>
+<?php echo $form->labelEx($model, 'date_of_issue'); ?>
             <?php
             if (!isset($model->date_of_issue)) {
                 $date = DomainConst::DATE_FORMAT_3_NULL;
             } else {
-                $date = CommonProcess::convertDateTime($model->date_of_issue,
-                            DomainConst::DATE_FORMAT_4,
-                            DomainConst::DATE_FORMAT_3);
+                $date = CommonProcess::convertDateTime($model->date_of_issue, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_3);
                 if (empty($date)) {
                     $date = DomainConst::DATE_FORMAT_3_NULL;
                 }
             }
             $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-                'model'     => $model,
+                'model' => $model,
                 'attribute' => 'date_of_issue',
-                'options'   => array(
-                    'showAnim'      => 'fold',
-                    'dateFormat'    => DomainConst::DATE_FORMAT_2,
-                    'maxDate'       => '0',
-                    'changeMonth'   => true,
-                    'changeYear'    => true,
-                    'showOn'        => 'button',
-                    'buttonImage'   => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
+                'options' => array(
+                    'showAnim' => 'fold',
+                    'dateFormat' => DomainConst::DATE_FORMAT_2,
+                    'maxDate' => '0',
+                    'changeMonth' => true,
+                    'changeYear' => true,
+                    'showOn' => 'button',
+                    'buttonImage' => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
                     'buttonImageOnly' => true,
                 ),
-                'htmlOptions'=>array(
-                            'class'=>'w-16',
-                            'readonly'=>'readonly',
-                            'value' => $date,
-                        ),
+                'htmlOptions' => array(
+                    'class' => 'w-16',
+                    'readonly' => 'readonly',
+                    'value' => $date,
+                ),
             ));
             ?>
             <?php echo $form->error($model, 'date_of_issue'); ?>
@@ -265,9 +273,9 @@
 
     <div class="row">
         <div class="col-md-6">
-            <?php echo $form->labelEx($model, 'place_of_issue'); ?>
-            <?php echo $form->dropDownList($model, 'place_of_issue', Cities::loadItems(), array('class' => '', 'empty' => 'Select')); ?>
-            <?php echo $form->error($model, 'place_of_issue'); ?>
+<?php echo $form->labelEx($model, 'place_of_issue'); ?>
+<?php echo $form->dropDownList($model, 'place_of_issue', Cities::loadItems(), array('class' => '', 'empty' => 'Select')); ?>
+<?php echo $form->error($model, 'place_of_issue'); ?>
         </div>
         <div class="col-md-6">
             <?php echo $form->labelEx($model, 'date_in'); ?>
@@ -275,37 +283,35 @@
             if (!isset($model->date_in)) {
                 $date = DomainConst::DATE_FORMAT_3_NULL;
             } else {
-                $date = CommonProcess::convertDateTime($model->date_in,
-                            DomainConst::DATE_FORMAT_4,
-                            DomainConst::DATE_FORMAT_3);
+                $date = CommonProcess::convertDateTime($model->date_in, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_3);
                 if (empty($date)) {
                     $date = DomainConst::DATE_FORMAT_3_NULL;
                 }
             }
             $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-                'model'     => $model,
+                'model' => $model,
                 'attribute' => 'date_in',
-                'options'   => array(
-                    'showAnim'      => 'fold',
-                    'dateFormat'    => DomainConst::DATE_FORMAT_2,
-                    'maxDate'       => '0',
-                    'changeMonth'   => true,
-                    'changeYear'    => true,
-                    'showOn'        => 'button',
-                    'buttonImage'   => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
+                'options' => array(
+                    'showAnim' => 'fold',
+                    'dateFormat' => DomainConst::DATE_FORMAT_2,
+                    'maxDate' => '0',
+                    'changeMonth' => true,
+                    'changeYear' => true,
+                    'showOn' => 'button',
+                    'buttonImage' => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
                     'buttonImageOnly' => true,
                 ),
-                'htmlOptions'=>array(
-                            'class'=>'w-16',
-                            'readonly'=>'readonly',
-                            'value' => $date,
-                        ),
+                'htmlOptions' => array(
+                    'class' => 'w-16',
+                    'readonly' => 'readonly',
+                    'value' => $date,
+                ),
             ));
             ?>
             <?php echo $form->error($model, 'date_in'); ?>
         </div>
     </div>
-    
+
     <div class="row" style="display: none;">
         <div class="col-md-12">
             <?php echo $form->labelEx($model, 'img_avatar'); ?>
@@ -313,61 +319,61 @@
                 <thead>
                     <tr>
                         <th class="item_code item_c">
-                            <?php echo DomainConst::CONTENT00294 . Files::ALLOW_IMAGE_FILE_TYPE; ?>
+            <?php echo DomainConst::CONTENT00294 . Files::ALLOW_IMAGE_FILE_TYPE; ?>
                             <br>
-                            <?php echo DomainConst::CONTENT00295; ?>
+<?php echo DomainConst::CONTENT00295; ?>
                         </th>
                         <th><?php echo DomainConst::CONTENT00296; ?></th>
                     </tr>
                 </thead>
                 <tbody>
-                <?php if (isset($model->rImgAvatarFile)): ?>
-                    <tr class="materials_row">
-                        <td class="item_l w-400">
-                            <img>
-                            <?php echo $model->rImgAvatarFile->getViewImage(); ?>
-                        </td>
-                        <td class="item_c last">
-                            <input type="checkbox" name="delete_file[]" value="<?php echo $model->rImgAvatarFile->id; ?>">
-                        </td>
-                    </tr>
-                <?php endif; ?>
+                            <?php if (isset($model->rImgAvatarFile)): ?>
+                        <tr class="materials_row">
+                            <td class="item_l w-400">
+                                <img>
+    <?php echo $model->rImgAvatarFile->getViewImage(); ?>
+                            </td>
+                            <td class="item_c last">
+                                <input type="checkbox" name="delete_file[]" value="<?php echo $model->rImgAvatarFile->id; ?>">
+                            </td>
+                        </tr>
+                            <?php endif; ?>
 
                     <tr>
                         <td>
-                            <?php echo $form->fileField($model, 'file_name[]', array('class' => 'input_file', 'accept' => 'image/*')); ?>
+<?php echo $form->fileField($model, 'file_name[]', array('class' => 'input_file', 'accept' => 'image/*')); ?>
                         </td>
                         <td class="item_c last"></td>
                     </tr>
                 </tbody>
             </table>
-            <?php echo $form->error($model, 'img_avatar'); ?>
+                            <?php echo $form->error($model, 'img_avatar'); ?>
         </div>
     </div>
+<?php
+$count = 0;
+?>
+            <?php foreach (SocialNetworks::TYPE_NETWORKS as $key => $value): ?>
     <?php
-    $count = 0;
+    $id = "Users_social_network_$key";
+    $name = "Users[social_network_$key]";
     ?>
-    <?php foreach (SocialNetworks::TYPE_NETWORKS as $key => $value): ?>
-        <?php
-        $id = "Users_social_network_$key";
-        $name = "Users[social_network_$key]";
-        ?>
-            <?php if ($count % 2 == 0): ?>
+        <?php if ($count % 2 == 0): ?>
             <div class="row">
-            <?php endif; // end if ($count % 2 == 0)  ?>
+        <?php endif; // end if ($count % 2 == 0)  ?>
 
             <div class="col-md-6">
                 <label for="<?php echo $id; ?>"><?php echo $value; ?></label>
                 <input size="60" maxlength="255" name="<?php echo $name; ?>" id="<?php echo $id; ?>" type="text" placeholder="<?php echo $value ?>" value="<?php echo $model->getSocialNetwork($key); ?>">
             </div>
 
-        <?php if ($count % 2 != 0): ?>
+    <?php if ($count % 2 != 0): ?>
             </div>
-        <?php endif; // end if ($count % 2 != 0) ?>
-        <?php
-        $count++;
-        ?>
-    <?php endforeach; // end foreach (SocialNetworks::TYPE_NETWORKS as $network) ?>
+    <?php endif; // end if ($count % 2 != 0)  ?>
+    <?php
+    $count++;
+    ?>
+        <?php endforeach; // end foreach (SocialNetworks::TYPE_NETWORKS as $network) ?>
 
     <?php if ($count % 2 != 0): ?>
     </div>
@@ -375,15 +381,15 @@
 
 <div class="row buttons">
     <div class="col-md-6">
-        <?php
-        echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array(
-            'name' => 'submit',
-        ));
-        ?>
+    <?php
+    echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array(
+        'name' => 'submit',
+    ));
+    ?>
     </div>
 </div>
 
-<?php $this->endWidget(); ?>
+        <?php $this->endWidget(); ?>
 
 </div><!-- form -->
 <script type="text/javascript">

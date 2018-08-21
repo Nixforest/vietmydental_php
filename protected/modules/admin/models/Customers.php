@@ -454,7 +454,7 @@ class Customers extends BaseActiveRecord
                 if ($value->type_network == SocialNetworks::TYPE_NETWORK_EMAIL) {
                     return $value->value;
                 }
-                $retVal[] = SocialNetworks::TYPE_NETWORKS[$value->type_network] . ": $value->value";
+//                $retVal[] = SocialNetworks::TYPE_NETWORKS[$value->type_network] . ": $value->value";
             }
         }
         return '';

@@ -4,40 +4,40 @@
  * This is the model class for table "users".
  *
  * The followings are the available columns in table 'users':
- * @property string $id                 
- * @property string $username
- * @property string $email
- * @property string $password_hash
- * @property string $temp_password
- * @property string $first_name
- * @property string $last_name
- * @property string $birthday
- * @property string $identity_number
- * @property string $date_of_issue
- * @property integer $place_of_issue
- * @property string $date_in
- * @property string $code_account
- * @property string $img_avatar
- * @property string $address
- * @property string $address_vi
- * @property string $house_numbers
- * @property integer $province_id
- * @property integer $district_id
- * @property integer $ward_id
- * @property integer $street_id
- * @property integer $login_attemp
- * @property string $created_date
- * @property string $last_logged_in
- * @property string $ip_address
- * @property integer $role_id
- * @property integer $application_id
- * @property integer $status
- * @property string $gender
- * @property string $phone
- * @property string $verify_code
- * @property string $slug
- * @property string $address_temp
- * @property string $created_by
+ * @property string $id                 Id of user
+ * @property string $username           Username
+ * @property string $email              Email
+ * @property string $password_hash      Password hash
+ * @property string $temp_password      Temp password
+ * @property string $first_name         Full name
+ * @property string $last_name          Last name (no use)
+ * @property string $birthday           Birthday
+ * @property string $identity_number    Identity number
+ * @property string $date_of_issue      Date of issue
+ * @property integer $place_of_issue    Place of issue (City id)
+ * @property string $date_in            Date in
+ * @property string $code_account       Code
+ * @property string $img_avatar         Avatar image
+ * @property string $address            Address
+ * @property string $address_vi         Address vi (use for search)
+ * @property string $house_numbers      House number
+ * @property integer $province_id       City id
+ * @property integer $district_id       District id
+ * @property integer $ward_id           Ward id
+ * @property integer $street_id         Street id
+ * @property integer $login_attemp      -
+ * @property string $created_date       Created date
+ * @property string $last_logged_in     Last logged in time
+ * @property string $ip_address         IP adress
+ * @property integer $role_id           Role id
+ * @property integer $application_id    -
+ * @property integer $status            Status
+ * @property string $gender             Gender
+ * @property string $phone              Phone number
+ * @property string $verify_code        Verify code
+ * @property string $slug               -
+ * @property string $address_temp       -
+ * @property string $created_by         Created by
  * 
  * The followings are the available model relations:
  * @property Users                  $rCreatedBy         User created this record
@@ -56,7 +56,9 @@
  * @property Agents[]               $rAgents            List of agent of user (replace for rJoinAgent)
  */
 class Users extends BaseActiveRecord {
-
+    //-----------------------------------------------------
+    // Properties
+    //-----------------------------------------------------
     public $password_confirm, $currentpassword, $newpassword; /* for change pass in admin */
     public $agent;
     //-----------------------------------------------------
@@ -87,12 +89,12 @@ class Users extends BaseActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('username, password_hash, created_date, ip_address, role_id, application_id', 'required'),
+            array('username, password_hash, created_date, ip_address, role_id, application_id, agent', 'required'),
             array('place_of_issue, province_id, district_id, ward_id, street_id, login_attemp, role_id, application_id, status', 'numerical', 'integerOnly' => true),
             array('username, last_name', 'length', 'max' => 50),
             array('email', 'length', 'max' => 80),
             array('first_name', 'length', 'max' => 150),
-            array('identity_number', 'length', 'max'=>256),
+            array('identity_number', 'length', 'max' => 256),
             array('code_account, ip_address', 'length', 'max' => 30),
             array('img_avatar, address_vi', 'length', 'max' => 255),
             array('gender', 'length', 'max' => 6),
@@ -100,7 +102,7 @@ class Users extends BaseActiveRecord {
             array('verify_code', 'length', 'max' => 100),
             array('slug', 'length', 'max' => 300),
             array('created_by', 'length', 'max' => 11),
-            array('birthday, date_of_issue, date_in, address, house_numbers, last_logged_in, address_temp', 'safe'),
+            array('birthday, date_of_issue, date_in, address, house_numbers, last_logged_in, address_temp, agent', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('id, username, email, first_name, last_name, code_account, address, address_vi, house_numbers, province_id, district_id, ward_id, street_id, login_attemp, created_date, last_logged_in, ip_address, role_id, application_id, status, gender, phone, verify_code, slug, address_temp, created_by', 'safe', 'on' => 'search'),
@@ -492,6 +494,39 @@ class Users extends BaseActiveRecord {
         }
         return '';
     }
+    
+    /**
+     * Get list agent id
+     * @return Array List agent id
+     */
+    public function getAgentIds() {
+        $retVal = [];
+        foreach ($this->rAgents as $agent) {
+            $retVal[] = $agent->id;
+        }
+        return $retVal;
+    }
+        
+    /**
+     * Get agents
+     * @return string
+     */
+    public function getAgents() {
+        $strResult = [];
+        foreach ($this->rAgents as $value) {
+            $strResult[] = $value->name;
+        }
+        return implode('<br>', $strResult);
+    }
+
+    /**
+     * Set list agents of model to $agents
+     */
+    public function setAgents() {
+        foreach ($this->rAgents as $value) {
+            $this->agent[$value->id] = $value->id;
+        }
+    }
 
     /**
      * Get id of agent
@@ -660,7 +695,7 @@ class Users extends BaseActiveRecord {
     public function isStaff() {
         return Roles::isStaff($this->role_id);
     }
-    
+
     /**
      * Get place issue Identity info
      * @return String City name
@@ -668,7 +703,7 @@ class Users extends BaseActiveRecord {
     public function getPlaceIssue() {
         return isset($this->rPlaceIssue) ? $this->rPlaceIssue->name : '';
     }
-    
+
     /**
      * Identity information
      * @return String Html string
@@ -677,14 +712,13 @@ class Users extends BaseActiveRecord {
         $retVal = array();
         $retVal[] = $this->identity_number;
         if (!DateTimeExt::isDateNull($this->date_of_issue)) {
-            $retVal[] = DomainConst::CONTENT00422 . ': ' . CommonProcess::convertDateTime($this->date_of_issue,
-                DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_3);
+            $retVal[] = DomainConst::CONTENT00422 . ': ' . CommonProcess::convertDateTime($this->date_of_issue, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_3);
         }
-        
+
         if (isset($this->rPlaceIssue)) {
             $retVal[] = DomainConst::CONTENT00423 . ': ' . $this->getPlaceIssue();
         }
-        
+
         return implode('<br>', $retVal);
     }
 
@@ -757,7 +791,8 @@ class Users extends BaseActiveRecord {
         $aModel = self::model()->findAll($criteria);
         $retVal = array();
         foreach ($aModel as $model) {
-            if ($model->getAgentId() == $agentId) {
+//            if ($model->getAgentId() == $agentId) {
+            if (in_array($agentId, $model->getAgentIds())) {
                 if ($model->status != DomainConst::DEFAULT_STATUS_INACTIVE) {
                     $retVal[$model->id] = $model->getFullName();
                 }
@@ -866,13 +901,13 @@ class Users extends BaseActiveRecord {
         }
         return $user;
     }
-    
+
     public static function getUserByName($name, $role_id = '') {
         if (empty($name)) {
             return NULL;
         }
         $nameArr = array(
-            'Nguyen Dinh Troi'  => 'Nguyễn Đình Trợi',
+            'Nguyen Dinh Troi' => 'Nguyễn Đình Trợi',
         );
         if (isset($nameArr[$name])) {
             $name = $nameArr[$name];
