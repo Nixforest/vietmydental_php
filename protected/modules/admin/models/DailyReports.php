@@ -281,7 +281,14 @@ class DailyReports extends CActiveRecord
          * @return boolean
          */
         public function canCreateNew(){
-            return true;
+            switch (CommonProcess::getCurrentRoleId()) {
+                case Roles::getRoleByName(Roles::ROLE_RECEPTIONIST)->id:
+                    return true;
+
+                default:
+                    break;
+            }
+            return false;
         }
         
         /**
