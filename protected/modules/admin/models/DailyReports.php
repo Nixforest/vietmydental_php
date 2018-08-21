@@ -107,6 +107,9 @@ class DailyReports extends CActiveRecord
 		$criteria->compare('date_report',CommonProcess::convertDateTime($this->date_report, DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_4));
                 $agentId    = isset(Yii::app()->user->agent_id) ? Yii::app()->user->agent_id : 0;
                 $criteria->compare('agent_id',$agentId);
+                if(!$this->canViewAll()){
+                    $criteria->compare('approve_id',Yii::app()->user->id);
+                }
                 return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
@@ -266,7 +269,7 @@ class DailyReports extends CActiveRecord
         }
         
         /**
-         * 
+         * can update status report
          * @return boolean
          */
         public function canUpdateStatus(){
@@ -274,10 +277,17 @@ class DailyReports extends CActiveRecord
         }
         
         /**
-         * 
+         * can create new daily report
          * @return boolean
          */
         public function canCreateNew(){
+            return true;
+        }
+        
+        /**
+         * can confirm all dailyreport
+         */
+        public function canViewAll(){
             return true;
         }
         
