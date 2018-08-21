@@ -376,9 +376,6 @@ class Customers extends BaseActiveRecord
      */
     public function getBirthday() {
         $retVal = '';
-        if (!DateTimeExt::isYearNull($this->year_of_birth)) {
-            $retVal = $this->year_of_birth;
-        }
         
         if (empty($retVal) && !DateTimeExt::isDateNull($this->date_of_birth)) {
             $date = CommonProcess::convertDateTime($this->date_of_birth,
@@ -390,6 +387,9 @@ class Customers extends BaseActiveRecord
                                 DomainConst::DATE_FORMAT_5);
             }
             $retVal = $date;
+        }
+        if (empty($retVal) && !DateTimeExt::isYearNull($this->year_of_birth)) {
+            $retVal = $this->year_of_birth;
         }
         
         return $retVal;
