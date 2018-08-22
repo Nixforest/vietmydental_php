@@ -251,6 +251,7 @@ class UsersController extends AdminController {
             throw new CHttpException(404, 'The requested page does not exist.');
         }
         $model->scenario = 'changeMyPassword';
+        $model->setAgents();
         if (isset($_POST['Users'])) {
             $model->currentpassword = $_POST['Users']['currentpassword'];
             $model->newpassword = $_POST['Users']['newpassword'];
@@ -284,6 +285,7 @@ class UsersController extends AdminController {
             throw new CHttpException(404, 'The requested page does not exist.');
         }
         $model->scenario = 'resetPassword';
+        $model->setAgents();
         if (isset($_POST['Users'])) {
             $model->newpassword = $_POST['Users']['newpassword'];
             $model->password_confirm = $_POST['Users']['password_confirm'];
