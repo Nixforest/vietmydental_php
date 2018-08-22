@@ -25,6 +25,8 @@ $('.search-button').click(function(){
 //	return false;
 //});
 ");
+Yii::app()->clientScript->registerScriptFile(Yii::app()->theme->baseUrl . '/js/jquery.colorbox-min.js');
+Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/colorbox.css');
 ?>
 
 <h1><?php echo $this->pageTitle; ?></h1>
@@ -94,7 +96,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                 array(
                     'header'    => DomainConst::CONTENT00353,
                     'type'      => 'raw',
-                    'value'     => '$data->getReceiptTotal()',
+                    'value'     => '$data->getReceiptTotal().$data->getUrlDetail()',
                     'htmlOptions' => array('style' => 'text-align:right;')
                 ),
                 array(
@@ -214,8 +216,13 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 <script>
     function fnUpdateColorbox(){
         $('.highlight').closest('tr').css({"color":"red"});
+        BindClickView();
     }
     $(document).ready(function(){
         fnUpdateColorbox();
+        BindClickView();
     });
+    function BindClickView(){
+        $(".detailReport").colorbox({iframe:true,innerHeight:'600', innerWidth: '1000',close: "<span title='close'>close</span>"});
+    }
 </script>

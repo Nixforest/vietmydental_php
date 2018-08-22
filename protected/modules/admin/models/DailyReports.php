@@ -505,4 +505,58 @@ class DailyReports extends CActiveRecord
         public function getAgent(){
             return !empty($this->rAgent) ? $this->rAgent->getFullName() : '';
         }
+        
+        /**
+         * get report receipts of doctor
+         * @return array report PAY, UN_PAY
+         */
+        public function getDetailReport(){
+            $aData = [];
+            if(!empty($this->approve_id) && !empty($this->date_report)){
+                $aData['PAY']       = $this->getReceipts($this->date_report, $this->date_report, array(Receipts::STATUS_RECEIPTIONIST));
+                $aData['ALL_PAY']   = $this->getReceipts($this->date_report, $this->date_report, array(Receipts::STATUS_RECEIPTIONIST),true);
+                $aData['UN_PAY']    = $this->getReceipts($this->date_report, $this->date_report, array(Receipts::STATUS_DOCTOR));
+            }
+            return $aData;
+        }
+        
+        public function getReceipts($from, $to, $arrStatus,$allData = false) {
+            $mOneMany = new OneMany();
+            $criteria=new CDbCriteria;
+            $tblReceipts = Receipts::model()->tableName();
+            $tblDetail   = TreatmentScheduleDetails::model()->tableName();
+            $tblSchedule   = TreatmentSchedules::model()->tableName();
+            $criteria->compare('r.status', Receipts::STATUS_RECEIPTIONIST,false,'OR');
+            $criteria->compare('r.status', Receipts::STATUS_DOCTOR,false,'OR');
+            $criteria->compare('t.type', OneMany::TYPE_AGENT_RECEIPT);
+            $criteria->compare('t.one_id', $this->id);
+            $criteria->compare('s.doctor_id', $this->approve_id);
+            $criteria->addCondition('r.status != '.Receipts::STATUS_INACTIVE);
+            $criteria->addInCondition('r.status', $arrStatus);
+            $criteria->addCondition('r.process_date >= \''.$from.'\'');
+            $criteria->addCondition('r.process_date <= \''.$to.'\'');
+            $criteria->order = 'r.process_date ASC';
+            $criteria->join = 'JOIN '.$tblReceipts.' as r ON r.id = t.many_id';
+            $criteria->join .= ' JOIN '.$tblDetail.' as d ON r.detail_id = d.id';
+            $criteria->join .= ' JOIN '.$tblSchedule.' as s ON d.schedule_id = s.id';
+
+            return new CActiveDataProvider($mOneMany, array(
+                'criteria'=>$criteria,
+                'pagination'=>$allData ? false : [ 'pageSize'=>Settings::getListPageSize()]
+
+            ));
+        }
+        
+        /**
+         * get url detail
+         * @return string
+         */
+        public function getUrlDetail(){
+            $result = '<br>';
+            $result .= '<a class = "detailReport" href ="' ;
+            $result .=Yii::app()->createAbsoluteUrl('admin/dailyReports/viewDetailReport',['date_report'=>$this->date_report,'doctor_id'=>$this->approve_id]);
+            $result .= '" >'.DomainConst::CONTENT00011;
+            $result .= '</a>';
+            return $result;
+        }
 }

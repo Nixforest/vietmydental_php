@@ -227,5 +227,20 @@ class DailyReportsController extends AdminController
             $model->status = DailyReports::STATUS_CANCEL;
             $model->update();
 	}
-
+        
+        /**
+         * View all report date of doctor
+         * @param int $doctor_id
+         * @param string $date_report Y-m-d
+         */
+        public function actionViewDetailReport($doctor_id, $date_report){
+            $this->layout='//layouts/ajax';
+            $mDailyReport = new DailyReports();
+            $mDailyReport->approve_id = $doctor_id;
+            $mDailyReport->date_report = $date_report;            
+            $this->render('revenue_daily_report', array(
+                    'model'          => $mDailyReport,
+                    DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+            ));
+        }
 }
