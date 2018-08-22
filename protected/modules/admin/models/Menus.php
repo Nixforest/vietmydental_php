@@ -150,8 +150,8 @@ class Menus extends BaseActiveRecord {
         foreach ($models as $model) {
 //            $_items[$model->id] = $model->name;
             if (!isset($model->parent_id)) {
+                $_items[$model->id] = $model->name;
                 if (!empty($model->rChildren)) {
-                    $_items[$model->id] = $model->name;
                     foreach ($model->rChildren as $child) {
                         $_items[$child->id] = '---> ' . $child->name;
                     }

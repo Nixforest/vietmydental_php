@@ -61,6 +61,10 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'value' => '$data->getField(\'description\')',
                 ),
                 array(
+                    'name'  => 'category_id',
+                    'value' => 'isset($data->rCategory) ? $data->rCategory->name : ""',
+                ),
+                array(
                     'name' => 'status',
                     'type' => 'raw',
                     'value' => '$data->getStatus()',

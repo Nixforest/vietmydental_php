@@ -12,7 +12,13 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl.'/themes/ckedit
 	'enableAjaxValidation'=>false,
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+        <?php echo DomainConst::CONTENT00081; ?>
+
+        <div class="row">
+            <?php echo $form->labelEx($model,'category_id'); ?>
+            <?php echo $form->dropDownList($model,'category_id', NewsCategories::loadItems(), array('class'=>'','empty'=>'Select')); ?>
+            <?php echo $form->error($model,'category_id'); ?>
+	</div>
 
 	<?php echo $form->errorSummary($model); ?>
 

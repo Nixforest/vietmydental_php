@@ -1443,4 +1443,7 @@ class DomainConst {
     const CONTENT00423  = 'Nơi cấp';
     const CONTENT00424  = 'Ngày vào làm';
     const CONTENT00425  = 'Tạo yêu cầu phục hình';
+    const CONTENT00426  = 'Tên chuyên mục';
+    const CONTENT00427  = 'Chuyên mục cha';
+    const CONTENT00428  = 'Nội dung';
 }

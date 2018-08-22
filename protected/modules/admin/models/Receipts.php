@@ -845,7 +845,10 @@ class Receipts extends CActiveRecord {
     public function changeStatus() {
         switch ($this->status) {
             case self::STATUS_INACTIVE:
+                // Remove receipt from agent
                 OneMany::deleteAllManyOldRecords($this->id, OneMany::TYPE_AGENT_RECEIPT);
+                // Rolllback customer debt
+                $this->rollbackCustomerDebt();
                 break;
             default:
                 break;
