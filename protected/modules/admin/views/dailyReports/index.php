@@ -194,6 +194,12 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                             <td style="text-align:right;">
                                 <input style="display: none;" value="<?php echo $revenue; ?>" name="DailyReports[revenue][<?php echo $doctor_id; ?>]">
                                 <?php echo CommonProcess::formatCurrency($revenue) . ' ' . DomainConst::CONTENT00134; ?>
+                                <?php
+                                $mFakeDailyReport = new DailyReports();
+                                $mFakeDailyReport->approve_id = $doctor_id;
+                                $mFakeDailyReport->date_report = CommonProcess::convertDateTime($model->date_report, DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_4);
+                                echo $mFakeDailyReport->getUrlDetail();
+                                ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
