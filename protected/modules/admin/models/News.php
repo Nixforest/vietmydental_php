@@ -9,8 +9,8 @@
  * @property string $description        Description
  * @property integer $category_id       Id of category
  * @property integer $status            Status
- * @property string $created_date       
- * @property string $created_by
+ * @property string $created_date       Created date
+ * @property string $created_by         Created by
  * 
  * The followings are the available model relations:
  * @property Users                  $rCreatedBy         User created this record
@@ -46,7 +46,7 @@ class News extends BaseActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('content, category_id, created_date', 'required'),
+            array('content, category_id', 'required'),
             array('category_id, status', 'numerical', 'integerOnly' => true),
             array('created_by', 'length', 'max' => 10),
             array('description', 'safe'),
@@ -171,10 +171,13 @@ class News extends BaseActiveRecord {
      * @param int $status
      * @return array model
      */
-    public function getArrayNews($status = News::STATUS_ACTIVE) {
+    public function getArrayNews($status = News::STATUS_ACTIVE, $category = '') {
         $aNews = [];
         $criteria = new CDbCriteria;
         $criteria->compare('status', $status);
+        if (!empty($category)) {
+            $criteria->compare('category_id', $category);
+        }
         $criteria->order = 't.id DESC';
         $aNews = News::model()->findAll($criteria);
         return $aNews;

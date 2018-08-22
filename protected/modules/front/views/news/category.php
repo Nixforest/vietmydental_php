@@ -1,29 +1,33 @@
-<?php if (!Yii::app()->user->isGuest) : ?>
-<?php foreach (NewsCategories::getListParent() as $category) : ?>
 <?php
+
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 $mNews = new News('search');
-$aNews = $mNews->getArrayNews(News::STATUS_ACTIVE, $category->id);
+$aNews = $mNews->getArrayNews(News::STATUS_ACTIVE, $model->id);
 ?>
 <div class="ad_read_news">
     <section>
-        <h1 class="title"><strong><?php echo $category->name; ?></strong></h1>
+        <h1 class="title"><strong><?php echo $model->name; ?></strong></h1>
         <div class="content document">
             <ul>
                 <?php foreach ($aNews as $key => $mNews) { ?>
                 <li>
-                    <a target="" class="_link" href="<?php echo Yii::app()->createAbsoluteUrl('/front/news/view',['id'=>$mNews->id]); ?>"><?php echo $mNews->getField('description'); ?></a>
+                    <a target="_blank" class="_link" href="<?php echo Yii::app()->createAbsoluteUrl('/front/news/view',['id'=>$mNews->id]); ?>"><?php echo $mNews->getField('description'); ?></a>
                 </li>
                 <?php } ?>
-                <?php foreach($category->rChildren as $childCategory) : ?>
+                <?php foreach($model->rChildren as $childCategory) : ?>
                     <li>
-                        <a target="" class="_link" href="<?php echo $childCategory->getFrontEndUrl(); ?>"><?php echo $childCategory->name; ?></a>
+                        <a target="_blank" class="_link" href="#"><?php echo $childCategory->name; ?></a>
                     </li>
                     <?php
                     $aNews = $mNews->getArrayNews(News::STATUS_ACTIVE, $childCategory->id);
                     ?>
                     <?php foreach ($aNews as $key => $mNews) { ?>
                     <li style="margin-left: 26px;" type="square">
-                        <a target="" class="_link" href="<?php echo Yii::app()->createAbsoluteUrl('/front/news/view',['id'=>$mNews->id]); ?>">
+                        <a target="_blank" class="_link" href="<?php echo Yii::app()->createAbsoluteUrl('/front/news/view',['id'=>$mNews->id]); ?>">
                             <?php echo DomainConst::SPACE . $mNews->getField('description'); ?>
                         </a>
                     </li>
@@ -33,5 +37,5 @@ $aNews = $mNews->getArrayNews(News::STATUS_ACTIVE, $category->id);
         </div>
     </section>
 </div>
-<?php endforeach; ?>
-<?php endif;
+
+

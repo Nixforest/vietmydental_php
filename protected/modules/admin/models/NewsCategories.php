@@ -117,35 +117,6 @@ class NewsCategories extends BaseActiveRecord {
             ),
         ));
     }
-
-    //-----------------------------------------------------
-    // Utility methods
-    //-----------------------------------------------------
-    /**
-     * Loads the items from the database
-     * @param type $emptyOption boolean the item is empty
-     * @return type List data
-     */
-    public static function loadItems($emptyOption = false) {
-        $_items = array();
-        if ($emptyOption) {
-            $_items[""] = "";
-        }
-        $models = self::model()->findAll(array(
-            'order' => 'id ASC',
-        ));
-        foreach ($models as $model) {
-            if (!isset($model->parent_id)) {
-                $_items[$model->id] = $model->name;
-                if (!empty($model->rChildren)) {
-                    foreach ($model->rChildren as $child) {
-                        $_items[$child->id] = '---> ' . $child->name;
-                    }
-                }
-            }
-        }
-        return $_items;
-    }
         
     //-----------------------------------------------------
     // Parent override methods
@@ -169,5 +140,67 @@ class NewsCategories extends BaseActiveRecord {
             
         }
         return parent::beforeSave();
+    }
+
+    //-----------------------------------------------------
+    // Utility methods
+    //-----------------------------------------------------
+    public function getChain() {
+        $retVal = array();
+        $retVal[] = $this;
+        $model = $this->rParent;
+        while (isset($model)) {
+            $retVal[] = $model;
+            $model = $model->rParent;
+        }
+        return $retVal;
+    }
+    
+    /**
+     * Get front-end url
+     * @return String Front-end url
+     */
+    public function getFrontEndUrl() {
+        return Yii::app()->createAbsoluteUrl('/front/news/category', ['id' => $this->id]);
+    }
+
+    //-----------------------------------------------------
+    // Static methods
+    //-----------------------------------------------------
+    /**
+     * Loads the items from the database
+     * @param type $emptyOption boolean the item is empty
+     * @return type List data
+     */
+    public static function loadItems($emptyOption = false, $onlyParent = false) {
+        $_items = array();
+        if ($emptyOption) {
+            $_items[""] = "";
+        }
+        $models = self::model()->findAll(array(
+            'order' => 'id ASC',
+        ));
+        foreach ($models as $model) {
+            if (!isset($model->parent_id)) {
+                $_items[$model->id] = $model->name;
+                if (!empty($model->rChildren) && !$onlyParent) {
+                    foreach ($model->rChildren as $child) {
+                        $_items[$child->id] = '---> ' . $child->name;
+                    }
+                }
+            }
+        }
+        return $_items;
+    }
+    
+    /**
+     * Get list parent category
+     * @return Array List category
+     */
+    public static function getListParent() {
+        $criteria = new CDbCriteria();
+        $criteria->addCondition('parent_id IS NULL');
+        $models = self::model()->findAll($criteria);
+        return $models;
     }
 }

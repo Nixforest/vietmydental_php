@@ -8,10 +8,30 @@ class NewsController extends FrontController {
      */
     public function actionView($id){
         $mNews = $this->loadModel($id);
+        $this->pageTitle = $mNews->description;
         $this->render('view', array(
             'model' => $mNews,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
+    }
+    
+    /**
+     * Action category
+     * @param type $id
+     */
+    public function actionCategory($id) {
+        $mCategory = NewsCategories::model()->findByPk($id);
+        
+        if (isset($mCategory)) {
+            $this->pageTitle = $mCategory->name;
+            $this->render('category', array(
+                'model' => $mCategory,
+                DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+            ));
+        } else {
+            Loggers::error('Truy cập không hợp lệ', 'Không có NewsCategories với id = ' . $id, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');;
+        }
+        
     }
     
     /**
