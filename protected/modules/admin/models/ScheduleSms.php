@@ -5,17 +5,16 @@
  *
  * The followings are the available columns in table 'schedule_sms':
  * @property string $id
- * @property string $uid_login
  * @property string $phone
  * @property string $user_id
- * @property string $username
  * @property integer $type
- * @property string $obj_id
  * @property string $title
- * @property string $json_var
+ * @property string $content
  * @property string $count_run
  * @property string $time_send
  * @property string $created_date
+ * @property int $created_by
+ * @property int $status
  * @property integer $content_type
  */
 class ScheduleSms extends CActiveRecord {
@@ -37,8 +36,9 @@ class ScheduleSms extends CActiveRecord {
     const NETWORK_OTHER                 = 4;// mạng khác
     const NETWORK_VIETNAM_MOBILE        = 5;
     const NETWORK_G_MOBILE              = 6;
+    const NETWORK_S_PHONE               = 7;
     
-    const TYPE_NOMAL     = 1;
+    const TYPE_NOMAL     = 1; // Loại gửi thông dụng thường
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
@@ -62,15 +62,7 @@ class ScheduleSms extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('uid_login, phone, user_id, username, type, obj_id, json_var, time_send, created_date, content_type', 'required'),
-            array('type, content_type', 'numerical', 'integerOnly' => true),
-            array('uid_login, user_id, obj_id, count_run', 'length', 'max' => 11),
-            array('phone', 'length', 'max' => 50),
-            array('username', 'length', 'max' => 100),
-            array('title', 'safe'),
-            // The following rule is used by search().
-            // Please remove those attributes that should not be searched.
-            array('id, uid_login, phone, user_id, username, type, obj_id, title, json_var, count_run, time_send, created_date, content_type', 'safe', 'on' => 'search'),
+            array('id, phone, user_id, type, title, content, count_run, time_send, created_date,created_by, status, content_type', 'safe'),
         );
     }
 
@@ -89,19 +81,7 @@ class ScheduleSms extends CActiveRecord {
      */
     public function attributeLabels() {
         return array(
-            'id' => 'ID',
-            'uid_login' => 'Uid Login',
-            'phone' => 'Phone',
-            'user_id' => 'User',
-            'username' => 'Username',
-            'type' => 'Type',
-            'obj_id' => 'Obj',
-            'title' => 'Title',
-            'json_var' => 'Json Var',
-            'count_run' => 'Count Run',
-            'time_send' => 'Time Send',
-            'created_date' => 'Created Date',
-            'content_type' => 'Content Type',
+            
         );
     }
 
@@ -114,20 +94,6 @@ class ScheduleSms extends CActiveRecord {
         // should not be searched.
 
         $criteria = new CDbCriteria;
-
-        $criteria->compare('id', $this->id, true);
-        $criteria->compare('uid_login', $this->uid_login, true);
-        $criteria->compare('phone', $this->phone, true);
-        $criteria->compare('user_id', $this->user_id, true);
-        $criteria->compare('username', $this->username, true);
-        $criteria->compare('type', $this->type);
-        $criteria->compare('obj_id', $this->obj_id, true);
-        $criteria->compare('title', $this->title, true);
-        $criteria->compare('json_var', $this->json_var, true);
-        $criteria->compare('count_run', $this->count_run, true);
-        $criteria->compare('time_send', $this->time_send, true);
-        $criteria->compare('created_date', $this->created_date, true);
-        $criteria->compare('content_type', $this->content_type);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
@@ -180,39 +146,10 @@ class ScheduleSms extends CActiveRecord {
      * send SMS in model ScheduleSms
      */
     public function doSend() {
-        $ReceiverID = $this->phone;
-        $Content = $this->title;
-        $ContentType = $this->content_type;
-        $user_param = array (
-            'User'      => $this->User,
-            'Password'  => $this->Password,
-            'CPCode'    => $this->CPCode,
-            'RequestID' => $this->RequestID,
-            'UserID'    => $ReceiverID,
-            'ReceiverID'    => $ReceiverID,
-            'ServiceID'     => $this->ServiceID,
-            'CommandCode'   => $this->CommandCode,
-            'Content'       => $Content,
-            'ContentType'   => $ContentType,
-        );
-        $client = $this->sending($user_param, "wsCpMt");
+        $mSmsHandler = new SMSHandler();
+        $mSmsHandler->sendSMSOnce($this->phone,$this->content);
         // move sang history
         $mScheduleSmsHistory = new ScheduleSmsHistory();
         $mScheduleSmsHistory->InsertNew($this);
-    }
-    
-    /**
-     * Send sms
-     * @param type $user_param
-     * @param type $functionCall
-     * @return \SoapClient
-     */
-    public function sending($user_param, $functionCall) {
-        $client = new SoapClient($this->Url, array("soap_version" => SOAP_1_1,"trace" => 1));
-        $client->__soapCall(
-           $functionCall,
-           array($user_param)
-        );
-        return $client;
     }
 }

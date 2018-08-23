@@ -6,19 +6,16 @@
  * The followings are the available columns in table 'schedule_sms_history':
  * @property string $id
  * @property integer $network
- * @property string $uid_login
  * @property string $phone
  * @property string $user_id
- * @property integer $role_id
- * @property string $username
  * @property integer $type
- * @property string $obj_id
  * @property string $title
- * @property string $json_var
+ * @property string $content
  * @property string $count_run
  * @property string $time_send
  * @property string $created_date
- * @property string $created_date_on_history
+ * @property int $created_by
+ * @property int $status
  * @property integer $content_type
  */
 class ScheduleSmsHistory extends CActiveRecord {
@@ -46,15 +43,7 @@ class ScheduleSmsHistory extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('network, uid_login, phone, user_id, role_id, username, type, obj_id, json_var, time_send, created_date, created_date_on_history, content_type', 'required'),
-            array('network, role_id, type, content_type', 'numerical', 'integerOnly' => true),
-            array('uid_login, user_id, obj_id, count_run', 'length', 'max' => 11),
-            array('phone', 'length', 'max' => 50),
-            array('username', 'length', 'max' => 100),
-            array('title', 'safe'),
-            // The following rule is used by search().
-            // Please remove those attributes that should not be searched.
-            array('id, network, uid_login, phone, user_id, role_id, username, type, obj_id, title, json_var, count_run, time_send, created_date, created_date_on_history, content_type', 'safe', 'on' => 'search'),
+            array('id, network, phone, user_id, type, title, content, count_run, time_send, created_date,created_by, status, content_type', 'safe'),
         );
     }
 
@@ -73,22 +62,7 @@ class ScheduleSmsHistory extends CActiveRecord {
      */
     public function attributeLabels() {
         return array(
-            'id' => 'ID',
-            'network' => 'Network',
-            'uid_login' => 'Uid Login',
-            'phone' => 'Phone',
-            'user_id' => 'User',
-            'role_id' => 'Role',
-            'username' => 'Username',
-            'type' => 'Type',
-            'obj_id' => 'Obj',
-            'title' => 'Title',
-            'json_var' => 'Json Var',
-            'count_run' => 'Count Run',
-            'time_send' => 'Time Send',
-            'created_date' => 'Created Date',
-            'created_date_on_history' => 'Created Date On History',
-            'content_type' => 'Content Type',
+            
         );
     }
 
@@ -101,24 +75,7 @@ class ScheduleSmsHistory extends CActiveRecord {
         // should not be searched.
 
         $criteria = new CDbCriteria;
-
-        $criteria->compare('id', $this->id, true);
-        $criteria->compare('network', $this->network);
-        $criteria->compare('uid_login', $this->uid_login, true);
-        $criteria->compare('phone', $this->phone, true);
-        $criteria->compare('user_id', $this->user_id, true);
-        $criteria->compare('role_id', $this->role_id);
-        $criteria->compare('username', $this->username, true);
-        $criteria->compare('type', $this->type);
-        $criteria->compare('obj_id', $this->obj_id, true);
-        $criteria->compare('title', $this->title, true);
-        $criteria->compare('json_var', $this->json_var, true);
-        $criteria->compare('count_run', $this->count_run, true);
-        $criteria->compare('time_send', $this->time_send, true);
-        $criteria->compare('created_date', $this->created_date, true);
-        $criteria->compare('created_date_on_history', $this->created_date_on_history, true);
-        $criteria->compare('content_type', $this->content_type);
-
+        
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
         ));
@@ -130,8 +87,10 @@ class ScheduleSmsHistory extends CActiveRecord {
      */
     public function InsertNew($mScheduleSms) {
         $mHistory = new ScheduleSmsHistory('InsertNew');
+        $mPhoneHandler = new PhoneHandler();
         $aFieldNotCopy = array('id');
         $this->copyFromToTable($mScheduleSms, $mHistory, $aFieldNotCopy);
+        $mHistory->network = $mPhoneHandler->detect_number_network($mHistory->phone);
         // Add new history
         $mHistory->save();
         //client was received then delete schedule notify SMS
@@ -140,10 +99,10 @@ class ScheduleSmsHistory extends CActiveRecord {
     
     /**
      * copy attributes to new model
-     * @param type $mFrom
-     * @param type $mTo
-     * @param type $aFieldNotCopy
-     * @return type
+     * @param model $mFrom
+     * @param model $mTo
+     * @param array $aFieldNotCopy
+     * @return model to
      */
     public function copyFromToTable($mFrom, &$mTo, $aFieldNotCopy = array())
     {
