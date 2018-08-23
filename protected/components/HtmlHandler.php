@@ -217,7 +217,7 @@ class HtmlHandler {
                 break;
             }
             $teeth = (!empty($value->description) ? 'Răng ' . $value->description : '');
-            $content = 'BS <b>' . $value->rDoctor->getFullName() . '</b> thực hiện <b>' . $value->name . '</b>. ';
+            $content = 'BS <b>' . (isset($value->rDoctor) ? $value->rDoctor->getFullName() : '') . '</b> thực hiện <b>' . $value->name . '</b>. ';
             $resVal .= '<div class="treatment-process-item">'
                     .   '<p><b>' . $value->process_date.': </b>'
                     .   ' <span>' . $content.'</span>'
