@@ -212,14 +212,16 @@ class HtmlHandler {
         }
         $i = 0;
         foreach ($mTreatmentProcess as $value) {
-            if($i++ == 3){
+            if($i++ == 5){
                 $resVal .= '<div class="view-more"><span class="vm-btn">Xem thêm <i class="fas fa-angle-double-down"></i></span></div>';
                 break;
             }
+            $teeth = (!empty($value->description) ? 'Răng ' . $value->description : '');
+            $content = 'BS <b>' . $value->rDoctor->getFullName() . '</b> thực hiện <b>' . $value->name . '</b>. ';
             $resVal .= '<div class="treatment-process-item">'
-                    .   '<p><b>' . $value->process_date.':</b>'
-                    .   ' <span>' . $value->name.',</span>'
-//                    .   ' <span>răng ' . $value->teeth_id.'</span></p>'
+                    .   '<p><b>' . $value->process_date.': </b>'
+                    .   ' <span>' . $content.'</span>'
+                    .   ' <span>' . $teeth.'</span></p>'
                     .'</div>';
         }
         return $resVal;
