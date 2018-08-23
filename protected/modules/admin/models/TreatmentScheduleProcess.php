@@ -294,4 +294,16 @@ class TreatmentScheduleProcess extends BaseActiveRecord
         
         return $fields;
     }
+    
+    //++ BUG0076-IMT (DuongNV 20180823) Create treatment schedule process
+    /*
+     * Get customer model to reload info customer after close modal dialog
+     */
+    public function getCustomerModel() {
+        if (isset($this->rDetail->rSchedule)) {
+            return $this->rDetail->rSchedule->getCustomerModel();
+        }
+        return NULL;
+    }
+    //-- BUG0076-IMT (DuongNV 20180823) Create treatment schedule process
 }
