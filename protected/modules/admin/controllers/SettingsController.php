@@ -80,9 +80,26 @@ class SettingsController extends AdminController
                     Settings::KEY_VIVAS_SHARE_KEY,
                 ),
             ),
+            // SMS type send
+            Settings::KEY_SMS_SETTING_SENDS  => array(
+                DomainConst::KEY_ALIAS      => 'Tuỳ chọn gửi sms',
+                DomainConst::KEY_CHILDREN   => array(
+                    Settings::KEY_SMS_SEND_NORMAL,
+                    Settings::KEY_SMS_SEND_NOTIFY,
+                ),
+            ),
             // TODO: Add more group here
         );
-
+        
+        /**
+         * array checkbook
+         */
+        public $aCheckBooks = [
+            Settings::KEY_SMS_SEND_NORMAL,
+            Settings::KEY_SMS_SEND_NOTIFY,
+            Settings::KEY_SMS_FUNC_ON_OFF,
+            //TODO: Add more checkbook here
+        ];
 	/**
 	 * @return array action filters
 	 */
@@ -220,6 +237,7 @@ class SettingsController extends AdminController
             $this->render('index',array(
                     'model'=>$model,
                     'aSettings' => $this->aSettings,
+                    'aCheckBooks' => $this->aCheckBooks,
                     DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
             ));
 	}

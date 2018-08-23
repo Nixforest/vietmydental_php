@@ -23,6 +23,8 @@ class Settings extends BaseActiveRecord
     const KEY_MAIL_SETTINGS                     = 'mail_settings';
     /** Key SMS setting */
     const KEY_SMS_SETTINGS                      = 'sms_settings';
+    /** Key SMS setting */
+    const KEY_SMS_SETTING_SENDS                 = 'sms_setting_sends';
     
     /* --- General settings --- */
     /** Key website title */
@@ -99,7 +101,9 @@ class Settings extends BaseActiveRecord
     const KEY_VIVAS_SHARE_KEY                   = 'VIVAS_SHARE_KEY';
     /** Key SMS function on/off */
     const KEY_SMS_FUNC_ON_OFF                   = 'SMS_FUNC_ON_OFF';
-    
+    /** Key SMS type send */
+    const KEY_SMS_SEND_NORMAL                   = 'SMS_SEND_NORMAL';
+    const KEY_SMS_SEND_NOTIFY                   = 'SMS_SEND_NOTIFY';
 	/**
 	 * @return string the associated database table name
 	 */
