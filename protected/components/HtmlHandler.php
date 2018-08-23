@@ -143,7 +143,9 @@ class HtmlHandler {
                     .        ' <span class="caret"></span></button>'
                     .        '<ul class="dropdown-menu" style="min-width:100px;">'
                     .           '<li class="createPrescription">' . $prescriptItem . '</li>'
-                    .           '<li class="createProcess"><a style="cursor:pointer;"><i class="fas fa-stethoscope"></i> Tạo Tiến trình điều trị</a></li>'
+                    //++ BUG0076-IMT (DuongNV 20180823) Create treatment schedule process
+                    .           '<li><a class="createProcess" style="cursor:pointer;" data-id="'.$id.'"><i class="fas fa-stethoscope"></i> Tạo Tiến trình điều trị</a></li>'
+                    //-- BUG0076-IMT (DuongNV 20180823) Create treatment schedule process
                     .           '<li><a class="imageCamera" style="cursor:pointer;" href="' . $urlReal . '"> <i class="fas fa-camera" style="margin:0 1px;"></i> Hình ảnh Camera</a></li>'
                     .           '<li><a class="imageXQuang" style="cursor:pointer;" href="' . $urlXRay . '"><i class="fas fa-x-ray"></i> Hình ảnh X-Quang</a></li>'
                     .           '<li class="requestRecoveryImage" data-id="'.$id.'">' . $laboRequestItem . '</li>'

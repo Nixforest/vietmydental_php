@@ -57,30 +57,65 @@ class TreatmentScheduleProcessController extends AdminController
 		));
 	}
 
+        //++ BUG0076-IMT (DuongNV 20180823) Create treatment schedule process
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
+         * @params: $ajax if create by opening dialog, set it to TRUE
 	 */
-	public function actionCreate()
+	public function actionCreate($ajax = false)
 	{
 		$model=new TreatmentScheduleProcess;
 
-		// Uncomment the following line if AJAX validation is needed
+                // Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-
+                
+                if(!empty($_POST['id'])){ // If create from dialog, id is available
+                    $model->detail_id = $_POST['id'];
+                }
 		if(isset($_POST['TreatmentScheduleProcess']))
 		{
-			$model->attributes=$_POST['TreatmentScheduleProcess'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+                        $model->attributes=$_POST['TreatmentScheduleProcess'];
+                        $datedmy = $_POST['TreatmentScheduleProcess']['process_date'];
+                        $datedmy = str_replace('/', '-', $datedmy);
+                        $model->process_date = date('Y-m-d', strtotime($datedmy));
+                        if($model->save()){
+                            if($ajax){ // Create by opening dialog
+                                $customer = $model->getCustomerModel();
+                                if (isset($customer)) {
+                                    $rightContent = $customer->getCustomerAjaxInfo();
+                                    $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
+                                }
+                                echo CJavaScript::jsonEncode(array(
+                                    DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
+                                    DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
+                                    DomainConst::KEY_RIGHT_CONTENT  => $rightContent,
+                                    DomainConst::KEY_INFO_SCHEDULE => $infoSchedule,
+                                ));
+                                exit;
+                            } else {
+                                $this->redirect(array('view','id'=>$model->id));
+                            }
+                        }
 		}
 
-		$this->render('create',array(
-			'model'=>$model,
-                        DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-		));
+                if($ajax){
+                    echo CJSON::encode(array(
+                        DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
+                        DomainConst::KEY_CONTENT => $this->renderPartial('create',array(
+                                'model'=>$model,
+                                DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                            ), true, true),
+                    ));
+                    exit;
+                } else {
+                    $this->render('create',array(
+                            'model'=>$model,
+                            DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                    ));
+                }
 	}
-
+        //-- BUG0076-IMT (DuongNV 20180823) Create treatment schedule process
 	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
