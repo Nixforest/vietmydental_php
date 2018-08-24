@@ -190,16 +190,29 @@
                                     <strong> <?php echo DomainConst::CONTENT00300; ?>: </strong><br>
                                     <span><?php echo $model->getDebt(); ?></span>
                                 </div>
-                                <?php $idx = count($model->getReceipts()); ?>
-                                <?php foreach ($model->getReceipts() as $receipt): ?>
+                                <?php // $idx = count($model->getReceipts()); ?>
+                                <?php
+                                $idx = 1;
+                                $html = ''; 
+                                ?>
+                                <?php foreach (array_reverse($model->getReceipts()) as $receipt): ?>
                                     <?php if ($receipt->final != 0) : ?>
-                                    <div class="lp-list-item">
+                                    <?php
+                                    $htmlVal = '<div class="lp-list-item">';
+                                    $htmlVal .=     '<i class="fa fa-credit-card custom lp-list-item-icon"></i>';
+                                    $htmlVal .=     '<strong>Thanh Toán Lần ' . $idx++ . ': </strong><br>';
+                                    $htmlVal .=     '<span>' . CommonProcess::formatCurrency($receipt->final) . ' (Ngày Thanh Toán: ' . $receipt->process_date . ')</span>';
+                                    $htmlVal .= '</div>';
+                                    $html = $htmlVal . $html;
+                                    ?>
+<!--                                    <div class="lp-list-item">
                                         <i class="fa fa-credit-card custom lp-list-item-icon"></i>
-                                        <strong>Thanh Toán Lần <?php echo $idx--; ?>: </strong><br>
-                                        <span><?php echo CommonProcess::formatCurrency($receipt->final); ?> (Ngày Thanh Toán: <?php echo $receipt->process_date; ?>)</span>
-                                    </div>
+                                        <strong>Thanh Toán Lần <?php // echo $idx++; ?>: </strong><br>
+                                        <span><?php // echo CommonProcess::formatCurrency($receipt->final); ?> (Ngày Thanh Toán: <?php echo $receipt->process_date; ?>)</span>
+                                    </div>-->
                                     <?php endif; ?>
                                 <?php endforeach; ?>
+                                <?php echo $html; ?>
                                 <!--<a href="#">(Xem Thêm)</a>-->
                             </div>
                         </div>

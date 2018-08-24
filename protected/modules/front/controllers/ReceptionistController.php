@@ -771,9 +771,9 @@ class ReceptionistController extends FrontController {
             //++ BUG0045-IMT (DuongNV 20180721) Handle show total money when update receipt
             //$total = $mDetail->getTotalMoney();
             $total = $model->total;
-            if (empty($total)) {
+            if (empty($total) && $model->isNewRecord) {
                 $total = $mDetail->getTotalMoney();
-                $model->final = $total;
+//                $model->final = $total;
             }
             //-- BUG0045-IMT (DuongNV 20180721) Handle show total money when update receipt
 
