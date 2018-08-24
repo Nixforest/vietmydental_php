@@ -192,11 +192,13 @@
                                 </div>
                                 <?php $idx = count($model->getReceipts()); ?>
                                 <?php foreach ($model->getReceipts() as $receipt): ?>
+                                    <?php if ($receipt->final != 0) : ?>
                                     <div class="lp-list-item">
                                         <i class="fa fa-credit-card custom lp-list-item-icon"></i>
                                         <strong>Thanh Toán Lần <?php echo $idx--; ?>: </strong><br>
                                         <span><?php echo CommonProcess::formatCurrency($receipt->final); ?> (Ngày Thanh Toán: <?php echo $receipt->process_date; ?>)</span>
                                     </div>
+                                    <?php endif; ?>
                                 <?php endforeach; ?>
                                 <!--<a href="#">(Xem Thêm)</a>-->
                             </div>

@@ -171,7 +171,7 @@
                     <?php foreach ($model as $value): ?>
                     <?php
                         $teethCount = 1;                    // Number of teeth
-                        $treatmentName = '';                // Name of treatment type
+//                        $treatmentName = '';                // Name of treatment type
                         $price = '';                        // Price of treatment
                         $money = $value->getTotal() - $value->discount; // Money
                         $totalmoney += $money;
@@ -186,11 +186,11 @@
                             $teethCount = $value->rTreatmentScheduleDetail->getTeethCount();
                         }
                         if ($treatment != NULL) {
-                            // Get treatment name
-                            $treatmentName = $treatment->name;
                             // And price
                             $price = $treatment->getPrice();
                         }
+                        // Get treatment name
+                        $treatmentName = $value->getTreatmentTypeName();
                     ?>
                     <tr>
                         <td><?php echo $index++; ?></td>

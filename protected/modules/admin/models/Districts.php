@@ -232,6 +232,18 @@ class Districts extends BaseActiveRecord
             'Q10'    => 'Quận 10',
             'Q11'    => 'Quận 11',
             'Q12'    => 'Quận 12',
+            'Q.1'    => 'Quận 1',
+            'Q.2'    => 'Quận 2',
+            'Q.3'    => 'Quận 3',
+            'Q.4'    => 'Quận 4',
+            'Q.5'    => 'Quận 5',
+            'Q.6'    => 'Quận 6',
+            'Q.7'    => 'Quận 7',
+            'Q.8'    => 'Quận 8',
+            'Q.9'    => 'Quận 9',
+            'Q.10'    => 'Quận 10',
+            'Q.11'    => 'Quận 11',
+            'Q.12'    => 'Quận 12',
         );
         $name = str_replace('Q. ', '', $name);
         $name = str_replace('H. ', '', $name);

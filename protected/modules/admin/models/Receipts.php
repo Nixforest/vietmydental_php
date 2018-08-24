@@ -334,9 +334,12 @@ class Receipts extends CActiveRecord {
      * @return Treatment type name, or empty
      */
     public function getTreatmentTypeName() {
-        $model = $this->getTreatmentType();
-        if ($model != NULL) {
-            return $model->name;
+//        $model = $this->getTreatmentType();
+//        if ($model != NULL) {
+//            return $model->name;
+//        }
+        if (isset($this->rTreatmentScheduleDetail)) {
+            return $this->rTreatmentScheduleDetail->getTreatmentInfo();
         }
         return '';
     }

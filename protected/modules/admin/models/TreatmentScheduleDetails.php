@@ -370,9 +370,24 @@ class TreatmentScheduleDetails extends BaseActiveRecord
      * @return String
      */
     public function getTreatmentInfo() {
-        $retVal = $this->getTreatment();
+        $retVal = [];
+        $treatment = trim($this->getTreatment());
+        if (!empty($treatment)) {
+            return $treatment;
+//            $retVal[] = $treatment;
+        }
+        if (isset($this->rDiagnosis)) {
+            $diagnosisName = trim($this->rDiagnosis->name);
+            if (!empty($diagnosisName)) {
+                $retVal[] = $diagnosisName;
+            }
+        }
+        $description = trim($this->description);
+        if (!empty($description)) {
+            $retVal[] = $description;
+        }
         if (!empty($retVal)) {
-            return $retVal;
+            return implode(DomainConst::SPLITTER_TYPE_1, $retVal);
         }
         return DomainConst::CONTENT00177;
     }
