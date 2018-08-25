@@ -76,7 +76,7 @@
                     'buttonImageOnly' => true,
                 ),
                 'htmlOptions'=>array(
-                            'class'=>'w-16',
+                            'class'=>'w-16 date-input',
 //                            'readonly'=>'readonly',
 //                            'value' => CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3),
                             'value' => $date,
@@ -275,5 +275,6 @@
             '#Customers_district_id',
             '#Customers_ward_id',
             "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/searchWardsByDistrict'); ?>");
+        fnInputDate();
     });
 </script>

@@ -400,3 +400,58 @@ function fnNumberOnly(){
     });
 }
 //-- BUG0045-IMT  (DuongNV 201807) Format currency when input
+
+function fnInputDate(){
+    $('.date-input').attr('maxlength','10');
+    $(document).on('focusin', '.date-input', function(){
+        if( $(this).val() == '' ){
+            $(this).val('00/00/0000');
+        }
+        createSelection($(this)[0], 0, 1);
+    });
+    $(document).on('focusout', '.date-input', function(){
+        var curVal = $(this).val();
+        if( curVal == '' || curVal.search('/') == -1 ){
+            $(this).val('00/00/0000');
+        }
+    });
+    $(document).on('keydown', '.date-input', function(e){
+        if(e.keyCode == 8 || e.keyCode == 46){ // Backspace
+            e.preventDefault();
+        }
+    });
+    $(document).on('keyup', '.date-input', function(e){
+        var cs = $(this)[0].selectionEnd; // Current pointer (at the end of selection)
+        if (!((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) { 
+            e.preventDefault();
+            e.stopPropagation()
+            return false;
+        }
+        switch(cs){
+            case 1: createSelection($(this)[0], 1, 2); break;
+            case 2: createSelection($(this)[0], 3, 4); break;
+            case 4: createSelection($(this)[0], 4, 5); break;
+            case 5: createSelection($(this)[0], 6, 7); break;
+            case 7: createSelection($(this)[0], 7, 8); break;
+            case 8: createSelection($(this)[0], 8, 9); break;
+            case 9: createSelection($(this)[0], 9, 10); break;
+        }
+    })
+}
+function createSelection(field, start, end) {
+    if( field.createTextRange ) {
+        var selRange = field.createTextRange();
+        selRange.collapse(true);
+        selRange.moveStart('character', start);
+        selRange.moveEnd('character', end);
+        selRange.select();
+        field.focus();
+    } else if( field.setSelectionRange ) {
+        field.focus();
+        field.setSelectionRange(start, end);
+    } else {
+        field.selectionStart = start;
+        field.selectionEnd = end;
+        field.focus();
+    }
+}
