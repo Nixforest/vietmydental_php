@@ -1446,4 +1446,5 @@ class DomainConst {
     const CONTENT00426  = 'Tên chuyên mục';
     const CONTENT00427  = 'Chuyên mục cha';
     const CONTENT00428  = 'Nội dung';
+    const CONTENT00429  = 'Total';
 }
