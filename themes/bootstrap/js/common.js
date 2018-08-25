@@ -401,6 +401,10 @@ function fnNumberOnly(){
 }
 //-- BUG0045-IMT  (DuongNV 201807) Format currency when input
 
+//++ BUG0066-IMT (DuongNV 20180825) input date create customer
+/* 
+ * @todo bind input date event to class "date-input"
+ */
 function fnInputDate(){
     $('.date-input').attr('maxlength','10');
     $(document).on('focusin', '.date-input', function(){
@@ -438,6 +442,12 @@ function fnInputDate(){
         }
     })
 }
+
+/* 
+ * @todo Select a text in input field
+ * @params field: input selector ( with class should have [0] after $() => $()[0] )
+ * @params select position, start at 0
+ */
 function createSelection(field, start, end) {
     if( field.createTextRange ) {
         var selRange = field.createTextRange();
@@ -455,3 +465,4 @@ function createSelection(field, start, end) {
         field.focus();
     }
 }
+//-- BUG0066-IMT (DuongNV 20180825) input date create customer
