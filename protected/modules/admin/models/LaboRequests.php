@@ -231,7 +231,7 @@ class LaboRequests extends BaseActiveRecord {
      * @return string
      */
     public function getPrice() {
-        return !empty($this->price) ? CommonProcess::formatCurrency($this->price) . ' ' . DomainConst::CONTENT00134 : '';
+        return !empty($this->price) ? CommonProcess::formatCurrency($this->price) : '';
     }
 
     /**
@@ -306,5 +306,27 @@ class LaboRequests extends BaseActiveRecord {
     public function getItemToothColor() {
         return explode(DomainConst::SPLITTER_TYPE_2, Settings::getItem(Settings::KEY_TOOTH_COLOR));
     }
-
+    
+    /**
+     * Get customer model
+     * @return Object Customer model, Null if not found
+     */
+    public function getCustomer() {
+        if (isset($this->rTreatmentScheduleDetail)) {
+            return $this->rTreatmentScheduleDetail->getCustomerModel();
+        }
+        return NULL;
+    }
+    
+    /**
+     * Get customer name
+     * @return string Customer name, empty string if not found
+     */
+    public function getCustomerName() {
+        $customer = $this->getCustomer();
+        if (isset($customer)) {
+            return $customer->name;
+        }
+        return '';
+    }
 }
