@@ -291,6 +291,7 @@ class TreatmentScheduleProcess extends BaseActiveRecord
         $fields[] = 'name: ' . $this->name;
         $fields[] = 'doctor: ' . (isset($this->rDoctor) ? $this->rDoctor->first_name : '');
         $fields[] = 'description: ' . $this->description;
+        $fields[] = 'note: ' . $this->note;
         
         return $fields;
     }
