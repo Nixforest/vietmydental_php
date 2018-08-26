@@ -207,10 +207,12 @@ class ReceptionistController extends FrontController {
                                 $mMedicalRecord->rCustomer,
                                 $schedule->rDoctor);
                         // Inform for customer
-                        SMSHandler::sendSMSOnce($mMedicalRecord->rCustomer->getPhone(),
+                        if (DateTimeExt::compare(CommonProcess::getCurrentDateTime(), $schedule->start_date) == -1) {
+                            SMSHandler::sendSMSOnce($mMedicalRecord->rCustomer->getPhone(),
                                 'Quý Khách hàng đã đặt hẹn trên Hệ thống Nha Khoa Việt Mỹ vào lúc '
                                 . $detail->getStartTime() . ' với bác sĩ ' . $schedule->rDoctor->first_name
                                 . '. Quý Khách hàng vui lòng sắp xếp thời gian đến đúng hẹn');
+                        }
                     }
                     echo CJavaScript::jsonEncode(array(
                         DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
@@ -877,7 +879,15 @@ class ReceptionistController extends FrontController {
                     if (isset($customer)) {
                         $rightContent = $customer->getCustomerAjaxInfo();
                         $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
+                        // Inform for customer
+                        if (DateTimeExt::compare(CommonProcess::getCurrentDateTime(), $model->start_date) == -1) {
+                            SMSHandler::sendSMSOnce($customer->getPhone(),
+                                'Quý Khách hàng đã đặt hẹn trên Hệ thống Nha Khoa Việt Mỹ vào lúc '
+                                . $model->getStartTime() . ' với bác sĩ ' . $mSchedule->rDoctor->first_name
+                                . '. Quý Khách hàng vui lòng sắp xếp thời gian đến đúng hẹn');
+                        }
                     }
+                    
                     echo CJavaScript::jsonEncode(array(
                         DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
                         DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,

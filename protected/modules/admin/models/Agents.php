@@ -422,7 +422,8 @@ class Agents extends BaseActiveRecord
                 $aData['EXPORT_DETAIL'][] = array(
                     'DATE' => $date,
                     'MONEY' => $mMoney->amount,
-                    'DESCRIPTION' => $mMoney->description,
+//                    'DESCRIPTION' => $mMoney->description,
+                    'DESCRIPTION' => $mMoney->name,
                 );
             }
 //            set date GENERAL
