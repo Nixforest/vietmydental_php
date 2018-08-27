@@ -873,7 +873,7 @@ class TreatmentScheduleDetails extends BaseActiveRecord
      * Get list all customersn have schedule in today
      * @return Array List of customer's id
      */
-    public static function getListCustomerIdHaveScheduleToday($date = '2018-08-02') {
+    public static function getListCustomerIdHaveScheduleToday($date = '') {
         $from = time();
         $retVal = array();
 //        $arrModel = self::model()->findAll();
