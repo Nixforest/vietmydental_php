@@ -744,15 +744,25 @@ class Receipts extends CActiveRecord {
      */
     public static function getReceiptsToday() {
         $retVal = array();
-        $models = self::model()->findAll();
+//        $models = self::model()->findAll();
+//        $agentId = isset(Yii::app()->user) ? Yii::app()->user->agent_id : '';
+//        foreach ($models as $model) {
+//            if ($model->status != self::STATUS_INACTIVE && DateTimeExt::isToday($model->process_date, DomainConst::DATE_FORMAT_4) && ($model->getAgentId() == $agentId)) {
+////        CommonProcess::dumpVariable($model->getAgentId());
+//                $retVal[] = $model;
+//            }
+//        }
+        
         $agentId = isset(Yii::app()->user) ? Yii::app()->user->agent_id : '';
-        foreach ($models as $model) {
-            if ($model->status != self::STATUS_INACTIVE && DateTimeExt::isToday($model->process_date, DomainConst::DATE_FORMAT_4) && ($model->getAgentId() == $agentId)) {
-//        CommonProcess::dumpVariable($model->getAgentId());
-                $retVal[] = $model;
-            }
-        }
-
+        $criteria = new CDbCriteria;
+        $criteria->addCondition('t.status != '.self::STATUS_INACTIVE);
+        $today = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
+        $criteria->compare('t.process_date',$today);
+        $tblOneMany = OneMany::model()->tableName();
+        $criteria->join = 'JOIN '.$tblOneMany.' as one ON one.many_id = t.id';
+        $criteria->compare('one.one_id',$agentId);
+        $criteria->compare('one.type',OneMany::TYPE_AGENT_RECEIPT);
+        $retVal = self::model()->findAll($criteria);
         return $retVal;
 //        $criteria = new CDbCriteria();
 //        $criteria->addCondition('t.process_date = DATE(NOW())');
@@ -790,16 +800,28 @@ class Receipts extends CActiveRecord {
     public static function getRevenue($from, $to, $agent_id) {
         Loggers::info('Revenue', "($from, $to, $agent_id)", __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         $retVal = 0;
-        foreach (self::model()->findAll() as $receipt) {
-            $date = $receipt->process_date;
-            $compareFrom = DateTimeExt::compare($date, $from);
-            $compareTo = DateTimeExt::compare($date, $to);
-            // Check if process date is between date range
-            if (($compareFrom == 1 || $compareFrom == 0) && ($compareTo == 0 || $compareTo == -1)) {
-                if (($receipt->status != self::STATUS_INACTIVE) && $receipt->isBelongAgent($agent_id)) {
-                    $retVal += $receipt->final;
-                }
-            }
+//        foreach (self::model()->findAll() as $receipt) {
+//            $date = $receipt->process_date;
+//            $compareFrom = DateTimeExt::compare($date, $from);
+//            $compareTo = DateTimeExt::compare($date, $to);
+//            // Check if process date is between date range
+//            if (($compareFrom == 1 || $compareFrom == 0) && ($compareTo == 0 || $compareTo == -1)) {
+//                if (($receipt->status != self::STATUS_INACTIVE) && $receipt->isBelongAgent($agent_id)) {
+//                    $retVal += $receipt->final;
+//                }
+//            }
+//        }
+        $criteria = new CDbCriteria;
+        $criteria->addCondition('t.status != '.self::STATUS_INACTIVE);
+        $criteria->addBetweenCondition('t.process_date',$from,$to);
+        $tblOneMany = OneMany::model()->tableName();
+        $criteria->join = 'JOIN '.$tblOneMany.' as one ON one.many_id = t.id';
+        $criteria->compare('one.one_id',$agent_id);
+        $criteria->select = 'DISTINCT t.*';
+        $criteria->compare('one.type',OneMany::TYPE_AGENT_RECEIPT);
+        $models = self::model()->findAll($criteria);
+        foreach ($models as $mReceipt) {
+            $retVal += $mReceipt->final;
         }
         return $retVal;
     }
