@@ -76,7 +76,9 @@
                     'buttonImageOnly' => true,
                 ),
                 'htmlOptions'=>array(
-                            'class'=>'w-16',
+                            //++ BUG0066-IMT (DuongNV 20180825) input date create customer
+                            'class'=>'w-16 date-input',
+                            //-- BUG0066-IMT (DuongNV 20180825) input date create customer
 //                            'readonly'=>'readonly',
 //                            'value' => CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3),
                             'value' => $date,
@@ -275,5 +277,8 @@
             '#Customers_district_id',
             '#Customers_ward_id',
             "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/searchWardsByDistrict'); ?>");
+        //++ BUG0066-IMT (DuongNV 20180825) input date create customer
+        fnInputDate();
+        //-- BUG0066-IMT (DuongNV 20180825) input date create customer
     });
 </script>
