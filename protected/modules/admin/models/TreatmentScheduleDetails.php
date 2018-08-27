@@ -873,21 +873,45 @@ class TreatmentScheduleDetails extends BaseActiveRecord
      * Get list all customersn have schedule in today
      * @return Array List of customer's id
      */
-    public static function getListCustomerIdHaveScheduleToday($date = '') {
+    public static function getListCustomerIdHaveScheduleToday($date = '2018-08-02') {
+        $from = time();
         $retVal = array();
-        $arrModel = self::model()->findAll();
+//        $arrModel = self::model()->findAll();
+//        $agentId = isset(Yii::app()->user) ? Yii::app()->user->agent_id : '';
+//        foreach ($arrModel as $value) {
+////            if ($value->status != self::STATUS_INACTIVE
+////                    && DateTimeExt::isToday($value->start_date, DomainConst::DATE_FORMAT_1)
+////                    && !DateTimeExt::isToday($value->created_date, DomainConst::DATE_FORMAT_1)) {
+//            if ($value->isScheduleOnDate($date)) {
+//                $customerId = $value->getCustomer();
+//                $mCustomer = $value->getCustomerModel();
+//                if (isset($mCustomer) && ($mCustomer->getAgentId() == $agentId)) {
+//                    $retVal[] = $mCustomer->id;
+//                }
+//            }
+//        }
         $agentId = isset(Yii::app()->user) ? Yii::app()->user->agent_id : '';
-        foreach ($arrModel as $value) {
-//            if ($value->status != self::STATUS_INACTIVE
-//                    && DateTimeExt::isToday($value->start_date, DomainConst::DATE_FORMAT_1)
-//                    && !DateTimeExt::isToday($value->created_date, DomainConst::DATE_FORMAT_1)) {
-            if ($value->isScheduleOnDate($date)) {
-                $customerId = $value->getCustomer();
-                $mCustomer = $value->getCustomerModel();
-                if (isset($mCustomer) && ($mCustomer->getAgentId() == $agentId)) {
-                    $retVal[] = $mCustomer->id;
-                }
-            }
+        $criteria=new CDbCriteria;
+        $criteria->addCondition('t.status !='. self::STATUS_INACTIVE);
+        if(empty($date)){
+            $today = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
+            $criteria->compare('DATE(t.start_date)', $today);
+            $criteria->addCondition('DATE(t.created_date) != "'. $today.'"');
+        }else{
+            $criteria->compare('DATE(t.start_date)', $date);
+        }
+        $tblTreatmentSchedules = TreatmentSchedules::model()->tableName();
+        $tblMedicalRecords = MedicalRecords::model()->tableName();
+        $tblOneMany = OneMany::model()->tableName();
+        $criteria->join = 'JOIN '.$tblTreatmentSchedules.' AS tr ON t.schedule_id = tr.id';
+        $criteria->join .= ' JOIN '.$tblMedicalRecords.' AS me ON tr.record_id = me.id';
+        $criteria->join .= ' JOIN '.$tblOneMany.' AS om ON me.customer_id = om.many_id';
+        $criteria->compare('om.type', OneMany::TYPE_AGENT_CUSTOMER);
+        $criteria->compare('om.one_id', $agentId);
+        $criteria->select = 'DISTINCT me.customer_id as id';
+        $arrModel = self::model()->findAll($criteria);
+        foreach ($arrModel as $mScheduleDetail) {
+            $retVal[] = $mScheduleDetail->id; // id -> customer_id
         }
         return $retVal;
     }
@@ -899,19 +923,45 @@ class TreatmentScheduleDetails extends BaseActiveRecord
      */
     public static function getListCustomerHaveScheduleTodayCreatedToday() {
         $retVal = array();
-        $arrModel = self::model()->findAll();
+//        $arrModel = self::model()->findAll();
+//        $agentId = isset(Yii::app()->user) ? Yii::app()->user->agent_id : '';
+//        foreach ($arrModel as $value) {
+//            if ($value->status != self::STATUS_INACTIVE
+//                    && DateTimeExt::isToday($value->start_date, DomainConst::DATE_FORMAT_1)
+//                    && DateTimeExt::isToday($value->created_date, DomainConst::DATE_FORMAT_1)) {
+//                $mCustomer = $value->getCustomerModel();
+////                if (isset($mCustomer)) {
+//                if (isset($mCustomer) && ($mCustomer->getAgentId() == $agentId)) {
+//                    $retVal[] = $mCustomer;
+//                }
+//            }
+//        }
+        $arrCus = [];
         $agentId = isset(Yii::app()->user) ? Yii::app()->user->agent_id : '';
-        foreach ($arrModel as $value) {
-            if ($value->status != self::STATUS_INACTIVE
-                    && DateTimeExt::isToday($value->start_date, DomainConst::DATE_FORMAT_1)
-                    && DateTimeExt::isToday($value->created_date, DomainConst::DATE_FORMAT_1)) {
-                $mCustomer = $value->getCustomerModel();
-//                if (isset($mCustomer)) {
-                if (isset($mCustomer) && ($mCustomer->getAgentId() == $agentId)) {
-                    $retVal[] = $mCustomer;
-                }
-            }
+        $criteria=new CDbCriteria;
+        $criteria->addCondition('t.status !='. self::STATUS_INACTIVE);
+        $today = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
+//        set date
+        $criteria->compare('DATE(t.start_date)', $today);
+        $criteria->compare('DATE(t.created_date)',$today);
+        $tblTreatmentSchedules = TreatmentSchedules::model()->tableName();
+        $tblMedicalRecords = MedicalRecords::model()->tableName();
+        $tblOneMany = OneMany::model()->tableName();
+        $criteria->join = 'JOIN '.$tblTreatmentSchedules.' AS tr ON t.schedule_id = tr.id';
+        $criteria->join .= ' JOIN '.$tblMedicalRecords.' AS me ON tr.record_id = me.id';
+        $criteria->join .= ' JOIN '.$tblOneMany.' AS om ON me.customer_id = om.many_id';
+        $criteria->compare('om.type', OneMany::TYPE_AGENT_CUSTOMER);
+        $criteria->compare('om.one_id', $agentId);
+        $criteria->select = 'DISTINCT me.customer_id as id';
+        $arrModel = self::model()->findAll($criteria);
+        foreach ($arrModel as $mScheduleDetail) {
+            $arrCus[] = $mScheduleDetail->id; // id -> customer_id
         }
+//        find cus
+        $criteriaCus=new CDbCriteria;
+        $criteriaCus->addInCondition('t.id', $arrCus);
+        $retVal = Customers::model()->findAll($criteriaCus);
+
         return $retVal;
     }
     
