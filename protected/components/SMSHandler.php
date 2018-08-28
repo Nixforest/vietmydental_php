@@ -85,6 +85,13 @@ class SMSHandler {
                 break;
         }
     }
+    public static function sendSMSSchedule() {
+        if (!Settings::canSendSMS()) {
+            Loggers::info('Can not send SMS', 'Send sms function is off', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            return;
+        }
+        // Insert new record to schedule_sms
+    }
     
     /**
      * Format phone number
