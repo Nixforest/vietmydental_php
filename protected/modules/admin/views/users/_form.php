@@ -221,7 +221,7 @@ $mAgents = new Agents();
                 ),
                 'htmlOptions' => array(
                     'class' => 'w-16',
-                    'readonly' => 'readonly',
+//                    'readonly' => 'readonly',
                     'value' => $date,
                 ),
             ));
@@ -262,7 +262,7 @@ $mAgents = new Agents();
                 ),
                 'htmlOptions' => array(
                     'class' => 'w-16',
-                    'readonly' => 'readonly',
+//                    'readonly' => 'readonly',
                     'value' => $date,
                 ),
             ));
@@ -303,7 +303,7 @@ $mAgents = new Agents();
                 ),
                 'htmlOptions' => array(
                     'class' => 'w-16',
-                    'readonly' => 'readonly',
+//                    'readonly' => 'readonly',
                     'value' => $date,
                 ),
             ));

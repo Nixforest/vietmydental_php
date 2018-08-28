@@ -65,7 +65,8 @@ class UsersController extends AdminController {
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
-
+        $model->password_hash       = DEFAULT_PASS;
+        $model->temp_password       = DEFAULT_PASS;
         if (isset($_POST['Users'])) {
             $model->attributes = $_POST['Users'];
             if ($model->save()) {

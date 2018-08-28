@@ -88,8 +88,10 @@ $this->widget('zii.widgets.grid.CGridView', array(
     <tbody>
         <?php
             $revenueToday = Receipts::getRevenueToday($model->id);
+            $revenueToday = 0;
             $totalCollected = 0;
-            $revenueMonth = Receipts::getRevenueCurrentMonth($model->id);
+//            $revenueMonth = Receipts::getRevenueCurrentMonth($model->id);
+            $revenueMonth = 0;
         ?>
         <?php // foreach ($arrModels as $model) :?>
             <?php

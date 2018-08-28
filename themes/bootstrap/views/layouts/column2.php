@@ -1,6 +1,6 @@
 <?php $this->beginContent('//layouts/main'); ?>
       <div class="row-fluid">
-        <div class="span3">
+        <div class="span2">
          <?php
 			$this->beginWidget('zii.widgets.CPortlet', array(
 				'title'=>'Tác vụ',
@@ -15,7 +15,7 @@
 		?>
 		</div><!-- sidebar span3 -->
 
-	<div class="span9">
+	<div class="span10">
 		<div class="main">
 			<?php echo $content; ?>
 		</div><!-- content -->

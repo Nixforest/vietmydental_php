@@ -48,7 +48,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'name'=>'customer_id',
                     'htmlOptions' => array('style' => 'text-align:center;'),
                     'value'=> 'isset($data->rCustomer) ? $data->rCustomer->name : ""',
-                    'filter'=>Customers::loadItems(),
+//                    'filter'=>Customers::loadItems(),
                 ),
 		array(
                     'name'=>'type_id',

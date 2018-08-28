@@ -603,10 +603,16 @@ class Customers extends BaseActiveRecord
                     .       '<path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path>'
                     .'</svg>';//END
         if (isset($this->rMedicalRecord) && isset($this->rMedicalRecord->rTreatmentSchedule)) {
-            $i = count($this->rMedicalRecord->rTreatmentSchedule);
+//            $i = count($this->rMedicalRecord->rTreatmentSchedule);
+            $i = 0;
             foreach ($this->rMedicalRecord->rTreatmentSchedule as $schedule) {
-                if (isset($schedule->rDetail)) {
-//                if (!empty($schedule->rDetail)) {
+                if (!empty($schedule->rDetail)) {
+                    $i++;
+                }
+            }
+            foreach ($this->rMedicalRecord->rTreatmentSchedule as $schedule) {
+//                if (isset($schedule->rDetail)) {
+                if (!empty($schedule->rDetail)) {
                     $rightContent .= '<b style="float: left">';
                     if ($schedule->rPathological) {
                         $rightContent .= $htmlIcon.'<span class="round-txt">Đợt ' . $i . ': ' . $schedule->getStartDate() . ' - ' . $schedule->rPathological->name . '</span>';

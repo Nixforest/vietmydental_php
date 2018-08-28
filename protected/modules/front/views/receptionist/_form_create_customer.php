@@ -50,7 +50,7 @@
             <?php echo $form->labelEx($customer,'date_of_birth'); ?>
             <!--<label for="Customers_date_of_birth" class="required">Ngày sinh (m/d/y) <span class="required">*</span></label>-->
             
-            <?php // echo $form->dateField($customer, 'date_of_birth');
+            <?php echo $form->dateField($customer, 'date_of_birth');
             if (!isset($customer->date_of_birth)) {
                 $date = DomainConst::DATE_FORMAT_3_NULL;
             } else {
