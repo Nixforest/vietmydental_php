@@ -206,13 +206,15 @@ class ReceptionistController extends FrontController {
                         FirebaseHandler::notifyNewSchedule(
                                 $mMedicalRecord->rCustomer,
                                 $schedule->rDoctor);
-                        if (Settings::getItem(Settings::KEY_SMS_SEND_NOTIFY) == true) {
+                        if (Settings::getItem(Settings::KEY_SMS_SEND_RECEIPT) == true) {
                             // Inform for customer
 //                            SMSHandler::sendSMSOnce($mMedicalRecord->rCustomer->getPhone(),
 //                                    'Quý Khách hàng đã đặt hẹn trên Hệ thống Nha Khoa Việt Mỹ vào lúc '
 //                                    . $detail->getStartTime() . ' với bác sĩ ' . $schedule->rDoctor->first_name
 //                                    . '. Quý Khách hàng vui lòng sắp xếp thời gian đến đúng hẹn');
-                            SMSHandler::sendSMSSchedule();
+                            SMSHandler::sendSMSSchedule(Settings::KEY_SMS_SEND_RECEIPT,$mMedicalRecord->rCustomer->getPhone(),'Quý Khách hàng đã đặt hẹn trên Hệ thống Nha Khoa Việt Mỹ vào lúc '
+                                    . $detail->getStartTime() . ' với bác sĩ ' . $schedule->rDoctor->first_name
+                                    . '. Quý Khách hàng vui lòng sắp xếp thời gian đến đúng hẹn',$mMedicalRecord->rCustomer->id,Settings::KEY_SMS_SEND_RECEIPT,date('Y-m-d'),1,1);
                         }
                         
                     }

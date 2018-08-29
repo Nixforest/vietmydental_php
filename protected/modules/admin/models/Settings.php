@@ -103,7 +103,7 @@ class Settings extends BaseActiveRecord
     const KEY_SMS_FUNC_ON_OFF                   = 'SMS_FUNC_ON_OFF';
     /** Key SMS type send */
     const KEY_SMS_SEND_NORMAL                   = 'SMS_SEND_NORMAL';
-    const KEY_SMS_SEND_NOTIFY                   = 'SMS_SEND_NOTIFY';
+    const KEY_SMS_SEND_RECEIPT                   = 'SMS_SEND_RECEIPT';
 	/**
 	 * @return string the associated database table name
 	 */

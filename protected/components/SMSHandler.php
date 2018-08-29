@@ -85,12 +85,36 @@ class SMSHandler {
                 break;
         }
     }
-    public static function sendSMSSchedule() {
+    
+    /**
+     * 
+     * @param string $title
+     * @param string $phone
+     * @param string $message
+     * @param int $user_id
+     * @param string $type type send sms Settings::KEY_SMS_SEND_NORMAL/ Settings::KEY_SMS_SEND_RECEIPT/ ...
+     * @param date $time_send Y-m-d H:i:s
+     * @param int $content_type 0: Nội dung không dấu, 1: Nội dung có dấu
+     * @param int $count_run Lần gửi tin nhắn thứ mấy
+     */
+    public static function sendSMSSchedule($title,$phone,$message,$user_id,$type,$time_send,$content_type=1,$count_run=1) {
         if (!Settings::canSendSMS()) {
             Loggers::info('Can not send SMS', 'Send sms function is off', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             return;
         }
         // Insert new record to schedule_sms
+        $mScheduleSms = new ScheduleSms();
+        $mScheduleSms->title        = $title;
+        $mScheduleSms->phone        = $phone;
+        $mScheduleSms->content      = $message;
+        $mScheduleSms->user_id      = $user_id;
+        $mScheduleSms->type         = $type;
+        $mScheduleSms->count_run    = $count_run;
+        $mScheduleSms->time_send    = $time_send;
+        $mScheduleSms->content_type =  $content_type;
+        $mScheduleSms->created_date = date('Y-m-d H:i:s');
+        $mScheduleSms->created_by   = !empty(Yii::app()->user->id)? Yii::app()->user->id : 0;
+        $mScheduleSms->save();
     }
     
     /**

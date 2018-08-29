@@ -72,7 +72,7 @@ $isFirstTabContent = true;
                         <label for="<?php echo $id; ?>"><?php echo $description; ?></label>
                     </div>
                     <div class="col-md-3">
-                        <?php if(in_array($child, $aCheckBooks)): ?>
+                        <?php if(in_array($child, $aTypeView['CheckBox'])): ?>
                         <input style="display: none;" type="text" name="<?php echo $id;?>" id="<?php echo $id; ?>"
                                value="<?php echo $value ?>">
                         <input class="check-book-settings" type="checkbox" data-id="<?php echo $id; ?>"
