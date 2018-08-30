@@ -490,12 +490,12 @@ class Agents extends BaseActiveRecord
         $strDocTor = '';
         $aData['OLD'] = null;
         $aData['NEW'] = null;
-        $aIdCus = [];
+        $aIdCus = [0];
         $criteriaNew = new CDbCriteria;
         $criteriaOld = new CDbCriteria;
-        if (empty($this->rJoinCustomer)) {
-            return $aData;
-        }
+//        if (empty($this->rJoinCustomer)) {
+//            return $aData;
+//        }
         foreach ($this->rJoinCustomer as $value) {
             $aIdCus[$value->many_id] = $value->many_id;
         }

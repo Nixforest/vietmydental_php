@@ -139,6 +139,46 @@ $this->widget('ReportSearchWidget', array(
     'agentId'   => $agentId,
 ));
 ?>
+
+<h3><?php echo DomainConst::CONTENT00254; ?></h3>
+<div class="grid-view">
+    <table class="items">
+        <thead>
+            <tr>
+                <th>
+                    <?php echo DomainConst::CONTENT00352; ?>
+                </th>
+                <th>
+                    <?php echo DomainConst::CONTENT00353; ?>
+                </th>
+                <th>
+                    <?php echo DomainConst::CONTENT00354; ?>
+                </th>
+                <th>
+                    <?php echo DomainConst::CONTENT00355; ?>
+                </th>
+                <th>
+                    <?php echo DomainConst::CONTENT00356; ?>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="even">
+<!--                <td style="text-align:center; font-weight:bold"><?php // echo OneMany::getReceiptCustomerTotal($receipts->rawData); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php // echo OneMany::getReceiptTotalTotal($receipts->rawData); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php // echo OneMany::getReceiptDiscountTotal($receipts->rawData); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php // echo OneMany::getReceiptFinalTotal($receipts->rawData); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php // echo OneMany::getReceiptDebitTotal($receipts->rawData); ?></td>-->
+                <td style="text-align:center; font-weight:bold"><?php echo OneMany::getReceiptCustomerTotal($allReceipts->getData()); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptTotalTotal($allReceipts->getData()); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptDiscountTotal($allReceipts->getData()); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptFinalTotal($allReceipts->getData()); ?></td>
+                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptDebitTotal($allReceipts->getData()); ?></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<h3><?php echo DomainConst::CONTENT00430; ?></h3>
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'receipts-grid',
@@ -228,44 +268,6 @@ $this->widget('zii.widgets.grid.CGridView', array(
     ),
 ));
 ?>
-<h3><?php echo DomainConst::CONTENT00254; ?></h3>
-<div class="grid-view">
-    <table class="items">
-        <thead>
-            <tr>
-                <th>
-                    <?php echo DomainConst::CONTENT00352; ?>
-                </th>
-                <th>
-                    <?php echo DomainConst::CONTENT00353; ?>
-                </th>
-                <th>
-                    <?php echo DomainConst::CONTENT00354; ?>
-                </th>
-                <th>
-                    <?php echo DomainConst::CONTENT00355; ?>
-                </th>
-                <th>
-                    <?php echo DomainConst::CONTENT00356; ?>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="even">
-<!--                <td style="text-align:center; font-weight:bold"><?php // echo OneMany::getReceiptCustomerTotal($receipts->rawData); ?></td>
-                <td style="text-align:right; font-weight:bold"><?php // echo OneMany::getReceiptTotalTotal($receipts->rawData); ?></td>
-                <td style="text-align:right; font-weight:bold"><?php // echo OneMany::getReceiptDiscountTotal($receipts->rawData); ?></td>
-                <td style="text-align:right; font-weight:bold"><?php // echo OneMany::getReceiptFinalTotal($receipts->rawData); ?></td>
-                <td style="text-align:right; font-weight:bold"><?php // echo OneMany::getReceiptDebitTotal($receipts->rawData); ?></td>-->
-                <td style="text-align:center; font-weight:bold"><?php echo OneMany::getReceiptCustomerTotal($allReceipts->getData()); ?></td>
-                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptTotalTotal($allReceipts->getData()); ?></td>
-                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptDiscountTotal($allReceipts->getData()); ?></td>
-                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptFinalTotal($allReceipts->getData()); ?></td>
-                <td style="text-align:right; font-weight:bold"><?php echo OneMany::getReceiptDebitTotal($allReceipts->getData()); ?></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
 <h3><?php echo DomainConst::CONTENT00370; ?></h3>
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
