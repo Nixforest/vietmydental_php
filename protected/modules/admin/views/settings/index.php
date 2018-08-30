@@ -72,8 +72,15 @@ $isFirstTabContent = true;
                         <label for="<?php echo $id; ?>"><?php echo $description; ?></label>
                     </div>
                     <div class="col-md-3">
+                        <?php if(in_array($child, $aTypeView['CheckBox'])): ?>
+                        <input style="display: none;" type="text" name="<?php echo $id;?>" id="<?php echo $id; ?>"
+                               value="<?php echo $value ?>">
+                        <input class="check-book-settings" type="checkbox" data-id="<?php echo $id; ?>"
+                               <?php echo $value == true ? 'checked' : ''; ?>>
+                        <?php else: ?>
                         <input type="text" name="<?php echo $id;?>" id="<?php echo $id; ?>"
                                value="<?php echo $value ?>">
+                        <?php endif; ?>
                     </div>
                     <?php if ($isNew): ?>
                     <div class="col-md-1">
@@ -95,3 +102,15 @@ $isFirstTabContent = true;
 </div>
 <?php $this->endWidget(); ?>
 
+<script>
+    $(document).ready(function(){
+        check();
+    });
+    function check() {
+        $('.check-book-settings').on('change',function(){
+            var value = this.checked ? "1" : "0";
+            var id = '#'+ $(this).data('id');
+            $(id).val(value);
+        });
+    }
+</script>
