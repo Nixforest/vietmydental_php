@@ -304,6 +304,37 @@ class Agents extends BaseActiveRecord
     }
     
     /**
+     * Get revenue in many agent
+     * @param String $from      From date
+     * @param String $to        To date
+     * @param Array $arrStatus  Status array
+     * @param Boolean $allData  Flag get all data
+     * @param String $arrId     Agent id array
+     * @return \CActiveDataProvider
+     */
+    public static function getRevenueMultiAgent($from, $to, $arrStatus, $allData = false, $arrId = []) {
+        $mOneMany = new OneMany();
+        $criteria=new CDbCriteria;
+        $tblReceipts = Receipts::model()->tableName();
+        $criteria->compare('r.status', Receipts::STATUS_RECEIPTIONIST,false,'OR');
+        $criteria->compare('r.status', Receipts::STATUS_DOCTOR,false,'OR');
+        $criteria->compare('t.type', OneMany::TYPE_AGENT_RECEIPT);
+        $criteria->addInCondition('t.one_id', $arrId);
+        $criteria->addCondition('r.status != '.Receipts::STATUS_INACTIVE);
+        $criteria->addInCondition('r.status', $arrStatus);
+        $criteria->addCondition('r.process_date >= \''.$from.'\'');
+        $criteria->addCondition('r.process_date <= \''.$to.'\'');
+        $criteria->order = 'r.process_date ASC';
+        $criteria->join = 'JOIN '.$tblReceipts.' as r ON r.id = t.many_id';
+        
+        return new CActiveDataProvider($mOneMany, array(
+            'criteria'=>$criteria,
+            'pagination'=>$allData ? false : [ 'pageSize'=>Settings::getListPageSize()]
+               
+        ));
+    }
+    
+    /**
      * 
      * @param type $from
      * @param type $to

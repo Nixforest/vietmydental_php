@@ -363,6 +363,36 @@ class CommonProcess {
     }
     
     /**
+     * Get current agent id array
+     * @return Array List id of agents
+     */
+    public static function getCurrentAgentIdArray() {
+        return isset(Yii::app()->user) ? Yii::app()->user->agent_id_array : [];
+    }
+    
+    /**
+     * Get current agent array
+     * @return Array List of model agent
+     */
+    public static function getCurrentAgentArray() {
+        $retVal = array();
+        $listAgentId = self::getCurrentAgentIdArray();
+        Loggers::info('User\'s agent list', implode('-', $listAgentId), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        if (count($listAgentId) > 1) {
+            $retVal[] = 'Tất cả';
+        }
+        foreach ($listAgentId as $id) {
+            $agent = Agents::model()->findByPk($id);
+            if (isset($agent)) {
+                Loggers::info('Agent name', $agent->name, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                $retVal[$id] = $agent->name;
+            }
+        }
+        
+        return $retVal;
+    }
+    
+    /**
      * Get host url
      * @return string Current host url
      */

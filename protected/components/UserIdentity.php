@@ -11,6 +11,7 @@
  *          Yii::app()->user->role_id           = Role id of user
  *          Yii::app()->user->role_name         = Role name of user
  *          Yii::app()->user->agent_id          = Agent id of user
+ *          Yii::app()->user->agent_id_array    = Agent id array of user
  */
 class UserIdentity extends CUserIdentity {
     /** Id of user */
@@ -35,6 +36,7 @@ class UserIdentity extends CUserIdentity {
             $this->setState('role_id', $users->role_id);
             $this->setState('role_name', $users->rRole->role_name);
             $this->setState('agent_id', $users->getAgentId());
+            $this->setState('agent_id_array', $users->getAgentIds());
             $this->saveParamToSession($users);
             $this->errorCode = self::ERROR_NONE;
         }

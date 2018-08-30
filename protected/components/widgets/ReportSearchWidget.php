@@ -14,11 +14,17 @@
 class ReportSearchWidget extends CWidget {
 
     public $dateFrom, $dateTo, $model;
+    /**
+     * Current agent id
+     * @var String Id of agent
+     */
+    public $agentId;
 
     public function run() {
         $this->render('reportSearch/_form', array(
-            'dateFrom' => $this->dateFrom,
-            'dateTo' => $this->dateTo,
+            'dateFrom'  => $this->dateFrom,
+            'dateTo'    => $this->dateTo,
+            'agentId'   => $this->agentId,
         ));
     }
 

@@ -800,7 +800,7 @@ class Users extends BaseActiveRecord {
         }
         return $retVal;
     }
-
+    
     /**
      * Get array users by array id
      * @param Array $aId    Array id
