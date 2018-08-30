@@ -105,94 +105,88 @@ class Settings extends BaseActiveRecord
     const KEY_SMS_SEND_NORMAL                   = 'SMS_SEND_NORMAL';
     const KEY_SMS_SEND_RECEIPT                   = 'SMS_SEND_RECEIPT';
 	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return 'settings';
-	}
+     * @return string the associated database table name
+     */
+    public function tableName() {
+        return 'settings';
+    }
 
-	/**
-	 * @return array validation rules for model attributes.
-	 */
-	public function rules()
-	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-			array('updated, key, value', 'required'),
-			array('key', 'length', 'max'=>255),
-			array('description', 'safe'),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('id, updated, key, value, description', 'safe', 'on'=>'search'),
-		);
-	}
+    /**
+     * @return array validation rules for model attributes.
+     */
+    public function rules() {
+        // NOTE: you should only define rules for those attributes that
+        // will receive user inputs.
+        return array(
+            array('updated, key, value', 'required'),
+            array('key', 'length', 'max' => 255),
+            array('description', 'safe'),
+            // The following rule is used by search().
+            // @todo Please remove those attributes that should not be searched.
+            array('id, updated, key, value, description', 'safe', 'on' => 'search'),
+        );
+    }
 
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-		);
-	}
+    /**
+     * @return array relational rules.
+     */
+    public function relations() {
+        // NOTE: you may need to adjust the relation name and the related
+        // class name for the relations automatically generated below.
+        return array(
+        );
+    }
 
-	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return array(
-			'id' => 'ID',
-			'updated' => 'Updated',
-			'key' => 'Key',
-			'value' => 'Value',
-			'description' => 'Description',
-		);
-	}
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels() {
+        return array(
+            'id' => 'ID',
+            'updated' => 'Updated',
+            'key' => 'Key',
+            'value' => 'Value',
+            'description' => 'Description',
+        );
+    }
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
+    /**
+     * Retrieves a list of models based on the current search/filter conditions.
+     *
+     * Typical usecase:
+     * - Initialize the model fields with values from filter form.
+     * - Execute this method to get CActiveDataProvider instance which will filter
+     * models according to data in model fields.
+     * - Pass data provider to CGridView, CListView or any similar widget.
+     *
+     * @return CActiveDataProvider the data provider that can return the models
+     * based on the search/filter conditions.
+     */
+    public function search() {
+        // @todo Please modify the following code to remove attributes that should not be searched.
 
-		$criteria=new CDbCriteria;
+        $criteria = new CDbCriteria;
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('updated',$this->updated,true);
-		$criteria->compare('key',$this->key,true);
-		$criteria->compare('value',$this->value,true);
-		$criteria->compare('description',$this->description,true);
+        $criteria->compare('id', $this->id, true);
+        $criteria->compare('updated', $this->updated, true);
+        $criteria->compare('key', $this->key, true);
+        $criteria->compare('value', $this->value, true);
+        $criteria->compare('description', $this->description, true);
 
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
-	}
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+        ));
+    }
 
-	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return Settings the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
+    /**
+     * Returns the static model of the specified AR class.
+     * Please note that you should have this exact method in all your CActiveRecord descendants!
+     * @param string $className active record class name.
+     * @return Settings the static model class
+     */
+    public static function model($className = __CLASS__) {
+        return parent::model($className);
+    }
 
     //-----------------------------------------------------
     // Utility methods
@@ -215,7 +209,7 @@ class Settings extends BaseActiveRecord
         }
         return $_items;
     }
-    
+
     /**
      * Update setting value
      * @param String $id Id of setting
@@ -223,13 +217,12 @@ class Settings extends BaseActiveRecord
      */
     public static function updateSetting($id, $value) {
         self::model()->updateByPk(
-                $id,
-                array(
-                    'value' => $value,
+                $id, array(
+            'value' => $value,
                 )
-            );
+        );
     }
-    
+
     /**
      * Save setting
      * @param String $key   Key string
@@ -237,7 +230,7 @@ class Settings extends BaseActiveRecord
      */
     public static function saveSetting($key, $value) {
         // TODO: Update data to cache
-        
+
         $criteria = new CDbCriteria();
         $criteria->compare('t.key', $key, true);
         $model = self::model()->find($criteria);
@@ -254,7 +247,7 @@ class Settings extends BaseActiveRecord
             $setting->save();
         }
     }
-    
+
     /**
      * Get item value
      * @param String $key Key string
@@ -268,7 +261,7 @@ class Settings extends BaseActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get value of ajax template variable
      * @param String id Id of key need to get
@@ -277,16 +270,16 @@ class Settings extends BaseActiveRecord
     public static function getAjaxTempValue($id = '') {
         return Settings::getItem(Settings::KEY_AJAX_TEMPLATE_VALUE . '_' . Yii::app()->user->id . $id);
     }
-    
+
     /**
      * Save value of ajax template variable
-     * @param String id Id of key need to save
      * @param String $value Value need to save
+     * @param String id Id of key need to save
      */
     public static function saveAjaxTempValue($value, $id = '') {
-        Settings::saveSetting(Settings::KEY_AJAX_TEMPLATE_VALUE . '_'  . Yii::app()->user->id . $id, $value);
+        Settings::saveSetting(Settings::KEY_AJAX_TEMPLATE_VALUE . '_' . Yii::app()->user->id . $id, $value);
     }
-    
+
     /**
      * Get value of ajax template variable
      * @return String
@@ -294,33 +287,33 @@ class Settings extends BaseActiveRecord
     public static function getAjaxTempValue1() {
         return Settings::getItem(Settings::KEY_AJAX_TEMPLATE_VALUE_1 . '_' . Yii::app()->user->id);
     }
-    
+
     /**
      * Save value of ajax template variable
      * @param String $value Value need to save
      */
     public static function saveAjaxTempValue1($value) {
-        Settings::saveSetting(Settings::KEY_AJAX_TEMPLATE_VALUE_1 . '_'  . Yii::app()->user->id, $value);
+        Settings::saveSetting(Settings::KEY_AJAX_TEMPLATE_VALUE_1 . '_' . Yii::app()->user->id, $value);
     }
-    
+
     /**
      * Apply setting for system
      */
     public static function applySetting() {
         Yii::app()->mail->transportType = self::getItem(Settings::KEY_EMAIL_TRANSPORT_TYPE);
         Yii::app()->mail->transportOptions[DomainConst::KEY_HOST] = self::getItem(
-                Settings::KEY_EMAIL_TRANSPORT_HOST);
+                        Settings::KEY_EMAIL_TRANSPORT_HOST);
         Yii::app()->mail->transportOptions[DomainConst::KEY_USERNAME] = self::getItem(
-                Settings::KEY_EMAIL_TRANSPORT_USERNAME);
+                        Settings::KEY_EMAIL_TRANSPORT_USERNAME);
         Yii::app()->mail->transportOptions[DomainConst::KEY_PASSWORD] = self::getItem(
-                Settings::KEY_EMAIL_TRANSPORT_PASSWORD);
+                        Settings::KEY_EMAIL_TRANSPORT_PASSWORD);
         Yii::app()->mail->transportOptions[DomainConst::KEY_PORT] = self::getItem(
-                Settings::KEY_EMAIL_TRANSPORT_PORT);
+                        Settings::KEY_EMAIL_TRANSPORT_PORT);
         Yii::app()->mail->transportOptions[DomainConst::KEY_ENCRYPTION] = self::getItem(
-                Settings::KEY_EMAIL_TRANSPORT_ENCRYPTION);
+                        Settings::KEY_EMAIL_TRANSPORT_ENCRYPTION);
         Yii::app()->name = self::getWebsiteName();
     }
-    
+
     /**
      * Get list page size
      * @return int List page size
@@ -332,7 +325,7 @@ class Settings extends BaseActiveRecord
         }
         return 10;
     }
-    
+
     /**
      * Get api list page size
      * @return int API list page size
@@ -344,7 +337,7 @@ class Settings extends BaseActiveRecord
         }
         return 10;
     }
-    
+
     /**
      * Get min of password length
      * @return int Min of password length
@@ -356,7 +349,7 @@ class Settings extends BaseActiveRecord
         }
         return 6;
     }
-    
+
     /**
      * Get max of password length
      * @return int Max of password length
@@ -368,7 +361,7 @@ class Settings extends BaseActiveRecord
         }
         return 50;
     }
-    
+
     /**
      * Get SMS server url.
      * @return string SMS server url
@@ -380,7 +373,7 @@ class Settings extends BaseActiveRecord
         }
         return "";
     }
-    
+
     /**
      * Get name of website
      * @return string
@@ -392,7 +385,7 @@ class Settings extends BaseActiveRecord
         }
         return DomainConst::CONTENT00273;
     }
-    
+
     /**
      * Get domain of website
      * @return string
@@ -404,7 +397,7 @@ class Settings extends BaseActiveRecord
         }
         return "";
     }
-    
+
     /**
      * Get print receipt font size
      * @return string
@@ -416,7 +409,7 @@ class Settings extends BaseActiveRecord
         }
         return "150%";
     }
-    
+
     /**
      * Get domain of sale website
      * @return string
@@ -428,7 +421,7 @@ class Settings extends BaseActiveRecord
         }
         return DomainConst::CONTENT_WEBSITE;
     }
-    
+
     /**
      * Check if system can send SMS
      * @return True if setting value is '1', False otherwise
@@ -440,4 +433,5 @@ class Settings extends BaseActiveRecord
         }
         return false;
     }
+
 }

@@ -18,6 +18,7 @@
  * @property integer $content_type
  */
 class ScheduleSms extends CActiveRecord {
+
 //  list  key can send  sms
     public $aTypeSchedule = [
         Settings::KEY_SMS_SEND_NORMAL,
@@ -29,19 +30,19 @@ class ScheduleSms extends CActiveRecord {
     public $Password        = '';
     public $CPCode          = '';
     public $RequestID       = 0;
-    public $Url = "";// Primary Server
-    
-    const ContentTypeVietkey            = 0;
-    const ContentTypeNonVietkey         = 1;
-    const MAX_COUNT_RUN                 = 3;
-    const NETWORK_VIETTEL               = 1;// mạng viettel
-    const NETWORK_MOBI                  = 2;// mạng mobile phone
-    const NETWORK_VINA                  = 3;
-    const NETWORK_OTHER                 = 4;// mạng khác
-    const NETWORK_VIETNAM_MOBILE        = 5;
-    const NETWORK_G_MOBILE              = 6;
-    const NETWORK_S_PHONE               = 7;
-    
+    public $Url             = ""; // Primary Server
+
+    const ContentTypeVietkey    = 0;
+    const ContentTypeNonVietkey = 1;
+    const MAX_COUNT_RUN         = 3;
+    const NETWORK_VIETTEL       = 1; // mạng viettel
+    const NETWORK_MOBI          = 2; // mạng mobile phone
+    const NETWORK_VINA          = 3;
+    const NETWORK_OTHER         = 4; // mạng khác
+    const NETWORK_VIETNAM_MOBILE = 5;
+    const NETWORK_G_MOBILE      = 6;
+    const NETWORK_S_PHONE       = 7;
+
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
@@ -84,7 +85,6 @@ class ScheduleSms extends CActiveRecord {
      */
     public function attributeLabels() {
         return array(
-            
         );
     }
 
@@ -102,16 +102,16 @@ class ScheduleSms extends CActiveRecord {
             'criteria' => $criteria,
         ));
     }
-    
+
     /** @Author: HOANG NAM 09/07/2018
      *  @Todo: send SMS
-     **/
+     * */
     public function runCronBig() {// gửi những SMS SL nhiều
         $aTypeSend = $this->getArrayTypeSend();
         $data = $this->getDataCron($aTypeSend);
         $this->runCron($data);
     }
-    
+
     /**
      *  get data by type send Sms
      * @param array $type
@@ -119,52 +119,53 @@ class ScheduleSms extends CActiveRecord {
      */
     public function getDataCron($type = []) {
         $criteria = new CDbCriteria();
-        $criteria->addCondition("t.time_send <= NOW() AND t.count_run < ".self::MAX_COUNT_RUN);
+        $criteria->addCondition("t.time_send <= NOW() AND t.count_run < " . self::MAX_COUNT_RUN);
         $criteria->order = 't.count_run ASC, t.id DESC';
         $criteria->limit = 150;
         $criteria->addInCondition('t.type', $type);
         return self::model()->findAll($criteria);
     }
-    
+
     /** @Author: HOANG NAM 09/07/2018
      *  @Todo: run send Sms
-     **/
+     * */
     public function runCron($data) {
         $from = time();
-        if(count($data) < 1 ){
-            return ;
+        if (count($data) < 1) {
+            return;
         }
-        foreach($data as $mScheduleSms){
+        foreach ($data as $mScheduleSms) {
             $mScheduleSms->doSend();
         }
         $to = time();
-        $second = $to-$from;
+        $second = $to - $from;
         $CountData = count($data);
-        $ResultRun = "CRON Notify SMS: ".$CountData.' done in: '.($second).'  Second  <=> '.round($second/60, 2).' Minutes ';
+        $ResultRun = "CRON Notify SMS: " . $CountData . ' done in: ' . ($second) . '  Second  <=> ' . round($second / 60, 2) . ' Minutes ';
         $ResultRun .= json_encode(CHtml::listData($data, 'id', 'phone'));
-        if($CountData){
+        if ($CountData) {
             Loggers::info(__METHOD__, $ResultRun, get_class());
         }
     }
+
     /**
      * send SMS in model ScheduleSms
      */
     public function doSend() {
         $mSmsHandler = new SMSHandler();
-        $mSmsHandler->sendSMSOnce($this->phone,$this->content);
+        $mSmsHandler->sendSMSOnce($this->phone, $this->content);
         // move to history
         $mScheduleSmsHistory = new ScheduleSmsHistory();
-        $mScheduleSmsHistory->InsertNew($this);
+        $mScheduleSmsHistory->insertNew($this);
     }
-    
+
     /**
      * get array type send sms
      */
-    public function getArrayTypeSend(){
+    public function getArrayTypeSend() {
         $aData = [];
         foreach ($this->aTypeSchedule as $value) {
             $setting = Settings::getItem($value);
-            if($setting == true){
+            if ($setting == true) {
                 $aData[] = $value;
             }
         }

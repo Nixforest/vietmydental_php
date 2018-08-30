@@ -62,7 +62,6 @@ class ScheduleSmsHistory extends CActiveRecord {
      */
     public function attributeLabels() {
         return array(
-            
         );
     }
 
@@ -75,17 +74,17 @@ class ScheduleSmsHistory extends CActiveRecord {
         // should not be searched.
 
         $criteria = new CDbCriteria;
-        
+
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
         ));
     }
-    
+
     /**
      * insert to history
      * @param type $mScheduleSms
      */
-    public function InsertNew($mScheduleSms) {
+    public function insertNew($mScheduleSms) {
         $mHistory = new ScheduleSmsHistory('InsertNew');
         $mPhoneHandler = new PhoneHandler();
         $aFieldNotCopy = array('id');
@@ -96,7 +95,7 @@ class ScheduleSmsHistory extends CActiveRecord {
         //client was received then delete schedule notify SMS
         $mScheduleSms->delete();
     }
-    
+
     /**
      * copy attributes to new model
      * @param model $mFrom
@@ -104,12 +103,12 @@ class ScheduleSmsHistory extends CActiveRecord {
      * @param array $aFieldNotCopy
      * @return model to
      */
-    public function copyFromToTable($mFrom, &$mTo, $aFieldNotCopy = array())
-    {
+    public function copyFromToTable($mFrom, &$mTo, $aFieldNotCopy = array()) {
         foreach ($mFrom->getAttributes() as $field_name => $field_value) {
             if (count($aFieldNotCopy)) {
-                if (!in_array($field_name, $aFieldNotCopy) && $mTo->hasAttribute($field_name))
+                if (!in_array($field_name, $aFieldNotCopy) && $mTo->hasAttribute($field_name)) {
                     $mTo->$field_name = $mFrom->$field_name;
+                }
             } else {
                 $mTo->$field_name = $mFrom->$field_name;
             }

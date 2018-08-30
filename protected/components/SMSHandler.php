@@ -12,9 +12,10 @@
  * @author nguyenpt
  */
 class SMSHandler {
+
     /** SMS provider vivas */
-    const SMS_PROVIDER_VIVAS                  = '1';
-    
+    const SMS_PROVIDER_VIVAS = '1';
+
     /**
      * Send SMS
      * @param String $username
@@ -27,20 +28,19 @@ class SMSHandler {
      * @param String $content
      * @param String $contentType
      */
-    public static function sendSMS($username, $password, $cpCode, $requestId,
-            $phone, $serviceId, $commandCode, $content, $contentType) {
+    public static function sendSMS($username, $password, $cpCode, $requestId, $phone, $serviceId, $commandCode, $content, $contentType) {
         $url = Settings::getSMSServerUrl();
         $userParam = array(
-            'User'          => $username,
-            'Password'      => $password,
-            'CPCode'        => $cpCode,
-            'RequestID'     => $requestId,
-            'UserID'        => $phone,
-            'ReceiverID'    => $phone,
-            'ServiceID'     => $serviceId,
-            'CommandCode'   => $commandCode,
-            'Content'       => $content,
-            'ContentType'   => $contentType,
+            'User' => $username,
+            'Password' => $password,
+            'CPCode' => $cpCode,
+            'RequestID' => $requestId,
+            'UserID' => $phone,
+            'ReceiverID' => $phone,
+            'ServiceID' => $serviceId,
+            'CommandCode' => $commandCode,
+            'Content' => $content,
+            'ContentType' => $contentType,
         );
 //        CommonProcess::dumpVariable($url);
 //        CommonProcess::dumpVariable($userParam);
@@ -48,7 +48,7 @@ class SMSHandler {
             $client = CommonProcess::callSoapFunction($userParam, "wsCpMt", $url);
         }
     }
-    
+
     /**
      * Get list SMS provider
      * @return Array List SMS provider
@@ -58,7 +58,7 @@ class SMSHandler {
             self::SMS_PROVIDER_VIVAS => 'VIVAS SMS System',
         );
     }
-    
+
     /**
      * Send sms
      * @param String $type Type of sms (1: Customer care, 2: Advertising)
@@ -85,19 +85,20 @@ class SMSHandler {
                 break;
         }
     }
-    
+
     /**
-     * 
-     * @param string $title
-     * @param string $phone
-     * @param string $message
-     * @param int $user_id
-     * @param string $type type send sms Settings::KEY_SMS_SEND_NORMAL/ Settings::KEY_SMS_SEND_RECEIPT/ ...
-     * @param date $time_send Y-m-d H:i:s
+     * Send sms by cron
+     * @param string $title     Title of sms
+     * @param string $phone     Phone number to send
+     * @param string $message   Message of sms
+     * @param int $user_id      Id of user
+     * @param string $type      Type send sms Settings::KEY_SMS_SEND_NORMAL/ Settings::KEY_SMS_SEND_RECEIPT/ ...
+     * @param date $time_send   Y-m-d H:i:s
      * @param int $content_type 0: Nội dung không dấu, 1: Nội dung có dấu
-     * @param int $count_run Lần gửi tin nhắn thứ mấy
+     * @param int $count_run    Lần gửi tin nhắn thứ mấy
      */
-    public static function sendSMSSchedule($title,$phone,$message,$user_id,$type,$time_send,$content_type=1,$count_run=1) {
+    public static function sendSMSSchedule($title, $phone, $message, $user_id,
+            $type, $time_send, $content_type = 1, $count_run = 1) {
         if (!Settings::canSendSMS()) {
             Loggers::info('Can not send SMS', 'Send sms function is off', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             return;
@@ -111,12 +112,12 @@ class SMSHandler {
         $mScheduleSms->type         = $type;
         $mScheduleSms->count_run    = $count_run;
         $mScheduleSms->time_send    = $time_send;
-        $mScheduleSms->content_type =  $content_type;
+        $mScheduleSms->content_type = $content_type;
         $mScheduleSms->created_date = date('Y-m-d H:i:s');
-        $mScheduleSms->created_by   = !empty(Yii::app()->user->id)? Yii::app()->user->id : 0;
+        $mScheduleSms->created_by   = !empty(Yii::app()->user->id) ? Yii::app()->user->id : 0;
         $mScheduleSms->save();
     }
-    
+
     /**
      * Format phone number
      * @param String $phone Phone value
@@ -129,7 +130,8 @@ class SMSHandler {
         if ($firstCharacter == DomainConst::NUMBER_ZERO_VALUE) {
             $retVal = substr($phone, 1);
         }
-        
+
         return $retVal;
     }
+
 }
