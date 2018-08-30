@@ -21,8 +21,9 @@ class ScheduleSms extends CActiveRecord {
 
 //  list  key can send  sms
     public $aTypeSchedule = [
-        Settings::KEY_SMS_SEND_NORMAL,
-        Settings::KEY_SMS_SEND_RECEIPT,
+        Settings::KEY_SMS_SEND_CREATE_SCHEDULE,
+        Settings::KEY_SMS_SEND_UPDATE_SCHEDULE,
+        Settings::KEY_SMS_SEND_CREATE_RECEIPT,
     ];
     public $ServiceID       = '';
     public $CommandCode     = '';

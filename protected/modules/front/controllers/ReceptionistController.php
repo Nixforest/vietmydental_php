@@ -206,23 +206,13 @@ class ReceptionistController extends FrontController {
                         FirebaseHandler::notifyNewSchedule(
                                 $mMedicalRecord->rCustomer,
                                 $schedule->rDoctor);
-                        if (Settings::getItem(Settings::KEY_SMS_SEND_RECEIPT) == true
-                           && (DateTimeExt::compare(CommonProcess::getCurrentDateTime(), $schedule->start_date) == -1)) {
-                            // Inform for customer
-//                            SMSHandler::sendSMSOnce($mMedicalRecord->rCustomer->getPhone(),
-//                                    'Quý Khách hàng đã đặt hẹn trên Hệ thống Nha Khoa Việt Mỹ vào lúc '
-//                                    . $detail->getStartTime() . ' với bác sĩ ' . $schedule->rDoctor->first_name
-//                                    . '. Quý Khách hàng vui lòng sắp xếp thời gian đến đúng hẹn');
-                            SMSHandler::sendSMSSchedule(
-                                Settings::KEY_SMS_SEND_RECEIPT,
+                        // Inform for customer
+                        SMSHandler::sendSMSCreateSchedule($schedule->start_date,
                                 $mMedicalRecord->rCustomer->getPhone(),
-                                'Quý Khách hàng đã đặt hẹn trên Hệ thống Nha Khoa Việt Mỹ vào lúc '
-                                . $detail->getStartTime() . ' với bác sĩ ' . $schedule->rDoctor->first_name
-                                . '. Quý Khách hàng vui lòng sắp xếp thời gian đến đúng hẹn',
+                                $detail->getStartTime(),
+                                $schedule->rDoctor->first_name,
                                 $mMedicalRecord->rCustomer->id,
-                                Settings::KEY_SMS_SEND_RECEIPT,
-                                date('Y-m-d'));
-                        }
+                                Settings::KEY_SMS_SEND_CREATE_SCHEDULE);
                     }
                     echo CJavaScript::jsonEncode(array(
                         DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
@@ -279,9 +269,17 @@ class ReceptionistController extends FrontController {
                     $rightContent = '';
                     $infoSchedule = '';
                     $customer = $schedule->getCustomerModel();
-                    if ($customer != NULL) {
+                    $mMedicalRecord = $schedule->rMedicalRecord;
+                    if (($customer != NULL) && isset($mMedicalRecord)) {
                         $rightContent = $customer->getCustomerAjaxInfo();
                         $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
+                        // Inform for customer
+                        SMSHandler::sendSMSCreateSchedule($schedule->start_date,
+                                $mMedicalRecord->rCustomer->getPhone(),
+                                $model->getStartTime(),
+                                $schedule->rDoctor->first_name,
+                                $mMedicalRecord->rCustomer->id,
+                                Settings::KEY_SMS_SEND_UPDATE_SCHEDULE);
                     }
                     echo CJSON::encode(array(
                         DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,

@@ -20,6 +20,7 @@
  * The followings are the available model relations:
  * @property Users                  $rDoctor            Doctor of treatment
  * @property Users                  $rCreatedBy         User created this record
+ * @property MedicalRecords         $rMedicalRecord     Medical record
  */
 class TreatmentSchedules extends BaseActiveRecord
 {

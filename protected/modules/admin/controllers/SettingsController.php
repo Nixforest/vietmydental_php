@@ -82,8 +82,9 @@ class SettingsController extends AdminController {
         Settings::KEY_SMS_SETTING_SENDS => array(
             DomainConst::KEY_ALIAS => 'Tuỳ chọn gửi sms',
             DomainConst::KEY_CHILDREN => array(
-                Settings::KEY_SMS_SEND_NORMAL,
-                Settings::KEY_SMS_SEND_RECEIPT,
+                Settings::KEY_SMS_SEND_CREATE_SCHEDULE,
+                Settings::KEY_SMS_SEND_UPDATE_SCHEDULE,
+                Settings::KEY_SMS_SEND_CREATE_RECEIPT,
             ),
         ),
             // TODO: Add more group here
@@ -94,8 +95,9 @@ class SettingsController extends AdminController {
      */
     public $aTypeView = [
         'CheckBox' => [
-            Settings::KEY_SMS_SEND_NORMAL,
-            Settings::KEY_SMS_SEND_RECEIPT,
+            Settings::KEY_SMS_SEND_CREATE_SCHEDULE,
+            Settings::KEY_SMS_SEND_UPDATE_SCHEDULE,
+            Settings::KEY_SMS_SEND_CREATE_RECEIPT,
             Settings::KEY_SMS_FUNC_ON_OFF,
         //TODO: Add more checkbook here
         ],

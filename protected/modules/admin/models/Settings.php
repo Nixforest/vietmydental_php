@@ -97,13 +97,16 @@ class Settings extends BaseActiveRecord
     const KEY_VIVAS_USERNAME                    = 'VIVAS_USERNAME';
     /** Key VIVAS SMS password */
     const KEY_VIVAS_PASSWORD                    = 'VIVAS_PASSWORD';
-    /** Key VIVAS SMS sharekey */
+    /** Key VIVAS SMS share key */
     const KEY_VIVAS_SHARE_KEY                   = 'VIVAS_SHARE_KEY';
     /** Key SMS function on/off */
     const KEY_SMS_FUNC_ON_OFF                   = 'SMS_FUNC_ON_OFF';
-    /** Key SMS type send */
-    const KEY_SMS_SEND_NORMAL                   = 'SMS_SEND_NORMAL';
-    const KEY_SMS_SEND_RECEIPT                   = 'SMS_SEND_RECEIPT';
+    /** Key SMS type send: create schedule */
+    const KEY_SMS_SEND_CREATE_SCHEDULE          = 'SMS_SEND_CREATE_SCHEDULE';
+    /** Key SMS type send: update schedule */
+    const KEY_SMS_SEND_UPDATE_SCHEDULE          = 'SMS_SEND_UPDATE_SCHEDULE';
+    /** Key SMS type send: create receipt */
+    const KEY_SMS_SEND_CREATE_RECEIPT           = 'SMS_SEND_RECEIPT';
 	/**
      * @return string the associated database table name
      */

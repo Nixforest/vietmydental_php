@@ -92,7 +92,7 @@ class SMSHandler {
      * @param string $phone     Phone number to send
      * @param string $message   Message of sms
      * @param int $user_id      Id of user
-     * @param string $type      Type send sms Settings::KEY_SMS_SEND_NORMAL/ Settings::KEY_SMS_SEND_RECEIPT/ ...
+     * @param string $type      Type send sms Settings::KEY_SMS_SEND_CREATE_SCHEDULE/ Settings::KEY_SMS_SEND_CREATE_RECEIPT/ ...
      * @param date $time_send   Y-m-d H:i:s
      * @param int $content_type 0: Nội dung không dấu, 1: Nội dung có dấu
      * @param int $count_run    Lần gửi tin nhắn thứ mấy
@@ -134,4 +134,37 @@ class SMSHandler {
         return $retVal;
     }
 
+    /**
+     * Send sms when create schedule
+     * @param String $start_date    Start date of schedule
+     * @param String $phone         Phone number
+     * @param String $startTime     Start time of schedule
+     * @param String $doctor        Name of doctor
+     * @param String $customerId    Id of customer
+     */
+    public static function sendSMSCreateSchedule($start_date, $phone, $startTime, $doctor, $customerId, $type) {
+        if (Settings::getItem($type)) {
+            $dateTime = CommonProcess::getCurrentDateTime();
+            if (DateTimeExt::compare($dateTime, $start_date) == -1) {
+                Loggers::info('Prepare to send sms', '',
+                        __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                self::sendSMSSchedule($type, $phone,
+                        'Quý Khách hàng đã đặt hẹn trên Hệ thống Nha Khoa Việt Mỹ vào lúc '
+                                . $startTime . ' với bác sĩ ' . $doctor
+                                . '. Quý Khách hàng vui lòng sắp xếp thời gian đến đúng hẹn',
+                        $customerId,
+                        $type, $dateTime);
+            } else {
+                Loggers::info('Not send SMS', 'Schedule on today no need to send sms',
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            }
+        } else {
+            $msg = 'CREATE';
+            if ($type == Settings::KEY_SMS_SEND_UPDATE_SCHEDULE) {
+                $msg = 'UPDATE';
+            }
+            Loggers::info('Can not send SMS', 'Send sms function when ' . $msg . ' schedule is off',
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        }
+    }
 }
