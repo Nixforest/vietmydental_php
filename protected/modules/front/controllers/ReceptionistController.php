@@ -311,12 +311,19 @@ class ReceptionistController extends FrontController {
      */
     public function actionBirthday() {
         $criteria = new CDbCriteria();
+        $criteria->compare('DAY(t.date_of_birth)',date('d'));
+        $criteria->compare('MONTH(t.date_of_birth)',date('m'));
         $models = Customers::model()->findAll($criteria);
         $retVal = array();
         $agentId = isset(Yii::app()->user) ? Yii::app()->user->agent_id : '';
+//        foreach ($models as $model) {
+//            if (DateTimeExt::isBirthday($model->date_of_birth, DomainConst::DATE_FORMAT_4)
+//                    && ($model->getAgentId() == $agentId)) {
+//                $retVal[$model->id] = $model;
+//            }
+//        }
         foreach ($models as $model) {
-            if (DateTimeExt::isBirthday($model->date_of_birth, DomainConst::DATE_FORMAT_4)
-                    && ($model->getAgentId() == $agentId)) {
+            if (($model->getAgentId() == $agentId)) {
                 $retVal[$model->id] = $model;
             }
         }

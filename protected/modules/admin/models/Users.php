@@ -788,15 +788,26 @@ class Users extends BaseActiveRecord {
     public static function getListUser($roleId = '', $agentId = '') {
         $criteria = new CDbCriteria();
         $criteria->compare('t.role_id', $roleId);
+//        $aModel = self::model()->findAll($criteria);
+//        $retVal = array();
+//        foreach ($aModel as $model) {
+////            if ($model->getAgentId() == $agentId) {
+//            if (in_array($agentId, $model->getAgentIds())) {
+//                if ($model->status != DomainConst::DEFAULT_STATUS_INACTIVE) {
+//                    $retVal[$model->id] = $model->getFullName();
+//                }
+//            }
+//        }
+        
+        $criteria->addCondition('t.status !='. DomainConst::DEFAULT_STATUS_INACTIVE);
+        $tblOneMany = OneMany::model()->tableName();
+        $criteria->join = 'JOIN ' .$tblOneMany .' as o ON o.many_id = t.id';
+        $criteria->compare('o.type', OneMany::TYPE_AGENT_USER);
+        $criteria->compare('o.one_id', $agentId);
         $aModel = self::model()->findAll($criteria);
         $retVal = array();
         foreach ($aModel as $model) {
-//            if ($model->getAgentId() == $agentId) {
-            if (in_array($agentId, $model->getAgentIds())) {
-                if ($model->status != DomainConst::DEFAULT_STATUS_INACTIVE) {
-                    $retVal[$model->id] = $model->getFullName();
-                }
-            }
+            $retVal[$model->id] = $model->getFullName();
         }
         return $retVal;
     }
