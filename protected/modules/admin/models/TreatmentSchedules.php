@@ -92,7 +92,7 @@ class TreatmentSchedules extends BaseActiveRecord
                     'rDetail' => array(
                         self::HAS_MANY, 'TreatmentScheduleDetails', 'schedule_id',
                         'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
-                        'order' => 'id DESC',
+                        'order' => 'start_date DESC',
                     ),
                     'rTime' => array(
                         self::BELONGS_TO, 'ScheduleTimes', 'time_id'

@@ -116,13 +116,13 @@ class CommonProcess {
         if ($emptyOption) {
             return array(
                 '' => '',
-                DomainConst::NUMBER_ONE_VALUE => DomainConst::CONTENT00001,
-                DomainConst::NUMBER_ZERO_VALUE => DomainConst::CONTENT00002
+                DomainConst::NUMBER_ZERO_VALUE => DomainConst::CONTENT00002,
+                DomainConst::NUMBER_ONE_VALUE => DomainConst::CONTENT00001
             );
         } else {
             return array(
-                DomainConst::NUMBER_ONE_VALUE => DomainConst::CONTENT00001,
-                DomainConst::NUMBER_ZERO_VALUE => DomainConst::CONTENT00002
+                DomainConst::NUMBER_ZERO_VALUE => DomainConst::CONTENT00002,
+                DomainConst::NUMBER_ONE_VALUE => DomainConst::CONTENT00001
             );
         }
     }
@@ -352,6 +352,44 @@ class CommonProcess {
             return Yii::app()->user->role_id;
         }
         return '';
+    }
+    
+    /**
+     * Get current agent id
+     * @return String Id of agent
+     */
+    public static function getCurrentAgentId() {
+        return isset(Yii::app()->user) ? Yii::app()->user->agent_id : '';
+    }
+    
+    /**
+     * Get current agent id array
+     * @return Array List id of agents
+     */
+    public static function getCurrentAgentIdArray() {
+        return isset(Yii::app()->user) ? Yii::app()->user->agent_id_array : [];
+    }
+    
+    /**
+     * Get current agent array
+     * @return Array List of model agent
+     */
+    public static function getCurrentAgentArray() {
+        $retVal = array();
+        $listAgentId = self::getCurrentAgentIdArray();
+        Loggers::info('User\'s agent list', implode('-', $listAgentId), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        if (count($listAgentId) > 1) {
+            $retVal[] = 'Tất cả';
+        }
+        foreach ($listAgentId as $id) {
+            $agent = Agents::model()->findByPk($id);
+            if (isset($agent)) {
+                Loggers::info('Agent name', $agent->name, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                $retVal[$id] = $agent->name;
+            }
+        }
+        
+        return $retVal;
     }
     
     /**

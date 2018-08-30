@@ -662,10 +662,50 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
             var id = $(this).data('id');
             fnUpdateTreatmentDetailStatus(id, stt);
         })
+        
+        //++ BUG0076-IMT (DuongNV 20180823) Create treatment schedule process
+        /**
+        * Open create treatment schedule process dialog
+        */
+       function fnOpenCreateTreatmentScheduleProcess(id) {
+           createTreatmentScheduleProcess(id);
+           $("#dialogId").dialog(opt).dialog("open");
+       }
+
+       /**
+        * Create treatment schedule process dialog
+        * @returns {Boolean}
+        */
+       function createTreatmentScheduleProcess(_id = '') {
+           fnLoadFormCSS();
+           $.ajax({
+                url: "<?php echo Yii::app()->createAbsoluteUrl(
+                        'admin/treatmentScheduleProcess/create', array('ajax' => 1)); ?>",
+                data: $(this).serialize() + '&id=' + _id,
+                type: "post",
+                dataType: "json",
+                success: function(data) {
+                    // After submit
+                   if (fnIsDataSuccess(data)) {
+                       fnUpdateCustomerData(data);
+                   } else {    // Load first time
+                       fnLoadDialogContent(data,
+                           '<?php echo DomainConst::CONTENT00233; ?>',
+                           createTreatmentScheduleProcess);
+                   }
+                },
+                cache: false
+            });
+           return false;
+       }
+        
         //++ BUG0054-IMT (DuongNV 20180806) Update UI treatment history
         $(document).on('click', '.createProcess', function(){
-            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
+//            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
+            var id = $(this).data('id');
+            fnOpenCreateTreatmentScheduleProcess(id);
         });
+        //-- BUG0076-IMT (DuongNV 20180823) Create treatment schedule process
         //++ BUG0056-IMT (DuongNV 20180811) Update image data treatment
         $(document).on('click', '.imageCamera', function(){
 //            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');

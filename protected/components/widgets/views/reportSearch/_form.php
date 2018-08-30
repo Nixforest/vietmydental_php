@@ -14,7 +14,7 @@
     ));
     ?>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <label for="from_date" class="required" style="width: auto; margin: 0 10px 0 111px;">Từ </label>
             <?php
             $this->widget('zii.widgets.jui.CJuiDatePicker', array(
@@ -37,7 +37,7 @@
             ));
             ?>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <label for="to_date" class="required" style="width: auto; margin-right: 10px;">Đến </label>
             <?php
             $this->widget('zii.widgets.jui.CJuiDatePicker', array(
@@ -58,6 +58,26 @@
                 'value' => $dateTo,
             ));
             ?>
+        </div>
+        <div class="col-md-4">
+            <label for="agentId" class="required" style="width: auto; margin-right: 10px;">Chi nhánh </label>
+            <select id="agentId" name="agentId">
+                <?php
+                    $html = '';
+                    foreach (CommonProcess::getCurrentAgentArray() as $id => $agent) {
+                        $select = '';
+                        Loggers::info('Agent key', $id, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                        Loggers::info('Agent id (From controller)', $agentId, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                        if ($agentId == $id) {
+                            $select = 'selected="selected"';
+                        }
+                        $html .= '<option value="' . $id . '" ' . $select . '>';
+                        $html .= $agent;
+                        $html .= '</option>';
+                    }
+                    echo $html;
+                ?>
+            </select>
         </div>
     </div>
 

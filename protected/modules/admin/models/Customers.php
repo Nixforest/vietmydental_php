@@ -376,9 +376,6 @@ class Customers extends BaseActiveRecord
      */
     public function getBirthday() {
         $retVal = '';
-        if (!DateTimeExt::isYearNull($this->year_of_birth)) {
-            $retVal = $this->year_of_birth;
-        }
         
         if (empty($retVal) && !DateTimeExt::isDateNull($this->date_of_birth)) {
             $date = CommonProcess::convertDateTime($this->date_of_birth,
@@ -390,6 +387,9 @@ class Customers extends BaseActiveRecord
                                 DomainConst::DATE_FORMAT_5);
             }
             $retVal = $date;
+        }
+        if (empty($retVal) && !DateTimeExt::isYearNull($this->year_of_birth)) {
+            $retVal = $this->year_of_birth;
         }
         
         return $retVal;
@@ -454,7 +454,7 @@ class Customers extends BaseActiveRecord
                 if ($value->type_network == SocialNetworks::TYPE_NETWORK_EMAIL) {
                     return $value->value;
                 }
-                $retVal[] = SocialNetworks::TYPE_NETWORKS[$value->type_network] . ": $value->value";
+//                $retVal[] = SocialNetworks::TYPE_NETWORKS[$value->type_network] . ": $value->value";
             }
         }
         return '';
@@ -603,10 +603,16 @@ class Customers extends BaseActiveRecord
                     .       '<path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path>'
                     .'</svg>';//END
         if (isset($this->rMedicalRecord) && isset($this->rMedicalRecord->rTreatmentSchedule)) {
-            $i = count($this->rMedicalRecord->rTreatmentSchedule);
+//            $i = count($this->rMedicalRecord->rTreatmentSchedule);
+            $i = 0;
             foreach ($this->rMedicalRecord->rTreatmentSchedule as $schedule) {
-                if (isset($schedule->rDetail)) {
-//                if (!empty($schedule->rDetail)) {
+                if (!empty($schedule->rDetail)) {
+                    $i++;
+                }
+            }
+            foreach ($this->rMedicalRecord->rTreatmentSchedule as $schedule) {
+//                if (isset($schedule->rDetail)) {
+                if (!empty($schedule->rDetail)) {
                     $rightContent .= '<b style="float: left">';
                     if ($schedule->rPathological) {
                         $rightContent .= $htmlIcon.'<span class="round-txt">Đợt ' . $i . ': ' . $schedule->getStartDate() . ' - ' . $schedule->rPathological->name . '</span>';

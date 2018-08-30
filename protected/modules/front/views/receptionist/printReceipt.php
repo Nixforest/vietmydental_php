@@ -146,8 +146,10 @@
                             (<?php echo DomainConst::CONTENT00314; ?>)
                         </td>
                         <td class="center">
-                            <b><?php echo DomainConst::CONTENT00315; ?></b><br>
-                            (<?php echo DomainConst::CONTENT00316; ?>)
+                            <!--<b><?php // echo DomainConst::CONTENT00315; ?></b><br>-->
+                            <!--(<?php // echo DomainConst::CONTENT00316; ?>)-->
+                            <b><?php echo DomainConst::CONTENT00353; ?></b><br>
+                            (<?php echo DomainConst::CONTENT00429; ?>)
                         </td>
                         <td class="center">
                             <b><?php echo DomainConst::CONTENT00317; ?></b><br>
@@ -171,7 +173,7 @@
                     <?php foreach ($model as $value): ?>
                     <?php
                         $teethCount = 1;                    // Number of teeth
-                        $treatmentName = '';                // Name of treatment type
+//                        $treatmentName = '';                // Name of treatment type
                         $price = '';                        // Price of treatment
                         $money = $value->getTotal() - $value->discount; // Money
                         $totalmoney += $money;
@@ -186,10 +188,13 @@
                             $teethCount = $value->rTreatmentScheduleDetail->getTeethCount();
                         }
                         if ($treatment != NULL) {
-                            // Get treatment name
-                            $treatmentName = $treatment->name;
                             // And price
                             $price = $treatment->getPrice();
+                        }
+                        // Get treatment name
+                        $treatmentName = $value->getTreatmentTypeName();
+                        if (!empty($price)) {
+                            $treatmentName .= ' - ' . $price;
                         }
                     ?>
                     <tr>
@@ -197,7 +202,8 @@
                         <td><?php echo CommonProcess::convertDateTime($value->process_date, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_3); ?></td>
                         <td><?php echo $treatmentName; ?></td>
                         <td><?php echo $teethCount; ?></td>
-                        <td class="currency"><?php echo $price; ?></td>
+                        <!--<td class="currency"><?php // echo $price; ?></td>-->
+                        <td class="currency"><?php echo CommonProcess::formatCurrency($value->total); ?></td>
                         <td class="currency"><?php echo $discount; ?></td>
                         <td class="currency"><?php echo CommonProcess::formatCurrency($money); ?></td>
                         <td class="currency"><?php echo $final; ?></td>

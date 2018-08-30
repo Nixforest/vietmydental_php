@@ -45,13 +45,14 @@ $form = $this->beginWidget('CActiveForm', array(
                 $detailCnt = count($schedule->rDetail);
                 foreach ($schedule->rDetail as $detail) {
                     $detailTitle = $space . $space . $space . $detail->getStartTime() . ' - ';
-                    if ($detail->rTreatmentType) {
-                        $detailTitle .= $detail->rTreatmentType->name;
-                    } else if ($detail->rDiagnosis) {
-                        $detailTitle .= $detail->rDiagnosis->name;
-                    } else {
-                        $detailTitle .= DomainConst::CONTENT00177;
-                    }
+//                    if ($detail->rTreatmentType) {
+//                        $detailTitle .= $detail->rTreatmentType->name;
+//                    } else if ($detail->rDiagnosis) {
+//                        $detailTitle .= $detail->rDiagnosis->name;
+//                    } else {
+//                        $detailTitle .= DomainConst::CONTENT00177;
+//                    }
+                    $detailTitle .= $detail->getTreatmentInfo();
                     $html .= '<tr>';
                     $html .=    '<td>';
                     $html .=        $detailTitle;

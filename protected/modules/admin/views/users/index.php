@@ -50,12 +50,12 @@ $this->widget('zii.widgets.grid.CGridView', array(
         'first_name',
         'username',
 //	'email',
-        array(
-            'header' => DomainConst::CONTENT00276,
-            'value' => '$data->getSocialNetworkInfo()',
-            'type' => 'html',
-            'htmlOptions' => array('style' => 'width:200px;'),
-        ),
+//        array(
+//            'header' => DomainConst::CONTENT00276,
+//            'value' => '$data->getSocialNetworkInfo()',
+//            'type' => 'html',
+//            'htmlOptions' => array('style' => 'width:200px;'),
+//        ),
         'address',
         array(
             'name'  => 'birthday',
@@ -88,19 +88,25 @@ $this->widget('zii.widgets.grid.CGridView', array(
           'application_id',
           'status',
           'gender',
-          'phone',
           'verify_code',
           'slug',
           'address_temp',
           'created_by',
          */
 //	'last_logged_in',
+        'phone',
+        array(
+            'name'=>'gender',
+            'htmlOptions' => array('style' => 'text-align:center;'),
+            'value'=> 'isset(CommonProcess::getGender()[$data->gender]) ? CommonProcess::getGender()[$data->gender] : ""',
+            'filter'=> CommonProcess::getGender(),
+        ),
         array(
             'name' => 'agent',
             'type' => 'html',
 //                    'value' => '$data->getAgentName()',
             'value' => '$data->getAgentNameTest()',
-            'filter' => Agents::loadItems(),
+//            'filter' => Agents::loadItems(),
         ),
         array(
             'name' => 'role_id',

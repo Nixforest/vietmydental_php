@@ -143,7 +143,9 @@ class HtmlHandler {
                     .        ' <span class="caret"></span></button>'
                     .        '<ul class="dropdown-menu" style="min-width:100px;">'
                     .           '<li class="createPrescription">' . $prescriptItem . '</li>'
-                    .           '<li class="createProcess"><a style="cursor:pointer;"><i class="fas fa-stethoscope"></i> Tạo Tiến trình điều trị</a></li>'
+                    //++ BUG0076-IMT (DuongNV 20180823) Create treatment schedule process
+                    .           '<li><a class="createProcess" style="cursor:pointer;" data-id="'.$id.'"><i class="fas fa-stethoscope"></i> Tạo Tiến trình điều trị</a></li>'
+                    //-- BUG0076-IMT (DuongNV 20180823) Create treatment schedule process
                     .           '<li><a class="imageCamera" style="cursor:pointer;" href="' . $urlReal . '"> <i class="fas fa-camera" style="margin:0 1px;"></i> Hình ảnh Camera</a></li>'
                     .           '<li><a class="imageXQuang" style="cursor:pointer;" href="' . $urlXRay . '"><i class="fas fa-x-ray"></i> Hình ảnh X-Quang</a></li>'
                     .           '<li class="requestRecoveryImage" data-id="'.$id.'">' . $laboRequestItem . '</li>'
@@ -210,14 +212,16 @@ class HtmlHandler {
         }
         $i = 0;
         foreach ($mTreatmentProcess as $value) {
-            if($i++ == 3){
+            if($i++ == 5){
                 $resVal .= '<div class="view-more"><span class="vm-btn">Xem thêm <i class="fas fa-angle-double-down"></i></span></div>';
                 break;
             }
+            $teeth = (!empty($value->description) ? 'Răng ' . $value->description : '');
+            $content = 'BS <b>' . (isset($value->rDoctor) ? $value->rDoctor->getFullName() : '') . '</b> thực hiện <b>' . $value->name . '</b>. ';
             $resVal .= '<div class="treatment-process-item">'
-                    .   '<p><b>' . $value->process_date.':</b>'
-                    .   ' <span>' . $value->name.',</span>'
-//                    .   ' <span>răng ' . $value->teeth_id.'</span></p>'
+                    .   '<p><b>' . $value->process_date.': </b>'
+                    .   ' <span>' . $content.'</span>'
+                    .   ' <span>' . $teeth.'</span></p>'
                     .'</div>';
         }
         return $resVal;

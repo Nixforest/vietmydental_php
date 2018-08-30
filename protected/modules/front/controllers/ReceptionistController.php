@@ -206,7 +206,8 @@ class ReceptionistController extends FrontController {
                         FirebaseHandler::notifyNewSchedule(
                                 $mMedicalRecord->rCustomer,
                                 $schedule->rDoctor);
-                        if (Settings::getItem(Settings::KEY_SMS_SEND_RECEIPT) == true) {
+                        if (Settings::getItem(Settings::KEY_SMS_SEND_RECEIPT) == true
+                           && (DateTimeExt::compare(CommonProcess::getCurrentDateTime(), $schedule->start_date) == -1)) {
                             // Inform for customer
 //                            SMSHandler::sendSMSOnce($mMedicalRecord->rCustomer->getPhone(),
 //                                    'Quý Khách hàng đã đặt hẹn trên Hệ thống Nha Khoa Việt Mỹ vào lúc '
@@ -782,9 +783,9 @@ class ReceptionistController extends FrontController {
             //++ BUG0045-IMT (DuongNV 20180721) Handle show total money when update receipt
             //$total = $mDetail->getTotalMoney();
             $total = $model->total;
-            if (empty($total)) {
+            if (empty($total) && $model->isNewRecord) {
                 $total = $mDetail->getTotalMoney();
-                $model->final = $total;
+//                $model->final = $total;
             }
             //-- BUG0045-IMT (DuongNV 20180721) Handle show total money when update receipt
 
@@ -888,7 +889,15 @@ class ReceptionistController extends FrontController {
                     if (isset($customer)) {
                         $rightContent = $customer->getCustomerAjaxInfo();
                         $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
+                        // Inform for customer
+                        if (DateTimeExt::compare(CommonProcess::getCurrentDateTime(), $model->start_date) == -1) {
+                            SMSHandler::sendSMSOnce($customer->getPhone(),
+                                'Quý Khách hàng đã đặt hẹn trên Hệ thống Nha Khoa Việt Mỹ vào lúc '
+                                . $model->getStartTime() . ' với bác sĩ ' . $mSchedule->rDoctor->first_name
+                                . '. Quý Khách hàng vui lòng sắp xếp thời gian đến đúng hẹn');
+                        }
                     }
+                    
                     echo CJavaScript::jsonEncode(array(
                         DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
                         DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,

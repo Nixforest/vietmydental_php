@@ -122,7 +122,8 @@
                                 array(
                                     'name' => DomainConst::CONTENT00259,
                                     'htmlOptions' => array('style' => 'text-align:right;'),
-                                    'value' => '($data->getTreatmentType() !== NULL) ? CommonProcess::formatCurrency($data->final) : ""',
+//                                    'value' => '($data->getTreatmentType() !== NULL) ? CommonProcess::formatCurrency($data->final) : ""',
+                                    'value' => 'CommonProcess::formatCurrency($data->final)',
                                 ),
 //                                'discount',
 //                                'need_approve',
