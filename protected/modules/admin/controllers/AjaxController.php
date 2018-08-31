@@ -482,11 +482,14 @@ class AjaxController extends AdminController
                     );
             $tooth = $this->widget('ext.SelectToothExt.SelectToothExt',
                     array('data' => $aData, 'canEdit' => false), true);
+            //++ BUG0068-IMT (DuongNV 20183108) Add customer info in receipt screen
+            $customerInfo = $customer->getCustomerCustomInfo();
             $json = CJavaScript::jsonEncode(array(
                 //'rightContent'  => $rightContent,
-                'rightContent'  => $tooth.$rightContent,
+                'rightContent'  => $tooth.$customerInfo.$rightContent,
                 'infoSchedule' => $infoSchedule,
             ));
+            //-- BUG0068-IMT (DuongNV 20183108) Add customer info in receipt screen
             //-- BUG0043-IMT (DuongNV 20180730) Show tooth in receipt screen
             echo $json;
             Yii::app()->end();
