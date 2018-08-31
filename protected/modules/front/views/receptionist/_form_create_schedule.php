@@ -60,6 +60,9 @@
             ));
             ?>
         <?php echo $form->error($schedule,'start_date'); ?>
+        <!--//++ BUG0067-IMT (DuongNV 20180831) Add 6 month book schedule btn-->
+        <div class="btn btn-primary btn-xs plus-6-month">+6 Tháng</div>
+        <!--//-- BUG0067-IMT (DuongNV 20180831) Add 6 month book schedule btn-->
     </div>
 
 <!--    <div class="row">
