@@ -715,56 +715,28 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
     /**
     * Update camera and XRay image
     */
-    $(document).on('click', '.imageXQuang, .imageCamera', function(e){
+    $(document).on('click', '.imageXQuang, .imageCamera', function(){
         $('form#treatment-schedule-details-form').remove();
-        e.preventDefault();
         $("#dialogId").dialog(opt).dialog("open");
         var id = $(this).data('id');
         ($(this).data('type') == 'xray') ? updateXRayImage(id) : updateCameraImage(id);
     });
     
     function updateCameraImage(_id = '') {
+        var data = new FormData($('form#treatment-schedule-details-form')[0]); // Upload file ajax need this (data store in FormData)
+        if(typeof _id != 'object'){
+            data.append('id', _id);
+        }
+        data.append('ajax', '1');
         fnLoadFormCSS();
-        url = '<?php echo Yii::app()->createAbsoluteUrl(
-                'admin/treatmentScheduleDetails/updateImageReal'); ?>';
-        title = 'Cập nhật hình ảnh Camera';
-        url += '/id/' + _id + '/ajax/1';
-        requestAjax(url, title, updateCameraImage, _id);
-        return false;
-    }
-    
-    function updateXRayImage(_id = '') {
-        fnLoadFormCSS();
-        url = '<?php echo Yii::app()->createAbsoluteUrl(
-                'admin/treatmentScheduleDetails/updateImageXRay'); ?>';
-        title = 'Cập nhật hình ảnh XQuang';
-        url += '/id/' + _id + '/ajax/1';
-        requestAjax(url, title, updateXRayImage, _id);
-        return false;
-    }
-    
-    /*
-     * Load dialog content with params
-     */
-    function fnLoadDialogContentWithParams(data, title, fnHandler, params) {
-        // Set content of dialog
-        $('#dialogId div.divForFormClass').html(
-                data['<?php echo DomainConst::KEY_CONTENT; ?>']);
-        // Set title of dialog
-        $('.ui-dialog-title').html(title);
-        // Here is the trick: on submit-> once again this function!
-        $('#dialogId div.divForFormClass form').submit(function(e){
-            fnHandler(params);
-            e.preventDefault();
-        });
-    }
-    
-    function requestAjax(url, title, callback, params){
-        var data = new FormData($('form#treatment-schedule-details-form')[0]);
+        var title = 'Cập nhật hình ảnh Camera';
         $.ajax({
-            url: url,
+            url: '<?php echo Yii::app()->createAbsoluteUrl(
+                'admin/treatmentScheduleDetails/updateImageReal'); ?>',
             data: data,
             type: 'post',
+            processData: false, // Upload file ajax need this
+            contentType: false, // Upload file ajax need this
             dataType: "json",
             success: function(data) {
                 // After submit
@@ -772,15 +744,54 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
                     $('#dialogId div.divForFormClass').html(data['<?php echo DomainConst::KEY_CONTENT; ?>']);
                     setTimeout("$('.ui-icon.ui-icon-closethick').click()", 1000);
                 } else {    // Load first time
-                    fnLoadDialogContentWithParams(data,
+                    fnLoadDialogContent(data,
                        title,
-                       callback, params);
+                       updateCameraImage);
                 }
             },
+            error: function (request, status, error) {
+                console.log('Error response text: '+request.responseText);
+                alert('Error in console!');
+            },
             cache: false,
-            contentType: false,
-            processData: false,
         });
+        return false;
+    }
+    
+    function updateXRayImage(_id = '') {
+        var data = new FormData($('form#treatment-schedule-details-form')[0]); // Upload file ajax need this (data store in FormData)
+        if(typeof _id != 'object'){
+            data.append('id', _id);
+        }
+        data.append('ajax', '1');
+        fnLoadFormCSS();
+        var title = 'Cập nhật hình ảnh XQuang';
+        $.ajax({
+            url: '<?php echo Yii::app()->createAbsoluteUrl(
+                'admin/treatmentScheduleDetails/updateImageXRay'); ?>',
+            data: data,
+            type: 'post',
+            processData: false, // Upload file ajax need this
+            contentType: false, // Upload file ajax need this
+            dataType: "json",
+            success: function(data) {
+                // After submit
+                if (fnIsDataSuccess(data)) {
+                    $('#dialogId div.divForFormClass').html(data['<?php echo DomainConst::KEY_CONTENT; ?>']);
+                    setTimeout("$('.ui-icon.ui-icon-closethick').click()", 1000);
+                } else {    // Load first time
+                    fnLoadDialogContent(data,
+                       title,
+                       updateXRayImage);
+                }
+            },
+            error: function (request, status, error) {
+                console.log('Error response text: '+request.responseText);
+                alert('Error in console!');
+            },
+            cache: false,
+        });
+        return false;
     }
         //-- BUG0056-IMT (DuongNV 20180820) Load dialog update image
     //-- BUG0056-IMT (DuongNV 20180811) Update image data treatment

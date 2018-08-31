@@ -193,51 +193,52 @@ class TreatmentScheduleDetailsController extends AdminController
 	 * @param integer $id the ID of the model to be updated
          */
         //++ BUG0056-IMT (DuongNV 20180811) Update image data treatment
-        public function actionUpdateImageXRay($id, $ajax = false) {
-		$model=$this->loadModel($id);
+        public function actionUpdateImageXRay($id = '') {
+            if(empty($id) && isset($_POST['id'])){
+                $id = $_POST['id'];
+            }
+            if(empty($id)) {
+                $id = isset($_POST['TreatmentScheduleDetails']['id']) ? $_POST['TreatmentScheduleDetails']['id'] : '';
+            }
+            $ajax = empty($_POST['ajax']) ? false : true;
+            $model=$this->loadModel($id);
 //                $mImageXRayFile = new Files();
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-		if(isset($_POST['TreatmentScheduleDetails']))
-		{
+            // Uncomment the following line if AJAX validation is needed
+            // $this->performAjaxValidation($model);
+            if(isset($_POST['TreatmentScheduleDetails']))
+            {
 //			$model->attributes=$_POST['TreatmentScheduleDetails'];
 //                        $mImageXRayFile->attributes = $_POST['Files'];
-                        Loggers::info('Post value', CommonProcess::json_encode_unicode($_POST), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                    Loggers::info('Post value', CommonProcess::json_encode_unicode($_POST), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
 //                        die;
-                        Files::deleteFileInUpdateNotIn($model, Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY,true);
-                        Files::saveRecordFile($model, Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY);
-            //++ BUG0056-IMT (DuongNV 20180820) Load dialog update image
-                        if($ajax){
-//                            $this->redirect(array('view','id'=>$model->id, 'ajax' => true));
-                            echo CJavaScript::jsonEncode(array(
-                                DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
-                                DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
-                            ));
-                            exit;
-                        } else {
-                            $this->redirect(array('view','id'=>$model->id));
-                        }
-		}
-                if($ajax){
-//                    $this->layout='//layouts/ajax';
-//                    $this->render('updateImageXRay',array(
-//                            'model'=>$model,
-//                            DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-//                    ));
-                    echo CJSON::encode(array(
-                        DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
-                        DomainConst::KEY_CONTENT => $this->renderPartial('updateImageXRay',array(
-                                'model'=>$model,
-                                DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-                            ), true, true),
-                    ));
-                    exit;
-                } else {
-                    $this->render('updateImageXRay',array(
+                    Files::deleteFileInUpdateNotIn($model, Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY,true);
+                    Files::saveRecordFile($model, Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY);
+        //++ BUG0056-IMT (DuongNV 20180820) Load dialog update image
+                    if($ajax){
+                        echo CJavaScript::jsonEncode(array(
+                            DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
+                            DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
+                        ));
+                        exit;
+                    } else {
+                        $this->redirect(array('view','id'=>$model->id));
+                    }
+            }
+            if($ajax){
+                echo CJSON::encode(array(
+                    DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
+                    DomainConst::KEY_CONTENT => $this->renderPartial('updateImageXRay',array(
                             'model'=>$model,
                             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-                    ));
-                }
+                        ), true, true),
+                ));
+                exit;
+            } else {
+                $this->render('updateImageXRay',array(
+                        'model'=>$model,
+                        DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                ));
+            }
         }
             //-- BUG0056-IMT (DuongNV 20180820) Load dialog update image
         //-- BUG0056-IMT (DuongNV 20180811) Update image data treatment
@@ -247,14 +248,20 @@ class TreatmentScheduleDetailsController extends AdminController
          * @param String $id Id of treatment schedule detail
          */
         //++ BUG0056-IMT (DuongNV 20180811) Update image data treatment
-        public function actionUpdateImageReal($id, $ajax = false) {
+        public function actionUpdateImageReal($id = '') {
+            if(empty($id) && isset($_POST['id'])){
+                $id = $_POST['id'];
+            }
+            if(empty($id)) {
+                $id = isset($_POST['TreatmentScheduleDetails']['id']) ? $_POST['TreatmentScheduleDetails']['id'] : '';
+            }
+            $ajax = empty($_POST['ajax']) ? false : true;
             $model = $this->loadModel($id);
             if (isset($_POST['TreatmentScheduleDetails'])) {
                 Files::deleteFileInUpdateNotIn($model, Files::TYPE_3_TREATMENT_SCHEDULE_REAL_IMG, true);
                 Files::saveRecordFile($model, Files::TYPE_3_TREATMENT_SCHEDULE_REAL_IMG);
             //++ BUG0056-IMT (DuongNV 20180820) Load dialog update image
                 if($ajax){
-//                    $this->redirect(array('view','id'=>$model->id, 'ajax' => true));
                     echo CJavaScript::jsonEncode(array(
                         DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
                         DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
@@ -266,11 +273,6 @@ class TreatmentScheduleDetailsController extends AdminController
             }
             
             if($ajax){
-//                $this->layout='//layouts/ajax';
-//                $this->render('updateImageReal', array(
-//                    'model' => $model,
-//                    DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-//                ));
                 echo CJSON::encode(array(
                     DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
                     DomainConst::KEY_CONTENT => $this->renderPartial('updateImageReal',array(
