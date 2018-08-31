@@ -46,6 +46,9 @@ $this->createMenu('updateImageXRay', $model);
             'htmlOptions' => array('enctype' => 'multipart/form-data'),
         )
     ); ?>
+    <!--//++ BUG0056-IMT (DuongNV 20180831) Update image xray and real-->
+    <?php echo $form->hiddenField($model, 'id') ?>
+    <!--//-- BUG0056-IMT (DuongNV 20180831) Update image xray and real-->
     <div class="row">
         <label>&nbsp</label>
         <div>

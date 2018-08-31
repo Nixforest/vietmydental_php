@@ -146,8 +146,10 @@ class HtmlHandler {
                     //++ BUG0076-IMT (DuongNV 20180823) Create treatment schedule process
                     .           '<li><a class="createProcess" style="cursor:pointer;" data-id="'.$id.'"><i class="fas fa-stethoscope"></i> Tạo Tiến trình điều trị</a></li>'
                     //-- BUG0076-IMT (DuongNV 20180823) Create treatment schedule process
-                    .           '<li><a class="imageCamera" style="cursor:pointer;" href="' . $urlReal . '"> <i class="fas fa-camera" style="margin:0 1px;"></i> Hình ảnh Camera</a></li>'
-                    .           '<li><a class="imageXQuang" style="cursor:pointer;" href="' . $urlXRay . '"><i class="fas fa-x-ray"></i> Hình ảnh X-Quang</a></li>'
+                    //++ BUG0056-IMT (DuongNV 20180831) Update image xray and real
+                    .           '<li><a class="imageCamera" style="cursor:pointer;" data-type="camera" data-id="'.$id.'"> <i class="fas fa-camera" style="margin:0 1px;"></i> Hình ảnh Camera</a></li>'
+                    .           '<li><a class="imageXQuang" style="cursor:pointer;" data-type="xray" data-id="'.$id.'"><i class="fas fa-x-ray"></i> Hình ảnh X-Quang</a></li>'
+                    //-- BUG0056-IMT (DuongNV 20180831) Update image xray and real
                     .           '<li class="requestRecoveryImage" data-id="'.$id.'">' . $laboRequestItem . '</li>'
                     .       '</ul>'
                     .    '</div>';
