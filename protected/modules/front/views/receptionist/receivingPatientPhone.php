@@ -707,20 +707,20 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
         });
         //-- BUG0076-IMT (DuongNV 20180823) Create treatment schedule process
         //++ BUG0056-IMT (DuongNV 20180811) Update image data treatment
-        $(document).on('click', '.imageCamera', function(){
-//            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
-            var id = $(this).data('id');
-            $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
+//        $(document).on('click', '.imageCamera', function(){
+////            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
+//            var id = $(this).data('id');
+//            $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
                     'admin/treatmentScheduleDetails/updateImageReal',
-                    array('id' => '')) ?>/' + id);
-        });
-        $(document).on('click', '.imageXQuang', function(){
-//            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
-            var id = $(this).data('id');
-            $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
+                    array('id' => '')) ?>///' + id);
+//        });
+//        $(document).on('click', '.imageXQuang', function(){
+////            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
+//            var id = $(this).data('id');
+//            $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
                     'admin/treatmentScheduleDetails/updateImageXRay',
-                    array('id' => '')) ?>/' + id);
-        });
+                    array('id' => '')) ?>///' + id);
+//        });
         
 //         $(document).on('click', '.requestRecoveryImage', function(){
 //             var id = $(this).data('id');
@@ -750,4 +750,86 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
 //       });
 //    }
     //-- BUG0056-IMT (DuongNV 20180811) Update image data treatment
+    
+    //++ BUG0056-IMT (DuongNV 20180831) Update image data treatment
+    $(document).on('click', '.imageXQuang, .imageCamera', function(){
+        $('form#treatment-schedule-details-form').remove();
+        $("#dialogId").dialog(opt).dialog("open");
+        var id = $(this).data('id');
+        ($(this).data('type') == 'xray') ? updateXRayImage(id) : updateCameraImage(id);
+    });
+    
+    function updateCameraImage(_id = '') {
+        var data = new FormData($('form#treatment-schedule-details-form')[0]); // Upload file ajax need this (data store in FormData)
+        if(typeof _id != 'object'){
+            data.append('id', _id);
+        }
+        data.append('ajax', '1');
+        fnLoadFormCSS();
+        var title = 'Cập nhật hình ảnh Camera';
+        $.ajax({
+            url: '<?php echo Yii::app()->createAbsoluteUrl(
+                'admin/treatmentScheduleDetails/updateImageReal'); ?>',
+            data: data,
+            type: 'post',
+            processData: false, // Upload file ajax need this
+            contentType: false, // Upload file ajax need this
+            dataType: "json",
+            success: function(data) {
+                // After submit
+                if (fnIsDataSuccess(data)) {
+                    $('#dialogId div.divForFormClass').html(data['<?php echo DomainConst::KEY_CONTENT; ?>']);
+                    setTimeout("$('.ui-icon.ui-icon-closethick').click()", 1000);
+                } else {    // Load first time
+                    fnLoadDialogContent(data,
+                       title,
+                       updateCameraImage);
+                }
+            },
+            error: function (request, status, error) {
+                console.log('Error response text: '+request.responseText);
+                alert('Error in console!');
+            },
+            cache: false,
+        });
+        return false;
+    }
+    
+    function updateXRayImage(_id = '') {
+        var data = new FormData($('form#treatment-schedule-details-form')[0]); // Upload file ajax need this (data store in FormData)
+        if(typeof _id != 'object'){
+            data.append('id', _id);
+        }
+        data.append('ajax', '1');
+        fnLoadFormCSS();
+        var title = 'Cập nhật hình ảnh XQuang';
+        $.ajax({
+            url: '<?php echo Yii::app()->createAbsoluteUrl(
+                'admin/treatmentScheduleDetails/updateImageXRay'); ?>',
+            data: data,
+            type: 'post',
+            processData: false, // Upload file ajax need this
+            contentType: false, // Upload file ajax need this
+            dataType: "json",
+            success: function(data) {
+                // After submit
+                if (fnIsDataSuccess(data)) {
+                    $('#dialogId div.divForFormClass').html(data['<?php echo DomainConst::KEY_CONTENT; ?>']);
+                    setTimeout("$('.ui-icon.ui-icon-closethick').click()", 1000);
+                } else {    // Load first time
+                    fnLoadDialogContent(data,
+                       title,
+                       updateXRayImage);
+                }
+            },
+            error: function (request, status, error) {
+                console.log('Error response text: '+request.responseText);
+                alert('Error in console!');
+            },
+            cache: false,
+        });
+        return false;
+    }
+    //-- BUG0056-IMT (DuongNV 20180831) Update image data treatment
+    
 </script>
