@@ -1346,4 +1346,56 @@ class Customers extends BaseActiveRecord
         
         return $fields;
     }
+    
+    //++ BUG0068-IMT (DuongNV 20183108) Add customer info in receipt screen
+    public function getCustomerCustomInfo() {
+        $recordNumber = '';
+        if (isset($this->rMedicalRecord)) {
+            $recordNumber = $this->rMedicalRecord->record_number;
+        }
+        $html = '';
+        $html .='<div class="info-result" style="background:white">'
+                .  '<div class="title-2">'.DomainConst::CONTENT00172.'</div>'
+                .   '<div class="item-search">'
+                .   '<table class="table table-borderless">'
+                .       '<tbody>'
+                .           '<tr>'
+                .               '<td style="width:35px;">'
+                .                   '<i class="fas fa-user" title="'.DomainConst::CONTENT00100.'"></i>'
+                .               '</td>'
+                .               '<td>'.$this->name.'</td>'
+                .           '</tr>'
+                .           '<tr>'
+                .               '<td>'
+                .                   '<i class="fas fa-map-marker-alt" title="'.DomainConst::CONTENT00045.'"></i>'
+                .               '</td>'
+                .               '<td>'.$this->address.'</td>'
+                .           '</tr>'
+                .           '<tr>'
+                .               '<td>'
+                .                   '<i class="fas fa-birthday-cake" title="'.DomainConst::CONTENT00101.'"></i>'
+                .               '</td>'
+                .               '<td>'.$this->getBirthday().'</td>'
+                .           '</tr>'
+                .           '<tr>'
+                .               '<td>'
+                .                   '<i class="fas fa-code-branch" title="'.DomainConst::CONTENT00199.'"></i>'
+                .               '</td>'
+                .               '<td>'.$this->getAgentName().'</td>'
+                .           '</tr>'
+                .           '<tr>'
+                .               '<td>'
+                .                   '<i class="fas fa-id-card" title="'.DomainConst::CONTENT00136.'"></i>'
+                .               '</td>'
+                .               '<td>'.$recordNumber.'</td>'
+                .           '</tr>'
+                .       '</tbody>'
+                .   '</table>'
+                . '</div>'
+                .'</div>';
+        return $html;
+    }
+    //-- BUG0068-IMT (DuongNV 20183108) Add customer info in receipt screen
+    
+    
 }
