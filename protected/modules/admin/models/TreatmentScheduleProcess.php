@@ -307,4 +307,16 @@ class TreatmentScheduleProcess extends BaseActiveRecord
         return NULL;
     }
     //-- BUG0076-IMT (DuongNV 20180823) Create treatment schedule process
+    
+    //++ BUG0079-IMT (DuongNV 20180109) Update and delete treatment process via ajax
+    public function validateUpdateUrl(&$id, $key) {
+        if(!empty($id)) return;
+        if (isset($_POST[DomainConst::KEY_ID]) && $_POST[DomainConst::KEY_ID] !== '[object Object]') {
+            $id = $_POST[DomainConst::KEY_ID];
+            Settings::saveAjaxTempValue($id, $key);
+        } else {
+            $id = Settings::getAjaxTempValue($key);
+        }
+    }
+    //-- BUG0079-IMT (DuongNV 20180109) Update and delete treatment process via ajax
 }

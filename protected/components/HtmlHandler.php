@@ -220,11 +220,18 @@ class HtmlHandler {
             }
             $teeth = (!empty($value->description) ? 'Răng ' . $value->description : '');
             $content = 'BS <b>' . (isset($value->rDoctor) ? $value->rDoctor->getFullName() : '') . '</b> thực hiện <b>' . $value->name . '</b>. ';
+            //++ BUG0079-IMT (DuongNV 20180109) Update and delete treatment process via ajax
+            $actionBtn = '<div class="treatment-process-action">'
+                        .   '<i class="fas fa-pencil-alt update-process-btn" data-id="'.$value->id.'"></i>'
+                        .   '<i class="fas fa-times delete-process-btn" data-id="'.$value->id.'"></i>'
+                        .'</div>';
             $resVal .= '<div class="treatment-process-item">'
                     .   '<p><b>' . $value->process_date.': </b>'
                     .   ' <span>' . $content.'</span>'
                     .   ' <span>' . $teeth.'</span></p>'
+                    .   $actionBtn
                     .'</div>';
+            //-- BUG0079-IMT (DuongNV 20180109) Update and delete treatment process via ajax
         }
         return $resVal;
     }

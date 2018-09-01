@@ -853,4 +853,65 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
     }
     //-- BUG0056-IMT (DuongNV 20180831) Update image data treatment
     
+    //++ BUG0079-IMT (DuongNV 20180109) Update and delete treatment process via ajax
+    $(document).on('click', '.update-process-btn' , function(){
+        var id = $(this).data('id');
+        fnUpdateTreatmentScheduleProcess(id);
+    })
+    
+    function fnUpdateTreatmentScheduleProcess(id) {
+        updateTreatmentScheduleProcess(id);
+        $("#dialogId").dialog(opt).dialog("open");
+    }
+
+    /**
+     * update treatment schedule process dialog
+     * @returns {Boolean}
+     */
+    function updateTreatmentScheduleProcess(_id = '') {
+        fnLoadFormCSS();
+        $.ajax({
+             url: "<?php echo Yii::app()->createAbsoluteUrl(
+                     'admin/treatmentScheduleProcess/update'); ?>",
+             data: $(this).serialize() + '&id=' + _id + '&ajax=1',
+             type: "post",
+             dataType: "json",
+             success: function(data) {
+                 // After submit
+                if (fnIsDataSuccess(data)) {
+                    fnUpdateCustomerData(data);
+                } else {    // Load first time
+                    fnLoadDialogContent(data,
+                        '<?php echo DomainConst::CONTENT00233; ?>',
+                        updateTreatmentScheduleProcess);
+                }
+             },
+             cache: false
+         });
+        return false;
+    }
+    
+    $(document).on('click', '.delete-process-btn' , function(){
+        var cf = confirm('Bạn có chắc muốn xóa?');
+        if(cf){
+            var id = $(this).data('id');
+            fnDeleteTreatmentScheduleProcess(id);
+        }
+    })
+    
+    function fnDeleteTreatmentScheduleProcess(_id = '') {
+        $.ajax({
+             url: "<?php echo Yii::app()->createAbsoluteUrl(
+                     'admin/treatmentScheduleProcess/delete'); ?>" + "/id/" + _id + '/ajax/1',
+             type: "post",
+             dataType: "json",
+             success: function(data) {
+                 // After submit
+                fnUpdateCustomerData(data);
+             },
+             cache: false
+         });
+        return false;
+    }
+    //-- BUG0079-IMT (DuongNV 20180109) Update and delete treatment process via ajax
 </script>
