@@ -480,8 +480,9 @@ class AjaxController extends AdminController
             $aData = array(
                 'model' => $model->rTreatmentScheduleDetail
                     );
-            $tooth = $this->widget('ext.SelectToothExt.SelectToothExt',
-                    array('data' => $aData, 'canEdit' => false), true);
+//            $tooth = $this->widget('ext.SelectToothExt.SelectToothExt',
+//                    array('data' => $aData, 'canEdit' => false), true);
+            $tooth = '';
             //++ BUG0068-IMT (DuongNV 20183108) Add customer info in receipt screen
             $customerInfo = $customer->getCustomerCustomInfo();
             $json = CJavaScript::jsonEncode(array(
