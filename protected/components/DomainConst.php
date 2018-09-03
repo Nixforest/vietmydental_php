@@ -1198,7 +1198,7 @@ class DomainConst {
     const CONTENT00176  = 'Tạo mới bệnh nhân';
     const CONTENT00177  = 'Lịch hẹn';
     const CONTENT00178  = 'Cập nhật lịch hẹn';
-    const CONTENT00179  = 'Đặt lịch hẹn';
+    const CONTENT00179  = 'Đặt lịch hẹn - Tạo đợt khám mới';
     const CONTENT00180  = 'Tạo mới bệnh nhân thành công';
     const CONTENT00181  = 'Cập nhật lịch hẹn thành công';
     const CONTENT00182  = 'Thông tin lịch hẹn';
