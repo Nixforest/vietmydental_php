@@ -1450,5 +1450,5 @@ class DomainConst {
     const CONTENT00428  = 'Nội dung';
     const CONTENT00429  = 'Total';
     const CONTENT00430  = 'Đã thu';
-    const CONTENT00431  = 'Bạn có chắc chắn muốn xóa';
+    const CONTENT00431  = 'Bạn có chắc chắn muốn xóa?';
 }
