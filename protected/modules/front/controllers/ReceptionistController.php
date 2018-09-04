@@ -804,7 +804,9 @@ class ReceptionistController extends FrontController {
         $model->setPromotion($customer, $mDetail, $total);
         //-- BUG0024-IMT (NamNH 201807) set promotion
         if (isset($_POST['Receipts'])) {
+            Loggers::info('Process date', $_POST['Receipts']['process_date'], __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             $model->attributes = $_POST['Receipts'];
+            Loggers::info('Process date', $model->process_date, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             
             //++ BUG0045-IMT (DuongNV 20180721) Format money when save
             $splitter = DomainConst::SPLITTER_TYPE_MONEY;
@@ -1014,7 +1016,9 @@ class ReceptionistController extends FrontController {
         $this->validateUpdateUrl($id, 'TreatmentScheduleProcess');
         $model = TreatmentScheduleProcess::model()->findByPk($id);
         if (isset($_POST['TreatmentScheduleProcess'])) {
+            Loggers::info('Process date', $_POST['TreatmentScheduleProcess']['process_date'], __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             $model->attributes = $_POST['TreatmentScheduleProcess'];
+            Loggers::info('Process date', $model->process_date, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             if ($model->save()) {
                 $customer = $model->getCustomerModel();
                 if (isset($customer)) {

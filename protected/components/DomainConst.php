@@ -91,6 +91,8 @@ class DomainConst {
     const DATE_FORMAT_10                                = 'Ymd';
     /** Date format */
     const DATE_FORMAT_11                                = 'd/m/Y H:i';
+    /** Date format */
+    const DATE_FORMAT_12                                = 'yy-mm-dd';
     /** Date default value null */
     const DATE_DEFAULT_NULL                             = '0000-00-00';
     /** Date default value null */
