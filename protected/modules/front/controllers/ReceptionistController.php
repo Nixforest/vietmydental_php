@@ -1009,14 +1009,13 @@ class ReceptionistController extends FrontController {
     /*
      * Update treatment schedule process
      */
-    public function actionUpdateProcess($id = '')
-    {
-        TreatmentScheduleProcess::model()->validateUpdateUrl($id, 'id');
-        $model=TreatmentScheduleProcess::model()->findByPk($id);
-        if(isset($_POST['TreatmentScheduleProcess']))
-        {
+    public function actionUpdateProcess($id = '') {
+//        TreatmentScheduleProcess::model()->validateUpdateUrl($id, 'id');
+        $this->validateUpdateUrl($id, 'TreatmentScheduleProcess');
+        $model = TreatmentScheduleProcess::model()->findByPk($id);
+        if (isset($_POST['TreatmentScheduleProcess'])) {
             $model->attributes = $_POST['TreatmentScheduleProcess'];
-            if($model->save()){
+            if ($model->save()) {
                 $customer = $model->getCustomerModel();
                 if (isset($customer)) {
                     $rightContent = $customer->getCustomerAjaxInfo();
@@ -1025,7 +1024,7 @@ class ReceptionistController extends FrontController {
                 echo CJavaScript::jsonEncode(array(
                     DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
                     DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
-                    DomainConst::KEY_RIGHT_CONTENT  => $rightContent,
+                    DomainConst::KEY_RIGHT_CONTENT => $rightContent,
                     DomainConst::KEY_INFO_SCHEDULE => $infoSchedule,
                 ));
                 exit;
@@ -1033,20 +1032,20 @@ class ReceptionistController extends FrontController {
         }
         echo CJSON::encode(array(
             DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
-            DomainConst::KEY_CONTENT => $this->renderPartial('_form_update_treatment_schedule_process',array(
-                    'model'=>$model,
-                    DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-                ), true, true),
+            DomainConst::KEY_CONTENT => $this->renderPartial('_form_update_treatment_schedule_process', array(
+                'model' => $model,
+                DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                    ), true, true),
         ));
         exit;
     }
-    
+
     /*
      * Todo Delete treatment schedule process
      */
-    public function actionDeleteProcess($id)
-    {
-        $model=TreatmentScheduleProcess::model()->findByPk($id);
+
+    public function actionDeleteProcess($id) {
+        $model = TreatmentScheduleProcess::model()->findByPk($id);
         $customer = $model->getCustomerModel();
         $model->delete();
         if (isset($customer)) {
@@ -1056,9 +1055,10 @@ class ReceptionistController extends FrontController {
         echo CJavaScript::jsonEncode(array(
             DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
             DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
-            DomainConst::KEY_RIGHT_CONTENT  => $rightContent,
+            DomainConst::KEY_RIGHT_CONTENT => $rightContent,
             DomainConst::KEY_INFO_SCHEDULE => $infoSchedule,
         ));
         exit;
     }
+
 }

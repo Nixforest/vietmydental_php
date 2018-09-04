@@ -857,22 +857,28 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
     $(document).on('click', '.update-process-btn' , function(){
         var id = $(this).data('id');
         fnUpdateTreatmentScheduleProcess(id);
-    })
+    });
     
-    function fnUpdateTreatmentScheduleProcess(id) {
-        updateTreatmentScheduleProcess(id);
+    /**
+    * Open update treatment schedule process dialog
+     * @param {String} _id Id of treatment schedule process need to update
+    * @returns {Boolean}
+    */
+    function fnUpdateTreatmentScheduleProcess(_id) {
+        createUpdateTreatmentScheduleProcessDialog(_id);
         $("#dialogId").dialog(opt).dialog("open");
     }
 
     /**
-     * update treatment schedule process dialog
+     * Create update treatment schedule process dialog
+     * @param {String} _id Id of treatment schedule process need to update
      * @returns {Boolean}
      */
-    function updateTreatmentScheduleProcess(_id = '') {
+    function createUpdateTreatmentScheduleProcessDialog(_id = '') {
         fnLoadFormCSS();
         $.ajax({
              url: "<?php echo Yii::app()->createAbsoluteUrl(
-                     'front/receptionist/UpdateProcess'); ?>",
+                     'front/receptionist/updateProcess'); ?>",
              data: $(this).serialize() + '&id=' + _id,
              type: "post",
              dataType: "json",
@@ -883,7 +889,7 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
                 } else {    // Load first time
                     fnLoadDialogContent(data,
                         '<?php echo DomainConst::CONTENT00233; ?>',
-                        updateTreatmentScheduleProcess);
+                        createUpdateTreatmentScheduleProcessDialog);
                 }
              },
              cache: false
@@ -893,16 +899,21 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
     
     $(document).on('click', '.delete-process-btn' , function(){
         var cf = confirm('Bạn có chắc muốn xóa?');
-        if(cf){
+        if (cf) {
             var id = $(this).data('id');
             fnDeleteTreatmentScheduleProcess(id);
         }
-    })
+    });
     
+    /**
+     * Delete treatment schedule process
+     * @param {String} _id Id of treatment schedule process need to update
+     * @returns {Boolean}
+     */
     function fnDeleteTreatmentScheduleProcess(_id = '') {
         $.ajax({
              url: "<?php echo Yii::app()->createAbsoluteUrl(
-                     'front/receptionist/DeleteProcess'); ?>" + "/id/" + _id,
+                     'front/receptionist/deleteProcess'); ?>" + "/id/" + _id,
              type: "post",
              dataType: "json",
              success: function(data) {
