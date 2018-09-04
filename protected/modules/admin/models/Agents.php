@@ -490,7 +490,12 @@ class Agents extends BaseActiveRecord
         $strDocTor = '';
         $aData['OLD'] = null;
         $aData['NEW'] = null;
-        $aIdCus = [0];
+        $aIdCus = [0
+        $scheduleByTime = $this->getScheduleDetail($from, $to);
+        if(empty($scheduleByTime)){
+            $scheduleByTime = [0];
+        }
+        $strScheduleByTime = implode(',', $scheduleByTime);
         $criteriaNew = new CDbCriteria;
         $criteriaOld = new CDbCriteria;
 //        if (empty($this->rJoinCustomer)) {
@@ -519,13 +524,15 @@ class Agents extends BaseActiveRecord
             foreach ($aUser as $key => $value) {
                 $aIdDoctor[] = $value->id;
             }
-            $strDocTor = ' AND tr.doctor_id IN ('.implode(',', $aIdDoctor).')';
+            $strDocTor =  ' AND tr.doctor_id IN ('.implode(',', $aIdDoctor).')';
         }
         $criteriaNew->distinct = true;
         $criteriaNew->addInCondition('t.id', $aIdCus);
+        //$strScheduleByTime
         $criteriaNew->join = 'JOIN (select re.* FROM medical_records as re JOIN treatment_schedules tr'
-                . ' ON re.id = tr.record_id'
-                . ' WHERE DATE(tr.created_date) >= "' . $from . '" AND DATE(tr.created_date) <= "' . $to . '" '.$strDocTor.') as b'
+                            . ' ON re.id = tr.record_id'
+                            . ' WHERE tr.id IN ('.$strScheduleByTime.') '.$strDocTor
+                . ' ) as b'
                 . ' ON b.customer_id = t.id';
 //        echo '<pre>';
 //        print_r($criteriaNew->join);
@@ -537,7 +544,8 @@ class Agents extends BaseActiveRecord
         $criteriaOld->addInCondition('t.id', $aIdCus);
         $criteriaOld->join = 'JOIN (select re.* FROM medical_records as re JOIN treatment_schedules tr'
                 . ' ON re.id = tr.record_id'
-                . ' WHERE DATE(tr.created_date) >= "' . $from . '" AND DATE(tr.created_date) <= "' . $to . '" '.$strDocTor.') as b'
+                . ' WHERE tr.id IN ('.$strScheduleByTime.') '.$strDocTor
+                . ' ) as b'
                 . ' ON b.customer_id = t.id';
         $criteriaOld->addCondition('DATE(t.created_date) <\'' . $from . '\'');
 
@@ -574,5 +582,31 @@ class Agents extends BaseActiveRecord
             'order' => 'id ASC',
         ));
         return  CHtml::listData($models,'id','name');
+    }
+    
+    /**
+     * 
+     * @param date $from
+     * @param date $to
+     */
+    public function getScheduleDetail($from,$to){
+        $criteria = new CDbCriteria;
+        $aProcess = $this->getScheduleProcess($from,$to);
+        $criteria->addBetweenCondition('DATE(t.created_date)', $from, $to);
+        $criteria->addInCondition('id', $aProcess, 'OR');
+        $aTreatmentScheduleDetails = TreatmentScheduleDetails::model()->findAll($criteria);
+        return chtml::listData($aTreatmentScheduleDetails, 'schedule_id', 'schedule_id');
+    }
+    
+    /**
+     * 
+     * @param date $from
+     * @param date $to
+     */
+    public function getScheduleProcess($from,$to){
+        $criteria = new CDbCriteria;
+        $criteria->addBetweenCondition('t.process_date', $from, $to);
+        $aTreatmentScheduleDetails = TreatmentScheduleProcess::model()->findAll($criteria);
+        return CHtml::listData($aTreatmentScheduleDetails, 'detail_id', 'detail_id');
     }
 }
