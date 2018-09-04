@@ -265,6 +265,18 @@ class Receipts extends CActiveRecord {
         }
         return '';
     }
+    
+    /**
+     * Get customer's agent name
+     * @return Customer name's agent, or empty
+     */
+    public function getCustomerAgentName() {
+        $customer = $this->getCustomer();
+        if (isset($customer)) {
+            return $customer->getAgentName();
+        }
+        return '';
+    }
 
     /**
      * Get customer id
