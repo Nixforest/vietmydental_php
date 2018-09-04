@@ -872,8 +872,8 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
         fnLoadFormCSS();
         $.ajax({
              url: "<?php echo Yii::app()->createAbsoluteUrl(
-                     'admin/treatmentScheduleProcess/update'); ?>",
-             data: $(this).serialize() + '&id=' + _id + '&ajax=1',
+                     'front/receptionist/UpdateProcess'); ?>",
+             data: $(this).serialize() + '&id=' + _id,
              type: "post",
              dataType: "json",
              success: function(data) {
@@ -902,7 +902,7 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
     function fnDeleteTreatmentScheduleProcess(_id = '') {
         $.ajax({
              url: "<?php echo Yii::app()->createAbsoluteUrl(
-                     'admin/treatmentScheduleProcess/delete'); ?>" + "/id/" + _id + '/ajax/1',
+                     'front/receptionist/DeleteProcess'); ?>" + "/id/" + _id,
              type: "post",
              dataType: "json",
              success: function(data) {

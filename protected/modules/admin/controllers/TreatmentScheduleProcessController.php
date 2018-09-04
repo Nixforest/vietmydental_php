@@ -121,55 +121,21 @@ class TreatmentScheduleProcessController extends AdminController
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
-        //++ BUG0079-IMT (DuongNV 20180109) Update and delete treatment process via ajax
-	public function actionUpdate($id = '')
+	public function actionUpdate($id)
 	{
-            TreatmentScheduleProcess::model()->validateUpdateUrl($id, 'id');
-            $ajax = empty($_POST['ajax']) ? false : true;
-            $model=$this->loadModel($id);
-
-            // Uncomment the following line if AJAX validation is needed
-            // $this->performAjaxValidation($model);
-
-            if(isset($_POST['TreatmentScheduleProcess']))
-            {
-                    $model->attributes=$_POST['TreatmentScheduleProcess'];
-                    if($model->save()){
-                        if($ajax){ // Create by opening dialog
-                            $customer = $model->getCustomerModel();
-                            if (isset($customer)) {
-                                $rightContent = $customer->getCustomerAjaxInfo();
-                                $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
-                            }
-                            echo CJavaScript::jsonEncode(array(
-                                DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
-                                DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
-                                DomainConst::KEY_RIGHT_CONTENT  => $rightContent,
-                                DomainConst::KEY_INFO_SCHEDULE => $infoSchedule,
-                            ));
-                            exit;
-                        } else {
-                            $this->redirect(array('view','id'=>$model->id));
-                        }
-                    }
-            }
-            
-            if($ajax){
-                echo CJSON::encode(array(
-                    DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
-                    DomainConst::KEY_CONTENT => $this->renderPartial('update',array(
-                            'model'=>$model,
-                            DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-                        ), true, true),
-                ));
-                exit;
-            } else {
-                $this->render('update',array(
-                        'model'=>$model,
+		$model=$this->loadModel($id);
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+		if(isset($_POST['TreatmentScheduleProcess']))
+		{
+			$model->attributes=$_POST['TreatmentScheduleProcess'];
+			if($model->save())
+				$this->redirect(array('view','id'=>$model->id));
+		}
+		$this->render('update',array(
+			'model'=>$model,
                         DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-                ));
-            }
-                
+		));
 	}
 
 	/**
@@ -179,31 +145,11 @@ class TreatmentScheduleProcessController extends AdminController
 	 */
 	public function actionDelete($id)
 	{
-            $model = $this->loadModel($id);
-            $customer = $model->getCustomerModel();
-            $model->delete();
-//		$this->loadModel($id)->delete();
-
+		$this->loadModel($id)->delete();
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!isset($_GET['ajax'])){
-                    $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-                } else {
-                    // Delete via ajax request (/front/receptionist/receivingPatientPhone)
-                    // Update data after delete
-                    if (isset($customer)) {
-                        $rightContent = $customer->getCustomerAjaxInfo();
-                        $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
-                    }
-                    echo CJavaScript::jsonEncode(array(
-                        DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
-                        DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
-                        DomainConst::KEY_RIGHT_CONTENT  => $rightContent,
-                        DomainConst::KEY_INFO_SCHEDULE => $infoSchedule,
-                    ));
-                    exit;
-                }
+		if(!isset($_GET['ajax']))
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 	}
-        //-- BUG0079-IMT (DuongNV 20180109) Update and delete treatment process via ajax
 
 	/**
 	 * Lists all models.
