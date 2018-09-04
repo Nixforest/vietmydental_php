@@ -175,10 +175,27 @@ class ReportsController extends AdminController {
         if (empty($to)) {
             $to = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
         }
+        
+        // Get agent info
+        $agentId = '';
+        $arrAgentId = array();
+        if (isset($_GET['agentId'])) {
+            $agentId = $_GET['agentId'];
+        }
+        if (isset($_POST['agentId'])) {
+            $agentId = $_POST['agentId'];
+        }
+        if (empty($agentId)) {
+            $arrAgentId = CommonProcess::getCurrentAgentIdArray();
+        } else {
+            $arrAgentId[] = $agentId;
+        }
+        
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
             $this->redirect(array('ReportMoney',
                 'from' => CommonProcess::convertDateTime($_POST['from_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat),
                 'to' => CommonProcess::convertDateTime($_POST['to_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat),
+                'agentId' => $agentId,
             ));
         }
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_MONTH)) {
@@ -186,6 +203,7 @@ class ReportsController extends AdminController {
             $this->redirect(array('ReportMoney',
                 'from' => $from,
                 'to' => CommonProcess::getLastDateOfMonth($from),
+                'agentId' => $agentId,
             ));
         }
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_LAST_MONTH)) {
@@ -193,6 +211,7 @@ class ReportsController extends AdminController {
             $this->redirect(array('ReportMoney',
                 'from' => CommonProcess::getFirstDateOfMonth($from),
                 'to' => CommonProcess::getLastDateOfMonth($from),
+                'agentId' => $agentId,
             ));
         }
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_TODATE)) {
@@ -200,6 +219,7 @@ class ReportsController extends AdminController {
             $this->redirect(array('ReportMoney',
                 'from' => $from,
                 'to' => $from,
+                'agentId' => $agentId,
             ));
         }
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_DATE_YESTERDAY)) {
@@ -207,6 +227,7 @@ class ReportsController extends AdminController {
             $this->redirect(array('ReportMoney',
                 'from' => $from,
                 'to' => $from,
+                'agentId' => $agentId,
             ));
         }
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_DATE_BEFORE_YESTERDAY)) {
@@ -214,6 +235,7 @@ class ReportsController extends AdminController {
             $this->redirect(array('ReportMoney',
                 'from' => $from,
                 'to' => $from,
+                'agentId' => $agentId,
             ));
         }
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_EXCEL)) {
@@ -226,6 +248,7 @@ class ReportsController extends AdminController {
             'from' => $from,
             'to' => $to,
             'aData' => $mAgent->getReportMoney($from, $to),
+            'agentId' => $agentId,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }
@@ -251,47 +274,69 @@ class ReportsController extends AdminController {
         if (empty($to)) {
             $to = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
         }
+        
+        // Get agent info
+        $agentId = '';
+        $arrAgentId = array();
+        if (isset($_GET['agentId'])) {
+            $agentId = $_GET['agentId'];
+        }
+        if (isset($_POST['agentId'])) {
+            $agentId = $_POST['agentId'];
+        }
+        if (empty($agentId)) {
+            $arrAgentId = CommonProcess::getCurrentAgentIdArray();
+        } else {
+            $arrAgentId[] = $agentId;
+        }
+        
         // Start access db
 
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
             $this->redirect(array('customer',
                 'from' => CommonProcess::convertDateTime($_POST['from_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat),
-                'to' => CommonProcess::convertDateTime($_POST['to_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat)
+                'to' => CommonProcess::convertDateTime($_POST['to_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat),
+                'agentId' => $agentId,
             ));
         }
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_MONTH)) {
             $from = CommonProcess::getFirstDateOfCurrentMonth($dateFormat);
             $this->redirect(array('customer',
                 'from' => $from,
-                'to' => CommonProcess::getLastDateOfMonth($from)
+                'to' => CommonProcess::getLastDateOfMonth($from),
+                'agentId' => $agentId,
             ));
         }
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_LAST_MONTH)) {
             $from = CommonProcess::getPreviousMonth($dateFormat);
             $this->redirect(array('customer',
                 'from' => CommonProcess::getFirstDateOfMonth($from),
-                'to' => CommonProcess::getLastDateOfMonth($from)
+                'to' => CommonProcess::getLastDateOfMonth($from),
+                'agentId' => $agentId,
             ));
         }
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_TODATE)) {
             $from = CommonProcess::getCurrentDateTime($dateFormat);
             $this->redirect(array('customer',
                 'from' => $from,
-                'to' => $from
+                'to' => $from,
+                'agentId' => $agentId,
             ));
         }
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_DATE_YESTERDAY)) {
             $from = CommonProcess::getPreviousDateTime($dateFormat);
             $this->redirect(array('customer',
                 'from' => $from,
-                'to' => $from
+                'to' => $from,
+                'agentId' => $agentId,
             ));
         }
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_DATE_BEFORE_YESTERDAY)) {
             $from = CommonProcess::getDateBeforeYesterdayDateTime($dateFormat);
             $this->redirect(array('customer',
                 'from' => $from,
-                'to' => $from
+                'to' => $from,
+                'agentId' => $agentId,
             ));
         }
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_EXCEL)) {
@@ -313,6 +358,7 @@ class ReportsController extends AdminController {
             'model' => $mAgent,
             'from' => $from,
             'to' => $to,
+            'agentId' => $agentId,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }

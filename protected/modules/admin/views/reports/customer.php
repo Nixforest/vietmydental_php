@@ -133,7 +133,7 @@ if (!empty($to)) {
 
 </div> form -->
 <?php 
- $this->widget('ReportSearchWidget', array('dateFrom' => $dateFrom, 'dateTo' => $dateTo));
+ $this->widget('ReportSearchWidget', array('dateFrom' => $dateFrom, 'dateTo' => $dateTo,'agentId'   => $agentId,));
  ?>
 <!--//-- BUG0046-IMT (DuongNV 20180803) Update UI reports-->
 <!--khách hàng mới-->
