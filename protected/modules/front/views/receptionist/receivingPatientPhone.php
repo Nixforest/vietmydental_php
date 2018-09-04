@@ -898,7 +898,7 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
     }
     
     $(document).on('click', '.delete-process-btn' , function(){
-        var cf = confirm('Bạn có chắc muốn xóa?');
+        var cf = confirm('<?php echo DomainConst::CONTENT00431; ?>');
         if (cf) {
             var id = $(this).data('id');
             fnDeleteTreatmentScheduleProcess(id);
