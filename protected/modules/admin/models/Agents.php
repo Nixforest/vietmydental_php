@@ -492,6 +492,9 @@ class Agents extends BaseActiveRecord
         $aData['NEW'] = null;
         $aIdCus = [0];
         $scheduleByTime = $this->getScheduleDetail($from, $to);
+        if(empty($scheduleByTime)){
+            $scheduleByTime = [0];
+        }
         $strScheduleByTime = implode(',', $scheduleByTime);
         $criteriaNew = new CDbCriteria;
         $criteriaOld = new CDbCriteria;
