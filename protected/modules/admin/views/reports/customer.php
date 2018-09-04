@@ -1,7 +1,7 @@
 <?php
 /* @var $this ReportsController */
 
-$this->createMenu('revenue', null);
+$this->createMenu('customer', null);
 $dateFrom = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
 $dateTo = $dateFrom;
 if (!empty($from)) {
