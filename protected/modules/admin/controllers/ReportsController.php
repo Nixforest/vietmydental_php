@@ -96,13 +96,7 @@ class ReportsController extends AdminController {
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_EXCEL)) {
             $from = CommonProcess::convertDateTime($_POST['from_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat);
             $to = CommonProcess::convertDateTime($_POST['to_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat);
-            if (!empty($agentId)) {
-                $mAgent = Agents()->model()->findByPk($agentId);
-                if ($mAgent) {
-                    ExcelHandler::summaryReportMoney($mAgent, $from, $to);
-                }
-            }
-            
+            $this->exportExcel($from, $to, $agentId);
         }
         $this->render('revenue', array(
             'receipts' => $receipts,
@@ -123,6 +117,21 @@ class ReportsController extends AdminController {
     public function validateRevenueUrl(&$from, &$to) {
         $from = isset($_GET['from']) ? $_GET['from'] : '';
         $to = isset($_GET['to']) ? $_GET['to'] : '';
+    }
+    
+    /**
+     * Handle export excel
+     * @param String $from      From
+     * @param String $to        To
+     * @param String $agentId Id of agent
+     */
+    public function exportExcel($from, $to, $agentId) {
+        if (!empty($agentId)) {
+            $mAgent = Agents::model()->findByPk($agentId);
+            if ($mAgent) {
+                ExcelHandler::summaryReportMoney($mAgent, $from, $to);
+            }
+        }
     }
 
     // Uncomment the following methods and override them if needed
@@ -169,42 +178,42 @@ class ReportsController extends AdminController {
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
             $this->redirect(array('ReportMoney',
                 'from' => CommonProcess::convertDateTime($_POST['from_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat),
-                'to' => CommonProcess::convertDateTime($_POST['to_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat)
+                'to' => CommonProcess::convertDateTime($_POST['to_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat),
             ));
         }
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_MONTH)) {
             $from = CommonProcess::getFirstDateOfCurrentMonth($dateFormat);
             $this->redirect(array('ReportMoney',
                 'from' => $from,
-                'to' => CommonProcess::getLastDateOfMonth($from)
+                'to' => CommonProcess::getLastDateOfMonth($from),
             ));
         }
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_LAST_MONTH)) {
             $from = CommonProcess::getPreviousMonth($dateFormat);
             $this->redirect(array('ReportMoney',
                 'from' => CommonProcess::getFirstDateOfMonth($from),
-                'to' => CommonProcess::getLastDateOfMonth($from)
+                'to' => CommonProcess::getLastDateOfMonth($from),
             ));
         }
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_TODATE)) {
             $from = CommonProcess::getCurrentDateTime($dateFormat);
             $this->redirect(array('ReportMoney',
                 'from' => $from,
-                'to' => $from
+                'to' => $from,
             ));
         }
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_DATE_YESTERDAY)) {
             $from = CommonProcess::getPreviousDateTime($dateFormat);
             $this->redirect(array('ReportMoney',
                 'from' => $from,
-                'to' => $from
+                'to' => $from,
             ));
         }
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_DATE_BEFORE_YESTERDAY)) {
             $from = CommonProcess::getDateBeforeYesterdayDateTime($dateFormat);
             $this->redirect(array('ReportMoney',
                 'from' => $from,
-                'to' => $from
+                'to' => $from,
             ));
         }
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_EXCEL)) {

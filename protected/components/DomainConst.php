@@ -91,6 +91,8 @@ class DomainConst {
     const DATE_FORMAT_10                                = 'Ymd';
     /** Date format */
     const DATE_FORMAT_11                                = 'd/m/Y H:i';
+    /** Date format */
+    const DATE_FORMAT_12                                = 'yy-mm-dd';
     /** Date default value null */
     const DATE_DEFAULT_NULL                             = '0000-00-00';
     /** Date default value null */
@@ -1198,7 +1200,7 @@ class DomainConst {
     const CONTENT00176  = 'Tạo mới bệnh nhân';
     const CONTENT00177  = 'Lịch hẹn';
     const CONTENT00178  = 'Cập nhật lịch hẹn';
-    const CONTENT00179  = 'Đặt lịch hẹn';
+    const CONTENT00179  = 'Đặt lịch hẹn - Tạo đợt khám mới';
     const CONTENT00180  = 'Tạo mới bệnh nhân thành công';
     const CONTENT00181  = 'Cập nhật lịch hẹn thành công';
     const CONTENT00182  = 'Thông tin lịch hẹn';
@@ -1447,4 +1449,6 @@ class DomainConst {
     const CONTENT00427  = 'Chuyên mục cha';
     const CONTENT00428  = 'Nội dung';
     const CONTENT00429  = 'Total';
+    const CONTENT00430  = 'Đã thu';
+    const CONTENT00431  = 'Bạn có chắc chắn muốn xóa?';
 }

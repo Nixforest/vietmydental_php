@@ -237,7 +237,7 @@ class OneMany extends BaseActiveRecord
      */
     public function getReceiptCustomerRecordNumber() {
         if (isset($this->rReceipt)) {
-            return $this->rReceipt->getCustomerRecordNumber();
+            return $this->rReceipt->getCustomerAgentName() . ' '  . DomainConst::SPLITTER_TYPE_3 . ' ' . $this->rReceipt->getCustomerRecordNumber();
         }
         return '';
     }

@@ -126,6 +126,9 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
                 "#right_page_title",
                 "<?php echo DomainConst::CONTENT00172 ?>",
                 '');
+        //++ BUG0067-IMT (DuongNV 20180831) Add 6 month book schedule btn
+        fnClickPlusMonth();
+        //-- BUG0067-IMT (DuongNV 20180831) Add 6 month book schedule btn
     });
     $("body").on("click", "#customer-info tbody tr", function() {
         fnShowCustomerInfo(
@@ -707,20 +710,20 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
         });
         //-- BUG0076-IMT (DuongNV 20180823) Create treatment schedule process
         //++ BUG0056-IMT (DuongNV 20180811) Update image data treatment
-        $(document).on('click', '.imageCamera', function(){
-//            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
-            var id = $(this).data('id');
-            $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
+//        $(document).on('click', '.imageCamera', function(){
+////            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
+//            var id = $(this).data('id');
+//            $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
                     'admin/treatmentScheduleDetails/updateImageReal',
-                    array('id' => '')) ?>/' + id);
-        });
-        $(document).on('click', '.imageXQuang', function(){
-//            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
-            var id = $(this).data('id');
-            $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
+                    array('id' => '')) ?>///' + id);
+//        });
+//        $(document).on('click', '.imageXQuang', function(){
+////            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
+//            var id = $(this).data('id');
+//            $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
                     'admin/treatmentScheduleDetails/updateImageXRay',
-                    array('id' => '')) ?>/' + id);
-        });
+                    array('id' => '')) ?>///' + id);
+//        });
         
 //         $(document).on('click', '.requestRecoveryImage', function(){
 //             var id = $(this).data('id');
@@ -750,4 +753,176 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
 //       });
 //    }
     //-- BUG0056-IMT (DuongNV 20180811) Update image data treatment
+    
+    //++ BUG0067-IMT (DuongNV 20180831) Add 6 month book schedule btn
+    function fnClickPlusMonth(){
+        $(document).on('click', '.plus-6-month', function(){
+            console.log(1);
+            var input = $(this).siblings('input#TreatmentSchedules_start_date');
+            var date = input.val().split('/')[0];
+            var month = parseInt(input.val().split('/')[1]);
+            var year = parseInt(input.val().split('/')[2]);
+            var cDate = new Date(year, month-1, date);
+            var nDate = new Date(cDate.setMonth(cDate.getMonth() + 6));
+            date = ("0" + nDate.getDate()).slice(-2);
+            month = ("0" + (nDate.getMonth() + 1)).slice(-2);
+            year = nDate.getFullYear();
+            input.val(date+'/'+month+'/'+year);
+        })
+    }
+    //-- BUG0067-IMT (DuongNV 20180831) Add 6 month book schedule btn
+    
+    //++ BUG0056-IMT (DuongNV 20180831) Update image data treatment
+    $(document).on('click', '.imageXQuang, .imageCamera', function(){
+        $('form#treatment-schedule-details-form').remove();
+        $("#dialogId").dialog(opt).dialog("open");
+        var id = $(this).data('id');
+        ($(this).data('type') == 'xray') ? updateXRayImage(id) : updateCameraImage(id);
+    });
+    
+    function updateCameraImage(_id = '') {
+        var data = new FormData($('form#treatment-schedule-details-form')[0]); // Upload file ajax need this (data store in FormData)
+        if(typeof _id != 'object'){
+            data.append('id', _id);
+        }
+        data.append('ajax', '1');
+        fnLoadFormCSS();
+        var title = 'Cập nhật hình ảnh Camera';
+        $.ajax({
+            url: '<?php echo Yii::app()->createAbsoluteUrl(
+                'admin/treatmentScheduleDetails/updateImageReal'); ?>',
+            data: data,
+            type: 'post',
+            processData: false, // Upload file ajax need this
+            contentType: false, // Upload file ajax need this
+            dataType: "json",
+            success: function(data) {
+                // After submit
+                if (fnIsDataSuccess(data)) {
+                    $('#dialogId div.divForFormClass').html(data['<?php echo DomainConst::KEY_CONTENT; ?>']);
+                    setTimeout("$('.ui-icon.ui-icon-closethick').click()", 1000);
+                } else {    // Load first time
+                    fnLoadDialogContent(data,
+                       title,
+                       updateCameraImage);
+                }
+            },
+            error: function (request, status, error) {
+                console.log('Error response text: '+request.responseText);
+                alert('Error in console!');
+            },
+            cache: false,
+        });
+        return false;
+    }
+    
+    function updateXRayImage(_id = '') {
+        var data = new FormData($('form#treatment-schedule-details-form')[0]); // Upload file ajax need this (data store in FormData)
+        if(typeof _id != 'object'){
+            data.append('id', _id);
+        }
+        data.append('ajax', '1');
+        fnLoadFormCSS();
+        var title = 'Cập nhật hình ảnh XQuang';
+        $.ajax({
+            url: '<?php echo Yii::app()->createAbsoluteUrl(
+                'admin/treatmentScheduleDetails/updateImageXRay'); ?>',
+            data: data,
+            type: 'post',
+            processData: false, // Upload file ajax need this
+            contentType: false, // Upload file ajax need this
+            dataType: "json",
+            success: function(data) {
+                // After submit
+                if (fnIsDataSuccess(data)) {
+                    $('#dialogId div.divForFormClass').html(data['<?php echo DomainConst::KEY_CONTENT; ?>']);
+                    setTimeout("$('.ui-icon.ui-icon-closethick').click()", 1000);
+                } else {    // Load first time
+                    fnLoadDialogContent(data,
+                       title,
+                       updateXRayImage);
+                }
+            },
+            error: function (request, status, error) {
+                console.log('Error response text: '+request.responseText);
+                alert('Error in console!');
+            },
+            cache: false,
+        });
+        return false;
+    }
+    //-- BUG0056-IMT (DuongNV 20180831) Update image data treatment
+    
+    //++ BUG0079-IMT (DuongNV 20180109) Update and delete treatment process via ajax
+    $(document).on('click', '.update-process-btn' , function(){
+        var id = $(this).data('id');
+        fnUpdateTreatmentScheduleProcess(id);
+    });
+    
+    /**
+    * Open update treatment schedule process dialog
+     * @param {String} _id Id of treatment schedule process need to update
+    * @returns {Boolean}
+    */
+    function fnUpdateTreatmentScheduleProcess(_id) {
+        createUpdateTreatmentScheduleProcessDialog(_id);
+        $("#dialogId").dialog(opt).dialog("open");
+    }
+
+    /**
+     * Create update treatment schedule process dialog
+     * @param {String} _id Id of treatment schedule process need to update
+     * @returns {Boolean}
+     */
+    function createUpdateTreatmentScheduleProcessDialog(_id = '') {
+        fnLoadFormCSS();
+        $.ajax({
+             url: "<?php echo Yii::app()->createAbsoluteUrl(
+                     'front/receptionist/updateProcess'); ?>",
+             data: $(this).serialize() + '&id=' + _id,
+             type: "post",
+             dataType: "json",
+             success: function(data) {
+                 // After submit
+                if (fnIsDataSuccess(data)) {
+                    fnUpdateCustomerData(data);
+                } else {    // Load first time
+                    fnLoadDialogContent(data,
+                        '<?php echo DomainConst::CONTENT00233; ?>',
+                        createUpdateTreatmentScheduleProcessDialog);
+                }
+             },
+             cache: false
+         });
+        return false;
+    }
+    
+    $(document).on('click', '.delete-process-btn' , function(){
+        var cf = confirm('<?php echo DomainConst::CONTENT00431; ?>');
+        if (cf) {
+            var id = $(this).data('id');
+            fnDeleteTreatmentScheduleProcess(id);
+        }
+    });
+    
+    /**
+     * Delete treatment schedule process
+     * @param {String} _id Id of treatment schedule process need to update
+     * @returns {Boolean}
+     */
+    function fnDeleteTreatmentScheduleProcess(_id = '') {
+        $.ajax({
+             url: "<?php echo Yii::app()->createAbsoluteUrl(
+                     'front/receptionist/deleteProcess'); ?>" + "/id/" + _id,
+             type: "post",
+             dataType: "json",
+             success: function(data) {
+                 // After submit
+                fnUpdateCustomerData(data);
+             },
+             cache: false
+         });
+        return false;
+    }
+    //-- BUG0079-IMT (DuongNV 20180109) Update and delete treatment process via ajax
 </script>

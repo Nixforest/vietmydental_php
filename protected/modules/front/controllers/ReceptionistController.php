@@ -207,12 +207,12 @@ class ReceptionistController extends FrontController {
                                 $mMedicalRecord->rCustomer,
                                 $schedule->rDoctor);
                         // Inform for customer
-                        if (DateTimeExt::compare(CommonProcess::getCurrentDateTime(), $schedule->start_date) == -1) {
-                            SMSHandler::sendSMSOnce($mMedicalRecord->rCustomer->getPhone(),
-                                'Quý Khách hàng đã đặt hẹn trên Hệ thống Nha Khoa Việt Mỹ vào lúc '
-                                . $detail->getStartTime() . ' với bác sĩ ' . $schedule->rDoctor->first_name
-                                . '. Quý Khách hàng vui lòng sắp xếp thời gian đến đúng hẹn');
-                        }
+                        SMSHandler::sendSMSCreateSchedule($schedule->start_date,
+                                $mMedicalRecord->rCustomer->getPhone(),
+                                $detail->getStartTime(),
+                                $schedule->rDoctor->first_name,
+                                $mMedicalRecord->rCustomer->id,
+                                Settings::KEY_SMS_SEND_CREATE_SCHEDULE);
                     }
                     echo CJavaScript::jsonEncode(array(
                         DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
@@ -269,9 +269,17 @@ class ReceptionistController extends FrontController {
                     $rightContent = '';
                     $infoSchedule = '';
                     $customer = $schedule->getCustomerModel();
-                    if ($customer != NULL) {
+                    $mMedicalRecord = $schedule->rMedicalRecord;
+                    if (($customer != NULL) && isset($mMedicalRecord)) {
                         $rightContent = $customer->getCustomerAjaxInfo();
                         $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
+                        // Inform for customer
+                        SMSHandler::sendSMSCreateSchedule($schedule->start_date,
+                                $mMedicalRecord->rCustomer->getPhone(),
+                                $model->getStartTime(),
+                                $schedule->rDoctor->first_name,
+                                $mMedicalRecord->rCustomer->id,
+                                Settings::KEY_SMS_SEND_UPDATE_SCHEDULE);
                     }
                     echo CJSON::encode(array(
                         DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
@@ -303,12 +311,19 @@ class ReceptionistController extends FrontController {
      */
     public function actionBirthday() {
         $criteria = new CDbCriteria();
+        $criteria->compare('DAY(t.date_of_birth)',date('d'));
+        $criteria->compare('MONTH(t.date_of_birth)',date('m'));
         $models = Customers::model()->findAll($criteria);
         $retVal = array();
         $agentId = isset(Yii::app()->user) ? Yii::app()->user->agent_id : '';
+//        foreach ($models as $model) {
+//            if (DateTimeExt::isBirthday($model->date_of_birth, DomainConst::DATE_FORMAT_4)
+//                    && ($model->getAgentId() == $agentId)) {
+//                $retVal[$model->id] = $model;
+//            }
+//        }
         foreach ($models as $model) {
-            if (DateTimeExt::isBirthday($model->date_of_birth, DomainConst::DATE_FORMAT_4)
-                    && ($model->getAgentId() == $agentId)) {
+            if (($model->getAgentId() == $agentId)) {
                 $retVal[$model->id] = $model;
             }
         }
@@ -789,7 +804,9 @@ class ReceptionistController extends FrontController {
         $model->setPromotion($customer, $mDetail, $total);
         //-- BUG0024-IMT (NamNH 201807) set promotion
         if (isset($_POST['Receipts'])) {
+            Loggers::info('Process date', $_POST['Receipts']['process_date'], __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             $model->attributes = $_POST['Receipts'];
+            Loggers::info('Process date', $model->process_date, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             
             //++ BUG0045-IMT (DuongNV 20180721) Format money when save
             $splitter = DomainConst::SPLITTER_TYPE_MONEY;
@@ -990,4 +1007,62 @@ class ReceptionistController extends FrontController {
 		);
 	}
 	*/
+    
+    /*
+     * Update treatment schedule process
+     */
+    public function actionUpdateProcess($id = '') {
+//        TreatmentScheduleProcess::model()->validateUpdateUrl($id, 'id');
+        $this->validateUpdateUrl($id, 'TreatmentScheduleProcess');
+        $model = TreatmentScheduleProcess::model()->findByPk($id);
+        if (isset($_POST['TreatmentScheduleProcess'])) {
+            Loggers::info('Process date', $_POST['TreatmentScheduleProcess']['process_date'], __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            $model->attributes = $_POST['TreatmentScheduleProcess'];
+            Loggers::info('Process date', $model->process_date, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            if ($model->save()) {
+                $customer = $model->getCustomerModel();
+                if (isset($customer)) {
+                    $rightContent = $customer->getCustomerAjaxInfo();
+                    $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
+                }
+                echo CJavaScript::jsonEncode(array(
+                    DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
+                    DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
+                    DomainConst::KEY_RIGHT_CONTENT => $rightContent,
+                    DomainConst::KEY_INFO_SCHEDULE => $infoSchedule,
+                ));
+                exit;
+            }
+        }
+        echo CJSON::encode(array(
+            DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
+            DomainConst::KEY_CONTENT => $this->renderPartial('_form_update_treatment_schedule_process', array(
+                'model' => $model,
+                DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                    ), true, true),
+        ));
+        exit;
+    }
+
+    /*
+     * Todo Delete treatment schedule process
+     */
+
+    public function actionDeleteProcess($id) {
+        $model = TreatmentScheduleProcess::model()->findByPk($id);
+        $customer = $model->getCustomerModel();
+        $model->delete();
+        if (isset($customer)) {
+            $rightContent = $customer->getCustomerAjaxInfo();
+            $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
+        }
+        echo CJavaScript::jsonEncode(array(
+            DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
+            DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
+            DomainConst::KEY_RIGHT_CONTENT => $rightContent,
+            DomainConst::KEY_INFO_SCHEDULE => $infoSchedule,
+        ));
+        exit;
+    }
+
 }

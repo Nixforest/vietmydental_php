@@ -55,6 +55,49 @@ class PhoneHandler {
         '095'  => 'SFone'
     );
     
+    private $network_number = array(
+        '096'  => ScheduleSms::NETWORK_VIETTEL,
+        '097'  => ScheduleSms::NETWORK_VIETTEL,
+        '098'  => ScheduleSms::NETWORK_VIETTEL,
+        '0162' => ScheduleSms::NETWORK_VIETTEL,
+        '0163' => ScheduleSms::NETWORK_VIETTEL,
+        '0164' => ScheduleSms::NETWORK_VIETTEL,
+        '0165' => ScheduleSms::NETWORK_VIETTEL,
+        '0166' => ScheduleSms::NETWORK_VIETTEL,
+        '0167' => ScheduleSms::NETWORK_VIETTEL,
+        '0168' => ScheduleSms::NETWORK_VIETTEL,
+        '0169' => ScheduleSms::NETWORK_VIETTEL,
+
+        '090'  => ScheduleSms::NETWORK_MOBI,
+        '093'  => ScheduleSms::NETWORK_MOBI,
+        '0120' => ScheduleSms::NETWORK_MOBI,
+        '0121' => ScheduleSms::NETWORK_MOBI,
+        '0122' => ScheduleSms::NETWORK_MOBI,
+        '0126' => ScheduleSms::NETWORK_MOBI,
+        '0128' => ScheduleSms::NETWORK_MOBI,
+
+        '091'  => ScheduleSms::NETWORK_VINA,
+        '094'  => ScheduleSms::NETWORK_VINA,
+        '0123' => ScheduleSms::NETWORK_VINA,
+        '0124' => ScheduleSms::NETWORK_VINA,
+        '0125' => ScheduleSms::NETWORK_VINA,
+        '0127' => ScheduleSms::NETWORK_VINA,
+        '0129' => ScheduleSms::NETWORK_VINA,
+
+        '0993' => ScheduleSms::NETWORK_G_MOBILE,
+        '0994' => ScheduleSms::NETWORK_G_MOBILE,
+        '0995' => ScheduleSms::NETWORK_G_MOBILE,
+        '0996' => ScheduleSms::NETWORK_G_MOBILE,
+        '0997' => ScheduleSms::NETWORK_G_MOBILE,
+        '0199' => ScheduleSms::NETWORK_G_MOBILE,
+
+        '092'  => ScheduleSms::NETWORK_VIETNAM_MOBILE,
+        '0186' => ScheduleSms::NETWORK_VIETNAM_MOBILE,
+        '0188' => ScheduleSms::NETWORK_VIETNAM_MOBILE,
+
+        '095'  => ScheduleSms::NETWORK_S_PHONE
+    );
+    
     /*
     * Check if a string is started with another string
     *
@@ -88,6 +131,34 @@ class PhoneHandler {
            // if $start number found in $number then return value of $carriers_number array as carrier name
            if ($this->start_with($start_number, $number)) {
                return $this->carriers_number[$start_number];
+           }
+       }
+
+       // if not found, return false
+       return false;
+   }
+   
+    /*
+    * Detect carrier name by phone number
+    *
+    * @param (string) ($number) The input phone number
+    * @return (mixed) Name of the carrier, false if not found
+    */
+   function detect_number_network($number) {
+       $number = str_replace(array('-', '.', ' '), '', $number);
+
+       // $number is not a phone number
+       if (!preg_match('/^(01[2689]|09)[0-9]{8}$/', $number)) {
+            return false;
+        }
+
+        // Store all start number in an array to search
+       $start_numbers = array_keys($this->network_number);
+
+       foreach ($start_numbers as $start_number) {
+           // if $start number found in $number then return value of $carriers_number array as carrier name
+           if ($this->start_with($start_number, $number)) {
+               return $this->network_number[$start_number];
            }
        }
 

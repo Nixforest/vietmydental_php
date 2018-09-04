@@ -11,7 +11,7 @@
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'customers-form',
 	'enableAjaxValidation'=>false,
-        'focus'=>[$customer,'phone'],
+        'focus'=>[$customer,'name'],
 )); ?>
 
     <?php echo DomainConst::CONTENT00081; ?>
@@ -30,14 +30,14 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <?php echo $form->labelEx($customer,'phone'); ?>
-            <?php echo $form->textField($customer,'phone',array('size'=>60,'maxlength'=>200, 'placeholder'=>'0123456789')); ?>
-            <?php echo $form->error($customer,'phone'); ?>
-        </div>
-        <div class="col-md-6">
             <?php echo $form->labelEx($customer,'name'); ?>
             <?php echo $form->textField($customer,'name',array('size'=>60,'maxlength'=>255, 'placeholder'=>'Họ và tên')); ?>
             <?php echo $form->error($customer,'name'); ?>
+        </div>
+        <div class="col-md-6">
+            <?php echo $form->labelEx($customer,'phone'); ?>
+            <?php echo $form->textField($customer,'phone',array('size'=>60,'maxlength'=>200, 'placeholder'=>'0123456789')); ?>
+            <?php echo $form->error($customer,'phone'); ?>
         </div>
     </div>
     <div class="row">

@@ -137,6 +137,7 @@ class TreatmentScheduleProcess extends BaseActiveRecord
      */
     public function beforeSave() {
         // Format start date value
+        Loggers::info('Process date', $this->process_date, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         $date = $this->process_date;
         $this->process_date = CommonProcess::convertDateTimeToMySqlFormat(
                 $date, DomainConst::DATE_FORMAT_3);

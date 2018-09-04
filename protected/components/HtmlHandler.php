@@ -146,8 +146,10 @@ class HtmlHandler {
                     //++ BUG0076-IMT (DuongNV 20180823) Create treatment schedule process
                     .           '<li><a class="createProcess" style="cursor:pointer;" data-id="'.$id.'"><i class="fas fa-stethoscope"></i> Tạo Tiến trình điều trị</a></li>'
                     //-- BUG0076-IMT (DuongNV 20180823) Create treatment schedule process
-                    .           '<li><a class="imageCamera" style="cursor:pointer;" href="' . $urlReal . '"> <i class="fas fa-camera" style="margin:0 1px;"></i> Hình ảnh Camera</a></li>'
-                    .           '<li><a class="imageXQuang" style="cursor:pointer;" href="' . $urlXRay . '"><i class="fas fa-x-ray"></i> Hình ảnh X-Quang</a></li>'
+                    //++ BUG0056-IMT (DuongNV 20180831) Update image xray and real
+                    .           '<li><a class="imageCamera" style="cursor:pointer;" data-type="camera" data-id="'.$id.'"> <i class="fas fa-camera" style="margin:0 1px;"></i> Hình ảnh Camera</a></li>'
+                    .           '<li><a class="imageXQuang" style="cursor:pointer;" data-type="xray" data-id="'.$id.'"><i class="fas fa-x-ray"></i> Hình ảnh X-Quang</a></li>'
+                    //-- BUG0056-IMT (DuongNV 20180831) Update image xray and real
                     .           '<li class="requestRecoveryImage" data-id="'.$id.'">' . $laboRequestItem . '</li>'
                     .       '</ul>'
                     .    '</div>';
@@ -218,11 +220,18 @@ class HtmlHandler {
             }
             $teeth = (!empty($value->description) ? 'Răng ' . $value->description : '');
             $content = 'BS <b>' . (isset($value->rDoctor) ? $value->rDoctor->getFullName() : '') . '</b> thực hiện <b>' . $value->name . '</b>. ';
+            //++ BUG0079-IMT (DuongNV 20180109) Update and delete treatment process via ajax
+            $actionBtn = '<div class="treatment-process-action">'
+                        .   '<i class="fas fa-pencil-alt update-process-btn" data-id="'.$value->id.'"></i>'
+                        .   '<i class="fas fa-times delete-process-btn" data-id="'.$value->id.'"></i>'
+                        .'</div>';
             $resVal .= '<div class="treatment-process-item">'
                     .   '<p><b>' . $value->process_date.': </b>'
                     .   ' <span>' . $content.'</span>'
                     .   ' <span>' . $teeth.'</span></p>'
+                    .   $actionBtn
                     .'</div>';
+            //-- BUG0079-IMT (DuongNV 20180109) Update and delete treatment process via ajax
         }
         return $resVal;
     }

@@ -277,6 +277,27 @@ class AjaxController extends AdminController
         return $models;
     }
     
+    private function searchAndSortByAgent($models, $agentId) {
+        $result = array();
+        if (!empty($agentId)) {
+            foreach ($models as $model) {
+                if ($model->getAgentId() == $agentId) {
+                    $result[] = $model;
+                }
+            }
+        } else {
+            $currentAgentId = CommonProcess::getCurrentAgentId();
+            foreach ($models as $model) {
+                if ($model->getAgentId() == $currentAgentId) {
+                    array_unshift($result, $model);
+                } else {
+                    $result[] = $model;
+                }
+            }
+        }
+        return $result;
+    }
+    
     /**
      * Search customer for receptionist
      */
@@ -291,7 +312,9 @@ class AjaxController extends AdminController
                 }
                 $arrKeyword = explode(",", $keyword);
                 $models = array();
+                $limit = 100;
                 if (is_array($arrKeyword) && count($arrKeyword) > 1) {
+                    Loggers::info('Search 1', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
                     // Loop for all keyword
 //                    foreach ($arrKeyword as $keyVal) {
 //                        array_push($models, findCustomerByKeyword(trim($keyVal)));
@@ -300,7 +323,7 @@ class AjaxController extends AdminController
                     $keyVal2 = trim($arrKeyword[1]);
                     $criteria = new CDbCriteria();
                     $criteria->addCondition("t.name like '%$keyVal1%' and (YEAR(t.date_of_birth) like '%$keyVal2%' or t.year_of_birth like '%$keyVal2%')");
-                    $criteria->limit = 50;
+                    $criteria->limit = $limit;
                     $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
                     if (isset($keywordArr["customer_find_phone"])) {
                         $phone = $keywordArr["customer_find_phone"];
@@ -326,25 +349,28 @@ class AjaxController extends AdminController
                         }
                     }
                     // Search by agent
-                    if (!empty($agentId)) {
-                        $result = array();
-                        foreach ($models as $model) {
-                            if ($model->getAgentId() == $agentId) {
-                                $result[] = $model;
-                            }
-                        }
-                        $models = $result;
-                    }
+//                    if (!empty($agentId)) {
+//                        $result = array();
+//                        foreach ($models as $model) {
+//                            if ($model->getAgentId() == $agentId) {
+//                                $result[] = $model;
+//                            }
+//                        }
+//                        $models = $result;
+//                    }
+                    $models = $this->searchAndSortByAgent($models, $agentId);
                 } else {
+                    Loggers::info('Search 2', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
                     $criteria = new CDbCriteria();
 //                    $criteria->addCondition("t.name like '%$keyword%' or t.phone like '%$keyword%'");
 //                    $criteria->addCondition("t.name like '%$keyword%' or t.phone like '%$keyword%' or YEAR(t.date_of_birth) like '%$keyword%' or t.year_of_birth like '%$keyword%'");
-                    $criteria->limit = 50;
+                    $criteria->limit = $limit;
     //                $criteria->compare("t.status", DomainConst::DEFAULT_STATUS_ACTIVE);
                     $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
                     if (isset($keywordArr["customer_find"])) {
                         $name = $keywordArr["customer_find"];
-                        $criteria->addCondition("t.name like'%$name%'");
+//                        $criteria->addCondition("t.name like'%$name%' or t.phone like '%$name%'");
+                        $criteria->addCondition("t.name like'%$name%' or t.phone like '%$name%' or t.address like '%$name%'");
                     }
                     if (isset($keywordArr["customer_find_phone"])) {
                         $phone = $keywordArr["customer_find_phone"];
@@ -369,15 +395,16 @@ class AjaxController extends AdminController
                         }
                     }
                     // Search by agent
-                    if (!empty($agentId)) {
-                        $result = array();
-                        foreach ($models as $model) {
-                            if ($model->getAgentId() == $agentId) {
-                                $result[] = $model;
-                            }
-                        }
-                        $models = $result;
-                    }
+//                    if (!empty($agentId)) {
+//                        $result = array();
+//                        foreach ($models as $model) {
+//                            if ($model->getAgentId() == $agentId) {
+//                                $result[] = $model;
+//                            }
+//                        }
+//                        $models = $result;
+//                    }
+                    $models = $this->searchAndSortByAgent($models, $agentId);
                 }
                 //++ BUG0037_1-IMT  (DuongNV 201807) Update UI schedule
 //                $retVal = '<div class="scroll-table">';
@@ -480,13 +507,17 @@ class AjaxController extends AdminController
             $aData = array(
                 'model' => $model->rTreatmentScheduleDetail
                     );
-            $tooth = $this->widget('ext.SelectToothExt.SelectToothExt',
-                    array('data' => $aData, 'canEdit' => false), true);
+//            $tooth = $this->widget('ext.SelectToothExt.SelectToothExt',
+//                    array('data' => $aData, 'canEdit' => false), true);
+            $tooth = '';
+            //++ BUG0068-IMT (DuongNV 20183108) Add customer info in receipt screen
+            $customerInfo = $customer->getCustomerCustomInfo();
             $json = CJavaScript::jsonEncode(array(
                 //'rightContent'  => $rightContent,
-                'rightContent'  => $tooth.$rightContent,
+                'rightContent'  => $tooth.$customerInfo.$rightContent,
                 'infoSchedule' => $infoSchedule,
             ));
+            //-- BUG0068-IMT (DuongNV 20183108) Add customer info in receipt screen
             //-- BUG0043-IMT (DuongNV 20180730) Show tooth in receipt screen
             echo $json;
             Yii::app()->end();

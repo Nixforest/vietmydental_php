@@ -265,6 +265,18 @@ class Receipts extends CActiveRecord {
         }
         return '';
     }
+    
+    /**
+     * Get customer's agent name
+     * @return Customer name's agent, or empty
+     */
+    public function getCustomerAgentName() {
+        $customer = $this->getCustomer();
+        if (isset($customer)) {
+            return $customer->getAgentName();
+        }
+        return '';
+    }
 
     /**
      * Get customer id
@@ -377,29 +389,33 @@ class Receipts extends CActiveRecord {
         }
         //++ BUG0038-IMT (DuongNV 201807) Update UI receipt
         $rightContent = '<div class="info-result" style="background:white">';
-        $rightContent .= '<div class="title-2">' . DomainConst::CONTENT00174 . '</div>';
-        $rightContent .= '<div class="item-search">';
-        $rightContent .= '<table class="table table-borderless">';
-        $rightContent .= '<tr>';
+//        $rightContent .= '<div class="title-2">' . DomainConst::CONTENT00174 . '</div>';
+//        $rightContent .= '<div class="item-search">';
+//        $rightContent .= '<table class="table table-borderless">';
+//        $rightContent .= '<tr>';
 //        $rightContent .=                '<td>' . DomainConst::CONTENT00145 . ': </td>';
-        $rightContent .= '<td style="width:35px;"><i class="fas fa-tooth" title="' . DomainConst::CONTENT00145 . '"></i></td>';
-        $rightContent .= '<td>' . $teeth . '' . '</td>';
-        $rightContent .= '</tr>';
-        $rightContent .= '<tr>';
+//        $rightContent .= '<td style="width:35px;"><i class="fas fa-tooth" title="' . DomainConst::CONTENT00145 . '"></i></td>';
+//        $rightContent .= '<td>' . $teeth . '' . '</td>';
+//        $rightContent .= '</tr>';
+//        $rightContent .= '<tr>';
 //        $rightContent .=                '<td>' . DomainConst::CONTENT00231 . ': </td>';
-        $rightContent .= '<td><i class="fas fa-diagnoses" title="' . DomainConst::CONTENT00231 . '" style="position:relative;right:3px;"></i></td>';
-        $rightContent .= '<td>' . $diagnosis . '' . '</td>';
-        $rightContent .= '</tr>';
-        $rightContent .= '<tr>';
+//        $rightContent .= '<td><i class="fas fa-diagnoses" title="' . DomainConst::CONTENT00231 . '" style="position:relative;right:3px;"></i></td>';
+//        $rightContent .= '<td>' . $diagnosis . '' . '</td>';
+//        $rightContent .= '</tr>';
+//        $rightContent .= '<tr>';
 //        $rightContent .=                '<td>' . DomainConst::CONTENT00128 . ': </td>';
-        $rightContent .= '<td><i class="fas fa-calendar-check" title="' . DomainConst::CONTENT00128 . '"></i></td>';
-        $rightContent .= '<td>' . $treatmentType . '' . '</td>';
-        $rightContent .= '</tr>';
-        $rightContent .= '</table>';
-        $rightContent .= '</div>';
+//        $rightContent .= '<td><i class="fas fa-calendar-check" title="' . DomainConst::CONTENT00128 . '"></i></td>';
+//        $rightContent .= '<td>' . $treatmentType . '' . '</td>';
+//        $rightContent .= '</tr>';
+//        $rightContent .= '</table>';
+//        $rightContent .= '</div>';
         $rightContent .= '<div class="title-2">' . DomainConst::CONTENT00251 . '</div>';
         $rightContent .= '<div class="item-search">';
         $rightContent .= '<table>';
+        $rightContent .= '<tr>';
+        $rightContent .= '<td><i class="fas fa-calendar-check" title="' . DomainConst::CONTENT00128 . '"></i></td>';
+        $rightContent .= '<td>' . $treatmentType . '' . '</td>';
+        $rightContent .= '</tr>';
         $rightContent .= '<tr>';
 //        $rightContent .=                '<td>' . DomainConst::CONTENT00254 . ': </td>';
         $rightContent .= '<td style="width:35px;"><i class="fas fa-cart-plus" title="' . DomainConst::CONTENT00254 . '"></i></td>';
