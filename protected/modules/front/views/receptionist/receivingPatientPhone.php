@@ -671,7 +671,9 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
         * Open create treatment schedule process dialog
         */
        function fnOpenCreateTreatmentScheduleProcess(id) {
-           createTreatmentScheduleProcess(id);
+//           createTreatmentScheduleProcess(id);
+           isCreate = 1;
+           createUpdateTreatmentScheduleProcessDialog(id);
            $("#dialogId").dialog(opt).dialog("open");
        }
 
@@ -679,28 +681,28 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
         * Create treatment schedule process dialog
         * @returns {Boolean}
         */
-       function createTreatmentScheduleProcess(_id = '') {
-           fnLoadFormCSS();
-           $.ajax({
-                url: "<?php echo Yii::app()->createAbsoluteUrl(
-                        'admin/treatmentScheduleProcess/create', array('ajax' => 1)); ?>",
-                data: $(this).serialize() + '&id=' + _id,
-                type: "post",
-                dataType: "json",
-                success: function(data) {
-                    // After submit
-                   if (fnIsDataSuccess(data)) {
-                       fnUpdateCustomerData(data);
-                   } else {    // Load first time
-                       fnLoadDialogContent(data,
-                           '<?php echo DomainConst::CONTENT00233; ?>',
-                           createTreatmentScheduleProcess);
-                   }
-                },
-                cache: false
-            });
-           return false;
-       }
+//       function createTreatmentScheduleProcess(_id = '') {
+//           fnLoadFormCSS();
+//           $.ajax({
+//                url: "<?php echo Yii::app()->createAbsoluteUrl(
+                        'front/receptionist/CreateProcess'); ?>//",
+//                data: $(this).serialize() + '&id=' + _id,
+//                type: "post",
+//                dataType: "json",
+//                success: function(data) {
+//                    // After submit
+//                   if (fnIsDataSuccess(data)) {
+//                       fnUpdateCustomerData(data);
+//                   } else {    // Load first time
+//                       fnLoadDialogContent(data,
+//                           '<?php echo DomainConst::CONTENT00233; ?>',
+//                           createTreatmentScheduleProcess);
+//                   }
+//                },
+//                cache: false
+//            });
+//           return false;
+//       }
         
         //++ BUG0054-IMT (DuongNV 20180806) Update UI treatment history
         $(document).on('click', '.createProcess', function(){
@@ -785,12 +787,11 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
         if(typeof _id != 'object'){
             data.append('id', _id);
         }
-        data.append('ajax', '1');
         fnLoadFormCSS();
         var title = 'Cập nhật hình ảnh Camera';
         $.ajax({
             url: '<?php echo Yii::app()->createAbsoluteUrl(
-                'admin/treatmentScheduleDetails/updateImageReal'); ?>',
+                'front/receptionist/updateImageReal'); ?>',
             data: data,
             type: 'post',
             processData: false, // Upload file ajax need this
@@ -821,12 +822,11 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
         if(typeof _id != 'object'){
             data.append('id', _id);
         }
-        data.append('ajax', '1');
         fnLoadFormCSS();
         var title = 'Cập nhật hình ảnh XQuang';
         $.ajax({
             url: '<?php echo Yii::app()->createAbsoluteUrl(
-                'admin/treatmentScheduleDetails/updateImageXRay'); ?>',
+                'front/receptionist/updateImageXRay'); ?>',
             data: data,
             type: 'post',
             processData: false, // Upload file ajax need this
@@ -865,6 +865,9 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
     * @returns {Boolean}
     */
     function fnUpdateTreatmentScheduleProcess(_id) {
+        //++ BUG0084-IMT (DuongNV 20180905) move process, image to front
+        isCreate = 0;
+        //-- BUG0084-IMT (DuongNV 20180905) move process, image to front
         createUpdateTreatmentScheduleProcessDialog(_id);
         $("#dialogId").dialog(opt).dialog("open");
     }
@@ -874,12 +877,16 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
      * @param {String} _id Id of treatment schedule process need to update
      * @returns {Boolean}
      */
+     //++ BUG0084-IMT (DuongNV 20180905) move process, image to front
     function createUpdateTreatmentScheduleProcessDialog(_id = '') {
+        if(typeof isCreate == 'undefined'){
+            isCreate = 0;
+        }
         fnLoadFormCSS();
         $.ajax({
              url: "<?php echo Yii::app()->createAbsoluteUrl(
-                     'front/receptionist/updateProcess'); ?>",
-             data: $(this).serialize() + '&id=' + _id,
+                     'front/receptionist/createUpdateProcess'); ?>",
+             data: $(this).serialize() + '&id=' + _id + '&isCreate=' + isCreate,
              type: "post",
              dataType: "json",
              success: function(data) {
@@ -896,6 +903,7 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
          });
         return false;
     }
+    //-- BUG0084-IMT (DuongNV 20180905) move process, image to front
     
     $(document).on('click', '.delete-process-btn' , function(){
         var cf = confirm('<?php echo DomainConst::CONTENT00431; ?>');
