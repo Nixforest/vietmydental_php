@@ -9,10 +9,13 @@ class ConvertExcelToDatabaseController extends AdminController
 	 */
 	public function actionIndex()
 	{
-                if(isset($_POST['ConvertExcelToDatabase'])){
-                    ConvertExcelToDatabase::ConvertExcelToDatabase($_POST['ConvertExcelToDatabase']);
-                }
-		$this->render('index',array(
-		));
+            $model = new ConvertExcelToDatabase();
+            if(isset($_POST['ConvertExcelToDatabase'])){
+                $model->attributes = $_POST['ConvertExcelToDatabase'];
+                $model->excelConvertExcelToDatabase();
+            }
+            $this->render('index',array(
+                'model' => $model,
+            ));
 	}
 }
