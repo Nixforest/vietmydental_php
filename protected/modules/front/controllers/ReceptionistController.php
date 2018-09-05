@@ -1016,9 +1016,9 @@ class ReceptionistController extends FrontController {
 //        TreatmentScheduleProcess::model()->validateUpdateUrl($id, 'id');
         $this->validateUpdateUrl($id, 'TreatmentScheduleProcess');
         $model = new TreatmentScheduleProcess;
-        if ( !empty( $_POST['isCreate'] ) ) {
+        if (!empty($_POST['isCreate'])) {
             $this->validateUpdateUrl($id, 'TreatmentScheduleProcess');
-            if( !empty( $id ) ){
+            if (!empty($id)) {
                 $model->detail_id = $id;
             }
         } else {
@@ -1028,7 +1028,7 @@ class ReceptionistController extends FrontController {
         if (isset($_POST['TreatmentScheduleProcess'])) {
             Loggers::info('Process date', $_POST['TreatmentScheduleProcess']['process_date'], __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             $model->attributes = $_POST['TreatmentScheduleProcess'];
-            if(isset($_POST['TreatmentScheduleProcess']['process_date'])){
+            if (isset($_POST['TreatmentScheduleProcess']['process_date'])) {
                 $model->process_date = CommonProcess::convertDateTime($_POST['TreatmentScheduleProcess']['process_date'], DomainConst::DATE_FORMAT_3, DomainConst::DATE_FORMAT_4);
             }
             Loggers::info('Process date', $model->process_date, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
@@ -1056,6 +1056,7 @@ class ReceptionistController extends FrontController {
         ));
         exit;
     }
+
     //-- BUG0084-IMT (DuongNV 20180905) move process, image to front
 
     /*
@@ -1085,7 +1086,7 @@ class ReceptionistController extends FrontController {
      */
     public function actionUpdateImageReal($id = '') {
         $this->validateUpdateUrl($id, 'TreatmentScheduleDetails');
-        $model=TreatmentScheduleDetails::model()->findByPk($id);
+        $model = TreatmentScheduleDetails::model()->findByPk($id);
         if (isset($_POST['TreatmentScheduleDetails'])) {
             Files::deleteFileInUpdateNotIn($model, Files::TYPE_3_TREATMENT_SCHEDULE_REAL_IMG, true);
             Files::saveRecordFile($model, Files::TYPE_3_TREATMENT_SCHEDULE_REAL_IMG);
@@ -1098,39 +1099,39 @@ class ReceptionistController extends FrontController {
 
         echo CJSON::encode(array(
             DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
-            DomainConst::KEY_CONTENT => $this->renderPartial('_update_image_real',array(
-                    'model'=>$model,
-                    DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-                ), true, true),
+            DomainConst::KEY_CONTENT => $this->renderPartial('_update_image_real', array(
+                'model' => $model,
+                DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                    ), true, true),
         ));
         exit;
     }
-    
+
     /*
      * @Todo: update image xray modal dialog
      */
     public function actionUpdateImageXRay($id = '') {
         $this->validateUpdateUrl($id, 'TreatmentScheduleDetails');
-        $model=TreatmentScheduleDetails::model()->findByPk($id);
-        if(isset($_POST['TreatmentScheduleDetails']))
-        {
+        $model = TreatmentScheduleDetails::model()->findByPk($id);
+        if ( isset($_POST['TreatmentScheduleDetails']) ) {
             Loggers::info('Post value', CommonProcess::json_encode_unicode($_POST), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-            Files::deleteFileInUpdateNotIn($model, Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY,true);
+            Files::deleteFileInUpdateNotIn($model, Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY, true);
             Files::saveRecordFile($model, Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY);
-                echo CJavaScript::jsonEncode(array(
-                    DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
-                    DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
-                ));
-                exit;
+            echo CJavaScript::jsonEncode(array(
+                DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
+                DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
+            ));
+            exit;
         }
         echo CJSON::encode(array(
             DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
-            DomainConst::KEY_CONTENT => $this->renderPartial('_update_image_xray',array(
-                    'model'=>$model,
-                    DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-                ), true, true),
+            DomainConst::KEY_CONTENT => $this->renderPartial('_update_image_xray', array(
+                'model' => $model,
+                DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+                    ), true, true),
         ));
         exit;
     }
+
     //-- BUG0084-IMT (DuongNV 20180905) move process, image to front
 }
