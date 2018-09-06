@@ -400,3 +400,26 @@ function fnNumberOnly(){
     });
 }
 //-- BUG0045-IMT  (DuongNV 201807) Format currency when input
+
+//++ BUG0080-IMT (DuongNV 20180906) print prescription
+function printDiv(id_element, cssLink = '') {
+    var divToPrint = document.getElementById(id_element);
+    var title = 'Print';
+    var css = '';
+    if(cssLink != ''){
+        css = "<link rel='stylesheet' href='" + cssLink + "' type='text/css' media='print'/>";
+    }
+    var newWin = window.open('','Print-Window');
+    newWin.document.open();
+    newWin.document.write('<html><title>'+title+'</title>'+css+'<body onload="window.print()">'+divToPrint.innerHTML+'</body></html>');
+    newWin.document.close();
+    setTimeout(function(){newWin.close();},10);
+}
+
+function bindPrint(classBtn, idToPrint, cssLink = ''){
+    $('#'+idToPrint).hide();
+    $('.'+classBtn).on('click', function(){
+        printDiv(idToPrint, cssLink);
+    });
+}
+//++ BUG0080-IMT (DuongNV 20180906) print prescription
