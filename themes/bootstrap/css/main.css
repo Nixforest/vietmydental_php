@@ -1368,10 +1368,10 @@ svg.mark-icon {
 .view-more .vm-btn:hover{border-color: black; color: black; transition: .3s;}
 /*--BUG0054-IMT (DuongNV 20180806) Update UI treatment history*/
 /*++ BUG0080-IMT (DuongNV 20180906) print prescription*/
-.form-print-medicine{padding:20px 50px;}
-.form-print-footer{padding:10px 40px;}
+.form-print-medicine{padding:20px 25px;}
+.form-print-footer{padding:10px 10px;}
 .form-print-date-and-no{text-align: right;}
 .form-print-title{text-align: center;}
-.form-print-content .left-content{float: left;}
-.form-print-content .right-content{float: right;}
+.form-print-content .left-content{float: left; max-width: 76%;}
+.form-print-content .right-content{float: right; max-width: 24%; text-align: right;}
 /*-- BUG0080-IMT (DuongNV 20180906) print prescription*/

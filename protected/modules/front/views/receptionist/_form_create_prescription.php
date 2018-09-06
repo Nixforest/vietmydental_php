@@ -345,12 +345,12 @@ $index = 1;
             <div class="form-print-medicine-item">
                 <div class="left-content">
                     <b><?php echo $index++ . ' ' . $medicineName ; ?></b>
-                    <p>Sáng (Morning):<?php echo $detail->quantity1; ?>  Trưa (Noon):<?php echo $detail->quantity2; ?></p>
+                    <p><?php if(!empty($detail->quantity1)) echo 'Sáng (Morning): '.$detail->quantity1; ?>  <?php if(!empty($detail->quantity2)) echo 'Trưa (Noon): '.$detail->quantity2; ?></p>
                     <p>Uống / Drink</p>
                 </div>
                 <div class="right-content">
                     <b><?php echo $detail->quantity; ?> Viên / Tablet</b>
-                    <p>Tối (Evening):<?php echo $detail->quantity3; ?></p>
+                    <p><?php if(!empty($detail->quantity3)) echo 'Chiều (Afternoon): '.$detail->quantity3; ?>  <?php if(!empty($detail->quantity4)) echo 'Tối (Evening): '.$detail->quantity4; ?></p>
                 </div>
                 <div class="clrfix"></div>
             </div>

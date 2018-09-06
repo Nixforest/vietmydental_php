@@ -411,7 +411,7 @@ function printDiv(id_element, cssLink = '') {
     }
     var newWin = window.open('','Print-Window');
     newWin.document.open();
-    newWin.document.write('<html><title>'+title+'</title>'+css+'<body onload="window.print()">'+divToPrint.innerHTML+'</body></html>');
+    newWin.document.write('<html><title>'+title+'</title>'+css+'<body onload="window.print()" style="font-size:77%;">'+divToPrint.innerHTML+'</body></html>');
     newWin.document.close();
     setTimeout(function(){newWin.close();},10);
 }
