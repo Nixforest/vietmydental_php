@@ -664,14 +664,14 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
             }
             var id = $(this).data('id');
             fnUpdateTreatmentDetailStatus(id, stt);
-        })
+        });
         
         //++ BUG0076-IMT (DuongNV 20180823) Create treatment schedule process
         /**
-        * Open create treatment schedule process dialog
-        */
-       function fnOpenCreateTreatmentScheduleProcess(id) {
-//           createTreatmentScheduleProcess(id);
+         * Open create treatment schedule process dialog
+         * @param {String} id Id of process
+         */
+        function fnOpenCreateTreatmentScheduleProcess(id) {
            isCreate = 1;
            createUpdateTreatmentScheduleProcessDialog(id);
            $("#dialogId").dialog(opt).dialog("open");
@@ -684,8 +684,8 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
 //       function createTreatmentScheduleProcess(_id = '') {
 //           fnLoadFormCSS();
 //           $.ajax({
-//                url: "<?php echo Yii::app()->createAbsoluteUrl(
-                        'front/receptionist/CreateProcess'); ?>//",
+//                url: "<?php // echo Yii::app()->createAbsoluteUrl(
+//                        'front/receptionist/CreateProcess'); ?>//",
 //                data: $(this).serialize() + '&id=' + _id,
 //                type: "post",
 //                dataType: "json",
@@ -695,7 +695,7 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
 //                       fnUpdateCustomerData(data);
 //                   } else {    // Load first time
 //                       fnLoadDialogContent(data,
-//                           '<?php echo DomainConst::CONTENT00233; ?>',
+//                           '<?php // echo DomainConst::CONTENT00233; ?>',
 //                           createTreatmentScheduleProcess);
 //                   }
 //                },
@@ -715,16 +715,16 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
 //        $(document).on('click', '.imageCamera', function(){
 ////            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
 //            var id = $(this).data('id');
-//            $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
-                    'admin/treatmentScheduleDetails/updateImageReal',
-                    array('id' => '')) ?>///' + id);
+//            $(location).attr('href', '<?php // echo Yii::app()->createAbsoluteUrl(
+//                    'admin/treatmentScheduleDetails/updateImageReal',
+//                    array('id' => '')) ?>///' + id);
 //        });
 //        $(document).on('click', '.imageXQuang', function(){
 ////            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
 //            var id = $(this).data('id');
-//            $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
-                    'admin/treatmentScheduleDetails/updateImageXRay',
-                    array('id' => '')) ?>///' + id);
+//            $(location).attr('href', '<?php // echo Yii::app()->createAbsoluteUrl(
+//                    'admin/treatmentScheduleDetails/updateImageXRay',
+//                    array('id' => '')) ?>///' + id);
 //        });
         
 //         $(document).on('click', '.requestRecoveryImage', function(){
@@ -770,7 +770,7 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
             month = ("0" + (nDate.getMonth() + 1)).slice(-2);
             year = nDate.getFullYear();
             input.val(date+'/'+month+'/'+year);
-        })
+        });
     }
     //-- BUG0067-IMT (DuongNV 20180831) Add 6 month book schedule btn
     
@@ -779,12 +779,17 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
         $('form#treatment-schedule-details-form').remove();
         $("#dialogId").dialog(opt).dialog("open");
         var id = $(this).data('id');
-        ($(this).data('type') == 'xray') ? updateXRayImage(id) : updateCameraImage(id);
+        ($(this).data('type') === 'xray') ? updateXRayImage(id) : updateCameraImage(id);
     });
     
+    /**
+     * Update camera image
+     * @param {String} _id Id of treatment schedule detail
+     * @returns {Boolean}
+     */
     function updateCameraImage(_id = '') {
         var data = new FormData($('form#treatment-schedule-details-form')[0]); // Upload file ajax need this (data store in FormData)
-        if(typeof _id != 'object'){
+        if(typeof _id !== 'object'){
             data.append('id', _id);
         }
         fnLoadFormCSS();
@@ -812,14 +817,19 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
                 console.log('Error response text: '+request.responseText);
                 alert('Error in console!');
             },
-            cache: false,
+            cache: false
         });
         return false;
     }
     
+    /**
+     * Update xray image
+     * @param {type} _id  Id of treatment schedule detail
+     * @returns {Boolean}     
+     */
     function updateXRayImage(_id = '') {
         var data = new FormData($('form#treatment-schedule-details-form')[0]); // Upload file ajax need this (data store in FormData)
-        if(typeof _id != 'object'){
+        if(typeof _id !== 'object'){
             data.append('id', _id);
         }
         fnLoadFormCSS();
@@ -847,7 +857,7 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
                 console.log('Error response text: '+request.responseText);
                 alert('Error in console!');
             },
-            cache: false,
+            cache: false
         });
         return false;
     }
@@ -872,14 +882,14 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
         $("#dialogId").dialog(opt).dialog("open");
     }
 
+    //++ BUG0084-IMT (DuongNV 20180905) move process, image to front
     /**
      * Create update treatment schedule process dialog
      * @param {String} _id Id of treatment schedule process need to update
      * @returns {Boolean}
      */
-     //++ BUG0084-IMT (DuongNV 20180905) move process, image to front
     function createUpdateTreatmentScheduleProcessDialog(_id = '') {
-        if(typeof isCreate == 'undefined'){
+        if(typeof isCreate === 'undefined'){
             isCreate = 0;
         }
         fnLoadFormCSS();

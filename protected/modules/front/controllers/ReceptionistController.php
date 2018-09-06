@@ -1013,7 +1013,6 @@ class ReceptionistController extends FrontController {
      * Create Update treatment schedule process
      */
     public function actionCreateUpdateProcess($id = '') {
-//        TreatmentScheduleProcess::model()->validateUpdateUrl($id, 'id');
         $this->validateUpdateUrl($id, 'TreatmentScheduleProcess');
         $model = new TreatmentScheduleProcess;
         if (!empty($_POST['isCreate'])) {
@@ -1081,8 +1080,9 @@ class ReceptionistController extends FrontController {
     }
 
     //++ BUG0084-IMT (DuongNV 20180905) move process, image to front
-    /*
-     * @Todo: update image camera modal dialog
+    /**
+     * Update image camera modal dialog
+     * @param type $id
      */
     public function actionUpdateImageReal($id = '') {
         $this->validateUpdateUrl($id, 'TreatmentScheduleDetails');
@@ -1107,13 +1107,14 @@ class ReceptionistController extends FrontController {
         exit;
     }
 
-    /*
-     * @Todo: update image xray modal dialog
+    /**
+     * update image xray modal dialog
+     * @param String $id Id of treatment schedule detail
      */
     public function actionUpdateImageXRay($id = '') {
         $this->validateUpdateUrl($id, 'TreatmentScheduleDetails');
         $model = TreatmentScheduleDetails::model()->findByPk($id);
-        if ( isset($_POST['TreatmentScheduleDetails']) ) {
+        if (isset($_POST['TreatmentScheduleDetails'])) {
             Loggers::info('Post value', CommonProcess::json_encode_unicode($_POST), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             Files::deleteFileInUpdateNotIn($model, Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY, true);
             Files::saveRecordFile($model, Files::TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY);
@@ -1132,6 +1133,5 @@ class ReceptionistController extends FrontController {
         ));
         exit;
     }
-
     //-- BUG0084-IMT (DuongNV 20180905) move process, image to front
 }
