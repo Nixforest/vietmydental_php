@@ -121,8 +121,11 @@
             <?php echo $form->textArea($model, 'note', array('rows' => 6, 'cols' => 50)); ?>
             <?php echo $form->error($model, 'note'); ?>
         </div>
-        <div class="col-md-6">
+        <!--//++ BUG0080-IMT (DuongNV 20180906) print prescription-->
+        <div class="col-md-6 text-center" style="padding-top: 20px;">
+            <i class="fas fa-print print-prescription" title="In toa thuốc" style="font-size:30px; color:#2098f3"></i>
         </div>
+        <!--//-- BUG0080-IMT (DuongNV 20180906) print prescription-->
     </div>
 
     <div class="row">
@@ -295,6 +298,81 @@
         <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+
+<!--//++ BUG0080-IMT (DuongNV 20180906) print prescription-->
+<?php
+$index = 1;
+?>
+<div id="form-print">
+    
+    <div class="form-print-info-company">
+        <h3><b>NHA KHOA VIỆT MỸ</b></h3>
+        <p>Addr: 175-175B QL50, P.5, QUẬN 8, TP.HCM</p>
+        <p>Website: www.nhakhoavietmy.com.vn</p>
+    </div>
+    
+    <div class="form-print-date-and-no">
+        <p>Số toa / No: <?php echo CommonProcess::generateID('TT', $customer->id) ?></p>
+        <p>Ngày / Date: <?php echo date('d/m/Y'); ?></p>
+    </div>
+    
+    <div class="form-print-title">
+        <h1><b>TOA THUỐC</b></h1>
+        <h2><b>(Prescription)</b></h2>
+    </div>
+    
+    <div class="form-print-content">    
+        <div class="form-print-customer-info">
+            <div class="left-content">
+                <p>Mã hồ sơ / Patient code: <?php echo $customer->rMedicalRecord->record_number; ?></p>
+                <p>Tên / Patient name: <?php echo $customer->name; ?></p>
+                <p>Địa chỉ / Address: <?php echo $customer->address; ?></p>
+                <p>Chuẩn đoán / Diagnosis: </p>
+            </div>
+            <div class="right-content">
+                <p>Giới tính / Sex: <?php echo CommonProcess::getGender()[$customer->gender]; ?></p>
+                <p>Năm sinh / YOB: <?php echo $customer->year_of_birth; ?></p>
+            </div>
+            <div class="clrfix"></div>
+        </div>
+        
+        <div class="form-print-medicine">
+        <?php 
+        if(count($listDetails) > 0){
+            foreach ($listDetails as $detail):
+            $medicineName = isset($detail->rMedicine) ? $detail->rMedicine->getAutoCompleteMedicine() : '';
+        ?>
+            <div class="form-print-medicine-item">
+                <div class="left-content">
+                    <b><?php echo $index++ . ' ' . $medicineName ; ?></b>
+                    <p><?php if(!empty($detail->quantity1)) echo 'Sáng (Morning): '.$detail->quantity1; ?>  <?php if(!empty($detail->quantity2)) echo 'Trưa (Noon): '.$detail->quantity2; ?></p>
+                    <p>Uống / Drink</p>
+                </div>
+                <div class="right-content">
+                    <b><?php echo $detail->quantity; ?> Viên / Tablet</b>
+                    <p><?php if(!empty($detail->quantity3)) echo 'Chiều (Afternoon): '.$detail->quantity3; ?>  <?php if(!empty($detail->quantity4)) echo 'Tối (Evening): '.$detail->quantity4; ?></p>
+                </div>
+                <div class="clrfix"></div>
+            </div>
+        <?php endforeach;} ?>
+        </div>
+        
+        <div class="form-print-footer">
+            <div class="left-content">
+                <p><b>Lời dặn của bác sĩ (Doctor's advise)</b></p>
+                <p><?php echo $model->note; ?></p>
+            </div>
+            <div class="right-content" style="padding-right: 80px;">
+                <p><b>Bác sĩ</b></p>
+                <p><b>(Doctor)</b></p>
+            </div>
+            <div class="clrfix"></div>
+        </div>
+    </div>
+    
+</div>
+<!--//-- BUG0080-IMT (DuongNV 20180906) print prescription-->
+
 <script>
 $(function(){
     $(document).on('click', '.delete-btn',function(){
@@ -309,6 +387,10 @@ $(function(){
         $('.materials_table').find('tr:visible:last').next('tr').show();
     });
     
+    <!--//++ BUG0080-IMT (DuongNV 20180906) print prescription-->
+    var cssLink = '<?php echo Yii::app()->theme->baseUrl; ?>'+'/css/main.css';
+    bindPrint('print-prescription', 'form-print', cssLink);
+    <!--//--BUG0080-IMT (DuongNV 20180906) print prescription-->
     function fnBuildRow(){
         $('.materials_table').find('tr:visible:last').next('tr').show();
     }
