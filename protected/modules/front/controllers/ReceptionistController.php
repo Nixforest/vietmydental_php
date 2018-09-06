@@ -586,8 +586,10 @@ class ReceptionistController extends FrontController {
         Loggers::info("Id of treatment schedule detail is " . $id, __FUNCTION__, __LINE__);
         $mTreatmentDetail = TreatmentScheduleDetails::model()->findByPk($id);
         if ($mTreatmentDetail) {
+            $canPrint = false;
             if (isset($mTreatmentDetail->rPrescription)) {
                 $model = $mTreatmentDetail->rPrescription;
+                $canPrint = true;
                 if (isset($model->rDetail) && count($model->rDetail) > 0) {
                     $listDetail = $model->rDetail;
                 } else {
@@ -645,6 +647,7 @@ class ReceptionistController extends FrontController {
                     'model'     => $model,
                     'customer'  => $customer,
                     'details'   => $listDetail,
+                    'canPrint'  => $canPrint,
                     DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
                 ), true, true)
             ));

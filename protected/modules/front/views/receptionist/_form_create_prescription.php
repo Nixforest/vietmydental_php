@@ -122,9 +122,12 @@
             <?php echo $form->error($model, 'note'); ?>
         </div>
         <!--//++ BUG0080-IMT (DuongNV 20180906) print prescription-->
-        <div class="col-md-6 text-center" style="padding-top: 20px;">
+        <?php if ($canPrint) : ?>
+        <div class="col-md-6" style="padding-top: 20px;">
+            <label for="Prescriptions_print" class="required">In toa thuốc</label>
             <i class="fas fa-print print-prescription" title="In toa thuốc" style="font-size:30px; color:#2098f3"></i>
         </div>
+        <?php endif; ?>
         <!--//-- BUG0080-IMT (DuongNV 20180906) print prescription-->
     </div>
 
@@ -304,53 +307,86 @@
 $index = 1;
 ?>
 <div id="form-print">
-    
+    <?php
+        $mAgent = CommonProcess::getUserAgent();
+        $address = "128 Huỳnh Tấn Phát P. Phú Mỹ, Quận 7, TP HCM";
+        $phone = "028.3785.8989";
+        $website = Settings::getDomainSaleWebsite();
+        $agentName = "";
+        if (isset($mAgent)) {
+            $address    = $mAgent->address;
+            $phone      = $mAgent->phone;
+            $agentName  = $mAgent->getFullName();
+        }
+    ?>
     <div class="form-print-info-company">
-        <h3><b>NHA KHOA VIỆT MỸ</b></h3>
-        <p>Addr: 175-175B QL50, P.5, QUẬN 8, TP.HCM</p>
-        <p>Website: www.nhakhoavietmy.com.vn</p>
+        <h3><b><?php echo $agentName; ?></b></h3>
+        <p><?php echo DomainConst::CONTENT00045 . ': ' . $address; ?></p>
+        <p><?php echo DomainConst::CONTENT00312 . ': ' . $website; ?></p>
     </div>
     
     <div class="form-print-date-and-no">
-        <p>Số toa / No: <?php echo CommonProcess::generateID('TT', $customer->id) ?></p>
-        <p>Ngày / Date: <?php echo date('d/m/Y'); ?></p>
+        <p><?php echo DomainConst::CONTENT00311 . ': ' . CommonProcess::generateID('TT', $customer->id) ?></p>
+        <p><?php echo DomainConst::CONTENT00302 . ' ' . CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3); ?></p>
     </div>
     
     <div class="form-print-title">
-        <h1><b>TOA THUỐC</b></h1>
+        <h1><b><?php echo DomainConst::CONTENT00432; ?></b></h1>
         <h2><b>(Prescription)</b></h2>
     </div>
     
     <div class="form-print-content">    
         <div class="form-print-customer-info">
             <div class="left-content">
-                <p>Mã hồ sơ / Patient code: <?php echo $customer->rMedicalRecord->record_number; ?></p>
-                <p>Tên / Patient name: <?php echo $customer->name; ?></p>
-                <p>Địa chỉ / Address: <?php echo $customer->address; ?></p>
+                <p><?php echo DomainConst::CONTENT00306 . ' ' . $customer->rMedicalRecord->record_number; ?></p>
+                <p><?php echo DomainConst::CONTENT00305 . ' ' . $customer->name; ?></p>
+                <p><?php echo DomainConst::CONTENT00308 . ' ' . $customer->address; ?></p>
                 <p>Chuẩn đoán / Diagnosis: </p>
             </div>
             <div class="right-content">
-                <p>Giới tính / Sex: <?php echo CommonProcess::getGender()[$customer->gender]; ?></p>
-                <p>Năm sinh / YOB: <?php echo $customer->year_of_birth; ?></p>
+                <p><?php echo DomainConst::CONTENT00433 . ': ' . CommonProcess::getGender()[$customer->gender]; ?></p>
+                <p><?php echo DomainConst::CONTENT00434 . ': ' . $customer->getBirthYear(); ?></p>
             </div>
             <div class="clrfix"></div>
         </div>
         
         <div class="form-print-medicine">
         <?php 
-        if(count($listDetails) > 0){
+            if (count($listDetails) > 0) {
             foreach ($listDetails as $detail):
-            $medicineName = isset($detail->rMedicine) ? $detail->rMedicine->getAutoCompleteMedicine() : '';
-        ?>
+                $medicineName = isset($detail->rMedicine) ? $detail->rMedicine->getAutoCompleteMedicine() : '';
+                ?>
             <div class="form-print-medicine-item">
                 <div class="left-content">
                     <b><?php echo $index++ . ' ' . $medicineName ; ?></b>
-                    <p><?php if(!empty($detail->quantity1)) echo 'Sáng (Morning): '.$detail->quantity1; ?>  <?php if(!empty($detail->quantity2)) echo 'Trưa (Noon): '.$detail->quantity2; ?></p>
+                    <p>
+                        <?php
+                            if (!empty($detail->quantity1)) {
+                                echo 'Sáng (Morning): '.$detail->quantity1;
+                            }
+                        ?>
+                        <?php
+                            if (!empty($detail->quantity2)) {
+                                echo 'Trưa (Noon): '.$detail->quantity2;
+                            }
+                        ?>
+                    </p>
                     <p>Uống / Drink</p>
                 </div>
                 <div class="right-content">
                     <b><?php echo $detail->quantity; ?> Viên / Tablet</b>
-                    <p><?php if(!empty($detail->quantity3)) echo 'Chiều (Afternoon): '.$detail->quantity3; ?>  <?php if(!empty($detail->quantity4)) echo 'Tối (Evening): '.$detail->quantity4; ?></p>
+                    <p>
+                        <?php
+                            if (!empty($detail->quantity3)) {
+                                echo 'Chiều (Afternoon): '.$detail->quantity3;
+                            }
+                        ?>
+                        <?php
+                            if (!empty($detail->quantity4)) {
+                                echo 'Tối (Evening): '.$detail->quantity4;
+                            }
+                        ?>
+                    </p>
                 </div>
                 <div class="clrfix"></div>
             </div>
@@ -379,7 +415,7 @@ $(function(){
         $(this).closest('tr').remove();
     });
     $(document).keydown(function(e) {
-        if(e.which == 119) {
+        if(e.which === 119) {
             fnBuildRow();
         }
     });
@@ -394,5 +430,5 @@ $(function(){
     function fnBuildRow(){
         $('.materials_table').find('tr:visible:last').next('tr').show();
     }
-})
+});
 </script>

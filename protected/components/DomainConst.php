@@ -1333,7 +1333,7 @@ class DomainConst {
     const CONTENT00308  = 'Địa chỉ/Address:';
     const CONTENT00309  = 'Dịch vụ';
     const CONTENT00310  = 'Services';
-    const CONTENT00311  = 'Địa chỉ/Address:';
+    const CONTENT00311  = 'Số toa/No'; // No use
     const CONTENT00312  = 'Website';
     const CONTENT00313  = 'SL';
     const CONTENT00314  = 'Qty';
@@ -1451,4 +1451,7 @@ class DomainConst {
     const CONTENT00429  = 'Total';
     const CONTENT00430  = 'Đã thu';
     const CONTENT00431  = 'Bạn có chắc chắn muốn xóa?';
+    const CONTENT00432  = 'TOA THUỐC';
+    const CONTENT00433  = 'Giới tính/Sex';
+    const CONTENT00434  = 'Năm sinh/YOB';
 }
