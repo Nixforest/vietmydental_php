@@ -30,6 +30,7 @@
  * @property Cities                 $rCity              City of customer
  * @property Districts              $rDistrict          District of customer
  * @property Users                  $rCreatedBy         User created this record
+ * @property MedicalRecords         $rMedicalRecord     Medical record
  */
 class Customers extends BaseActiveRecord
 {

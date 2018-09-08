@@ -78,9 +78,9 @@
                     'dateFormat' => DomainConst::DATE_FORMAT_2,
                     'changeMonth' => true,
                     'changeYear' => true,
-                    'showOn' => 'button',
-                    'buttonImage' => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
-                    'buttonImageOnly' => true,
+//                    'showOn' => 'button',
+//                    'buttonImage' => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
+//                    'buttonImageOnly' => true,
                 ),
                 'htmlOptions' => array(
                     'class' => 'w-16',
@@ -171,6 +171,7 @@
                                         'url'               => $url,
                                         'field_autocomplete_name' => "[$index]autocomplete_id_medicine",
                                         'style'             => 'width: 99%',
+                                        'min_length'        => 1,
                                        ];
                                     $this->widget('ext.AutocompleteExt.AutocompleteExt',
                                             array('data' => $aData));
@@ -237,6 +238,7 @@
                                         'url'               => $url,
                                         'field_autocomplete_name' => "[$index]autocomplete_id_medicine",
                                         'style'             => 'width: 99%',
+                                        'min_length'        => 1,
                                        ];
                                     $this->widget('ext.AutocompleteExt.AutocompleteExt',
                                             array('data' => $aData));

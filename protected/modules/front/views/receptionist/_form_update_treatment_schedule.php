@@ -87,6 +87,7 @@
                             'ClassAdd'          => 'w-350',
                             'url'               => Yii::app()->createAbsoluteUrl('admin/ajax/searchTreatmentType'),
                             'field_autocomplete_name' => 'autocomplete_treatment',
+                            'min_length'        => 1,
                         );
                         $this->widget('ext.AutocompleteExt.AutocompleteExt',
                                 array('data' => $aData));

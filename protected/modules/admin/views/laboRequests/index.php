@@ -49,19 +49,31 @@ $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'header' => DomainConst::CONTENT00135,
             'type' => 'raw',
-            'value' => '$data->getCustomerName()',
+            'value' => '$data->getCustomerName() . " - " . $data->getCustomerRecordNumber()',
+        ),
+        array(
+            'header'    => DomainConst::CONTENT00199,
+            'value'     => '$data->getAgentName()',
+        ),
+        array(
+            'header'    => DomainConst::CONTENT00143,
+            'value'     => '$data->getDoctorName()',
         ),
         array(
             'name' => 'service_id',
             'value' => 'isset($data->rService) ? $data->rService->name : ""',
         ),
         'date_request',
-        'date_receive',
+        array(
+            'name'      => 'date_receive',
+            'header'    => DomainConst::CONTENT00436,
+            'value'     => '$data->getReceiveTime()',
+        ),
         'date_test',
 //          'tooth_color',
         'description',
         array(
-            'header' => DomainConst::CONTENT00129,
+            'name' => 'price',
             'type' => 'raw',
             'value' => '$data->getPrice()',
         ),

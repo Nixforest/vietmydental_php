@@ -1435,8 +1435,8 @@ class DomainConst {
     const CONTENT00413  = 'Loại điều trị cũ';
     const CONTENT00414  = 'Người quản lý';
     const CONTENT00415  = 'Phòng Lab';
-    const CONTENT00416  = 'Ngày yêu cầu';
-    const CONTENT00417  = 'Ngày giờ nhận';
+    const CONTENT00416  = 'Ngày gửi yêu cầu';
+    const CONTENT00417  = 'Ngày nhận';
     const CONTENT00418  = 'Ngày giờ thử răng';
     const CONTENT00419  = 'Màu răng';
     const CONTENT00420  = 'Số răng';
@@ -1454,4 +1454,7 @@ class DomainConst {
     const CONTENT00432  = 'TOA THUỐC';
     const CONTENT00433  = 'Giới tính/Sex';
     const CONTENT00434  = 'Năm sinh/YOB';
+    const CONTENT00435  = 'Giờ nhận';
+    const CONTENT00436  = 'Ngày giờ nhận';
+    const CONTENT00437  = 'Yêu cầu';
 }

@@ -948,14 +948,18 @@ class ReceptionistController extends FrontController {
             }
             
             if (isset($_POST['LaboRequests'])) {
+                Loggers::info('Time id', $_POST['LaboRequests']['time_id'],
+                        __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
                 $model->attributes = $_POST['LaboRequests'];
                 if (isset($_POST['teethData'])) {
                     $model->teeths = $_POST['teethData'];
                 }
+                Loggers::info('Time id', $model->time_id,
+                        __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
                 $model->handleBeforeSave();
                 $model->validate();
                 if (!$model->hasErrors()) {
-                    $model->Handlesave();
+                    $model->handlesave();
                     $customer = $mTreatmentDetail->getCustomerModel();
                     if (isset($customer)) {
                         $rightContent = $customer->getCustomerAjaxInfo();
