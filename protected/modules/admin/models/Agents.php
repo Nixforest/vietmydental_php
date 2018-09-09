@@ -22,7 +22,7 @@
  */
 class Agents extends BaseActiveRecord
 {
-    public $autocomplete_name_street,$doctor_id;
+    public $autocomplete_name_street,$doctor_id,$agent_id;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -485,7 +485,7 @@ class Agents extends BaseActiveRecord
      * @param type $to
      * @return \CArrayDataProvider
      */
-    public function getCustomers($from, $to) {
+    public function getCustomers($from, $to,$multiAgent = false) {
         $aData = [];
         $strDocTor = '';
         $aData['OLD'] = null;
@@ -501,9 +501,15 @@ class Agents extends BaseActiveRecord
 //        if (empty($this->rJoinCustomer)) {
 //            return $aData;
 //        }
-        foreach ($this->rJoinCustomer as $value) {
-            $aIdCus[$value->many_id] = $value->many_id;
+        $id_agent = [];
+        if($multiAgent){
+            if(!empty($this->agent_id)){
+                $id_agent = is_array($this->agent_id) ? $this->agent_id : [$this->agent_id];
+            }
+        }else{
+            $id_agent = [isset(Yii::app()->user->agent_id) ? Yii::app()->user->agent_id : ''];
         }
+        
         $criteriaNew->select = ('t.*');
         if(!empty($this->created_by)){
             $criteria = new CDbCriteria;
@@ -527,13 +533,15 @@ class Agents extends BaseActiveRecord
             $strDocTor =  ' AND tr.doctor_id IN ('.implode(',', $aIdDoctor).')';
         }
         $criteriaNew->distinct = true;
-        $criteriaNew->addInCondition('t.id', $aIdCus);
         //$strScheduleByTime
         $criteriaNew->join = 'JOIN (select re.* FROM medical_records as re JOIN treatment_schedules tr'
                             . ' ON re.id = tr.record_id'
                             . ' WHERE tr.id IN ('.$strScheduleByTime.') '.$strDocTor
                 . ' ) as b'
                 . ' ON b.customer_id = t.id';
+        $criteriaNew->join .= ' JOIN one_many om ON om.many_id = t.id';
+        $criteriaNew->addInCondition('om.one_id',$id_agent);
+        $criteriaNew->compare('om.type', OneMany::TYPE_AGENT_CUSTOMER);
 //        echo '<pre>';
 //        print_r($criteriaNew->join);
 //        echo '</pre>';
@@ -541,12 +549,16 @@ class Agents extends BaseActiveRecord
         $criteriaNew->addBetweenCondition('DATE(t.created_date)', $from, $to);
         $criteriaOld->select = ('t.*');
         $criteriaOld->distinct = true;
-        $criteriaOld->addInCondition('t.id', $aIdCus);
         $criteriaOld->join = 'JOIN (select re.* FROM medical_records as re JOIN treatment_schedules tr'
                 . ' ON re.id = tr.record_id'
                 . ' WHERE tr.id IN ('.$strScheduleByTime.') '.$strDocTor
                 . ' ) as b'
                 . ' ON b.customer_id = t.id';
+        
+        $criteriaOld->join .= ' JOIN one_many om ON om.many_id = t.id';
+        $criteriaOld->addInCondition('om.one_id',$id_agent);
+        $criteriaOld->compare('om.type', OneMany::TYPE_AGENT_CUSTOMER);
+        
         $criteriaOld->addCondition('DATE(t.created_date) <\'' . $from . '\'');
 
         $mCustomers = new Customers('search');

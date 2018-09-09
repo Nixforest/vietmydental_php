@@ -133,14 +133,14 @@ if (!empty($to)) {
 
 </div> form -->
 <?php 
- $this->widget('ReportSearchWidget', array('dateFrom' => $dateFrom, 'dateTo' => $dateTo));
+ $this->widget('ReportSearchWidget', array('dateFrom' => $dateFrom, 'dateTo' => $dateTo,'agentId'   => $agentId));
  ?>
 <!--//-- BUG0046-IMT (DuongNV 20180803) Update UI reports-->
 <!--khách hàng mới-->
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'grid-new',
-    'dataProvider' => $model->getCustomers($from, $to)['NEW'],
+    'dataProvider' => $new,
 //    'filter'    => $model,
     'columns' => array(
         array(
@@ -219,7 +219,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'receipts-grid',
-    'dataProvider' => $model->getCustomers($from, $to)['OLD'],
+    'dataProvider' => $old,
     'filter'    => $model,
     'columns' => array(
         array(
