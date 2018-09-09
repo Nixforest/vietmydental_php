@@ -341,7 +341,7 @@ class Agents extends BaseActiveRecord
      * @param type $arrStatus
      * @return \CArrayDataProvider
      */
-    public function getMoney($from, $to, $arrIsIncomming,$allData = false) {
+    public function getMoney($from, $to, $arrIsIncomming,$allData = false,$multiAgent = false) {
 //        $arrReceipts = array();
 //        if (isset($this->rMoneyAccount)) {
 //            foreach ($this->rMoneyAccount as $aValue) {
@@ -372,9 +372,18 @@ class Agents extends BaseActiveRecord
 //                'pageSize'=>Settings::getListPageSize(),
 //            ),
 //        ));
+        $id_agent   = [];
         $criteria   =  new CDbCriteria;
         $tblMoneyAccount = MoneyAccount::model()->tableName();
-        $criteria->compare('ma.agent_id', $this->id);
+        if($multiAgent){
+            if(!empty($this->agent_id)){
+                $id_agent = is_array($this->agent_id) ? $this->agent_id : [$this->agent_id];
+            }
+        }else{
+            $id_agent = [$this->id];
+        }
+        $criteria->addInCondition('ma.agent_id', $id_agent);
+//        $criteria->compare('ma.agent_id', $this->id);
         $criteria->addCondition('ma.status != '. DomainConst::DEFAULT_STATUS_INACTIVE);
         $criteria->addInCondition('t.isIncomming', $arrIsIncomming);
         $criteria->addCondition('t.action_date >= \''.$from.'\'');
@@ -393,18 +402,26 @@ class Agents extends BaseActiveRecord
      * @param type $from
      * @param type $to
      */
-    public function getReportMoney($from, $to){
+    public function getReportMoney($from, $to, $multiAgent = false){
+        $id_agent = [];
+        if($multiAgent){
+            if(!empty($this->agent_id)){
+                $id_agent = is_array($this->agent_id) ? $this->agent_id : [$this->agent_id];
+            }
+        }else{
+            $id_agent = [$this->id];
+        }
         $aData = array();
         $aData['DOCTORS'] = array();
         $aData['RECEIPT'] = array();
         $aData['RECEIPT']['DATES'] = array();
         $aData['RECEIPT']['VALUES'] = array();
-        $aData['DOCTORS'] =  Users::getListUser(Roles::getRoleByName(Roles::ROLE_DOCTOR)->id,$this->id);
+        $aData['DOCTORS'] =  Users::getListUser(Roles::getRoleByName(Roles::ROLE_DOCTOR)->id,$id_agent);
         foreach ($aData['DOCTORS'] as $id => $name){
             $aData['DOCTORS'][$id] = $this->getNameBS($name);
         }
 //        Load receipts
-        $receipts = $this->getReceipts($from, $to, array(Receipts::STATUS_RECEIPTIONIST),true);
+        $receipts = $this->getRevenueMultiAgent($from, $to, array(Receipts::STATUS_RECEIPTIONIST),true,$id_agent);
 //        $receipts->pagination = false;
         $aReceipts = $receipts->getData();
         foreach ($aReceipts as $key => $mJoinReceipt) {
@@ -429,7 +446,7 @@ class Agents extends BaseActiveRecord
         $aData['GENERAL']['IMPORT'] = array();
         $aData['GENERAL']['EXPORT'] = array();
         $aData['EXPORT_DETAIL'] = array();
-        $moneys = $this->getMoney($from, $to, array(DomainConst::NUMBER_ONE_VALUE,DomainConst::NUMBER_ZERO_VALUE),true);
+        $moneys = $this->getMoney($from, $to, array(DomainConst::NUMBER_ONE_VALUE,DomainConst::NUMBER_ZERO_VALUE),true,true);
 //        $moneys->pagination = false;
         $aMoneys = $moneys->getData();
         foreach ($aMoneys as $key => $mMoney) {
@@ -490,7 +507,6 @@ class Agents extends BaseActiveRecord
         $strDocTor = '';
         $aData['OLD'] = null;
         $aData['NEW'] = null;
-        $aIdCus = [0];
         $scheduleByTime = $this->getScheduleDetail($from, $to);
         if(empty($scheduleByTime)){
             $scheduleByTime = [0];

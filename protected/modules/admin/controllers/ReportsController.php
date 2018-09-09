@@ -243,11 +243,12 @@ class ReportsController extends AdminController {
             $to = CommonProcess::convertDateTime($_POST['to_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat);
             ExcelHandler::summaryReportMoney($mAgent, $from, $to);
         }
-
+        
+        $mAgent->agent_id = $arrAgentId;
         $this->render('report_money', array(
             'from' => $from,
             'to' => $to,
-            'aData' => $mAgent->getReportMoney($from, $to),
+            'aData' => $mAgent->getReportMoney($from, $to,true),
             'agentId' => $agentId,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
