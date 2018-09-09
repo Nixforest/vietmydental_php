@@ -17,6 +17,15 @@ class ReportsController extends AdminController {
      * Revenue action.
      */
     public function actionRevenue() {
+        $agentId = isset(Yii::app()->user->agent_id) ? Yii::app()->user->agent_id : '';
+        $mAgent = Agents::model()->findByPk($agentId);
+        $mAgent->created_by = '';
+        $mAgent->doctor_id = '';
+        if(empty($mAgent)){
+            $mAgent = new Agents();
+            $mAgent->unsetAttributes();
+        }
+        
         $dateFormat = DomainConst::DATE_FORMAT_4;
         $from = '';
         $to = '';
@@ -42,6 +51,7 @@ class ReportsController extends AdminController {
         } else {
             $arrAgentId[] = $agentId;
         }
+        $mAgent->agent_id = $arrAgentId;
         $receipts = Agents::getRevenueMultiAgent($from, $to, array(Receipts::STATUS_RECEIPTIONIST), false, $arrAgentId);
         $allReceipts = Agents::getRevenueMultiAgent($from, $to, array(Receipts::STATUS_RECEIPTIONIST), true, $arrAgentId);
         $newReceipts = Agents::getRevenueMultiAgent($from, $to, array(Receipts::STATUS_DOCTOR), false, $arrAgentId);
@@ -96,7 +106,8 @@ class ReportsController extends AdminController {
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_EXCEL)) {
             $from = CommonProcess::convertDateTime($_POST['from_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat);
             $to = CommonProcess::convertDateTime($_POST['to_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat);
-            $this->exportExcel($from, $to, $agentId);
+//            $this->exportExcel($from, $to, $agentId);
+            ExcelHandler::summaryReportMoney($mAgent, $from, $to,true);
         }
         $this->render('revenue', array(
             'receipts' => $receipts,
@@ -165,6 +176,9 @@ class ReportsController extends AdminController {
         $dateFormat = DomainConst::DATE_FORMAT_4;
         $agentId = isset(Yii::app()->user->agent_id) ? Yii::app()->user->agent_id : '';
         $mAgent = Agents::model()->findByPk($agentId);
+        if(empty($mAgent)){
+            $mAgent = new Agents();
+        }
         $from = '';
         $to = '';
         // Get data from url
@@ -190,7 +204,8 @@ class ReportsController extends AdminController {
         } else {
             $arrAgentId[] = $agentId;
         }
-        
+        $mAgent->agent_id = $arrAgentId;
+
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
             $this->redirect(array('ReportMoney',
                 'from' => CommonProcess::convertDateTime($_POST['from_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat),
@@ -241,10 +256,9 @@ class ReportsController extends AdminController {
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_EXCEL)) {
             $from = CommonProcess::convertDateTime($_POST['from_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat);
             $to = CommonProcess::convertDateTime($_POST['to_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat);
-            ExcelHandler::summaryReportMoney($mAgent, $from, $to);
+            ExcelHandler::summaryReportMoney($mAgent, $from, $to,true);
         }
         
-        $mAgent->agent_id = $arrAgentId;
         $this->render('report_money', array(
             'from' => $from,
             'to' => $to,
@@ -259,12 +273,14 @@ class ReportsController extends AdminController {
      */
     public function actionCustomer() {
         $dateFormat = DomainConst::DATE_FORMAT_4;
-//        $agentId = isset(Yii::app()->user->agent_id) ? Yii::app()->user->agent_id : '';
-//        $mAgent = Agents::model()->findByPk($agentId);
-//        $mAgent->created_by = '';
-//        $mAgent->doctor_id = '';
-        $mAgent = new Agents();
-        $mAgent->unsetAttributes();
+        $agentId = isset(Yii::app()->user->agent_id) ? Yii::app()->user->agent_id : '';
+        $mAgent = Agents::model()->findByPk($agentId);
+        $mAgent->created_by = '';
+        $mAgent->doctor_id = '';
+        if(empty($mAgent)){
+            $mAgent = new Agents();
+            $mAgent->unsetAttributes();
+        }
         
         $from = '';
         $to = '';
@@ -293,7 +309,7 @@ class ReportsController extends AdminController {
         } else {
             $arrAgentId[] = $agentId;
         }
-
+        $mAgent->agent_id = $arrAgentId;
         // Start access db
 
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
@@ -346,13 +362,12 @@ class ReportsController extends AdminController {
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT_EXCEL)) {
             $from = CommonProcess::convertDateTime($_POST['from_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat);
             $to = CommonProcess::convertDateTime($_POST['to_date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat);
-            ExcelHandler::summaryReportMoney($mAgent, $from, $to);
+            ExcelHandler::summaryReportMoney($mAgent, $from, $to,true);
         }
         if (!empty($_GET['Agents'])) {
             $mAgent->attributes = $_GET['Agents'];
         }
         if ($mAgent) {
-            $mAgent->agent_id = $arrAgentId;
             $data = $mAgent->getCustomers($from, $to,true);
             $old = !empty($data['OLD']) ? $data['OLD'] : null;
             $new = !empty($data['NEW']) ? $data['NEW'] : null;

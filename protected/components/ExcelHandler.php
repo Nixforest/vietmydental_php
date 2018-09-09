@@ -129,10 +129,10 @@ class ExcelHandler {
      * @param type $from
      * @param type $to
      */
-    public static function summaryReportMoney($model, $from, $to) {
+    public static function summaryReportMoney($model, $from, $to,$multiAgent = false) {
         try {
             //        data
-            $aData = $model->getReportMoney($from, $to);
+            $aData = $model->getReportMoney($from, $to,$multiAgent);
             $titleCellDate = 'THÁNG '.date('m/Y',strtotime($from));
             $fileName = 'Báo cáo (' . $from . ' đến ' . $to . ')';
             Yii::import('application.extensions.vendors.PHPExcel', true);
