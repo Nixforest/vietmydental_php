@@ -1046,7 +1046,8 @@ class Customers extends BaseActiveRecord
                 }
                 // Get list customers assign at doctor
 //                $criteria->addInCondition('t.id', $mUser->getListCustomerOfDoctor($from, $to));
-                return $mUser->getListCustomerOfDoctor($from, $to);
+//                return $mUser->getListCustomerOfDoctor($from, $to);
+                return $mUser->getListCustomersByDoctorAPI($from, $to, $root->page);
 //                return TreatmentScheduleDetails::getListCustomerByDoctor($mUser->id, $from, $to);
 //                break;
 

@@ -312,7 +312,7 @@ class Agents extends BaseActiveRecord
      * @param String $arrId     Agent id array
      * @return \CActiveDataProvider
      */
-    public static function getRevenueMultiAgent($from, $to, $arrStatus, $allData = false, $arrId = []) {
+    public static function getRevenueMultiAgent($from, $to, $arrStatus, $allData = false, $arrId = [], $page = '', $isAPI = false) {
         $mOneMany = new OneMany();
         $criteria=new CDbCriteria;
         $tblReceipts = Receipts::model()->tableName();
@@ -328,9 +328,11 @@ class Agents extends BaseActiveRecord
         $criteria->join = 'JOIN '.$tblReceipts.' as r ON r.id = t.many_id';
         
         return new CActiveDataProvider($mOneMany, array(
-            'criteria'=>$criteria,
-            'pagination'=>$allData ? false : [ 'pageSize'=>Settings::getListPageSize()]
-               
+            'criteria' => $criteria,
+            'pagination' => $allData ? false : [
+                'pageSize'      => $isAPI ? Settings::getApiListPageSize() : Settings::getListPageSize(),
+                'currentPage'   => $page,
+            ],
         ));
     }
     
@@ -581,9 +583,27 @@ class Agents extends BaseActiveRecord
         $models = self::model()->findAll(array(
             'order' => 'id ASC',
         ));
-        return  CHtml::listData($models,'id','name');
+        return CHtml::listData($models,'id','name');
     }
     
+    /**
+     * Get agent list json format
+     * @return Array Json object
+     */
+    public function getAgentListJson() {
+        $arrAgent = self::model()->findAll(array(
+            'order' => 'id ASC',
+        ));
+        $retVal = array();
+        $retVal[] = CommonProcess::createConfigJson('-1', "Tất cả");
+        foreach ($arrAgent as $value) {
+            $retVal[] = CommonProcess::createConfigJson($value->id, $value->name);
+        }
+        
+        return $retVal;
+    }
+
+
     /**
      * 
      * @param date $from

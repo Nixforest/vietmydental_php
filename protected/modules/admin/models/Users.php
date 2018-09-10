@@ -615,6 +615,67 @@ class Users extends BaseActiveRecord {
 
         return $retVal;
     }
+    
+    public function getListCustomersByDoctorAPI($from, $to, $page) {
+        if (!$this->isDoctor()) {
+            return NULL;
+        }
+        $data = array();
+        foreach ($this->getAgentIds() as $agentId) {
+            $mAgent = Agents::model()->findByPk($agentId);
+            if ($mAgent) {
+                $mAgent->doctor_id = $this->id;
+                $aIdCus = [0];
+                $scheduleByTime = $mAgent->getScheduleDetail($from, $to);
+                if(empty($scheduleByTime)){
+                    $scheduleByTime = [0];
+                }
+                $strScheduleByTime = implode(',', $scheduleByTime);
+                $criteriaNew = new CDbCriteria;
+                foreach ($mAgent->rJoinCustomer as $value) {
+                    $aIdCus[$value->many_id] = $value->many_id;
+                }
+                $criteriaNew->select = ('t.*');
+                if (!empty($mAgent->created_by)) {
+                    $criteria = new CDbCriteria;
+                    $criteria->compare('t.first_name', $mAgent->created_by, true);
+                    $aUser = Users::model()->findAll($criteria);
+                    $aId = [];
+                    foreach ($aUser as $key => $value) {
+                        $aId[] = $value->id;
+                    }
+                    $criteriaNew->addInCondition('t.created_by', $aId);
+                }
+                if (!empty($mAgent->doctor_id)) {
+                    $criteria = new CDbCriteria;
+                    $criteria->compare('t.first_name', $mAgent->doctor_id, true);
+                    $aUser = Users::model()->findAll($criteria);
+                    $aIdDoctor = [0];
+                    foreach ($aUser as $key => $value) {
+                        $aIdDoctor[] = $value->id;
+                    }
+                    $strDocTor = ' AND tr.doctor_id IN (' . implode(',', $aIdDoctor) . ')';
+                }
+                
+                $criteriaNew->distinct = true;
+                $criteriaNew->addInCondition('t.id', $aIdCus);
+                //$strScheduleByTime
+                $criteriaNew->join = 'JOIN (select re.* FROM medical_records as re JOIN treatment_schedules tr'
+                                    . ' ON re.id = tr.record_id'
+                                    . ' WHERE tr.id IN ('.$strScheduleByTime.') '.$strDocTor
+                        . ' ) as b'
+                        . ' ON b.customer_id = t.id';
+                $mCustomers = new Customers('search');
+                return new CActiveDataProvider($mCustomers, array(
+                    'criteria' => $criteriaNew,
+                    'pagination' => array(
+                        'pageSize' => Settings::getListPageSize(),
+                        'currentPage'   => $page,
+                    ),
+                ));
+            }
+        }
+    }
 
     /**
      * Check if a user is a test user
@@ -694,6 +755,14 @@ class Users extends BaseActiveRecord {
      */
     public function isStaff() {
         return Roles::isStaff($this->role_id);
+    }
+    
+    /**
+     * Check if user is doctor
+     * @return boolean True if user is doctor, false otherwise
+     */
+    public function isDoctor() {
+        return Roles::isDoctorRole($this->role_id);
     }
 
     /**

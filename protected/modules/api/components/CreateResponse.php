@@ -36,9 +36,13 @@ class CreateResponse {
             DomainConst::KEY_TREATMENT          => TreatmentGroup::getJsonList(),
 //            DomainConst::KEY_STATUS_TREATMENT_DETAIL    => TreatmentScheduleDetails::getJsonListStatus(),
 //            DomainConst::KEY_STATUS_TREATMENT_PROCESS   => TreatmentScheduleProcess::getJsonListStatus(),
+            DomainConst::KEY_STATUS_RECEIPT     => Receipts::getJsonListStatus(),
             DomainConst::KEY_TEETH              => CommonProcess::getListConfigTeeth(),
             DomainConst::KEY_TIMER              => ScheduleTimes::getJsonList(),
             DomainConst::KEY_DIAGNOSIS_OTHER_ID => Diagnosis::getOtherDiagnosisId(),
+            DomainConst::KEY_LIST_AGENT         => Agents::getAgentListJson(),
+            Settings::KEY_APP_API_LIST_PAGE_SIZE => Settings::getApiListPageSize(),
+            DomainConst::KEY_AGENT_ID           => implode(',', $mUser->getAgentIds()),
         );
         ApiModule::sendResponse($result, $objController);
     }
@@ -123,8 +127,8 @@ class CreateResponse {
         $data = $mCustomer->apiList($root, $mDoctor);
 //        $pagination = $data->pagination;
         $list = array();
-//        foreach ($data->data as $customer) {
-        foreach ($data as $key => $customer) {
+        foreach ($data->getData() as $customer) {
+//        foreach ($data as $key => $customer) {
 //            $list[] = CommonProcess::createConfigJson(
 //                    $customer->id,
 //                    $customer->name);

@@ -237,4 +237,16 @@ class Roles extends BaseActiveRecord
         }
         return false;
     }
+    
+    /**
+     * Check if role is doctor
+     * @param String $roleId id of role
+     * @return boolean
+     */
+    public static function isDoctorRole($roleId) {
+        if (self::getRoleByName(self::ROLE_DOCTOR) == $roleId) {
+            return true;
+        }
+        return false;
+    }
 }

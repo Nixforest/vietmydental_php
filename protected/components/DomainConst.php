@@ -270,6 +270,8 @@ class DomainConst {
     const KEY_STATUS_TREATMENT_DETAIL       = 'status_treatment_detail';
     /** status_treatment_process */
     const KEY_STATUS_TREATMENT_PROCESS      = 'status_treatment_process';
+    /** Status of receipt */
+    const KEY_STATUS_RECEIPT                = 'status_receipt';
     /** address_config */
     const KEY_ADDRESS_CONFIG                = 'address_config';
     /** doctor */
@@ -1018,6 +1020,114 @@ class DomainConst {
     /** Icon: print all */
     const IMG_PRESCRIPTION_ICON             = 'icon_prescription_24.png';
     
+    //-----------------------------------------------------
+    // Constants
+    //-----------------------------------------------------
+    /** Group id: Medical record */
+    const GROUP_MEDICAL_RECORD              = '1';
+    /** Group id: Treatment */
+    const GROUP_TREATMENT                   = '2';
+    /** Item id: Update data */
+    const ITEM_UPDATE_DATE                  = '0';
+    /** Item id: Name */
+    const ITEM_NAME                         = '1';
+    /** Item id: Birthday */
+    const ITEM_BIRTHDAY                     = '2';
+    /** Item id: Medical history */
+    const ITEM_MEDICAL_HISTORY              = '3';
+    /** Item id: Gender */
+    const ITEM_GENDER                       = '4';
+    /** Item id: Age */
+    const ITEM_AGE                          = '5';
+    /** Item id: Phone */
+    const ITEM_PHONE                        = '6';
+    /** Item id: Address */
+    const ITEM_ADDRESS                      = '7';
+    /** Item id: Email */
+    const ITEM_EMAIL                        = '8';
+    /** Item id: Agent */
+    const ITEM_AGENT                        = '9';
+    /** Item id: Career */
+    const ITEM_CAREER                       = '10';
+    /** Item id: Characteristics */
+    const ITEM_CHARACTERISTICS              = '11';
+    /** Item id: Record number */
+    const ITEM_RECORD_NUMBER                = '12';
+    /** Item id: Start date */
+    const ITEM_START_DATE                   = '13';
+    /** Item id: End date */
+    const ITEM_END_DATE                     = '14';
+    /** Item id: Diagnosis */
+    const ITEM_DIAGNOSIS                    = '15';
+    /** Item id: Pathological */
+    const ITEM_PATHOLOGICAL                 = '16';
+    /** Item id: Doctor */
+    const ITEM_DOCTOR                       = '17';
+    /** Item id: Healthy */
+    const ITEM_HEALTHY                      = '18';
+    /** Item id: Status */
+    const ITEM_STATUS                       = '19';
+    /** Item id: Details */
+    const ITEM_DETAILS                      = '20';
+    /** Item id: Teeth */
+    const ITEM_TEETH                        = '21';
+    /** Item id: Treatment */
+    const ITEM_TREATMENT                    = '22';
+    /** Item id: NOTE */
+    const ITEM_NOTE                         = '23';
+    /** Item id: Type */
+    const ITEM_TYPE                         = '24';
+    /** Item id: Can update */
+    const ITEM_CAN_UPDATE                   = '25';
+    /** Item id: Id */
+    const ITEM_ID                           = '26';
+    /** Item id: Diagnosis Id */
+    const ITEM_DIAGNOSIS_ID                 = '27';
+    /** Item id: Pathological Id */
+    const ITEM_PATHOLOGICAL_ID              = '28';
+    /** Item id: Teeth Id */
+    const ITEM_TEETH_ID                     = '29';
+    /** Item id: Treatment type Id */
+    const ITEM_TREATMENT_TYPE_ID            = '30';
+    /** Item id: Description */
+    const ITEM_DESCRIPTION                  = '31';
+    /** Item id: Time id */
+    const ITEM_TIME_ID                      = '32';
+    /** Item id: Time */
+    const ITEM_TIME                         = '33';
+    /** Item id: Receipt */
+    const ITEM_RECEIPT                      = '34';
+    /** Item id: Discount */
+    const ITEM_DISCOUNT                     = '35';
+    /** Item id: Need approve */
+    const ITEM_NEED_APPROVE                 = '36';
+    /** Item id: Customer confirmed */
+    const ITEM_CUSTOMER_CONFIRMED           = '37';
+    /** Item id: Final */
+    const ITEM_FINAL                        = '38';
+    /** Item id: Insurance */
+    const ITEM_INSURRANCE                   = '39';
+    /** Item id: Teeth information */
+    const ITEM_TEETH_INFO                   = '40';
+    /** Item id: Customer debt information */
+    const ITEM_CUSTOMER_DEBT                = '41';
+    /** Item id: Image */
+    const ITEM_IMAGE                        = '42';
+    /** Item id: Image */
+    const ITEM_IMAGE_TREATMENT              = '43';
+    /** Item id: Agent id */
+    const ITEM_AGENT_ID                     = '44';
+    /** Item id: Price */
+    const ITEM_PRICE                        = '45';
+    /** Item id: Quantity */
+    const ITEM_QUANTITY                     = '46';
+    /** Item id: Total */
+    const ITEM_TOTAL                        = '47';
+    /** Item id: Debt */
+    const ITEM_DEBT                         = '48';
+    /** Item id: Receptionist */
+    const ITEM_RECEIPTIONIST                = '49';
+    
     
     /**----- Message content -----*/
     const CONTENT00001  = 'Thu';
@@ -1457,4 +1567,7 @@ class DomainConst {
     const CONTENT00435  = 'Giờ nhận';
     const CONTENT00436  = 'Ngày giờ nhận';
     const CONTENT00437  = 'Yêu cầu';
+    const CONTENT00438  = 'Mã Chi nhánh';
+    const CONTENT00439  = 'Mã loại điều trị';
+    const CONTENT00440  = 'Phiếu thu';
 }
