@@ -285,7 +285,7 @@ class OneMany extends BaseActiveRecord
     public function getReceiptNumTeeth() {
         $retVal = '';
         if (isset($this->rReceipt)) {
-            $retVal = $this->rReceipt->getNumTeeth();
+            $retVal = $this->rReceipt->getNumTeeth() . '';
         }
         if (!empty($retVal)) {
             return $retVal;

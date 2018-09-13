@@ -68,6 +68,10 @@ class CreateResponse {
             $roleName = $mRole->role_name;
             switch ($roleName) {
                 case Roles::ROLE_ADMIN:
+                    $aMenu[] = array(
+                        DomainConst::KEY_ID     => DomainConst::KEY_REPORT_REVENUE,
+                        DomainConst::KEY_NAME   => DomainConst::CONTENT00441,
+                    );
 
                     break;
                 case Roles::ROLE_DOCTOR:
@@ -75,11 +79,33 @@ class CreateResponse {
                         DomainConst::KEY_ID     => DomainConst::KEY_CUSTOMER_LIST,
                         DomainConst::KEY_NAME   => DomainConst::CONTENT00135,
                     );
+                    $aMenu[] = array(
+                        DomainConst::KEY_ID     => DomainConst::KEY_REPORT_REVENUE,
+                        DomainConst::KEY_NAME   => DomainConst::CONTENT00441,
+                    );
                     break;
                 case Roles::ROLE_ASSISTANT:
                     $aMenu[] = array(
                         DomainConst::KEY_ID     => DomainConst::KEY_CUSTOMER_LIST,
                         DomainConst::KEY_NAME   => DomainConst::CONTENT00088,
+                    );
+                    break;
+                case Roles::ROLE_DIRECTOR:
+                    $aMenu[] = array(
+                        DomainConst::KEY_ID     => DomainConst::KEY_REPORT_REVENUE,
+                        DomainConst::KEY_NAME   => DomainConst::CONTENT00441,
+                    );
+                    break;
+                case Roles::ROLE_DIRECTOR_AGENT:
+                    $aMenu[] = array(
+                        DomainConst::KEY_ID     => DomainConst::KEY_REPORT_REVENUE,
+                        DomainConst::KEY_NAME   => DomainConst::CONTENT00441,
+                    );
+                    break;
+                case Roles::ROLE_ACCOUNT_MANAGER:
+                    $aMenu[] = array(
+                        DomainConst::KEY_ID     => DomainConst::KEY_REPORT_REVENUE,
+                        DomainConst::KEY_NAME   => DomainConst::CONTENT00441,
                     );
                     break;
                 default:

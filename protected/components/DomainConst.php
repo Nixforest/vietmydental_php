@@ -306,6 +306,8 @@ class DomainConst {
     const KEY_NOTE                          = 'note';
     /** Report wrong */
     const KEY_REPORT_WRONG                  = 'report_wrong';
+    /** Report revenue */
+    const KEY_REPORT_REVENUE                = 'report_revenue';
     /** Note internal */
     const KEY_NOTE_INTERNAL                 = 'note_internal';
     /** Reply Id */
@@ -1570,4 +1572,5 @@ class DomainConst {
     const CONTENT00438  = 'Mã Chi nhánh';
     const CONTENT00439  = 'Mã loại điều trị';
     const CONTENT00440  = 'Phiếu thu';
+    const CONTENT00441  = 'Báo cáo doanh thu';
 }
