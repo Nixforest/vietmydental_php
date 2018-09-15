@@ -39,10 +39,10 @@
                     $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3);
                 }
             }
-            $schedule->start_date = $date;
             $this->widget('DatePickerWidget', array(
                 'model' => $schedule,
                 'field' => 'start_date',
+                'value' => $date,
             ));
             ?>
             <?php echo $form->error($schedule, 'start_date'); ?>

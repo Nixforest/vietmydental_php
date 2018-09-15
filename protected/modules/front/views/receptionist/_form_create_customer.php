@@ -61,26 +61,32 @@
                     $date = DomainConst::DATE_FORMAT_3_NULL;
                 }
             }
-            $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-                'model'     => $customer,
-                'attribute' => 'date_of_birth',
-                'language'=>'en-GB',
-                'options'   => array(
-                    'showAnim'      => 'fold',
-                    'dateFormat'    => DomainConst::DATE_FORMAT_2,
-                    'maxDate'       => '0',
-                    'changeMonth'   => true,
-                    'changeYear'    => true,
-//                    'showOn'        => 'button',
-//                    'buttonImage'   => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
-//                    'buttonImageOnly' => true,
-                ),
-                'htmlOptions'=>array(
-                            'class'=>'w-16',
-//                            'readonly'=>'readonly',
-//                            'value' => CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3),
-                            'value' => $date,
-                        ),
+//            $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+//                'model'     => $customer,
+//                'attribute' => 'date_of_birth',
+//                'language'=>'en-GB',
+//                'options'   => array(
+//                    'showAnim'      => 'fold',
+//                    'dateFormat'    => DomainConst::DATE_FORMAT_2,
+//                    'maxDate'       => '0',
+//                    'changeMonth'   => true,
+//                    'changeYear'    => true,
+////                    'showOn'        => 'button',
+////                    'buttonImage'   => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
+////                    'buttonImageOnly' => true,
+//                ),
+//                'htmlOptions'=>array(
+//                            'class'=>'w-16',
+////                            'readonly'=>'readonly',
+////                            'value' => CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3),
+//                            'value' => $date,
+//                        ),
+//            ));
+            $this->widget('DatePickerWidget', array(
+                'model' => $customer,
+                'field' => 'date_of_birth',
+                'value' => $date,
+                'isReadOnly'    => false,
             ));
             ?>
             <?php echo $form->error($customer,'date_of_birth'); ?>
@@ -120,7 +126,17 @@
         </div>
         <div class="col-md-6">
             <?php echo $form->labelEx($customer,'year_of_birth'); ?>
-            <?php echo $form->numberField($customer,'year_of_birth',array('size'=>60,'maxlength'=>255, 'placeholder'=>'Năm sinh')); ?>
+            <?php // echo $form->numberField($customer,'year_of_birth',array('size'=>60,'maxlength'=>255, 'placeholder'=>'Năm sinh')); ?>
+            <?php
+            
+            $this->widget('DatePickerWidget', array(
+                'model'         => $customer,
+                'field'         => 'year_of_birth',
+                'format'        => 'yy',
+                'value'         => $customer->year_of_birth,
+                'isReadOnly'    => false,
+            ));
+            ?>
             <?php echo $form->error($customer,'year_of_birth'); ?>
         </div>
     </div>

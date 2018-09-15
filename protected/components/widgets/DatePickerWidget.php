@@ -15,6 +15,8 @@ class DatePickerWidget extends CWidget {
     public $value;
     /** Is readonly */
     public $isReadOnly = true;
+    /** Format */
+    public $format      = DomainConst::DATE_FORMAT_2;
 
     public function run() {
         $readOnly = '';
@@ -26,6 +28,7 @@ class DatePickerWidget extends CWidget {
             'field' => $this->field,
             'value' => $this->value,
             'isReadOnly'    => $readOnly,
+            'format'        => $this->format,
         ));
     }
 

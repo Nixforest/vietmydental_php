@@ -5,7 +5,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker', array(
     'language'  =>'en-GB',
     'options'   => array(
         'showAnim'      => 'slide',
-        'dateFormat'    => DomainConst::DATE_FORMAT_2,
+        'dateFormat'    => $format,
         'changeMonth'   => true,
         'changeYear'    => true,
     ),
