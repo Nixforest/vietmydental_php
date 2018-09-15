@@ -111,11 +111,11 @@ class TreatmentSchedules extends BaseActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'record_id' => DomainConst::CONTENT00138,
-			'time_id' => DomainConst::CONTENT00240,
-			'start_date' => DomainConst::CONTENT00139,
-			'end_date' => DomainConst::CONTENT00140,
-			'diagnosis_id' => DomainConst::CONTENT00121,
+			'record_id'     => DomainConst::CONTENT00138,
+			'time_id'       => DomainConst::CONTENT00240,
+			'start_date'    => DomainConst::CONTENT00139,
+			'end_date'      => DomainConst::CONTENT00140,
+			'diagnosis_id'  => DomainConst::CONTENT00121,
 			'pathological_id' => DomainConst::CONTENT00141,
 			'insurrance' => DomainConst::CONTENT00260,
 			'doctor_id' => DomainConst::CONTENT00143,

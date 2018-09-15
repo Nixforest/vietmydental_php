@@ -245,6 +245,8 @@ class Districts extends BaseActiveRecord
             'Q.11'    => 'Quận 11',
             'Q.12'    => 'Quận 12',
             'TP.Mỹ Tho' => 'Thành phố Mỹ Tho',
+            'Trà Vinh'  => 'Thành phố Trà Vinh',
+            'Bến Tre'   => 'Thành phố Bến Tre',
         );
         $name = str_replace('Q. ', '', $name);
         $name = str_replace('H. ', '', $name);

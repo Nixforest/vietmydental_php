@@ -1573,4 +1573,5 @@ class DomainConst {
     const CONTENT00439  = 'Mã loại điều trị';
     const CONTENT00440  = 'Phiếu thu';
     const CONTENT00441  = 'Báo cáo doanh thu';
+    const CONTENT00442  = 'Ngày hẹn';
 }

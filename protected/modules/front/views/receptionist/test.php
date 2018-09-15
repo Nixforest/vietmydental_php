@@ -26,6 +26,12 @@
     </select>
     <br>
     <?php
+        $model = new LaboRequests();
+        $this->widget('DatePickerWidget', array(
+            'model' => $model,
+            'field' => 'date_receive',
+            'isReadOnly'    => false,
+        ));
 //        $sms = new SmsVivasHandler();
 //        $sms->login();
 //        $sms->logout();
