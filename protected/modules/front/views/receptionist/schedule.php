@@ -123,6 +123,7 @@ if (!empty($dateValue)) {
                 "<?php echo DomainConst::CONTENT00172 ?>",
                 $(this).attr('id'));
 //        alert($(this).attr('id'));
+    fnClickPlusMonth();
     });
 </script>
 <script type="text/javascript">
