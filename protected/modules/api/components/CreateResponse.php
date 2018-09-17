@@ -151,7 +151,7 @@ class CreateResponse {
         $result = ApiModule::$defaultSuccessResponse;
         $mCustomer = new Customers();
         $data = $mCustomer->apiList($root, $mDoctor);
-//        $pagination = $data->pagination;
+        $pagination = $data->pagination;
         $list = array();
         foreach ($data->getData() as $customer) {
 //        foreach ($data as $key => $customer) {
@@ -168,10 +168,10 @@ class CreateResponse {
             );
         }
         $result[DomainConst::KEY_DATA] = array(
-//            DomainConst::KEY_TOTAL_RECORD => $pagination->itemCount,
-//            DomainConst::KEY_TOTAL_PAGE => $pagination->pageCount,
-            DomainConst::KEY_TOTAL_RECORD => count($data),
-            DomainConst::KEY_TOTAL_PAGE => '1',
+            DomainConst::KEY_TOTAL_RECORD => $pagination->itemCount,
+            DomainConst::KEY_TOTAL_PAGE => $pagination->pageCount,
+//            DomainConst::KEY_TOTAL_RECORD => count($data),
+//            DomainConst::KEY_TOTAL_PAGE => '1',
             DomainConst::KEY_LIST => $list,
         );
         ApiModule::sendResponse($result, $objController);

@@ -89,7 +89,8 @@ class Users extends BaseActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('username, password_hash, created_date, ip_address, role_id, application_id, agent', 'required'),
+//            array('username, password_hash, created_date, ip_address, role_id, application_id, agent', 'required'),
+            array('username, password_hash, created_date, ip_address, role_id, application_id', 'required'),
             array('place_of_issue, province_id, district_id, ward_id, street_id, login_attemp, role_id, application_id, status', 'numerical', 'integerOnly' => true),
             array('username, last_name', 'length', 'max' => 50),
             array('email', 'length', 'max' => 80),
@@ -557,7 +558,7 @@ class Users extends BaseActiveRecord {
      * Get list customer of doctor
      * @return Array Array of customer id
      */
-    public function getListCustomerOfDoctor($from, $to) {
+    public function getListCustomerOfDoctor($from, $to, $page) {
         $retVal = array();
         // Check relation rTreatmentSchedule is set
         if (isset($this->rTreatmentSchedule)) {
@@ -612,14 +613,28 @@ class Users extends BaseActiveRecord {
                 }
             }
         }
-
-        return $retVal;
+        $dataPro = new CActiveDataProvider('Customers', array(
+            'data'  => $retVal,
+            'pagination' => array(
+                'pageSize' => Settings::getAPIListPageSize(),
+                'currentPage'   => $page,
+            ),
+        ));
+//        return $retVal;
+        return $dataPro;
     }
     
     public function getListCustomersByDoctorAPI($from, $to, $page) {
-        if (!$this->isDoctor()) {
-            return NULL;
-        }
+//        if (!$this->isDoctor()) {
+//            Loggers::info('Not doctor', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+//            $mCustomers = new Customers('search');
+//            return new CActiveDataProvider($mCustomers, array(
+//                    'pagination' => array(
+//                        'pageSize' => Settings::getAPIListPageSize(),
+//                        'currentPage'   => $page,
+//                    ),
+//                ));
+//        }
         $data = array();
         foreach ($this->getAgentIds() as $agentId) {
             $mAgent = Agents::model()->findByPk($agentId);
@@ -967,6 +982,7 @@ class Users extends BaseActiveRecord {
         if (empty($name)) {
             return NULL;
         }
+        $name = strtolower($name);
         $criteria = new CDbCriteria();
         $criteria->compare('role_id', '6', true);
         $criteria->compare('address_vi', $name, true, 'AND');
@@ -988,6 +1004,7 @@ class Users extends BaseActiveRecord {
         }
         $nameArr = array(
             'Nguyen Dinh Troi' => 'Nguyễn Đình Trợi',
+            'Do Thi Thuy Lieu' => 'Đỗ Thị Thúy Liễu',
         );
         if (isset($nameArr[$name])) {
             $name = $nameArr[$name];

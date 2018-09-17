@@ -231,7 +231,7 @@
         echo $message;
         print_r($result);
         echo '</pre>';
-    $doctorName = 'Nguyen Thi Nhu Khanh';
+    $doctorName = 'NGO QUANG KHOI';
 //    $doctorName = '';
     $doctor = Users::getDoctorByName($doctorName, '3');
     if (!empty($doctor)) {
@@ -245,7 +245,7 @@
     $districtName = 'Q. Thủ Đức';
     $district = Districts::getModelByName($districtName);
     CommonProcess::echoTest("Tên quận: ", isset($district) ? $district->name : 'Không tìm thấy');
-    $name = 'Nguyen Dinh Troi';
+    $name = 'Do Thi Thuy Lieu';
     $user = Users::getUserByName($name);
     CommonProcess::echoTest("User: ", isset($user) ? $user->getFullName() : 'Không tìm thấy');
 

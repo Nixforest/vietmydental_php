@@ -144,6 +144,7 @@ class UserController extends APIController
         $mUser->street_id       = trim($root->street_id);
         $mUser->house_numbers   = trim($root->house_numbers);
         $mUser->validate();
+        $mUser->setAgents();
         if ($mUser->hasErrors()) {
             $result[DomainConst::KEY_MESSAGE] = CreateResponse::fortmatErrorsModel($mUser->getErrors());
             ApiModule::sendResponse($result, $this);
