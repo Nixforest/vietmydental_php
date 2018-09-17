@@ -1,6 +1,6 @@
 <?php
 
-class ApiRequestLogsController extends AdminController
+class ApiRequestLogsController extends APIBaseController
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning

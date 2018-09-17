@@ -64,6 +64,7 @@ class AdminMenuManager {
      * @return string Menu array in html form
      */
     public function createMenu() {
+        Loggers::info('Start create Admin menu', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         $retVal = '';
         $session = Yii::app()->session;
         // If session was saved menu string, just return it
@@ -72,43 +73,27 @@ class AdminMenuManager {
         }
         // Check if user is logged in
         if (Yii::app()->session[DomainConst::KEY_LOGGED_USER] != NULL && !is_null(Yii::app()->user->id)) {
-//            $userObj = Yii::app()->session[DomainConst::KEY_LOGGED_USER];
-//            $userRoleId = $userObj->role_id;
-//            $userRoleMenuId = array();
             $menusTemp = Menus::model()->findAll(
-                    array(
-                        'condition' => 'show_in_menu = "1"',
-                        'order'     => 'display_order asc'
-                    )
+                array(
+                    'condition' => 'show_in_menu = "1"',
+                    'order'     => 'display_order asc'
+                )
             );
-//            $allowSessionMenu = Yii::app()->params['allow_session_menu'];
-//            if ($allowSessionMenu = 'yes') {
-//                $session[DomainConst::KEY_ALLOW_SESSION_MENU] = 1;
-//            } else {
-//                $session[DomainConst::KEY_ALLOW_SESSION_MENU] = 0;
-//            }
             $session[DomainConst::KEY_ALLOW_SESSION_MENU] = 1;
             $menus = array();
+            // Loop for all menu items
             foreach ($menusTemp as $menuTemp) {
-                if ($menuTemp->link == '#') {
+                if ($menuTemp->link == '#') {           // Parent menu
                     $menus[] = $menuTemp;
                     continue;
                 }
-                if ($menuTemp->rModule->name == 'front') {
+                if ($menuTemp->rModule->name == 'front') {  // Front end
                     continue;
                 }
-//                $aLinks = explode('/', $menuTemp->link);
-//                $c = '';        // Controller name
-//                $a = '';        // Action name
-//                if (count($aLinks) == 2) {
-//                    $c = $aLinks[1];
-//                    $a = 'index';
-//                } else if (count($aLinks) > 2) {
-//                    $c = $aLinks[1];
-//                    $a = ucfirst($aLinks[2]);
-//                }
                 $c = isset($menuTemp->rController) ? $menuTemp->rController->name : '';
                 $a = $menuTemp->action;
+                $module = isset($menuTemp->rModule) ? $menuTemp->rModule->name : '';
+                Loggers::info('Module/Controller/Action', $module . '/' . $c . '/' . $a, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
                 // If allow menu session
                 if ($session[DomainConst::KEY_ALLOW_SESSION_MENU]) {
                     // If not exist => create
@@ -119,14 +104,14 @@ class AdminMenuManager {
                     $sessionTemp = $session[DomainConst::KEY_MENU_CONTROLLER_ACTION];
                     if (!isset($sessionTemp[$c])) {
                         // Get list all actions of current controller data from db
-                        $sessionTemp[$c] = ActionsUsers::getActionArrAllowForCurrentUserByControllerName($c);
+                        $sessionTemp[$c] = ActionsUsers::getActionArrAllowForCurrentUserByControllerName($c, $module);
                         $session[DomainConst::KEY_MENU_CONTROLLER_ACTION] = $sessionTemp;
                     }
                     $aActionAllowed = $session[DomainConst::KEY_MENU_CONTROLLER_ACTION][$c];
                 } else {
                     // Reset action
                     $session[DomainConst::KEY_MENU_CONTROLLER_ACTION] = array();
-                    $aActionAllowed = ActionsUsers::getActionArrAllowForCurrentUserByControllerName($c);
+                    $aActionAllowed = ActionsUsers::getActionArrAllowForCurrentUserByControllerName($c, $module);
                 }
                 // Check if current action is allowed
                 if (in_array($a, $aActionAllowed)) {
