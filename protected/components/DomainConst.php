@@ -1575,4 +1575,6 @@ class DomainConst {
     const CONTENT00441  = 'Báo cáo doanh thu';
     const CONTENT00442  = 'Ngày hẹn';
     const CONTENT00443  = 'Mã Tỉnh/Thành phố';
+    const CONTENT00444  = 'Mã Quận Huyện';
+    const CONTENT00445  = 'Mã Phường Xã';
 }

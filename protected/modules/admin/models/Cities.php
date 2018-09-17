@@ -49,7 +49,7 @@ class Cities extends BaseActiveRecord {
             array('short_name, slug', 'length', 'max' => 150),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, name, short_name, status, slug', 'safe', 'on' => 'search'),
+            array('id, name, short_name, status, slug, code_no', 'safe', 'on' => 'search'),
         );
     }
 
