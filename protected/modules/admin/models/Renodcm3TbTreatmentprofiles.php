@@ -205,6 +205,6 @@ class Renodcm3TbTreatmentprofiles extends CActiveRecord
     }
     
     public function getDoctorName() {
-        return isset($this->rDoctor) ? $this->rDoctor->LastName . ' ' . $this->rDoctor->FirstName : '';
+        return isset($this->rDoctor) ? trim($this->rDoctor->LastName) . ' ' . trim($this->rDoctor->FirstName) : '';
     }
 }

@@ -1183,6 +1183,7 @@ class Customers extends BaseActiveRecord
         $treatment->start_date  = $renoTreatmentProfile->DateOfProfiles;
         $treatment->end_date    = $renoTreatmentProfile->EndDateOfProfiles;
 //        $doctor = Users::getDoctorByName($renoTreatmentProfile->getDoctorName(), $agentId);
+        Loggers::info('Doctor', $renoTreatmentProfile->getDoctorName(), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         $doctor = Users::getUserByName($renoTreatmentProfile->getDoctorName());
         if (!empty($doctor)) {
             $treatment->doctor_id   = $doctor->id;

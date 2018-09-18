@@ -1003,8 +1003,9 @@ class Users extends BaseActiveRecord {
             return NULL;
         }
         $nameArr = array(
-            'Nguyen Dinh Troi' => 'Nguyễn Đình Trợi',
-            'Do Thi Thuy Lieu' => 'Đỗ Thị Thúy Liễu',
+            'Nguyen Dinh Troi'  => 'Nguyễn Đình Trợi',
+            'Do Thi Thuy Lieu'  => 'Đỗ Thị Thúy Liễu',
+            'Đỗ Văn Bách'       =>  'bach',
         );
         if (isset($nameArr[$name])) {
             $name = $nameArr[$name];
