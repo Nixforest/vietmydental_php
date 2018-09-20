@@ -130,7 +130,7 @@ if (!empty($to)) {
 
 </div> form -->
 <?php 
- $this->widget('ReportSearchWidget', array('dateFrom' => $dateFrom, 'dateTo' => $dateTo));
+ $this->widget('ReportSearchWidget', array('dateFrom' => $dateFrom, 'dateTo' => $dateTo,'agentId'   => $agentId));
  ?>
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(

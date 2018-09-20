@@ -133,7 +133,7 @@ if (!empty($to)) {
 
 </div> form -->
 <?php 
- $this->widget('ReportSearchWidget', array('dateFrom' => $dateFrom, 'dateTo' => $dateTo));
+ $this->widget('ReportSearchWidget', array('dateFrom' => $dateFrom, 'dateTo' => $dateTo,'agentId'   => $agentId));
  ?>
 <!--//-- BUG0046-IMT (DuongNV 20180803) Update UI reports-->
 <!--khách hàng mới-->
@@ -143,7 +143,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
     //++ BUG0062-IMT (DuongNV 20180910) fix bug select row
     'itemsCssClass' => 'items table-select',
     //-- BUG0062-IMT (DuongNV 20180910) fix bug select row
-    'dataProvider' => $model->getCustomers($from, $to)['NEW'],
+    'dataProvider' => $new,
 //    'filter'    => $model,
     'columns' => array(
         array(
@@ -225,7 +225,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
     //++ BUG0062-IMT (DuongNV 20180910) fix bug select row
     'itemsCssClass' => 'items table-select',
     //-- BUG0062-IMT (DuongNV 20180910) fix bug select row
-    'dataProvider' => $model->getCustomers($from, $to)['OLD'],
+    'dataProvider' => $old,
     'filter'    => $model,
     'columns' => array(
         array(

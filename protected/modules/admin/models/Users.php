@@ -887,7 +887,11 @@ class Users extends BaseActiveRecord {
         $tblOneMany = OneMany::model()->tableName();
         $criteria->join = 'JOIN ' .$tblOneMany .' as o ON o.many_id = t.id';
         $criteria->compare('o.type', OneMany::TYPE_AGENT_USER);
-        $criteria->compare('o.one_id', $agentId);
+        if(is_array($agentId)){
+            $criteria->addInCondition('o.one_id', $agentId);
+        }else{
+            $criteria->compare('o.one_id', $agentId);
+        }
         $aModel = self::model()->findAll($criteria);
         $retVal = array();
         foreach ($aModel as $model) {
