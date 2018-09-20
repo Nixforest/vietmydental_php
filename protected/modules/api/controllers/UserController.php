@@ -51,7 +51,7 @@ class UserController extends APIController
      *  + street_id:        Id of street
      *  + house_numbers:    House number
      *  + email:            Email
-     *  + agent_id:         Id of agent
+     *  + agent_id:         Id of agent (Removed)
      */
     public function actionUpdate() {
         try {
@@ -144,7 +144,7 @@ class UserController extends APIController
         $mUser->street_id       = trim($root->street_id);
         $mUser->house_numbers   = trim($root->house_numbers);
         $mUser->validate();
-        $mUser->setAgents();
+//        $mUser->setAgents();
         if ($mUser->hasErrors()) {
             $result[DomainConst::KEY_MESSAGE] = CreateResponse::fortmatErrorsModel($mUser->getErrors());
             ApiModule::sendResponse($result, $this);
@@ -153,8 +153,8 @@ class UserController extends APIController
         $aUpdate = array('first_name', 'email', 'province_id', 'district_id', 'ward_id', 'street_id', 'house_numbers', 'address_vi', 'address');
         if ($mUser->update($aUpdate)) {
             // Remove old record
-            OneMany::deleteAllManyOldRecords($mUser->id, OneMany::TYPE_AGENT_USER);
-            OneMany::insertOne($root->agent_id, $mUser->id, OneMany::TYPE_AGENT_USER);
+//            OneMany::deleteAllManyOldRecords($mUser->id, OneMany::TYPE_AGENT_USER);
+//            OneMany::insertOne($root->agent_id, $mUser->id, OneMany::TYPE_AGENT_USER);
         }
     }
 }

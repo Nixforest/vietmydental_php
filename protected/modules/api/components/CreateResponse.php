@@ -27,6 +27,7 @@ class CreateResponse {
             DomainConst::KEY_TOKEN              => $token,
             DomainConst::KEY_ID                 => $mUser->id,
             DomainConst::KEY_ROLE_ID            => $mUser->role_id,
+            DomainConst::KEY_AGENT_ID           => implode(',', $mUser->getAgentIds()),
             DomainConst::KEY_NEED_CHANGE_PASS   => $mUser->needChangePass(),
             DomainConst::KEY_MENU               => $menu,
             DomainConst::KEY_PATHOLOGICAL       => Pathological::getJsonList(),
@@ -42,7 +43,6 @@ class CreateResponse {
             DomainConst::KEY_DIAGNOSIS_OTHER_ID => Diagnosis::getOtherDiagnosisId(),
             DomainConst::KEY_LIST_AGENT         => Agents::getAgentListJson(),
             Settings::KEY_APP_API_LIST_PAGE_SIZE => Settings::getApiListPageSize(),
-            DomainConst::KEY_AGENT_ID           => implode(',', $mUser->getAgentIds()),
         );
         ApiModule::sendResponse($result, $objController);
     }

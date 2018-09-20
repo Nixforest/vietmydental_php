@@ -55,10 +55,12 @@ class ReportController extends APIController {
     public function getStatistic($result, $mUser, $root) {
         $orgFormat = DomainConst::DATE_FORMAT_6;            // Origin date format
         $dateFormat = DomainConst::DATE_FORMAT_4;           // Current date format
-//        $arrAgentId = explode(DomainConst::SPLITTER_TYPE_2, $root->agent_id);
         $arrAgentId = $root->agent_id;
+        Loggers::info('Agent array', CommonProcess::json_encode_unicode($arrAgentId), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         if (empty($root->agent_id)) {
             $arrAgentId = $mUser->getAgentIds();
+            Loggers::info('User', $mUser->getFullName(), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            Loggers::info('Agent array', CommonProcess::json_encode_unicode($arrAgentId), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         }
         
         $from   = CommonProcess::convertDateTime($root->date_from, $orgFormat, $dateFormat);
