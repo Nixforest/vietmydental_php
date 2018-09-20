@@ -423,3 +423,100 @@ function bindPrint(classBtn, idToPrint, cssLink = ''){
     });
 }
 //++ BUG0080-IMT (DuongNV 20180906) print prescription
+
+//++ BUG0062-IMT (DuongNV 20180910) fix bug select row
+/* @todo: next cell or prev cell
+ * @params: dir (direction) = 1 (next), != 1 (previous)
+ */
+function gotoCell(currentSelectedElm, dir = 1){
+    var initIndex = currentSelectedElm.children().last().index();
+    var limit = 0, step = -1;
+    if(dir == 1){
+        limit = initIndex;
+        initIndex = 0;
+        step = 1;
+    }
+    if(currentSelectedElm.find('td.selected').length == 0){ // cell not select
+        currentSelectedElm.children().eq(initIndex).addClass('selected');
+    } else { // cell selected
+        indexCell = currentSelectedElm.find('td.selected').index();
+        if( indexCell != limit ){ // Not final cell
+            currentSelectedElm.children().eq(indexCell).removeClass('selected');
+            indexCell += step;
+            currentSelectedElm.children().eq(indexCell).addClass('selected');
+        }
+    }
+    return indexCell;
+}
+
+/* @todo: next row or prev row
+ * @params: dir (direction) = 1 (next), != 1 (previous)
+ */
+function gotoRow(currentSelectedElm, dir = 1, indexCell = ''){
+    currentSelectedElm.removeClass('selected');
+    currentSelectedElm.find('td.selected').removeClass('selected'); // Remove selected cell
+    if(dir == 1){
+        currentSelectedElm = currentSelectedElm.next();
+    } else {
+        currentSelectedElm = currentSelectedElm.prev();
+    }
+    currentSelectedElm.addClass('selected');
+    if(indexCell !== ''){
+        currentSelectedElm.find('td').eq(indexCell).addClass('selected');
+    }
+    return currentSelectedElm;
+}
+
+/* 
+ * @todo: bind click event to tr
+ */
+function bindClickRow(){
+    $('table.table-select tr').on('click', function (event) {
+        //Remove another selected row
+        var anotherSelected = $('body').find('table.table-select tr.selected');
+        if (anotherSelected.length != 0) {
+            anotherSelected.removeClass('selected');
+            anotherSelected.find('td.selected').removeClass('selected');
+        } //End remove
+        if ($(this).hasClass('selected')) { // Not select
+            currentSelectedElm = '';
+            $(event.target).removeClass('selected');
+            
+        } else { // Selected
+            currentSelectedElm = $(this);
+            currentSelectedElm.find('td.selected').removeClass('selected');
+            $(event.target).addClass('selected');
+            indexCell = $(event.target).index();
+        }
+    });
+}
+
+/* 
+ * @todo: bind can select row to table.table-select
+ */
+function bindSelectRow(){
+    currentSelectedElm = '';
+    indexCell = 0;
+    bindClickRow();
+    $(document).keydown(function (event) {
+        switch (event.which) {
+            case 37: // Left arrow 
+                indexCell = gotoCell(currentSelectedElm, -1);
+                event.preventDefault();break;
+            case 38: // Up arrow 
+                if (typeof currentSelectedElm.prev()[0] != 'undefined') {
+                    currentSelectedElm = gotoRow(currentSelectedElm, -1, indexCell);
+                }
+                event.preventDefault();break;
+            case 39: // Right arrow 
+                indexCell = gotoCell(currentSelectedElm, 1); // Next cell
+                event.preventDefault();break;
+            case 40: // Down arrow 
+                if (typeof currentSelectedElm.next()[0] != 'undefined') {
+                    currentSelectedElm = gotoRow(currentSelectedElm, 1, indexCell);
+                }
+                event.preventDefault();break;
+        }
+    });
+}
+//-- BUG0062-IMT (DuongNV 20180910) fix bug select row
