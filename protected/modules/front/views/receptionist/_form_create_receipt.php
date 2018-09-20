@@ -120,6 +120,7 @@
             echo $form->textField($model, 'final', array(
                 'size' => 10, 'maxlength' => 11,
                 'class' => 'format-currency number_only',
+                'style' => 'color: red;',
                 'tabindex' => "3",
             ));
             ?>
