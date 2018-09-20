@@ -232,12 +232,12 @@ $mAgents = new Agents();
 
     <div class="row">
         <div class="col-md-6">
-<?php echo $form->labelEx($model, 'identity_number'); ?>
+            <?php echo $form->labelEx($model, 'identity_number'); ?>
             <?php echo $form->textField($model, 'identity_number', array('size' => 60, 'maxlength' => 256)); ?>
             <?php echo $form->error($model, 'identity_number'); ?>
         </div>
         <div class="col-md-6">
-<?php echo $form->labelEx($model, 'date_of_issue'); ?>
+            <?php echo $form->labelEx($model, 'date_of_issue'); ?>
             <?php
             if (!isset($model->date_of_issue)) {
                 $date = DomainConst::DATE_FORMAT_3_NULL;
@@ -273,9 +273,9 @@ $mAgents = new Agents();
 
     <div class="row">
         <div class="col-md-6">
-<?php echo $form->labelEx($model, 'place_of_issue'); ?>
-<?php echo $form->dropDownList($model, 'place_of_issue', Cities::loadItems(), array('class' => '', 'empty' => 'Select')); ?>
-<?php echo $form->error($model, 'place_of_issue'); ?>
+            <?php echo $form->labelEx($model, 'place_of_issue'); ?>
+            <?php echo $form->dropDownList($model, 'place_of_issue', Cities::loadItems(), array('class' => '', 'empty' => 'Select')); ?>
+            <?php echo $form->error($model, 'place_of_issue'); ?>
         </div>
         <div class="col-md-6">
             <?php echo $form->labelEx($model, 'date_in'); ?>
@@ -319,9 +319,9 @@ $mAgents = new Agents();
                 <thead>
                     <tr>
                         <th class="item_code item_c">
-            <?php echo DomainConst::CONTENT00294 . Files::ALLOW_IMAGE_FILE_TYPE; ?>
+                            <?php echo DomainConst::CONTENT00294 . Files::ALLOW_IMAGE_FILE_TYPE; ?>
                             <br>
-<?php echo DomainConst::CONTENT00295; ?>
+                            <?php echo DomainConst::CONTENT00295; ?>
                         </th>
                         <th><?php echo DomainConst::CONTENT00296; ?></th>
                     </tr>
@@ -331,7 +331,7 @@ $mAgents = new Agents();
                         <tr class="materials_row">
                             <td class="item_l w-400">
                                 <img>
-    <?php echo $model->rImgAvatarFile->getViewImage(); ?>
+                                <?php echo $model->rImgAvatarFile->getViewImage(); ?>
                             </td>
                             <td class="item_c last">
                                 <input type="checkbox" name="delete_file[]" value="<?php echo $model->rImgAvatarFile->id; ?>">
@@ -341,7 +341,7 @@ $mAgents = new Agents();
 
                     <tr>
                         <td>
-<?php echo $form->fileField($model, 'file_name[]', array('class' => 'input_file', 'accept' => 'image/*')); ?>
+                        <?php echo $form->fileField($model, 'file_name[]', array('class' => 'input_file', 'accept' => 'image/*')); ?>
                         </td>
                         <td class="item_c last"></td>
                     </tr>
@@ -350,10 +350,10 @@ $mAgents = new Agents();
                             <?php echo $form->error($model, 'img_avatar'); ?>
         </div>
     </div>
-<?php
-$count = 0;
-?>
-            <?php foreach (SocialNetworks::TYPE_NETWORKS as $key => $value): ?>
+    <?php
+    $count = 0;
+    ?>
+    <?php foreach (SocialNetworks::TYPE_NETWORKS as $key => $value): ?>
     <?php
     $id = "Users_social_network_$key";
     $name = "Users[social_network_$key]";
@@ -373,12 +373,19 @@ $count = 0;
     <?php
     $count++;
     ?>
-        <?php endforeach; // end foreach (SocialNetworks::TYPE_NETWORKS as $network) ?>
+    <?php endforeach; // end foreach (SocialNetworks::TYPE_NETWORKS as $network) ?>
 
     <?php if ($count % 2 != 0): ?>
     </div>
     <?php endif; // end if ($count % 2 == 0)  ?>
 
+    <div class="row">
+        <div class="col-md-6">
+            <?php echo $form->labelEx($model, 'status'); ?>
+            <?php echo $form->dropDownList($model, 'status', CommonProcess::getDefaultStatus()); ?>
+            <?php echo $form->error($model, 'status'); ?>
+        </div>
+    </div>
 <div class="row buttons">
     <div class="col-md-6">
     <?php
