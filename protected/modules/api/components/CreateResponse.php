@@ -27,6 +27,7 @@ class CreateResponse {
             DomainConst::KEY_TOKEN              => $token,
             DomainConst::KEY_ID                 => $mUser->id,
             DomainConst::KEY_ROLE_ID            => $mUser->role_id,
+            DomainConst::KEY_AGENT_ID           => implode(',', $mUser->getAgentIds()),
             DomainConst::KEY_NEED_CHANGE_PASS   => $mUser->needChangePass(),
             DomainConst::KEY_MENU               => $menu,
             DomainConst::KEY_PATHOLOGICAL       => Pathological::getJsonList(),
@@ -36,9 +37,12 @@ class CreateResponse {
             DomainConst::KEY_TREATMENT          => TreatmentGroup::getJsonList(),
 //            DomainConst::KEY_STATUS_TREATMENT_DETAIL    => TreatmentScheduleDetails::getJsonListStatus(),
 //            DomainConst::KEY_STATUS_TREATMENT_PROCESS   => TreatmentScheduleProcess::getJsonListStatus(),
+            DomainConst::KEY_STATUS_RECEIPT     => Receipts::getJsonListStatus(),
             DomainConst::KEY_TEETH              => CommonProcess::getListConfigTeeth(),
             DomainConst::KEY_TIMER              => ScheduleTimes::getJsonList(),
             DomainConst::KEY_DIAGNOSIS_OTHER_ID => Diagnosis::getOtherDiagnosisId(),
+            DomainConst::KEY_LIST_AGENT         => Agents::getAgentListJson(),
+            Settings::KEY_APP_API_LIST_PAGE_SIZE => Settings::getApiListPageSize(),
         );
         ApiModule::sendResponse($result, $objController);
     }
@@ -64,6 +68,10 @@ class CreateResponse {
             $roleName = $mRole->role_name;
             switch ($roleName) {
                 case Roles::ROLE_ADMIN:
+                    $aMenu[] = array(
+                        DomainConst::KEY_ID     => DomainConst::KEY_REPORT_REVENUE,
+                        DomainConst::KEY_NAME   => DomainConst::CONTENT00441,
+                    );
 
                     break;
                 case Roles::ROLE_DOCTOR:
@@ -71,11 +79,33 @@ class CreateResponse {
                         DomainConst::KEY_ID     => DomainConst::KEY_CUSTOMER_LIST,
                         DomainConst::KEY_NAME   => DomainConst::CONTENT00135,
                     );
+                    $aMenu[] = array(
+                        DomainConst::KEY_ID     => DomainConst::KEY_REPORT_REVENUE,
+                        DomainConst::KEY_NAME   => DomainConst::CONTENT00441,
+                    );
                     break;
                 case Roles::ROLE_ASSISTANT:
                     $aMenu[] = array(
                         DomainConst::KEY_ID     => DomainConst::KEY_CUSTOMER_LIST,
                         DomainConst::KEY_NAME   => DomainConst::CONTENT00088,
+                    );
+                    break;
+                case Roles::ROLE_DIRECTOR:
+                    $aMenu[] = array(
+                        DomainConst::KEY_ID     => DomainConst::KEY_REPORT_REVENUE,
+                        DomainConst::KEY_NAME   => DomainConst::CONTENT00441,
+                    );
+                    break;
+                case Roles::ROLE_DIRECTOR_AGENT:
+                    $aMenu[] = array(
+                        DomainConst::KEY_ID     => DomainConst::KEY_REPORT_REVENUE,
+                        DomainConst::KEY_NAME   => DomainConst::CONTENT00441,
+                    );
+                    break;
+                case Roles::ROLE_ACCOUNT_MANAGER:
+                    $aMenu[] = array(
+                        DomainConst::KEY_ID     => DomainConst::KEY_REPORT_REVENUE,
+                        DomainConst::KEY_NAME   => DomainConst::CONTENT00441,
                     );
                     break;
                 default:
@@ -121,10 +151,10 @@ class CreateResponse {
         $result = ApiModule::$defaultSuccessResponse;
         $mCustomer = new Customers();
         $data = $mCustomer->apiList($root, $mDoctor);
-//        $pagination = $data->pagination;
+        $pagination = $data->pagination;
         $list = array();
-//        foreach ($data->data as $customer) {
-        foreach ($data as $key => $customer) {
+        foreach ($data->getData() as $customer) {
+//        foreach ($data as $key => $customer) {
 //            $list[] = CommonProcess::createConfigJson(
 //                    $customer->id,
 //                    $customer->name);
@@ -138,10 +168,10 @@ class CreateResponse {
             );
         }
         $result[DomainConst::KEY_DATA] = array(
-//            DomainConst::KEY_TOTAL_RECORD => $pagination->itemCount,
-//            DomainConst::KEY_TOTAL_PAGE => $pagination->pageCount,
-            DomainConst::KEY_TOTAL_RECORD => count($data),
-            DomainConst::KEY_TOTAL_PAGE => '1',
+            DomainConst::KEY_TOTAL_RECORD => $pagination->itemCount,
+            DomainConst::KEY_TOTAL_PAGE => $pagination->pageCount,
+//            DomainConst::KEY_TOTAL_RECORD => count($data),
+//            DomainConst::KEY_TOTAL_PAGE => '1',
             DomainConst::KEY_LIST => $list,
         );
         ApiModule::sendResponse($result, $objController);

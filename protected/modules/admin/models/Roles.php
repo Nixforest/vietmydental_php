@@ -22,6 +22,8 @@ class Roles extends BaseActiveRecord
     const ROLE_ASSISTANT            = 'ROLE_ASSISTANT';
     const ROLE_RECEPTIONIST         = 'ROLE_RECEPTIONIST';
     const ROLE_SALE                 = 'ROLE_SALE';
+    const ROLE_DIRECTOR_AGENT       = 'ROLE_DIRECTOR_AGENT';
+    const ROLE_ACCOUNT_MANAGER      = 'ROLE_ACCOUNT_MANAGER';
     
     static $arrAdminRoles           = array(
         self::ROLE_ADMIN,
@@ -233,6 +235,18 @@ class Roles extends BaseActiveRecord
      */
     public static function isDirectorRole($roleId) {
         if (self::getRoleByName(self::ROLE_DIRECTOR) == $roleId) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Check if role is doctor
+     * @param String $roleId id of role
+     * @return boolean
+     */
+    public static function isDoctorRole($roleId) {
+        if (self::getRoleByName(self::ROLE_DOCTOR) == $roleId) {
             return true;
         }
         return false;

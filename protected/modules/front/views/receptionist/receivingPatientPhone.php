@@ -759,18 +759,28 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
     //++ BUG0067-IMT (DuongNV 20180831) Add 6 month book schedule btn
     function fnClickPlusMonth(){
         $(document).on('click', '.plus-6-month', function(){
-            console.log(1);
-            var input = $(this).siblings('input#TreatmentSchedules_start_date');
+            fnPlusMonth(6);
+        });
+        $(document).on('click', '.plus-3-month', function(){
+            fnPlusMonth(3);
+        });
+    }
+    
+    /**
+     * Increase current month
+     * @param {Int} _val Value increase
+     */
+    function fnPlusMonth(_val) {
+        var input = $('input#TreatmentSchedules_start_date');
             var date = input.val().split('/')[0];
             var month = parseInt(input.val().split('/')[1]);
             var year = parseInt(input.val().split('/')[2]);
             var cDate = new Date(year, month-1, date);
-            var nDate = new Date(cDate.setMonth(cDate.getMonth() + 6));
+            var nDate = new Date(cDate.setMonth(cDate.getMonth() + _val));
             date = ("0" + nDate.getDate()).slice(-2);
             month = ("0" + (nDate.getMonth() + 1)).slice(-2);
             year = nDate.getFullYear();
             input.val(date+'/'+month+'/'+year);
-        });
     }
     //-- BUG0067-IMT (DuongNV 20180831) Add 6 month book schedule btn
     

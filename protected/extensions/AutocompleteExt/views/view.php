@@ -14,7 +14,8 @@ $session                = Yii::app()->session;
         'model'     => $model,
         'sourceUrl' => $url,
         'options'   => array(
-            'minLength' => AutocompleteExt::MIN_LENGTH_AUTOCOMPLETE,
+//            'minLength' => AutocompleteExt::MIN_LENGTH_AUTOCOMPLETE,
+            'minLength' => $min_length,
             'multiple'  => true,
             'search'    => "js:function( event, ui ) {
                     $('$idFieldName').addClass('grid-view-loading-gas');

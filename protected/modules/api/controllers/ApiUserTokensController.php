@@ -1,6 +1,6 @@
 <?php
 
-class ApiUserTokensController extends AdminController
+class ApiUserTokensController extends APIBaseController
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning

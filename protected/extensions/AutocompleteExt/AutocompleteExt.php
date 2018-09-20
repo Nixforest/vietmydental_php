@@ -54,6 +54,8 @@ class AutocompleteExt extends CPortlet {
     const DEFAULT_PLACE_HOLDER                          = DomainConst::CONTENT00067;
     /** Min length start search default value */
     const MIN_LENGTH_AUTOCOMPLETE                       = 2;
+    /** Key min length */
+    const KEY_MIN_LENGTH                                = 'min_length';
     /**
      * Current data
      * array('model' => $model, 'url' => custom url, 'field_name' => field_name)
@@ -88,9 +90,11 @@ class AutocompleteExt extends CPortlet {
         $idFieldName            = '';       // Id field of name
         $idFieldId              = '';       // Id field of id
         $classAdd               = CommonProcess::getValue($this->data, AutocompleteExt::KEY_CLASS_ADD);
+        $minLength              = CommonProcess::getValue($this->data, self::KEY_MIN_LENGTH, self::MIN_LENGTH_AUTOCOMPLETE);
         $placeholder            = CommonProcess::getValue($this->data, AutocompleteExt::KEY_PLACE_HOLDER,
                                     AutocompleteExt::DEFAULT_PLACE_HOLDER)
-                                    . ' Tối thiểu ' . AutocompleteExt::MIN_LENGTH_AUTOCOMPLETE . ' ký tự';
+//                                    . ' Tối thiểu ' . AutocompleteExt::MIN_LENGTH_AUTOCOMPLETE . ' ký tự';
+                                    . ' Tối thiểu ' . $minLength . ' ký tự';
         $isShowInfo             = CommonProcess::getValue($this->data, AutocompleteExt::KEY_IS_SHOW_INFO, 1); // Flag show/hide detail information
         $isCallFuncSelected     = 0;
         $isCallFuncSelectedV2   = CommonProcess::getValue($this->data, AutocompleteExt::KEY_FN_SELECTED_V2, 0);
@@ -128,6 +132,7 @@ class AutocompleteExt extends CPortlet {
             'isDoSomethingOnClose'  => $isDoSomethingOnClose,
             'updateValue'       => $updateValue,
             'style'             => $style,
+            self::KEY_MIN_LENGTH    => $minLength,
         ));
     }
 }

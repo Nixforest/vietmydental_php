@@ -123,6 +123,7 @@ if (!empty($dateValue)) {
                 "<?php echo DomainConst::CONTENT00172 ?>",
                 $(this).attr('id'));
 //        alert($(this).attr('id'));
+    fnClickPlusMonth();
     });
 </script>
 <script type="text/javascript">
@@ -621,14 +622,16 @@ if (!empty($dateValue)) {
             }
             var id = $(this).data('id');
             fnUpdateTreatmentDetailStatus(id, stt);
-        })
+        });
         
         //++ BUG0076-IMT (DuongNV 20180823) Create treatment schedule process
         /**
-        * Open create treatment schedule process dialog
-        */
-       function fnOpenCreateTreatmentScheduleProcess(id) {
-           createTreatmentScheduleProcess(id);
+         * Open create treatment schedule process dialog
+         * @param {String} id Id of process
+         */
+        function fnOpenCreateTreatmentScheduleProcess(id) {
+           isCreate = 1;
+           createUpdateTreatmentScheduleProcessDialog(id);
            $("#dialogId").dialog(opt).dialog("open");
        }
 
@@ -636,28 +639,28 @@ if (!empty($dateValue)) {
         * Create treatment schedule process dialog
         * @returns {Boolean}
         */
-       function createTreatmentScheduleProcess(_id = '') {
-           fnLoadFormCSS();
-           $.ajax({
-                url: "<?php echo Yii::app()->createAbsoluteUrl(
-                        'admin/treatmentScheduleProcess/create', array('ajax' => 1)); ?>",
-                data: $(this).serialize() + '&id=' + _id,
-                type: "post",
-                dataType: "json",
-                success: function(data) {
-                    // After submit
-                   if (fnIsDataSuccess(data)) {
-                       fnUpdateCustomerData(data);
-                   } else {    // Load first time
-                       fnLoadDialogContent(data,
-                           '<?php echo DomainConst::CONTENT00233; ?>',
-                           createTreatmentScheduleProcess);
-                   }
-                },
-                cache: false
-            });
-           return false;
-       }
+//       function createTreatmentScheduleProcess(_id = '') {
+//           fnLoadFormCSS();
+//           $.ajax({
+//                url: "<?php // echo Yii::app()->createAbsoluteUrl(
+//                        'front/receptionist/CreateProcess'); ?>//",
+//                data: $(this).serialize() + '&id=' + _id,
+//                type: "post",
+//                dataType: "json",
+//                success: function(data) {
+//                    // After submit
+//                   if (fnIsDataSuccess(data)) {
+//                       fnUpdateCustomerData(data);
+//                   } else {    // Load first time
+//                       fnLoadDialogContent(data,
+//                           '<?php // echo DomainConst::CONTENT00233; ?>',
+//                           createTreatmentScheduleProcess);
+//                   }
+//                },
+//                cache: false
+//            });
+//           return false;
+//       }
         
         //++ BUG0054-IMT (DuongNV 20180806) Update UI treatment history
         $(document).on('click', '.createProcess', function(){
@@ -670,16 +673,16 @@ if (!empty($dateValue)) {
 //        $(document).on('click', '.imageCamera', function(){
 ////            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
 //            var id = $(this).data('id');
-//            $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
-                    'admin/treatmentScheduleDetails/updateImageReal',
-                    array('id' => '')) ?>///' + id);
+//            $(location).attr('href', '<?php // echo Yii::app()->createAbsoluteUrl(
+//                    'admin/treatmentScheduleDetails/updateImageReal',
+//                    array('id' => '')) ?>///' + id);
 //        });
 //        $(document).on('click', '.imageXQuang', function(){
 ////            alert('Chức năng đang hoàn thiện, vui lòng thử lại sau');
 //            var id = $(this).data('id');
-//            $(location).attr('href', '<?php echo Yii::app()->createAbsoluteUrl(
-                    'admin/treatmentScheduleDetails/updateImageXRay',
-                    array('id' => '')) ?>///' + id);
+//            $(location).attr('href', '<?php // echo Yii::app()->createAbsoluteUrl(
+//                    'admin/treatmentScheduleDetails/updateImageXRay',
+//                    array('id' => '')) ?>///' + id);
 //        });
         
 //         $(document).on('click', '.requestRecoveryImage', function(){
@@ -714,18 +717,22 @@ if (!empty($dateValue)) {
     //++ BUG0067-IMT (DuongNV 20180831) Add 6 month book schedule btn
     function fnClickPlusMonth(){
         $(document).on('click', '.plus-6-month', function(){
-            console.log(1);
-            var input = $(this).siblings('input#TreatmentSchedules_start_date');
-            var date = input.val().split('/')[0];
-            var month = parseInt(input.val().split('/')[1]);
-            var year = parseInt(input.val().split('/')[2]);
-            var cDate = new Date(year, month-1, date);
-            var nDate = new Date(cDate.setMonth(cDate.getMonth() + 6));
-            date = ("0" + nDate.getDate()).slice(-2);
-            month = ("0" + (nDate.getMonth() + 1)).slice(-2);
-            year = nDate.getFullYear();
-            input.val(date+'/'+month+'/'+year);
-        })
+            alert('Chức năng đang cập nhật, vui lòng thử lại sau');
+//            console.log(1);
+//            var input = $(this).siblings('input#TreatmentSchedules_start_date');
+//            var date = input.val().split('/')[0];
+//            var month = parseInt(input.val().split('/')[1]);
+//            var year = parseInt(input.val().split('/')[2]);
+//            var cDate = new Date(year, month-1, date);
+//            var nDate = new Date(cDate.setMonth(cDate.getMonth() + 6));
+//            date = ("0" + nDate.getDate()).slice(-2);
+//            month = ("0" + (nDate.getMonth() + 1)).slice(-2);
+//            year = nDate.getFullYear();
+//            input.val(date+'/'+month+'/'+year);
+        });
+        $(document).on('click', '.plus-3-month', function(){
+            alert('Chức năng đang cập nhật, vui lòng thử lại sau');
+        });
     }
     //-- BUG0067-IMT (DuongNV 20180831) Add 6 month book schedule btn
     
@@ -734,20 +741,24 @@ if (!empty($dateValue)) {
         $('form#treatment-schedule-details-form').remove();
         $("#dialogId").dialog(opt).dialog("open");
         var id = $(this).data('id');
-        ($(this).data('type') == 'xray') ? updateXRayImage(id) : updateCameraImage(id);
+        ($(this).data('type') === 'xray') ? updateXRayImage(id) : updateCameraImage(id);
     });
     
+    /**
+     * Update camera image
+     * @param {String} _id Id of treatment schedule detail
+     * @returns {Boolean}
+     */
     function updateCameraImage(_id = '') {
         var data = new FormData($('form#treatment-schedule-details-form')[0]); // Upload file ajax need this (data store in FormData)
-        if(typeof _id != 'object'){
+        if(typeof _id !== 'object'){
             data.append('id', _id);
         }
-        data.append('ajax', '1');
         fnLoadFormCSS();
         var title = 'Cập nhật hình ảnh Camera';
         $.ajax({
             url: '<?php echo Yii::app()->createAbsoluteUrl(
-                'admin/treatmentScheduleDetails/updateImageReal'); ?>',
+                'front/receptionist/updateImageReal'); ?>',
             data: data,
             type: 'post',
             processData: false, // Upload file ajax need this
@@ -768,22 +779,26 @@ if (!empty($dateValue)) {
                 console.log('Error response text: '+request.responseText);
                 alert('Error in console!');
             },
-            cache: false,
+            cache: false
         });
         return false;
     }
     
+    /**
+     * Update xray image
+     * @param {type} _id  Id of treatment schedule detail
+     * @returns {Boolean}     
+     */
     function updateXRayImage(_id = '') {
         var data = new FormData($('form#treatment-schedule-details-form')[0]); // Upload file ajax need this (data store in FormData)
-        if(typeof _id != 'object'){
+        if(typeof _id !== 'object'){
             data.append('id', _id);
         }
-        data.append('ajax', '1');
         fnLoadFormCSS();
         var title = 'Cập nhật hình ảnh XQuang';
         $.ajax({
             url: '<?php echo Yii::app()->createAbsoluteUrl(
-                'admin/treatmentScheduleDetails/updateImageXRay'); ?>',
+                'front/receptionist/updateImageXRay'); ?>',
             data: data,
             type: 'post',
             processData: false, // Upload file ajax need this
@@ -804,7 +819,7 @@ if (!empty($dateValue)) {
                 console.log('Error response text: '+request.responseText);
                 alert('Error in console!');
             },
-            cache: false,
+            cache: false
         });
         return false;
     }
@@ -822,21 +837,28 @@ if (!empty($dateValue)) {
     * @returns {Boolean}
     */
     function fnUpdateTreatmentScheduleProcess(_id) {
+        //++ BUG0084-IMT (DuongNV 20180905) move process, image to front
+        isCreate = 0;
+        //-- BUG0084-IMT (DuongNV 20180905) move process, image to front
         createUpdateTreatmentScheduleProcessDialog(_id);
         $("#dialogId").dialog(opt).dialog("open");
     }
 
+    //++ BUG0084-IMT (DuongNV 20180905) move process, image to front
     /**
      * Create update treatment schedule process dialog
      * @param {String} _id Id of treatment schedule process need to update
      * @returns {Boolean}
      */
     function createUpdateTreatmentScheduleProcessDialog(_id = '') {
+        if(typeof isCreate === 'undefined'){
+            isCreate = 0;
+        }
         fnLoadFormCSS();
         $.ajax({
              url: "<?php echo Yii::app()->createAbsoluteUrl(
-                     'front/receptionist/updateProcess'); ?>",
-             data: $(this).serialize() + '&id=' + _id,
+                     'front/receptionist/createUpdateProcess'); ?>",
+             data: $(this).serialize() + '&id=' + _id + '&isCreate=' + isCreate,
              type: "post",
              dataType: "json",
              success: function(data) {
@@ -853,9 +875,10 @@ if (!empty($dateValue)) {
          });
         return false;
     }
+    //-- BUG0084-IMT (DuongNV 20180905) move process, image to front
     
     $(document).on('click', '.delete-process-btn' , function(){
-        var cf = confirm('Bạn có chắc muốn xóa?');
+        var cf = confirm('<?php echo DomainConst::CONTENT00431; ?>');
         if (cf) {
             var id = $(this).data('id');
             fnDeleteTreatmentScheduleProcess(id);

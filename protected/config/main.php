@@ -39,9 +39,10 @@ return array(
 //            // If removed, Gii defaults to localhost only. Edit carefully to taste.
 //            'ipFilters' => array('127.0.0.1', '::1'),
 //        ),
-        'admin', // Admin module
-        'api', // API module
-        'front', // Front-end module
+        'admin',    // Admin module
+        'api',      // API module
+        'front',    // Front-end module
+        'hr',       // Human resource module
     ),
     // application components
     'components' => array(

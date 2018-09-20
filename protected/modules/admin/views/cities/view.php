@@ -7,20 +7,23 @@ $this->createMenu('view', $model);
 
 <h1><?php echo $this->pageTitle . ': ' . $model->name; ?></h1>
 
-<?php $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
-	'attributes'=>array(
+<?php
+$this->widget('zii.widgets.CDetailView', array(
+    'data' => $model,
+    'attributes' => array(
 //		'id',
-		'name',
-		'short_name',
-		'slug',
-		array(
-                   'name'=>'status',
-                   'type'=>'Status',
-                    'visible' => CommonProcess::isUserAdmin(),
-                ),
-	),
-)); ?>
+        'name',
+        'code_no',
+        'short_name',
+        'slug',
+        array(
+            'name' => 'status',
+            'type' => 'Status',
+            'visible' => CommonProcess::isUserAdmin(),
+        ),
+    ),
+));
+?>
 
 <h1><?php echo DomainConst::CONTENT00094 . ':'; ?></h1>
 <?php

@@ -1001,4 +1001,26 @@ class Receipts extends CActiveRecord {
 //        $this->discount = $max;
     }
 
+    //-----------------------------------------------------
+    // JSON methods
+    //-----------------------------------------------------    
+    /**
+     * Get json list status
+     * @return Array
+     * [
+     *      {
+     *          id:"1",
+     *          name:"Active",
+     *      },
+     *      ...
+     * ]
+     */
+    public static function getJsonListStatus() {
+        $retVal = array();
+        foreach (self::getStatus() as $key => $value) {
+            $retVal[] = CommonProcess::createConfigJson($key, $value);
+        }
+        return $retVal;
+    }
+
 }

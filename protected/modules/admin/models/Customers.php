@@ -30,6 +30,7 @@
  * @property Cities                 $rCity              City of customer
  * @property Districts              $rDistrict          District of customer
  * @property Users                  $rCreatedBy         User created this record
+ * @property MedicalRecords         $rMedicalRecord     Medical record
  */
 class Customers extends BaseActiveRecord
 {
@@ -1027,12 +1028,12 @@ class Customers extends BaseActiveRecord
     public function apiList($root, $mUser) {
         $criteria = new CDbCriteria();
         $criteria->compare('t.status', DomainConst::DEFAULT_STATUS_ACTIVE);
-//        $criteria->order = 't.id DESC';
         $criteria->order = 't.created_date DESC';
         // Set condition
         $roleName = isset($mUser->rRole) ? $mUser->rRole->role_name : '';
         switch ($roleName) {
             case Roles::ROLE_DOCTOR:
+                Loggers::info('Switch', 'Roles::ROLE_DOCTOR', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
                 $today = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_6);
                 $lastMonth = CommonProcess::getPreviousMonth(DomainConst::DATE_FORMAT_6);
                 $from = isset($root->date_from) ? $root->date_from : $lastMonth;
@@ -1045,7 +1046,8 @@ class Customers extends BaseActiveRecord
                 }
                 // Get list customers assign at doctor
 //                $criteria->addInCondition('t.id', $mUser->getListCustomerOfDoctor($from, $to));
-                return $mUser->getListCustomerOfDoctor($from, $to);
+                return $mUser->getListCustomerOfDoctor($from, $to, $root->page);
+//                return $mUser->getListCustomersByDoctorAPI($from, $to, $root->page);
 //                return TreatmentScheduleDetails::getListCustomerByDoctor($mUser->id, $from, $to);
 //                break;
 
@@ -1181,6 +1183,7 @@ class Customers extends BaseActiveRecord
         $treatment->start_date  = $renoTreatmentProfile->DateOfProfiles;
         $treatment->end_date    = $renoTreatmentProfile->EndDateOfProfiles;
 //        $doctor = Users::getDoctorByName($renoTreatmentProfile->getDoctorName(), $agentId);
+        Loggers::info('Doctor', $renoTreatmentProfile->getDoctorName(), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         $doctor = Users::getUserByName($renoTreatmentProfile->getDoctorName());
         if (!empty($doctor)) {
             $treatment->doctor_id   = $doctor->id;

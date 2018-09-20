@@ -264,11 +264,11 @@ class Renodcm3TbTreatment extends CActiveRecord
     }
     
     public function getDoctorAdvise() {
-        return isset($this->rDoctorAdvise) ? $this->rDoctorAdvise->LastName . ' ' . $this->rDoctorAdvise->FirstName : '';
+        return isset($this->rDoctorAdvise) ? trim($this->rDoctorAdvise->LastName) . ' ' . $this->rDoctorAdvise->FirstName : '';
     }
     
     public function getDoctorName() {
-        return isset($this->rDoctor) ? $this->rDoctor->LastName . ' ' . $this->rDoctor->FirstName : '';
+        return isset($this->rDoctor) ? trim($this->rDoctor->LastName) . ' ' . trim($this->rDoctor->FirstName) : '';
     }
     
     public function createFieldsLbl() {

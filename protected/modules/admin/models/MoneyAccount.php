@@ -96,11 +96,11 @@ class MoneyAccount extends BaseActiveRecord {
         $criteria->compare('id', $this->id);
         $criteria->compare('name', $this->name, true);
         $criteria->compare('owner_id', $this->owner_id, true);
-        //$criteria->compare('agent_id',$this->agent_id,true);
+//        $criteria->compare('agent_id',$this->agent_id,true);
         if (CommonProcess::isUserAdmin()) {
             $criteria->compare('agent_id', $this->agent_id, true);
         } else {
-            $criteria->compare('agent_id', CommonProcess::getCurrentAgentId(), true);
+            $criteria->compare('agent_id', CommonProcess::getCurrentAgentId(), false);
         }
         $criteria->compare('balance', $this->balance, true);
         $criteria->compare('created_date', $this->created_date, true);

@@ -25,73 +25,50 @@ $mLaboServices = new LaboServices();
             <?php echo $form->error($model, 'service_id'); ?>
         </div>
         <div class="col-md-6">
-            <?php echo $form->labelEx($model, 'date_request'); ?>
-            <?php
-            $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-                'attribute' => 'date_request',
-                'model' => $model,
-                'options' => array(
-                    'showAnim' => 'fold',
-                    'dateFormat' => DomainConst::DATE_FORMAT_2,
-                    'changeMonth' => true,
-                    'changeYear' => true,
-                    'showOn' => 'button',
-                    'buttonImage' => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
-                    'buttonImageOnly' => true,
-                ),
-                'htmlOptions' => array(
-                    'class' => 'w-16',
-                ),
-            ));
-            ?>
-            <?php echo $form->error($model, 'date_request'); ?>
+            <?php echo $form->labelEx($model, 'price'); ?>
+            <?php echo $form->textField($model, 'price'); ?>
+            <?php echo $form->error($model, 'price'); ?>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-6">
-            <?php echo $form->labelEx($model, 'date_receive'); ?>
+            <?php echo $form->labelEx($model, 'date_request'); ?>
             <?php
-            $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-                'attribute' => 'date_receive',
+            $this->widget('DatePickerWidget', array(
                 'model' => $model,
-                'options' => array(
-                    'showAnim' => 'fold',
-                    'dateFormat' => DomainConst::DATE_FORMAT_2,
-                    'changeMonth' => true,
-                    'changeYear' => true,
-                    'showOn' => 'button',
-                    'buttonImage' => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
-                    'buttonImageOnly' => true,
-                ),
-                'htmlOptions' => array(
-                    'class' => 'w-16',
-                ),
+                'field' => 'date_request',
             ));
             ?>
-            <?php echo $form->error($model, 'date_receive'); ?>
+            <?php echo $form->error($model, 'date_request'); ?>
         </div>
         <div class="col-md-6">
             <?php echo $form->labelEx($model, 'date_test'); ?>
             <?php
-            $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-                'attribute' => 'date_test',
+            $this->widget('DatePickerWidget', array(
                 'model' => $model,
-                'options' => array(
-                    'showAnim' => 'fold',
-                    'dateFormat' => DomainConst::DATE_FORMAT_2,
-                    'changeMonth' => true,
-                    'changeYear' => true,
-                    'showOn' => 'button',
-                    'buttonImage' => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
-                    'buttonImageOnly' => true,
-                ),
-                'htmlOptions' => array(
-                    'class' => 'w-16',
-                ),
+                'field' => 'date_test',
             ));
             ?>
             <?php echo $form->error($model, 'date_test'); ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <?php echo $form->labelEx($model, 'time_id'); ?>
+            <?php echo $form->dropDownList($model, 'time_id', ScheduleTimes::loadItems()); ?>
+            <?php echo $form->error($model, 'time_id'); ?>
+        </div>
+        <div class="col-md-6">
+            <?php echo $form->labelEx($model, 'date_receive'); ?>
+            <?php
+            $this->widget('DatePickerWidget', array(
+                'model' => $model,
+                'field' => 'date_receive',
+            ));
+            ?>
+            <?php echo $form->error($model, 'date_receive'); ?>
         </div>
     </div>
 
@@ -109,14 +86,9 @@ $mLaboServices = new LaboServices();
     </div>
 
     <div class="row">
-        <div class="col-md-6">
-            <?php echo $form->labelEx($model, 'price'); ?>
-            <?php echo $form->textField($model, 'price'); ?>
-            <?php echo $form->error($model, 'price'); ?>
-        </div>
-        <div class="col-md-6">
+        <div class="col-md-12">
             <?php echo $form->labelEx($model, 'description'); ?>
-            <?php echo $form->textArea($model, 'description', array('rows' => 6, 'cols' => 100)); ?>
+            <?php echo $form->textArea($model, 'description', array('rows' => 6, 'cols' => 70, 'style' => 'width: 100%;')); ?>
             <?php echo $form->error($model, 'description'); ?>
         </div>
     </div>

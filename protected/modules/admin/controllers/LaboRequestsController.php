@@ -107,7 +107,7 @@ class LaboRequestsController extends AdminController
                         $model->handleBeforeSave();
                         $model->validate();
 			if(!$model->hasErrors()){
-                            $model->Handlesave();
+                            $model->handlesave();
                             $this->redirect(array('createAjax','id'=>$id));
                         }
 		}
@@ -148,7 +148,7 @@ class LaboRequestsController extends AdminController
                         $model->handleBeforeSave();
                         $model->validate();
 			if(!$model->hasErrors()){
-                            $model->Handlesave();
+                            $model->handlesave();
                             $this->redirect(array('updateAjax','id'=>$id));
                         }
 		}
@@ -189,7 +189,7 @@ class LaboRequestsController extends AdminController
                         $model->handleBeforeSave();
                         $model->validate();
 			if(!$model->hasErrors()){
-                            $model->Handlesave();
+                            $model->handlesave();
                             $this->redirect(array('update','id'=>$id));
                         }
 		}

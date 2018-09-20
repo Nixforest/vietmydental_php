@@ -165,25 +165,33 @@
                 $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3);
             } else {
                 $date = CommonProcess::convertDateTime($model->process_date, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_3);
+                if (empty($date)) {
+                    $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3);
+                }
             }
-            $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+//            $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+//                'model' => $model,
+//                'attribute' => 'process_date',
+//                'options' => array(
+//                    'showAnim' => 'fold',
+//                    'dateFormat' => DomainConst::DATE_FORMAT_2,
+//                    'maxDate' => '0',
+//                    'changeMonth' => true,
+//                    'changeYear' => true,
+//                    'showOn' => 'button',
+//                    'buttonImage' => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
+//                    'buttonImageOnly' => true,
+//                ),
+//                'htmlOptions' => array(
+//                    'class' => 'w-16',
+//                    'readonly' => 'readonly',
+//                    'value' => $date,
+//                ),
+//            ));
+            $this->widget('DatePickerWidget', array(
                 'model' => $model,
-                'attribute' => 'process_date',
-                'options' => array(
-                    'showAnim' => 'fold',
-                    'dateFormat' => DomainConst::DATE_FORMAT_2,
-                    'maxDate' => '0',
-                    'changeMonth' => true,
-                    'changeYear' => true,
-                    'showOn' => 'button',
-                    'buttonImage' => Yii::app()->theme->baseUrl . '/img/icon_calendar_r.gif',
-                    'buttonImageOnly' => true,
-                ),
-                'htmlOptions' => array(
-                    'class' => 'w-16',
-                    'readonly' => 'readonly',
-                    'value' => $date,
-                ),
+                'field' => 'process_date',
+                'value' => $date,
             ));
             ?>
             <?php echo $form->error($model, 'process_date'); ?>
