@@ -642,6 +642,7 @@ class Agents extends BaseActiveRecord
         $aProcess = $this->getScheduleProcess($from,$to);
         $criteria->addBetweenCondition('DATE(t.created_date)', $from, $to);
         $criteria->addInCondition('id', $aProcess, 'OR');
+        $criteria->group = 't.schedule_id';
         $aTreatmentScheduleDetails = TreatmentScheduleDetails::model()->findAll($criteria);
         return chtml::listData($aTreatmentScheduleDetails, 'schedule_id', 'schedule_id');
     }
@@ -654,6 +655,7 @@ class Agents extends BaseActiveRecord
     public function getScheduleProcess($from,$to){
         $criteria = new CDbCriteria;
         $criteria->addBetweenCondition('t.process_date', $from, $to);
+        $criteria->group = 't.detail_id';
         $aTreatmentScheduleDetails = TreatmentScheduleProcess::model()->findAll($criteria);
         return CHtml::listData($aTreatmentScheduleDetails, 'detail_id', 'detail_id');
     }

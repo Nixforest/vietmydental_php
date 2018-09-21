@@ -1577,4 +1577,5 @@ class DomainConst {
     const CONTENT00443  = 'Mã Tỉnh/Thành phố';
     const CONTENT00444  = 'Mã Quận Huyện';
     const CONTENT00445  = 'Mã Phường Xã';
+    const CONTENT00446  = 'Record liên quan';
 }
