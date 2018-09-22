@@ -34,7 +34,11 @@
                     <?php
                     $html = '<option value="" style="color: black">' . DomainConst::CONTENT00385 . '</option>';
                     foreach (Agents::loadItems() as $key => $agent) {
-                        $html .= '<option value="' . $key . '"  style="color: black">' . $agent . '</option>';
+                        $selected = '';
+                        if ($key == CommonProcess::getCurrentAgentId()) {
+                            $selected = ' selected';
+                        }
+                        $html .= '<option value="' . $key . '"  style="color: black"' . $selected . '>' . $agent . '</option>';
                     }
                     echo $html;
                     ?>
@@ -105,7 +109,7 @@
         if(isHidden){
             $('#customer_find_phone').val('');
             $('#customer_find_address').val('');
-            $('#customer_find_agent option').eq(0).attr('selected','selectd');
+//            $('#customer_find_agent option').eq(0).attr('selected','selectd');
         }
     });
 </script>

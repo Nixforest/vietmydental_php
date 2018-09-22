@@ -262,7 +262,7 @@ class AjaxController extends AdminController
     private function findCustomerByKeyword($keyword) {
         $criteria = new CDbCriteria();
         $criteria->addCondition("t.name like '%$keyword%' or t.phone like '%$keyword%' or YEAR(t.date_of_birth) like '%$keyword%' or t.year_of_birth like '%$keyword%'");
-        $criteria->limit = 50;
+        $criteria->limit = 500;
         $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
         $models = Customers::model()->findAll($criteria);
 
