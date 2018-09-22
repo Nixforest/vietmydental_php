@@ -14,7 +14,8 @@
  * 
  * The followings are the available model relations:
  * @property Users                  $rCreatedBy         User created this record
- * @property rCategory              $rCategory          Category belong to
+ * @property NewsCategories         $rCategory          Category belong to
+ * @property Comments[]             $rComments          List comments of news
  */
 class News extends BaseActiveRecord {
     //-----------------------------------------------------
@@ -68,6 +69,11 @@ class News extends BaseActiveRecord {
             'rCategory' => array(
                 self::BELONGS_TO, 'NewsCategories', 'category_id',
                 'on' => 'status !=' . DomainConst::DEFAULT_STATUS_INACTIVE,
+            ),
+            'rComments' => array(
+                self::HAS_MANY, 'Comments', 'relate_id',
+                'on'    => 'status !=' . DomainConst::DEFAULT_STATUS_INACTIVE
+                            . ' AND type =' . Comments::TYPE_NEWS,
             ),
         );
     }
@@ -181,6 +187,19 @@ class News extends BaseActiveRecord {
         $criteria->order = 't.id DESC';
         $aNews = News::model()->findAll($criteria);
         return $aNews;
+    }
+    
+    /**
+     * Get array comments
+     * @return Array List comments
+     */
+    public function getArrayComments() {
+        $retVal = array();
+        if (isset($this->rComments)) {
+            $retVal = $this->rComments;
+        }
+        
+        return $retVal;
     }
 
 }

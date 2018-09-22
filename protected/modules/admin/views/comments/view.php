@@ -33,3 +33,5 @@ $this->widget('zii.widgets.CDetailView', array(
         'created_date',
     ),
 ));
+?>
+<?php echo 'Có ' . count($model->getArrayComments()) . ' bình luận con.'; ?>

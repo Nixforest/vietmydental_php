@@ -30,3 +30,4 @@ $this->createMenu('view', $model);
 //	),
 //)); ?>
 <?php echo $model->content; ?>
+<?php echo 'Có ' . count($model->getArrayComments()) . ' bình luận.'; ?>

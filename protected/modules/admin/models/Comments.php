@@ -15,6 +15,7 @@
  * The followings are the available model relations:
  * @property Users                  $rCreatedBy         User created this record
  * @property News                   $rNews              News relate with this record
+ * @property Comments[]             $rComments          List comments of comment
  */
 class Comments extends BaseActiveRecord {
     //-----------------------------------------------------
@@ -70,6 +71,11 @@ class Comments extends BaseActiveRecord {
         return array(
             'rCreatedBy' => array(self::BELONGS_TO, 'Users', 'created_by'),
             'rNews' => array(self::BELONGS_TO, 'News', 'relate_id'),
+            'rComments' => array(
+                self::HAS_MANY, 'Comments', 'relate_id',
+                'on'    => 'status !=' . DomainConst::DEFAULT_STATUS_INACTIVE
+                            . ' AND type =' . Comments::TYPE_CHILD,
+            ),
         );
     }
 
@@ -185,6 +191,19 @@ class Comments extends BaseActiveRecord {
     public function getCreator() {
         return isset($this->rCreatedBy) ? $this->rCreatedBy->getFullName() : '';
     }
+    
+    /**
+     * Get array comments
+     * @return Array List comments
+     */
+    public function getArrayComments() {
+        $retVal = array();
+        if (isset($this->rComments)) {
+            $retVal = $this->rComments;
+        }
+        
+        return $retVal;
+    }
 
     //-----------------------------------------------------
     // Static methods
@@ -209,5 +228,45 @@ class Comments extends BaseActiveRecord {
             self::TYPE_NEWS     => 'Comment cha',
             self::TYPE_CHILD    => 'Comment con',
         ];
+    }
+    
+    /**
+     * Insert comment for News
+     * @param String $news_id Id of news record
+     * @param String $content Content of comment
+     * @return boolean True if insert success, False otherwise
+     */
+    public static function insertCommentNews($news_id, $content) {
+        $model = new Comments();
+        $model->content = $content;
+        $model->type = self::TYPE_NEWS;
+        $model->relate_id = $news_id;
+        if ($model->save()) {
+            Loggers::info('Add comment for news success', $news_id, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            return true;
+        } else {
+            Loggers::error('Add comment for news failed', $news_id, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        }
+        return false;
+    }
+    
+    /**
+     * Reply comment
+     * @param String $comment_id Id of comment
+     * @param String $content    Content of comment
+     * @return boolean True if insert success, False otherwise
+     */
+    public static function replyComment($comment_id, $content) {
+        $model = new Comments();
+        $model->content = $content;
+        $model->type = self::TYPE_CHILD;
+        $model->relate_id = $comment_id;
+        if ($model->save()) {
+            Loggers::info('Reply comment success', $comment_id, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            return true;
+        } else {
+            Loggers::error('Reply comment failed', $comment_id, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        }
+        return false;
     }
 }
