@@ -1375,3 +1375,32 @@ svg.mark-icon {
 .form-print-content .left-content{float: left; max-width: 76%;}
 .form-print-content .right-content{float: right; max-width: 24%; text-align: right;}
 /*-- BUG0080-IMT (DuongNV 20180906) print prescription*/
+
+/*++ BUG0093-IMT (DuongNV 20180924) comment in news*/
+.rep-cmt, .cm-ctn{margin-top:5px;}
+.cm-ctn{background: #e8e8e8; border-radius: 33px; padding: 5px 8px; display: inline-block;}
+.cm-avatar{width: 32px; height: 32px; border-radius: 50%; background: #cacaca;}
+.child-cm-container .cm-avatar{width: 24px; height: 24px;}
+.cm-name{font-weight: bold; color: #10647d;}
+.like-btn, .cm-btn{color: #1176b1;}
+.cm-avatar, .cm-name, .like-btn, .cm-btn{cursor: pointer;}
+.time-text{color: grey;}
+.like-block{padding-left: 40px;}
+input[type="text"].input-cm{border-radius: 33px; padding-left: 10px; position: relative;}
+.cm-name:hover, .like-btn:hover, .cm-btn:hover{text-decoration: underline;}
+input[type="text"].input-cm::placeholder {color: grey!important;}
+input[type="text"].input-cm:-ms-input-placeholder {color: red!important;}
+input[type="text"].input-cm::-ms-input-placeholder {color: red!important;}
+.rep-cmt{position: relative; display: inline-block;}
+.rep-cmt .icon-send{
+    position: absolute;
+    top: 2px;
+    right: 7px;
+    padding: 7px;
+}
+.rep-cmt .icon-send:hover{
+    color: teal;
+    cursor: pointer;
+}
+.child-cm-container{margin: 7px 5px 10px 34px; border-left: 2px solid #338dea; padding-left: 6px;}
+/*-- BUG0093-IMT (DuongNV 20180924) comment in news*/
