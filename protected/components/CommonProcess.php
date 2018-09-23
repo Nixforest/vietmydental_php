@@ -504,6 +504,16 @@ class CommonProcess {
     }
     
     /**
+     * Get tomorrow
+     * @param String $format Date time format
+     * @return Date time string (default is DATE_FORMAT_1 - 'Y-m-d H:i:s')
+     */
+    public static function getTomorrowDateTime($format = DomainConst::DATE_FORMAT_1) {
+        ate_default_timezone_set(DomainConst::DEFAULT_TIMEZONE);
+        return date($format, strtotime('1 day'));
+    }
+    
+    /**
      * Get previous month
      * @param String $format Date time format
      * @return Date time string (default is DATE_FORMAT_1 - 'Y-m-d H:i:s')

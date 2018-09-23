@@ -85,6 +85,7 @@ class SettingsController extends AdminController {
                 Settings::KEY_SMS_SEND_CREATE_SCHEDULE,
                 Settings::KEY_SMS_SEND_UPDATE_SCHEDULE,
                 Settings::KEY_SMS_SEND_CREATE_RECEIPT,
+                Settings::KEY_SMS_SEND_ALARM_SCHEDULE,
             ),
         ),
             // TODO: Add more group here
@@ -99,9 +100,10 @@ class SettingsController extends AdminController {
             Settings::KEY_SMS_SEND_UPDATE_SCHEDULE,
             Settings::KEY_SMS_SEND_CREATE_RECEIPT,
             Settings::KEY_SMS_FUNC_ON_OFF,
-        //TODO: Add more checkbook here
+            //TODO: Add more checkbook here
+            Settings::KEY_SMS_SEND_ALARM_SCHEDULE,
         ],
-            //TODO: Add more type input here
+        //TODO: Add more type input here
     ];
 
     /**

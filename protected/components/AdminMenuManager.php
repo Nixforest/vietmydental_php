@@ -64,7 +64,6 @@ class AdminMenuManager {
      * @return string Menu array in html form
      */
     public function createMenu() {
-        Loggers::info('Start create Admin menu', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         $retVal = '';
         $session = Yii::app()->session;
         // If session was saved menu string, just return it
@@ -93,7 +92,6 @@ class AdminMenuManager {
                 $c = isset($menuTemp->rController) ? $menuTemp->rController->name : '';
                 $a = $menuTemp->action;
                 $module = isset($menuTemp->rModule) ? $menuTemp->rModule->name : '';
-                Loggers::info('Module/Controller/Action', $module . '/' . $c . '/' . $a, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
                 // If allow menu session
                 if ($session[DomainConst::KEY_ALLOW_SESSION_MENU]) {
                     // If not exist => create
