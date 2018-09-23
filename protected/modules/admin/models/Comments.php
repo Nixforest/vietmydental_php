@@ -243,7 +243,10 @@ class Comments extends BaseActiveRecord {
         $model->relate_id = $news_id;
         if ($model->save()) {
             Loggers::info('Add comment for news success', $news_id, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-            return true;
+            //++ BUG0093-IMT (DuongNV 20180924) comment in news
+//            return true;
+            return $model->id; 
+            //-- BUG0093-IMT (DuongNV 20180924) comment in news
         } else {
             Loggers::error('Add comment for news failed', $news_id, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         }
@@ -263,10 +266,29 @@ class Comments extends BaseActiveRecord {
         $model->relate_id = $comment_id;
         if ($model->save()) {
             Loggers::info('Reply comment success', $comment_id, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-            return true;
+            //++ BUG0093-IMT (DuongNV 20180924) comment in news
+//            return true;
+            return $model->id;
+            //-- BUG0093-IMT (DuongNV 20180924) comment in news
         } else {
             Loggers::error('Reply comment failed', $comment_id, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         }
         return false;
     }
+    
+    //++ BUG0093-IMT (DuongNV 20180924) comment in news
+    public static function getInfoUserById($id, $aFieldName = 'first_name') {
+        $mUser = Users::model()->findByPk($id);
+        if(empty($mUser)) return "";
+        $resVal = '';
+        if(is_array($aFieldName)){
+            foreach ($aFieldName as $field) {
+                $resVal .= $mUser->$field . ' - ';
+            }
+        } else {
+            $resVal .= $mUser->$aFieldName;
+        }
+        return rtrim($resVal, "-");
+    }
+    //-- BUG0093-IMT (DuongNV 20180924) comment in news
 }
