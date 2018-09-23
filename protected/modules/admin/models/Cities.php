@@ -270,11 +270,11 @@ class Cities extends BaseActiveRecord {
             if ($model->rDistrict) {
                 foreach ($model->rDistrict as $district) {
                     $dataWards = array();
-                    if ($district->rWard) {
-                        foreach ($district->rWard as $ward) {
-                            $dataWards[] = CommonProcess::createConfigJson($ward->id, $ward->name);
-                        }
-                    }
+//                    if ($district->rWard) {
+//                        foreach ($district->rWard as $ward) {
+//                            $dataWards[] = CommonProcess::createConfigJson($ward->id, $ward->name);
+//                        }
+//                    }
                     $dataDistricts[] = CommonProcess::createConfigJson($district->id, $district->name, $dataWards);
                 }
             }

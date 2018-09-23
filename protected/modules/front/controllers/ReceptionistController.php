@@ -1141,4 +1141,70 @@ class ReceptionistController extends FrontController {
         exit;
     }
     //-- BUG0084-IMT (DuongNV 20180905) move process, image to front
+    
+    
+    /**
+     * Action create warranty.
+     */
+    public function actionCreateWarranty() {
+        $id = '';
+        $this->validateUpdateUrl($id, 'Warranties');
+        $mTreatmentDetail = TreatmentScheduleDetails::model()->findByPk($id);
+        $model = new Warranties();
+        if ($mTreatmentDetail) {
+            $customer = $mTreatmentDetail->getCustomerModel();
+            if ($customer != NULL) {
+                $model->customer_id = $customer->id;
+                if (isset($_POST['Warranties'])) {
+                    $model->attributes = $_POST['Warranties'];
+                    if ($model->save()) {
+                        $model->saveTooth();
+                        $customer = $mTreatmentDetail->getCustomerModel();
+                        if (isset($customer)) {
+                            $rightContent = $customer->getCustomerAjaxInfo();
+                            $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
+                        }
+                        echo CJavaScript::jsonEncode(array(
+                            DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
+                            DomainConst::KEY_CONTENT => DomainConst::CONTENT00035,
+                            DomainConst::KEY_RIGHT_CONTENT  => $rightContent,
+                            DomainConst::KEY_INFO_SCHEDULE => $infoSchedule,
+                        ));
+                        exit;
+                    } else {    // Save failed
+                        Loggers::error('Have problem when save model',
+                            CommonProcess::json_encode_unicode($model->getErrors()),
+                            __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                    }
+                } else {
+                    if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
+                        Loggers::error('Have problem with POST',
+                            CommonProcess::json_encode_unicode($_POST),
+                            __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                        $model->addErrorMessage('Have problem with POST');
+                    }
+                }
+            } else {
+                Loggers::error('Can not found customer',
+                        'TreatmentScheduleDetail\'s id = ' . $mTreatmentDetail->id,
+                        __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                $model->addErrorMessage(DomainConst::CONTENT00448);
+            }
+        } else {
+            Loggers::error('Can not found treatmentscheduledetail',
+                    'TreatmentScheduleDetail\'s id = ' . $id,
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            $model->addErrorMessage(DomainConst::CONTENT00449);
+        }
+            
+        echo CJSON::encode(array(
+        DomainConst::KEY_STATUS => DomainConst::NUMBER_ZERO_VALUE,
+        DomainConst::KEY_CONTENT => $this->renderPartial('_form_create_warranty',
+            array(
+                'model'     => $model,
+                DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+            ), true, true)
+        ));
+        exit;
+    }
 }

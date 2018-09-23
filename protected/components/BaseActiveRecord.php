@@ -14,6 +14,11 @@
 class BaseActiveRecord extends CActiveRecord {
     public $baseArrayJsonDecode, $baseArrayJsonDecodeV1;// Jan 26, 2017 sử dụng để làm biến tạm decode json
     /**
+     * Field save error message.
+     * @var type 
+     */
+    public $errMsg;
+    /**
      * Update json from variable data
      * @param String $field Json field
      * @param String $json_db_name Json database name
@@ -198,5 +203,21 @@ class BaseActiveRecord extends CActiveRecord {
         if (empty($this->$field)) {
             $this->$field = $date;
         }
+    }
+    
+    /**
+     * Add error message
+     * @param String $msg Message content
+     */
+    public function addErrorMessage($msg) {
+        $this->addError('errMsg', $msg);
+    }
+    
+    /**
+     * Can update this model
+     * @return boolean True
+     */
+    public function canUpdate() {
+        return true;
     }
 }

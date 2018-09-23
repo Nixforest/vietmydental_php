@@ -99,7 +99,9 @@ class HtmlHandler {
      * @param String $status
      * @return String Html string generate button
      */
-    public static function createCustomButton($href, $title, $time, $doctor, $paymentHref, $prescriptHref, $paymentClick = '', $prescriptClick = '', $status = '', $id = '', $mTreatmentProcess = []) {
+    public static function createCustomButton($href, $title, $time, $doctor,
+            $paymentHref, $prescriptHref, $paymentClick = '',
+            $prescriptClick = '', $status = '', $id = '', $mTreatmentProcess = []) {
         $retVal = '';
         $target = '';
         $target = 'target=""';
@@ -134,7 +136,9 @@ class HtmlHandler {
             $prescriptItem = '<a onclick="' . $prescriptClick . '" style="cursor:pointer;"><i class="fas fa-capsules"></i> ' . DomainConst::CONTENT00379 . '</a>';
         }
         $laboRequestEvent = '{fnOpenLaboRequest(\'' . $id . '\');}';
-        $laboRequestItem = '<a onclick="' . $laboRequestEvent . '" style="cursor:pointer;"><i class="fas fa-exchange-alt"></i> ' . DomainConst::CONTENT00425 . '</a>';;
+        $laboRequestItem = '<a onclick="' . $laboRequestEvent . '" style="cursor:pointer;"><i class="fas fa-exchange-alt"></i> ' . DomainConst::CONTENT00425 . '</a>';
+        $warrantyEvent = '{fnOpenWarranty(\'' . $id . '\');}';
+        $warranty = '<a onclick="' . $warrantyEvent . '" style="cursor:pointer;"><i class="fas fa-shield-alt"></i>' . DomainConst::CONTENT00447 . '</a>';
             //++ BUG0056-IMT (DuongNV 20180811) Update image data treatment
         $urlXRay = Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/updateImageXRay", array('id' => $id, 'ajax' => false));
         $urlReal = Yii::app()->createAbsoluteUrl("admin/treatmentScheduleDetails/updateImageReal", array('id' => $id, 'ajax' => false));
@@ -151,6 +155,7 @@ class HtmlHandler {
                     .           '<li><a class="imageXQuang" style="cursor:pointer;" data-type="xray" data-id="'.$id.'"><i class="fas fa-x-ray"></i> Hình ảnh X-Quang</a></li>'
                     //-- BUG0056-IMT (DuongNV 20180831) Update image xray and real
                     .           '<li class="requestRecoveryImage" data-id="'.$id.'">' . $laboRequestItem . '</li>'
+                    .           '<li class="warranty" data-id="' . $id . '">' . $warranty . '</li>'
                     .       '</ul>'
                     .    '</div>';
             //-- BUG0056-IMT (DuongNV 20180811) Update image data treatment

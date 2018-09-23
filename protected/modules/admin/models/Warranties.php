@@ -11,7 +11,7 @@
  * @property string $end_date
  * @property integer $status
  */
-class Warranties extends CActiveRecord
+class Warranties extends BaseActiveRecord
 {
     public $autocomplete_name_customer;
 	/**
@@ -183,5 +183,25 @@ class Warranties extends CActiveRecord
     public function getRemainTime() {
         // TODO: Implement
         return '';
+    }
+    
+    /**
+     * Save tooth
+     */
+    public function saveTooth() {
+        $aTeethData = [];
+        if (!empty($_POST['teethData'])) {
+            $strDataRaw = $_POST['teethData'];
+            $strData = implode(',', array_unique(explode(',', $strDataRaw)));
+            $aTeethData = explode(',', rtrim($strData, ','));
+        }
+        $arrTeeth = CommonProcess::getListTeeth(false, '');
+        foreach ($arrTeeth as $key => $teeth) {
+            $arrTeeth[$key] = str_replace(' - ', '', $teeth);
+        }
+        foreach ($aTeethData as $t) {
+            $idInsert = array_search($t, $arrTeeth);
+            OneMany::insertOne($this->id, $idInsert, OneMany::TYPE_WARRANTY_TEETH);
+        }
     }
 }

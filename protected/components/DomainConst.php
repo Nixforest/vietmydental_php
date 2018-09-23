@@ -1578,4 +1578,7 @@ class DomainConst {
     const CONTENT00444  = 'Mã Quận Huyện';
     const CONTENT00445  = 'Mã Phường Xã';
     const CONTENT00446  = 'Record liên quan';
+    const CONTENT00447  = 'Tạo thông tin bảo hành';
+    const CONTENT00448  = 'Không thể tìm thấy Bệnh nhân';
+    const CONTENT00449  = 'Không thể tìm thấy Lần điều trị';
 }
