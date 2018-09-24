@@ -905,6 +905,43 @@ if (!empty($dateValue)) {
         return false;
     }
     //-- BUG0079-IMT (DuongNV 20180109) Update and delete treatment process via ajax
+    /**
+     * Open warranty
+     * @param {String} _id Id of treatment schedule detail need to create warranty
+     * @returns {Boolean}
+     */
+    function fnOpenWarranty(_id = '') {
+        createWarrantyDialog(_id);
+        $("#dialogId").dialog(opt).dialog("open");
+    }
+    
+    /**
+     * Create warranty dialog
+     * @param {String} _id Id of treatment schedule detail need to create warranty
+     * @returns {Boolean}
+     */
+    function createWarrantyDialog(_id = '') {
+        fnLoadFormCSS();
+        $.ajax({
+            url: "<?php echo Yii::app()->createAbsoluteUrl(
+                    'front/receptionist/createWarranty'); ?>",
+            data: $(this).serialize() + '&id=' + _id,
+            type: "post",
+            dataType: "json",
+            success: function(data) {
+                // After submit
+                if (fnIsDataSuccess(data)) {
+                    fnUpdateCustomerData(data);
+                } else {    // Load first time
+                    fnLoadDialogContent(data,
+                       '<?php echo DomainConst::CONTENT00447; ?>',
+                       createWarrantyDialog);
+                }
+            },
+            cache: false
+        });
+        return false;
+    }
 </script>
 <style>
     .input {
