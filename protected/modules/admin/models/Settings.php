@@ -71,6 +71,10 @@ class Settings extends BaseActiveRecord
     const KEY_EMAIL_TRANSPORT_PORT              = 'EMAIL_TRANSPORT_PORT';
     /** Key Email transport encryption */
     const KEY_EMAIL_TRANSPORT_ENCRYPTION        = 'EMAIL_TRANSPORT_ENCRYPTION';
+    /** Key Email SendGrid API key */
+    const KEY_EMAIL_SENDGRID_API_KEY            = 'EMAIL_SENDGRID_API_KEY';
+    /** Key Email provider */
+    const KEY_EMAIL_PROVIDER                    = 'EMAIL_PROVIDER';
     
     /* --- Others settings --- */
     /** Key Ajax template value */
@@ -438,5 +442,16 @@ class Settings extends BaseActiveRecord
         }
         return false;
     }
-
+    
+    /**
+     * Get SendGrid api key
+     * @return String API key
+     */
+    public static function getSendGridAPIKey() {
+        $retVal = Settings::getItem(Settings::KEY_EMAIL_SENDGRID_API_KEY);
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return SENDGRID_API_KEY;
+    }
 }

@@ -39,7 +39,7 @@ class SettingsController extends AdminController {
 //                    Settings::KEY_EMAIL_TRANSPORT_ENCRYPTION,
             ),
         ),
-        // Mail setting
+        // App setting
         Settings::KEY_APP_SETTINGS => array(
             DomainConst::KEY_ALIAS => DomainConst::CONTENT00163,
             DomainConst::KEY_CHILDREN => array(
@@ -59,6 +59,8 @@ class SettingsController extends AdminController {
                 Settings::KEY_EMAIL_TRANSPORT_PASSWORD,
                 Settings::KEY_EMAIL_TRANSPORT_PORT,
                 Settings::KEY_EMAIL_TRANSPORT_ENCRYPTION,
+                Settings::KEY_EMAIL_SENDGRID_API_KEY,
+                Settings::KEY_EMAIL_PROVIDER,
             ),
         ),
         // SMS setting

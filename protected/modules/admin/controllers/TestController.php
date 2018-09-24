@@ -22,6 +22,31 @@ class TestController extends AdminController {
             Loggers::info('Start submit', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             EmailHandler::sendManual('Subject', 'Body', 'nixforest@live.com');
         }
+        if (filter_input(INPUT_POST, 'submit_email')) {
+            Loggers::info('Start submit email', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            EmailHandler::sendMail1();
+        }
+        if (filter_input(INPUT_POST, 'submit_email_pa')) {
+            Loggers::info('Start submit email PA', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            EmailHandler::sendMailByGmail();
+        }
+        if (filter_input(INPUT_POST, 'submit_test_fsocket')) {
+            $fp = fsockopen('localhost', 25, $errno, $errstr, 10);
+            if (!$fp) {
+                print_r("$errstr ($errno)\n");
+            } else {
+                $out = "QUIT\r\n";
+                fwrite($fp, $out);
+                while (!feof($fp)) {
+                    print_r(fgets($fp, 128));
+                }
+                fclose($fp);
+            }
+        }
+        if (filter_input(INPUT_POST, 'submit_send_grid')) {
+            Loggers::info('Start send grid', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            EmailHandler::sendEmailOnce('nixforest21991920@gmail.com', 'info@nhakhoavietmy.com', 'Chủ đề email', 'Nội dung email');
+        }
         $this->render('test', array(
             'tabId'                     => $tabId,
             'arrTabs'                   => $arrTabs,

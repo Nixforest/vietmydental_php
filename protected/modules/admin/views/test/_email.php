@@ -23,6 +23,18 @@
         <?php echo CHtml::submitButton('Send', array(
             'name'  => DomainConst::KEY_SUBMIT,
         )); ?>
+        <?php echo CHtml::submitButton('Send Swift Mailer', array(
+            'name'  => 'submit_email',
+        )); ?>
+        <?php echo CHtml::submitButton('Send PA mail handler', array(
+            'name'  => 'submit_email_pa',
+        )); ?>
+        <?php echo CHtml::submitButton('Test fsocket', array(
+            'name'  => 'submit_test_fsocket',
+        )); ?>
+        <?php echo CHtml::submitButton('SendGrid', array(
+            'name'  => 'submit_send_grid',
+        )); ?>
     </div>
 
 <?php $this->endWidget(); ?>

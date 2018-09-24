@@ -5,13 +5,49 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+//include 'smtp.php';
+//include("class.phpmailer.php");
 /**
  * Description of EmailHandler
  *
  * @author NguyenPT
  */
 class EmailHandler {
+    /** Email provider SendGrid */
+    const EMAIL_PROVIDER_SENDGRID = '1';
+
+    /**
+     * Get list Email provider
+     * @return Array List Email provider
+     */
+    public static function getListEmailProvider() {
+        return array(
+            self::EMAIL_PROVIDER_SENDGRID => 'SendGrid',
+        );
+    }
+    
+    /**
+     * Send email once
+     * @param String $to        To email
+     * @param String $from      From email
+     * @param String $subject   Subject of email
+     * @param String $content   Content of email
+     */
+    public static function sendEmailOnce($to, $from, $subject, $content) {
+        $provider = Settings::getItem(Settings::KEY_EMAIL_PROVIDER);
+        switch ($provider) {
+            case self::EMAIL_PROVIDER_SENDGRID:
+                Loggers::info('Start send email', self::getListEmailProvider()[$provider],
+                        __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                self::sendEmailGrid($to, $from, $subject, $content);
+                break;
+
+            default:
+                Loggers::error('Send email error', 'No provider', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                break;
+        }
+    }
+    
     /**
      * Handle send email
      * @param Array $data Data of message
@@ -58,11 +94,7 @@ class EmailHandler {
             $swiftAttachment = Swift_Attachment::fromPath($data[DomainConst::KEY_ATTACHMENT]);
             $message->attach($swiftAttachment);
         }
-//        CommonProcess::dumpVariable($message->from);
-//        CommonProcess::dumpVariable(Yii::app()->mail->transportOptions[DomainConst::KEY_HOST]);
-//        CommonProcess::dumpVariable(Yii::app()->mail->class);
         return Yii::app()->mail->send($message);
-//        return Yii::app()->mail->sendSimple('nguyenpt@spj.vn', 'nixforest@live.com', 'Subject', 'Body');
     }
     
     /**
@@ -162,33 +194,134 @@ class EmailHandler {
         );
         return self::send($data);
     }
-    
-    public static function mailsend($to, $from, $from_name, $subject, $message, $cc = array(), $attachment = array()) {
-        $mail = Yii::app()->Smtpmail;
-        $mail->SetFrom($from, $from_name);
-        $mail->Subject = $subject;
-//        $mail->MsgHTML($this->mailTemplate($message));
-        $mail->AddAddress($to, "");
+    public static function sendMail() {
+        try { 
+            $transport = Swift_MailTransport::newInstance();
+            $mailer = Swift_Mailer::newInstance($transport);
+            $message = Swift_Message::newInstance('Wonderful Subject')
+                    ->setFrom(array('nguyenpt@spj.vn' => 'John Doe'))
+                    ->setTo(array('nixforest@live.com', 'nixforest21991920@gmail.com' => 'A name'))
+                    ->setBody('Here is the message itself');
 
-        // Add CC
-        if (!empty($cc)) {
-            foreach ($cc as $email) {
-                $mail->AddCC($email);
-            }
-        }
-
-        // Add Attchments
-        if (!empty($attachment)) {
-            foreach ($attachment as $attach) {
-                $mail->AddAttachment($attach);
-            }
-        }
-
-        if (!$mail->Send()) {
-            return false; // Fail echo "Mailer Error: " . $mail->ErrorInfo;
-        } else {
-            return true; // Success
+            $result = $mailer->send($message);
+            Loggers::info('Result', $result, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            $mailer->getTransport()->stop();
+        } catch (Swift_TransportException $e) {
+            //this should be caught to understand if the issue is on transport
+            Loggers::error('Swift_TransportException', $e->getMessage(), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        } catch (Exception $e) {
+            Loggers::error('Exception', $e->getMessage(), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         }
     }
+    
+    public static function sendMail1() {
+        // Create the mail transport configuration
+        $transport = Swift_MailTransport::newInstance('ssl://mail.spj.vn', 465);
 
+        // Create the message
+        $message = Swift_Message::newInstance();
+        $message->setTo(array(
+          "nixforest@live.com" => "Aurelio De Rosa",
+          "nixforest21991920@gmail.com" => "Audero"
+        ));
+        $message->setSubject("This email is sent using Swift Mailer");
+        $message->setBody("You're our best client ever.");
+        $message->setFrom("nguyenpt@spj.vn", "Your bank");
+
+        // Send the email
+        $mailer = Swift_Mailer::newInstance($transport);
+        $mailer->send($message, $failedRecipients);
+        print_r($failedRecipients);
+    }
+    
+    public static function sendMailPA() {
+        SendMail('nguyenpt@spj.vn', 'nixforest@live.com', 'Subject', 'Xin chao, toi muon gui mail lam roi!');
+    }
+    
+    public static function sendMailByGmail() {
+        $mail = new PHPMailer();
+
+        $mail->IsSMTP();
+        $mail->IsHTML(true);
+//        $mail->Host = "ssl://smtp.gmail.com";
+        $mail->Host = "smtp.gmail.com";
+
+        $mail->Port = 465;
+        $mail->SMTPSecure = "ssl";
+
+        $mail->SMTPAuth = true;
+        $mail->Username = "nixforest21991920@gmail.com";
+
+        $mail->Password = "";
+
+
+
+        $mail->Body = "<h3>SMTP Gmail</h3>";
+
+        $mail->Subject = "SMTP Gmail";
+
+
+
+        $mail->From = "********";
+
+        $mail->FromName = "pavietnam";
+
+        $mail->AddAddress("nixforest@live.com");
+
+
+
+        if ($mail->Send()) {
+
+            echo "OK!";
+        } else {
+
+            echo "Co loi!<br><br>";
+
+            echo "Hiba: " . $mail->ErrorInfo;
+        }
+    }
+    
+    /**
+     * Send email by SendGrid
+     * @param String $to        To email
+     * @param String $from      From email
+     * @param String $subject   Subject of email
+     * @param String $content   Content of email
+     */
+    public static function sendEmailGrid($to, $from, $subject, $content) {
+        $ch = curl_init();
+        $key = Settings::getSendGridAPIKey();
+        $headers = array(
+            "Content-type: application/json",
+            "authorization: Bearer " . $key,
+        );
+        Loggers::error('SendGrid key', $key, 
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        $input_xml = '{"personalizations": [{'
+                . '"to": [{"email": "' . $to . '"}]}],'
+                . '"from": {"email": "' . $from . '"},'
+                . '"subject": "' . $subject . '",'
+                . '"content": [{"type": "text/plain", "value": "' . $content . '"}]}';
+        Loggers::error('Data', $input_xml, 
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        curl_setopt($ch, CURLOPT_URL, 'https://api.sendgrid.com/v3/mail/send');
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_HEADER, 1);
+        curl_setopt($ch, CURLOPT_VERBOSE, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $input_xml);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 300);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        $response = curl_exec($ch);
+        if (curl_errno($ch)) {
+            Loggers::error('Error when send email', '', 
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        } else {
+            curl_close($ch);
+            Loggers::info('Send email success', '', 
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        }
+    }
 }
