@@ -393,6 +393,18 @@ class CommonProcess {
     }
     
     /**
+     * Check user was logged in
+     * @return boolean True if user logged in, False otherwise
+     */
+    public static function checkUserIsLoggedIn() {
+        if (Yii::app()->user->isGuest) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+    /**
      * Get host url
      * @return string Current host url
      */

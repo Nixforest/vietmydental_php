@@ -12,7 +12,7 @@
  * @author NguyenPT
  */
 class AdminMenuManager {
-    
+
     /**
      * Check if a menu has child
      * @param Int $id       id of menu
@@ -58,7 +58,7 @@ class AdminMenuManager {
         } // end foreach($arrObj as $object)
         return 0;
     }
-    
+
     /**
      * Create main menu array
      * @return string Menu array in html form
@@ -71,12 +71,13 @@ class AdminMenuManager {
             return $session[DomainConst::KEY_STRING_MENU];
         }
         // Check if user is logged in
-        if (Yii::app()->session[DomainConst::KEY_LOGGED_USER] != NULL && !is_null(Yii::app()->user->id)) {
+//        if (Yii::app()->session[DomainConst::KEY_LOGGED_USER] != NULL && !is_null(Yii::app()->user->id)) {
+        if (CommonProcess::checkUserIsLoggedIn()) {
             $menusTemp = Menus::model()->findAll(
-                array(
-                    'condition' => 'show_in_menu = "1"',
-                    'order'     => 'display_order asc'
-                )
+                    array(
+                        'condition' => 'show_in_menu = "1"',
+                        'order' => 'display_order asc'
+                    )
             );
             $session[DomainConst::KEY_ALLOW_SESSION_MENU] = 1;
             $menus = array();
@@ -117,7 +118,7 @@ class AdminMenuManager {
                     $menus[] = $menuTemp;
                 }
             }
-            
+
             foreach ($menus as $menuItem) {
                 // If current item is subitem => ignore
                 if ($menuItem->parent_id != '') {
@@ -125,12 +126,12 @@ class AdminMenuManager {
                 }
                 // Menu have subitem
                 if ($menuItem->link == '#') {
-                    if ($this->hasChild($menuItem->id, $menus) == 1) {                    
+                    if ($this->hasChild($menuItem->id, $menus) == 1) {
                         $retVal .= '<div class="dropdownX">';
-                        $retVal .=      '<button class="dropbtnX">';
-                        $retVal .=          $menuItem->name;                    
-                        $retVal .=      '</button>';
-                        $retVal .=      '<div class="dropdown-contentX">';
+                        $retVal .= '<button class="dropbtnX">';
+                        $retVal .= $menuItem->name;
+                        $retVal .= '</button>';
+                        $retVal .= '<div class="dropdown-contentX">';
                         foreach ($menus as $subItem) {
                             // This is a subitem
                             if ($subItem->parent_id == $menuItem->id) {
@@ -138,7 +139,7 @@ class AdminMenuManager {
                                 $retVal .= AdminMenuManager::createMenuItem($subItem->name, $subItem->getLink());
                             }
                         }
-                        $retVal .=      '</div>';    // Close <div class="dropdown-contentX">
+                        $retVal .= '</div>';    // Close <div class="dropdown-contentX">
                         $retVal .= '</div>';        // Close <div class="dropdownX">
                     }
                 } else {    // Just menu item, have not subitem
@@ -166,7 +167,7 @@ class AdminMenuManager {
         }
         return '';
     }
-    
+
     /**
      * Create a menu item by write an [a] tag
      * @param type $label
@@ -178,7 +179,7 @@ class AdminMenuManager {
         $retVal .= "<a href='" . Yii::app()->createAbsoluteUrl($link) . "'>" . $label . "</a>";
         return $retVal;
     }
-    
+
     public static function createFrontEndMenuItem($label, $link, $icon) {
         $aTitle = explode('/', $label);
         $retVal = '';
@@ -190,7 +191,7 @@ class AdminMenuManager {
         $retVal .= "</div>";
         return $retVal;
     }
-    
+
     /**
      * Create main menu array for front end
      * @return string Menu array in html form
@@ -203,21 +204,22 @@ class AdminMenuManager {
             return $session[DomainConst::KEY_FE_STRING_MENU];
         }
         // Check if user is logged in
-        if (Yii::app()->session[DomainConst::KEY_LOGGED_USER] != NULL && !is_null(Yii::app()->user->id)) {
+//        if (Yii::app()->session[DomainConst::KEY_LOGGED_USER] != NULL && !is_null(Yii::app()->user->id)) {
+        if (CommonProcess::checkUserIsLoggedIn()) {
             $menusTemp = Menus::model()->findAll(
                 array(
                     'condition' => 'show_in_menu = "1"',
-                    'order'     => 'display_order asc'
+                    'order' => 'display_order asc'
                 )
             );
-            
+
             $session[DomainConst::KEY_FE_ALLOW_SESSION_MENU] = 1;
             $menus = array();
             foreach ($menusTemp as $menuTemp) {
                 if ($menuTemp->rModule->name != 'front') {
                     continue;
                 }
-                
+
                 $c = isset($menuTemp->rController) ? $menuTemp->rController->name : '';
                 $a = $menuTemp->action;
                 // If allow menu session
@@ -245,7 +247,7 @@ class AdminMenuManager {
                     $menus[] = $menuTemp;
                 }
             }
-            
+
             foreach ($menus as $menuItem) {
                 // If current item is subitem => ignore
                 if ($menuItem->parent_id != '') {
@@ -253,6 +255,7 @@ class AdminMenuManager {
                 }
                 // Menu have subitem
                 if ($menuItem->link == '#') {
+                    
                 } else {    // Just menu item, have not subitem    
                     $retVal .= '<div class="item-menu">';
                     $retVal .= AdminMenuManager::createFrontEndMenuItem($menuItem->name, $menuItem->getLink(), $menuItem->link);
@@ -279,4 +282,5 @@ class AdminMenuManager {
         }
         return '';
     }
+
 }

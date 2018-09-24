@@ -1,4 +1,5 @@
-<?php if (!Yii::app()->user->isGuest) : ?>
+<?php // if (!Yii::app()->user->isGuest) : ?>
+<?php if (CommonProcess::checkUserIsLoggedIn()) : ?>
 <?php foreach (NewsCategories::getListParent() as $category) : ?>
 <?php
 $mNews = new News('search');
