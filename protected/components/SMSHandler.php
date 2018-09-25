@@ -143,8 +143,8 @@ class SMSHandler {
      * @param String $customerId    Id of customer
      */
     public static function sendSMSCreateSchedule($start_date, $phone, $startTime, $doctor, $customerId, $type) {
+        $dateTime = CommonProcess::getCurrentDateTime();
         if (Settings::getItem($type)) {
-            $dateTime = CommonProcess::getCurrentDateTime();
             if (DateTimeExt::compare($dateTime, $start_date) == -1) {
                 Loggers::info('Prepare to send sms', '',
                         __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
@@ -175,6 +175,30 @@ class SMSHandler {
             }
             Loggers::info('Can not send SMS', 'Send sms function when ' . $msg . ' is off',
                     __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        }
+        
+        // Alarm schedule
+        if (Settings::getItem(Settings::KEY_SMS_SEND_ALARM_SCHEDULE)) {
+            $startDate = CommonProcess::convertDateTime($start_date,
+                    DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
+            Loggers::info('StartDate', $startDate,
+                        __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            $previousDate = CommonProcess::getPreviousDateOfDate($startDate, DomainConst::DATE_FORMAT_4);
+            Loggers::info('PreviousDate', $previousDate,
+                        __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            if (DateTimeExt::compare($dateTime, $start_date) == -1) {
+                Loggers::info('Prepare to send sms alarm schedule', '',
+                        __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                self::sendSMSSchedule($type, $phone,
+                        'Quý Khách hàng đã đặt hẹn trên Hệ thống Nha Khoa Việt Mỹ vào lúc '
+                                . $startTime . ' với bác sĩ ' . $doctor
+                                . '. Quý Khách hàng vui lòng sắp xếp thời gian đến đúng hẹn',
+                        $customerId,
+                        $type, $previousDate);
+            } else {
+                Loggers::info('Not send SMS', 'Schedule on today no need to send sms',
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            }
         }
     }
     

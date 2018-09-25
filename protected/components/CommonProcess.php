@@ -577,6 +577,16 @@ class CommonProcess {
         }
         return false;
     }
+    
+    /**
+     * Get previous date of a date
+     * @param String $date Date value (format: Y-m-d)
+     * @return type
+     */
+    public static function getPreviousDateOfDate($date, $format = DomainConst::DATE_FORMAT_1) {
+        date_default_timezone_set(DomainConst::DEFAULT_TIMEZONE);
+        return date($format, strtotime('-1 day', strtotime($date)));
+    }
             
     //-----------------------------------------------------
     // -- Date time process
