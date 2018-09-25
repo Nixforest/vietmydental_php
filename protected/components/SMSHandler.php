@@ -160,10 +160,49 @@ class SMSHandler {
             }
         } else {
             $msg = 'CREATE';
-            if ($type == Settings::KEY_SMS_SEND_UPDATE_SCHEDULE) {
-                $msg = 'UPDATE';
+            switch ($type) {
+                case Settings::KEY_SMS_SEND_CREATE_SCHEDULE:
+                    $msg = 'CREATE SCHEDULE';
+                    break;
+                case Settings::KEY_SMS_SEND_UPDATE_SCHEDULE:
+                    $msg = 'UPDATE SCHEDULE';
+                    break;
+                case Settings::KEY_SMS_SEND_CREATE_SCHEDULE_DETAIL:
+                    $msg = 'CREATE SCHEDULE DETAIL';
+                    break;
+                default:
+                    break;
             }
-            Loggers::info('Can not send SMS', 'Send sms function when ' . $msg . ' schedule is off',
+            Loggers::info('Can not send SMS', 'Send sms function when ' . $msg . ' is off',
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        }
+    }
+    
+    /**
+     * Send sms when create receipt
+     * @param String $phone         Phone number
+     * @param String $amount        Amount of money
+     * @param String $date          Date of receipt
+     * @param String $customerId    Id of customer
+     */
+    public static function sendSMSCreateReceipt($phone, $amount, $date, $customerId, $reason) {
+        if (Settings::getItem(Settings::KEY_SMS_SEND_CREATE_RECEIPT)) {
+            Loggers::info('Prepare to send sms', '',
+                        __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            $dateTime = CommonProcess::getCurrentDateTime();
+            $process_date = CommonProcess::convertDateTime($date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_BACK_END);
+            $msg = 'Quý Khách hàng đã thanh toán trên Hệ thống Nha Khoa Việt Mỹ số tiền '
+                    . CommonProcess::formatCurrency($amount)
+                    . ' vào ngày ' . $process_date
+                    . '. Lý do: ' . $reason
+                    . '. Xin cảm ơn Quý Khách.'; 
+            self::sendSMSSchedule(Settings::KEY_SMS_SEND_CREATE_RECEIPT,
+                    $phone, $msg, $customerId,
+                    Settings::KEY_SMS_SEND_CREATE_RECEIPT,
+                    $dateTime);
+            
+        } else {
+            Loggers::info('Can not send SMS', 'Send sms function when CREATE RECEIPT is off',
                     __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         }
     }

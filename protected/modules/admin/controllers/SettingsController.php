@@ -86,6 +86,7 @@ class SettingsController extends AdminController {
             DomainConst::KEY_CHILDREN => array(
                 Settings::KEY_SMS_SEND_CREATE_SCHEDULE,
                 Settings::KEY_SMS_SEND_UPDATE_SCHEDULE,
+                Settings::KEY_SMS_SEND_CREATE_SCHEDULE_DETAIL,
                 Settings::KEY_SMS_SEND_CREATE_RECEIPT,
                 Settings::KEY_SMS_SEND_ALARM_SCHEDULE,
             ),
@@ -100,6 +101,7 @@ class SettingsController extends AdminController {
         'CheckBox' => [
             Settings::KEY_SMS_SEND_CREATE_SCHEDULE,
             Settings::KEY_SMS_SEND_UPDATE_SCHEDULE,
+            Settings::KEY_SMS_SEND_CREATE_SCHEDULE_DETAIL,
             Settings::KEY_SMS_SEND_CREATE_RECEIPT,
             Settings::KEY_SMS_FUNC_ON_OFF,
             //TODO: Add more checkbook here

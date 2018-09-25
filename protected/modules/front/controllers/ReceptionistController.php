@@ -457,6 +457,19 @@ class ReceptionistController extends FrontController {
                 $model->updateCustomerDebt();
                 // Confirm finish Treatment schedule detail
                 $model->finishTreatmentScheduleDetail();
+                // Inform for customer
+                $customer = $model->getCustomer();
+                $mDetail = $model->rTreatmentScheduleDetail;
+                if ($customer && $mDetail) {
+                    SMSHandler::sendSMSCreateReceipt($customer->getPhone(),
+                            $model->final,
+                            $model->process_date,
+                            $customer->id,
+                            $mDetail->getTitle());
+                } else {
+                    Loggers::info('Not send sms', 'Update receipt',
+                            __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                }
             } else {
                 Loggers::info("Update receipt failed: " . CommonProcess::json_encode_unicode($model->getErrors()),
                         __FUNCTION__, __CLASS__);
@@ -786,7 +799,7 @@ class ReceptionistController extends FrontController {
             if (isset($mDetail->rReceipt)) {
                 $model = $mDetail->rReceipt;
             } else {
-                $model   = new Receipts();
+                $model      = new Receipts();
             }
             //++ BUG0045-IMT (DuongNV 20180721) Handle show total money when update receipt
             //$total = $mDetail->getTotalMoney();
@@ -830,6 +843,7 @@ class ReceptionistController extends FrontController {
                     $rightContent = $customer->getCustomerAjaxInfo();
                     $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
                 }
+                
                 echo CJavaScript::jsonEncode(array(
                     DomainConst::KEY_STATUS => DomainConst::NUMBER_ONE_VALUE,
                     DomainConst::KEY_CONTENT => DomainConst::CONTENT00387,
@@ -900,12 +914,19 @@ class ReceptionistController extends FrontController {
                         $rightContent = $customer->getCustomerAjaxInfo();
                         $infoSchedule = $customer->getCustomerAjaxScheduleInfo();
                         // Inform for customer
-                        if (DateTimeExt::compare(CommonProcess::getCurrentDateTime(), $model->start_date) == -1) {
-                            SMSHandler::sendSMSOnce($customer->getPhone(),
-                                'Quý Khách hàng đã đặt hẹn trên Hệ thống Nha Khoa Việt Mỹ vào lúc '
-                                . $model->getStartTime() . ' với bác sĩ ' . $mSchedule->rDoctor->first_name
-                                . '. Quý Khách hàng vui lòng sắp xếp thời gian đến đúng hẹn');
-                        }
+//                        if (DateTimeExt::compare(CommonProcess::getCurrentDateTime(), $model->start_date) == -1) {
+//                            SMSHandler::sendSMSOnce($customer->getPhone(),
+//                                'Quý Khách hàng đã đặt hẹn trên Hệ thống Nha Khoa Việt Mỹ vào lúc '
+//                                . $model->getStartTime() . ' với bác sĩ ' . $mSchedule->rDoctor->first_name
+//                                . '. Quý Khách hàng vui lòng sắp xếp thời gian đến đúng hẹn');
+//                        }
+                        // Inform for customer
+                        SMSHandler::sendSMSCreateSchedule($model->start_date,
+                                $customer->getPhone(),
+                                $model->getStartTime(),
+                                $mSchedule->rDoctor->getFullName(),
+                                $customer->id,
+                                Settings::KEY_SMS_SEND_CREATE_SCHEDULE_DETAIL);
                     }
                     
                     echo CJavaScript::jsonEncode(array(

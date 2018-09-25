@@ -23,6 +23,7 @@ class ScheduleSms extends CActiveRecord {
     public $aTypeSchedule = [
         Settings::KEY_SMS_SEND_CREATE_SCHEDULE,
         Settings::KEY_SMS_SEND_UPDATE_SCHEDULE,
+        Settings::KEY_SMS_SEND_CREATE_SCHEDULE_DETAIL,
         Settings::KEY_SMS_SEND_CREATE_RECEIPT,
     ];
     public $ServiceID       = '';
@@ -108,6 +109,7 @@ class ScheduleSms extends CActiveRecord {
      *  @Todo: send SMS
      * */
     public function runCronBig() {// gửi những SMS SL nhiều
+        Loggers::info('Start', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         $aTypeSend = $this->getArrayTypeSend();
         $data = $this->getDataCron($aTypeSend);
         $this->runCron($data);
@@ -132,6 +134,7 @@ class ScheduleSms extends CActiveRecord {
      * */
     public function runCron($data) {
         $from = time();
+        Loggers::info('Count', count($data), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         if (count($data) < 1) {
             return;
         }

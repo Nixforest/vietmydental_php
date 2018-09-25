@@ -109,6 +109,8 @@ class Settings extends BaseActiveRecord
     const KEY_SMS_SEND_CREATE_SCHEDULE          = 'SMS_SEND_CREATE_SCHEDULE';
     /** Key SMS type send: update schedule */
     const KEY_SMS_SEND_UPDATE_SCHEDULE          = 'SMS_SEND_UPDATE_SCHEDULE';
+    /** Key SMS type send: create schedule detail */
+    const KEY_SMS_SEND_CREATE_SCHEDULE_DETAIL   = 'SMS_SEND_CREATE_SCHEDULE_DETAIL';
     /** Key SMS type send: create receipt */
     const KEY_SMS_SEND_CREATE_RECEIPT           = 'SMS_SEND_RECEIPT';
     /** Key SMS type send: alarm schedule */
