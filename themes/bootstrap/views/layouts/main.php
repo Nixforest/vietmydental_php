@@ -46,7 +46,8 @@ Yii::app()->clientscript
         <style>
             .containerX {
                 overflow: hidden;
-                background-color: #333;
+                /*background-color: #333;*/
+                background-color: #00BAC2;
                 font-family: Arial;
             }
 
@@ -250,7 +251,7 @@ Yii::app()->clientscript
                         About us | Contact us | Terms & Conditions
                     </div> <!-- /span6 -->
                     <div id="footer-terms" class="col-md-6">
-                        © 2017 <a href="http://immortal.vn" target="_blank">Immortal.vn</a>
+                        © 2017 <a href="http://www.immortal.vn/" target="_blank">Immortal.vn</a>
                     </div> <!-- /.span6 -->
                 </div> <!-- /row -->
             </div> <!-- /container -->

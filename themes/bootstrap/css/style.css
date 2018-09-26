@@ -29,6 +29,7 @@ padding-left:20px;
 padding-right:20px;
 padding-bottom:20px;
 background-color: #fff;
+/*background-color: #00BAC2;*/
 border: 1px solid #DEDEDE;
 border-radius:3px;
 -webkit-border-radius:3px;
@@ -48,7 +49,8 @@ p, div {
 
 div.portlet-decoration {
 color: #fff;
-background-color: #000;
+/*background-color: #000;*/
+background-color: #00BAC2;
 padding: 10px 15px;
 border-bottom: 1px solid transparent;
 border-top-right-radius: 3px;
@@ -432,6 +434,7 @@ input[type="checkbox"][readonly] {
   margin: 0 0 18px;
   list-style: none;
   background-color: #fbfbfb;
+  /*background-color: #00BAC2;*/
   background-image: -moz-linear-gradient(top, #ffffff, #f5f5f5);
   background-image: -ms-linear-gradient(top, #ffffff, #f5f5f5);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f5f5f5));
@@ -496,8 +499,10 @@ p.hint { float:left; display:block;}
   border-top: 1px solid #000;
   padding: 20px 0;
   font-size: 11px;
-  color: #BBB;
-  background: #1A1A1A;
+  /*color: #BBB;*/
+  color: white;
+  /*background: #1A1A1A;*/
+  background: #00BAC2;
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
@@ -507,7 +512,8 @@ p.hint { float:left; display:block;}
 }
 
 .extra a {
-  color: #666;
+  /*color: #666;*/
+  color: white;
 }
 .extra h4 {
   margin-bottom: 1em;
@@ -529,8 +535,10 @@ p.hint { float:left; display:block;}
   border-top: 1px solid #000;
   padding: 15px 0;
   font-size: 12px;
-  background: #111;
-  color: #999;
+  /*background: #111;*/
+  background: #00BAC2;
+  /*color: #999;*/
+  color: white;
   -webkit-box-shadow: inset 0 1px 0 #292929;
   box-shadow: inset 0 1px 0 #292929;
 }
