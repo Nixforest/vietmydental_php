@@ -27,6 +27,7 @@ class SettingsController extends AdminController {
                 Settings::KEY_PRINT_RECEIPT_FONT_SIZE_RATE,
                 Settings::KEY_SMS_PROVIDER,
                 Settings::KEY_TOOTH_COLOR,
+                Settings::KEY_NEWS_DATE_OF_HOT_NEWS,
             /** Test */
 //                    Settings::KEY_APP_MOBILE_VERSION_IOS,
 //                    Settings::KEY_ADMIN_EMAIL,

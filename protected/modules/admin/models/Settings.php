@@ -47,6 +47,8 @@ class Settings extends BaseActiveRecord
     const KEY_SMS_PROVIDER                      = 'SMS_PROVIDER';
     /** key TOOTH COLOR */
     const KEY_TOOTH_COLOR                       = 'TOOTH_COLOR';
+    /** key TOOTH COLOR */
+    const KEY_NEWS_DATE_OF_HOT_NEWS             = 'NEWS_DATE_OF_HOT_NEWS';
     
     /* --- App settings --- */
     /** Key Mobile app version iOS */
@@ -455,5 +457,17 @@ class Settings extends BaseActiveRecord
             return $retVal;
         }
         return SENDGRID_API_KEY;
+    }
+    
+    /**
+     * Get number of date hot news
+     * @return int Number of date hot news
+     */
+    public static function getNumberOfDateHotNews() {
+        $retVal = Settings::getItem(Settings::KEY_NEWS_DATE_OF_HOT_NEWS);
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return 3;
     }
 }

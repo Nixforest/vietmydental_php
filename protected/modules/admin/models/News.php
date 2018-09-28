@@ -215,7 +215,7 @@ class News extends BaseActiveRecord {
     public function isNew() {
         $retVal = false;
         $today = CommonProcess::getCurrentDateTime();
-        $lastDate = CommonProcess::getMinusDate(3);
+        $lastDate = CommonProcess::getMinusDate(Settings::getNumberOfDateHotNews());
 
         if ((DateTimeExt::compare($this->created_date, $lastDate) >= 0)
                 && (DateTimeExt::compare($this->created_date, $today) <= 0)) {
