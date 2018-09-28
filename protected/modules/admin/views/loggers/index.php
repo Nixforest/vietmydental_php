@@ -61,3 +61,8 @@ $('.search-form form').submit(function(){
                 ),
 	),
 )); ?>
+<style>
+    .grid-view table td {
+        word-break: break-all;
+    }
+</style>
