@@ -81,6 +81,10 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
                     'value' => '$data->getCreatedDate()',
                 ),
                 array(
+                    'name'  => 'created_date',
+                    'value' => '$data->isNew() ? "true" : "false"',
+                ),
+                array(
                     'header' => 'Actions',
                     'class'=>'CButtonColumn',
                     'template'=> $this->createActionButtons(),

@@ -12,7 +12,7 @@ $aNews = $mNews->getArrayNews(News::STATUS_ACTIVE, $category->id);
             <ul>
                 <?php foreach ($aNews as $key => $mNews) { ?>
                 <li>
-                    <a target="" class="_link" href="<?php echo Yii::app()->createAbsoluteUrl('/front/news/view',['id'=>$mNews->id]); ?>"><?php echo $mNews->getField('description'); ?></a>
+                    <a target="" class="_link <?php echo ($mNews->isNew()) ? 'new' : ''; ?>" href="<?php echo Yii::app()->createAbsoluteUrl('/front/news/view',['id'=>$mNews->id]); ?>"><?php echo $mNews->getField('description'); ?></a>
                 </li>
                 <?php } ?>
                 <?php foreach($category->rChildren as $childCategory) : ?>
@@ -24,7 +24,7 @@ $aNews = $mNews->getArrayNews(News::STATUS_ACTIVE, $category->id);
                     ?>
                     <?php foreach ($aNews as $key => $mNews) { ?>
                     <li style="margin-left: 26px;" type="square">
-                        <a target="" class="_link" href="<?php echo Yii::app()->createAbsoluteUrl('/front/news/view',['id'=>$mNews->id]); ?>">
+                        <a target="" class="_link <?php echo ($mNews->isNew()) ? 'new' : ''; ?>" href="<?php echo Yii::app()->createAbsoluteUrl('/front/news/view',['id'=>$mNews->id]); ?>">
                             <?php echo DomainConst::SPACE . $mNews->getField('description'); ?>
                         </a>
                     </li>
@@ -35,4 +35,11 @@ $aNews = $mNews->getArrayNews(News::STATUS_ACTIVE, $category->id);
     </section>
 </div>
 <?php endforeach; ?>
-<?php endif;
+<?php endif; ?>
+
+<style>
+    .new {
+        color: red;
+        font-weight: bold;
+    }
+</style>

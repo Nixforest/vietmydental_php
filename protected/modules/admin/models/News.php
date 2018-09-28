@@ -110,6 +110,7 @@ class News extends BaseActiveRecord {
         $criteria->compare('status', $this->status);
         $criteria->compare('created_date', $this->created_date, true);
         $criteria->compare('created_by', $this->created_by, true);
+        $criteria->order = 'id desc';
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
@@ -179,13 +180,18 @@ class News extends BaseActiveRecord {
      */
     public function getArrayNews($status = News::STATUS_ACTIVE, $category = '') {
         $aNews = [];
-        $criteria = new CDbCriteria;
-        $criteria->compare('status', $status);
-        if (!empty($category)) {
-            $criteria->compare('category_id', $category);
+        try {
+            $criteria = new CDbCriteria;
+            $criteria->compare('status', $status);
+            if (!empty($category)) {
+                $criteria->compare('category_id', $category);
+            }
+            $criteria->order = 't.id DESC';
+            $aNews = News::model()->findAll($criteria);
+        } catch (Exception $ex) {
+            Loggers::error(DomainConst::CONTENT00214, $ex->getMessage(), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         }
-        $criteria->order = 't.id DESC';
-        $aNews = News::model()->findAll($criteria);
+        
         return $aNews;
     }
     
@@ -202,4 +208,20 @@ class News extends BaseActiveRecord {
         return $retVal;
     }
 
+    /**
+     * Check this model is a new model. That mean created_date between today and 3 days ago
+     * @return boolean True if model is a new model, False otherwise
+     */
+    public function isNew() {
+        $retVal = false;
+        $today = CommonProcess::getCurrentDateTime();
+        $lastDate = CommonProcess::getMinusDate(3);
+
+        if ((DateTimeExt::compare($this->created_date, $lastDate) >= 0)
+                && (DateTimeExt::compare($this->created_date, $today) <= 0)) {
+            $retVal = true;
+        }
+        
+        return $retVal;
+    }
 }

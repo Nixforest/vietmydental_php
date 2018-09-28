@@ -496,6 +496,28 @@ class CommonProcess {
     }
     
     /**
+     * Get plus date value
+     * @param Int $numberOfDate Number of date need plus
+     * @param String $format Date time format
+     * @return Date time string (default is DATE_FORMAT_1 - 'Y-m-d H:i:s')
+     */
+    public static function getPlusDate($numberOfDate, $format = DomainConst::DATE_FORMAT_1) {
+        date_default_timezone_set(DomainConst::DEFAULT_TIMEZONE);
+        return date($format, strtotime('+' . $numberOfDate . ' day'));
+    }
+    
+    /**
+     * Get minus date value
+     * @param Int $numberOfDate Number of date need minus
+     * @param String $format Date time format
+     * @return Date time string (default is DATE_FORMAT_1 - 'Y-m-d H:i:s')
+     */
+    public static function getMinusDate($numberOfDate, $format = DomainConst::DATE_FORMAT_1) {
+        date_default_timezone_set(DomainConst::DEFAULT_TIMEZONE);
+        return date($format, strtotime('-' . $numberOfDate . ' day'));
+    }
+    
+    /**
      * Get yesterday
      * @param String $format Date time format
      * @return Date time string (default is DATE_FORMAT_1 - 'Y-m-d H:i:s')

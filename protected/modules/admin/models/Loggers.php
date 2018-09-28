@@ -154,12 +154,12 @@ class Loggers extends CActiveRecord
     //-----------------------------------------------------
     /**
      * Insert record
-     * @param String $message
      * @param String $description
+     * @param String $message
      * @param String $level
      * @param String $category
      */
-    public static function insertOne($message, $description, $level, $category) {
+    public static function insertOne($description, $message, $level, $category) {
         $model = new Loggers();
         $model->message = $message;
         $model->description = $description;
@@ -167,7 +167,12 @@ class Loggers extends CActiveRecord
         $model->logtime = time();
 //        $model->logtime = self::microseconds();
         $model->category = $category;
-        $model->save();
+        if ($model->save()) {
+            
+        } else {
+            self::error('Can not save log', CommonProcess::json_encode_unicode($model->getErrors()),
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        }
     }
     
     private static function microseconds() {

@@ -26,6 +26,7 @@
     </select>
     <br>
     <?php
+    
         $model = new LaboRequests();
         $this->widget('DatePickerWidget', array(
             'model' => $model,
@@ -249,4 +250,9 @@
     $user = Users::getUserByName($name);
     CommonProcess::echoTest("User: ", isset($user) ? $user->getFullName() : 'Không tìm thấy');
 
+        $newsId = 1;
+        $mNews = News::model()->findByPk($newsId);
+        if ($mNews) {
+            CommonProcess::echoTest('Is new? ', ($mNews->isNew()) ? 'true' : 'false');
+        }
 ?>
