@@ -93,6 +93,10 @@ class DomainConst {
     const DATE_FORMAT_11                                = 'd/m/Y H:i';
     /** Date format */
     const DATE_FORMAT_12                                = 'yy-mm-dd';
+    /** Date format */
+    const DATE_FORMAT_13                                = 'm/Y';
+    /** Date format */
+    const DATE_FORMAT_14                                = 'mm/yy';
     /** Date default value null */
     const DATE_DEFAULT_NULL                             = '0000-00-00';
     /** Date default value null */
@@ -1601,4 +1605,10 @@ class DomainConst {
     const CONTENT00465  = 'Lên răng (Thử răng)';
     const CONTENT00466  = 'Ép nhựa';
     const CONTENT00467  = 'Mới tạo';
+    const CONTENT00468  = 'Người chịu trách nhiệm';
+    const CONTENT00469  = 'Lý do';
+    const CONTENT00470  = 'Tháng';
+    const CONTENT00471  = 'Thông tin liên quan';
+    const CONTENT00472  = 'Văn bản';
+    const CONTENT00473  = 'Hoàn tất';
 }
