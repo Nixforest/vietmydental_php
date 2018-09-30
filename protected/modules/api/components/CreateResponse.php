@@ -42,6 +42,7 @@ class CreateResponse {
             DomainConst::KEY_TIMER              => ScheduleTimes::getJsonList(),
             DomainConst::KEY_DIAGNOSIS_OTHER_ID => Diagnosis::getOtherDiagnosisId(),
             DomainConst::KEY_LIST_AGENT         => Agents::getAgentListJson(),
+            DomainConst::KEY_AGENT_LIST         => $mUser->getAgentListJson(),
             Settings::KEY_APP_API_LIST_PAGE_SIZE => Settings::getApiListPageSize(),
         );
         ApiModule::sendResponse($result, $objController);

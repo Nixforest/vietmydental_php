@@ -1129,6 +1129,8 @@ class DomainConst {
     const ITEM_DEBT                         = '48';
     /** Item id: Receptionist */
     const ITEM_RECEIPTIONIST                = '49';
+    /** Item id: Status string */
+    const ITEM_STATUS_STR                   = '50';
     
     
     /**----- Message content -----*/

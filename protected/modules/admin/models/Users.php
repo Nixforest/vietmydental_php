@@ -507,6 +507,18 @@ class Users extends BaseActiveRecord {
         }
         return $retVal;
     }
+    
+    /**
+     * Get list agent in Json format
+     * @return Array Json format list agent
+     */
+    public function getAgentListJson() {
+        $retVal = [];
+        foreach ($this->rAgents as $agent) {
+            $retVal[] = CommonProcess::createConfigJson($agent->id, $agent->name);
+        }
+        return $retVal;
+    }
         
     /**
      * Get agents

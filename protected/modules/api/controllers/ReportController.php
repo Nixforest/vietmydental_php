@@ -71,7 +71,7 @@ class ReportController extends APIController {
         if (empty($to)) {
             $to = CommonProcess::getCurrentDateTime($dateFormat);
         }
-        $allReceipts = Agents::getRevenueMultiAgent($from, $to, array(Receipts::STATUS_RECEIPTIONIST), true, $arrAgentId);
+        $allReceipts = Agents::getRevenueMultiAgent($from, $to, array(Receipts::STATUS_RECEIPTIONIST), true, $arrAgentId, '', true);
         $result = ApiModule::$defaultSuccessResponse;
         $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00194;
         $result[DomainConst::KEY_DATA] = array(
