@@ -123,6 +123,13 @@ $mLaboServices = new LaboServices();
 		<?php echo $form->textField($model,'price'); ?>
 		<?php echo $form->error($model,'price'); ?>
 	</div>
+
+        <div class="row">
+            <?php echo $form->labelEx($model, 'status'); ?>
+            <?php // echo $form->textField($model, 'status'); ?>
+            <?php echo $form->dropdownlist($model, 'status', LaboRequests::getArrayStatus()); ?>
+            <?php echo $form->error($model, 'status'); ?>
+        </div>
         
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>

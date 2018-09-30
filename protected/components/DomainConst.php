@@ -1581,4 +1581,22 @@ class DomainConst {
     const CONTENT00447  = 'Tạo thông tin bảo hành';
     const CONTENT00448  = 'Không thể tìm thấy Bệnh nhân';
     const CONTENT00449  = 'Không thể tìm thấy Lần điều trị';
+    const CONTENT00450  = 'Nhận hàng';
+    const CONTENT00451  = 'Cưa đai';
+    const CONTENT00452  = 'Điêu khắc sáp';
+    const CONTENT00453  = 'Nung kim loại';
+    const CONTENT00454  = 'Sườn kim loại';
+    const CONTENT00455  = 'Quét OPEC';
+    const CONTENT00456  = 'Đắp sứ + Nướng';
+    const CONTENT00457  = 'Mài sứ (thử sứ thô)';
+    const CONTENT00458  = 'Nướng bóng';
+    const CONTENT00459  = 'Lễ tân kiểm tra và đóng gói';
+    const CONTENT00460  = 'Phòng Zico (Máy cắt CAM)';
+    const CONTENT00461  = 'Nung Zico';
+    const CONTENT00462  = 'Mài Sườn (thử sườn)';
+    const CONTENT00463  = 'Tháo lắp';
+    const CONTENT00464  = 'Làm gối sáp (Cắn khớp)';
+    const CONTENT00465  = 'Lên răng (Thử răng)';
+    const CONTENT00466  = 'Ép nhựa';
+    const CONTENT00467  = 'Mới tạo';
 }

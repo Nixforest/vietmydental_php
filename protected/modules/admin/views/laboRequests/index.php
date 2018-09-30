@@ -1,7 +1,7 @@
 <?php
 /* @var $this LaboRequestsController */
 /* @var $dataProvider CActiveDataProvider */
-$this->createMenu('', $model);
+$this->createMenu('index', $model);
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
@@ -60,8 +60,13 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'value'     => '$data->getDoctorName()',
         ),
         array(
+            'header'    => DomainConst::CONTENT00146,
+            'type'      => 'html',
+            'value'     => '$data->getTreatmentInfo()',
+        ),
+        array(
             'name' => 'service_id',
-            'value' => 'isset($data->rService) ? $data->rService->name : ""',
+            'value' => '$data->getService()',
         ),
         'date_request',
         array(
@@ -79,7 +84,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'name' => 'status',
-            'type'  => 'status',
+            'value'  => '$data->getStatus()',
         ),
         'created_date',
         array(

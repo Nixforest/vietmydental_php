@@ -29,8 +29,42 @@ class LaboRequests extends BaseActiveRecord {
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
-    const STATUS_ACTIVE         = 1;
-    const STATUS_INACTIVE       = 0;
+    const STATUS_ACTIVE                 = 1;
+    const STATUS_INACTIVE               = 0;
+    /** Cưa đai */
+    const STATUS_SAW_BELT               = 2;            // Cưa đai
+    /** Điêu khắc sáp */
+    const STATUS_WAX_SCULPTURE          = 3;            // Điêu khắc sáp
+    /** Nung kim loại */
+    const STATUS_METAL_HEATING          = 4;            // Nung kim loại
+    /** Sườn kim loại */
+    const STATUS_METAL_FRAME            = 5;            // Sườn kim loại
+    /** Quét OPEC */
+    const STATUS_SCAN_OPEC              = 6;            // Quét OPEC
+    /** Đắp sứ và Nướng */
+    const STATUS_GRAFTING_PORCELAIN     = 7;            // Đắp sứ và Nướng
+    /** Mài sứ (thử sứ thô) */
+    const STATUS_GRINDING_PORCELAIN     = 8;            // Mài sứ (thử sứ thô)
+    /** Nướng bóng */
+    const STATUS_GRILLED_POLIST         = 9;            // Nướng bóng
+    /** Lễ tân kiểm tra và đóng gói */
+    const STATUS_PACKAGED               = 10;           // Lễ tân kiểm tra và đóng gói
+    /** Phòng Zico (Máy cắt CAM) */
+    const STATUS_ZICO_CAM_CUT           = 11;           // Phòng Zico (Máy cắt CAM)
+    /** Nung Zico */
+    const STATUS_ZICO_HEATING           = 12;           // Nung Zico
+    /** Mài Sườn */
+    const STATUS_GRINDING_FRAME         = 13;           // Mài Sườn
+    /** Tháo lắp */
+    const STATUS_REMOVABLE              = 14;
+    /** Làm gối sáp (Cắn khớp) */
+    const STATUS_WAX_PILLOW             = 15;
+    /** Lên răng (Thử răng) */
+    const STATUS_TEST_TEETH             = 16;
+    /** Ép nhựa */
+    const STATUS_PLASTIC                = 17;
+    /** Nhận hàng */
+    const STATUS_RECEIVE                = 18;
 
     //-----------------------------------------------------
     // Properties
@@ -129,6 +163,7 @@ class LaboRequests extends BaseActiveRecord {
         $criteria->compare('status', $this->status);
         $criteria->compare('created_date', $this->created_date, true);
         $criteria->compare('created_by', $this->created_by, true);
+        $criteria->order = 'id desc';
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
@@ -313,6 +348,21 @@ class LaboRequests extends BaseActiveRecord {
     }
     
     /**
+     * Get treatment info
+     * @return string Treatment info as string
+     */
+    public function getTreatmentInfo() {
+        if (isset($this->rTreatmentScheduleDetail)) {
+            $retVal = $this->rTreatmentScheduleDetail->getTitle();
+            $retVal .= '<br/>';
+            $retVal .= $this->rTreatmentScheduleDetail->getStartTime();
+            return $retVal;
+        }
+        
+        return '';
+    }
+    
+    /**
      * Get customer model
      * @return Object Customer model, Null if not found
      */
@@ -388,5 +438,47 @@ class LaboRequests extends BaseActiveRecord {
             $retVal = $this->rTreatmentScheduleDetail->getDoctor();
         }
         return $retVal;
+    }
+    
+    /**
+     * Get status of model
+     * @return string Status string
+     */
+    public function getStatus() {
+        if (isset(self::getArrayStatus()[$this->status])) {
+            return self::getArrayStatus()[$this->status];
+        }
+        return '';
+    }
+
+    //-----------------------------------------------------
+    // Static methods
+    //-----------------------------------------------------
+    /**
+     * Get list status of model
+     * @return Array List status
+     */
+    public static function getArrayStatus() {
+        return [
+            self::STATUS_INACTIVE           => DomainConst::CONTENT00403,
+            self::STATUS_ACTIVE             => DomainConst::CONTENT00467,
+            self::STATUS_RECEIVE            => DomainConst::CONTENT00450,
+            self::STATUS_SAW_BELT           => DomainConst::CONTENT00451,
+            self::STATUS_WAX_SCULPTURE      => DomainConst::CONTENT00452,
+            self::STATUS_METAL_HEATING      => DomainConst::CONTENT00453,
+            self::STATUS_METAL_FRAME        => DomainConst::CONTENT00454,
+            self::STATUS_SCAN_OPEC          => DomainConst::CONTENT00455,
+            self::STATUS_GRAFTING_PORCELAIN => DomainConst::CONTENT00456,
+            self::STATUS_GRINDING_PORCELAIN => DomainConst::CONTENT00457,
+            self::STATUS_GRILLED_POLIST     => DomainConst::CONTENT00458,
+            self::STATUS_PACKAGED           => DomainConst::CONTENT00459,
+            self::STATUS_ZICO_CAM_CUT       => DomainConst::CONTENT00460,
+            self::STATUS_ZICO_HEATING       => DomainConst::CONTENT00461,
+            self::STATUS_GRINDING_FRAME     => DomainConst::CONTENT00462,
+            self::STATUS_REMOVABLE          => DomainConst::CONTENT00463,
+            self::STATUS_WAX_PILLOW         => DomainConst::CONTENT00464,
+            self::STATUS_TEST_TEETH         => DomainConst::CONTENT00465,
+            self::STATUS_PLASTIC            => DomainConst::CONTENT00466,
+        ];
     }
 }
