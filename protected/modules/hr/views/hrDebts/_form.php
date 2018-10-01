@@ -61,11 +61,11 @@
             }
         }
         $this->widget('DatePickerWidget', array(
-            'model' => $model,
-            'field' => 'month',
-            'value' => $month,
+            'model'         => $model,
+            'field'         => 'month',
+            'value'         => $month,
             'isReadOnly'    => false,
-            'format'    => DomainConst::DATE_FORMAT_14,
+            'format'        => DomainConst::DATE_FORMAT_14,
         ));
         ?>
         <?php echo $form->error($model, 'month'); ?>

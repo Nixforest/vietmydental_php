@@ -1,6 +1,6 @@
 <?php
-/* @var $this HrDebtsController */
-/* @var $model HrDebts */
+/* @var $this HrHolidaysController */
+/* @var $model HrHolidays */
 $this->createMenu('index', $model);
 
 Yii::app()->clientScript->registerScript('search', "
@@ -9,7 +9,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#hr-debts-grid').yiiGridView('update', {
+	$('#hr-holidays-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -35,7 +35,7 @@ $('.search-form form').submit(function(){
 
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
-    'id' => 'hr-debts-grid',
+    'id' => 'hr-holidays-grid',
     'dataProvider' => $model->search(),
     'filter' => $model,
     'columns' => array(
@@ -46,27 +46,14 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'headerHtmlOptions' => array('width' => '30px', 'style' => 'text-align:center;'),
             'htmlOptions' => array('style' => 'text-align:center;')
         ),
+        'name',
+        'date',
         array(
-            'name' => 'user_id',
-            'value' => '$data->getUserName()',
-        ),
-        array(
-            'name' => 'amount',
-            'value' => '$data->getAmount()',
-        ),
-        'reason',
-        array(
-            'name' => 'month',
-            'value' => '$data->getMonth()',
-        ),
-        array(
-            'name' => 'type',
+            'name' => 'type_id',
             'value' => '$data->getType()',
         ),
-        array(
-            'name' => 'relate_id',
-            'value' => '$data->getRelationInfo()',
-        ),
+        'compensatory_date',
+        'description',
         array(
             'name' => 'status',
             'value' => '$data->getStatus()',

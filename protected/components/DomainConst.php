@@ -1621,4 +1621,7 @@ class DomainConst {
     const CONTENT00479  = 'Năm';
     const CONTENT00480  = 'Loại ngày nghỉ lễ';
     const CONTENT00481  = 'Hệ số công';
+    const CONTENT00482  = 'Tên ngày nghỉ';
+    const CONTENT00483  = 'Ngày';
+    const CONTENT00484  = 'Ngày nghỉ bù';
 }

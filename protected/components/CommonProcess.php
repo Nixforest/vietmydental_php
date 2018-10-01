@@ -611,6 +611,26 @@ class CommonProcess {
         date_default_timezone_set(DomainConst::DEFAULT_TIMEZONE);
         return date($format, strtotime('-1 day', strtotime($date)));
     }
+    
+    /**
+     * Get all days in year
+     * @param String $year Year value
+     * @param Array $aDay List day of week need to get ('Sun','Mon','Tue','Wed','Thu','Fri','Sat')
+     * @return Array List of days in year
+     */
+    public static function getAllDay($year, $aDay = array()) {
+        $result = array();
+        $begin = new DateTime("{$year}-01-01");
+        $end = new DateTime("{$year}-12-31");
+        $interval = DateInterval::createFromDateString('1 day');
+        $period = new DatePeriod($begin, $interval, $end);
+        foreach ($period as $dt) {
+            if (in_array($dt->format("D"), $aDay)) {
+                $result[] = $dt->format('Y-m-d');
+            }
+        }
+        return $result;
+    }
             
     //-----------------------------------------------------
     // -- Date time process
