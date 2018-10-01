@@ -462,7 +462,6 @@ class CommonProcess {
      * @return type
      */
     public static function convertDateTimeWithFormat($datetime, $format = DomainConst::DATE_FORMAT_3) {
-//        $time = DateTime::createFromFormat(DomainConst::DATE_FORMAT_1, $datetime)->format($format);
         $time = self::convertDateTime($datetime, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_3);
         return $time;
     }
@@ -475,6 +474,7 @@ class CommonProcess {
      * @return String Date time value after convert
      */
     public static function convertDateTime($datetime, $fromFormat, $toFormat) {
+        date_default_timezone_set(DomainConst::DEFAULT_TIMEZONE);
         if (DateTimeExt::isDateNull($datetime)) {
             return '';
         }
@@ -543,7 +543,7 @@ class CommonProcess {
      * @return Date time string (default is DATE_FORMAT_1 - 'Y-m-d H:i:s')
      */
     public static function getTomorrowDateTime($format = DomainConst::DATE_FORMAT_1) {
-        ate_default_timezone_set(DomainConst::DEFAULT_TIMEZONE);
+        date_default_timezone_set(DomainConst::DEFAULT_TIMEZONE);
         return date($format, strtotime('1 day'));
     }
     
@@ -574,6 +574,7 @@ class CommonProcess {
      * @return Date time string (default is DATE_FORMAT_4 - 'Y-m-d')
      */
     public static function getFirstDateOfMonth($date) {
+        date_default_timezone_set(DomainConst::DEFAULT_TIMEZONE);
         return date('Y-m-01', strtotime($date));
     }
     
@@ -583,6 +584,7 @@ class CommonProcess {
      * @return Date time string (default is DATE_FORMAT_4 - 'Y-m-d')
      */
     public static function getLastDateOfMonth($date) {
+        date_default_timezone_set(DomainConst::DEFAULT_TIMEZONE);
         return date('Y-m-t', strtotime($date));
     }
     

@@ -11,9 +11,9 @@
  * @property string $month          Month
  * @property integer $type          Type of debts
  * @property string $relate_id      Id of model relate
- * @property integer $status                Status
- * @property string $created_date           Created date
- * @property string $created_by             Created by
+ * @property integer $status        Status
+ * @property string $created_date   Created date
+ * @property string $created_by     Created by
  *
  * The followings are the available model relations:
  * @property Users                      $rCreatedBy                     User created this record

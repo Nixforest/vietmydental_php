@@ -8,6 +8,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker', array(
         'dateFormat'    => $format,
         'changeMonth'   => true,
         'changeYear'    => true,
+        'showButtonPanel'=>true,
     ),
     'htmlOptions'       => array(
         'readonly'  => $isReadOnly,

@@ -97,6 +97,8 @@ class DomainConst {
     const DATE_FORMAT_13                                = 'm/Y';
     /** Date format */
     const DATE_FORMAT_14                                = 'mm/yy';
+    /** Date format */
+    const DATE_FORMAT_15                                = 'yy';
     /** Date default value null */
     const DATE_DEFAULT_NULL                             = '0000-00-00';
     /** Date default value null */
@@ -1611,4 +1613,10 @@ class DomainConst {
     const CONTENT00471  = 'Thông tin liên quan';
     const CONTENT00472  = 'Văn bản';
     const CONTENT00473  = 'Hoàn tất';
+    const CONTENT00474  = 'Người duyệt';
+    const CONTENT00475  = 'Ngày duyệt';
+    const CONTENT00476  = 'Đã duyệt';
+    const CONTENT00477  = 'Không duyệt';
+    const CONTENT00478  = 'Yêu cầu cập nhật';
+    const CONTENT00479  = 'Năm';
 }

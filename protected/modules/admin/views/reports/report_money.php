@@ -252,8 +252,20 @@ $this->widget('zii.widgets.grid.CGridView', array(
         </thead>
         <tbody>
             <?php $index = 0; ?>
+            <?php
+            $inTotal = 0;
+            $outTotal = 0;
+            ?>
             <?php  foreach ($aData['GENERAL']['DATES'] as $key => $date) { ?>
             <tr class="<?php echo (($index++ % 2) == 1) ? 'even' : 'odd'; ?>">
+                <?php
+                if (!empty($aData['GENERAL']['IMPORT'][$date])) {
+                    $inTotal += $aData['GENERAL']['IMPORT'][$date];
+                }
+                if (!empty($aData['GENERAL']['EXPORT'][$date])) {
+                    $outTotal += $aData['GENERAL']['EXPORT'][$date];
+                }
+                ?>
                 <td style="text-align:center;"><?php echo $date; ?></td>
                 <td style="text-align:right;"><?php echo !empty($aData['GENERAL']['IMPORT'][$date])
                     ? CommonProcess::formatCurrency($aData['GENERAL']['IMPORT'][$date]) : ''; ?></td>
@@ -261,6 +273,12 @@ $this->widget('zii.widgets.grid.CGridView', array(
                     ? CommonProcess::formatCurrency($aData['GENERAL']['EXPORT'][$date]) : ''; ?></td>
             </tr>
             <?php }?>
+            
+            <tr>
+                <td style="text-align:center; font-weight:bold;"><?php echo DomainConst::CONTENT00254; ?></td>
+                <td style="text-align:right; font-weight:bold;"><?php echo CommonProcess::formatCurrency($inTotal); ?></td>
+                <td style="text-align:right; font-weight:bold;"><?php echo CommonProcess::formatCurrency($outTotal); ?></td>
+            </tr>
         </tbody>
     </table>
 </div>
