@@ -1619,4 +1619,6 @@ class DomainConst {
     const CONTENT00477  = 'Không duyệt';
     const CONTENT00478  = 'Yêu cầu cập nhật';
     const CONTENT00479  = 'Năm';
+    const CONTENT00480  = 'Loại ngày nghỉ lễ';
+    const CONTENT00481  = 'Hệ số công';
 }

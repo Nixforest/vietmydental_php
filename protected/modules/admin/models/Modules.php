@@ -42,7 +42,10 @@ class Modules extends BaseActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-                    'rController'   => array(self::HAS_MANY, 'Controllers', 'module_id'),
+                    'rController'   => array(
+                        self::HAS_MANY, 'Controllers', 'module_id',
+                        'order' => 'id DESC',
+                    ),
                     'rMenu'         => array(self::HAS_MANY, 'Menus', 'module_id'),
 		);
 	}

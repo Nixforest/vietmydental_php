@@ -83,7 +83,7 @@
         <?php echo $form->error($model, 'relate_id'); ?>
     </div>
 
-    <div class="row">
+    <div class="row" style="<?php echo (($model->isNewRecord) ? "display: none;" : ""); ?>">
         <?php echo $form->labelEx($model, 'status'); ?>
         <?php echo $form->dropDownList($model, 'status', HrDebts::getArrayStatus()); ?>
         <?php echo $form->error($model, 'status'); ?>
