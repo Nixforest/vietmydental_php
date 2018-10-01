@@ -4,11 +4,14 @@
  * This is the model class for table "roles".
  *
  * The followings are the available columns in table 'roles':
- * @property integer $id
- * @property string $role_name
- * @property string $role_short_name
- * @property integer $application_id
- * @property integer $status
+ * @property integer $id                Id of record
+ * @property string $role_name          Name of role
+ * @property string $role_short_name    Short name of role
+ * @property integer $application_id    Id of application
+ * @property integer $status            Status
+ *
+ * The followings are the available model relations:
+ * @property HrWorkShift[]                      $rWorkShifts        Array work shifts belong to this role
  */
 class Roles extends BaseActiveRecord
 {
@@ -79,6 +82,10 @@ class Roles extends BaseActiveRecord
                     'rActionsRole'  => array(self::HAS_MANY, 'ActionsRoles', 'role_id'),
                     'rApiUserToken'  => array(self::HAS_MANY, 'ApiUserTokens', 'role_id'),
                     'rLoginLog'  => array(self::HAS_MANY, 'LoginLogs', 'role_id'),
+                    'rWorkShifts'   => array(
+                        self::HAS_MANY, 'HrWorkShifts', 'role_id',
+                        'on'    => 'status !=' . HrWorkShifts::STATUS_INACTIVE,
+                    ),
 		);
 	}
 

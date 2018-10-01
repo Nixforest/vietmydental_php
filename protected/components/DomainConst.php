@@ -1624,4 +1624,9 @@ class DomainConst {
     const CONTENT00482  = 'Tên ngày nghỉ';
     const CONTENT00483  = 'Ngày';
     const CONTENT00484  = 'Ngày nghỉ bù';
+    const CONTENT00485  = 'Tên ca';
+    const CONTENT00486  = 'Từ';
+    const CONTENT00487  = 'Đến';
+    const CONTENT00488  = 'Nhóm user';
+    const CONTENT00489  = 'Ca thường';
 }
