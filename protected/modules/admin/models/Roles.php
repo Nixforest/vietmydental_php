@@ -13,6 +13,7 @@
  * The followings are the available model relations:
  * @property HrWorkShifts[]                     $rWorkShifts        Array work shifts belong to this role
  * @property HrWorkPlans[]                      $rWorkPlans         Array work plans belong to this role
+ * @property HrParameters[]                     $rParameters        Array parameters belong to this role
  */
 class Roles extends BaseActiveRecord
 {
@@ -90,6 +91,10 @@ class Roles extends BaseActiveRecord
                     'rWorkPlans'   => array(
                         self::HAS_MANY, 'HrWorkPlans', 'role_id',
                         'on'    => 'status !=' . HrWorkPlans::STATUS_INACTIVE,
+                    ),
+                    'rParameters'   => array(
+                        self::HAS_MANY, 'HrParameters', 'role_id',
+                        'on'    => 'status !=' . HrParameters::STATUS_INACTIVE,
                     ),
 		);
 	}
@@ -262,5 +267,24 @@ class Roles extends BaseActiveRecord
             return true;
         }
         return false;
+    }
+    
+    /**
+     * Get role array for salary calculating
+     * @return Array List roles
+     */
+    public static function getRoleArrayForSalary() {
+        $_items = array();
+        $_items['0'] = DomainConst::CONTENT00409;
+        $models = self::model()->findAll(array(
+            'order' => 'id ASC',
+        ));
+        foreach ($models as $model) {
+            if (($model->status == DomainConst::DEFAULT_STATUS_ACTIVE)
+                    && in_array($model->role_name, self::$arrRolesStaff)) {
+                $_items[$model->id] = $model->role_short_name;
+            }
+        }
+        return $_items;
     }
 }

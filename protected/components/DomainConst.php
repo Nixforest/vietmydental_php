@@ -1632,4 +1632,6 @@ class DomainConst {
     const CONTENT00490  = 'Nhân viên';
     const CONTENT00491  = 'Ca làm việc';
     const CONTENT00492  = 'Kế hoạch làm việc';
+    const CONTENT00493  = 'Tên tham số';
+    const CONTENT00494  = 'Method';
 }
