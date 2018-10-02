@@ -11,7 +11,8 @@
  * @property integer $status            Status
  *
  * The followings are the available model relations:
- * @property HrWorkShift[]                      $rWorkShifts        Array work shifts belong to this role
+ * @property HrWorkShifts[]                     $rWorkShifts        Array work shifts belong to this role
+ * @property HrWorkPlans[]                      $rWorkPlans         Array work plans belong to this role
  */
 class Roles extends BaseActiveRecord
 {
@@ -85,6 +86,10 @@ class Roles extends BaseActiveRecord
                     'rWorkShifts'   => array(
                         self::HAS_MANY, 'HrWorkShifts', 'role_id',
                         'on'    => 'status !=' . HrWorkShifts::STATUS_INACTIVE,
+                    ),
+                    'rWorkPlans'   => array(
+                        self::HAS_MANY, 'HrWorkPlans', 'role_id',
+                        'on'    => 'status !=' . HrWorkPlans::STATUS_INACTIVE,
                     ),
 		);
 	}
