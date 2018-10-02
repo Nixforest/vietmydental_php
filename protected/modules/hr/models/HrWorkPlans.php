@@ -19,8 +19,9 @@
  * @property Users                      $rCreatedBy                     User created this record
  * @property Users                      $rApproved                      User was approved
  * @property Roles                      $rRole                          Role this record belong to
+ * @property HrWorkSchedules[]          $rWorkSchedules                 Work schedules belong this record
  */
-class HrWorkPlans extends CActiveRecord {
+class HrWorkPlans extends BaseActiveRecord {
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
@@ -84,6 +85,10 @@ class HrWorkPlans extends CActiveRecord {
             'rCreatedBy' => array(self::BELONGS_TO, 'Users', 'created_by'),
             'rApproved' => array(self::BELONGS_TO, 'Users', 'approved'),
             'rRole' => array(self::BELONGS_TO, 'Roles', 'role_id'),
+            'rWorkSchedules' => array(
+                self::HAS_MANY, 'HrWorkSchedules', 'work_plan_id',
+                'on'    => 'status !=' . HrWorkSchedules::STATUS_INACTIVE,
+            ),
         );
     }
 
@@ -264,6 +269,27 @@ class HrWorkPlans extends CActiveRecord {
             return $mRole->rWorkPlans;
         }
         return array();
+    }
+    
+    /**
+     * Loads the type items for the specified type from the database
+     * @param type $emptyOption boolean the item is empty
+     * @return type List data
+     */
+    public static function loadItems($emptyOption = false) {
+        $_items = array();
+        if ($emptyOption) {
+            $_items[""] = "";
+        }
+        $models = self::model()->findAll(array(
+            'order' => 'id ASC',
+        ));
+        foreach ($models as $model) {
+            if ($model->status == DomainConst::DEFAULT_STATUS_ACTIVE) {
+                $_items[$model->id] = $model->getRoleName() . ' [' . $model->date_from . ' -> ' . $model->date_to . ']';
+            }
+        }
+        return $_items;
     }
 
 }

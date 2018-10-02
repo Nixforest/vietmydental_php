@@ -20,6 +20,7 @@
  * @property Roles                      $rRole                          Role belong to
  * @property ScheduleTimes              $rFromTime                      Time from
  * @property ScheduleTimes              $rToTime                        Time to
+ * @property HrWorkSchedules[]          $rWorkSchedules                 Work schedules belong this record
  */
 class HrWorkShifts extends BaseActiveRecord {
     //-----------------------------------------------------
@@ -87,6 +88,10 @@ class HrWorkShifts extends BaseActiveRecord {
             ),
             'rToTime' => array(
                 self::BELONGS_TO, 'ScheduleTimes', 'to_id',
+            ),
+            'rWorkSchedules' => array(
+                self::HAS_MANY, 'HrWorkSchedules', 'work_shift_id',
+                'on'    => 'status !=' . HrWorkSchedules::STATUS_INACTIVE,
             ),
         );
     }
@@ -262,6 +267,27 @@ class HrWorkShifts extends BaseActiveRecord {
             return $mRole->rWorkShifts;
         }
         return array();
+    }
+    
+    /**
+     * Loads the type items for the specified type from the database
+     * @param type $emptyOption boolean the item is empty
+     * @return type List data
+     */
+    public static function loadItems($emptyOption = false) {
+        $_items = array();
+        if ($emptyOption) {
+            $_items[""] = "";
+        }
+        $models = self::model()->findAll(array(
+            'order' => 'id ASC',
+        ));
+        foreach ($models as $model) {
+            if ($model->status == DomainConst::DEFAULT_STATUS_ACTIVE) {
+                $_items[$model->id] = $model->getRoleName() . ' -> [' .$model->name . ']';
+            }
+        }
+        return $_items;
     }
 
 }

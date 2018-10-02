@@ -1629,4 +1629,7 @@ class DomainConst {
     const CONTENT00487  = 'Đến';
     const CONTENT00488  = 'Nhóm user';
     const CONTENT00489  = 'Ca thường';
+    const CONTENT00490  = 'Nhân viên';
+    const CONTENT00491  = 'Ca làm việc';
+    const CONTENT00492  = 'Kế hoạch làm việc';
 }
