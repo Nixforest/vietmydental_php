@@ -373,4 +373,11 @@ class BaseController extends CController {
         }
         return $retVal;
     }
+    
+    /**
+     * Handle ajax after update
+     */
+    public function handleAjaxAfterDelete() {
+        return 'function(link,success,data){ if(success) if(data) alert(data); }';
+    }
 }

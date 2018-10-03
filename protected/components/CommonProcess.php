@@ -736,10 +736,10 @@ class CommonProcess {
      * @param type $price Price value
      * @return String Price after format
      */
-    public static function formatCurrency($price) {
+    public static function formatCurrency($price, $maxleft = 2) {
         $number_left = substr(strrchr($price, "."), 1);
         if ($number_left > 0) {
-            $res = number_format((double) $price, 2);
+            $res = number_format((double) $price, $maxleft);
         } else {
             $res = number_format((double) $price, 0);
         }

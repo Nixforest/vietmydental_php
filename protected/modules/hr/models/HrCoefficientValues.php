@@ -1,22 +1,22 @@
 <?php
 
 /**
- * This is the model class for table "hr_coefficients".
+ * This is the model class for table "hr_coefficient_values".
  *
- * The followings are the available columns in table 'hr_coefficients':
- * @property string $id             Id of record
- * @property integer $role_id       Id of role
- * @property string $name           Name of coefficient
- * @property integer $status        Status
- * @property string $created_date   Created date
- * @property string $created_by     Created by
+ * The followings are the available columns in table 'hr_coefficient_values':
+ * @property string $id                 Id of record
+ * @property integer $coefficient_id    Id of coefficient
+ * @property string $value              Value of coefficient
+ * @property string $month              Month
+ * @property integer $status            Status
+ * @property string $created_date       Created date
+ * @property string $created_by         Created by
  *
  * The followings are the available model relations:
  * @property Users                      $rCreatedBy                     User created this record
- * @property Roles                      $rRole                          Role belong to
- * @property HrCoefficientValues[]      $rValues                        Values of coefficient
+ * @property HrCoefficients             $rCoefficient                   Coefficient model
  */
-class HrCoefficients extends BaseActiveRecord {
+class HrCoefficientValues extends BaseActiveRecord {
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
@@ -28,7 +28,7 @@ class HrCoefficients extends BaseActiveRecord {
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
-     * @return HrCoefficients the static model class
+     * @return HrCoefficientValues the static model class
      */
     public static function model($className = __CLASS__) {
         return parent::model($className);
@@ -38,7 +38,7 @@ class HrCoefficients extends BaseActiveRecord {
      * @return string the associated database table name
      */
     public function tableName() {
-        return 'hr_coefficients';
+        return 'hr_coefficient_values';
     }
 
     /**
@@ -48,14 +48,14 @@ class HrCoefficients extends BaseActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('name', 'required'),
-            array('role_id, status', 'numerical', 'integerOnly' => true),
-            array('name', 'length', 'max' => 255),
+            array('coefficient_id, month', 'required'),
+            array('coefficient_id, status', 'numerical', 'integerOnly' => true),
+//            array('value', 'numerical'),
             array('created_by', 'length', 'max' => 10),
             array('created_date', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, role_id, name, status, created_date, created_by', 'safe', 'on' => 'search'),
+            array('id, coefficient_id, value, month, status, created_date, created_by', 'safe', 'on' => 'search'),
         );
     }
 
@@ -67,11 +67,7 @@ class HrCoefficients extends BaseActiveRecord {
         // class name for the relations automatically generated below.
         return array(
             'rCreatedBy' => array(self::BELONGS_TO, 'Users', 'created_by'),
-            'rRole' => array(self::BELONGS_TO, 'Roles', 'role_id'),
-            'rValues'   => array(
-                self::HAS_MANY, 'HrCoefficientValues', 'coefficient_id',
-                'on'    => 'status !=' . HrCoefficientValues::STATUS_INACTIVE,
-            ),
+            'rCoefficient' => array(self::BELONGS_TO, 'HrCoefficients', 'coefficient_id'),
         );
     }
 
@@ -80,12 +76,13 @@ class HrCoefficients extends BaseActiveRecord {
      */
     public function attributeLabels() {
         return array(
-            'id'            => 'ID',
-            'role_id'       => DomainConst::CONTENT00488,
-            'name'          => DomainConst::CONTENT00497,
-            'status'        => DomainConst::CONTENT00026,
-            'created_date'  => DomainConst::CONTENT00010,
-            'created_by'    => DomainConst::CONTENT00054,
+            'id'                => 'ID',
+            'coefficient_id'    => DomainConst::CONTENT00496,
+            'value'             => DomainConst::CONTENT00495,
+            'month'             => DomainConst::CONTENT00470,
+            'status'            => DomainConst::CONTENT00026,
+            'created_date'      => DomainConst::CONTENT00010,
+            'created_by'        => DomainConst::CONTENT00054,
         );
     }
 
@@ -100,12 +97,14 @@ class HrCoefficients extends BaseActiveRecord {
         $criteria = new CDbCriteria;
 
         $criteria->compare('id', $this->id, true);
-        $criteria->compare('role_id', $this->role_id);
-        $criteria->compare('name', $this->name, true);
+        $criteria->compare('coefficient_id', $this->coefficient_id);
+        $criteria->compare('value', $this->value);
+        $criteria->compare('month', $this->month, true);
         $criteria->compare('status', $this->status);
         $criteria->compare('created_date', $this->created_date, true);
         $criteria->compare('created_by', $this->created_by, true);
         $criteria->order = 'id desc';
+//        $criteria->group = 'coefficient_id';
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
@@ -123,29 +122,18 @@ class HrCoefficients extends BaseActiveRecord {
      * @return parent
      */
     protected function beforeSave() {
+        $date = $this->month;
+        $this->month = CommonProcess::convertDateTime($date, DomainConst::DATE_FORMAT_13, DomainConst::DATE_FORMAT_4);
         if ($this->isNewRecord) {
             $this->created_by = Yii::app()->user->id;
             
             // Handle created date
             $this->created_date = CommonProcess::getCurrentDateTime();
         }
+        Loggers::info('Value', $this->value, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        $this->value = str_replace(DomainConst::SPLITTER_TYPE_2, '', $this->value);
         
         return parent::beforeSave();
-    }
-    
-    /**
-     * Override before delete method
-     * @return Parent result
-     */
-    protected function beforeDelete() {
-        $retVal = true;
-        // Check foreign table hr_coefficient_values
-        if (!empty($this->rValues)) {
-            Loggers::error('', 'Can not delete', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-            $this->addErrorMessage(DomainConst::CONTENT00498);
-            return false;
-        }
-        return $retVal;
     }
     
     //-----------------------------------------------------
@@ -163,6 +151,14 @@ class HrCoefficients extends BaseActiveRecord {
     }
     
     /**
+     * Get month value
+     * @return String Month value in format 'm/Y'
+     */
+    public function getMonth() {
+        return CommonProcess::convertDateTime($this->month, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_13);
+    }
+    
+    /**
      * Return status string
      * @return string Status value as string
      */
@@ -174,25 +170,22 @@ class HrCoefficients extends BaseActiveRecord {
     }
     
     /**
-     * Get name of role
-     * @return string Name of role
+     * Get coefficient
+     * @return string Name of coefficient
      */
-    public function getRoleName() {
-        if (isset(Roles::getRoleArrayForSalary()[$this->role_id])) {
-            return Roles::getRoleArrayForSalary()[$this->role_id];
+    public function getCoefficient() {
+        if (isset($this->rCoefficient)) {
+            return $this->rCoefficient->name;
         }
         return '';
     }
     
     /**
-     * Get value of coefficient
-     * @param String $from  Date from
-     * @param String $to    Date to
-     * @return Float Value of coefficient
+     * Get value (as formated)
+     * @return String Formated value
      */
-    public function getValue($from, $to) {
-        $retVal = 0;
-        return $retVal;
+    public function getValue() {
+        return $this->value;
     }
     
     //-----------------------------------------------------
@@ -207,48 +200,6 @@ class HrCoefficients extends BaseActiveRecord {
             self::STATUS_INACTIVE       => DomainConst::CONTENT00408,
             self::STATUS_ACTIVE         => DomainConst::CONTENT00407,
         );
-    }
-    
-    /**
-     * Get models by role
-     * @param Int $roleId Id of role
-     * @return Array List of models
-     */
-    public static function getArrayByRole($roleId) {
-        $retVal = array();
-        if ($roleId != Roles::ROLE_ALL_ID) {
-            $mRole = Roles::model()->findByPk($roleId);
-            if ($mRole) {
-                $retVal = $mRole->rCoefficients;
-            }
-        } else {
-            $retVal = self::model()->findAll(array(
-                'condition' => 'role_id =' . Roles::ROLE_ALL_ID,
-            ));
-        }
-        
-        return $retVal;
-    }
-    
-    /**
-     * Loads the type items for the specified type from the database
-     * @param type $emptyOption boolean the item is empty
-     * @return type List data
-     */
-    public static function loadItems($emptyOption = false) {
-        $_items = array();
-        if ($emptyOption) {
-            $_items[""] = "";
-        }
-        $models = self::model()->findAll(array(
-            'order' => 'id ASC',
-        ));
-        foreach ($models as $model) {
-            if ($model->status == DomainConst::DEFAULT_STATUS_ACTIVE) {
-                $_items[$model->id] = $model->name;
-            }
-        }
-        return $_items;
     }
 
 }

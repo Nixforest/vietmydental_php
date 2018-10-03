@@ -1,6 +1,6 @@
 <?php
 
-class HrCoefficientsController extends HrController {
+class HrCoefficientValuesController extends HrController {
 
     /**
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -24,13 +24,14 @@ class HrCoefficientsController extends HrController {
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
-        $model = new HrCoefficients;
+        $model = new HrCoefficientValues;
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
 
-        if (isset($_POST['HrCoefficients'])) {
-            $model->attributes = $_POST['HrCoefficients'];
+        if (isset($_POST['HrCoefficientValues'])) {
+            $model->attributes = $_POST['HrCoefficientValues'];
+            $model->value = str_replace(DomainConst::SPLITTER_TYPE_MONEY, '', $_POST['HrCoefficientValues']['value']);
             if ($model->save()) {
                 $this->redirect(array('view', 'id' => $model->id));
             }
@@ -53,8 +54,9 @@ class HrCoefficientsController extends HrController {
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
 
-        if (isset($_POST['HrCoefficients'])) {
-            $model->attributes = $_POST['HrCoefficients'];
+        if (isset($_POST['HrCoefficientValues'])) {
+            $model->attributes = $_POST['HrCoefficientValues'];
+            $model->value = str_replace(DomainConst::SPLITTER_TYPE_MONEY, '', $_POST['HrCoefficientValues']['value']);
             if ($model->save()) {
                 $this->redirect(array('view', 'id' => $model->id));
             }
@@ -72,14 +74,11 @@ class HrCoefficientsController extends HrController {
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
-        $model = $this->loadModel($id);
-        $canDelete = isset($model) ? $model->delete() : false;
-        if (!$canDelete) {
-            echo $model->getError('errMsg'); //for ajax
-        }
+        $this->loadModel($id)->delete();
+
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax'])) {
-            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
         }
     }
 
@@ -87,10 +86,10 @@ class HrCoefficientsController extends HrController {
      * Lists all models.
      */
     public function actionIndex() {
-        $model = new HrCoefficients('search');
+        $model = new HrCoefficientValues('search');
         $model->unsetAttributes();  // clear any default values
-        if (isset($_GET['HrCoefficients'])) {
-            $model->attributes = $_GET['HrCoefficients'];
+        if (isset($_GET['HrCoefficientValues'])) {
+            $model->attributes = $_GET['HrCoefficientValues'];
         }
 
         $this->render('index', array(
@@ -103,11 +102,11 @@ class HrCoefficientsController extends HrController {
      * Returns the data model based on the primary key given in the GET variable.
      * If the data model is not found, an HTTP exception will be raised.
      * @param integer $id the ID of the model to be loaded
-     * @return HrCoefficients the loaded model
+     * @return HrCoefficientValues the loaded model
      * @throws CHttpException
      */
     public function loadModel($id) {
-        $model = HrCoefficients::model()->findByPk($id);
+        $model = HrCoefficientValues::model()->findByPk($id);
         if ($model === null) {
             throw new CHttpException(404, 'The requested page does not exist.');
         }
@@ -116,10 +115,10 @@ class HrCoefficientsController extends HrController {
 
     /**
      * Performs the AJAX validation.
-     * @param HrCoefficients $model the model to be validated
+     * @param HrCoefficientValues $model the model to be validated
      */
     protected function performAjaxValidation($model) {
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'hr-coefficients-form') {
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'hr-coefficient-values-form') {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }

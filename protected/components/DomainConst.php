@@ -1635,4 +1635,8 @@ class DomainConst {
     const CONTENT00493  = 'Tên tham số';
     const CONTENT00494  = 'Method';
     const CONTENT00495  = 'Giá trị';
+    const CONTENT00496  = 'Hệ số';
+    const CONTENT00497  = 'Tên hệ số';
+    const CONTENT00498  = 'Không thể xoá do còn [Giá trị của Hệ số] liên quan';
+    const CONTENT00499  = 'Đã xoá';
 }

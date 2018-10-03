@@ -1,7 +1,6 @@
 <?php
-/* @var $this HrCoefficientsController */
-/* @var $model HrCoefficients */
-
+/* @var $this HrCoefficientValuesController */
+/* @var $model HrCoefficientValues */
 
 $this->createMenu('index', $model);
 
@@ -11,7 +10,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#hr-coefficients-grid').yiiGridView('update', {
+	$('#hr-coefficient-values-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -35,13 +34,9 @@ $('.search-form form').submit(function(){
     ?>
 </div><!-- search-form -->
 
-
-<div class="info" id="statusMsg">
-    <?php echo Yii::app()->user->getFlash('deleteStatus'); ?>
-</div>
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
-    'id' => 'hr-coefficients-grid',
+    'id' => 'hr-coefficient-values-grid',
     'dataProvider' => $model->search(),
     'filter' => $model,
     'columns' => array(
@@ -53,10 +48,17 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array('style' => 'text-align:center;')
         ),
         array(
-            'name' => 'role_id',
-            'value' => '$data->getRoleName()',
+            'name' => 'coefficient_id',
+            'value' => '$data->getCoefficient()',
         ),
-        'name',
+        array(
+            'name' => 'value',
+            'value' => '$data->getValue()',
+        ),
+        array(
+            'name' => 'month',
+            'value' => '$data->getMonth()',
+        ),
         array(
             'name' => 'status',
             'value' => '$data->getStatus()',
@@ -69,8 +71,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'header' => DomainConst::CONTENT00239,
             'class' => 'CButtonColumn',
-            'template' => $this->createActionButtons(),
-            'afterDelete' => $this->handleAjaxAfterDelete(),
+            'template' => $this->createActionButtons()
         ),
     ),
 ));
