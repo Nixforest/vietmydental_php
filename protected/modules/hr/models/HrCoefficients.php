@@ -1,13 +1,12 @@
 <?php
 
 /**
- * This is the model class for table "hr_parameters".
+ * This is the model class for table "hr_coefficients".
  *
- * The followings are the available columns in table 'hr_parameters':
+ * The followings are the available columns in table 'hr_coefficients':
  * @property string $id             Id of record
  * @property integer $role_id       Id of role
- * @property string $method         Name of method
- * @property string $name           Name of parameter
+ * @property string $name           Name of coefficient
  * @property integer $status        Status
  * @property string $created_date   Created date
  * @property string $created_by     Created by
@@ -16,7 +15,7 @@
  * @property Users                      $rCreatedBy                     User created this record
  * @property Roles                      $rRole                          Role belong to
  */
-class HrParameters extends BaseActiveRecord {
+class HrCoefficients extends CActiveRecord {
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
@@ -28,7 +27,7 @@ class HrParameters extends BaseActiveRecord {
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
-     * @return HrParameters the static model class
+     * @return HrCoefficients the static model class
      */
     public static function model($className = __CLASS__) {
         return parent::model($className);
@@ -38,7 +37,7 @@ class HrParameters extends BaseActiveRecord {
      * @return string the associated database table name
      */
     public function tableName() {
-        return 'hr_parameters';
+        return 'hr_coefficients';
     }
 
     /**
@@ -48,14 +47,14 @@ class HrParameters extends BaseActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('method, name', 'required'),
+            array('name', 'required'),
             array('role_id, status', 'numerical', 'integerOnly' => true),
-            array('method, name', 'length', 'max' => 255),
+            array('name', 'length', 'max' => 255),
             array('created_by', 'length', 'max' => 10),
             array('created_date', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, role_id, method, name, status, created_date, created_by', 'safe', 'on' => 'search'),
+            array('id, role_id, name, status, created_date, created_by', 'safe', 'on' => 'search'),
         );
     }
 
@@ -78,7 +77,6 @@ class HrParameters extends BaseActiveRecord {
         return array(
             'id'            => 'ID',
             'role_id'       => DomainConst::CONTENT00488,
-            'method'        => DomainConst::CONTENT00494,
             'name'          => DomainConst::CONTENT00493,
             'status'        => DomainConst::CONTENT00026,
             'created_date'  => DomainConst::CONTENT00010,
@@ -98,7 +96,6 @@ class HrParameters extends BaseActiveRecord {
 
         $criteria->compare('id', $this->id, true);
         $criteria->compare('role_id', $this->role_id);
-        $criteria->compare('method', $this->method, true);
         $criteria->compare('name', $this->name, true);
         $criteria->compare('status', $this->status);
         $criteria->compare('created_date', $this->created_date, true);
@@ -168,14 +165,13 @@ class HrParameters extends BaseActiveRecord {
     }
     
     /**
-     * Get value of parameter
+     * Get value of coefficient
      * @param String $from  Date from
      * @param String $to    Date to
-     * @param Model $mUser  User model
-     * @return Float Value of parameter
+     * @return Float Value of coefficient
      */
-    public function getValue($from, $to, $mUser) {
-        $retVal = $mUser->{$this->method}($from, $to);
+    public function getValue($from, $to) {
+        $retVal = 0;
         return $retVal;
     }
     
@@ -203,7 +199,7 @@ class HrParameters extends BaseActiveRecord {
         if ($roleId != Roles::ROLE_ALL_ID) {
             $mRole = Roles::model()->findByPk($roleId);
             if ($mRole) {
-                $retVal = $mRole->rParameters;
+                $retVal = $mRole->rCoefficients;
             }
         } else {
             $retVal = self::model()->findAll(array(

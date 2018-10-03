@@ -14,154 +14,156 @@
  * @property HrWorkShifts[]                     $rWorkShifts        Array work shifts belong to this role
  * @property HrWorkPlans[]                      $rWorkPlans         Array work plans belong to this role
  * @property HrParameters[]                     $rParameters        Array parameters belong to this role
+ * @property HrCoefficients[]                   $rCoefficients      Array coefficients belong to this role
  */
-class Roles extends BaseActiveRecord
-{
+class Roles extends BaseActiveRecord {
+
+    /** Role all */
+    const ROLE_ALL_ID                      = DomainConst::NUMBER_ZERO_VALUE;
     /** Role name */
-    const ROLE_MANAGER              = 'ROLE_MANAGER';
-    const ROLE_ADMIN                = 'ROLE_ADMIN';
-    const ROLE_CUSTOMER             = 'ROLE_CUSTOMER';
-    const ROLE_MEMBER               = 'ROLE_MEMBER';
-    const ROLE_DIRECTOR             = 'ROLE_DIRECTOR';
-    const ROLE_DOCTOR               = 'ROLE_DOCTOR';
-    const ROLE_ASSISTANT            = 'ROLE_ASSISTANT';
-    const ROLE_RECEPTIONIST         = 'ROLE_RECEPTIONIST';
-    const ROLE_SALE                 = 'ROLE_SALE';
-    const ROLE_DIRECTOR_AGENT       = 'ROLE_DIRECTOR_AGENT';
-    const ROLE_ACCOUNT_MANAGER      = 'ROLE_ACCOUNT_MANAGER';
-    
-    static $arrAdminRoles           = array(
+    const ROLE_MANAGER = 'ROLE_MANAGER';
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+    const ROLE_CUSTOMER = 'ROLE_CUSTOMER';
+    const ROLE_MEMBER = 'ROLE_MEMBER';
+    const ROLE_DIRECTOR = 'ROLE_DIRECTOR';
+    const ROLE_DOCTOR = 'ROLE_DOCTOR';
+    const ROLE_ASSISTANT = 'ROLE_ASSISTANT';
+    const ROLE_RECEPTIONIST = 'ROLE_RECEPTIONIST';
+    const ROLE_SALE = 'ROLE_SALE';
+    const ROLE_DIRECTOR_AGENT = 'ROLE_DIRECTOR_AGENT';
+    const ROLE_ACCOUNT_MANAGER = 'ROLE_ACCOUNT_MANAGER';
+
+    static $arrAdminRoles = array(
         self::ROLE_ADMIN,
         self::ROLE_MANAGER,
     );
-    static $arrRolesNotResetPass    = array(
+    static $arrRolesNotResetPass = array(
         self::ROLE_MANAGER,
         self::ROLE_ADMIN,
         self::ROLE_CUSTOMER
     );
-    static $arrRolesStaff           = array(
+    static $arrRolesStaff = array(
         self::ROLE_DIRECTOR,
         self::ROLE_DOCTOR,
         self::ROLE_RECEPTIONIST,
         self::ROLE_ASSISTANT,
         self::ROLE_SALE,
     );
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return 'roles';
-	}
 
-	/**
-	 * @return array validation rules for model attributes.
-	 */
-	public function rules()
-	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-			array('role_name, role_short_name, application_id', 'required'),
-			array('application_id, status', 'numerical', 'integerOnly'=>true),
-			array('role_name, role_short_name', 'length', 'max'=>255),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('id, role_name, role_short_name, application_id, status', 'safe', 'on'=>'search'),
-		);
-	}
+    /**
+     * @return string the associated database table name
+     */
+    public function tableName() {
+        return 'roles';
+    }
 
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-                    'application'   => array(self::BELONGS_TO, 'Applications', 'application_id'),
-                    'rUser'         => array(self::HAS_MANY, 'Users', 'role_id'),
-                    'rActionsRole'  => array(self::HAS_MANY, 'ActionsRoles', 'role_id'),
-                    'rApiUserToken'  => array(self::HAS_MANY, 'ApiUserTokens', 'role_id'),
-                    'rLoginLog'  => array(self::HAS_MANY, 'LoginLogs', 'role_id'),
-                    'rWorkShifts'   => array(
-                        self::HAS_MANY, 'HrWorkShifts', 'role_id',
-                        'on'    => 'status !=' . HrWorkShifts::STATUS_INACTIVE,
-                    ),
-                    'rWorkPlans'   => array(
-                        self::HAS_MANY, 'HrWorkPlans', 'role_id',
-                        'on'    => 'status !=' . HrWorkPlans::STATUS_INACTIVE,
-                    ),
-                    'rParameters'   => array(
-                        self::HAS_MANY, 'HrParameters', 'role_id',
-                        'on'    => 'status !=' . HrParameters::STATUS_INACTIVE,
-                    ),
-		);
-	}
+    /**
+     * @return array validation rules for model attributes.
+     */
+    public function rules() {
+        // NOTE: you should only define rules for those attributes that
+        // will receive user inputs.
+        return array(
+            array('role_name, role_short_name, application_id', 'required'),
+            array('application_id, status', 'numerical', 'integerOnly' => true),
+            array('role_name, role_short_name', 'length', 'max' => 255),
+            // The following rule is used by search().
+            // @todo Please remove those attributes that should not be searched.
+            array('id, role_name, role_short_name, application_id, status', 'safe', 'on' => 'search'),
+        );
+    }
 
-	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return array(
-			'id' => 'ID',
-			'role_name' => DomainConst::CONTENT00024,
-			'role_short_name' => DomainConst::CONTENT00025,
-			'application_id' => 'Application',
-			'status' => DomainConst::CONTENT00026,
-		);
-	}
+    /**
+     * @return array relational rules.
+     */
+    public function relations() {
+        // NOTE: you may need to adjust the relation name and the related
+        // class name for the relations automatically generated below.
+        return array(
+            'application' => array(self::BELONGS_TO, 'Applications', 'application_id'),
+            'rUser' => array(self::HAS_MANY, 'Users', 'role_id'),
+            'rActionsRole' => array(self::HAS_MANY, 'ActionsRoles', 'role_id'),
+            'rApiUserToken' => array(self::HAS_MANY, 'ApiUserTokens', 'role_id'),
+            'rLoginLog' => array(self::HAS_MANY, 'LoginLogs', 'role_id'),
+            'rWorkShifts' => array(
+                self::HAS_MANY, 'HrWorkShifts', 'role_id',
+                'on' => 'status !=' . HrWorkShifts::STATUS_INACTIVE,
+            ),
+            'rWorkPlans' => array(
+                self::HAS_MANY, 'HrWorkPlans', 'role_id',
+                'on' => 'status !=' . HrWorkPlans::STATUS_INACTIVE,
+            ),
+            'rParameters' => array(
+                self::HAS_MANY, 'HrParameters', 'role_id',
+                'on' => 'status !=' . HrParameters::STATUS_INACTIVE,
+            ),
+            'rCoefficients' => array(
+                self::HAS_MANY, 'HrCoefficients', 'role_id',
+                'on' => 'status !=' . HrCoefficients::STATUS_INACTIVE,
+            ),
+        );
+    }
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels() {
+        return array(
+            'id' => 'ID',
+            'role_name' => DomainConst::CONTENT00024,
+            'role_short_name' => DomainConst::CONTENT00025,
+            'application_id' => 'Application',
+            'status' => DomainConst::CONTENT00026,
+        );
+    }
 
-		$criteria=new CDbCriteria;
+    /**
+     * Retrieves a list of models based on the current search/filter conditions.
+     *
+     * Typical usecase:
+     * - Initialize the model fields with values from filter form.
+     * - Execute this method to get CActiveDataProvider instance which will filter
+     * models according to data in model fields.
+     * - Pass data provider to CGridView, CListView or any similar widget.
+     *
+     * @return CActiveDataProvider the data provider that can return the models
+     * based on the search/filter conditions.
+     */
+    public function search() {
+        // @todo Please modify the following code to remove attributes that should not be searched.
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('role_name',$this->role_name,true);
-                if (CommonProcess::isUserAdmin()) {
-                    
-                } else {
-                    $criteria->addCondition('t.role_name !="' . self::ROLE_ADMIN . '"');
-                    $criteria->addCondition('t.role_name !="' . self::ROLE_MANAGER . '"');
-                }
-		$criteria->compare('role_short_name',$this->role_short_name,true);
-		$criteria->compare('application_id',$this->application_id);
-		$criteria->compare('status',$this->status);
+        $criteria = new CDbCriteria;
 
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-                        'pagination' => array(
-                            'pageSize' => Settings::getListPageSize(),
-                        ),
-		));
-	}
+        $criteria->compare('id', $this->id);
+        $criteria->compare('role_name', $this->role_name, true);
+        if (CommonProcess::isUserAdmin()) {
+            
+        } else {
+            $criteria->addCondition('t.role_name !="' . self::ROLE_ADMIN . '"');
+            $criteria->addCondition('t.role_name !="' . self::ROLE_MANAGER . '"');
+        }
+        $criteria->compare('role_short_name', $this->role_short_name, true);
+        $criteria->compare('application_id', $this->application_id);
+        $criteria->compare('status', $this->status);
 
-	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return Roles the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
-        
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+            'pagination' => array(
+                'pageSize' => Settings::getListPageSize(),
+            ),
+        ));
+    }
+
+    /**
+     * Returns the static model of the specified AR class.
+     * Please note that you should have this exact method in all your CActiveRecord descendants!
+     * @param string $className active record class name.
+     * @return Roles the static model class
+     */
+    public static function model($className = __CLASS__) {
+        return parent::model($className);
+    }
+
     //-----------------------------------------------------
     // Parent override methods
     //-----------------------------------------------------
@@ -207,16 +209,16 @@ class Roles extends BaseActiveRecord
         }
         return $_items;
     }
-    
+
     /**
      * Get role by name
      * @param type $role_name
      * @return Role object
      */
     public static function getRoleByName($role_name) {
-        return self::model()->find('LOWER(role_name)="'.  strtolower($role_name).'"');
+        return self::model()->find('LOWER(role_name)="' . strtolower($role_name) . '"');
     }
-    
+
     /**
      * Check if a role id is in array admin roles
      * @param String $roleId Id of role
@@ -230,7 +232,7 @@ class Roles extends BaseActiveRecord
         }
         return false;
     }
-    
+
     /**
      * Check if a role id is in array staff roles
      * @param String $roleId Id of role
@@ -244,7 +246,7 @@ class Roles extends BaseActiveRecord
         }
         return false;
     }
-    
+
     /**
      * Check if role is director
      * @param type $roleId
@@ -256,7 +258,7 @@ class Roles extends BaseActiveRecord
         }
         return false;
     }
-    
+
     /**
      * Check if role is doctor
      * @param String $roleId id of role
@@ -268,23 +270,23 @@ class Roles extends BaseActiveRecord
         }
         return false;
     }
-    
+
     /**
      * Get role array for salary calculating
      * @return Array List roles
      */
     public static function getRoleArrayForSalary() {
         $_items = array();
-        $_items['0'] = DomainConst::CONTENT00409;
+        $_items[self::ROLE_ALL_ID] = DomainConst::CONTENT00409;
         $models = self::model()->findAll(array(
             'order' => 'id ASC',
         ));
         foreach ($models as $model) {
-            if (($model->status == DomainConst::DEFAULT_STATUS_ACTIVE)
-                    && in_array($model->role_name, self::$arrRolesStaff)) {
+            if (($model->status == DomainConst::DEFAULT_STATUS_ACTIVE) && in_array($model->role_name, self::$arrRolesStaff)) {
                 $_items[$model->id] = $model->role_short_name;
             }
         }
         return $_items;
     }
+
 }

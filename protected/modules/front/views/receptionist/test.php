@@ -250,9 +250,13 @@
     $user = Users::getUserByName($name);
     CommonProcess::echoTest("User: ", isset($user) ? $user->getFullName() : 'Không tìm thấy');
 
-        $newsId = 1;
-        $mNews = News::model()->findByPk($newsId);
-        if ($mNews) {
-            CommonProcess::echoTest('Is new? ', ($mNews->isNew()) ? 'true' : 'false');
-        }
+    $newsId = 1;
+    $mNews = News::model()->findByPk($newsId);
+    if ($mNews) {
+        CommonProcess::echoTest('Is new? ', ($mNews->isNew()) ? 'true' : 'false');
+    }
+    
+    $arrParams = HrParameters::getArrayByRole(5);
+    CommonProcess::echoTest('Role all: ', count($arrParams));
+    CommonProcess::echoTest('Role all: ', $arrParams[0]->name);
 ?>
