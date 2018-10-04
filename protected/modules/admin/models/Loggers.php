@@ -14,7 +14,7 @@
  * @property integer $logtime
  * @property string $category
  */
-class Loggers extends CActiveRecord
+class Loggers extends BaseActiveRecord
 {
     //-----------------------------------------------------
     // Constants

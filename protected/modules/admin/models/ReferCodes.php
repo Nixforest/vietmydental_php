@@ -10,7 +10,7 @@
  * @property integer $status
  * @property integer $type
  */
-class ReferCodes extends CActiveRecord
+class ReferCodes extends BaseActiveRecord
 {
     //-----------------------------------------------------
     // Type of relation

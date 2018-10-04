@@ -24,7 +24,7 @@
  * @property Users                          $rCreatedBy                     User created this record
  * @property Users                          $rReceiptionist                 Receptionist associated with this record
  */
-class Receipts extends CActiveRecord {
+class Receipts extends BaseActiveRecord {
 
     //-----------------------------------------------------
     // Constants

@@ -11,7 +11,7 @@
  * @property integer $type
  * @property integer $type_network
  */
-class SocialNetworks extends CActiveRecord
+class SocialNetworks extends BaseActiveRecord
 {
     //-----------------------------------------------------
     // Type of relation

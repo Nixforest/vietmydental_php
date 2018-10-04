@@ -17,7 +17,7 @@
  * @property int $status
  * @property integer $content_type
  */
-class ScheduleSms extends CActiveRecord {
+class ScheduleSms extends BaseActiveRecord {
 
 //  list  key can send  sms
     public $aTypeSchedule = [

@@ -1639,4 +1639,8 @@ class DomainConst {
     const CONTENT00497  = 'Tên hệ số';
     const CONTENT00498  = 'Không thể xoá do còn [Giá trị của Hệ số] liên quan';
     const CONTENT00499  = 'Đã xoá';
+    const CONTENT00500  = 'Không thể xoá do còn [Công thức] liên quan';
+    const CONTENT00501  = 'Công thức';
+    const CONTENT00502  = 'Loại công thức';
+    const CONTENT00503  = 'Tính theo ngày';
 }

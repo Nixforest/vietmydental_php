@@ -1,6 +1,6 @@
 <?php
-/* @var $this HrCoefficientsController */
-/* @var $model HrCoefficients */
+/* @var $this HrFunctionTypesController */
+/* @var $model HrFunctionTypes */
 
 $this->createMenu('index', $model);
 
@@ -10,7 +10,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#hr-coefficients-grid').yiiGridView('update', {
+	$('#hr-function-types-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -36,7 +36,7 @@ $('.search-form form').submit(function(){
 
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
-    'id' => 'hr-coefficients-grid',
+    'id' => 'hr-function-types-grid',
     'dataProvider' => $model->search(),
     'filter' => $model,
     'columns' => array(
@@ -47,11 +47,8 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'headerHtmlOptions' => array('width' => '30px', 'style' => 'text-align:center;'),
             'htmlOptions' => array('style' => 'text-align:center;')
         ),
-        array(
-            'name' => 'role_id',
-            'value' => '$data->getRoleName()',
-        ),
         'name',
+        'description',
         array(
             'name' => 'status',
             'value' => '$data->getStatus()',

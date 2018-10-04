@@ -12,7 +12,7 @@
  * @property string $created_date
  * @property integer $status
  */
-class MoneyType extends CActiveRecord
+class MoneyType extends BaseActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.

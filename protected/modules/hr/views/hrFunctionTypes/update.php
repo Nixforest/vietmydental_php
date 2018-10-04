@@ -1,6 +1,6 @@
 <?php
-/* @var $this HrCoefficientsController */
-/* @var $model HrCoefficients */
+/* @var $this HrFunctionTypesController */
+/* @var $model HrFunctionTypes */
 
 $this->createMenu('update', $model);
 ?>

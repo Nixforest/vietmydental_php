@@ -10,7 +10,7 @@
  * @property string $description
  * @property integer $status
  */
-class WarrantyTypes extends CActiveRecord
+class WarrantyTypes extends BaseActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.

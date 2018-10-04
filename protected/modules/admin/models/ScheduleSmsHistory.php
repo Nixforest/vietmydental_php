@@ -18,7 +18,7 @@
  * @property int $status
  * @property integer $content_type
  */
-class ScheduleSmsHistory extends CActiveRecord {
+class ScheduleSmsHistory extends BaseActiveRecord {
 
     /**
      * Returns the static model of the specified AR class.

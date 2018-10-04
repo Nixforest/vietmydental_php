@@ -13,7 +13,7 @@
  * @property string $created_date
  * @property string $created_by
  */
-class Promotions extends CActiveRecord
+class Promotions extends BaseActiveRecord
 {
     public $agents;
     const STATUS_ACTIVE = 1;

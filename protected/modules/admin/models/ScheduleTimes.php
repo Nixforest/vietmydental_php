@@ -9,7 +9,7 @@
  * @property string $description
  * @property integer $status
  */
-class ScheduleTimes extends CActiveRecord
+class ScheduleTimes extends BaseActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.

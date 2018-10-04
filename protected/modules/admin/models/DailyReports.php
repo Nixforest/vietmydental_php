@@ -14,7 +14,7 @@
  * @property string $created_by
  * @property string $created_date
  */
-class DailyReports extends CActiveRecord
+class DailyReports extends BaseActiveRecord
 {
     //-----------------------------------------------------
     // Constants

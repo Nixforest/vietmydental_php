@@ -14,7 +14,7 @@
  * @property string $created_by
  * @property int $promotion_id
  */
-class PromotionDetails extends CActiveRecord
+class PromotionDetails extends BaseActiveRecord
 {
     public $treatments;
     const TYPE_DISCOUNT = 1;// Trừ theo phần trăm
