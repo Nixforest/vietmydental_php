@@ -4,15 +4,20 @@
  * This is the model class for table "daily_reports".
  *
  * The followings are the available columns in table 'daily_reports':
- * @property string $id
- * @property double $receipt_total
- * @property double $agent_id
- * @property double $receipt_total_confirm
- * @property string $approve_id
- * @property integer $status
- * @property string $date_report
- * @property string $created_by
- * @property string $created_date
+ * @property string $id                     Id of record
+ * @property double $receipt_total          Total money of receipts
+ * @property double $agent_id               Id of agent
+ * @property double $receipt_total_confirm  Total money doctor was confirmed
+ * @property string $approve_id             Id of approved
+ * @property integer $status                Status
+ * @property string $date_report            Date report
+ * @property string $created_date           Created date
+ * @property string $created_by             Created by
+ *
+ * The followings are the available model relations:
+ * @property Users                      $rCreatedBy                     User created this record
+ * @property Users                      $rApprove                       User was related with this record
+ * @property Agents                     $rAgent                         Agent
  */
 class DailyReports extends BaseActiveRecord {
 
@@ -70,6 +75,7 @@ class DailyReports extends BaseActiveRecord {
         return array(
             'rApprove' => array(self::BELONGS_TO, 'Users', 'approve_id'),
             'rAgent' => array(self::BELONGS_TO, 'Agents', 'agent_id'),
+            'rCreatedBy' => array(self::BELONGS_TO, 'Users', 'created_by'),
         );
     }
 
@@ -499,11 +505,14 @@ class DailyReports extends BaseActiveRecord {
     }
 
     /**
-     * 
-     * @return string
+     * Get agent name
+     * @return string Name of agent
      */
     public function getAgent() {
-        return !empty($this->rAgent) ? $this->rAgent->getFullName() : '';
+        if (isset($this->rAgent)) {
+            return $this->rAgent->name;
+        }
+        return '';
     }
 
     /**
@@ -572,6 +581,17 @@ class DailyReports extends BaseActiveRecord {
             $this->created_date,
         ));
     }
+    
+    /**
+     * Get created user
+     * @return string
+     */
+    public function getCreatedBy() {
+        if (isset($this->rCreatedBy)) {
+            return $this->rCreatedBy->getFullName();
+        }
+        return '';
+    }
 
     //-----------------------------------------------------
     // Static methods
@@ -597,7 +617,7 @@ class DailyReports extends BaseActiveRecord {
     public static function checkStatus($mApprover, $date) {
         $retVal = self::STATUS_NOT_CREATED_YET;
         $criteria = new CDbCriteria();
-        $criteria->addInCondition('agent_id',$mApprover->getAgentIds());
+        $criteria->addInCondition('agent_id', $mApprover->getAgentIds());
         $criteria->compare('date_report', $date);
         $criteria->compare('status', self::STATUS_CONFIRM);
         $criteria->order = 'id desc';
@@ -620,6 +640,54 @@ class DailyReports extends BaseActiveRecord {
             $retVal = self::STATUS_NEW;
         }
         return $retVal;
+    }
+    
+    /**
+     * Get report information
+     * @param String $date Date as format yyyy-mm-dd
+     * @param Int $agentId Id of agent
+     * @return Array List information
+     */
+    public static function getReport($date, $agentId) {
+        $criteria = new CDbCriteria();
+        $criteria->compare('agent_id', $agentId);
+        $criteria->compare('date_report', $date);
+        $criteria->order = 'id desc';
+        $model = DailyReports::model()->find($criteria);
+        // Init return value
+        $id         = DomainConst::NUMBER_ZERO_VALUE;
+        $agentName  = '';
+        $total      = 0;
+        $createdBy  = '';
+        $status     = self::STATUS_NOT_CREATED_YET;
+        $statusStr  = self::getArrayStatus()[$status];
+        
+        if ($model) {       // Found
+            $id         = $model->id;
+            $agentName  = $model->getAgent();
+            $total      = $model->receipt_total;
+            $createdBy  = $model->getCreatedBy();
+            $status     = $model->status;
+            $statusStr  = self::getArrayStatus()[$status];
+        } else {            // Not created yet
+            $mAgent = Agents::model()->findByPk($agentId);
+            if ($mAgent) {
+                $agentName = $mAgent->name;
+            }
+        }
+        
+        $data = array();
+        $data[] = CommonProcess::createConfigJson(
+                DomainConst::ITEM_TOTAL, DomainConst::CONTENT00353, CommonProcess::formatCurrency($total));
+        $data[] = CommonProcess::createConfigJson(
+                DomainConst::ITEM_RECEIPTIONIST, DomainConst::CONTENT00054, $createdBy);
+        $data[] = CommonProcess::createConfigJson(DomainConst::ITEM_STATUS, '', $status);
+        $data[] = CommonProcess::createConfigJson(DomainConst::ITEM_STATUS_STR, '', $statusStr);
+        $data[] = CommonProcess::createConfigJson(DomainConst::ITEM_AGENT_ID, '', $agentId);
+        $data[] = CommonProcess::createConfigJson(
+                DomainConst::ITEM_AGENT, DomainConst::CONTENT00199, $agentName);
+        return CommonProcess::createConfigJson($id,
+                $agentName, $data);
     }
 
 }

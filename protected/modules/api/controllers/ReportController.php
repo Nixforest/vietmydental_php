@@ -229,7 +229,7 @@ class ReportController extends APIController {
      * - url:   api/report/dailyReportList
      * - parameter:
      *  + token:        Token
-     *  + month:        Month(format yyyy/mm)
+     *  + month:        Month(format yyyy-mm)
      */
     public function actionDailyReportList() {
         try {
@@ -287,8 +287,54 @@ class ReportController extends APIController {
                     $statusStr);
             $data = CommonProcess::createConfigJson($dateAsId, $dateAsName,
                     $childData);
-//            $retVal[] = $data;
             array_unshift($retVal, $data);
+        }
+        $result = ApiModule::$defaultSuccessResponse;
+        $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00194;
+        $result[DomainConst::KEY_DATA]  = $retVal;
+        ApiModule::sendResponse($result, $this);
+    }
+    
+    /**
+     * P0034_DailyReport_API
+     * Get daily report information
+     * - url:   api/report/dailyReport
+     * - parameter:
+     *  + token:        Token
+     *  + date:         Date(format yyyy-mm-dd)
+     */
+    public function actionDailyReport() {
+        try {
+            $resultFailed = ApiModule::$defaultFailedResponse;
+            // Check format of request
+            $this->checkRequest();
+            // Parse request to json
+            $root = json_decode($_POST[DomainConst::KEY_ROOT_REQUEST]);
+            // Check if parameters are exist
+            $this->checkRequiredParam($root, array(
+                DomainConst::KEY_TOKEN,
+                DomainConst::KEY_DATE,
+            ));
+            // Get user by token value
+            $mUser = $this->getUserByToken($resultFailed, $root->token);
+            // Check version
+            $this->checkVersion($root, $mUser);
+            $this->getDailyReport($resultFailed, $mUser, $root);
+        } catch (Exception $exc) {
+            ApiModule::catchError($exc, $this);
+        }
+    }
+    
+    /**
+     * Get daily report
+     * @param Array $result Result data
+     * @param Object $mUser Model user
+     * @param Object $root Json object
+     */
+    private function getDailyReport($result, $mUser, $root) {
+        $retVal = array();
+        foreach ($mUser->getAgentIds() as $agentId) {
+            $retVal[] = DailyReports::getReport($root->date, $agentId);
         }
         $result = ApiModule::$defaultSuccessResponse;
         $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00194;
