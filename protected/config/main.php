@@ -4,6 +4,7 @@ include_once 'info.php';
 
 // uncomment the following to define a path alias
 // Yii::setPathOfAlias('local','path/to/local-folder');
+Yii::setPathOfAlias('bootstrap', dirname(__FILE__) . '/../extensions/bootstrap');
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 return array(
@@ -19,6 +20,7 @@ return array(
     'import' => array(
         'application.models.*',
         'application.components.*',
+        'application.components.widgets.*',
         'application.modules.admin.models.*',
         'application.modules.api.models.*',
         'application.modules.api.components.*',
@@ -30,6 +32,10 @@ return array(
 //                'application.extensions.phpexcel.Classes.PHPExcel.*',
 //        ++ BUG0040-IMT add widget 
         'application.components.widgets.*',
+        'application.modules.hr.models.*',
+        'bootstrap.helpers.*',
+        'bootstrap.behaviors.TbWidget',
+        'bootstrap.widgets.*',
     ),
     'modules' => array(
         // uncomment the following to enable the Gii tool
@@ -38,11 +44,12 @@ return array(
 //            'password' => '123',
 //            // If removed, Gii defaults to localhost only. Edit carefully to taste.
 //            'ipFilters' => array('127.0.0.1', '::1'),
+//          'generatorPaths' => array('bootstrap.gii'),
 //        ),
-        'admin',    // Admin module
-        'api',      // API module
-        'front',    // Front-end module
-        'hr',       // Human resource module
+        'admin', // Admin module
+        'api', // API module
+        'front', // Front-end module
+        'hr',       // Hr module
     ),
     // application components
     'components' => array(
@@ -102,11 +109,17 @@ return array(
                 'password' => MAIL_HOST_PASSWORD,
                 'port' => MAIL_HOST_PORT,
                 'encryption' => 'ssl',
-                'timeout' => '120',
+                'timeout' => '10',
             ),
             'viewPath' => 'application.mail',
             'logging' => true,
             'dryRun' => false
+        ),
+        'bootstrap' => array(
+            'class' => 'bootstrap.components.TbApi',  
+//            'class' => 'bootstrap.components.Bootstrap',
+//            'cdnurl'=>"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/",
+            'cdnUrl'=>"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/",
         ),
     ),
     // application-level parameters that can be accessed

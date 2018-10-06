@@ -631,6 +631,19 @@ class CommonProcess {
         }
         return $result;
     }
+    
+    /**
+     * Get date period
+     * @param Sring $from Date from (format is DATE_FORMAT_4 - 'Y-m-d')
+     * @param Sring $to Date to (format is DATE_FORMAT_4 - 'Y-m-d')
+     */
+    public static function getDatePeriod($from, $to) {
+        $begin = new DateTime($from);
+        $end = (new DateTime($to))->modify('+1 day');
+        $interval = DateInterval::createFromDateString('1 day');
+        $period = new DatePeriod($begin, $interval, $end);
+        return $period;
+    }
             
     //-----------------------------------------------------
     // -- Date time process

@@ -49,65 +49,59 @@ class CreateResponse {
     }
     
     /**
+     * Create menu item
+     * @param String $id    Id of menu
+     * @param String $name  Name of menu
+     * @return Array Item menu
+     */
+    private static function createMenuItem($id, $name) {
+        return array(
+            DomainConst::KEY_ID     => $id,
+            DomainConst::KEY_NAME   => $name,
+        );
+    }
+    
+    /**
      * Create menu array base on role of user
      * @param Users $mUser Model User
      * @return Array
      */
     public static function getMenuByUser($mUser) {
+        $itemHome           = self::createMenuItem(DomainConst::KEY_HOME,           DomainConst::CONTENT00188);
+        $itemAccount        = self::createMenuItem(DomainConst::KEY_ACCOUNT,        DomainConst::CONTENT00008);
+        $itemRevenue        = self::createMenuItem(DomainConst::KEY_REPORT_REVENUE, DomainConst::CONTENT00441);
+        $itemCustomerList   = self::createMenuItem(DomainConst::KEY_CUSTOMER_LIST,  DomainConst::CONTENT00135);
+        $itemDailyReport    = self::createMenuItem(DomainConst::KEY_DAILY_REPORT,   DomainConst::CONTENT00504);
+        
+        // Default menu
         $aMenu = array(
-            array(
-                DomainConst::KEY_ID     => DomainConst::KEY_HOME,
-                DomainConst::KEY_NAME   => DomainConst::CONTENT00188,
-            ),
-            array(
-                DomainConst::KEY_ID     => DomainConst::KEY_ACCOUNT,
-                DomainConst::KEY_NAME   => DomainConst::CONTENT00008,
-            ),
+            $itemHome,
+            $itemAccount,
         );
         $mRole = Roles::model()->findByPk($mUser->role_id);
         if ($mRole) {
             $roleName = $mRole->role_name;
             switch ($roleName) {
-                case Roles::ROLE_ADMIN:
-                    $aMenu[] = array(
-                        DomainConst::KEY_ID     => DomainConst::KEY_REPORT_REVENUE,
-                        DomainConst::KEY_NAME   => DomainConst::CONTENT00441,
-                    );
+                case Roles::ROLE_ADMIN:                     // Admin
+                    $aMenu[] = $itemRevenue;
 
                     break;
-                case Roles::ROLE_DOCTOR:
-                    $aMenu[] = array(
-                        DomainConst::KEY_ID     => DomainConst::KEY_CUSTOMER_LIST,
-                        DomainConst::KEY_NAME   => DomainConst::CONTENT00135,
-                    );
-                    $aMenu[] = array(
-                        DomainConst::KEY_ID     => DomainConst::KEY_REPORT_REVENUE,
-                        DomainConst::KEY_NAME   => DomainConst::CONTENT00441,
-                    );
+                case Roles::ROLE_DOCTOR:                    // Doctor
+                    $aMenu[] = $itemCustomerList;
+                    $aMenu[] = $itemRevenue;
+                    $aMenu[] = $itemDailyReport;
                     break;
-                case Roles::ROLE_ASSISTANT:
-                    $aMenu[] = array(
-                        DomainConst::KEY_ID     => DomainConst::KEY_CUSTOMER_LIST,
-                        DomainConst::KEY_NAME   => DomainConst::CONTENT00088,
-                    );
+                case Roles::ROLE_ASSISTANT:                 // Assistant
+                    $aMenu[] = $itemCustomerList;
                     break;
-                case Roles::ROLE_DIRECTOR:
-                    $aMenu[] = array(
-                        DomainConst::KEY_ID     => DomainConst::KEY_REPORT_REVENUE,
-                        DomainConst::KEY_NAME   => DomainConst::CONTENT00441,
-                    );
+                case Roles::ROLE_DIRECTOR:                  // Director
+                    $aMenu[] = $itemRevenue;
                     break;
-                case Roles::ROLE_DIRECTOR_AGENT:
-                    $aMenu[] = array(
-                        DomainConst::KEY_ID     => DomainConst::KEY_REPORT_REVENUE,
-                        DomainConst::KEY_NAME   => DomainConst::CONTENT00441,
-                    );
+                case Roles::ROLE_DIRECTOR_AGENT:            // Agent director
+                    $aMenu[] = $itemRevenue;
                     break;
-                case Roles::ROLE_ACCOUNT_MANAGER:
-                    $aMenu[] = array(
-                        DomainConst::KEY_ID     => DomainConst::KEY_REPORT_REVENUE,
-                        DomainConst::KEY_NAME   => DomainConst::CONTENT00441,
-                    );
+                case Roles::ROLE_ACCOUNT_MANAGER:           // Accountant manager
+                    $aMenu[] = $itemRevenue;
                     break;
                 default:
                     break;

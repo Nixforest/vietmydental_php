@@ -22,6 +22,12 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'total'); ?>
+		<?php echo $form->textField($model,'total'); ?>
+		<?php echo $form->error($model,'total'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'process_date'); ?>
 		<?php echo $form->textField($model,'process_date'); ?>
 		<?php echo $form->error($model,'process_date'); ?>

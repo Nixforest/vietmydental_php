@@ -99,6 +99,8 @@ class DomainConst {
     const DATE_FORMAT_14                                = 'mm/yy';
     /** Date format */
     const DATE_FORMAT_15                                = 'yy';
+    /** Date format */
+    const DATE_FORMAT_16                                = 'ddmmyyyy';
     /** Date default value null */
     const DATE_DEFAULT_NULL                             = '0000-00-00';
     /** Date default value null */
@@ -905,6 +907,8 @@ class DomainConst {
     const KEY_ACCOUNT                       = 'account';
     /** customer_list */
     const KEY_CUSTOMER_LIST                 = 'customer_list';
+    /** daily_report */
+    const KEY_DAILY_REPORT                  = 'daily_report';
     /** city_id */
     const KEY_CITY_ID                       = 'city_id';
     /** Submit */
@@ -935,6 +939,8 @@ class DomainConst {
     const KEY_CAN_SELECT_AGENT              = 'canSelectAgent';
     /** Setting key: List receipts */
     const KEY_LIST_RECEIPTS                 = 'listReceipts';
+    /** Setting key: month */
+    const KEY_MONTH                         = 'month';
     
     //-----------------------------------------------------
     // List domain const
@@ -1643,4 +1649,10 @@ class DomainConst {
     const CONTENT00501  = 'Công thức';
     const CONTENT00502  = 'Loại công thức';
     const CONTENT00503  = 'Tính theo ngày';
+    const CONTENT00504  = 'Báo cáo hằng ngày';
+    const CONTENT00505  = 'Đang yêu cầu duyệt';
+    const CONTENT00506  = 'Đã xác nhận';
+    const CONTENT00507  = 'Cần xem xét lại';
+    const CONTENT00508  = 'Chưa tạo';
+    const CONTENT00509  = 'Chưa duyệt';
 }

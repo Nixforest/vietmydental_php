@@ -258,3 +258,4 @@ Yii::app()->clientscript
         </div>
     </body>
 </html>
+<?php Yii::app()->bootstrap->register(); ?>

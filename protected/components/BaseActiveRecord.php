@@ -220,4 +220,27 @@ class BaseActiveRecord extends CActiveRecord {
     public function canUpdate() {
         return true;
     }
+    
+    /**
+     * Get info of model
+     * @param Array $arrInputs Input array
+     * @return String Model information
+     */
+    public function getInfo($arrInputs) {
+        $arrStr = array();
+        foreach ($arrInputs as $input) {
+            $arrStr[] = '[' . $input . ']';
+        }
+        $retVal = implode('-', $arrStr);
+        
+        return $retVal;
+    }
+    
+    /**
+     * Convert object to string
+     * @return String Default value is all attributes
+     */
+    public function toString() {
+        return $this->getInfo($this->attributes);
+    }
 }

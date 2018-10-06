@@ -222,4 +222,77 @@ class ReportController extends APIController {
         );
         ApiModule::sendResponse($result, $this);
     }
+    
+    /**
+     * P0033_DailyReportList_API
+     * Get list daily report
+     * - url:   api/report/dailyReportList
+     * - parameter:
+     *  + token:        Token
+     *  + month:        Month(format yyyy/mm)
+     */
+    public function actionDailyReportList() {
+        try {
+            $resultFailed = ApiModule::$defaultFailedResponse;
+            // Check format of request
+            $this->checkRequest();
+            // Parse request to json
+            $root = json_decode($_POST[DomainConst::KEY_ROOT_REQUEST]);
+            // Check if parameters are exist
+            $this->checkRequiredParam($root, array(
+                DomainConst::KEY_TOKEN,
+                DomainConst::KEY_MONTH,
+            ));
+            // Get user by token value
+            $mUser = $this->getUserByToken($resultFailed, $root->token);
+            // Check version
+            $this->checkVersion($root, $mUser);
+            $this->getDailyReportList($resultFailed, $mUser, $root);
+        } catch (Exception $exc) {
+            ApiModule::catchError($exc, $this);
+        }
+    }
+    
+    /**
+     * Get list daily report
+     * @param Array $result Result data
+     * @param Object $mUser Model user
+     * @param Object $root Json object
+     */
+    private function getDailyReportList($result, $mUser, $root) {
+        $retVal = array();
+        $monthValue = $root->month . '-01';
+        Loggers::info('Month value', $monthValue, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        $firstDate      = CommonProcess::getFirstDateOfMonth($monthValue);
+        $currentDate    = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
+        $lastDate       = CommonProcess::getLastDateOfMonth($monthValue);
+        Loggers::info('First date of month', $firstDate, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        Loggers::info('Current date of month', $currentDate, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        Loggers::info('Last date of month', $lastDate, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        $period = CommonProcess::getDatePeriod($firstDate, $currentDate);
+        if (DateTimeExt::compare($currentDate, $lastDate) == 1) {
+            $period = CommonProcess::getDatePeriod($firstDate, $lastDate);
+        }
+        foreach ($period as $dt) {
+            $childData = array();
+            // Get value of date
+            $date = $dt->format(DomainConst::DATE_FORMAT_4);
+            $dateAsId = $dt->format(DomainConst::DATE_FORMAT_10);
+            $dateAsName = $dt->format(DomainConst::DATE_FORMAT_BACK_END);
+            $status = DailyReports::checkStatus($mUser, $date);
+            $statusStr = isset(DailyReports::getArrayStatus()[$status]) ? DailyReports::getArrayStatus()[$status] : '';
+            $childData[] = CommonProcess::createConfigJson(DomainConst::ITEM_STATUS, '',
+                    $status);
+            $childData[] = CommonProcess::createConfigJson(DomainConst::ITEM_STATUS_STR, '',
+                    $statusStr);
+            $data = CommonProcess::createConfigJson($dateAsId, $dateAsName,
+                    $childData);
+//            $retVal[] = $data;
+            array_unshift($retVal, $data);
+        }
+        $result = ApiModule::$defaultSuccessResponse;
+        $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00194;
+        $result[DomainConst::KEY_DATA]  = $retVal;
+        ApiModule::sendResponse($result, $this);
+    }
 }
