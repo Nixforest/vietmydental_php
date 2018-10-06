@@ -341,4 +341,89 @@ class ReportController extends APIController {
         $result[DomainConst::KEY_DATA]  = $retVal;
         ApiModule::sendResponse($result, $this);
     }
+    
+    /**
+     * P0035_UpdateDailyReport_API
+     * Update daily report status
+     * - url:   api/report/updateDailyReport
+     * - parameter:
+     *  + token:        Token
+     *  + id:           Id of report
+     *  + status:       Status of daily report
+     */
+    public function actionUpdateDailyReport() {
+        try {
+            $resultFailed = ApiModule::$defaultFailedResponse;
+            // Check format of request
+            $this->checkRequest();
+            // Parse request to json
+            $root = json_decode($_POST[DomainConst::KEY_ROOT_REQUEST]);
+            // Check if parameters are exist
+            $this->checkRequiredParam($root, array(
+                DomainConst::KEY_TOKEN,
+                DomainConst::KEY_ID,
+                DomainConst::KEY_STATUS,
+            ));
+            // Get user by token value
+            $mUser = $this->getUserByToken($resultFailed, $root->token);
+            // Check version
+            $this->checkVersion($root, $mUser);
+            $this->updateDailyReport($resultFailed, $mUser, $root);
+        } catch (Exception $exc) {
+            ApiModule::catchError($exc, $this);
+        }
+    }
+    
+    /**
+     * Update daily report
+     * @param Array $result Result data
+     * @param Object $mUser Model user
+     * @param Object $root Json object
+     */
+    private function updateDailyReport($result, $mUser, $root) {
+        $mReport = DailyReports::model()->findByPk($root->id);
+        if ($mReport) {
+            // Request status is confirm
+            if ($root->status == DailyReports::STATUS_CONFIRM) {
+                if ($mReport->canConfirm($mUser->role_id)) {
+                    $mReport->status = $root->status;
+                    if ($mReport->save()) { // Success
+                        $result = ApiModule::$defaultSuccessResponse;
+                        $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00035;
+                        ApiModule::sendResponse($result, $this);
+                    } else {                // Failed
+                        $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00214 . ': '
+                                . CommonProcess::json_encode_unicode($mReport->getErrors());
+                        ApiModule::sendResponse($result, $this);
+                    }
+                } else {                    // Failed
+                    $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00511;
+                    ApiModule::sendResponse($result, $this);
+                }
+            } else if ($root->status == DailyReports::STATUS_CANCEL) {
+                // Request status is cancel
+                if ($mReport->canCancel($mUser->role_id)) {
+                    $mReport->status = $root->status;
+                    if ($mReport->save()) { // Success
+                        $result = ApiModule::$defaultSuccessResponse;
+                        $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00035;
+                        ApiModule::sendResponse($result, $this);
+                    } else {                // Failed
+                        $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00214 . ': '
+                                . CommonProcess::json_encode_unicode($mReport->getErrors());
+                        ApiModule::sendResponse($result, $this);
+                    }
+                } else {                    // Failed
+                    $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00511;
+                    ApiModule::sendResponse($result, $this);
+                }
+            } else {
+                $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00511;
+                ApiModule::sendResponse($result, $this);
+            }
+        } else {
+            $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00510;
+            ApiModule::sendResponse($result, $this);
+        }
+    }
 }

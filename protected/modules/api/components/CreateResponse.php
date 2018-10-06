@@ -43,7 +43,9 @@ class CreateResponse {
             DomainConst::KEY_DIAGNOSIS_OTHER_ID => Diagnosis::getOtherDiagnosisId(),
             DomainConst::KEY_LIST_AGENT         => Agents::getAgentListJson(),
             DomainConst::KEY_AGENT_LIST         => $mUser->getAgentListJson(),
-            Settings::KEY_APP_API_LIST_PAGE_SIZE => Settings::getApiListPageSize(),
+            Settings::KEY_APP_API_LIST_PAGE_SIZE    => Settings::getApiListPageSize(),
+            DomainConst::KEY_DAILY_REPORT_STATUS    => DailyReports::getArrayStatusJson(),
+            
         );
         ApiModule::sendResponse($result, $objController);
     }

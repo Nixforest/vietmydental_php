@@ -556,6 +556,8 @@ class DomainConst {
     const KEY_AGENT_LONG                    = 'agent_longitude';
     /** Setting key: Agent list */
     const KEY_AGENT_LIST                    = 'agent_list';
+    /** Setting key: Daily report status */
+    const KEY_DAILY_REPORT_STATUS           = 'daily_report_status';
     /** Setting key: Information of agent */
     const KEY_INFO_AGENT                    = 'info_agent';
     /** Setting key: Information of gas */
@@ -1655,4 +1657,6 @@ class DomainConst {
     const CONTENT00507  = 'Cần xem xét lại';
     const CONTENT00508  = 'Chưa tạo';
     const CONTENT00509  = 'Chưa duyệt';
+    const CONTENT00510  = 'Báo cáo không tồn tại';
+    const CONTENT00511  = 'Trạng thái cập nhật không hợp lệ';
 }

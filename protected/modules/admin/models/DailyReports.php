@@ -108,7 +108,9 @@ class DailyReports extends BaseActiveRecord {
         $criteria->compare('approve_id', $this->approve_id);
         $criteria->compare('status', $this->status);
         $criteria->compare('created_by', $this->created_by);
-        $criteria->compare('date_report', CommonProcess::convertDateTime($this->date_report, DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_4));
+        $criteria->compare('date_report',
+                CommonProcess::convertDateTime($this->date_report,
+                        DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_4));
         $agentId = isset(Yii::app()->user->agent_id) ? Yii::app()->user->agent_id : 0;
         $criteria->compare('agent_id', $agentId);
         if (!$this->canViewAll()) {
@@ -344,15 +346,21 @@ class DailyReports extends BaseActiveRecord {
 
     /**
      * can update status report
-     * @return boolean
+     * @param String $roleId Id of user role
+     * @return boolean True if can confirm, false otherwise
      */
-    public function canConfirm() {
+    public function canConfirm($roleId = '') {
+        if (empty($roleId)) {
+            $roleId = CommonProcess::getCurrentRoleId();
+        }
         switch ($this->status) {
             case self::STATUS_NEW:
                 break;
 
             case self::STATUS_PROCESS:
-                switch (CommonProcess::getCurrentRoleId()) {
+                Loggers::info('Current role', $roleId,
+                        __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                switch ($roleId) {
                     case Roles::getRoleByName(Roles::ROLE_RECEPTIONIST)->id:
                         return false;
 
@@ -371,7 +379,7 @@ class DailyReports extends BaseActiveRecord {
                 break;
 
             case self::STATUS_CANCEL:
-                switch (CommonProcess::getCurrentRoleId()) {
+                switch ($roleId) {
                     case Roles::getRoleByName(Roles::ROLE_RECEPTIONIST)->id:
                         return false;
 
@@ -387,7 +395,7 @@ class DailyReports extends BaseActiveRecord {
                 break;
 
             case self::STATUS_SHOULD_REVIEW:
-                switch (CommonProcess::getCurrentRoleId()) {
+                switch ($roleId) {
                     case Roles::getRoleByName(Roles::ROLE_RECEPTIONIST)->id:
                         return false;
 
@@ -411,13 +419,16 @@ class DailyReports extends BaseActiveRecord {
      * can cancel daily report
      * @return boolean
      */
-    public function canCancel() {
+    public function canCancel($roleId = '') {
+        if (empty($roleId)) {
+            $roleId = CommonProcess::getCurrentRoleId();
+        }
         switch ($this->status) {
             case self::STATUS_NEW:
                 break;
 
             case self::STATUS_PROCESS:
-                switch (CommonProcess::getCurrentRoleId()) {
+                switch ($roleId) {
                     case Roles::getRoleByName(Roles::ROLE_RECEPTIONIST)->id:
                         return true;
 
@@ -439,7 +450,7 @@ class DailyReports extends BaseActiveRecord {
                 break;
 
             case self::STATUS_SHOULD_REVIEW:
-                switch (CommonProcess::getCurrentRoleId()) {
+                switch ($roleId) {
                     case Roles::getRoleByName(Roles::ROLE_RECEPTIONIST)->id:
                         return false;
 
@@ -596,6 +607,10 @@ class DailyReports extends BaseActiveRecord {
     //-----------------------------------------------------
     // Static methods
     //-----------------------------------------------------
+    /**
+     * Get list status
+     * @return Array List status
+     */
     public static function getArrayStatus() {
         return [
 //            self::STATUS_NEW                => DomainConst::CONTENT00467,
@@ -606,6 +621,18 @@ class DailyReports extends BaseActiveRecord {
             self::STATUS_SHOULD_REVIEW      => DomainConst::CONTENT00507,
             self::STATUS_NOT_CREATED_YET    => DomainConst::CONTENT00508,
         ];
+    }
+    
+    /**
+     * Get Array status json
+     * @return String Json type
+     */
+    public static function getArrayStatusJson() {
+        $retVal = array();
+        foreach (self::getArrayStatus() as $key => $value) {
+            $retVal[] = CommonProcess::createConfigJson($key, $value);
+        }
+        return $retVal;
     }
     
     /**
