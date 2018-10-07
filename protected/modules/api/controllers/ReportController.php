@@ -56,13 +56,17 @@ class ReportController extends APIController {
         $orgFormat = DomainConst::DATE_FORMAT_6;            // Origin date format
         $dateFormat = DomainConst::DATE_FORMAT_4;           // Current date format
         $arrAgentId = $root->agent_id;
-        Loggers::info('Agent array', CommonProcess::json_encode_unicode($arrAgentId), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        Loggers::info('Agent array', CommonProcess::json_encode_unicode($arrAgentId),
+                __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         if (empty($root->agent_id)) {
             $arrAgentId = $mUser->getAgentIds();
-            Loggers::info('User', $mUser->getFullName(), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-            Loggers::info('Agent array', CommonProcess::json_encode_unicode($arrAgentId), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            Loggers::info('User', $mUser->getFullName(),
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            Loggers::info('Agent array', CommonProcess::json_encode_unicode($arrAgentId),
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         }
         
+        Loggers::info('Date from', $root->date_from, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         $from   = CommonProcess::convertDateTime($root->date_from, $orgFormat, $dateFormat);
         $to     = CommonProcess::convertDateTime($root->date_to, $orgFormat, $dateFormat);
         if (empty($from)) {
@@ -71,16 +75,62 @@ class ReportController extends APIController {
         if (empty($to)) {
             $to = CommonProcess::getCurrentDateTime($dateFormat);
         }
-        $allReceipts = Agents::getRevenueMultiAgent($from, $to, array(Receipts::STATUS_RECEIPTIONIST), true, $arrAgentId, '', true);
+        switch ($mUser->role_id) {
+            case Roles::getRoleByName(Roles::ROLE_DOCTOR)->id:
+                $sql = 'SELECT count(r.id) as count_id, sum(total) as sum_total, sum(final) as sum_final, sum(discount) as sum_discount
+                        FROM ' . Receipts::model()->tableName() . ' as r
+                        INNER JOIN ' . OneMany::model()->tableName() . ' as om ON om.many_id=r.id
+                        WHERE r.detail_id IN (SELECT id FROM ' . TreatmentScheduleDetails::model()->tableName() . ' as td
+                                                WHERE td.schedule_id IN (SELECT id FROM ' . TreatmentSchedules::model()->tableName() . ' as t
+                                                                        WHERE t.doctor_id=' . $mUser->id . '))
+                        AND r.process_date>\'' . CommonProcess::getPreviousDateOfDate($from, DomainConst::DATE_FORMAT_4) . '\'
+                        AND r.process_date<\'' . CommonProcess::getNextDateOfDate($to, DomainConst::DATE_FORMAT_4) . '\'
+                        AND om.type=' . OneMany::TYPE_AGENT_RECEIPT . ' AND om.one_id IN (' . implode(',', $arrAgentId) . ')';
+                break;
+            case Roles::getRoleByName(Roles::ROLE_DIRECTOR)->id:
+                $sql = 'SELECT count(r.id) as count_id, sum(total) as sum_total, sum(final) as sum_final, sum(discount) as sum_discount
+                        FROM ' . Receipts::model()->tableName() . ' as r
+                        INNER JOIN ' . OneMany::model()->tableName() . ' as om ON om.many_id=r.id
+                        WHERE r.detail_id IN (SELECT id FROM ' . TreatmentScheduleDetails::model()->tableName() . ' as td
+                                                WHERE td.schedule_id IN (SELECT id FROM ' . TreatmentSchedules::model()->tableName() . ' as t))
+                        AND r.process_date>\'' . CommonProcess::getPreviousDateOfDate($from, DomainConst::DATE_FORMAT_4) . '\'
+                        AND r.process_date<\'' . CommonProcess::getNextDateOfDate($to, DomainConst::DATE_FORMAT_4) . '\'
+                        AND om.type=' . OneMany::TYPE_AGENT_RECEIPT . ' AND om.one_id IN (' . implode(',', $arrAgentId) . ')';
+                break;
+
+            default:
+                break;
+        }
+//        $allReceipts = Agents::getRevenueMultiAgent($from, $to, array(Receipts::STATUS_RECEIPTIONIST), true, $arrAgentId, '', true);
+        // Create SQL statement
+        // SELECT * FROM receipts as r WHERE r.detail_id
+        //  IN (SELECT id FROM treatment_schedule_details as td WHERE td.schedule_id
+        //          IN (SELECT id FROM treatment_schedules as t WHERE t.doctor_id=6))
+        //  AND process_date>'2018-08-31' AND process_date<'2018-10-01'
+//        $sql = 'SELECT count(id) as count_id, sum(total) as sum_total, sum(final) as sum_final, sum(discount) as sum_discount FROM ' . Receipts::model()->tableName() . ' as r WHERE r.detail_id IN '
+//                . '(SELECT id FROM ' . TreatmentScheduleDetails::model()->tableName() . ' as td WHERE td.schedule_id IN '
+//                . '(SELECT id FROM ' . TreatmentSchedules::model()->tableName() . ' as t WHERE t.doctor_id=' . $mUser->id . ')) '
+//                . 'AND process_date>\'' . CommonProcess::getPreviousDateOfDate($from, DomainConst::DATE_FORMAT_4)
+//                . '\' AND process_date<\'' . CommonProcess::getPreviousDateOfDate($to, DomainConst::DATE_FORMAT_4) . '\'';
+        $list = Yii::app()->db->createCommand($sql)->queryAll();
+        $countId    = $list[0]['count_id'];
+        $total      = $list[0]['sum_total'];
+        $final      = $list[0]['sum_final'];
+        $discount   = $list[0]['sum_discount'];
         $result = ApiModule::$defaultSuccessResponse;
         $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00194;
         $result[DomainConst::KEY_DATA] = array(
-            DomainConst::KEY_DISCOUNT_AMOUNT    => OneMany::getReceiptDiscountTotal($allReceipts->getData()),
-            DomainConst::KEY_TOTAL              => OneMany::getReceiptTotalTotal($allReceipts->getData()),
-            DomainConst::KEY_FINAL              => OneMany::getReceiptFinalTotal($allReceipts->getData()),
-            DomainConst::KEY_DEBT               => OneMany::getReceiptDebitTotal($allReceipts->getData()),
+//            DomainConst::KEY_DISCOUNT_AMOUNT    => OneMany::getReceiptDiscountTotal($allReceipts->getData()),
+//            DomainConst::KEY_TOTAL              => OneMany::getReceiptTotalTotal($allReceipts->getData()),
+//            DomainConst::KEY_FINAL              => OneMany::getReceiptFinalTotal($allReceipts->getData()),
+//            DomainConst::KEY_DEBT               => OneMany::getReceiptDebitTotal($allReceipts->getData()),
 //            DomainConst::KEY_CAN_SELECT_AGENT   => DomainConst::NUMBER_ZERO_VALUE,
-            DomainConst::KEY_TOTAL_QTY          => OneMany::getReceiptCustomerTotal($allReceipts->getData()),
+//            DomainConst::KEY_TOTAL_QTY          => OneMany::getReceiptCustomerTotal($allReceipts->getData()),
+            DomainConst::KEY_TOTAL              => CommonProcess::formatCurrency($total),
+            DomainConst::KEY_FINAL              => CommonProcess::formatCurrency($final),
+            DomainConst::KEY_DISCOUNT_AMOUNT    => CommonProcess::formatCurrency($discount),
+            DomainConst::KEY_DEBT               => CommonProcess::formatCurrency($total - $discount - $final),
+            DomainConst::KEY_TOTAL_QTY          => $countId,
         );
         ApiModule::sendResponse($result, $this);
     }

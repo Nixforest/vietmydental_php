@@ -496,6 +496,16 @@ class CommonProcess {
     }
     
     /**
+     * Get next date of a date
+     * @param String $date Date value (format: Y-m-d)
+     * @return type
+     */
+    public static function getNextDateOfDate($date, $format = DomainConst::DATE_FORMAT_1) {
+        date_default_timezone_set(DomainConst::DEFAULT_TIMEZONE);
+        return date($format, strtotime('+1 day', strtotime($date)));
+    }
+    
+    /**
      * Get plus date value
      * @param Int $numberOfDate Number of date need plus
      * @param String $format Date time format
