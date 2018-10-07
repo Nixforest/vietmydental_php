@@ -67,23 +67,6 @@ class HrFunctionTypesController extends HrController {
     }
 
     /**
-     * Deletes a particular model.
-     * If deletion is successful, the browser will be redirected to the 'admin' page.
-     * @param integer $id the ID of the model to be deleted
-     */
-    public function actionDelete($id) {
-        $model = $this->loadModel($id);
-        $canDelete = isset($model) ? $model->delete() : false;
-        if (!$canDelete) {
-            echo $model->getError('errMsg'); //for ajax
-        }
-        // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-        if (!isset($_GET['ajax'])) {
-            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
-        }
-    }
-
-    /**
      * Lists all models.
      */
     public function actionIndex() {

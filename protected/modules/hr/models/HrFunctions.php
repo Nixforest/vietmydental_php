@@ -18,15 +18,37 @@
  * @property Users                      $rCreatedBy                     User created this record
  * @property Roles                      $rRole                          Role belong to
  * @property HrFunctionTypes            $rType                          HrFunctionTypes belong to
+ * @property HrParameters[]             $rParameters                    List parameters belong to
+ * @property HrCoefficients[]           $rCoefficients                  List coefficients belong to
  */
 class HrFunctions extends BaseActiveRecord {
+
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
     /** Inactive */
-    const STATUS_INACTIVE               = 0;
+    const STATUS_INACTIVE           = 0;
+
     /** Active */
-    const STATUS_ACTIVE                 = 1;
+    const STATUS_ACTIVE             = 1;
+
+    /** List of keywords */
+    const LIST_KEYWORD              = 'TS|HS';
+
+    /** Parameter keyword */
+    const KEYWORD_PARAM             = 'TS';
+
+    /** Coefficient keyword */
+    const KEYWORD_COEFFICIENT       = 'HS';
+
+    /** Condition keyword */
+    const KEYWORD_CONDITION         = 'IF';
+
+    /** Type of function is count day per day */
+    const FUNCTION_TYPE_COUNT       = '1';
+
+    /** Type of function is calculate from date to a day (range of date) */
+    const FUNCTION_TYPE_RANGE       = '0';
 
     /**
      * Returns the static model of the specified AR class.
@@ -73,7 +95,15 @@ class HrFunctions extends BaseActiveRecord {
             'rRole' => array(self::BELONGS_TO, 'Roles', 'role_id'),
             'rType' => array(
                 self::BELONGS_TO, 'HrFunctionTypes', 'type_id',
-                'on'    => 'status !=' . HrFunctionTypes::STATUS_INACTIVE,
+                'on' => 'status !=' . HrFunctionTypes::STATUS_INACTIVE,
+            ),
+            'rParameters' => array(
+                self::MANY_MANY, 'HrParameters', 'one_many(one_id, many_id)',
+                'condition' => 'rParameters_rParameters.type=' . OneMany::TYPE_FUNCTION_PARAMETER,
+            ),
+            'rCoefficients' => array(
+                self::MANY_MANY, 'HrCoefficients', 'one_many(one_id, many_id)',
+                'condition' => 'rCoefficients_rCoefficients.type=' . OneMany::TYPE_FUNCTION_COEFFICIENT,
             ),
         );
     }
@@ -134,14 +164,26 @@ class HrFunctions extends BaseActiveRecord {
     protected function beforeSave() {
         if ($this->isNewRecord) {
             $this->created_by = Yii::app()->user->id;
-            
+
             // Handle created date
             $this->created_date = CommonProcess::getCurrentDateTime();
         }
-        
+
         return parent::beforeSave();
     }
     
+    /**
+     * Override before delete method
+     * @return Parent result
+     */
+    protected function beforeDelete() {
+        $retVal = true;
+        // Delete all relation param
+        OneMany::deleteAllOldRecords($this->id, OneMany::TYPE_FUNCTION_PARAMETER);
+        OneMany::deleteAllOldRecords($this->id, OneMany::TYPE_FUNCTION_COEFFICIENT);
+        return $retVal;
+    }
+
     //-----------------------------------------------------
     // Utility methods
     //-----------------------------------------------------
@@ -155,7 +197,7 @@ class HrFunctions extends BaseActiveRecord {
         }
         return '';
     }
-    
+
     /**
      * Return status string
      * @return string Status value as string
@@ -166,7 +208,7 @@ class HrFunctions extends BaseActiveRecord {
         }
         return '';
     }
-    
+
     /**
      * Get name of role
      * @return string Name of role
@@ -177,7 +219,7 @@ class HrFunctions extends BaseActiveRecord {
         }
         return '';
     }
-    
+
     /**
      * Get value of function
      * @param String $from  Date from
@@ -186,9 +228,171 @@ class HrFunctions extends BaseActiveRecord {
      */
     public function getValue($from, $to, $mUser) {
         $retVal = 0;
+        if ($this->is_per_day == self::FUNCTION_TYPE_RANGE) {
+            $function = $this->convertFunctionToValue($from, $to, $mUser);
+            $retVal = self::calculateFunction($function);
+        } else {
+            $retVal = $this->getCountValue($from, $to, $mUser);
+        }
         return $retVal;
     }
-    
+
+    /**
+     * Get function as human readable
+     * @return String Function as human readable
+     */
+    public function getUnderstandingFunction() {
+        $aParamModels = isset($this->rParameters) ? $this->rParameters : array();
+        $aCoeffModels = isset($this->rCoefficients) ? $this->rCoefficients : array();
+        $retVal = $this->function;
+        $idx = 1;
+        foreach ($aParamModels as $param) {
+            $name = $param->getName();
+            $retVal = str_ireplace(self::KEYWORD_PARAM . $idx++, ' [' . $name . '] ', $retVal);
+        }
+        $idxx = 1;
+        foreach ($aCoeffModels as $coefficient) {
+            $name = $coefficient->getName();
+            $retVal = str_ireplace(self::KEYWORD_COEFFICIENT . $idxx++, ' [' . $name . '] ', $retVal);
+        }
+        foreach (self::getArrOperators() as $key => $value) {
+            $retVal = str_ireplace($key, $value, $retVal);
+        }
+
+        return $retVal;
+    }
+
+    /**
+     * Get type
+     * @return string Name of type
+     */
+    public function getType() {
+        if (isset($this->rType)) {
+            return $this->rType->name;
+        }
+        return '';
+    }
+
+    /**
+     * Get is_per_day value in text
+     * @return string is_per_day value in text
+     */
+    public function isPerDayText() {
+        if ($this->is_per_day == self::FUNCTION_TYPE_COUNT) {
+            return DomainConst::CONTENT00512;
+        }
+        return DomainConst::CONTENT00513;
+    }
+
+    /**
+     * Get array variables name
+     * @return array List variables name
+     */
+    public function getArrVariablesName() {
+        $retVal = array();
+        $matches = array();
+        preg_match_all('/(' . self::LIST_KEYWORD . ')\w+/', strtoupper($this->function), $matches);
+        if (isset($matches[0])) {
+            foreach ($matches[0] as $value) {
+                if (!in_array($value, $retVal)) {
+                    $retVal[] = $value;
+                }
+            }
+        }
+
+        return $retVal;
+    }
+
+    /**
+     * Get parameter model by index
+     * @param Int $index Index of parameter
+     * @return Paramter model if exist, NULL otherwise
+     */
+    public function getParamModel($index) {
+        if ($index <= 0) {
+            return NULL;
+        }
+        if (isset($this->rParameters)) {
+            if (isset($this->rParameters[$index - 1])) {
+                return $this->rParameters[$index - 1];
+            }
+        }
+        return NULL;
+    }
+
+    /**
+     * Get coefficient model by index
+     * @param Int $index Index of coefficient
+     * @return Coefficient model if exist, NULL otherwise
+     */
+    public function getCoefficientModel($index) {
+        if ($index <= 0) {
+            return NULL;
+        }
+        if (isset($this->rCoefficients)) {
+            if (isset($this->rCoefficients[$index - 1])) {
+                return $this->rCoefficients[$index - 1];
+            }
+        }
+        return NULL;
+    }
+
+    public function convertFunctionToValue($from, $to, $mUser) {
+        $arrValues = array();
+        // Get list variable
+        $arrVariables = $this->getArrayVariablesName();
+        // List list value of parameter
+        foreach ($arrVariables as $value) {
+            $model = NULL;
+            if (strpos($value, self::KEYWORD_PARAM) !== false) {
+                $index = str_replace(self::KEYWORD_PARAM, '', $value);
+                $model = $this->getParamModel($index);
+                if (isset($model)) {
+                    // Save list using parameter in current user
+                    if (!in_array($model, $mUser->usingParam)) {
+                        $mUser->usingParam[] = $model;
+                    }
+
+                    $arrValues[$value] = $model->getValue($from, $to, $mUser);
+                }
+            } else if (strpos($value, self::KEYWORD_COEFFICIENT) !== false) {
+                $index = str_replace(self::KEYWORD_COEFFICIENT, '', $value);
+                $model = $this->getCoefficientModel($index);
+                if (isset($model)) {
+                    $arrValues[$value] = $model->getValue($from, $to);
+                }
+            }
+        }
+        $function = self::normalizationFunction($this->function, 'retVal');
+        foreach ($arrValues as $key => $value) {
+            $function = str_replace($key, $value, $function);
+        }
+        return $function;
+    }
+
+    /**
+     * Get value of function (for timesheet type)
+     * @param String $from Date from (format is DATE_FORMAT_4 - 'Y-m-d')
+     * @param String $to Date to (format is DATE_FORMAT_4 - 'Y-m-d')
+     */
+    public function getCountValue($from, $to, $mUser) {
+        $retVal = 0;
+        $begin = new DateTime($from);
+        $end = (new DateTime($to))->modify('+1 day');
+        $interval = DateInterval::createFromDateString('1 day');
+        $period = new DatePeriod($begin, $interval, $end);
+        $total = 0;
+        // Loop for all date between range - Check date by date
+        foreach ($period as $dt) {
+            $dateValue = $dt->format(DomainConst::DATE_FORMAT_4);
+            $function = $this->convertFunctionToValue($dateValue, $dateValue, $mUser);
+            $retVal = self::calculateFunction($function);
+            $total += $retVal;
+        }
+
+        return $total;
+    }
+
     //-----------------------------------------------------
     // Static methods
     //-----------------------------------------------------
@@ -198,8 +402,159 @@ class HrFunctions extends BaseActiveRecord {
      */
     public static function getArrayStatus() {
         return array(
-            self::STATUS_INACTIVE       => DomainConst::CONTENT00408,
-            self::STATUS_ACTIVE         => DomainConst::CONTENT00407,
+            self::STATUS_INACTIVE => DomainConst::CONTENT00408,
+            self::STATUS_ACTIVE => DomainConst::CONTENT00407,
+        );
+    }
+
+    /**
+     * Get array invalid char
+     * @return Array Invalid chars
+     */
+    public static function getArrInvalidChar() {
+        return array(
+            '$'
+        );
+    }
+
+    /**
+     * Get list operators
+     * @return Array List operators
+     */
+    public static function getArrOperators() {
+        return array(
+            '+' => ' + ',
+            '-' => ' - ',
+            '*' => ' * ',
+            '/' => ' / ',
+            '  ' => ' ',
+        );
+    }
+
+    /**
+     * Load list functions
+     * @return Array List functions
+     */
+    public static function loadItems() {
+        $models = self::model()->findAll();
+        $retVal = [];
+        foreach ($models as $model) {
+            if ($model->status != self::STATUS_INACTIVE) {
+                $retVal[$model->role_id][$model->type_id][$model->id] = $model;
+            }
+        }
+        return $retVal;
+    }
+
+    /**
+     * Check list variables was defined
+     * @param Array $arrVariables   Array variables to check
+     * @param Array $output         List variables was missing (output)
+     * @return boolean True if all variables was defined, False otherwise
+     */
+    private static function issetVariables($arrVariables, &$output) {
+        $allVariable = get_defined_vars();
+        // Loop for all variables
+        foreach ($arrVariables as $value) {
+            if (!array_key_exists(strtoupper($value), $allVariable)) {
+                $output[] = $value;
+            }
+        }
+
+        // If list result is empty => All variables is valid
+        if (!empty($output)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Normalization function string
+     * @param String $strFunction Input function
+     * @param String $outputName Name of output variable
+     * @return string Function after normalization
+     */
+    private static function normalizationFunction($strFunction, $outputName) {
+        $function = strtoupper($strFunction);
+        foreach (self::getArrInvalidChar() as $value) {
+            $function = str_replace($value, '', $function);
+        }
+        $index = strpos($function, self::KEYWORD_CONDITION, 0);
+        while (!($index === false)) {
+            $function = self::replaceStep(array('?'), ';', $function, true, array('limit' => 1), $index);
+            $index = strpos($function, self::KEYWORD_CONDITION, $index + 1);
+        }
+        $function = str_replace(self::KEYWORD_CONDITION, '', $function);
+        $function = str_replace(';', ':', $function);
+        $strEval = '$' . $outputName . ' = ' . $function . ';';
+        return $strEval;
+    }
+
+    /**
+     * Replace keyword in function to be a calculable statement in PHP code
+     * @param Array $aStep
+     * @param String $strOld
+     * @param String $strReplace
+     * @param Bool $isLimit
+     * @param String $aParam
+     * @param Int $after
+     * @return String Function after replace
+     */
+    private static function replaceStep($aStep, $strOld, $strReplace, $isLimit = false, $aParam = array(), $after = 0) {
+        $limit = 0;
+        $ii = 0;
+        if (isset($aParam['limit'])) {
+            $limit = $aParam['limit'];
+        }
+        $index = strpos($strReplace, $strOld, $after);
+        while (!($index === false)) {
+            if ($isLimit) {
+                if ($limit <= 0) {
+                    break;
+                }
+                $limit--;
+            }
+            $strStep = $aStep[$ii];
+            $strReplace = substr_replace($strReplace, $strStep, $index, strlen($strOld));
+            if (++$ii > (count($aStep) - 1)) {
+                $ii = 0;
+            }
+            $index = strpos($strReplace, $strOld, $after);
+        }
+        return $strReplace;
+    }
+
+    /**
+     * Calculate function
+     * @param String $function Function
+     * @return int Value of function
+     */
+    private static function calculateFunction($function) {
+        $retVal = 0;
+        set_error_handler(function() {
+            throw new Exception(DomainConst::CONTENT00214);
+        });
+        try {
+            eval($function);
+        } catch (Exception $ex) {
+            $visibleFunc = str_replace('$retVal = ', "", $function);
+            $visibleFunc = str_replace(';', "", $visibleFunc);
+            Loggers::error(DomainConst::CONTENT00214, $ex->getMessage(), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            Loggers::error("Có lỗi chia cho 0!", $this->name . html_entity_decode('\n') . $visibleFunc, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        }
+        restore_error_handler();
+        return $retVal;
+    }
+    
+    /**
+     * Get array is_per_day text
+     * @return Array 
+     */
+    public static function getArrIsPerDayText() {
+        return array(
+            self::FUNCTION_TYPE_COUNT   => DomainConst::CONTENT00512,
+            self::FUNCTION_TYPE_RANGE   => DomainConst::CONTENT00513,
         );
     }
 

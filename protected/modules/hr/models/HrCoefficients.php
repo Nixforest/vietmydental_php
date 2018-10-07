@@ -15,6 +15,7 @@
  * @property Users                      $rCreatedBy                     User created this record
  * @property Roles                      $rRole                          Role belong to
  * @property HrCoefficientValues[]      $rValues                        Values of coefficient
+ * @property HrFunctions[]              $rFunctions                     List functions which using this coefficient
  */
 class HrCoefficients extends BaseActiveRecord {
     //-----------------------------------------------------
@@ -71,6 +72,10 @@ class HrCoefficients extends BaseActiveRecord {
             'rValues'   => array(
                 self::HAS_MANY, 'HrCoefficientValues', 'coefficient_id',
                 'on'    => 'status !=' . HrCoefficientValues::STATUS_INACTIVE,
+            ),
+            'rFunctions'    => array(
+                self::MANY_MANY, 'HrFunctions', 'one_many(many_id, one_id)',
+                'condition' => 'rFunctions_rFunctions.type=' . OneMany::TYPE_FUNCTION_COEFFICIENT,
             ),
         );
     }
@@ -143,6 +148,12 @@ class HrCoefficients extends BaseActiveRecord {
         if (!empty($this->rValues)) {
             Loggers::error(DomainConst::CONTENT00214, 'Can not delete', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             $this->addErrorMessage(DomainConst::CONTENT00498);
+            return false;
+        }
+        // Check foreign table hr_functions
+        if (!empty($this->rFunctions)) {
+            Loggers::error(DomainConst::CONTENT00214, 'Can not delete', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            $this->addErrorMessage(DomainConst::CONTENT00500);
             return false;
         }
         return $retVal;

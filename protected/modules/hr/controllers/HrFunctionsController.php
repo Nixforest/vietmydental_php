@@ -1,6 +1,6 @@
 <?php
 
-class HrParametersController extends HrController {
+class HrFunctionsController extends HrController {
 
     /**
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -24,13 +24,13 @@ class HrParametersController extends HrController {
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
-        $model = new HrParameters;
+        $model = new HrFunctions;
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
 
-        if (isset($_POST['HrParameters'])) {
-            $model->attributes = $_POST['HrParameters'];
+        if (isset($_POST['HrFunctions'])) {
+            $model->attributes = $_POST['HrFunctions'];
             if ($model->save()) {
                 $this->redirect(array('view', 'id' => $model->id));
             }
@@ -53,8 +53,8 @@ class HrParametersController extends HrController {
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
 
-        if (isset($_POST['HrParameters'])) {
-            $model->attributes = $_POST['HrParameters'];
+        if (isset($_POST['HrFunctions'])) {
+            $model->attributes = $_POST['HrFunctions'];
             if ($model->save()) {
                 $this->redirect(array('view', 'id' => $model->id));
             }
@@ -70,10 +70,10 @@ class HrParametersController extends HrController {
      * Lists all models.
      */
     public function actionIndex() {
-        $model = new HrParameters('search');
+        $model = new HrFunctions('search');
         $model->unsetAttributes();  // clear any default values
-        if (isset($_GET['HrParameters'])) {
-            $model->attributes = $_GET['HrParameters'];
+        if (isset($_GET['HrFunctions'])) {
+            $model->attributes = $_GET['HrFunctions'];
         }
 
         $this->render('index', array(
@@ -86,11 +86,11 @@ class HrParametersController extends HrController {
      * Returns the data model based on the primary key given in the GET variable.
      * If the data model is not found, an HTTP exception will be raised.
      * @param integer $id the ID of the model to be loaded
-     * @return HrParameters the loaded model
+     * @return HrFunctions the loaded model
      * @throws CHttpException
      */
     public function loadModel($id) {
-        $model = HrParameters::model()->findByPk($id);
+        $model = HrFunctions::model()->findByPk($id);
         if ($model === null) {
             throw new CHttpException(404, 'The requested page does not exist.');
         }
@@ -99,10 +99,10 @@ class HrParametersController extends HrController {
 
     /**
      * Performs the AJAX validation.
-     * @param HrParameters $model the model to be validated
+     * @param HrFunctions $model the model to be validated
      */
     protected function performAjaxValidation($model) {
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'hr-parameters-form') {
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'hr-functions-form') {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }

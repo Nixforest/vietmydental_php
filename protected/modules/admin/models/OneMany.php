@@ -34,6 +34,10 @@ class OneMany extends BaseActiveRecord
     const TYPE_PROMOTION_TREATMENT_TYPE                 = '8';
     /** 1 [LaboRequests] has many [teeth] */
     const TYPE_LABO_REQUEST_TEETH                       = '9';
+    /** 1 [HrFunctions] has many [HrParameters] */
+    const TYPE_FUNCTION_PARAMETER                       = '10';
+    /** 1 [HrFunctions] has many [HrCoefficients] */
+    const TYPE_FUNCTION_COEFFICIENT                     = '11';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.

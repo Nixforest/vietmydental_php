@@ -15,6 +15,7 @@
  * The followings are the available model relations:
  * @property Users                      $rCreatedBy                     User created this record
  * @property Roles                      $rRole                          Role belong to
+ * @property HrFunctions[]              $rFunctions                     List functions which using this parameter
  */
 class HrParameters extends BaseActiveRecord {
     //-----------------------------------------------------
@@ -68,6 +69,10 @@ class HrParameters extends BaseActiveRecord {
         return array(
             'rCreatedBy' => array(self::BELONGS_TO, 'Users', 'created_by'),
             'rRole' => array(self::BELONGS_TO, 'Roles', 'role_id'),
+            'rFunctions'    => array(
+                self::MANY_MANY, 'HrFunctions', 'one_many(many_id, one_id)',
+                'condition' => 'rFunctions_rFunctions.type=' . OneMany::TYPE_FUNCTION_PARAMETER,
+            ),
         );
     }
 
@@ -129,6 +134,21 @@ class HrParameters extends BaseActiveRecord {
         }
         
         return parent::beforeSave();
+    }
+    
+    /**
+     * Override before delete method
+     * @return Parent result
+     */
+    protected function beforeDelete() {
+        $retVal = true;
+        // Check foreign table hr_functions
+        if (!empty($this->rFunctions)) {
+            Loggers::error(DomainConst::CONTENT00214, 'Can not delete', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            $this->addErrorMessage(DomainConst::CONTENT00500);
+            return false;
+        }
+        return $retVal;
     }
     
     //-----------------------------------------------------

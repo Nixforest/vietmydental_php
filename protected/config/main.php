@@ -30,7 +30,6 @@ return array(
         'application.extensions.phpexcel.*',
         'application.extensions.phpexcel.Classes.*',
 //                'application.extensions.phpexcel.Classes.PHPExcel.*',
-//        ++ BUG0040-IMT add widget 
         'application.components.widgets.*',
         'application.modules.hr.models.*',
         'bootstrap.helpers.*',
@@ -44,7 +43,6 @@ return array(
 //            'password' => '123',
 //            // If removed, Gii defaults to localhost only. Edit carefully to taste.
 //            'ipFilters' => array('127.0.0.1', '::1'),
-//          'generatorPaths' => array('bootstrap.gii'),
 //        ),
         'admin', // Admin module
         'api', // API module
@@ -116,10 +114,10 @@ return array(
             'dryRun' => false
         ),
         'bootstrap' => array(
-            'class' => 'bootstrap.components.TbApi',  
+            'class' => 'bootstrap.components.TbApi',
 //            'class' => 'bootstrap.components.Bootstrap',
 //            'cdnurl'=>"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/",
-            'cdnUrl'=>"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/",
+            'cdnUrl' => "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/",
         ),
     ),
     // application-level parameters that can be accessed

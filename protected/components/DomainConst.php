@@ -1649,7 +1649,7 @@ class DomainConst {
     const CONTENT00499  = 'Đã xoá';
     const CONTENT00500  = 'Không thể xoá do còn [Công thức] liên quan';
     const CONTENT00501  = 'Công thức';
-    const CONTENT00502  = 'Loại công thức';
+    const CONTENT00502  = 'Loại bảng lương';
     const CONTENT00503  = 'Tính theo ngày';
     const CONTENT00504  = 'Báo cáo hằng ngày';
     const CONTENT00505  = 'Đang yêu cầu duyệt';
@@ -1659,4 +1659,6 @@ class DomainConst {
     const CONTENT00509  = 'Chưa duyệt';
     const CONTENT00510  = 'Báo cáo không tồn tại';
     const CONTENT00511  = 'Trạng thái cập nhật không hợp lệ';
+    const CONTENT00512  = 'Công thức tính theo từng ngày';
+    const CONTENT00513  = 'Công thức tính theo khoảng thời gian';
 }

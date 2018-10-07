@@ -1,6 +1,6 @@
 <?php
-/* @var $this HrParametersController */
-/* @var $model HrParameters */
+/* @var $this HrFunctionsController */
+/* @var $model HrFunctions */
 
 $this->createMenu('index', $model);
 
@@ -10,7 +10,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#hr-parameters-grid').yiiGridView('update', {
+	$('#hr-functions-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -36,7 +36,7 @@ $('.search-form form').submit(function(){
 
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
-    'id' => 'hr-parameters-grid',
+    'id' => 'hr-functions-grid',
     'dataProvider' => $model->search(),
     'filter' => $model,
     'columns' => array(
@@ -47,12 +47,20 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'headerHtmlOptions' => array('width' => '30px', 'style' => 'text-align:center;'),
             'htmlOptions' => array('style' => 'text-align:center;')
         ),
+        'name',
+        'function',
         array(
             'name' => 'role_id',
             'value' => '$data->getRoleName()',
         ),
-        'method',
-        'name',
+        array(
+            'name' => 'type_id',
+            'value' => '$data->getType()',
+        ),
+        array(
+            'name' => 'is_per_day',
+            'value' => '$data->isPerDayText()',
+        ),
         array(
             'name' => 'status',
             'value' => '$data->getStatus()',
@@ -63,10 +71,10 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '$data->getCreatedBy()',
         ),
         array(
-            'header'        => DomainConst::CONTENT00239,
-            'class'         => 'CButtonColumn',
-            'template'      => $this->createActionButtons(),
-            'afterDelete'   => $this->handleAjaxAfterDelete(),
+            'header' => DomainConst::CONTENT00239,
+            'class' => 'CButtonColumn',
+            'template' => $this->createActionButtons(),
+            'afterDelete' => $this->handleAjaxAfterDelete(),
         ),
     ),
 ));
