@@ -64,5 +64,29 @@ class DepartmentTypes extends BaseTypeRecords {
         }
         return $retVal;
     }
+    
+    //-----------------------------------------------------
+    // Static methods
+    //-----------------------------------------------------
+    /**
+     * Loads the type items for the specified type from the database
+     * @param type $emptyOption boolean the item is empty
+     * @return type List data
+     */
+    public static function loadItems($emptyOption = false) {
+        $_items = array();
+        if ($emptyOption) {
+            $_items[""] = "";
+        }
+        $models = self::model()->findAll(array(
+            'order' => 'id ASC',
+        ));
+        foreach ($models as $model) {
+            if ($model->status == DomainConst::DEFAULT_STATUS_ACTIVE) {
+                $_items[$model->id] = $model->name;
+            }
+        }
+        return $_items;
+    }
 
 }

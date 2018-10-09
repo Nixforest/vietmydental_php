@@ -1668,5 +1668,10 @@ class DomainConst {
     const CONTENT00518  = 'Ngày hoạt động';
     const CONTENT00519  = 'Mã số thuế';
     const CONTENT00520  = 'Giám đốc';
-    const CONTENT00521  = 'Không thể xoá do còn [Nhóm phòng ban] liên quan';
+    const CONTENT00521  = 'Không thể xoá do còn [' . self::CONTENT00525 . '] liên quan';
+    const CONTENT00522  = 'Khối phòng ban';
+    const CONTENT00525  = 'Phòng ban';
+    const CONTENT00526  = 'Công ty';
+    const CONTENT00527  = 'Trưởng phòng';
+    const CONTENT00528  = 'Phó phòng';
 }
