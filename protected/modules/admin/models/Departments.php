@@ -225,6 +225,22 @@ class Departments extends BaseActiveRecord {
         return isset($this->rCompany) ? $this->rCompany->name : '';
     }
     
+    /**
+     * Get name of department
+     * @return String Name of department
+     */
+    public function getName() {
+        return DomainConst::CONTENT00530 . ' ' . $this->name;
+    }
+    
+    /**
+     * Get full name
+     * @return String Full name
+     */
+    public function getFullName() {
+        return DomainConst::CONTENT00530 . ' ' . $this->name . ' - ' . $this->getCompany();
+    }
+    
     //-----------------------------------------------------
     // Static methods
     //-----------------------------------------------------
@@ -237,6 +253,25 @@ class Departments extends BaseActiveRecord {
             self::STATUS_INACTIVE       => DomainConst::CONTENT00408,
             self::STATUS_ACTIVE         => DomainConst::CONTENT00407,
         );
+    }   
+    
+    /**
+     * Loads items for the specified type from the database
+     * @param type $emptyOption boolean the item is empty
+     * @return type List data
+     */
+    public static function loadItems($emptyOption = false) {
+        $_items = array();
+        if ($emptyOption) {
+            $_items[""] = "";
+        }
+        $models = self::model()->findAll(array(
+            'order' => 'name ASC',
+        ));
+        foreach ($models as $model) {
+            $_items[$model->id] = $model->getFullName();
+        }
+        return $_items;
     }
 
 }

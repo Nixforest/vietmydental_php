@@ -1674,4 +1674,6 @@ class DomainConst {
     const CONTENT00526  = 'Công ty';
     const CONTENT00527  = 'Trưởng phòng';
     const CONTENT00528  = 'Phó phòng';
+    const CONTENT00529  = 'Thuộc Phòng ban';
+    const CONTENT00530  = 'Phòng';
 }

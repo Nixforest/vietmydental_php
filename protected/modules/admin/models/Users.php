@@ -28,9 +28,10 @@
  * @property integer $login_attemp      -
  * @property string $created_date       Created date
  * @property string $last_logged_in     Last logged in time
- * @property string $ip_address         IP adress
+ * @property string $ip_address         IP address
  * @property integer $role_id           Role id
  * @property integer $application_id    -
+ * @property integer $department_id     Department id
  * @property integer $status            Status
  * @property string $gender             Gender
  * @property string $phone              Phone number
@@ -54,6 +55,7 @@
  * @property Files                  $rImgAvatarFile     Avatar of user
  * @property ApiUserTokens[]        $rToken             Token of user
  * @property Agents[]               $rAgents            List of agent of user (replace for rJoinAgent)
+ * @property Departments            $rDepartment        Department model
  */
 class Users extends BaseActiveRecord {
     //-----------------------------------------------------
@@ -91,7 +93,7 @@ class Users extends BaseActiveRecord {
         return array(
 //            array('username, password_hash, created_date, ip_address, role_id, application_id, agent', 'required'),
             array('username, password_hash, created_date, ip_address, role_id, application_id', 'required'),
-            array('place_of_issue, province_id, district_id, ward_id, street_id, login_attemp, role_id, application_id, status', 'numerical', 'integerOnly' => true),
+            array('place_of_issue, department_id, province_id, district_id, ward_id, street_id, login_attemp, role_id, application_id, status', 'numerical', 'integerOnly' => true),
             array('username, last_name', 'length', 'max' => 50),
             array('email', 'length', 'max' => 80),
             array('first_name', 'length', 'max' => 150),
@@ -106,7 +108,7 @@ class Users extends BaseActiveRecord {
             array('birthday, date_of_issue, date_in, address, house_numbers, last_logged_in, address_temp, agent', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, username, email, first_name, last_name, code_account, address, address_vi, house_numbers, province_id, district_id, ward_id, street_id, login_attemp, created_date, last_logged_in, ip_address, role_id, application_id, status, gender, phone, verify_code, slug, address_temp, created_by', 'safe', 'on' => 'search'),
+            array('id, username, email, first_name, last_name, code_account, address, address_vi, house_numbers, department_id, province_id, district_id, ward_id, street_id, login_attemp, created_date, last_logged_in, ip_address, role_id, application_id, status, gender, phone, verify_code, slug, address_temp, created_by', 'safe', 'on' => 'search'),
             array('currentpassword', 'comparePassword', 'on' => 'changeMyPassword'),
             array('currentpassword, newpassword, password_confirm', 'required', 'on' => "changeMyPassword"),
             array('newpassword', 'length', 'min' => DomainConst::PASSW_LENGTH_MIN, 'max' => DomainConst::PASSW_LENGTH_MAX,
@@ -165,7 +167,11 @@ class Users extends BaseActiveRecord {
             'rAgents' => array(self::MANY_MANY, 'Agents', 'one_many(many_id,one_id)',
                 'condition' => 'rAgents_rAgents.type = ' . OneMany::TYPE_AGENT_USER,
                 'order' => 'rAgents_rAgents.id DESC'),
-            'rPlaceIssue' => array(self::BELONGS_TO, 'Cities', 'place_of_issue'),
+            'rPlaceIssue'   => array(self::BELONGS_TO, 'Cities', 'place_of_issue'),
+            'rDepartment'   => array(
+                self::BELONGS_TO, 'Departments', 'department_id',
+                'on'    => 'status !=' . DomainConst::DEFAULT_STATUS_INACTIVE,
+            ),
         );
     }
 
@@ -200,6 +206,7 @@ class Users extends BaseActiveRecord {
             'ip_address'        => 'Ip Address',
             'role_id'           => DomainConst::CONTENT00046,
             'application_id'    => 'Application',
+            'department_id'     => DomainConst::CONTENT00529,
             'status'            => DomainConst::CONTENT00026,
             'gender'            => DomainConst::CONTENT00047,
             'phone'             => DomainConst::CONTENT00048,
@@ -263,6 +270,7 @@ class Users extends BaseActiveRecord {
             $criteria->addCondition('t.role_id !=' . Roles::getRoleByName(Roles::ROLE_MANAGER)->id);
         }
         $criteria->compare('application_id', $this->application_id);
+        $criteria->compare('department_id', $this->department_id);
         $criteria->compare('status', $this->status);
         $criteria->compare('gender', $this->gender, true);
         $criteria->compare('phone', $this->phone, true);
@@ -435,7 +443,7 @@ class Users extends BaseActiveRecord {
     }
 
     /**
-     * Get autocomplete user name
+     * Get auto complete user name
      * @return String [username - last_name first_name]
      */
     public function getAutoCompleteUserName() {
@@ -816,6 +824,17 @@ class Users extends BaseActiveRecord {
         }
 
         return implode('<br>', $retVal);
+    }
+    
+    /**
+     * Get department name
+     * @return String Name of department
+     */
+    public function getDepartment() {
+        if (isset($this->rDepartment)) {
+            return $this->rDepartment->getName();
+        }
+        return '';
     }
 
     //-----------------------------------------------------

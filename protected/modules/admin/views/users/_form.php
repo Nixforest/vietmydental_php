@@ -385,6 +385,11 @@ $mAgents = new Agents();
             <?php echo $form->dropDownList($model, 'status', CommonProcess::getDefaultStatus()); ?>
             <?php echo $form->error($model, 'status'); ?>
         </div>
+        <div class="col-md-6">
+            <?php echo $form->labelEx($model, 'department_id'); ?>
+            <?php echo $form->dropDownList($model, 'department_id', Departments::loadItems(true)); ?>
+            <?php echo $form->error($model, 'department_id'); ?>
+        </div>
     </div>
 <div class="row buttons">
     <div class="col-md-6">
