@@ -1,6 +1,6 @@
 <?php
-/* @var $this HrHolidayPlansController */
-/* @var $model HrHolidayPlans */
+/* @var $this HrSalaryReportsController */
+/* @var $model HrSalaryReports */
 
 $this->createMenu('index', $model);
 
@@ -10,7 +10,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#hr-holiday-plans-grid').yiiGridView('update', {
+	$('#hr-salary-reports-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -36,11 +36,29 @@ $('.search-form form').submit(function(){
 
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
-    'id' => 'hr-holiday-plans-grid',
+    'id' => 'hr-salary-reports-grid',
     'dataProvider' => $model->search(),
     'filter' => $model,
     'columns' => array(
-        'id',
+        array(
+            'header' => DomainConst::CONTENT00034,
+            'type' => 'raw',
+            'value' => '$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
+            'headerHtmlOptions' => array('width' => '30px', 'style' => 'text-align:center;'),
+            'htmlOptions' => array('style' => 'text-align:center;')
+        ),
+        'name',
+        'start_date',
+        'end_date',
+        array(
+            'name' => 'role_id',
+            'value' => '$data->getRoleName()',
+        ),
+        array(
+            'name' => 'type_id',
+            'value' => '$data->getType()',
+        ),
+        'data',
         array(
             'name' => 'approved',
             'value' => '$data->getApproverName()',

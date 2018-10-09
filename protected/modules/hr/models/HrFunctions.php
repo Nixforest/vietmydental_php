@@ -337,6 +337,13 @@ class HrFunctions extends BaseActiveRecord {
         return NULL;
     }
 
+    /**
+     * Convert function to value
+     * @param String $from Date from (format is DATE_FORMAT_4 - 'Y-m-d')
+     * @param String $to Date to (format is DATE_FORMAT_4 - 'Y-m-d')
+     * @param Users $mUser User model
+     * @return String Function as string
+     */
     public function convertFunctionToValue($from, $to, $mUser) {
         $arrValues = array();
         // Get list variable
@@ -374,6 +381,8 @@ class HrFunctions extends BaseActiveRecord {
      * Get value of function (for timesheet type)
      * @param String $from Date from (format is DATE_FORMAT_4 - 'Y-m-d')
      * @param String $to Date to (format is DATE_FORMAT_4 - 'Y-m-d')
+     * @param Users $mUser User model
+     * @return Number Value of total
      */
     public function getCountValue($from, $to, $mUser) {
         $retVal = 0;

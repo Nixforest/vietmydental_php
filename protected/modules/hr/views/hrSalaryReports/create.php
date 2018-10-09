@@ -1,6 +1,6 @@
 <?php
-/* @var $this HrHolidayPlansController */
-/* @var $model HrHolidayPlans */
+/* @var $this HrSalaryReportsController */
+/* @var $model HrSalaryReports */
 
 $this->createMenu('create', $model);
 ?>

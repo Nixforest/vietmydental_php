@@ -14,6 +14,7 @@
  * The followings are the available model relations:
  * @property Users                      $rCreatedBy                     User created this record
  * @property HrFunctions[]              $rFunctions                     List functions
+ * @property HrSalaryReports[]          $rSalaryReports                 List salary reports
  */
 class HrFunctionTypes extends BaseActiveRecord {
     //-----------------------------------------------------
@@ -69,6 +70,10 @@ class HrFunctionTypes extends BaseActiveRecord {
             'rFunctions'    => array(
                 self::HAS_MANY, 'HrFunctions', 'type_id',
                 'on'    => 'status !=' . HrFunctions::STATUS_INACTIVE,
+            ),
+            'rSalaryReports'    => array(
+                self::HAS_MANY, 'HrSalaryReports', 'type_id',
+                'on'    => 'status !=' . HrSalaryReports::STATUS_INACTIVE,
             ),
         );
     }
@@ -141,6 +146,12 @@ class HrFunctionTypes extends BaseActiveRecord {
         if (!empty($this->rFunctions)) {
             Loggers::error(DomainConst::CONTENT00214, 'Can not delete', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             $this->addErrorMessage(DomainConst::CONTENT00500);
+            return false;
+        }
+        // Check foreign table hr_salary_reports
+        if (!empty($this->rSalaryReports)) {
+            Loggers::error(DomainConst::CONTENT00214, 'Can not delete', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            $this->addErrorMessage(DomainConst::CONTENT00517);
             return false;
         }
         return $retVal;

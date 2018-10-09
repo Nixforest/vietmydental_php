@@ -1661,4 +1661,8 @@ class DomainConst {
     const CONTENT00511  = 'Trạng thái cập nhật không hợp lệ';
     const CONTENT00512  = 'Công thức tính theo từng ngày';
     const CONTENT00513  = 'Công thức tính theo khoảng thời gian';
+    const CONTENT00514  = 'Đang tính';
+    const CONTENT00515  = 'Đang gửi yêu cầu';
+    const CONTENT00516  = 'Đã chốt';
+    const CONTENT00517  = 'Không thể xoá do còn [Bảng lương] liên quan';
 }

@@ -332,7 +332,7 @@ class ReportController extends APIController {
             $status = DailyReports::checkStatus($mUser, $date);
             $statusStr = isset(DailyReports::getArrayStatus()[$status]) ? DailyReports::getArrayStatus()[$status] : '';
             $childData[] = CommonProcess::createConfigJson(DomainConst::ITEM_STATUS, '',
-                    $status);
+                    $status . '');
             $childData[] = CommonProcess::createConfigJson(DomainConst::ITEM_STATUS_STR, '',
                     $statusStr);
             $data = CommonProcess::createConfigJson($dateAsId, $dateAsName,

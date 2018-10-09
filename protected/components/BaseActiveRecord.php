@@ -191,19 +191,19 @@ class BaseActiveRecord extends CActiveRecord {
      * Format date
      * @param String $field Name of field date
      */
-    public function formatDate($field) {
-        // Format birthday value
-        $date = $this->$field;
-        $this->$field = CommonProcess::convertDateTimeToMySqlFormat(
-                $date, DomainConst::DATE_FORMAT_3);
-        if (empty($this->$field)) {
-            $this->$field = CommonProcess::convertDateTimeToMySqlFormat(
-                        $date, DomainConst::DATE_FORMAT_4);
-        }
-        if (empty($this->$field)) {
-            $this->$field = $date;
-        }
-    }
+//    public function formatDate($field) {
+//        // Format birthday value
+//        $date = $this->$field;
+//        $this->$field = CommonProcess::convertDateTimeToMySqlFormat(
+//                $date, DomainConst::DATE_FORMAT_3);
+//        if (empty($this->$field)) {
+//            $this->$field = CommonProcess::convertDateTimeToMySqlFormat(
+//                        $date, DomainConst::DATE_FORMAT_4);
+//        }
+//        if (empty($this->$field)) {
+//            $this->$field = $date;
+//        }
+//    }
     
     /**
      * Add error message
@@ -242,5 +242,21 @@ class BaseActiveRecord extends CActiveRecord {
      */
     public function toString() {
         return $this->getInfo($this->attributes);
+    }
+    
+    /**
+     * Format date field
+     * @param String $field         Field name
+     * @param String $fromFormat    Format date convert from
+     * @param String $toFormat      Format date convert to
+     */
+    public function formatDate($field,
+            $fromFormat = DomainConst::DATE_FORMAT_3,
+            $toFormat = DomainConst::DATE_FORMAT_1) {
+        $date = $this->$field;
+        $this->$field = CommonProcess::convertDateTime($date, $fromFormat, $toFormat);
+        if (empty($this->$field)) {
+            $this->$field = $date;
+        }
     }
 }

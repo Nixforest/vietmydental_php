@@ -36,7 +36,7 @@
 
     <div class="row">
         <?php echo $form->labelEx($model, 'role_id'); ?>
-        <?php echo $form->dropdownlist($model, 'role_id', Roles::loadItems()); ?>
+        <?php echo $form->dropdownlist($model, 'role_id', Roles::getRoleArrayForSalary()); ?>
         <?php echo $form->error($model, 'role_id'); ?>
     </div>
 

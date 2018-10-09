@@ -686,7 +686,7 @@ class DailyReports extends BaseActiveRecord {
         $agentName  = '';
         $total      = 0;
         $createdBy  = '';
-        $status     = self::STATUS_NOT_CREATED_YET;
+        $status     = self::STATUS_NOT_CREATED_YET . '';
         $statusStr  = self::getArrayStatus()[$status];
         
         if ($model) {       // Found
@@ -694,7 +694,7 @@ class DailyReports extends BaseActiveRecord {
             $agentName  = $model->getAgent();
             $total      = $model->receipt_total;
             $createdBy  = $model->getCreatedBy();
-            $status     = $model->status;
+            $status     = $model->status . '';
             $statusStr  = self::getArrayStatus()[$status];
         } else {            // Not created yet
             $mAgent = Agents::model()->findByPk($agentId);

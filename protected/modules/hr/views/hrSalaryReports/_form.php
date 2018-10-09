@@ -1,6 +1,6 @@
 <?php
-/* @var $this HrWorkPlansController */
-/* @var $model HrWorkPlans */
+/* @var $this HrSalaryReportsController */
+/* @var $model HrSalaryReports */
 /* @var $form CActiveForm */
 ?>
 
@@ -8,13 +8,76 @@
 
     <?php
     $form = $this->beginWidget('CActiveForm', array(
-        'id' => 'hr-work-plans-form',
+        'id' => 'hr-salary-reports-form',
         'enableAjaxValidation' => false,
     ));
     ?>
 
     <?php echo DomainConst::CONTENT00081; ?>
     <?php echo $form->errorSummary($model); ?>
+
+    <div class="row">
+        <?php echo $form->labelEx($model, 'name'); ?>
+        <?php echo $form->textField($model, 'name', array('size' => 60, 'maxlength' => 255)); ?>
+        <?php echo $form->error($model, 'name'); ?>
+    </div>
+
+    <div class="row">
+        <?php echo $form->labelEx($model, 'start_date'); ?>
+        <?php
+        if (!isset($model->start_date)) {
+            $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3);
+        } else {
+            $date = CommonProcess::convertDateTime($model->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_3);
+            if (empty($date)) {
+                $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3);
+            }
+        }
+        $this->widget('DatePickerWidget', array(
+            'model' => $model,
+            'field' => 'start_date',
+            'value' => $date,
+        ));
+        ?>
+        <?php echo $form->error($model, 'start_date'); ?>
+    </div>
+
+    <div class="row">
+        <?php echo $form->labelEx($model, 'end_date'); ?>
+        <?php
+        if (!isset($model->end_date)) {
+            $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3);
+        } else {
+            $date = CommonProcess::convertDateTime($model->end_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_3);
+            if (empty($date)) {
+                $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3);
+            }
+        }
+        $this->widget('DatePickerWidget', array(
+            'model' => $model,
+            'field' => 'end_date',
+            'value' => $date,
+        ));
+        ?>
+    </div>
+
+    <div class="row">
+        <?php echo $form->labelEx($model, 'role_id'); ?>
+        <?php echo $form->dropdownlist($model, 'role_id', Roles::getRoleArrayForSalary()); ?>
+        <?php echo $form->error($model, 'role_id'); ?>
+    </div>
+
+    <div class="row">
+        <?php echo $form->labelEx($model, 'type_id'); ?>
+        <?php echo $form->dropdownlist($model, 'type_id', HrFunctionTypes::loadItems()); ?>
+        <?php echo $form->error($model, 'type_id'); ?>
+    </div>
+
+    <div class="row">
+        <?php echo $form->labelEx($model, 'data'); ?>
+        <?php echo $form->textArea($model, 'data', array('rows' => 6, 'cols' => 50)); ?>
+        <?php echo $form->error($model, 'data'); ?>
+    </div>
 
     <div class="row">
         <?php echo $form->labelEx($model, 'approved'); ?>
@@ -64,62 +127,10 @@
         <?php echo $form->textArea($model, 'notify', array('rows' => 6, 'cols' => 50)); ?>
         <?php echo $form->error($model, 'notify'); ?>
     </div>
-
-    <div class="row">
-        <?php echo $form->labelEx($model, 'role_id'); ?>
-        <?php echo $form->dropdownlist($model, 'role_id', Roles::getRoleArrayForSalary()); ?>
-        <?php echo $form->error($model, 'role_id'); ?>
-    </div>
-
-    <div class="row">
-        <?php echo $form->labelEx($model, 'date_from'); ?>
-        <?php
-        if (!isset($model->isNewRecord)) {
-            $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_BACK_END);
-        } else {
-            $date = CommonProcess::convertDateTime($model->date_from,
-                        DomainConst::DATE_FORMAT_4,
-                        DomainConst::DATE_FORMAT_BACK_END);
-            if (empty($date)) {
-                $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_BACK_END);
-            }
-        }
-        $this->widget('DatePickerWidget', array(
-            'model'         => $model,
-            'field'         => 'date_from',
-            'value'         => $date,
-            'isReadOnly'    => false,
-        ));
-        ?>
-        <?php echo $form->error($model, 'date_from'); ?>
-    </div>
-
-    <div class="row">
-        <?php echo $form->labelEx($model, 'date_to'); ?>
-        <?php
-        if (!isset($model->isNewRecord)) {
-            $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_BACK_END);
-        } else {
-            $date = CommonProcess::convertDateTime($model->date_to,
-                        DomainConst::DATE_FORMAT_4,
-                        DomainConst::DATE_FORMAT_BACK_END);
-            if (empty($date)) {
-                $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_BACK_END);
-            }
-        }
-        $this->widget('DatePickerWidget', array(
-            'model'         => $model,
-            'field'         => 'date_to',
-            'value'         => $date,
-            'isReadOnly'    => false,
-        ));
-        ?>
-        <?php echo $form->error($model, 'date_to'); ?>
-    </div>
-
+    
     <div class="row" style="<?php echo (($model->isNewRecord) ? "display: none;" : ""); ?>">
         <?php echo $form->labelEx($model, 'status'); ?>
-        <?php echo $form->dropdownlist($model, 'status', HrWorkShifts::getArrayStatus()); ?>
+        <?php echo $form->dropDownList($model, 'status', HrHolidayPlans::getArrayStatus()); ?>
         <?php echo $form->error($model, 'status'); ?>
     </div>
 
