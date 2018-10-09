@@ -33,7 +33,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'description'); ?>
-		<?php echo $form->textArea($model,'description',array('rows'=>6, 'cols'=>50)); ?>
+		<?php echo $form->textField($model,'description',array('size'=>60,'maxlength'=>150)); ?>
 		<?php echo $form->error($model,'description'); ?>
 	</div>
 

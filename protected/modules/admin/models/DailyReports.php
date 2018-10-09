@@ -709,7 +709,7 @@ class DailyReports extends BaseActiveRecord {
         $data[] = CommonProcess::createConfigJson(
                 DomainConst::ITEM_RECEIPTIONIST, DomainConst::CONTENT00054, $createdBy);
         $data[] = CommonProcess::createConfigJson(DomainConst::ITEM_STATUS, '', $status);
-        $data[] = CommonProcess::createConfigJson(DomainConst::ITEM_STATUS_STR, '', $statusStr);
+        $data[] = CommonProcess::createConfigJson(DomainConst::ITEM_STATUS_STR, DomainConst::CONTENT00026, $statusStr);
         $data[] = CommonProcess::createConfigJson(DomainConst::ITEM_AGENT_ID, '', $agentId);
         $data[] = CommonProcess::createConfigJson(
                 DomainConst::ITEM_AGENT, DomainConst::CONTENT00199, $agentName);
