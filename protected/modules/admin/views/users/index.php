@@ -63,7 +63,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'name'  => 'date_in',
-            'value' => 'CommonProcess::convertDateTime($data->date_in, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_3)',
+            'value' => '$data->getDateIn()',
         ),
         array(
             'header' => DomainConst::CONTENT00421,
@@ -113,6 +113,11 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '!empty($data->role_id) ? $data->rRole->role_short_name : ""',
             'filter' => Roles::loadItems(),
+        ),
+        array(
+            'name'      => 'department_id',
+            'value'     => '$data->getDepartment()',
+            'filter'    => Departments::loadItems(true),
         ),
         array(
             'header' => DomainConst::CONTENT00036,

@@ -380,4 +380,15 @@ class BaseController extends CController {
     public function handleAjaxAfterDelete() {
         return 'function(link,success,data){ if(success) if(data) alert(data); }';
     }
+
+    /**
+     * Displays a particular model.
+     * @param integer $id the ID of the model to be displayed
+     */
+    public function actionView($id) {
+        $this->render('view', array(
+            'model' => $this->loadModel($id),
+            DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+        ));
+    }
 }

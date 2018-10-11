@@ -214,7 +214,7 @@ class Users extends BaseActiveRecord {
             'verify_code'       => 'Verify Code',
             'slug'              => 'Slug',
             'address_temp'      => 'Address Temp',
-            'created_by'        => DomainConst::CONTENT00010,
+            'created_by'        => DomainConst::CONTENT00054,
             'agent'             => DomainConst::CONTENT00199,
         );
     }
@@ -833,6 +833,63 @@ class Users extends BaseActiveRecord {
     public function getDepartment() {
         if (isset($this->rDepartment)) {
             return $this->rDepartment->getName();
+        }
+        return '';
+    }
+    
+    /**
+     * Get gender
+     * @return string Gender
+     */
+    public function getGender() {
+        if (isset(CommonProcess::getGender()[$this->gender])) {
+            return CommonProcess::getGender()[$this->gender];
+        }
+        return '';
+    }
+    
+    /**
+     * Get role name
+     * @return string Name of role
+     */
+    public function getRoleName() {
+        if (isset($this->rRole)) {
+            return $this->rRole->role_short_name;
+        }
+        return '';
+    }
+    
+    /**
+     * Get birthday value
+     * @return String Birthday
+     */
+    public function getBirthDay() {
+        $retVal = CommonProcess::convertDateTime($this->birthday, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_BACK_END);
+        if (empty($retVal)) {
+            return $this->birthday;
+        }
+        return $retVal;
+    }
+    
+    /**
+     * Get date in value
+     * @return String Date in
+     */
+    public function getDateIn() {
+        $retVal = CommonProcess::convertDateTime($this->date_in, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_BACK_END);
+        if (empty($retVal)) {
+            return $this->date_in;
+        }
+        return $retVal;
+    }
+    
+    /**
+     * Get creator
+     * @return string Creator name
+     */
+    public function getCreatedBy() {
+        if (isset($this->rCreatedBy)) {
+            return $this->rCreatedBy->getFullName();
         }
         return '';
     }

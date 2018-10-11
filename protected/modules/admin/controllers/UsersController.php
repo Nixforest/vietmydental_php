@@ -75,8 +75,10 @@ class UsersController extends AdminController {
                     OneMany::deleteAllManyOldRecords($model->id, OneMany::TYPE_AGENT_USER);
 //                    $selectedAgent = $_POST['Users']['agent'];
 //                    OneMany::insertOne($selectedAgent, $model->id, OneMany::TYPE_AGENT_USER);
-                    foreach ($model->agent as $agentId) {
-                        OneMany::insertOne($agentId, $model->id, OneMany::TYPE_AGENT_USER);
+                    if (isset($model->agent)) {
+                        foreach ($model->agent as $agentId) {
+                            OneMany::insertOne($agentId, $model->id, OneMany::TYPE_AGENT_USER);
+                        }
                     }
 
                     // Handle save social network information
@@ -125,8 +127,12 @@ class UsersController extends AdminController {
                         OneMany::deleteAllManyOldRecords($model->id, OneMany::TYPE_AGENT_USER);
 //                        $selectedAgent = $_POST['Users']['agent'];
 //                        OneMany::insertOne($selectedAgent, $model->id, OneMany::TYPE_AGENT_USER);
-                        foreach ($model->agent as $agentId) {
-                            OneMany::insertOne($agentId, $model->id, OneMany::TYPE_AGENT_USER);
+                        Loggers::info('Agent id', CommonProcess::json_encode_unicode($model->agent),
+                                __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                        if (isset($model->agent)) {
+                            foreach ($model->agent as $agentId) {
+                                OneMany::insertOne($agentId, $model->id, OneMany::TYPE_AGENT_USER);
+                            }
                         }
 
                         // Handle save social network information

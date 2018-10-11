@@ -5,79 +5,68 @@
 $this->createMenu('view', $model);
 ?>
 
-<h1><?php echo $this->pageTitle . ' ' . $model->id; ?></h1>
+<h1><?php echo $this->pageTitle . ': ' . $model->getFullName(); ?></h1>
 
 <?php
 $this->widget('zii.widgets.CDetailView', array(
     'data' => $model,
     'attributes' => array(
         'username',
-//		'email',
         array(
             'name' => DomainConst::CONTENT00276,
             'value' => $model->getSocialNetworkInfo(),
             'type' => 'html',
             'htmlOptions' => array('style' => 'width:200px;'),
         ),
-//		'password_hash',
         array(
             'name' => 'password_hash',
             'type' => 'raw',
             'value' => CHtml::link('Đặt lại mật khẩu', Yii::app()->createAbsoluteUrl('admin/users/resetPassword', array('user_id' => $model->id))),
         ),
-//                array(
-//                    'name' => 'img_avatar',
-//                    'type' => 'html',
-//                    'value' => CHtml::image($model->getImageAvatarUrl(), "", array("style"=>"width:250px;height:250px;")),
-//                ),
-//		'temp_password',
-        'last_name',
         'first_name',
-        'birthday',
+        array(
+            'name'  => 'birthday',
+            'value' => $model->getBirthday(),
+        ),
+        array(
+            'name' => 'gender',
+            'value' => $model->getGender(),
+        ),
+        'phone',
         array(
             'name' => 'identity_number',
+            'type'  => 'html',
             'value' => $model->getIdentityInfo(),
         ),
-        'date_in',
+        'address',
+        array(
+            'name'  => 'date_in',
+            'value' => $model->getDateIn(),
+        ),
         'code_account',
-//                array(
-//                    'name'=>'img_avatar',
-//                    'type'=>'html',
-//                    'value'=>(!empty($model->img_avatar))?CHtml::image($model->getImageAvatarPath(),"",array("style"=>"width:25px;height:25px;")):"no image",
-//                ),
         array(
             'name' => 'agent',
             'value' => $model->getAgents(),
             'type' => 'html',
         ),
-        'address',
-//		'address_vi',
-//		'house_numbers',
-//		'province_id',
-//		'district_id',
-//		'ward_id',
-//		'street_id',
-//		'login_attemp',
-        'created_date',
-//		'last_logged_in',
-        'ip_address',
-//		'role_id',
         array(
             'name' => 'role_id',
-            'value' => $model->rRole->role_short_name,
+            'value' => $model->getRoleName(),
         ),
-//		'application_id',
-//		'status',
+        array(
+            'name' => 'department_id',
+            'value' => $model->getDepartment(),
+        ),
+        'ip_address',
         array(
             'name' => 'status',
             'type' => 'Status',
         ),
-        'gender',
-        'phone',
-//		'verify_code',
-//		'slug',
-//		'address_temp',
-        'created_by',
+        array(
+            'name' => 'created_by',
+            'value' => $model->getCreatedBy(),
+        ),
+        'created_date',
     ),
 ));
 ?>
