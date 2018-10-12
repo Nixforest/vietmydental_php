@@ -1676,4 +1676,9 @@ class DomainConst {
     const CONTENT00528  = 'Phó phòng';
     const CONTENT00529  = 'Thuộc Phòng ban';
     const CONTENT00530  = 'Phòng';
+    const CONTENT00531  = 'Loại hợp đồng';
+    const CONTENT00532  = 'Lương cơ bản';
+    const CONTENT00533  = 'Lương đóng BHXH';
+    const CONTENT00534  = 'Lương trách nhiệm';
+    const CONTENT00535  = 'Phụ cấp cố định';
 }

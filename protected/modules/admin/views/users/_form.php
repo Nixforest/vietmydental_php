@@ -381,14 +381,48 @@ $mAgents = new Agents();
 
     <div class="row">
         <div class="col-md-6">
-            <?php echo $form->labelEx($model, 'status'); ?>
-            <?php echo $form->dropDownList($model, 'status', CommonProcess::getDefaultStatus()); ?>
-            <?php echo $form->error($model, 'status'); ?>
-        </div>
-        <div class="col-md-6">
             <?php echo $form->labelEx($model, 'department_id'); ?>
             <?php echo $form->dropDownList($model, 'department_id', Departments::loadItems(true)); ?>
             <?php echo $form->error($model, 'department_id'); ?>
+        </div>
+        <div class="col-md-6">
+            <?php echo $form->labelEx($model, 'contract_type_id'); ?>
+            <?php echo $form->dropDownList($model, 'contract_type_id', ContractTypes::loadItems(true)); ?>
+            <?php echo $form->error($model, 'contract_type_id'); ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <?php echo $form->labelEx($model, 'base_salary'); ?>
+            <?php echo $form->textField($model,'base_salary',array('size'=>60,'maxlength'=>200, 'class'=>'format-currency number_only')); ?>
+            <?php echo $form->error($model, 'base_salary'); ?>
+        </div>
+        <div class="col-md-6">
+            <?php echo $form->labelEx($model, 'social_insurance_salary'); ?>
+            <?php echo $form->textField($model,'social_insurance_salary',array('size'=>60,'maxlength'=>200, 'class'=>'format-currency number_only')); ?>
+            <?php echo $form->error($model, 'social_insurance_salary'); ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <?php echo $form->labelEx($model, 'responsible_salary'); ?>
+            <?php echo $form->textField($model,'responsible_salary',array('size'=>60,'maxlength'=>200, 'class'=>'format-currency number_only')); ?>
+            <?php echo $form->error($model, 'responsible_salary'); ?>
+        </div>
+        <div class="col-md-6">
+            <?php echo $form->labelEx($model, 'subvention'); ?>
+            <?php echo $form->textField($model,'subvention',array('size'=>60,'maxlength'=>200, 'class'=>'format-currency number_only')); ?>
+            <?php echo $form->error($model, 'subvention'); ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <?php echo $form->labelEx($model, 'status'); ?>
+            <?php echo $form->dropDownList($model, 'status', CommonProcess::getDefaultStatus()); ?>
+            <?php echo $form->error($model, 'status'); ?>
         </div>
     </div>
 <div class="row buttons">
@@ -430,6 +464,10 @@ $mAgents = new Agents();
             }
         });
         fnBindRemoveActionUploadFile();
+        formatNumber("#Users_base_salary");
+        formatNumber("#Users_social_insurance_salary");
+        formatNumber("#Users_responsible_salary");
+        formatNumber("#Users_subvention");
     });
     $(function () {
         fnBindChangeCity(
@@ -441,6 +479,19 @@ $mAgents = new Agents();
                 '#Users_ward_id',
                 "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/searchWardsByDistrict'); ?>");
     });
+    $(document).on('input', '.format-currency', function(){
+        var t = $(this).val();
+        t = t.replace(/[,]/g,'');
+        t = t.replace(/[.]/g,'');
+        $(this).val(fnFormatNumber(t));
+    });
+    function formatNumber(_id) {
+        var t = $(_id).val();
+        t = t.replace(/[,]/g,'');
+        t = t.replace(/[.]/g,'');
+        $(_id).val(fnFormatNumber(t));
+    };
+    fnNumberOnly();
 </script>
 <!--<script>
     $(function(){

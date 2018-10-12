@@ -57,6 +57,30 @@ $this->widget('zii.widgets.CDetailView', array(
             'name' => 'department_id',
             'value' => $model->getDepartment(),
         ),
+        array(
+            'name' => 'contract_type_id',
+            'value' => $model->getContractType(),
+        ),
+        array(
+            'name' => 'base_salary',
+            'htmlOptions' => array('style' => 'text-align:right;'),
+            'value' => CommonProcess::formatCurrency($model->base_salary),
+        ),
+        array(
+            'name' => 'social_insurance_salary',
+            'htmlOptions' => array('style' => 'text-align:right;'),
+            'value' => CommonProcess::formatCurrency($model->social_insurance_salary),
+        ),
+        array(
+            'name' => 'responsible_salary',
+            'htmlOptions' => array('style' => 'text-align:right;'),
+            'value' => CommonProcess::formatCurrency($model->responsible_salary),
+        ),
+        array(
+            'name' => 'subvention',
+            'htmlOptions' => array('style' => 'text-align:right;'),
+            'value' => CommonProcess::formatCurrency($model->subvention),
+        ),
         'ip_address',
         array(
             'name' => 'status',

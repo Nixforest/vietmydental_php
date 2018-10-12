@@ -69,6 +69,7 @@ class UsersController extends AdminController {
         $model->temp_password       = DEFAULT_PASS;
         if (isset($_POST['Users'])) {
             $model->attributes = $_POST['Users'];
+            $model->handleBeforeSave();
             if ($model->save()) {
                 if (filter_input(INPUT_POST, 'submit')) {
                     // Remove old record
@@ -121,6 +122,7 @@ class UsersController extends AdminController {
 
             if (!$model->hasErrors()) {
                 Files::deleteFileInUpdate($model);
+                $model->handleBeforeSave();
                 if ($model->save()) {
                     if (filter_input(INPUT_POST, 'submit')) {
                         // Remove old record

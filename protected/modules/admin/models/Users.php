@@ -32,6 +32,11 @@
  * @property integer $role_id           Role id
  * @property integer $application_id    -
  * @property integer $department_id     Department id
+ * @property integer $contract_type_id          Id of contract type
+ * @property double $base_salary                Base salary
+ * @property double $social_insurance_salary    Social insurance salary
+ * @property double $responsible_salary         Responsible salary
+ * @property double $subvention                 Subvention
  * @property integer $status            Status
  * @property string $gender             Gender
  * @property string $phone              Phone number
@@ -56,6 +61,7 @@
  * @property ApiUserTokens[]        $rToken             Token of user
  * @property Agents[]               $rAgents            List of agent of user (replace for rJoinAgent)
  * @property Departments            $rDepartment        Department model
+ * @property ContractTypes          $rContractType      Contract type model
  */
 class Users extends BaseActiveRecord {
     //-----------------------------------------------------
@@ -71,9 +77,9 @@ class Users extends BaseActiveRecord {
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
-    const STATUS_INACTIVE = 0;
-    const STATUS_ACTIVE = 1;
-    const STATUS_NEED_CHANGE_PASS = 2;
+    const STATUS_INACTIVE           = 0;
+    const STATUS_ACTIVE             = 1;
+    const STATUS_NEED_CHANGE_PASS   = 2;
 //    const STATUS_COMPLETED              = 3;
     const UPLOAD_FOLDER = 'upload/admin/users/';
 
@@ -93,7 +99,8 @@ class Users extends BaseActiveRecord {
         return array(
 //            array('username, password_hash, created_date, ip_address, role_id, application_id, agent', 'required'),
             array('username, password_hash, created_date, ip_address, role_id, application_id', 'required'),
-            array('place_of_issue, department_id, province_id, district_id, ward_id, street_id, login_attemp, role_id, application_id, status', 'numerical', 'integerOnly' => true),
+            array('place_of_issue, department_id, contract_type_id, province_id, district_id, ward_id, street_id, login_attemp, role_id, application_id, status', 'numerical', 'integerOnly' => true),
+//            array('base_salary, social_insurance_salary, responsible_salary, subvention', 'numerical'),
             array('username, last_name', 'length', 'max' => 50),
             array('email', 'length', 'max' => 80),
             array('first_name', 'length', 'max' => 150),
@@ -108,7 +115,7 @@ class Users extends BaseActiveRecord {
             array('birthday, date_of_issue, date_in, address, house_numbers, last_logged_in, address_temp, agent', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, username, email, first_name, last_name, code_account, address, address_vi, house_numbers, department_id, province_id, district_id, ward_id, street_id, login_attemp, created_date, last_logged_in, ip_address, role_id, application_id, status, gender, phone, verify_code, slug, address_temp, created_by', 'safe', 'on' => 'search'),
+            array('id, username, email, first_name, last_name, code_account, address, address_vi, house_numbers, department_id, contract_type_id, province_id, district_id, ward_id, street_id, login_attemp, created_date, last_logged_in, ip_address, role_id, application_id, status, gender, phone, verify_code, slug, address_temp, created_by', 'safe', 'on' => 'search'),
             array('currentpassword', 'comparePassword', 'on' => 'changeMyPassword'),
             array('currentpassword, newpassword, password_confirm', 'required', 'on' => "changeMyPassword"),
             array('newpassword', 'length', 'min' => DomainConst::PASSW_LENGTH_MIN, 'max' => DomainConst::PASSW_LENGTH_MAX,
@@ -172,6 +179,10 @@ class Users extends BaseActiveRecord {
                 self::BELONGS_TO, 'Departments', 'department_id',
                 'on'    => 'status !=' . DomainConst::DEFAULT_STATUS_INACTIVE,
             ),
+            'rContractType'   => array(
+                self::BELONGS_TO, 'ContractTypes', 'contract_type_id',
+                'on'    => 'status !=' . DomainConst::DEFAULT_STATUS_INACTIVE,
+            ),
         );
     }
 
@@ -207,6 +218,11 @@ class Users extends BaseActiveRecord {
             'role_id'           => DomainConst::CONTENT00046,
             'application_id'    => 'Application',
             'department_id'     => DomainConst::CONTENT00529,
+            'contract_type_id'          => DomainConst::CONTENT00531,
+            'base_salary'               => DomainConst::CONTENT00532,
+            'social_insurance_salary'   => DomainConst::CONTENT00533,
+            'responsible_salary'        => DomainConst::CONTENT00534,
+            'subvention'                => DomainConst::CONTENT00535,
             'status'            => DomainConst::CONTENT00026,
             'gender'            => DomainConst::CONTENT00047,
             'phone'             => DomainConst::CONTENT00048,
@@ -271,6 +287,11 @@ class Users extends BaseActiveRecord {
         }
         $criteria->compare('application_id', $this->application_id);
         $criteria->compare('department_id', $this->department_id);
+        $criteria->compare('contract_type_id', $this->contract_type_id);
+        $criteria->compare('base_salary', $this->base_salary);
+        $criteria->compare('social_insurance_salary', $this->social_insurance_salary);
+        $criteria->compare('responsible_salary', $this->responsible_salary);
+        $criteria->compare('subvention', $this->subvention);
         $criteria->compare('status', $this->status);
         $criteria->compare('gender', $this->gender, true);
         $criteria->compare('phone', $this->phone, true);
@@ -892,6 +913,28 @@ class Users extends BaseActiveRecord {
             return $this->rCreatedBy->getFullName();
         }
         return '';
+    }
+    
+    /**
+     * Get contract type
+     * @return string Name of contract type
+     */
+    public function getContractType() {
+        if (isset($this->rContractType)) {
+            return $this->rContractType->name;
+        }
+        return '';
+    }
+    
+    /**
+     * Handle change format of data before save
+     */
+    public function handleBeforeSave() {
+        // Convert value of salary from formated value to save value
+        $this->base_salary = str_replace(DomainConst::SPLITTER_TYPE_MONEY, '', $_POST['Users']['base_salary']);
+        $this->social_insurance_salary = str_replace(DomainConst::SPLITTER_TYPE_MONEY, '', $_POST['Users']['social_insurance_salary']);
+        $this->responsible_salary = str_replace(DomainConst::SPLITTER_TYPE_MONEY, '', $_POST['Users']['responsible_salary']);
+        $this->subvention = str_replace(DomainConst::SPLITTER_TYPE_MONEY, '', $_POST['Users']['subvention']);
     }
 
     //-----------------------------------------------------
