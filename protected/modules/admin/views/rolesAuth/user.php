@@ -1,10 +1,7 @@
 <?php
 /* @var $this RolesAuthController */
-
-//$this->breadcrumbs=array(
-//	$this->controllerDescription=>array('/users/index'),
-//	'User',
-//);
+/* @var $id String */
+/* @var $mUser Users */
 ?>
 <h1><?php echo $this->pageTitle ?></h1>
 
@@ -19,47 +16,40 @@ $form = $this->beginWidget('CActiveForm', array(
         <?php echo Yii::app()->user->getFlash(DomainConst::KEY_SUCCESS_UPDATE); ?>
     </div>
 <?php endif; // end if (Yii::app()->user->hasFlash('successUpdate'))  ?>
-<table style="">
-    <?php foreach($this->aControllers as $controller_id=>$aController): ?>
-        <?php
-            $listAllowActionsRoles = ActionsRoles::getActionArrByRoleAndController($mUser->role_id, $controller_id);
-            $listAllowActionsUser = ActionsUsers::getActionArrByUserAndController($id, $controller_id);
-            $mActionsUsers = ActionsUsers::model()->findAll('user_id = ' . $id . ' AND controller_id = ' . $controller_id);
-        ?>
-        <tr>
-            <th colspan="3" >
-                <h2>
-                    <?php echo $aController[DomainConst::KEY_ALIAS] . ' - ' . Controllers::getNameById($controller_id); ?>
-                </h2>
-            </th>
-        </tr>
-        <?php foreach($aController[DomainConst::KEY_ACTIONS] as $keyAction=>$aAction): ?>
-        <?php
-            $checkBoxName = $controller_id . '[' . $keyAction . ']';
-            $checkBoxId = $controller_id . '_' . $keyAction;
-            ?>
-        <tr>
-            <td>
-                <input
-                name="<?php echo $checkBoxName ?>"
-                value="1"
-                type="checkbox"
-                id="<?php echo $checkBoxId ?>"
-                <?php
-                    if (in_array($keyAction, $listAllowActionsUser)
-                            || (($mActionsUsers == NULL) && in_array($keyAction, $listAllowActionsRoles))) {
-                        echo 'checked="checked"';
-                    }
-                ?>
-                >
-                <label for="<?php echo $checkBoxId ?>" >
-                <?php echo $aAction[DomainConst::KEY_ALIAS] ?>
-            </label>
-            </td>
-        </tr>
-        <?php endforeach; ?>   
-    <?php endforeach; ?>    
-</table>
+<?php
+$arrayTabs = array();
+$isActive = true;
+$listControllers = RolesAuthController::getListRolesAuthenticatedFromDb1();
+foreach ($listControllers as $module_id => $module) {
+    $id = $module_id;
+    $label = $module[DomainConst::KEY_ALIAS];
+    $content = $this->renderPartial('_module_tab_content', array(
+        'module'    => $module,
+        'module_id' => $module_id,
+        'mUser'     => $mUser,
+    ), true);
+    if ($isActive) {
+        $isActive = false;
+        $tab = array(
+            'id'        => $id,
+            'label'     => $module[DomainConst::KEY_ALIAS],
+            'content'   => $content,
+            'active'    => true,
+        );
+    } else {
+        $tab = array(
+            'id'        => $id,
+            'label'     => $module[DomainConst::KEY_ALIAS],
+            'content'   => $content,
+        );
+    }
+    $arrayTabs[] = $tab;
+}
+$this->widget('bootstrap.widgets.TbTabs', array(
+    'type' => 'tabs',
+    'tabs' => $arrayTabs,
+));
+?>
 <div class="form form_fix_submit">
     <div class="row buttons" style="padding-left: 250px; padding-top: 20px;">
         <?php echo CHtml::submitButton("Save", array('name'=>'submit')); ?>

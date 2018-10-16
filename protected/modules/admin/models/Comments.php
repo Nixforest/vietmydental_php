@@ -170,7 +170,7 @@ class Comments extends BaseActiveRecord {
                 break;
         }
         
-        return '<a href="' . $retVal . '">' . $name . '</a>';;
+        return '<a href="' . $retVal . '">' . $name . '</a>';
     }
     
     /**

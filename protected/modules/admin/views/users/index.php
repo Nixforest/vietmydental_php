@@ -132,6 +132,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
                     'url' => 'Yii::app()->createAbsoluteUrl("admin/rolesAuth/user",array("id"=>$data->id))',
                 )
             ),
+            'visible'   => CommonProcess::isUserAdmin(),
         ),
         array(
             'header' => 'Actions',

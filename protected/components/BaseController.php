@@ -41,7 +41,7 @@ class BaseController extends CController {
      * @var type 
      */
     public $controllerDescription;
-    
+
     /**
      * Initialize
      */
@@ -68,8 +68,7 @@ class BaseController extends CController {
      * Get access rule.
      */
     public function accessRules() {
-        return $this->getAccessRules(Yii::app()->controller->id,
-                $this->module);
+        return $this->getAccessRules(Yii::app()->controller->id, $this->module);
     }
 
     /**
@@ -79,8 +78,8 @@ class BaseController extends CController {
         if (isset(Yii::app()->user->role_id)) {
 //        CommonProcess::dumpVariable($this->accessRules());
             $this->listActionsCanAccess = self::getListActionsCanAccess(
-                    $this->accessRules(),
-                    Yii::app()->user->role_id);
+                            $this->accessRules(), Yii::app()->user->role_id);
+            Loggers::info('Set action access for user ' . Yii::app()->user->id, CommonProcess::json_encode_unicode($this->listActionsCanAccess), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         } else {
 //            echo 'Yii::app()->user->role_id chưa có giá trị';
         }
@@ -96,7 +95,7 @@ class BaseController extends CController {
         $aActionAllowed = array_map('strtolower', ActionsUsers::getActionArrAllowForCurrentUserByController($controller_id));
         return in_array(strtolower($action), $aActionAllowed);
     }
-    
+
     /**
      * Get access rule for controller
      * @param String $controller_name Name of controller
@@ -155,9 +154,10 @@ class BaseController extends CController {
                 }
             }
         }
-        $accessArr[] = array(DomainConst::KEY_DENY, // deny all users
-            'users' => array('*')
-        );
+        $accessArr[] = array(DomainConst::KEY_DENY);
+//        $accessArr[] = array(DomainConst::KEY_DENY, // deny all users
+//            'users' => array('*')
+//        );
 
         return $accessArr;
     }
@@ -171,7 +171,7 @@ class BaseController extends CController {
     public static function getListActionsCanAccess($accessRules, $role_id) {
         //foreach ($accessRules as $key => $role) {
         foreach ($accessRules as $role) {
-            if (isset($role[0]) && ($role[0] == DomainConst::DEFAULT_ACCESS_ALLOW) && isset($role[DomainConst::KEY_ACTIONS])) {
+            if (isset($role[0]) && ($role[0] == DomainConst::KEY_ALLOW) && isset($role[DomainConst::KEY_ACTIONS])) {
                 return $role[DomainConst::KEY_ACTIONS];
             }
             if (isset($role[DomainConst::KEY_EXPRESSION]) && isset($role[DomainConst::KEY_ACTIONS])) {
@@ -206,7 +206,7 @@ class BaseController extends CController {
         $actionLower = strtolower(trim($action));
         return in_array($actionLower, $listActions);
     }
-    
+
     /**
      * Handle create action buttons
      * @param type $buttons
@@ -355,7 +355,7 @@ class BaseController extends CController {
         $this->breadcrumbs = $this->createBreadCrumbs($action, $model);
         $this->menu = $this->createOperationMenu($action, $model);
     }
-    
+
     /**
      * Get current action name
      * @return String Action name
@@ -373,7 +373,7 @@ class BaseController extends CController {
         }
         return $retVal;
     }
-    
+
     /**
      * Handle ajax after update
      */
@@ -391,4 +391,5 @@ class BaseController extends CController {
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }
+
 }
