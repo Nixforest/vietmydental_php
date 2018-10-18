@@ -378,13 +378,15 @@ class ReportController extends APIController {
     /**
      * Get daily report
      * @param Array $result Result data
-     * @param Object $mUser Model user
+     * @param Users $mUser Model user
      * @param Object $root Json object
      */
     private function getDailyReport($result, $mUser, $root) {
         $retVal = array();
         foreach ($mUser->getAgentIds() as $agentId) {
-            $retVal[] = DailyReports::getReport($root->date, $agentId);
+            $retVal[] = DailyReports::getReport(CommonProcess::convertDateTime(
+                    $root->date, DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_DB),
+                    $agentId, $mUser);
         }
         $result = ApiModule::$defaultSuccessResponse;
         $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00194;
@@ -440,6 +442,9 @@ class ReportController extends APIController {
                     if ($mReport->save()) { // Success
                         $result = ApiModule::$defaultSuccessResponse;
                         $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00035;
+                        $result[DomainConst::KEY_DATA]  = array(
+                            DailyReports::getReportJson($mReport, $mReport->agent_id),
+                        );
                         ApiModule::sendResponse($result, $this);
                     } else {                // Failed
                         $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00214 . ': '
@@ -457,6 +462,9 @@ class ReportController extends APIController {
                     if ($mReport->save()) { // Success
                         $result = ApiModule::$defaultSuccessResponse;
                         $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00035;
+                        $result[DomainConst::KEY_DATA]  = array(
+                            DailyReports::getReportJson($mReport, $mReport->agent_id),
+                        );
                         ApiModule::sendResponse($result, $this);
                     } else {                // Failed
                         $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00214 . ': '

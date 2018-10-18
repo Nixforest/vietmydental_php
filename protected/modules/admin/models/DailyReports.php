@@ -680,15 +680,62 @@ class DailyReports extends BaseActiveRecord {
      * Get report information
      * @param String $date Date as format yyyy-mm-dd
      * @param Int $agentId Id of agent
+     * @param Users $mUser Model user
      * @return Array List information
      */
-    public static function getReport($date, $agentId) {
+    public static function getReport($date, $agentId, $mUser) {
         $criteria = new CDbCriteria();
+        $criteria->compare('approve_id', $mUser->id);
         $criteria->compare('agent_id', $agentId);
         $criteria->compare('date_report', $date);
         $criteria->order = 'id desc';
+        Loggers::info("Params", "Approve: $mUser->id, Agent: $agentId, Date: $date", __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         $model = DailyReports::model()->find($criteria);
+        
         // Init return value
+//        $id         = DomainConst::NUMBER_ZERO_VALUE;
+//        $agentName  = '';
+//        $total      = 0;
+//        $createdBy  = '';
+//        $status     = self::STATUS_NOT_CREATED_YET . '';
+//        $statusStr  = self::getArrayStatus()[$status];
+//        
+//        if ($model) {       // Found
+//            $id         = $model->id;
+//            $agentName  = $model->getAgent();
+//            $total      = $model->receipt_total;
+//            $createdBy  = $model->getCreatedBy();
+//            $status     = $model->status . '';
+//            $statusStr  = self::getArrayStatus()[$status];
+//        } else {            // Not created yet
+//            $mAgent = Agents::model()->findByPk($agentId);
+//            if ($mAgent) {
+//                $agentName = $mAgent->name;
+//            }
+//        }
+//        
+//        $data = array();
+//        $data[] = CommonProcess::createConfigJson(
+//                DomainConst::ITEM_TOTAL, DomainConst::CONTENT00353, CommonProcess::formatCurrency($total));
+//        $data[] = CommonProcess::createConfigJson(
+//                DomainConst::ITEM_RECEIPTIONIST, DomainConst::CONTENT00054, $createdBy);
+//        $data[] = CommonProcess::createConfigJson(DomainConst::ITEM_STATUS, '', $status);
+//        $data[] = CommonProcess::createConfigJson(DomainConst::ITEM_STATUS_STR, DomainConst::CONTENT00026, $statusStr);
+//        $data[] = CommonProcess::createConfigJson(DomainConst::ITEM_AGENT_ID, '', $agentId);
+//        $data[] = CommonProcess::createConfigJson(
+//                DomainConst::ITEM_AGENT, DomainConst::CONTENT00199, $agentName);
+//        return CommonProcess::createConfigJson($id,
+//                $agentName, $data);
+        return self::getReportJson($model, $agentId);
+    }
+    
+    /**
+     * Get daily report as json format
+     * @param DailyReports $model   Report model
+     * @param String $agentId       Id of agent
+     * @return Json 
+     */
+    public static function getReportJson($model, $agentId) {
         $id         = DomainConst::NUMBER_ZERO_VALUE;
         $agentName  = '';
         $total      = 0;
