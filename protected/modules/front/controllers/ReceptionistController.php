@@ -337,6 +337,7 @@ class ReceptionistController extends FrontController {
      * Action get all customers have schedule on today
      */
     public function actionSchedule() {
+        Loggers::info('', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         $date = '';
         $dateFormat = DomainConst::DATE_FORMAT_4;
         // Get data from url
@@ -346,20 +347,30 @@ class ReceptionistController extends FrontController {
             $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
         }
         // Date value is today
-        if (DateTimeExt::isToday($date, DomainConst::DATE_FORMAT_4)) {
-            // Old logic
-            $arrCustomerId = TreatmentScheduleDetails::getListCustomerIdHaveScheduleToday();
-            $criteria = new CDbCriteria();
-            $criteria->addInCondition('id', $arrCustomerId);
-            $models = Customers::model()->findAll($criteria);
-            $todayModels = TreatmentScheduleDetails::getListCustomerHaveScheduleTodayCreatedToday();
-        } else {
-            // New logic
-            $arrCustomerId = TreatmentScheduleDetails::getListCustomerIdHaveScheduleToday($date);
-            $criteria = new CDbCriteria();
-            $criteria->addInCondition('id', $arrCustomerId);
-            $models = Customers::model()->findAll($criteria);
-            $todayModels = array();
+//        if (DateTimeExt::isToday($date, DomainConst::DATE_FORMAT_4)) {
+//            // Old logic
+//            $arrCustomerId = TreatmentScheduleDetails::getListCustomerIdHaveScheduleToday();
+//            $criteria = new CDbCriteria();
+//            $criteria->addInCondition('id', $arrCustomerId);
+//            $models = Customers::model()->findAll($criteria);
+//            $todayModels = TreatmentScheduleDetails::getListCustomerHaveScheduleTodayCreatedToday();
+//        } else {
+//            // New logic
+//            $arrCustomerId = TreatmentScheduleDetails::getListCustomerIdHaveScheduleToday($date);
+//            $criteria = new CDbCriteria();
+//            $criteria->addInCondition('id', $arrCustomerId);
+//            $models = Customers::model()->findAll($criteria);
+//            $todayModels = array();
+//        }
+        $data = SqlHandler::getAppointmentOnDate($date, CommonProcess::getCurrentAgentId());
+        $models             = array();
+        $createdTodayModels = array();
+        foreach ($data as $value) {
+            if ($value['start_date'] == $value['created_date']) {
+                $createdTodayModels[] = $value;
+            } else {
+                $models[] = $value;
+            }
         }
         // Start search
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
@@ -367,13 +378,17 @@ class ReceptionistController extends FrontController {
                 'dateValue'  => CommonProcess::convertDateTime($_POST['date'], DomainConst::DATE_FORMAT_BACK_END, $dateFormat),
                 ));
         }
+//        print_r($data);
         $this->render('schedule', array(
-            'model' => $models,
-            'array' => $arrCustomerId,
-            'todayModels'   => $todayModels,
-            'dateValue'     => $date,
+            'model'                 => $models,
+//            'array' => $arrCustomerId,
+//            'todayModels'   => $todayModels,
+            'data'                  => $data,
+            'createdTodayModels'    => $createdTodayModels,
+            'dateValue'             => $date,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
+        Loggers::info('', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
     }
     
     /**

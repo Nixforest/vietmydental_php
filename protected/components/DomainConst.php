@@ -69,6 +69,8 @@ class DomainConst {
     const DATE_FORMAT_VIEW                              = self::DATE_FORMAT_5;
     /** Date format backend */
     const DATE_FORMAT_BACK_END                          = self::DATE_FORMAT_3;
+    /** Date format db */
+    const DATE_FORMAT_DB                                = self::DATE_FORMAT_4;
     /** Date format */
     const DATE_FORMAT_1                                 = 'Y-m-d H:i:s';
     /** Date format */
@@ -861,6 +863,8 @@ class DomainConst {
     const KEY_TIME_REPLY                    = 'time_reply';
     /** time */
     const KEY_TIME                          = 'time';
+    /** time */
+    const KEY_TIME_ID                       = 'time_id';
     /** can_close */
     const KEY_CAN_CLOSE                     = 'can_close';
     /** can_reply */
