@@ -283,18 +283,30 @@ class HtmlHandler {
         $retVal .=           '</thead>';
         $retVal .=           '<tbody>';
         foreach ($arrCustomer as $customer) {
-            $retVal .=           '<tr id="' . $customer->id . '" class="customer-info-tr">';
+            $id         = CommonProcess::getValue($customer, DomainConst::KEY_ID);
+            $mCustomer  = Customers::getCustomerById($id);
+            $birthday   = '';
+            if ($mCustomer) {
+                $birthday = $mCustomer->getBirthday();
+            }
+            $recordNum  = CommonProcess::getValue($customer, DomainConst::KEY_RECORD_NUMBER);
+            $name       = CommonProcess::getValue($customer, DomainConst::KEY_NAME);
+            $phone      = CommonProcess::getValue($customer, DomainConst::KEY_PHONE);
+            $address    = CommonProcess::getValue($customer, DomainConst::KEY_ADDRESS);
+            $time       = ScheduleTimes::getTimeById(CommonProcess::getValue($customer, DomainConst::KEY_TIME_ID));
+            $doctor     = Users::getUserFullNameById(CommonProcess::getValue($customer, DomainConst::KEY_DOCTOR_ID));
+            $retVal .=           '<tr id="' . $id . '" class="customer-info-tr">';
             $retVal .=               '<td>';
-            $retVal .=                   $customer->name . '<br>' . $customer->phone . '<br>';
+            $retVal .=                   self::formatRecordNumber($recordNum) . '<br>' . $name . '<br>' . $phone . '<br>';
             $retVal .=               '</td>';
             $retVal .=               '<td>';
-            $retVal .=                   $customer->getBirthDay()  . '<br>'. $customer->address;
+            $retVal .=                   $birthday  . '<br>'. $address;
             $retVal .=               '</td>';
             $retVal .=               '<td>';
-            $retVal .=                   $customer->getScheduleTime();
+            $retVal .=                   $time;
             $retVal .=               '</td>';
             $retVal .=               '<td>';
-            $retVal .=                   $customer->getScheduleDoctor();
+            $retVal .=                   $doctor;
             $retVal .=               '</td>';
             $retVal .=           '</tr>';
         }
@@ -303,5 +315,14 @@ class HtmlHandler {
         $retVal .=       '</table>';
         $retVal .=  '</div>';
         return $retVal;
+    }
+    
+    /**
+     * Format record number
+     * @param String $recordNumber Record number
+     * @return String Formated string
+     */
+    public static function formatRecordNumber($recordNumber) {
+        return '<b><font color="blue">' . $recordNumber . '</font></b>';
     }
 }

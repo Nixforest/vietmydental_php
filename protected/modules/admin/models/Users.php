@@ -1150,5 +1150,20 @@ class Users extends BaseActiveRecord {
         $model = self::model()->find($criteria);
         return $model;
     }
+    
+    /**
+     * Get user full name by id
+     * @param String $id Id of user
+     * @return string Name of user
+     */
+    public static function getUserFullNameById($id) {
+        $retVal = '';
+        $model = self::model()->findByPk($id);
+        if ($model) {
+            return $model->getFullName();
+        }
+        
+        return $retVal;
+    }
 
 }

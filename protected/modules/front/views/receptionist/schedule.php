@@ -1,5 +1,9 @@
 <?php
 /* @var $this ReceptionistController */
+/* @var $data Array */
+/* @var $model Array */
+/* @var $createdTodayModels Array */
+
 // Get value of current date
 $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_4);
 //CommonProcess::dumpVariable($dateValue);
@@ -76,7 +80,8 @@ if (!empty($dateValue)) {
                         </div>
                         
                     <?php echo HtmlHandler::createTableCustomer($model, DomainConst::CONTENT00361); ?>
-                    <?php echo HtmlHandler::createTableCustomer($todayModels, DomainConst::CONTENT00362); ?>
+                    <?php // echo HtmlHandler::createTableCustomer($todayModels, DomainConst::CONTENT00362); ?>
+                    <?php echo HtmlHandler::createTableCustomer($createdTodayModels, DomainConst::CONTENT00362); ?>
                     <div class="scroll-table">
                 
                     </div>

@@ -4,27 +4,27 @@
  * This is the model class for table "customers".
  *
  * The followings are the available columns in table 'customers':
- * @property string $id
- * @property string $name
- * @property integer $gender
- * @property string $date_of_birth
- * @property string $year_of_birth
- * @property string $phone
- * @property string $email
- * @property integer $city_id
- * @property integer $district_id
- * @property integer $ward_id
- * @property string $street_id
- * @property string $house_numbers
- * @property string $address
- * @property integer $type_id
- * @property integer $career_id
- * @property string $user_id
- * @property string $debt
- * @property integer $status
- * @property string $characteristics
- * @property string $created_by
- * @property string $created_date
+ * @property string $id                 Id of record
+ * @property string $name               Name of customer
+ * @property integer $gender            Gender
+ * @property string $date_of_birth      Birthday
+ * @property string $year_of_birth      Year of birth
+ * @property string $phone              Phone
+ * @property string $email              Email
+ * @property integer $city_id           Id of city
+ * @property integer $district_id       Id of district
+ * @property integer $ward_id           Id of ward
+ * @property string $street_id          Id of street
+ * @property string $house_numbers      House number
+ * @property string $address            Address
+ * @property integer $type_id           Id of type
+ * @property integer $career_id         Id career
+ * @property string $user_id            Id of user account
+ * @property string $debt               Debt
+ * @property integer $status            Status
+ * @property string $characteristics    Characteristics
+ * @property string $created_by         Created by
+ * @property string $created_date       Created date
  * 
  * The followings are the available model relations:
  * @property Cities                 $rCity              City of customer
@@ -32,174 +32,169 @@
  * @property Users                  $rCreatedBy         User created this record
  * @property MedicalRecords         $rMedicalRecord     Medical record
  */
-class Customers extends BaseActiveRecord
-{
+class Customers extends BaseActiveRecord {
+
     public $autocomplete_name_user;
     public $autocomplete_name_street;
     public $agent;
     public $referCode;
     public $autocomplete_name_refercode;
-	/**
-	 * Returns the static model of the specified AR class.
-	 * @param string $className active record class name.
-	 * @return Customers the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
 
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return 'customers';
-	}
+    /**
+     * Returns the static model of the specified AR class.
+     * @param string $className active record class name.
+     * @return Customers the static model class
+     */
+    public static function model($className = __CLASS__) {
+        return parent::model($className);
+    }
 
-	/**
-	 * @return array validation rules for model attributes.
-	 */
-	public function rules()
-	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-                        //++ BUG0041-IMT (DuongNV 20180725) Un required district when create patient
+    /**
+     * @return string the associated database table name
+     */
+    public function tableName() {
+        return 'customers';
+    }
+
+    /**
+     * @return array validation rules for model attributes.
+     */
+    public function rules() {
+        // NOTE: you should only define rules for those attributes that
+        // will receive user inputs.
+        return array(
+            //++ BUG0041-IMT (DuongNV 20180725) Un required district when create patient
 //			array('name, city_id, district_id', 'required'),
-			array('name, city_id', 'required'),
-                        //-- BUG0041-IMT (DuongNV 20180725) Un required district when create patient
-			array('gender, city_id, district_id, ward_id, type_id, career_id, status', 'numerical', 'integerOnly'=>true),
-			array('name, house_numbers', 'length', 'max'=>255),
-			array('year_of_birth', 'length', 'max'=>4),
-			array('phone, email', 'length', 'max'=>200),
-			array('street_id, user_id, created_by', 'length', 'max'=>11),
-			array('debt', 'length', 'max'=>10),
-			array('date_of_birth, address, characteristics', 'safe'),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('id, name, gender, date_of_birth, year_of_birth, phone, email, city_id, district_id, ward_id, street_id, house_numbers, address, type_id, career_id, user_id, status, characteristics, created_by, created_date', 'safe', 'on'=>'search'),
-                        array('type_id', 'safe'),
-		);
-	}
+            array('name, city_id', 'required'),
+            //-- BUG0041-IMT (DuongNV 20180725) Un required district when create patient
+            array('gender, city_id, district_id, ward_id, type_id, career_id, status', 'numerical', 'integerOnly' => true),
+            array('name, house_numbers', 'length', 'max' => 255),
+            array('year_of_birth', 'length', 'max' => 4),
+            array('phone, email', 'length', 'max' => 200),
+            array('street_id, user_id, created_by', 'length', 'max' => 11),
+            array('debt', 'length', 'max' => 10),
+            array('date_of_birth, address, characteristics', 'safe'),
+            // The following rule is used by search().
+            // Please remove those attributes that should not be searched.
+            array('id, name, gender, date_of_birth, year_of_birth, phone, email, city_id, district_id, ward_id, street_id, house_numbers, address, type_id, career_id, user_id, status, characteristics, created_by, created_date', 'safe', 'on' => 'search'),
+            array('type_id', 'safe'),
+        );
+    }
 
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-                    'rCity' => array(self::BELONGS_TO, 'Cities', 'city_id'),
-                    'rDistrict' => array(self::BELONGS_TO, 'Districts', 'district_id'),
-                    'rWard' => array(self::BELONGS_TO, 'Wards', 'ward_id'),
-                    'rStreet' => array(self::BELONGS_TO, 'Streets', 'street_id'),
-                    'rType' => array(self::BELONGS_TO, 'CustomerTypes', 'type_id'),
-                    'rCareer' => array(self::BELONGS_TO, 'Careers', 'career_id'),
-                    'rUser' => array(self::BELONGS_TO, 'Users', 'user_id'),
-                    'rCreatedBy' => array(self::BELONGS_TO, 'Users', 'created_by'),
-                    'rStreet' => array(self::BELONGS_TO, 'Streets', 'street_id'),
-                    'rMedicalRecord' => array(
-                        self::HAS_ONE, 'MedicalRecords', 'customer_id',
-                        'on' => 'status = 1',
-                    ),
-                    'rJoinAgent' => array(
-                        self::HAS_MANY, 'OneMany', 'many_id',
-                        'on'    => 'type = ' . OneMany::TYPE_AGENT_CUSTOMER,
-                    ),
-                    'rReferCode' => array(
-                        self::HAS_ONE, 'ReferCodes', 'object_id',
-                        'on'    => 'type = ' . ReferCodes::TYPE_CUSTOMER,
-                    ),
-                    'rSocialNetwork' => array(
-                        self::HAS_MANY, 'SocialNetworks', 'object_id',
-                        'on'    => 'type = ' . SocialNetworks::TYPE_CUSTOMER,
-                    ),
-                    'rWarranty' => array(self::HAS_MANY, 'Warranties', 'customer_id',
-                        'on' => 'status!=' . DomainConst::DEFAULT_STATUS_INACTIVE,
-                        'order' => 'id ASC',
-                        ),
-                    'rAgents' =>array(self::MANY_MANY, 'Agents', 'one_many(many_id,one_id)',
-                        'condition' => 'rAgents_rAgents.type = ' . OneMany::TYPE_AGENT_CUSTOMER,
-                        'order'=> 'rAgents_rAgents.id DESC') ,
-		);
-	}
+    /**
+     * @return array relational rules.
+     */
+    public function relations() {
+        // NOTE: you may need to adjust the relation name and the related
+        // class name for the relations automatically generated below.
+        return array(
+            'rCity' => array(self::BELONGS_TO, 'Cities', 'city_id'),
+            'rDistrict' => array(self::BELONGS_TO, 'Districts', 'district_id'),
+            'rWard' => array(self::BELONGS_TO, 'Wards', 'ward_id'),
+            'rStreet' => array(self::BELONGS_TO, 'Streets', 'street_id'),
+            'rType' => array(self::BELONGS_TO, 'CustomerTypes', 'type_id'),
+            'rCareer' => array(self::BELONGS_TO, 'Careers', 'career_id'),
+            'rUser' => array(self::BELONGS_TO, 'Users', 'user_id'),
+            'rCreatedBy' => array(self::BELONGS_TO, 'Users', 'created_by'),
+            'rStreet' => array(self::BELONGS_TO, 'Streets', 'street_id'),
+            'rMedicalRecord' => array(
+                self::HAS_ONE, 'MedicalRecords', 'customer_id',
+                'on' => 'status = 1',
+            ),
+            'rJoinAgent' => array(
+                self::HAS_MANY, 'OneMany', 'many_id',
+                'on' => 'type = ' . OneMany::TYPE_AGENT_CUSTOMER,
+            ),
+            'rReferCode' => array(
+                self::HAS_ONE, 'ReferCodes', 'object_id',
+                'on' => 'type = ' . ReferCodes::TYPE_CUSTOMER,
+            ),
+            'rSocialNetwork' => array(
+                self::HAS_MANY, 'SocialNetworks', 'object_id',
+                'on' => 'type = ' . SocialNetworks::TYPE_CUSTOMER,
+            ),
+            'rWarranty' => array(self::HAS_MANY, 'Warranties', 'customer_id',
+                'on' => 'status!=' . DomainConst::DEFAULT_STATUS_INACTIVE,
+                'order' => 'id ASC',
+            ),
+            'rAgents' => array(self::MANY_MANY, 'Agents', 'one_many(many_id,one_id)',
+                'condition' => 'rAgents_rAgents.type = ' . OneMany::TYPE_AGENT_CUSTOMER,
+                'order' => 'rAgents_rAgents.id DESC'),
+        );
+    }
 
-	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return array(
-			'id' => DomainConst::CONTENT00389,
-			'name' => DomainConst::CONTENT00100,
-			'gender' => DomainConst::CONTENT00047,
-			'date_of_birth' => DomainConst::CONTENT00101,
-			'year_of_birth' => DomainConst::CONTENT00368,
-			'phone' => DomainConst::CONTENT00048,
-			'email' => DomainConst::CONTENT00040,
-			'city_id' => DomainConst::CONTENT00102,
-			'district_id' => DomainConst::CONTENT00103,
-			'ward_id' => DomainConst::CONTENT00104,
-			'street_id' => DomainConst::CONTENT00105,
-			'house_numbers' => DomainConst::CONTENT00106,
-			'address' => DomainConst::CONTENT00045,
-			'type_id' => DomainConst::CONTENT00107,
-			'career_id' => DomainConst::CONTENT00099,
-			'user_id' => DomainConst::CONTENT00008,
-			'debt' => DomainConst::CONTENT00300,
-			'status' => DomainConst::CONTENT00026,
-			'characteristics' => DomainConst::CONTENT00108,
-			'created_by' => DomainConst::CONTENT00054,
-			'created_date' => DomainConst::CONTENT00010,
-                        'agent' => DomainConst::CONTENT00199,
-                        'referCode' => DomainConst::CONTENT00271,
-		);
-	}
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels() {
+        return array(
+            'id'                => DomainConst::CONTENT00389,
+            'name'              => DomainConst::CONTENT00100,
+            'gender'            => DomainConst::CONTENT00047,
+            'date_of_birth'     => DomainConst::CONTENT00101,
+            'year_of_birth'     => DomainConst::CONTENT00368,
+            'phone'             => DomainConst::CONTENT00048,
+            'email'             => DomainConst::CONTENT00040,
+            'city_id'           => DomainConst::CONTENT00102,
+            'district_id'       => DomainConst::CONTENT00103,
+            'ward_id'           => DomainConst::CONTENT00104,
+            'street_id'         => DomainConst::CONTENT00105,
+            'house_numbers'     => DomainConst::CONTENT00106,
+            'address'           => DomainConst::CONTENT00045,
+            'type_id'           => DomainConst::CONTENT00107,
+            'career_id'         => DomainConst::CONTENT00099,
+            'user_id'           => DomainConst::CONTENT00008,
+            'debt'              => DomainConst::CONTENT00300,
+            'status'            => DomainConst::CONTENT00026,
+            'characteristics'   => DomainConst::CONTENT00108,
+            'created_by'        => DomainConst::CONTENT00054,
+            'created_date'      => DomainConst::CONTENT00010,
+            'agent'             => DomainConst::CONTENT00199,
+            'referCode'         => DomainConst::CONTENT00271,
+        );
+    }
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
+    /**
+     * Retrieves a list of models based on the current search/filter conditions.
+     * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+     */
+    public function search() {
+        // Warning: Please modify the following code to remove attributes that
+        // should not be searched.
 
-		$criteria=new CDbCriteria;
+        $criteria = new CDbCriteria;
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('gender',$this->gender);
-		$criteria->compare('date_of_birth',$this->date_of_birth,true);
-		$criteria->compare('year_of_birth',$this->year_of_birth,true);
-		$criteria->compare('phone',$this->phone,true);
-		$criteria->compare('email',$this->email,true);
-		$criteria->compare('city_id',$this->city_id);
-		$criteria->compare('district_id',$this->district_id);
-		$criteria->compare('ward_id',$this->ward_id);
-		$criteria->compare('street_id',$this->street_id,true);
-		$criteria->compare('house_numbers',$this->house_numbers,true);
-		$criteria->compare('address',$this->address,true);
-		$criteria->compare('type_id',$this->type_id);
-		$criteria->compare('career_id',$this->career_id);
-		$criteria->compare('user_id',$this->user_id,true);
-		$criteria->compare('debt',$this->debt,true);
-		$criteria->compare('status',$this->status);
-		$criteria->compare('characteristics',$this->characteristics,true);
-		$criteria->compare('created_by',$this->created_by,true);
-		$criteria->compare('created_date',$this->created_date,true);
-                $criteria->order = 'created_date DESC';
+        $criteria->compare('id', $this->id, true);
+        $criteria->compare('name', $this->name, true);
+        $criteria->compare('gender', $this->gender);
+        $criteria->compare('date_of_birth', $this->date_of_birth, true);
+        $criteria->compare('year_of_birth', $this->year_of_birth, true);
+        $criteria->compare('phone', $this->phone, true);
+        $criteria->compare('email', $this->email, true);
+        $criteria->compare('city_id', $this->city_id);
+        $criteria->compare('district_id', $this->district_id);
+        $criteria->compare('ward_id', $this->ward_id);
+        $criteria->compare('street_id', $this->street_id, true);
+        $criteria->compare('house_numbers', $this->house_numbers, true);
+        $criteria->compare('address', $this->address, true);
+        $criteria->compare('type_id', $this->type_id);
+        $criteria->compare('career_id', $this->career_id);
+        $criteria->compare('user_id', $this->user_id, true);
+        $criteria->compare('debt', $this->debt, true);
+        $criteria->compare('status', $this->status);
+        $criteria->compare('characteristics', $this->characteristics, true);
+        $criteria->compare('created_by', $this->created_by, true);
+        $criteria->compare('created_date', $this->created_date, true);
+        $criteria->order = 'created_date DESC';
 
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-                        'pagination' => array(
-                            'pageSize' => Settings::getListPageSize(),
-                        ),
-		));
-	}
-        
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+            'pagination' => array(
+                'pageSize' => Settings::getListPageSize(),
+            ),
+        ));
+    }
+
     //-----------------------------------------------------
     // Parent override methods
     //-----------------------------------------------------
@@ -212,18 +207,16 @@ class Customers extends BaseActiveRecord
         // Format birthday value
         $date = $this->date_of_birth;
         $this->date_of_birth = CommonProcess::convertDateTimeToMySqlFormat(
-                $date, DomainConst::DATE_FORMAT_3);
+                        $date, DomainConst::DATE_FORMAT_3);
         if (empty($this->date_of_birth)) {
             $this->date_of_birth = CommonProcess::convertDateTimeToMySqlFormat(
-                        $date, DomainConst::DATE_FORMAT_4);
+                            $date, DomainConst::DATE_FORMAT_4);
         }
         if (empty($this->date_of_birth)) {
             $this->date_of_birth = $date;
         }
         $this->address = CommonProcess::createAddressString(
-                $this->city_id, $this->district_id,
-                $this->ward_id, $this->street_id,
-                $this->house_numbers);
+                        $this->city_id, $this->district_id, $this->ward_id, $this->street_id, $this->house_numbers);
         if ($this->isNewRecord) {   // Add
             // Handle created by
             if (empty($this->created_by)) {
@@ -234,11 +227,10 @@ class Customers extends BaseActiveRecord
                 $this->created_date = CommonProcess::getCurrentDateTime();
             }
         } else {                    // Update
-            
         }
         return parent::beforeSave();
     }
-    
+
     /**
      * Override before delete method
      * @return Parent result
@@ -287,7 +279,7 @@ class Customers extends BaseActiveRecord
     }
 
     /**
-     * Get autocomplete customer name
+     * Get auto complete customer name
      * @return String [username - last_name first_name]
      */
     public function getAutoCompleteCustomerName() {
@@ -296,7 +288,7 @@ class Customers extends BaseActiveRecord
         $retVal .= ' -  SN: ' . $this->date_of_birth;
         return $retVal;
     }
-    
+
     /**
      * Check if customer have schedule date
      * @return Id of treatment schedule (have not detail data), empty otherwise
@@ -311,14 +303,13 @@ class Customers extends BaseActiveRecord
             } else { // #0
                 // Get newest record
                 $schedule = $this->rMedicalRecord->rTreatmentSchedule[0];
-                if ($isActive
-                        && ($schedule->status == TreatmentSchedules::STATUS_COMPLETED)) {
+                if ($isActive && ($schedule->status == TreatmentSchedules::STATUS_COMPLETED)) {
 //                // Status of schedule is Completed
 //                if ($schedule->status == TreatmentSchedules::STATUS_COMPLETED) {
                     $retVal = '';
                 } else {
                     if (isset($schedule->rDetail)) {
-                        if (count($schedule->rDetail) == 0) {                        
+                        if (count($schedule->rDetail) == 0) {
                             $retVal = '';
                         } else { // #0
                             if ($schedule->rDetail[0]->isSchedule()) {
@@ -330,12 +321,12 @@ class Customers extends BaseActiveRecord
                     } else {
                         $retVal = '';
                     }
-                }                
+                }
             }
         }
         return $retVal;
     }
-    
+
     /**
      * Get value of id
      * @return String
@@ -344,7 +335,7 @@ class Customers extends BaseActiveRecord
         $retVal = CommonProcess::generateID(DomainConst::CUSTOMER_ID_PREFIX, $this->id);
         return $retVal;
     }
-    
+
     /**
      * Get name of agent
      * @return Name of agent
@@ -357,7 +348,7 @@ class Customers extends BaseActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get id of agent
      * @return Id of agent
@@ -370,32 +361,28 @@ class Customers extends BaseActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get birthday with format
      * @return String Birthday with format {01 thg 11, 2018}
      */
     public function getBirthday() {
         $retVal = '';
-        
+
         if (empty($retVal) && !DateTimeExt::isDateNull($this->date_of_birth)) {
-            $date = CommonProcess::convertDateTime($this->date_of_birth,
-                                DomainConst::DATE_FORMAT_4,
-                                DomainConst::DATE_FORMAT_5);
+            $date = CommonProcess::convertDateTime($this->date_of_birth, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_5);
             if (empty($date)) {
-                $date = CommonProcess::convertDateTime($this->date_of_birth,
-                                DomainConst::DATE_FORMAT_1,
-                                DomainConst::DATE_FORMAT_5);
+                $date = CommonProcess::convertDateTime($this->date_of_birth, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_5);
             }
             $retVal = $date;
         }
         if (empty($retVal) && !DateTimeExt::isYearNull($this->year_of_birth)) {
             $retVal = $this->year_of_birth;
         }
-        
+
         return $retVal;
     }
-    
+
     /**
      * Get birth year
      * @return String Birthday with format {2018}
@@ -403,17 +390,15 @@ class Customers extends BaseActiveRecord
     public function getBirthYear() {
         $retVal = '';
         if (!DateTimeExt::isDateNull($this->date_of_birth)) {
-            $retVal = CommonProcess::convertDateTime($this->date_of_birth,
-                            DomainConst::DATE_FORMAT_4,
-                            'Y');
+            $retVal = CommonProcess::convertDateTime($this->date_of_birth, DomainConst::DATE_FORMAT_4, 'Y');
         } else if (!DateTimeExt::isYearNull($this->year_of_birth)) {
             $retVal = $this->year_of_birth;
         }
-        
-        
+
+
         return $retVal;
     }
-    
+
     /**
      * Get age of customer
      * $return String Age of customer
@@ -423,19 +408,17 @@ class Customers extends BaseActiveRecord
         $age = '';
         if (!DateTimeExt::isDateNull($this->date_of_birth)) {
             $age = DateTime::createFromFormat(
-                DomainConst::DATE_FORMAT_4,
-                $this->date_of_birth);
+                            DomainConst::DATE_FORMAT_4, $this->date_of_birth);
         } else if (!DateTimeExt::isYearNull($this->year_of_birth)) {
             $age = DateTime::createFromFormat(
-                'Y',
-                $this->year_of_birth);
+                            'Y', $this->year_of_birth);
         }
         if ($age) {
             $retVal = $age->diff(new DateTime('now'))->y;
         }
         return $retVal . 't';
     }
-    
+
     /**
      * Get phone value
      * @return String
@@ -443,7 +426,7 @@ class Customers extends BaseActiveRecord
     public function getPhone() {
         return isset($this->phone) ? $this->phone : '';
     }
-    
+
     /**
      * Get email value
      * @return String
@@ -460,7 +443,7 @@ class Customers extends BaseActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get address value
      * @return String
@@ -468,7 +451,7 @@ class Customers extends BaseActiveRecord
     public function getAddress() {
         return isset($this->address) ? $this->address : '';
     }
-    
+
     /**
      * Get career value
      * @return String
@@ -476,7 +459,7 @@ class Customers extends BaseActiveRecord
     public function getCareer() {
         return isset($this->rCareer) ? $this->rCareer->name : '';
     }
-    
+
     /**
      * Get characteristics value
      * @return String
@@ -484,7 +467,7 @@ class Customers extends BaseActiveRecord
     public function getCharacteristics() {
         return isset($this->characteristics) ? $this->characteristics : '';
     }
-    
+
     /**
      * Get record number value
      * @return String
@@ -492,7 +475,7 @@ class Customers extends BaseActiveRecord
     public function getMedicalRecordNumber() {
         return isset($this->rMedicalRecord) ? $this->rMedicalRecord->record_number : '';
     }
-    
+
     /**
      * Get customer ajax info
      * @return string Ajax information data
@@ -504,105 +487,105 @@ class Customers extends BaseActiveRecord
         }
         //++BUG0017-IMT (DuongNV 20180717) modify
         $rightContent = '<div class="info-result">';
-        $rightContent .=    '<div class="title-2">';
-        $rightContent .=        DomainConst::CONTENT00173;
-        $rightContent .=    '</div>';
-        $rightContent .=    '<div class="item-search" style="position:relative;">';
-        
-        $rightContent .=        '<table style="font-size: 15px;width: 85%;" id="patient-records-tbl">';
-        $rightContent .=            '<tr>';
-        $rightContent .=                '<td style="width:10%;"><i title="'.DomainConst::CONTENT00100.'" class="glyphicon glyphicon-ok"></i></td>';
-        $rightContent .=                '<td>';
-        $rightContent .=                '<b>' . $this->name . '<b>';
+        $rightContent .= '<div class="title-2">';
+        $rightContent .= DomainConst::CONTENT00173;
+        $rightContent .= '</div>';
+        $rightContent .= '<div class="item-search" style="position:relative;">';
+
+        $rightContent .= '<table style="font-size: 15px;width: 85%;" id="patient-records-tbl">';
+        $rightContent .= '<tr>';
+        $rightContent .= '<td style="width:10%;"><i title="' . DomainConst::CONTENT00100 . '" class="glyphicon glyphicon-ok"></i></td>';
+        $rightContent .= '<td>';
+        $rightContent .= '<b>' . $this->name . '<b>';
 //        $rightContent .=                '<a href=' . CommonProcess::generateQRCodeURL($this->id)
 //                                            . ' class="btn btn-default glyphicon glyphicon-info-sign"'
 //                                            . ' title="' . DomainConst::CONTENT00011 . '"></a>';
-        $rightContent .=                '</td>';
-        $rightContent .=            '</tr>';
-        
-        $rightContent .=            '<tr>';
-        $rightContent .=                '<td><i title="'.DomainConst::CONTENT00170.'" class="glyphicon glyphicon-earphone"></i></td>';
-        $rightContent .=                '<td>';
-        $rightContent .=                '<b>' . $this->getPhone() . '<b>';
+        $rightContent .= '</td>';
+        $rightContent .= '</tr>';
+
+        $rightContent .= '<tr>';
+        $rightContent .= '<td><i title="' . DomainConst::CONTENT00170 . '" class="glyphicon glyphicon-earphone"></i></td>';
+        $rightContent .= '<td>';
+        $rightContent .= '<b>' . $this->getPhone() . '<b>';
 //        $rightContent .=                    '<a onclick="{fnOpenUpdateCustomer(\'' . $this->id . '\');}"'
 //                                            . ' class="btn btn-default glyphicon glyphicon-pencil"'
 //                                            . ' title="' . DomainConst::CONTENT00229 . '"></a>';
-        $rightContent .=                '</td>';
-        $rightContent .=            '</tr>';
-        
-        $rightContent .=            '<tr>';
-        $rightContent .=                '<td><i title="'.DomainConst::CONTENT00106.'" class="glyphicon glyphicon-home"></i></td>';
-        $rightContent .=                '<td>';
-        $rightContent .=                '<b>' . $this->getAddress() . '<b>';
+        $rightContent .= '</td>';
+        $rightContent .= '</tr>';
+
+        $rightContent .= '<tr>';
+        $rightContent .= '<td><i title="' . DomainConst::CONTENT00106 . '" class="glyphicon glyphicon-home"></i></td>';
+        $rightContent .= '<td>';
+        $rightContent .= '<b>' . $this->getAddress() . '<b>';
 //        $rightContent .=                '<a class="btn btn-default glyphicon glyphicon-print"'
 //                                        .'title="In phiếu thu"'
 //                                        .'onclick="{fnOpenPrintReceipt(\'' . $this->id . '\');}" ></a>';
-        $rightContent .=                '</td>';
-        $rightContent .=            '</tr>';
-        
-        $rightContent .=            '<tr>';
-        $rightContent .=                '<td><i title="'.DomainConst::CONTENT00197.'" class="glyphicon glyphicon-map-marker"></i></td>';
-        $rightContent .=                '<td>';
-        $rightContent .=                '<b>' . $this->getAgentName() . '<b>';
-        $rightContent .=                '</td>';
-        $rightContent .=            '</tr>';
-        
-        $rightContent .=            '<tr>';
-        $rightContent .=                '<td><i title="'.DomainConst::CONTENT00101.'" class="	glyphicon glyphicon-gift"></i></td>';
-        $rightContent .=                '<td>';
-        $rightContent .=                '<b>' . $this->getBirthday() . '<b>';
-        $rightContent .=                '</td>';
-        $rightContent .=            '</tr>';
-        $rightContent .=            '<tr>';
-        $rightContent .=                '<td title="'.DomainConst::CONTENT00047.'"><i class="	glyphicon glyphicon-user"></i></td>';
-        $rightContent .=                '<td>';
-        $rightContent .=                '<b>' . CommonProcess::getGender()[$this->gender] . '<b>';
-        $rightContent .=                '</td>';
-        $rightContent .=            '</tr>';
-        $rightContent .=            '<tr>';
-        $rightContent .=                '<td><i title="'.DomainConst::CONTENT00136.'" class="	glyphicon glyphicon-tasks"></i></td>';
-        $rightContent .=                '<td>';
-        $rightContent .=                '<b>' . $recordNumber . '<b>';
-        $rightContent .=                '</td>';
-        $rightContent .=            '</tr>';
-        $rightContent .=            '<tr>';
-        $rightContent .=                '<td><i title="'.DomainConst::CONTENT00300.'" class="fa fa-dollar"></i></td>';
-        $rightContent .=                '<td>';
-        $rightContent .=                '<b>' . $this->getDebt() . '<b>';
-        $rightContent .=                '</td>';
-        $rightContent .=            '</tr>';
+        $rightContent .= '</td>';
+        $rightContent .= '</tr>';
+
+        $rightContent .= '<tr>';
+        $rightContent .= '<td><i title="' . DomainConst::CONTENT00197 . '" class="glyphicon glyphicon-map-marker"></i></td>';
+        $rightContent .= '<td>';
+        $rightContent .= '<b>' . $this->getAgentName() . '<b>';
+        $rightContent .= '</td>';
+        $rightContent .= '</tr>';
+
+        $rightContent .= '<tr>';
+        $rightContent .= '<td><i title="' . DomainConst::CONTENT00101 . '" class="	glyphicon glyphicon-gift"></i></td>';
+        $rightContent .= '<td>';
+        $rightContent .= '<b>' . $this->getBirthday() . '<b>';
+        $rightContent .= '</td>';
+        $rightContent .= '</tr>';
+        $rightContent .= '<tr>';
+        $rightContent .= '<td title="' . DomainConst::CONTENT00047 . '"><i class="	glyphicon glyphicon-user"></i></td>';
+        $rightContent .= '<td>';
+        $rightContent .= '<b>' . CommonProcess::getGender()[$this->gender] . '<b>';
+        $rightContent .= '</td>';
+        $rightContent .= '</tr>';
+        $rightContent .= '<tr>';
+        $rightContent .= '<td><i title="' . DomainConst::CONTENT00136 . '" class="	glyphicon glyphicon-tasks"></i></td>';
+        $rightContent .= '<td>';
+        $rightContent .= '<b>' . $recordNumber . '<b>';
+        $rightContent .= '</td>';
+        $rightContent .= '</tr>';
+        $rightContent .= '<tr>';
+        $rightContent .= '<td><i title="' . DomainConst::CONTENT00300 . '" class="fa fa-dollar"></i></td>';
+        $rightContent .= '<td>';
+        $rightContent .= '<b>' . $this->getDebt() . '<b>';
+        $rightContent .= '</td>';
+        $rightContent .= '</tr>';
         $pathological = '';
         if (isset($this->rMedicalRecord)) {
             $pathological = $this->rMedicalRecord->generateMedicalHistory(", ");
             Settings::saveAjaxTempValue($this->rMedicalRecord->id);
         }
         if (!empty($pathological)) {
-            $rightContent .=        '<tr>';
-            $rightContent .=            '<td colspan="2">' . DomainConst::CONTENT00137 . ': ' . '<b>' . $pathological . '<b>' . '</td>';
-            $rightContent .=        '</tr>';
-        }                
-        $rightContent .=        '</table>';
-        $rightContent   .=  '<div class="btn-bar">'
-                        .       '<a href=' . CommonProcess::generateQRCodeURL($this->id)
-                        .       ' class="btn btn-default glyphicon glyphicon-info-sign"'
-                        .       ' title="' . DomainConst::CONTENT00011 . '"></a>'
-                        .       '<a onclick="{fnOpenUpdateCustomer(\'' . $this->id . '\');}"'
-                        .       ' class="btn btn-default glyphicon glyphicon-pencil"'
-                        .       ' title="' . DomainConst::CONTENT00229 . '"></a>'
-                        .       '<a class="btn btn-default glyphicon glyphicon-print"'
-                        .       'title="In phiếu thu"'
-                        .       'onclick="{fnOpenPrintReceipt(\'' . $this->id . '\');}" ></a>'
-                        .   '</div>';
+            $rightContent .= '<tr>';
+            $rightContent .= '<td colspan="2">' . DomainConst::CONTENT00137 . ': ' . '<b>' . $pathological . '<b>' . '</td>';
+            $rightContent .= '</tr>';
+        }
+        $rightContent .= '</table>';
+        $rightContent .= '<div class="btn-bar">'
+                . '<a href=' . CommonProcess::generateQRCodeURL($this->id)
+                . ' class="btn btn-default glyphicon glyphicon-info-sign"'
+                . ' title="' . DomainConst::CONTENT00011 . '"></a>'
+                . '<a onclick="{fnOpenUpdateCustomer(\'' . $this->id . '\');}"'
+                . ' class="btn btn-default glyphicon glyphicon-pencil"'
+                . ' title="' . DomainConst::CONTENT00229 . '"></a>'
+                . '<a class="btn btn-default glyphicon glyphicon-print"'
+                . 'title="In phiếu thu"'
+                . 'onclick="{fnOpenPrintReceipt(\'' . $this->id . '\');}" ></a>'
+                . '</div>';
         //--BUG0017-IMT (DuongNV 20180717) modify
-        $rightContent .=    '</div>';
-        $rightContent .=    '<div class="title-2">' . DomainConst::CONTENT00201 . '</div>';
-        $rightContent .=    '<div class="item-search treatment-history-container">';     
-        
+        $rightContent .= '</div>';
+        $rightContent .= '<div class="title-2">' . DomainConst::CONTENT00201 . '</div>';
+        $rightContent .= '<div class="item-search treatment-history-container">';
+
         //DuongNV add custom html
-        $htmlIcon =  '<svg class="mark-icon"'
-                    .' viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true">'
-                    .       '<path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path>'
-                    .'</svg>';//END
+        $htmlIcon = '<svg class="mark-icon"'
+                . ' viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true">'
+                . '<path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path>'
+                . '</svg>'; //END
         if (isset($this->rMedicalRecord) && isset($this->rMedicalRecord->rTreatmentSchedule)) {
 //            $i = count($this->rMedicalRecord->rTreatmentSchedule);
             $i = 0;
@@ -616,17 +599,14 @@ class Customers extends BaseActiveRecord
                 if (!empty($schedule->rDetail)) {
                     $rightContent .= '<b style="float: left">';
                     if ($schedule->rPathological) {
-                        $rightContent .= $htmlIcon.'<span class="round-txt">Đợt ' . $i . ': ' . $schedule->getStartDate() . ' - ' . $schedule->rPathological->name . '</span>';
+                        $rightContent .= $htmlIcon . '<span class="round-txt">Đợt ' . $i . ': ' . $schedule->getStartDate() . ' - ' . $schedule->rPathological->name . '</span>';
                     } else {
-                        $rightContent .= $htmlIcon.'<span class="round-txt">Đợt ' . $i . ': ' . $schedule->getStartDate() . '</span>';
+                        $rightContent .= $htmlIcon . '<span class="round-txt">Đợt ' . $i . ': ' . $schedule->getStartDate() . '</span>';
                     }
                     $rightContent .= '</b>';
                     // Add button create new treatment schedule detail
-                    $rightContent .= HtmlHandler::createAjaxButtonWithImage('',
-                            DomainConst::IMG_ADD_ICON,
-                            '{fnOpenCreateNewTreatment(\'' . $schedule->id . '\');}',
-                            '', 'create-treatment-btn');
-                    
+                    $rightContent .= HtmlHandler::createAjaxButtonWithImage('', DomainConst::IMG_ADD_ICON, '{fnOpenCreateNewTreatment(\'' . $schedule->id . '\');}', '', 'create-treatment-btn');
+
                     $detailIdx = count($schedule->rDetail);
                     // Html container of all treatment by Duong
                     $rightContent .= '<div class="round-container">';
@@ -644,47 +624,31 @@ class Customers extends BaseActiveRecord
                                 $mTreatmentProcess = empty($detail->rProcess) ? [] : $detail->rProcess;
                                 //--BUG0054-IMT (DuongNV 20180806) Update UI treatment history
                                 if ($detail->isCompleted()) {
-                                    $updateTag = 
-                                            HtmlHandler::createCustomButton(
-                                                $updateTreatment,
-                                                $btnTitle,
-                                                $detail->getStartTime(),
-                                                $detail->getDoctor(),
-                                                '', '',
-                                                $createReceipt,
-                                                $createPrescription,
-                                                array(
-                                                    DomainConst::KEY_NAME => DomainConst::CONTENT00204,
-                                                    DomainConst::KEY_TYPE => 1
-                                                ),
-                                                //++ BUG0017-IMT (DuongNV 20180717) Add id to change status treatment history
-                                                $detail->id
-                                                //-- BUG0017-IMT (DuongNV 20180717) Add id to change status treatment history
-                                                //++BUG0054-IMT (DuongNV 20180806) Update UI treatment history
-                                                ,$mTreatmentProcess
-                                                //--BUG0054-IMT (DuongNV 20180806) Update UI treatment history
-                                                );
+                                    $updateTag = HtmlHandler::createCustomButton(
+                                                    $updateTreatment, $btnTitle, $detail->getStartTime(), $detail->getDoctor(), '', '', $createReceipt, $createPrescription, array(
+                                                DomainConst::KEY_NAME => DomainConst::CONTENT00204,
+                                                DomainConst::KEY_TYPE => 1
+                                                    ),
+                                                    //++ BUG0017-IMT (DuongNV 20180717) Add id to change status treatment history
+                                                    $detail->id
+                                                    //-- BUG0017-IMT (DuongNV 20180717) Add id to change status treatment history
+                                                    //++BUG0054-IMT (DuongNV 20180806) Update UI treatment history
+                                                    , $mTreatmentProcess
+                                                    //--BUG0054-IMT (DuongNV 20180806) Update UI treatment history
+                                    );
                                 } else {    // Normal item
-                                    $updateTag =
-                                            HtmlHandler::createCustomButton(
-                                                $updateTreatment,
-                                                $btnTitle,
-                                                $detail->getStartTime(),
-                                                $detail->getDoctor(),
-                                                '', '',
-                                                $createReceipt,
-                                                $createPrescription,
-                                                array(
-                                                    DomainConst::KEY_NAME => DomainConst::CONTENT00402,
-                                                    DomainConst::KEY_TYPE => 0
-                                                ),
-                                                //++ BUG0017-IMT (DuongNV 20180717) Add id to change status treatment history
-                                                $detail->id
-                                                //-- BUG0017-IMT (DuongNV 20180717) Add id to change status treatment history
-                                                //++BUG0054-IMT (DuongNV 20180806) Update UI treatment history
-                                                ,$mTreatmentProcess
-                                                //--BUG0054-IMT (DuongNV 20180806) Update UI treatment history
-                                                );
+                                    $updateTag = HtmlHandler::createCustomButton(
+                                                    $updateTreatment, $btnTitle, $detail->getStartTime(), $detail->getDoctor(), '', '', $createReceipt, $createPrescription, array(
+                                                DomainConst::KEY_NAME => DomainConst::CONTENT00402,
+                                                DomainConst::KEY_TYPE => 0
+                                                    ),
+                                                    //++ BUG0017-IMT (DuongNV 20180717) Add id to change status treatment history
+                                                    $detail->id
+                                                    //-- BUG0017-IMT (DuongNV 20180717) Add id to change status treatment history
+                                                    //++BUG0054-IMT (DuongNV 20180806) Update UI treatment history
+                                                    , $mTreatmentProcess
+                                                    //--BUG0054-IMT (DuongNV 20180806) Update UI treatment history
+                                    );
                                 }
                             default:
                                 break;
@@ -692,16 +656,16 @@ class Customers extends BaseActiveRecord
                         $rightContent .= $updateTag;
                         $detailIdx--;
                     }
-                    $rightContent .=    '</div>';//Duong
+                    $rightContent .= '</div>'; //Duong
                 }
                 $i--;
             }
         }
-        $rightContent .=    '</div>';
+        $rightContent .= '</div>';
         $rightContent .= '</div>';
         return $rightContent;
     }
-    
+
     /**
      * Get active schedule time
      * @return string Schedule time
@@ -724,7 +688,7 @@ class Customers extends BaseActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get active schedule doctor
      * @return string Doctor name
@@ -743,7 +707,7 @@ class Customers extends BaseActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get customer ajax schedule information
      * @return string
@@ -753,43 +717,39 @@ class Customers extends BaseActiveRecord
         $scheduleId = $this->getSchedule();
 
         $infoSchedule .= HtmlHandler::createAjaxButtonWithImage(
-                DomainConst::CONTENT00179, DomainConst::IMG_APPOINTMENT_ICON,
-                '{fnOpenCreateSchedule();}',
-                'cursor: pointer;');
+                        DomainConst::CONTENT00179, DomainConst::IMG_APPOINTMENT_ICON, '{fnOpenCreateSchedule();}', 'cursor: pointer;');
         if (!empty($scheduleId)) {
             Settings::saveAjaxTempValue($scheduleId);
             $mSchedule = TreatmentScheduleDetails::model()->findByPk($scheduleId);
             if ($mSchedule) {
-                $infoSchedule  = '<div class="title-2">' . DomainConst::CONTENT00177 . ': </div>';
+                $infoSchedule = '<div class="title-2">' . DomainConst::CONTENT00177 . ': </div>';
                 $infoSchedule .= '<div class="item-search schedule-apmt-info">';
-                $infoSchedule .=        '<p><i class="glyphicon glyphicon-time" title="Thời gian"></i> ' . $mSchedule->getStartTime() . '</p>';
+                $infoSchedule .= '<p><i class="glyphicon glyphicon-time" title="Thời gian"></i> ' . $mSchedule->getStartTime() . '</p>';
                 //++ BUG0017-IMT (NguyenPT 20170717) Show/hide item base on value
 //                $infoSchedule .=        '<p><i class="glyphicon glyphicon-credit-card" title="' . DomainConst::CONTENT00260 . '"></i> ' . $mSchedule->rSchedule->getInsurrance() . '</p>';
 //                $infoSchedule .=        '<p><i class="glyphicon glyphicon-info-sign" title="Chi Tiết Công Việc"></i> ' . $mSchedule->description . '</p>';
 //                $infoSchedule .=        '<p><i class="glyphicon glyphicon-user" title="Bác sĩ"></i> ' . $mSchedule->getDoctor() . '</p>';
                 if ($mSchedule->rSchedule->getInsurrance() != "0") {
-                    $infoSchedule .=        '<p><i class="glyphicon glyphicon-credit-card" title="'
+                    $infoSchedule .= '<p><i class="glyphicon glyphicon-credit-card" title="'
                             . DomainConst::CONTENT00260 . '">'
                             . '</i> ' . $mSchedule->rSchedule->getInsurrance() . '</p>';
                 }
                 if (!empty($mSchedule->description)) {
-                    $infoSchedule .=        '<p><i class="glyphicon glyphicon-info-sign" title="'
+                    $infoSchedule .= '<p><i class="glyphicon glyphicon-info-sign" title="'
                             . DomainConst::CONTENT00207 . '">'
                             . '</i> ' . $mSchedule->description . '</p>';
                 }
-                $infoSchedule .=        '<p><i class="fas fa-user-md" title="'
+                $infoSchedule .= '<p><i class="fas fa-user-md" title="'
                         . DomainConst::CONTENT00143 . '"></i> ' . $mSchedule->getDoctor() . '</p>';
                 //-- BUG0017-IMT (NguyenPT 20170717) Show/hide item base on value
                 $infoSchedule .= '</div>';
                 $infoSchedule .= HtmlHandler::createAjaxButtonWithImage(
-                        DomainConst::CONTENT00346, DomainConst::IMG_EDIT_ICON,
-                        '{fnOpenUpdateSchedule(\'' . $scheduleId . '\');}',
-                        'cursor: pointer;');
+                                DomainConst::CONTENT00346, DomainConst::IMG_EDIT_ICON, '{fnOpenUpdateSchedule(\'' . $scheduleId . '\');}', 'cursor: pointer;');
             }
         }
         return $infoSchedule;
     }
-    
+
     /**
      * Get landing page schedule information
      * @return string
@@ -801,18 +761,18 @@ class Customers extends BaseActiveRecord
             $mSchedule = TreatmentScheduleDetails::model()->findByPk($scheduleId);
             if ($mSchedule) {
                 $retVal .= '<div class="lp-text-content">';
-                $retVal .=      '<p>';
-                $retVal .=          '<i class="fas fa-angle-double-right"></i> ';
-                $retVal .=          '<strong>' . $mSchedule->getTitle() . '</strong><br>';
-                $retVal .=          '<i class="fas fa-calendar-plus" title="Ngày bắt đầu"></i> ';
-                $retVal .=          $mSchedule->getStartTime() . '<br>';
-                $retVal .=      '</p>';
+                $retVal .= '<p>';
+                $retVal .= '<i class="fas fa-angle-double-right"></i> ';
+                $retVal .= '<strong>' . $mSchedule->getTitle() . '</strong><br>';
+                $retVal .= '<i class="fas fa-calendar-plus" title="Ngày bắt đầu"></i> ';
+                $retVal .= $mSchedule->getStartTime() . '<br>';
+                $retVal .= '</p>';
                 $retVal .= '</div>';
             }
         }
         return $retVal;
     }
-    
+
     /**
      * Get social network information
      * @return String
@@ -827,7 +787,7 @@ class Customers extends BaseActiveRecord
         }
         return implode('<br>', $retVal);
     }
-    
+
     /**
      * Get social network value
      * @param Int $type_network Network type
@@ -843,7 +803,7 @@ class Customers extends BaseActiveRecord
         }
         return '';
     }
-    
+
     /**
      * Get medical history html
      * @return type
@@ -854,14 +814,13 @@ class Customers extends BaseActiveRecord
             foreach ($this->rMedicalRecord->rJoinPathological as $item) {
                 if (isset($item->rPathological)) {
                     $retVal[] = CommonProcess::createConfigJson(
-                            $item->rPathological->id,
-                            $item->rPathological->name);
+                                    $item->rPathological->id, $item->rPathological->name);
                 }
             }
         }
         return $retVal;
     }
-    
+
     /**
      * Get list of customer's treatment schedule
      * @return Array List of customer's treatment schedule
@@ -880,7 +839,7 @@ class Customers extends BaseActiveRecord
         }
         return $retVal;
     }
-    
+
     /**
      * Get debt information
      * @return String
@@ -888,14 +847,14 @@ class Customers extends BaseActiveRecord
     public function getDebt() {
         return CommonProcess::formatCurrency($this->debt) . ' ' . DomainConst::CONTENT00134;
     }
-    
+
     /**
      * Get list receipt of this customer
      * @return array
      */
     public function getReceipts() {
         $retVal = array();
-        
+
         if (isset($this->rMedicalRecord) && isset($this->rMedicalRecord->rTreatmentSchedule)) {
             // Loop for all treatment schedules
             foreach ($this->rMedicalRecord->rTreatmentSchedule as $treatmentSchedule) {
@@ -910,7 +869,7 @@ class Customers extends BaseActiveRecord
                 }
             }
         }
-        
+
         return $retVal;
     }
 
@@ -941,14 +900,13 @@ class Customers extends BaseActiveRecord
             foreach ($this->rMedicalRecord->rJoinPathological as $item) {
                 if (isset($item->rPathological)) {
                     $retVal[] = CommonProcess::createConfigJson(
-                            $item->rPathological->id,
-                            $item->rPathological->name);
+                                    $item->rPathological->id, $item->rPathological->name);
                 }
             }
         }
         return $retVal;
     }
-    
+
     /**
      * Get 3 of last record TreatmentSchedules
      * @return String
@@ -1005,20 +963,18 @@ class Customers extends BaseActiveRecord
                     $count++;
                     if ($count >= 3) {
                         $retVal[] = CommonProcess::createConfigJson(
-                                CustomerController::ITEM_UPDATE_DATE,
-                                DomainConst::CONTENT00230);
+                                        CustomerController::ITEM_UPDATE_DATE, DomainConst::CONTENT00230);
                         return $retVal;
                     }
                 }
             }
         }
         $retVal[] = CommonProcess::createConfigJson(
-                CustomerController::ITEM_UPDATE_DATE,
-                DomainConst::CONTENT00230);
-        
+                        CustomerController::ITEM_UPDATE_DATE, DomainConst::CONTENT00230);
+
         return $retVal;
     }
-    
+
     /**
      * List api return
      * @param Array $root Root value
@@ -1054,39 +1010,51 @@ class Customers extends BaseActiveRecord
             default:
                 break;
         }
-        
+
         // Get return value
         $retVal = new CActiveDataProvider(
-                $this,
-                array(
-                    'criteria' => $criteria,
-                    'pagination' => array(
-                        'pageSize' => Settings::getApiListPageSize(),
-                        'currentPage' => (int)$root->page,
-                    ),
-                ));
+                $this, array(
+            'criteria' => $criteria,
+            'pagination' => array(
+                'pageSize' => Settings::getApiListPageSize(),
+                'currentPage' => (int) $root->page,
+            ),
+        ));
         return $retVal;
     }
-    
+
     /**
      * get field name
      * @param type $fieldName
      * @return type
      */
-    public function getFieldName($fieldName = 'name'){
+    public function getFieldName($fieldName = 'name') {
         return !empty($this->$fieldName) ? $this->$fieldName : '';
     }
-    
+
     /**
      * get created by
      */
-    public function getCreatedBy(){
+    public function getCreatedBy() {
         return !empty($this->rCreatedBy) ? $this->rCreatedBy->getFullName() : '';
     }
 
     //-----------------------------------------------------
     // Static methods
     //-----------------------------------------------------
+    /**
+     * Get customer model by id
+     * @param String $id Id of customer
+     * @return Customers Model customer, NULL if not found
+     */
+    public static function getCustomerById($id) {
+        $model = self::model()->findByPk($id);
+        if ($model) {
+            return $model;
+        }
+        return NULL;
+    }
+    
     public static function transferCustomer($renoPatient, $agentId) {
         $records = MedicalRecords::model()->findAllByAttributes(array(
             'record_number' => $renoPatient->Code,
@@ -1103,26 +1071,26 @@ class Customers extends BaseActiveRecord
             $customer = $medicalRecord->rCustomer;
             // Remove old record
             OneMany::deleteAllManyOldRecords($customer->id, OneMany::TYPE_AGENT_CUSTOMER);
-            Loggers::info("Cập nhật Bệnh nhân: " , $renoPatient->Code, __FUNCTION__ . __LINE__);
+            Loggers::info("Cập nhật Bệnh nhân: ", $renoPatient->Code, __FUNCTION__ . __LINE__);
             return self::saveCustomer($renoPatient, $agentId, $customer, false);
         } else {
             // Create new
             $customer = new Customers();
-            Loggers::info("Tạo mới Bệnh nhân: " , $renoPatient->Code, __FUNCTION__ . __LINE__);
+            Loggers::info("Tạo mới Bệnh nhân: ", $renoPatient->Code, __FUNCTION__ . __LINE__);
             return self::saveCustomer($renoPatient, $agentId, $customer, true);
         }
     }
-    
+
     public static function saveCustomer($renoPatient, $agentId, &$customer, $needCreateMedicalRecord = true, $isValidate = false) {
         $customer->name = $renoPatient->FullName;
         $customer->gender = DomainConst::GENDER_FEMALE;
         if ($renoPatient->Sex == '1') {
             $customer->gender = DomainConst::GENDER_MALE;
         }
-        $customer->date_of_birth    = $renoPatient->DateOfBirth;
-        $customer->year_of_birth    = $renoPatient->YearOfBirth;
-        $customer->phone            = $renoPatient->Mobile;
-        $customer->city_id          = '2';
+        $customer->date_of_birth = $renoPatient->DateOfBirth;
+        $customer->year_of_birth = $renoPatient->YearOfBirth;
+        $customer->phone = $renoPatient->Mobile;
+        $customer->city_id = '2';
         if (!empty($renoPatient->ProvinceId)) {
             $city = Cities::getModelByName($renoPatient->rCity->Name);
             if (isset($city)) {
@@ -1135,7 +1103,7 @@ class Customers extends BaseActiveRecord
                 $customer->district_id = $district->id;
             }
         }
-        $customer->house_numbers    = $renoPatient->Address;
+        $customer->house_numbers = $renoPatient->Address;
         if (isset($renoPatient->CreateDate)) {
             $customer->created_date = $renoPatient->CreateDate;
         }
@@ -1147,24 +1115,24 @@ class Customers extends BaseActiveRecord
         }
         if (!$isValidate) {
             if ($customer->save()) {
-                Loggers::info("Lưu Bệnh nhân thành công: " , $renoPatient->Code, __FUNCTION__ . __LINE__);
+                Loggers::info("Lưu Bệnh nhân thành công: ", $renoPatient->Code, __FUNCTION__ . __LINE__);
                 OneMany::insertOne($agentId, $customer->id, OneMany::TYPE_AGENT_CUSTOMER);
                 if ($needCreateMedicalRecord) {
                     $medicalRecord = new MedicalRecords();
                     $medicalRecord->customer_id = $customer->id;
                     $medicalRecord->record_number = $renoPatient->Code;
                     if ($medicalRecord->save()) {
-                        Loggers::info("Lưu Hồ sơ Bệnh án thành công: " , $medicalRecord->id, __FUNCTION__ . __LINE__);
+                        Loggers::info("Lưu Hồ sơ Bệnh án thành công: ", $medicalRecord->id, __FUNCTION__ . __LINE__);
                         return $medicalRecord->id;
                     } else {
-                        Loggers::info("Lỗi khi lưu Hồ sơ Bệnh án: " , $customer->id, __FUNCTION__ . __LINE__);
+                        Loggers::info("Lỗi khi lưu Hồ sơ Bệnh án: ", $customer->id, __FUNCTION__ . __LINE__);
                         Loggers::info(CommonProcess::json_encode_unicode($medicalRecord->getErrors()), '', __FUNCTION__ . __LINE__);
                     }
                 } else {
                     return isset($customer->rMedicalRecord) ? $customer->rMedicalRecord->id : '';
                 }
             } else {
-                Loggers::info("Lỗi khi lưu Bệnh nhân: " , $renoPatient->Code, __FUNCTION__ . __LINE__);
+                Loggers::info("Lỗi khi lưu Bệnh nhân: ", $renoPatient->Code, __FUNCTION__ . __LINE__);
                 Loggers::info(CommonProcess::json_encode_unicode($customer->getErrors()), '', __FUNCTION__ . __LINE__);
             }
             return '';
@@ -1172,46 +1140,46 @@ class Customers extends BaseActiveRecord
             return $customer->createFields();
         }
     }
-    
+
     public static function transferTreatmentSchedule($renoTreatmentProfile, $medicalRecord, $agentId, $isValidate = false) {
         $treatment = new TreatmentSchedules();
         if (!$isValidate) {
-            $treatment->record_id   = $medicalRecord;
+            $treatment->record_id = $medicalRecord;
         }
-        
-        $treatment->time_id     = 1;
-        $treatment->start_date  = $renoTreatmentProfile->DateOfProfiles;
-        $treatment->end_date    = $renoTreatmentProfile->EndDateOfProfiles;
+
+        $treatment->time_id = 1;
+        $treatment->start_date = $renoTreatmentProfile->DateOfProfiles;
+        $treatment->end_date = $renoTreatmentProfile->EndDateOfProfiles;
 //        $doctor = Users::getDoctorByName($renoTreatmentProfile->getDoctorName(), $agentId);
         Loggers::info('Doctor', $renoTreatmentProfile->getDoctorName(), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         $doctor = Users::getUserByName($renoTreatmentProfile->getDoctorName());
         if (!empty($doctor)) {
-            $treatment->doctor_id   = $doctor->id;
+            $treatment->doctor_id = $doctor->id;
         }
         if (!$isValidate) {
             if ($treatment->save()) {
-                Loggers::info("Lưu TreatmentProfile thành công: " , $treatment->id, __FUNCTION__ . __LINE__);
+                Loggers::info("Lưu TreatmentProfile thành công: ", $treatment->id, __FUNCTION__ . __LINE__);
                 return $treatment->id;
             } else {
-                Loggers::info("Lỗi khi lưu TreatmentProfile: " , $renoTreatmentProfile->TreatmentProfiles_ID, __FUNCTION__ . __LINE__);
+                Loggers::info("Lỗi khi lưu TreatmentProfile: ", $renoTreatmentProfile->TreatmentProfiles_ID, __FUNCTION__ . __LINE__);
                 Loggers::info(CommonProcess::json_encode_unicode($treatment->getErrors()), '', __FUNCTION__ . __LINE__);
-                Loggers::info("Doctor: " , $renoTreatmentProfile->getDoctorName(), __FUNCTION__ . __LINE__);
+                Loggers::info("Doctor: ", $renoTreatmentProfile->getDoctorName(), __FUNCTION__ . __LINE__);
             }
             return '';
         } else {
             return $treatment->createFields();
         }
     }
-    
+
     public static function transferTreatmentScheduleDetail($renoTreatment, $treatmentId, $agentId, $isValidate = false) {
         $detail = new TreatmentScheduleDetails();
         if (!$isValidate) {
-            $detail->schedule_id    = $treatmentId;
+            $detail->schedule_id = $treatmentId;
         }
-        
-        $detail->time_id        = 1;
-        $detail->start_date     = $renoTreatment->TreatmentDate;
-        $detail->end_date       = $renoTreatment->FinishDate;
+
+        $detail->time_id = 1;
+        $detail->start_date = $renoTreatment->TreatmentDate;
+        $detail->end_date = $renoTreatment->FinishDate;
         $name = isset($renoTreatment->treatmentService) ? $renoTreatment->treatmentService->Name : '';
         if (!empty($name)) {
             $model = TreatmentTypes::getModelByName($name);
@@ -1220,18 +1188,17 @@ class Customers extends BaseActiveRecord
             }
         }
         if (isset($renoTreatment->treatmentProfiles)) {
-            $detail->description    = '';
+            $detail->description = '';
             if (!empty($name)) {
-                $detail->description    .= $name . '. ';
+                $detail->description .= $name . '. ';
             }
 //            $detail->description    .= $renoTreatment->treatmentProfiles->Reason . '. ';
-            
 //            $detail->description    .= 'BS ' . $renoTreatment->getDoctorName() . ' thực hiện. ';
         }
         $detail->status = TreatmentScheduleDetails::STATUS_COMPLETED;
         if (!$isValidate) {
             if ($detail->save()) {
-                Loggers::info("Lưu Treatment thành công: " , $detail->id, __FUNCTION__ . __LINE__);
+                Loggers::info("Lưu Treatment thành công: ", $detail->id, __FUNCTION__ . __LINE__);
                 // Teeth
                 if (!empty($renoTreatment->TreatmentTooth)) {
                     $arrTeeth = explode(',', $renoTreatment->TreatmentTooth);
@@ -1244,28 +1211,27 @@ class Customers extends BaseActiveRecord
                 }
                 $receipt = new Receipts();
                 $receipt->detail_id = $detail->id;
-                $receipt->process_date  = CommonProcess::convertDateTime($detail->start_date,
-                DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
-                $receipt->total         = $renoTreatment->TotalMoney + $renoTreatment->Decrease;
-                $receipt->discount      = $renoTreatment->Decrease;
-                $receipt->final         = '0';
+                $receipt->process_date = CommonProcess::convertDateTime($detail->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_4);
+                $receipt->total = $renoTreatment->TotalMoney + $renoTreatment->Decrease;
+                $receipt->discount = $renoTreatment->Decrease;
+                $receipt->final = '0';
                 if (!empty($renoTreatment->Payed)) {
-                    $receipt->final         = $renoTreatment->Payed;
+                    $receipt->final = $renoTreatment->Payed;
                 }
-                $receipt->status        = Receipts::STATUS_RECEIPTIONIST;
+                $receipt->status = Receipts::STATUS_RECEIPTIONIST;
                 if ($receipt->save()) {
-                    Loggers::info("Lưu Phiếu thu thành công: " , $receipt->id, __FUNCTION__ . __LINE__);
+                    Loggers::info("Lưu Phiếu thu thành công: ", $receipt->id, __FUNCTION__ . __LINE__);
                     // Update customer's debt
                     $receipt->updateCustomerDebt();
                     $receipt->connectAgent($agentId);
                 } else {
-                    Loggers::info("Lỗi khi lưu Phiếu thu: " , $detail->id, __FUNCTION__ . __LINE__);
+                    Loggers::info("Lỗi khi lưu Phiếu thu: ", $detail->id, __FUNCTION__ . __LINE__);
                     Loggers::info(CommonProcess::json_encode_unicode($receipt->getErrors()), '', __FUNCTION__ . __LINE__);
                 }
 
                 return $detail->id;
             } else {
-                Loggers::info("Lỗi khi lưu Treatment: " , $renoTreatment->Treatment_Id, __FUNCTION__ . __LINE__);
+                Loggers::info("Lỗi khi lưu Treatment: ", $renoTreatment->Treatment_Id, __FUNCTION__ . __LINE__);
                 Loggers::info(CommonProcess::json_encode_unicode($detail->getErrors()), '', __FUNCTION__ . __LINE__);
             }
         } else {
@@ -1274,68 +1240,67 @@ class Customers extends BaseActiveRecord
                 $detail->description .= 'Răng: ' . $renoTreatment->TreatmentTooth;
             }
             $fields = $detail->createFields();
-            
+
             return $fields;
         }
     }
-    
+
     public static function createNewTreatmentDetail($renoTreatmentProfile, $treatmentId) {
         $detail = new TreatmentScheduleDetails();
-        $detail->schedule_id    = $treatmentId;
-        $detail->time_id        = 1;
-        $detail->start_date     = $renoTreatmentProfile->DateOfProfiles;
-        $detail->end_date       = $renoTreatmentProfile->EndDateOfProfiles;
-        $detail->description    = 'BS ' . $renoTreatmentProfile->getDoctorName() . ' thực hiện. ';
-        $detail->description    .= $renoTreatmentProfile->Reason;
+        $detail->schedule_id = $treatmentId;
+        $detail->time_id = 1;
+        $detail->start_date = $renoTreatmentProfile->DateOfProfiles;
+        $detail->end_date = $renoTreatmentProfile->EndDateOfProfiles;
+        $detail->description = 'BS ' . $renoTreatmentProfile->getDoctorName() . ' thực hiện. ';
+        $detail->description .= $renoTreatmentProfile->Reason;
         $detail->status = TreatmentScheduleDetails::STATUS_COMPLETED;
         if ($detail->save()) {
-            Loggers::info("Lưu Treatment thành công: " , $detail->id, __FUNCTION__ . __LINE__);
-                
+            Loggers::info("Lưu Treatment thành công: ", $detail->id, __FUNCTION__ . __LINE__);
+
             return $detail->id;
         } else {
-            Loggers::info("Lỗi khi lưu Treatment: " , $renoTreatmentProfile->TreatmentProfiles_ID, __FUNCTION__ . __LINE__);
+            Loggers::info("Lỗi khi lưu Treatment: ", $renoTreatmentProfile->TreatmentProfiles_ID, __FUNCTION__ . __LINE__);
             Loggers::info(CommonProcess::json_encode_unicode($detail->getErrors()), '', __FUNCTION__ . __LINE__);
         }
     }
-    
+
     public static function transferTreatmentProcess($renoTreatmentDetail, $detailId, $agentId, $isValidate = false) {
         $process = new TreatmentScheduleProcess();
         if (!$isValidate) {
-            $process->detail_id     = $detailId;
+            $process->detail_id = $detailId;
         }
-        
+
         if (!empty($renoTreatmentDetail->Date)) {
-            $process->process_date  = $renoTreatmentDetail->Date;
+            $process->process_date = $renoTreatmentDetail->Date;
         } else {
             if (isset($renoTreatmentDetail->treatmentProfiles)) {
-                $process->process_date  = $renoTreatmentDetail->treatmentProfiles->DateOfProfiles;
+                $process->process_date = $renoTreatmentDetail->treatmentProfiles->DateOfProfiles;
             }
         }
-        
-        $process->name          = $renoTreatmentDetail->ContentOfWork;
-        $process->description   = $renoTreatmentDetail->Teeth;
+
+        $process->name = $renoTreatmentDetail->ContentOfWork;
+        $process->description = $renoTreatmentDetail->Teeth;
 //        $doctor = Users::getDoctorByName($renoTreatmentDetail->getDoctorName(), $agentId);
         $doctor = Users::getUserByName($renoTreatmentDetail->getDoctorName());
         if (!empty($doctor)) {
-            $process->doctor_id   = $doctor->id;
+            $process->doctor_id = $doctor->id;
         }
-        $process->note          = $renoTreatmentDetail->Note;
+        $process->note = $renoTreatmentDetail->Note;
         if (!$isValidate) {
             if ($process->save()) {
-                Loggers::info("Lưu TreatmentDetail thành công: " , $process->id, __FUNCTION__ . __LINE__);
+                Loggers::info("Lưu TreatmentDetail thành công: ", $process->id, __FUNCTION__ . __LINE__);
             } else {
-                Loggers::info("Lỗi khi lưu TreatmentDetail: " , $renoTreatmentDetail->Id, __FUNCTION__ . __LINE__);
+                Loggers::info("Lỗi khi lưu TreatmentDetail: ", $renoTreatmentDetail->Id, __FUNCTION__ . __LINE__);
                 Loggers::info(CommonProcess::json_encode_unicode($process->getErrors()), '', __FUNCTION__ . __LINE__);
             }
         } else {
             return $process->createFields();
         }
-            
     }
-    
+
     public function createFields() {
         $fields = array();
-        
+
         $fields[] = 'name: ' . $this->name;
         $fields[] = 'gender: ' . $this->gender;
         $fields[] = 'date_of_birth: ' . $this->date_of_birth;
@@ -1346,10 +1311,10 @@ class Customers extends BaseActiveRecord
         $fields[] = 'house_numbers: ' . $this->house_numbers;
         $fields[] = 'created_date: ' . $this->created_date;
         $fields[] = 'created_by: ' . (isset($this->rCreatedBy) ? $this->rCreatedBy->first_name : '');
-        
+
         return $fields;
     }
-    
+
     //++ BUG0068-IMT (DuongNV 20183108) Add customer info in receipt screen
     public function getCustomerCustomInfo() {
         $recordNumber = '';
@@ -1357,48 +1322,47 @@ class Customers extends BaseActiveRecord
             $recordNumber = $this->rMedicalRecord->record_number;
         }
         $html = '';
-        $html .='<div class="info-result" style="background:white">'
-                .  '<div class="title-2">'.DomainConst::CONTENT00172.'</div>'
-                .   '<div class="item-search">'
-                .   '<table class="table table-borderless">'
-                .       '<tbody>'
-                .           '<tr>'
-                .               '<td style="width:35px;">'
-                .                   '<i class="fas fa-user" title="'.DomainConst::CONTENT00100.'"></i>'
-                .               '</td>'
-                .               '<td>'.$this->name.'</td>'
-                .           '</tr>'
-                .           '<tr>'
-                .               '<td>'
-                .                   '<i class="fas fa-map-marker-alt" title="'.DomainConst::CONTENT00045.'"></i>'
-                .               '</td>'
-                .               '<td>'.$this->address.'</td>'
-                .           '</tr>'
-                .           '<tr>'
-                .               '<td>'
-                .                   '<i class="fas fa-birthday-cake" title="'.DomainConst::CONTENT00101.'"></i>'
-                .               '</td>'
-                .               '<td>'.$this->getBirthday().'</td>'
-                .           '</tr>'
-                .           '<tr>'
-                .               '<td>'
-                .                   '<i class="fas fa-code-branch" title="'.DomainConst::CONTENT00199.'"></i>'
-                .               '</td>'
-                .               '<td>'.$this->getAgentName().'</td>'
-                .           '</tr>'
-                .           '<tr>'
-                .               '<td>'
-                .                   '<i class="fas fa-id-card" title="'.DomainConst::CONTENT00136.'"></i>'
-                .               '</td>'
-                .               '<td>'.$recordNumber.'</td>'
-                .           '</tr>'
-                .       '</tbody>'
-                .   '</table>'
+        $html .= '<div class="info-result" style="background:white">'
+                . '<div class="title-2">' . DomainConst::CONTENT00172 . '</div>'
+                . '<div class="item-search">'
+                . '<table class="table table-borderless">'
+                . '<tbody>'
+                . '<tr>'
+                . '<td style="width:35px;">'
+                . '<i class="fas fa-user" title="' . DomainConst::CONTENT00100 . '"></i>'
+                . '</td>'
+                . '<td>' . $this->name . '</td>'
+                . '</tr>'
+                . '<tr>'
+                . '<td>'
+                . '<i class="fas fa-map-marker-alt" title="' . DomainConst::CONTENT00045 . '"></i>'
+                . '</td>'
+                . '<td>' . $this->address . '</td>'
+                . '</tr>'
+                . '<tr>'
+                . '<td>'
+                . '<i class="fas fa-birthday-cake" title="' . DomainConst::CONTENT00101 . '"></i>'
+                . '</td>'
+                . '<td>' . $this->getBirthday() . '</td>'
+                . '</tr>'
+                . '<tr>'
+                . '<td>'
+                . '<i class="fas fa-code-branch" title="' . DomainConst::CONTENT00199 . '"></i>'
+                . '</td>'
+                . '<td>' . $this->getAgentName() . '</td>'
+                . '</tr>'
+                . '<tr>'
+                . '<td>'
+                . '<i class="fas fa-id-card" title="' . DomainConst::CONTENT00136 . '"></i>'
+                . '</td>'
+                . '<td>' . $recordNumber . '</td>'
+                . '</tr>'
+                . '</tbody>'
+                . '</table>'
                 . '</div>'
-                .'</div>';
+                . '</div>';
         return $html;
     }
+
     //-- BUG0068-IMT (DuongNV 20183108) Add customer info in receipt screen
-    
-    
 }

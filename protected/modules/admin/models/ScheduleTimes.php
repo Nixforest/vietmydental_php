@@ -99,6 +99,10 @@ class ScheduleTimes extends BaseActiveRecord
 
     //-----------------------------------------------------
     // Utility methods
+    //----------------------------------------------------- 
+
+    //-----------------------------------------------------
+    // Static methods
     //-----------------------------------------------------    
     /**
      * Loads the application items for the specified type from the database
@@ -117,6 +121,20 @@ class ScheduleTimes extends BaseActiveRecord
             $_items[$model->id] = $model->name;
         }
         return $_items;
+    }
+    
+    /**
+     * Get time by id
+     * @param String $id Id value
+     * @return string
+     */
+    public static function getTimeById($id) {
+        $retVal = '';
+        $model = self::model()->findByPk($id);
+        if ($model) {
+            return $model->name;
+        }
+        return $retVal;
     }
 
     //-----------------------------------------------------

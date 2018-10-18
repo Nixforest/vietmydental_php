@@ -431,7 +431,7 @@ class AjaxController extends AdminController
                         }
                         $retVal .= '<tr id="' . $model->id . '" class="customer-info-tr">';
                         $retVal .= '<td>' . $model->name . '</td>';
-                        $retVal .= '<td>' . $model->phone . '<br>' . $recordNumber . '</td>';
+                        $retVal .= '<td>' . $model->phone . '<br>' . HtmlHandler::formatRecordNumber($recordNumber) . '</td>';
                         $retVal .= '<td>' . $model->getBirthday() . '</td>';
                         $retVal .= '<td>' . $model->getAgentName() . '<br>' . $model->address . '</td>';
                         $retVal .= '</tr>';
