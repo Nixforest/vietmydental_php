@@ -136,7 +136,7 @@ class DailyReportsController extends AdminController
 //		));
             $model=new DailyReports('search');
             $model->unsetAttributes();  // clear any default values
-            $model->date_report = date('d/m/Y');
+            $model->date_report = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_BACK_END);
             if(isset($_GET['DailyReports'])){
                 $model->attributes=$_GET['DailyReports'];
             }

@@ -102,7 +102,7 @@ class DailyReports extends BaseActiveRecord {
     public function search() {
         // Warning: Please modify the following code to remove attributes that
         // should not be searched.
-
+        Loggers::info('', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         $criteria = new CDbCriteria;
 
         $criteria->compare('approve_id', $this->approve_id);
@@ -112,7 +112,8 @@ class DailyReports extends BaseActiveRecord {
                 CommonProcess::convertDateTime($this->date_report,
                         DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_4));
         $agentId = isset(Yii::app()->user->agent_id) ? Yii::app()->user->agent_id : 0;
-        $criteria->compare('agent_id', $agentId);
+        Loggers::info('Agent id', $agentId, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+//        $criteria->compare('agent_id', $agentId);
         if (!$this->canViewAll()) {
             $criteria->addCondition('status != ' . self::STATUS_NEW);
             $criteria->compare('approve_id', Yii::app()->user->id);
@@ -644,27 +645,33 @@ class DailyReports extends BaseActiveRecord {
     public static function checkStatus($mApprover, $date) {
         $retVal = self::STATUS_NOT_CREATED_YET;
         $criteria = new CDbCriteria();
-        $criteria->addInCondition('agent_id', $mApprover->getAgentIds());
+//        $criteria->addInCondition('agent_id', $mApprover->getAgentIds());
+        $criteria->compare('approve_id', $mApprover->id);
         $criteria->compare('date_report', $date);
-        $criteria->compare('status', self::STATUS_CONFIRM);
+//        $criteria->compare('status', self::STATUS_CONFIRM);
         $criteria->order = 'id desc';
         $models = DailyReports::model()->findAll($criteria);
+        Loggers::info('Found Report number at date ' . $date, count($models), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         if ($models && count($models) > 0) {
-//            $isApproved = true;
-//            foreach ($models as $model) {
-//                if ($model->status != self::STATUS_CONFIRM) {
-//                    $isApproved = false;
-//                    break;
-//                }
-//            }
-//            if ($isApproved) {
-//                $retVal = self::STATUS_CONFIRM;
-//            } else {
-//                $retVal = $models[0]->status;
-//            }
-            $retVal = self::STATUS_CONFIRM;
+            $isApproved = true;
+            // Loop for all report in this date (maybe have more than 1 agent
+            foreach ($models as $model) {
+                // If only 1 report's status is not confirm => All is not confirm
+                if ($model->status != self::STATUS_CONFIRM) {
+                    $isApproved = false;
+                    break;
+                }
+            }
+            if ($isApproved) {
+                // If all reports was confirmed
+                $retVal = self::STATUS_CONFIRM;
+            } else {
+                // Return first report status
+                $retVal = $models[0]->status;
+            }
+//            $retVal = self::STATUS_CONFIRM;
         } else {
-            $retVal = self::STATUS_NEW;
+//            $retVal = self::STATUS_NEW;
         }
         return $retVal;
     }

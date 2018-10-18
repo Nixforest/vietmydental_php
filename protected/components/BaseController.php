@@ -79,7 +79,6 @@ class BaseController extends CController {
 //        CommonProcess::dumpVariable($this->accessRules());
             $this->listActionsCanAccess = self::getListActionsCanAccess(
                             $this->accessRules(), Yii::app()->user->role_id);
-            Loggers::info('Set action access for user ' . Yii::app()->user->id, CommonProcess::json_encode_unicode($this->listActionsCanAccess), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         } else {
 //            echo 'Yii::app()->user->role_id chưa có giá trị';
         }
