@@ -1,24 +1,6 @@
 <?php
 Yii::app()->clientscript
-  ->registerCoreScript( 'jquery' )
-// use it when you need it!
-/*
-  ->registerCssFile( Yii::app()->theme->baseUrl . '/css/bootstrap.css' )
-  ->registerCssFile( Yii::app()->theme->baseUrl . '/css/bootstrap-responsive.css' )
-  ->registerCoreScript( 'jquery' )
-  ->registerScriptFile( Yii::app()->theme->baseUrl . '/js/bootstrap-transition.js', CClientScript::POS_END )
-  ->registerScriptFile( Yii::app()->theme->baseUrl . '/js/bootstrap-alert.js', CClientScript::POS_END )
-  ->registerScriptFile( Yii::app()->theme->baseUrl . '/js/bootstrap-modal.js', CClientScript::POS_END )
-  ->registerScriptFile( Yii::app()->theme->baseUrl . '/js/bootstrap-dropdown.js', CClientScript::POS_END )
-  ->registerScriptFile( Yii::app()->theme->baseUrl . '/js/bootstrap-scrollspy.js', CClientScript::POS_END )
-  ->registerScriptFile( Yii::app()->theme->baseUrl . '/js/bootstrap-tab.js', CClientScript::POS_END )
-  ->registerScriptFile( Yii::app()->theme->baseUrl . '/js/bootstrap-tooltip.js', CClientScript::POS_END )
-  ->registerScriptFile( Yii::app()->theme->baseUrl . '/js/bootstrap-popover.js', CClientScript::POS_END )
-  ->registerScriptFile( Yii::app()->theme->baseUrl . '/js/bootstrap-button.js', CClientScript::POS_END )
-  ->registerScriptFile( Yii::app()->theme->baseUrl . '/js/bootstrap-collapse.js', CClientScript::POS_END )
-  ->registerScriptFile( Yii::app()->theme->baseUrl . '/js/bootstrap-carousel.js', CClientScript::POS_END )
-  ->registerScriptFile( Yii::app()->theme->baseUrl . '/js/bootstrap-typeahead.js', CClientScript::POS_END )
- */
+        ->registerCoreScript('jquery')
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -35,14 +17,10 @@ Yii::app()->clientscript
         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/bootstrap.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/bootstrap-responsive.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/style.css" />
-        <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/bootstrap.min.css" />        
-        <!--<script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/jquery.min.js"></script>-->     
+        <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/bootstrap.min.css" /> 
         <script src="<?php echo Yii::app()->theme->baseUrl; ?>/js/bootstrap.min.js"></script>
-        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
-        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
-        <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
         <!-- Le fav and touch icons -->
-        <link rel="shortcut icon" type="image/ico" href="<?php echo Yii::app()->theme->baseUrl; ?>/favicons.png" />
+        <link rel="shortcut icon" type="image/x-icon" href="<?php echo Yii::app()->theme->baseUrl; ?>/favicon.ico" />
         <style>
             .containerX {
                 overflow: hidden;
@@ -104,22 +82,15 @@ Yii::app()->clientscript
                 display: block;
             }
         </style>
-        <!--<script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>-->
         <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/common.js"></script>
     </head>
 
     <body>
-        </div>
-        <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar navbar-inverse navbar-fixed-top" style="display: block;">
+        <!--<div class="navbar navbar-inverse" style="top: 0;">-->
+        <!--<div class="navbar navbar-inverse">-->
             <div class="navbar-inner">
                 <div class="container-fluid">
-<!--                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    <a class="brand" href="<?php echo Yii::app()->createAbsoluteUrl(''); ?>"><?php echo Yii::app()->name ?></a>-->
-
                     <div class="containerX">
                         <div class="dropdownX" style="line-height: 18px;">
                             <a href="<?php echo Yii::app()->createAbsoluteUrl(''); ?>"><?php echo Settings::getWebsiteName() ?></a>
@@ -128,54 +99,33 @@ Yii::app()->clientscript
                         $menu = new AdminMenuManager();
                         echo $menu->createMenu();
                         ?>
-<!--                        <a href="<?php echo Yii::app()->createAbsoluteUrl(''); ?>">Home</a>
-                        <a href="#news">News</a>
-                        <div class="dropdownX">
-                            <button class="dropbtnX">Quản trị</button>
-                            <div class="dropdown-contentX">
-                                <a href="<?php echo Yii::app()->createAbsoluteUrl('/admin/applications') ?>">Quản lý ứng dụng</a>
-                                <a href="<?php echo Yii::app()->createAbsoluteUrl('/admin/controllers') ?>">Quản lý danh mục</a>
-                                <a href="<?php echo Yii::app()->createAbsoluteUrl('/admin/controllersActions') ?>">Quản lý các action của danh mục</a>
-                                <a href="<?php echo Yii::app()->createAbsoluteUrl('/admin/users') ?>">Quản lý nhân sự</a>
-                                <a href="<?php echo Yii::app()->createAbsoluteUrl('/admin/roles') ?>">Quản lý phân quyền</a>
-                                <a href="<?php echo Yii::app()->createAbsoluteUrl('/admin/actionsRoles') ?>">Quản lý quyền của nhóm người dùng</a>
-                                <a href="<?php echo Yii::app()->createAbsoluteUrl('/admin/actionsUsers') ?>">Quản lý quyền của từng người dùng</a>
-                                <a href="<?php echo Yii::app()->createAbsoluteUrl('/admin/menus') ?>">Quản lý danh sách Menu</a>
-                                <a href="<?php echo Yii::app()->createAbsoluteUrl('/admin/settings') ?>">Quản lý tham số hệ thống</a>
-                                <a href="<?php echo Yii::app()->createAbsoluteUrl('/admin/modules') ?>">Quản lý các module</a>
-                            </div>
-                        </div> -->
                         <a href="<?php echo Yii::app()->createAbsoluteUrl('/site/login') ?>"
                            style="<?php
                            if (!Yii::app()->user->isGuest) {
                                echo 'display: none';
                            }
                            ?>">
-                           <?php echo DomainConst::CONTENT00068; ?>
+                               <?php echo DomainConst::CONTENT00068; ?>
                         </a>
                         <?php if (Yii::app()->user->isGuest): ?>
                         <?php else: ?>
-                        <div class="dropdownX">
-                            <button class="dropbtnX">Tài khoản<?php echo ' (' . Yii::app()->user->name .')' ?></button>
-                            <div class="dropdown-contentX">
-                                <a href="<?php echo Yii::app()->createAbsoluteUrl('/admin/users/view', array('id' => Yii::app()->user->id)); ?>">
-                                    <?php echo DomainConst::CONTENT00070; ?>
-                                </a>
-                                <a href="<?php echo Yii::app()->createAbsoluteUrl('/admin/users/changePassword') ?>">
-                                     <?php echo DomainConst::CONTENT00071; ?>
-                                </a>
-                                <a href="<?php echo Yii::app()->createAbsoluteUrl('/site/logout') ?>"><?php echo DomainConst::CONTENT00069; ?></a>
+                            <div class="dropdownX">
+                                <button class="dropbtnX">Tài khoản<?php echo ' (' . Yii::app()->user->name . ')' ?></button>
+                                <div class="dropdown-contentX">
+                                    <a href="<?php echo Yii::app()->createAbsoluteUrl('/admin/users/view', array('id' => Yii::app()->user->id)); ?>">
+                                        <?php echo DomainConst::CONTENT00070; ?>
+                                    </a>
+                                    <a href="<?php echo Yii::app()->createAbsoluteUrl('/admin/users/changePassword') ?>">
+                                        <?php echo DomainConst::CONTENT00071; ?>
+                                    </a>
+                                    <a href="<?php echo Yii::app()->createAbsoluteUrl('/site/logout') ?>"><?php echo DomainConst::CONTENT00069; ?></a>
+                                </div>
                             </div>
-                        </div>
                         <?php endif; // end if (Yii::app()->user->isGuest) ?>
                     </div><!--/.nav-collapse -->
                 </div>
             </div>
         </div>
-                        <?php
-//                        $menu = new AdminMenuManager();
-//                        echo $menu->createMenu();
-                        ?>
         <div class="cont">
             <div class="container-fluid">
                 <?php if (isset($this->breadcrumbs)): ?>
