@@ -14,6 +14,7 @@ class TestController extends AdminController {
     public function actionTest() {
         $this->pageTitle = 'Thử nghiệm các tính năng';
         $arrTabs = array(
+            'CSS'       => '_css',
             'SQL'       => '_sql',
             'Email'     => '_email',
             'SMS'       => '_email',
