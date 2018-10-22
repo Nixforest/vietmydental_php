@@ -502,7 +502,7 @@ class Settings extends BaseActiveRecord {
      * @param type $defaultVal Value default
      * @return type Value of item
      */
-    public static function getItemValue($key, $defaultVal) {
+    public static function getItemValue($key, $defaultVal = '') {
         $retVal = self::getItem($key);
         if (!empty($retVal)) {
             return $retVal;

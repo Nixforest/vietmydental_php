@@ -933,6 +933,17 @@ class Users extends BaseActiveRecord {
     }
     
     /**
+     * Get email infor
+     * @return String Email
+     */
+    public function getEmail() {
+        if (!empty($this->email)) {
+            return $this->email;
+        }
+        return $this->getSocialNetwork(SocialNetworks::TYPE_NETWORK_EMAIL);
+    }
+    
+    /**
      * Handle change format of data before save
      */
     public function handleBeforeSave() {

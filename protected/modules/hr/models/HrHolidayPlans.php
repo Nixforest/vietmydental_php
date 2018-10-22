@@ -164,6 +164,8 @@ class HrHolidayPlans extends BaseActiveRecord {
                         __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             }
         }
+        // Send email inform
+        $this->sendEmail();
     }
     
     //-----------------------------------------------------
@@ -273,6 +275,70 @@ class HrHolidayPlans extends BaseActiveRecord {
             return $holidays;
         }
         return array();
+    }
+    
+    /**
+     * Get creator email
+     * @return string Email of creator
+     */
+    public function getCreatorEmail() {
+        if (isset($this->rCreatedBy)) {
+            return $this->rCreatedBy->getEmail();
+        }
+        return '';
+    }
+    
+    /**
+     * Get approver email
+     * @return string Email of approver
+     */
+    public function getApproverEmail() {
+        if (isset($this->rApproved)) {
+            return $this->rApproved->getEmail();
+        }
+        return '';
+    }
+    
+    /**
+     * Send email inform for user
+     */
+    public function sendEmail() {
+        $userId = CommonProcess::getCurrentUserId();
+        if (Roles::isAdminRole($userId)) {
+            // Update from administrator
+            // Do nothing
+        } else {
+            switch ($userId) {
+                case $this->approved:
+                    switch ($this->status) {
+                        case self::STATUS_APPROVED:
+                        case self::STATUS_CANCEL:
+                        case self::STATUS_REQUIRED_UPDATE:
+                            EmailHandler::sendApprovedHolidayPlan($this, $this->rCreatedBy);
+                            break;
+
+                        default:
+                            break;
+                    }
+                    
+                    break;
+                case $this->created_by:         // Current user is creator
+                    // Send email to approver
+                    switch ($this->status) {
+                        case self::STATUS_ACTIVE:
+                            EmailHandler::sendReqApprovedHolidayPlan($this, $this->rApproved);
+                            break;
+
+                        default:
+                            break;
+                    }
+                    
+                    break;
+
+                default:
+                    break;
+            }
+        }
     }
     
     //-----------------------------------------------------

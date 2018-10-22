@@ -59,7 +59,7 @@
         <?php echo $form->labelEx($model, 'approved_date'); ?>
         <?php
         if (!isset($model->approved_date)) {
-            $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_BACK_END);
+            $date = '';
         } else {
             Loggers::info('Approved date', $model->approved_date, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             $date = CommonProcess::convertDateTime($model->approved_date,
