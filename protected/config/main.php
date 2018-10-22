@@ -21,6 +21,8 @@ return array(
         'application.models.*',
         'application.components.*',
         'application.components.widgets.*',
+        'application.components.email.*',
+        'application.components.sms.*',
         'application.modules.admin.models.*',
         'application.modules.api.models.*',
         'application.modules.api.components.*',
