@@ -69,3 +69,8 @@ $this->widget('bootstrap.widgets.TbTabs', array(
         });
     }
 </script>
+<style>
+    label {
+        width: 340px !important;
+    }
+</style>

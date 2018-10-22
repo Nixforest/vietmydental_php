@@ -465,16 +465,22 @@ class Users extends BaseActiveRecord {
 
     /**
      * Get auto complete user name
-     * @return String [username - last_name first_name]
+     * @return String [Full name - Role - Agent name]
      */
     public function getAutoCompleteUserName() {
-        $retVal = $this->username;
-        if (!empty($this->last_name)) {
-            $retVal .= ' - ' . $this->last_name;
-        }
-        if (!empty($this->first_name)) {
-            $retVal .= ' ' . $this->first_name;
-        }
+//        $retVal = $this->username;
+//        if (!empty($this->last_name)) {
+//            $retVal .= ' - ' . $this->last_name;
+//        }
+//        if (!empty($this->first_name)) {
+//            $retVal .= ' ' . $this->first_name;
+//        }
+        $arr = array(
+            $this->getFullName(),
+            $this->getRoleName(),
+            $this->getAgentName(),
+        );
+        $retVal = implode(' - ', $arr);
 
         return $retVal;
     }

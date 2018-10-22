@@ -61,12 +61,19 @@
         if (!isset($model->approved_date)) {
             $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_BACK_END);
         } else {
+            Loggers::info('Approved date', $model->approved_date, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             $date = CommonProcess::convertDateTime($model->approved_date,
                         DomainConst::DATE_FORMAT_1,
                         DomainConst::DATE_FORMAT_BACK_END);
+            Loggers::info('Approved date after format', $date, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             if (empty($date)) {
                 $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_BACK_END);
             }
+        }
+        if ($model->isNewRecord) {
+            $date = '';
+        } else if ($model->approved == CommonProcess::getCurrentUserId()) {
+            $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_BACK_END);
         }
         $this->widget('DatePickerWidget', array(
             'model'         => $model,

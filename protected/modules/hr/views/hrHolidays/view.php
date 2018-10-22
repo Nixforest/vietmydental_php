@@ -12,12 +12,18 @@ $this->widget('zii.widgets.CDetailView', array(
     'data' => $model,
     'attributes' => array(
         'name',
-        'date',
+        array(
+            'name' => 'date',
+            'value' => $model->getDate(),
+        ),
         array(
             'name' => 'type_id',
             'value' => $model->getType(),
         ),
-        'compensatory_date',
+        array(
+            'name' => 'compensatory_date',
+            'value' => $model->getCompensatoryDate(),
+        ),
         'description',
         array(
             'name' => 'status',

@@ -654,6 +654,15 @@ class CommonProcess {
         $period = new DatePeriod($begin, $interval, $end);
         return $period;
     }
+    
+    /**
+     * Convert date to back-end
+     * @param String $date Date value as format Y-m-d
+     * @return String Date value as dd/mm/yyyy
+     */
+    public static function convertDateBackEnd($date) {
+        return CommonProcess::convertDateTime($date, DomainConst::DATE_FORMAT_DB, DomainConst::DATE_FORMAT_BACK_END);
+    }
             
     //-----------------------------------------------------
     // -- Date time process

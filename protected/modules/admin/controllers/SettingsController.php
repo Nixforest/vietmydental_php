@@ -28,6 +28,8 @@ class SettingsController extends AdminController {
                 Settings::KEY_SMS_PROVIDER,
                 Settings::KEY_TOOTH_COLOR,
                 Settings::KEY_NEWS_DATE_OF_HOT_NEWS,
+                Settings::KEY_HR_WORK_ON_SATURDAY,
+                Settings::KEY_HR_WORKSHIFT_OFF_DAY_PER_MONTH,
             /** Test */
 //                    Settings::KEY_APP_MOBILE_VERSION_IOS,
 //                    Settings::KEY_ADMIN_EMAIL,
@@ -107,6 +109,7 @@ class SettingsController extends AdminController {
             Settings::KEY_SMS_FUNC_ON_OFF,
             //TODO: Add more checkbook here
             Settings::KEY_SMS_SEND_ALARM_SCHEDULE,
+            Settings::KEY_HR_WORK_ON_SATURDAY,
         ],
         //TODO: Add more type input here
     ];

@@ -8,6 +8,7 @@
  * @property string $role_name          Name of role
  * @property string $role_short_name    Short name of role
  * @property integer $application_id    Id of application
+ * @property integer $working_type      Type of working schedule
  * @property integer $status            Status
  *
  * The followings are the available model relations:
@@ -17,31 +18,46 @@
  * @property HrCoefficients[]                   $rCoefficients      Array coefficients belong to this role
  */
 class Roles extends BaseActiveRecord {
-
+    //-----------------------------------------------------
+    // Constants
+    //-----------------------------------------------------
     /** Role all */
     const ROLE_ALL_ID                      = DomainConst::NUMBER_ZERO_VALUE;
     /** Role name */
-    const ROLE_MANAGER = 'ROLE_MANAGER';
-    const ROLE_ADMIN = 'ROLE_ADMIN';
-    const ROLE_CUSTOMER = 'ROLE_CUSTOMER';
-    const ROLE_MEMBER = 'ROLE_MEMBER';
-    const ROLE_DIRECTOR = 'ROLE_DIRECTOR';
-    const ROLE_DOCTOR = 'ROLE_DOCTOR';
-    const ROLE_ASSISTANT = 'ROLE_ASSISTANT';
-    const ROLE_RECEPTIONIST = 'ROLE_RECEPTIONIST';
-    const ROLE_SALE = 'ROLE_SALE';
-    const ROLE_DIRECTOR_AGENT = 'ROLE_DIRECTOR_AGENT';
-    const ROLE_ACCOUNT_MANAGER = 'ROLE_ACCOUNT_MANAGER';
+    const ROLE_MANAGER                      = 'ROLE_MANAGER';
+    const ROLE_ADMIN                        = 'ROLE_ADMIN';
+    const ROLE_CUSTOMER                     = 'ROLE_CUSTOMER';
+    const ROLE_MEMBER                       = 'ROLE_MEMBER';
+    const ROLE_DIRECTOR                     = 'ROLE_DIRECTOR';
+    const ROLE_DOCTOR                       = 'ROLE_DOCTOR';
+    const ROLE_ASSISTANT                    = 'ROLE_ASSISTANT';
+    const ROLE_RECEPTIONIST                 = 'ROLE_RECEPTIONIST';
+    const ROLE_SALE                         = 'ROLE_SALE';
+    const ROLE_DIRECTOR_AGENT               = 'ROLE_DIRECTOR_AGENT';
+    const ROLE_ACCOUNT_MANAGER              = 'ROLE_ACCOUNT_MANAGER';
 
+    /**
+     * List administrator roles
+     * @var Array 
+     */
     static $arrAdminRoles = array(
         self::ROLE_ADMIN,
         self::ROLE_MANAGER,
     );
+    /**
+     * List roles no need reset password
+     * @var Array 
+     */
     static $arrRolesNotResetPass = array(
         self::ROLE_MANAGER,
         self::ROLE_ADMIN,
         self::ROLE_CUSTOMER
     );
+    
+    /**
+     * List role is staff of company
+     * @var Array 
+     */
     static $arrRolesStaff = array(
         self::ROLE_DIRECTOR,
         self::ROLE_DOCTOR,
@@ -49,6 +65,16 @@ class Roles extends BaseActiveRecord {
         self::ROLE_ASSISTANT,
         self::ROLE_SALE,
     );
+    
+    //-----------------------------------------------------
+    // Type of working schedule
+    //-----------------------------------------------------
+    /** Office hours */
+    const TYPE_OFFICE_HOURSE            =   '1';
+    /** Working shift */
+    const TYPE_SHIFT_WORK               =   '2';
+    /** Other */
+    const TYPE_OTHER                    =   '3';
 
     /**
      * @return string the associated database table name
@@ -65,11 +91,11 @@ class Roles extends BaseActiveRecord {
         // will receive user inputs.
         return array(
             array('role_name, role_short_name, application_id', 'required'),
-            array('application_id, status', 'numerical', 'integerOnly' => true),
+            array('application_id, status, working_type', 'numerical', 'integerOnly' => true),
             array('role_name, role_short_name', 'length', 'max' => 255),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, role_name, role_short_name, application_id, status', 'safe', 'on' => 'search'),
+            array('id, role_name, role_short_name, application_id, status, working_type', 'safe', 'on' => 'search'),
         );
     }
 
@@ -109,11 +135,12 @@ class Roles extends BaseActiveRecord {
      */
     public function attributeLabels() {
         return array(
-            'id' => 'ID',
-            'role_name' => DomainConst::CONTENT00024,
-            'role_short_name' => DomainConst::CONTENT00025,
-            'application_id' => 'Application',
-            'status' => DomainConst::CONTENT00026,
+            'id'                => 'ID',
+            'role_name'         => DomainConst::CONTENT00024,
+            'role_short_name'   => DomainConst::CONTENT00025,
+            'application_id'    => 'Application',
+            'working_type'      => DomainConst::CONTENT00536,
+            'status'            => DomainConst::CONTENT00026,
         );
     }
 
@@ -145,6 +172,7 @@ class Roles extends BaseActiveRecord {
         $criteria->compare('role_short_name', $this->role_short_name, true);
         $criteria->compare('application_id', $this->application_id);
         $criteria->compare('status', $this->status);
+        $criteria->compare('working_type', $this->working_type);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
@@ -189,6 +217,20 @@ class Roles extends BaseActiveRecord {
     //-----------------------------------------------------
     // Utility methods
     //-----------------------------------------------------   
+    /**
+     * Get working type string
+     * @return string Working type
+     */
+    public function getWorkingType() {
+        if (isset(self::getArrayWorkingType()[$this->working_type])) {
+            return self::getArrayWorkingType()[$this->working_type];
+        }
+        return '';
+    }
+    
+    //-----------------------------------------------------
+    // Static methods
+    //-----------------------------------------------------
     /**
      * Loads the application items for the specified type from the database
      * @param type $emptyOption boolean the item is empty
@@ -287,6 +329,18 @@ class Roles extends BaseActiveRecord {
             }
         }
         return $_items;
+    }
+    
+    /**
+     * Get working type array
+     * @return Array Array working type
+     */
+    public static function getArrayWorkingType() {
+        return array(
+            self::TYPE_OFFICE_HOURSE        => DomainConst::CONTENT00537,
+            self::TYPE_SHIFT_WORK           => DomainConst::CONTENT00538,
+            self::TYPE_OTHER                => DomainConst::CONTENT00031,
+        );
     }
 
 }

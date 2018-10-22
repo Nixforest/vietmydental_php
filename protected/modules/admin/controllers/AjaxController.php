@@ -33,13 +33,14 @@ class AjaxController extends AdminController
         $cmsFormat = new CmsFormatter();
         $session = Yii::app()->session;
         foreach ($models as $model) {
-            $label = $model->username;
-            if ($model->last_name != '') {
-                $label .= ' - ' . $model->last_name;
-            }
-            if ($model->first_name != '') {
-                $label .= ' ' . $model->first_name;
-            }
+//            $label = $model->username;
+//            if ($model->last_name != '') {
+//                $label .= ' - ' . $model->last_name;
+//            }
+//            if ($model->first_name != '') {
+//                $label .= ' ' . $model->first_name;
+//            }
+            $label = $model->getAutoCompleteUserName();
             $retVal[] = array(      // Key tương ứng với giá trị ui.item
                 'label' => $label,
                 'value' => $label,

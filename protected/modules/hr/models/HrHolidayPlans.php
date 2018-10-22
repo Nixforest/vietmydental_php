@@ -108,12 +108,19 @@ class HrHolidayPlans extends BaseActiveRecord {
         $criteria = new CDbCriteria;
 
         $criteria->compare('id', $this->id, true);
-        $criteria->compare('approved', $this->approved, true);
         $criteria->compare('approved_date', $this->approved_date, true);
         $criteria->compare('notify', $this->notify, true);
         $criteria->compare('status', $this->status);
         $criteria->compare('created_date', $this->created_date, true);
-        $criteria->compare('created_by', $this->created_by, true);
+        if (Roles::isAdminRole(CommonProcess::getCurrentRoleId())) {
+            // Admin user
+            $criteria->compare('created_by', $this->created_by, true);
+            $criteria->compare('approved', $this->approved, true);
+        } else {
+            $userId = CommonProcess::getCurrentUserId();
+            $criteria->addCondition('created_by = ' . $userId, 'OR');
+            $criteria->addCondition('approved = ' . $userId, 'OR');
+        }
         $criteria->order = 'id desc';
 
         return new CActiveDataProvider($this, array(
@@ -143,6 +150,20 @@ class HrHolidayPlans extends BaseActiveRecord {
         }
         
         return parent::beforeSave();
+    }
+    
+    /**
+     * Override afterSave method
+     */
+    protected function afterSave() {
+        $arr = $this->getHolidaysBelongTo();
+        foreach ($arr as $holiday) {
+            $holiday->status = $this->status;
+            if (!$holiday->save()) {
+                Loggers::error('Update holiday failed', CommonProcess::json_encode_unicode($holiday->getErrors()),
+                        __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            }
+        }
     }
     
     //-----------------------------------------------------
@@ -240,6 +261,20 @@ class HrHolidayPlans extends BaseActiveRecord {
         return ($this->status == self::STATUS_APPROVED);
     }
     
+    /**
+     * Get all holidays model belong to this year
+     * @return HrHolidays List models
+     */
+    public function getHolidaysBelongTo() {
+        $criteria = new CDbCriteria();
+        $criteria->addCondition('YEAR(date) = ' . $this->getYear());
+        $holidays = HrHolidays::model()->findAll($criteria);
+        if ($holidays) {
+            return $holidays;
+        }
+        return array();
+    }
+    
     //-----------------------------------------------------
     // Static methods
     //-----------------------------------------------------
@@ -250,7 +285,7 @@ class HrHolidayPlans extends BaseActiveRecord {
     public static function getArrayStatus() {
         return array(
             self::STATUS_INACTIVE           => DomainConst::CONTENT00408,
-            self::STATUS_ACTIVE             => DomainConst::CONTENT00407,
+            self::STATUS_ACTIVE             => DomainConst::CONTENT00539,
             self::STATUS_APPROVED           => DomainConst::CONTENT00476,
             self::STATUS_CANCEL             => DomainConst::CONTENT00477,
             self::STATUS_REQUIRED_UPDATE    => DomainConst::CONTENT00478,
