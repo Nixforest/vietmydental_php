@@ -26,6 +26,12 @@ class HrHolidays extends BaseActiveRecord {
     const STATUS_INACTIVE               = 0;
     /** Active */
     const STATUS_ACTIVE                 = 1;
+    /** Done */
+    const STATUS_APPROVED               = 2;
+    /** Cancel */
+    const STATUS_CANCEL                 = 3;
+    /** Required update */
+    const STATUS_REQUIRED_UPDATE        = 4;
 
     /**
      * Returns the static model of the specified AR class.
@@ -112,7 +118,7 @@ class HrHolidays extends BaseActiveRecord {
         $criteria->compare('status', $this->status);
         $criteria->compare('created_date', $this->created_date, true);
         $criteria->compare('created_by', $this->created_by, true);
-        $criteria->order = 'id desc';
+        $criteria->order = 'date desc';
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
@@ -130,14 +136,9 @@ class HrHolidays extends BaseActiveRecord {
      * @return parent
      */
     protected function beforeSave() {
-        $date = $this->date;
-        $this->date = CommonProcess::convertDateTime($date,
-            DomainConst::DATE_FORMAT_BACK_END,
-            DomainConst::DATE_FORMAT_4);
-        $date = $this->compensatory_date;
-        $this->compensatory_date = CommonProcess::convertDateTime($date,
-            DomainConst::DATE_FORMAT_BACK_END,
-            DomainConst::DATE_FORMAT_4);
+        $this->formatDate('date', DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_DB);
+        $this->formatDate('compensatory_date', DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_DB);
+        
         if ($this->isNewRecord) {
             $this->created_by = Yii::app()->user->id;
             
@@ -207,6 +208,25 @@ class HrHolidays extends BaseActiveRecord {
         return $retVal;
     }
     
+    /**
+     * Get compensatory date
+     * @return string Compensatory date
+     */
+    public function getCompensatoryDate() {
+        if (!DateTimeExt::isDateNull($this->compensatory_date)) {
+            return CommonProcess::convertDateBackEnd($this->compensatory_date);
+        }
+        return '';
+    }
+    
+    /**
+     * Get date value
+     * @return String Date value as dd/mm/yyyy format
+     */
+    public function getDate() {
+        return CommonProcess::convertDateBackEnd($this->date);
+    }
+    
     //-----------------------------------------------------
     // Static methods
     //-----------------------------------------------------
@@ -216,8 +236,11 @@ class HrHolidays extends BaseActiveRecord {
      */
     public static function getArrayStatus() {
         return array(
-            self::STATUS_INACTIVE       => DomainConst::CONTENT00408,
-            self::STATUS_ACTIVE         => DomainConst::CONTENT00407,
+            self::STATUS_INACTIVE           => DomainConst::CONTENT00408,
+            self::STATUS_ACTIVE             => DomainConst::CONTENT00539,
+            self::STATUS_APPROVED           => DomainConst::CONTENT00476,
+            self::STATUS_CANCEL             => DomainConst::CONTENT00477,
+            self::STATUS_REQUIRED_UPDATE    => DomainConst::CONTENT00478,
         );
     }
     

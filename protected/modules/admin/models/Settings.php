@@ -4,28 +4,32 @@
  * This is the model class for table "settings".
  *
  * The followings are the available columns in table 'settings':
- * @property string $id
- * @property string $updated
- * @property string $key
- * @property string $value
- * @property string $description
+ * @property string $id             Id of record
+ * @property string $updated        Updated time
+ * @property string $key            Key value
+ * @property string $value          Value
+ * @property string $description    Description
  */
-class Settings extends BaseActiveRecord
-{
+class Settings extends BaseActiveRecord {
+
     //-----------------------------------------------------
     // ++ Define keys
     //-----------------------------------------------------
     /** Key General setting */
     const KEY_GENERAL_SETTINGS                  = 'general_settings';
-    /** Key App setting */
+
+    /** Key Application setting */
     const KEY_APP_SETTINGS                      = 'app_settings';
+
     /** Key Mail setting */
     const KEY_MAIL_SETTINGS                     = 'mail_settings';
+
     /** Key SMS setting */
     const KEY_SMS_SETTINGS                      = 'sms_settings';
+
     /** Key SMS setting */
     const KEY_SMS_SETTING_SENDS                 = 'sms_setting_sends';
-    
+
     /* --- General settings --- */
     /** Key website title */
     const KEY_TITLE                             = 'WEBSITE_TITLE';
@@ -45,19 +49,23 @@ class Settings extends BaseActiveRecord
     const KEY_DOMAIN_SALE_WEBSITE               = 'DOMAIN_SALE_WEBSITE';
     /** Key SMS provider */
     const KEY_SMS_PROVIDER                      = 'SMS_PROVIDER';
-    /** key TOOTH COLOR */
+    /** Key TOOTH COLOR */
     const KEY_TOOTH_COLOR                       = 'TOOTH_COLOR';
-    /** key TOOTH COLOR */
+    /** Key TOOTH COLOR */
     const KEY_NEWS_DATE_OF_HOT_NEWS             = 'NEWS_DATE_OF_HOT_NEWS';
-    
+    /** Key check this company working on Saturday or not */
+    const KEY_HR_WORK_ON_SATURDAY               = 'HR_WORK_ON_SATURDAY';
+    /** Key number of off day per month (with workshift role) */
+    const KEY_HR_WORKSHIFT_OFF_DAY_PER_MONTH    = 'HR_WORKSHIFT_OFF_DAY_PER_MONTH';
+
     /* --- App settings --- */
-    /** Key Mobile app version iOS */
+    /** Key Mobile application version iOS */
     const KEY_APP_MOBILE_VERSION_IOS            = 'APP_MOBILE_VERSION_IOS';
     /** Key Page size of api list */
     const KEY_APP_API_LIST_PAGE_SIZE            = 'APP_API_LIST_PAGE_SIZE';
     
     /* --- Email settings --- */
-    /** Key admin email */
+    /** Key administrator email */
     const KEY_ADMIN_EMAIL                       = 'ADMIN_EMAIL';
     /** Key Email main subject */
     const KEY_EMAIL_MAIN_SUBJECT                = 'EMAIL_MAIN_SUBJECT';
@@ -77,13 +85,13 @@ class Settings extends BaseActiveRecord
     const KEY_EMAIL_SENDGRID_API_KEY            = 'EMAIL_SENDGRID_API_KEY';
     /** Key Email provider */
     const KEY_EMAIL_PROVIDER                    = 'EMAIL_PROVIDER';
-    
+
     /* --- Others settings --- */
     /** Key Ajax template value */
     const KEY_AJAX_TEMPLATE_VALUE               = 'AJAX_TEMPLATE_VALUE';
     /** Key Ajax template value */
     const KEY_AJAX_TEMPLATE_VALUE_1             = 'AJAX_TEMPLATE_VALUE_1';
-    
+
     /* --- SMS settings --- */
     /** Key SMS server url */
     const KEY_SMS_SERVER_URL                    = 'SMS_SERVER_URL';
@@ -91,33 +99,50 @@ class Settings extends BaseActiveRecord
     const KEY_VIVAS_SMS_SERVER_URL              = 'VIVAS_SMS_SERVER_URL';
     /** Key VIVAS SMS server url: login */
     const KEY_VIVAS_URL_LOGIN                   = 'VIVAS_URL_LOGIN';
+
     /** Key VIVAS SMS server url: send sms */
     const KEY_VIVAS_URL_SEND_SMS                = 'VIVAS_URL_SEND_SMS';
+
     /** Key VIVAS SMS server url: send sms extend */
     const KEY_VIVAS_URL_SEND_SMS_EXT            = 'VIVAS_URL_SEND_SMS_EXT';
+
     /** Key VIVAS SMS server url: verify */
     const KEY_VIVAS_URL_VERIFY                  = 'VIVAS_URL_VERIFY';
+
     /** Key VIVAS SMS server url: logout */
     const KEY_VIVAS_URL_LOGOUT                  = 'VIVAS_URL_LOGOUT';
+
     /** Key VIVAS SMS username */
     const KEY_VIVAS_USERNAME                    = 'VIVAS_USERNAME';
+
     /** Key VIVAS SMS password */
     const KEY_VIVAS_PASSWORD                    = 'VIVAS_PASSWORD';
+
     /** Key VIVAS SMS share key */
     const KEY_VIVAS_SHARE_KEY                   = 'VIVAS_SHARE_KEY';
+
     /** Key SMS function on/off */
     const KEY_SMS_FUNC_ON_OFF                   = 'SMS_FUNC_ON_OFF';
+
     /** Key SMS type send: create schedule */
     const KEY_SMS_SEND_CREATE_SCHEDULE          = 'SMS_SEND_CREATE_SCHEDULE';
+
     /** Key SMS type send: update schedule */
     const KEY_SMS_SEND_UPDATE_SCHEDULE          = 'SMS_SEND_UPDATE_SCHEDULE';
+
     /** Key SMS type send: create schedule detail */
     const KEY_SMS_SEND_CREATE_SCHEDULE_DETAIL   = 'SMS_SEND_CREATE_SCHEDULE_DETAIL';
+
     /** Key SMS type send: create receipt */
     const KEY_SMS_SEND_CREATE_RECEIPT           = 'SMS_SEND_RECEIPT';
+
     /** Key SMS type send: alarm schedule */
     const KEY_SMS_SEND_ALARM_SCHEDULE           = 'SMS_SEND_ALARM_SCHEDULE';
-	/**
+    //-----------------------------------------------------
+    // -- Define keys
+    //-----------------------------------------------------
+
+    /**
      * @return string the associated database table name
      */
     public function tableName() {
@@ -155,11 +180,11 @@ class Settings extends BaseActiveRecord
      */
     public function attributeLabels() {
         return array(
-            'id' => 'ID',
-            'updated' => 'Updated',
-            'key' => 'Key',
-            'value' => 'Value',
-            'description' => 'Description',
+            'id'            => 'ID',
+            'updated'       => 'Updated',
+            'key'           => 'Key',
+            'value'         => 'Value',
+            'description'   => 'Description',
         );
     }
 
@@ -446,7 +471,7 @@ class Settings extends BaseActiveRecord
         }
         return false;
     }
-    
+
     /**
      * Get SendGrid api key
      * @return String API key
@@ -458,7 +483,7 @@ class Settings extends BaseActiveRecord
         }
         return SENDGRID_API_KEY;
     }
-    
+
     /**
      * Get number of date hot news
      * @return int Number of date hot news
@@ -470,4 +495,27 @@ class Settings extends BaseActiveRecord
         }
         return 3;
     }
+    
+    /**
+     * Get item value
+     * @param String $key Key string
+     * @param type $defaultVal Value default
+     * @return type Value of item
+     */
+    public static function getItemValue($key, $defaultVal = '') {
+        $retVal = self::getItem($key);
+        if (!empty($retVal)) {
+            return $retVal;
+        }
+        return $defaultVal;
+    }
+    
+    /**
+     * Check if working on Saturday
+     * @return Int 1 - working on Saturday, 0 - off on Saturday
+     */
+    public static function isWorkingOnSaturday() {
+        return self::getItemValue(self::KEY_HR_WORK_ON_SATURDAY, 0);
+    }
+
 }

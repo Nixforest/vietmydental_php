@@ -654,6 +654,15 @@ class CommonProcess {
         $period = new DatePeriod($begin, $interval, $end);
         return $period;
     }
+    
+    /**
+     * Convert date to back-end
+     * @param String $date Date value as format Y-m-d
+     * @return String Date value as dd/mm/yyyy
+     */
+    public static function convertDateBackEnd($date) {
+        return CommonProcess::convertDateTime($date, DomainConst::DATE_FORMAT_DB, DomainConst::DATE_FORMAT_BACK_END);
+    }
             
     //-----------------------------------------------------
     // -- Date time process
@@ -664,12 +673,27 @@ class CommonProcess {
      * @param Array $array Array of data
      * @param String $key Value of key
      * @param type $defaultValue Default value
-     * @return Value after get from array
+     * @return String Value after get from array
      */
     public static function getValue($array, $key, $defaultValue = '') {
         $retVal = $defaultValue;
         if (isset($array[$key])) {
             $retVal = $array[$key];
+        }
+        return $retVal;
+    }
+    
+    /**
+     * Get json value
+     * @param Json $json Json object
+     * @param String $key Key value
+     * @param type $defaultValue Default value
+     * @return String Value after get from json
+     */
+    public static function getValueJson($json, $key, $defaultValue = '') {
+        $retVal = $defaultValue;
+        if (isset($json->$key)) {
+           $retVal = $json->$key;
         }
         return $retVal;
     }

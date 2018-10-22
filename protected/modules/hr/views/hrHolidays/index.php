@@ -47,12 +47,18 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array('style' => 'text-align:center;')
         ),
         'name',
-        'date',
+        array(
+            'name' => 'date',
+            'value' => '$data->getDate()',
+        ),
         array(
             'name' => 'type_id',
             'value' => '$data->getType()',
         ),
-        'compensatory_date',
+        array(
+            'name' => 'compensatory_date',
+            'value' => '$data->getCompensatoryDate()',
+        ),
         'description',
         array(
             'name' => 'status',

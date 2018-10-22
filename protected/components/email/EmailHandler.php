@@ -39,7 +39,7 @@ class EmailHandler {
             case self::EMAIL_PROVIDER_SENDGRID:
                 Loggers::info('Start send email', self::getListEmailProvider()[$provider],
                         __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-                self::sendEmailGrid($to, $from, $subject, $content);
+                EmailSendGridHandler::sendEmailGrid($to, $from, $subject, $content);
                 break;
 
             default:
@@ -282,46 +282,48 @@ class EmailHandler {
     }
     
     /**
-     * Send email by SendGrid
-     * @param String $to        To email
-     * @param String $from      From email
-     * @param String $subject   Subject of email
-     * @param String $content   Content of email
+     * Send email to request approved holiday plan
+     * @param HrHolidayPlans    $mPlan Plan information
+     * @param Users             $mUser User need to sending
      */
-    public static function sendEmailGrid($to, $from, $subject, $content) {
-        $ch = curl_init();
-        $key = Settings::getSendGridAPIKey();
-        $headers = array(
-            "Content-type: application/json",
-            "authorization: Bearer " . $key,
-        );
-        Loggers::error('SendGrid key', $key, 
-                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-        $input_xml = '{"personalizations": [{'
-                . '"to": [{"email": "' . $to . '"}]}],'
-                . '"from": {"email": "' . $from . '"},'
-                . '"subject": "' . $subject . '",'
-                . '"content": [{"type": "text/plain", "value": "' . $content . '"}]}';
-        Loggers::error('Data', $input_xml, 
-                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-        curl_setopt($ch, CURLOPT_URL, 'https://api.sendgrid.com/v3/mail/send');
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_HEADER, 1);
-        curl_setopt($ch, CURLOPT_VERBOSE, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $input_xml);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 300);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-        $response = curl_exec($ch);
-        if (curl_errno($ch)) {
-            Loggers::error('Error when send email', '', 
-                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-        } else {
-            curl_close($ch);
-            Loggers::info('Send email success', '', 
-                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-        }
+    public static function sendReqApprovedHolidayPlan($mPlan, $mUser) {
+        $email      = $mUser->getEmail();
+        $fullName   = $mUser->getFullName();
+        $link       = Yii::app()->createAbsoluteUrl("hr/hrHolidayPlans/view", array(
+                            'id'    => $mPlan->id,
+                        ));
+        $content    = "Xin chào: $fullName."
+                       . "<br>Thông báo có Kế hoạch nghỉ lễ cần được phê duyệt."
+                       . "<br>Vui lòng truy cập vào link bên dưới để thực hiện phê duyệt:"
+                       . "<br>$link";
+        $adminEmail = Settings::getItemValue(Settings::KEY_ADMIN_EMAIL);
+        $subject    = Settings::getItemValue(Settings::KEY_EMAIL_MAIN_SUBJECT);
+        EmailHandler::sendEmailOnce($email, $adminEmail, $subject, $content);
+        
+        Loggers::info('Sent email', $email,
+                __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+    }
+    
+    /**
+     * Send email to creator of holiday plan
+     * @param HrHolidayPlans    $mPlan Plan information
+     * @param Users             $mUser User need to sending
+     */
+    public static function sendApprovedHolidayPlan($mPlan, $mUser) {
+        $email      = $mUser->getEmail();
+        $fullName   = $mUser->getFullName();
+        $link       = Yii::app()->createAbsoluteUrl("hr/hrHolidayPlans/view", array(
+                            'id'    => $mPlan->id,
+                        ));
+        $content    = "Xin chào: $fullName."
+                       . "<br>Thông báo Kế hoạch nghỉ lễ đã được cập nhật. "
+                       . "<br>Vui lòng truy cập vào link bên dưới để xem thông tin chi tiết:"
+                       . "<br>$link";
+        $adminEmail = Settings::getItemValue(Settings::KEY_ADMIN_EMAIL);
+        $subject    = Settings::getItemValue(Settings::KEY_EMAIL_MAIN_SUBJECT);
+        EmailHandler::sendEmailOnce($email, $adminEmail, $subject, $content);
+        
+        Loggers::info('Sent email', $email,
+                __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
     }
 }

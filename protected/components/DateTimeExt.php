@@ -91,7 +91,7 @@ class DateTimeExt extends DateTime {
      * @return True if date is '0000-00-00', False otherwise
      */
     public static function isDateNull($date) {
-        return (!isset($date) || $date == DomainConst::DATE_DEFAULT_NULL);
+        return (!isset($date) || $date == DomainConst::DATE_DEFAULT_NULL || $date == DomainConst::DATE_DEFAULT_NULL_FULL);
     }
     
     /**

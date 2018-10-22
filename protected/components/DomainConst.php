@@ -106,6 +106,8 @@ class DomainConst {
     /** Date default value null */
     const DATE_DEFAULT_NULL                             = '0000-00-00';
     /** Date default value null */
+    const DATE_DEFAULT_NULL_FULL                        = '0000-00-00 00:00:00';
+    /** Date default value null */
     const DATE_FORMAT_3_NULL                            = '00/00/0000';
     /** Date default year value null */
     const DATE_DEFAULT_YEAR_NULL                        = '0000';
@@ -1685,4 +1687,8 @@ class DomainConst {
     const CONTENT00533  = 'Lương đóng BHXH';
     const CONTENT00534  = 'Lương trách nhiệm';
     const CONTENT00535  = 'Phụ cấp cố định';
+    const CONTENT00536  = 'Lịch làm việc';
+    const CONTENT00537  = 'Giờ hành chính';
+    const CONTENT00538  = 'Theo ca';
+    const CONTENT00539  = 'Chờ duyệt';
 }
