@@ -93,7 +93,8 @@
     
     <div class="row" style="<?php echo (($model->isNewRecord) ? "display: none;" : ""); ?>">
         <?php echo $form->labelEx($model, 'status'); ?>
-        <?php echo $form->dropDownList($model, 'status', HrHolidayPlans::getArrayStatus()); ?>
+        <?php // echo $form->dropDownList($model, 'status', HrHolidayPlans::getArrayStatus()); ?>
+        <?php echo $form->dropDownList($model, 'status', $model->getArrayStatusByUser()); ?>
         <?php echo $form->error($model, 'status'); ?>
     </div>
 

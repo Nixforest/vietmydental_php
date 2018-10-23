@@ -341,12 +341,42 @@ class HrHolidayPlans extends BaseActiveRecord {
         }
     }
     
+    /**
+     * Get array status by user
+     * @return Array Array status
+     */
+    public function getArrayStatusByUser() {
+        $userId = CommonProcess::getCurrentUserId();
+        if (Roles::isAdminRole(CommonProcess::getCurrentRoleId())) {
+            // Administrator
+            return self::getArrayStatus();
+        } else {
+            switch ($userId) {
+                case $this->approved:               // Current user is approver
+                    return self::getArrayStatusPartial(array(
+                        self::STATUS_APPROVED,
+                        self::STATUS_CANCEL,
+                        self::STATUS_REQUIRED_UPDATE,
+                    ));
+                case $this->created_by:             // Current user is creator
+                    return self::getArrayStatusPartial(array(
+                        self::STATUS_INACTIVE,
+                        self::STATUS_ACTIVE,
+                    ));
+
+                default:
+                    break;
+            }
+        }
+        return self::getArrayStatus();
+    }
+    
     //-----------------------------------------------------
     // Static methods
     //-----------------------------------------------------
     /**
      * Get status array
-     * @return Array Array status of debt
+     * @return Array Array status
      */
     public static function getArrayStatus() {
         return array(
@@ -357,5 +387,20 @@ class HrHolidayPlans extends BaseActiveRecord {
             self::STATUS_REQUIRED_UPDATE    => DomainConst::CONTENT00478,
         );
     }
+    
+    /**
+     * Get partial of array status
+     * @param Array $arrayId Array id of status
+     * @return Array Array status
+     */
+    public static function getArrayStatusPartial($arrayId) {
+        $retVal = array();
+        foreach (self::getArrayStatus() as $key => $value) {
+            if (in_array($key, $arrayId)) {
+                $retVal[$key] = $value;
+            }
+        }
+        return $retVal;
+    } 
 
 }
