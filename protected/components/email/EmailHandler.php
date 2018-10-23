@@ -326,4 +326,50 @@ class EmailHandler {
         Loggers::info('Sent email', $email,
                 __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
     }
+    
+    /**
+     * Send email about HrLeave record was updated by approver
+     * @param HrLeaves $mLeave Model
+     * @param Users $mUser Model user of creator
+     */
+    public static function sendApprovedHrLeave($mLeave, $mUser) {
+        $email      = $mUser->getEmail();
+        $fullName   = $mUser->getFullName();
+        $link       = Yii::app()->createAbsoluteUrl("hr/hrLeaves/view", array(
+                            'id'    => $mLeave->id,
+                        ));
+        $content    = "Xin chào: $fullName."
+                       . "<br>Thông báo Thông tin nghỉ phép đã được cập nhật. "
+                       . "<br>Vui lòng truy cập vào link bên dưới để xem thông tin chi tiết:"
+                       . "<br>$link";
+        $adminEmail = Settings::getItemValue(Settings::KEY_ADMIN_EMAIL);
+        $subject    = Settings::getItemValue(Settings::KEY_EMAIL_MAIN_SUBJECT);
+        EmailHandler::sendEmailOnce($email, $adminEmail, $subject, $content);
+        
+        Loggers::info('Sent email', $email,
+                __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+    }
+    
+    /**
+     * Send email to request approved HrLeaves record
+     * @param HrLeaves $mLeave Model
+     * @param Users $mUser Model user of approver
+     */
+    public static function sendReqApproveHrLeave($mLeave, $mUser) {
+        $email      = $mUser->getEmail();
+        $fullName   = $mUser->getFullName();
+        $link       = Yii::app()->createAbsoluteUrl("hr/hrLeaves/update", array(
+                            'id'    => $mLeave->id,
+                        ));
+        $content    = "Xin chào: $fullName."
+                       . "<br>Thông báo có Thông tin nghỉ phép cần được phê duyệt."
+                       . "<br>Vui lòng truy cập vào link bên dưới để thực hiện phê duyệt:"
+                       . "<br>$link";
+        $adminEmail = Settings::getItemValue(Settings::KEY_ADMIN_EMAIL);
+        $subject    = Settings::getItemValue(Settings::KEY_EMAIL_MAIN_SUBJECT);
+        EmailHandler::sendEmailOnce($email, $adminEmail, $subject, $content);
+        
+        Loggers::info('Sent email', $email,
+                __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+    }
 }

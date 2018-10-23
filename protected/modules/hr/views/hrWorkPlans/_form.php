@@ -20,18 +20,17 @@
         <?php echo $form->labelEx($model, 'approved'); ?>
         <?php echo $form->hiddenField($model, 'approved', array('class' => '')); ?>
         <?php
-            $userName = isset($model->rApproved) ? $model->rApproved->getAutoCompleteUserName() : '';
-            Loggers::info('Approver', $userName, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-            $aData = array(
-                'model'             => $model,
-                'field_id'          => 'approved',
-                'update_value'      => $userName,
-                'ClassAdd'          => 'w-400',
-                'url'               => Yii::app()->createAbsoluteUrl('admin/ajax/searchUser'),
-                'field_autocomplete_name' => 'autocomplete_user',
-            );
-            $this->widget('ext.AutocompleteExt.AutocompleteExt',
-                    array('data' => $aData));
+        $userName = isset($model->rApproved) ? $model->rApproved->getAutoCompleteUserName() : '';
+        Loggers::info('Approver', $userName, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        $aData = array(
+            'model' => $model,
+            'field_id' => 'approved',
+            'update_value' => $userName,
+            'ClassAdd' => 'w-400',
+            'url' => Yii::app()->createAbsoluteUrl('admin/ajax/searchUser'),
+            'field_autocomplete_name' => 'autocomplete_user',
+        );
+        $this->widget('ext.AutocompleteExt.AutocompleteExt', array('data' => $aData));
         ?>
         <?php echo $form->error($model, 'approved'); ?>
     </div>
@@ -42,18 +41,16 @@
         if (!isset($model->approved_date)) {
             $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_BACK_END);
         } else {
-            $date = CommonProcess::convertDateTime($model->approved_date,
-                        DomainConst::DATE_FORMAT_1,
-                        DomainConst::DATE_FORMAT_BACK_END);
+            $date = CommonProcess::convertDateTime($model->approved_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_BACK_END);
             if (empty($date)) {
                 $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_BACK_END);
             }
         }
         $this->widget('DatePickerWidget', array(
-            'model'         => $model,
-            'field'         => 'approved_date',
-            'value'         => $date,
-            'isReadOnly'    => false,
+            'model' => $model,
+            'field' => 'approved_date',
+            'value' => $date,
+            'isReadOnly' => false,
         ));
         ?>
         <?php echo $form->error($model, 'approved_date'); ?>
@@ -77,18 +74,16 @@
         if (!isset($model->isNewRecord)) {
             $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_BACK_END);
         } else {
-            $date = CommonProcess::convertDateTime($model->date_from,
-                        DomainConst::DATE_FORMAT_4,
-                        DomainConst::DATE_FORMAT_BACK_END);
+            $date = CommonProcess::convertDateTime($model->date_from, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_BACK_END);
             if (empty($date)) {
                 $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_BACK_END);
             }
         }
         $this->widget('DatePickerWidget', array(
-            'model'         => $model,
-            'field'         => 'date_from',
-            'value'         => $date,
-            'isReadOnly'    => false,
+            'model' => $model,
+            'field' => 'date_from',
+            'value' => $date,
+            'isReadOnly' => false,
         ));
         ?>
         <?php echo $form->error($model, 'date_from'); ?>
@@ -100,18 +95,16 @@
         if (!isset($model->isNewRecord)) {
             $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_BACK_END);
         } else {
-            $date = CommonProcess::convertDateTime($model->date_to,
-                        DomainConst::DATE_FORMAT_4,
-                        DomainConst::DATE_FORMAT_BACK_END);
+            $date = CommonProcess::convertDateTime($model->date_to, DomainConst::DATE_FORMAT_4, DomainConst::DATE_FORMAT_BACK_END);
             if (empty($date)) {
                 $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_BACK_END);
             }
         }
         $this->widget('DatePickerWidget', array(
-            'model'         => $model,
-            'field'         => 'date_to',
-            'value'         => $date,
-            'isReadOnly'    => false,
+            'model' => $model,
+            'field' => 'date_to',
+            'value' => $date,
+            'isReadOnly' => false,
         ));
         ?>
         <?php echo $form->error($model, 'date_to'); ?>
@@ -124,9 +117,9 @@
     </div>
 
     <div class="row buttons">
-    <?php echo CHtml::submitButton($model->isNewRecord ? DomainConst::CONTENT00017 : DomainConst::CONTENT00377); ?>
+        <?php echo CHtml::submitButton($model->isNewRecord ? DomainConst::CONTENT00017 : DomainConst::CONTENT00377); ?>
     </div>
 
-<?php $this->endWidget(); ?>
+    <?php $this->endWidget(); ?>
 
 </div><!-- form -->

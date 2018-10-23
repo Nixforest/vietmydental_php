@@ -1691,4 +1691,5 @@ class DomainConst {
     const CONTENT00537  = 'Giờ hành chính';
     const CONTENT00538  = 'Theo ca';
     const CONTENT00539  = 'Chờ duyệt';
+    const CONTENT00540  = 'Nhân viên xin nghỉ';
 }

@@ -263,10 +263,13 @@ class Roles extends BaseActiveRecord {
 
     /**
      * Check if a role id is in array admin roles
-     * @param String $roleId Id of role
+     * @param String $roleId Id of role (Default is empty => Get current user role)
      * @return boolean True if role id is in array admin roles, False otherwise
      */
-    public static function isAdminRole($roleId) {
+    public static function isAdminRole($roleId = '') {
+        if (empty($roleId)) {
+            $roleId = CommonProcess::getCurrentRoleId();
+        }
         foreach (self::$arrAdminRoles as $roleName) {
             if (self::getRoleByName($roleName)->id == $roleId) {
                 return true;
