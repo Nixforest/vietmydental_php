@@ -1692,4 +1692,6 @@ class DomainConst {
     const CONTENT00538  = 'Theo ca';
     const CONTENT00539  = 'Chờ duyệt';
     const CONTENT00540  = 'Nhân viên xin nghỉ';
+    const CONTENT00541  = 'Ngày nghỉ lễ';
+    const CONTENT00542  = 'Không thể xoá do còn [' . self::CONTENT00541 . '] liên quan';
 }

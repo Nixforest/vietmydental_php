@@ -168,6 +168,20 @@ class HrWorkPlans extends BaseActiveRecord {
         
         return parent::beforeSave();
     }
+    /**
+     * Override before delete method
+     * @return Parent result
+     */
+    protected function beforeDelete() {
+        $retVal = parent::beforeDelete();
+        // Check foreign key in table hr_work_schedules
+        if (!empty($this->rWorkSchedules)) {
+            foreach ($this->rWorkSchedules as $schedule) {
+                $schedule->delete();
+            }
+        }
+        return $retVal;
+    }
     
     //-----------------------------------------------------
     // Utility methods
