@@ -59,7 +59,7 @@ class HrHolidayPlans extends BaseActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('id, notify', 'required'),
+            array('id', 'required'),
             array('status', 'numerical', 'integerOnly' => true),
             array('id, created_by', 'length', 'max' => 10),
             array('approved', 'length', 'max' => 11),

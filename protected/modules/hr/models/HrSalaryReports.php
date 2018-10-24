@@ -67,7 +67,7 @@ class HrSalaryReports extends BaseActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('name, type_id, notify', 'required'),
+            array('name, type_id', 'required'),
             array('role_id, type_id, status', 'numerical', 'integerOnly' => true),
             array('name', 'length', 'max' => 255),
             array('approved', 'length', 'max' => 11),

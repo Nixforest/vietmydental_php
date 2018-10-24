@@ -29,6 +29,7 @@ class HrWorkPlansController extends HrController {
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
 
+        $model->status = HrWorkPlans::STATUS_APPROVED;
         if (isset($_POST['HrWorkPlans'])) {
             $model->attributes = $_POST['HrWorkPlans'];
             if ($model->save()) {

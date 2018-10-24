@@ -10,6 +10,7 @@ Loggers::info('$listAllowActionsRoles', CommonProcess::json_encode_unicode($list
 $listAllowActionsUser   = ActionsUsers::getActionArrByUserAndController($mUser->id, $controller_id);
 $mActionsUsers          = ActionsUsers::model()->findAll('user_id = ' . $mUser->id . ' AND controller_id = ' . $controller_id);
 ?>
+<div style="border-top: 2px solid black;">
 <?php foreach($controller[DomainConst::KEY_ACTIONS] as $keyAction => $aAction): ?>
     <?php if ((CommonProcess::isUserAdmin() || (!CommonProcess::isUserAdmin() && $keyAction != DomainConst::KEY_ACTION_DELETE))):
         ?>
@@ -34,3 +35,4 @@ $mActionsUsers          = ActionsUsers::model()->findAll('user_id = ' . $mUser->
         </label>
     <?php endif; ?>
 <?php endforeach; // foreach ($module[DomainConst::KEY_CHILDREN] as $controller): ?>
+</div>

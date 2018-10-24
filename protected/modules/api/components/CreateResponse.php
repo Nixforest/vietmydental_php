@@ -219,7 +219,7 @@ class CreateResponse {
     /**
      * Create customer medical record information response
      * @param Object $mUser User model
-     * @param Object $mCustomer Customer model
+     * @param Customers $mCustomer Customer model
      * @param Object $objController Controller
      */
     public static function customerMedicalRecordInfoResp($mUser, $mCustomer, $objController) {
@@ -236,6 +236,7 @@ class CreateResponse {
         $data[] = CommonProcess::createConfigJson(CustomerController::ITEM_CAREER, $mCustomer->getCareer());
         $data[] = CommonProcess::createConfigJson(CustomerController::ITEM_CHARACTERISTICS, $mCustomer->getCharacteristics());
         $data[] = CommonProcess::createConfigJson(CustomerController::ITEM_RECORD_NUMBER, $mCustomer->getMedicalRecordNumber());
+        $data[] = CommonProcess::createConfigJson(CustomerController::ITEM_FINAL, $mCustomer->getDebt());
         $data[] = CommonProcess::createConfigJson(
                 CustomerController::ITEM_MEDICAL_HISTORY,
                 DomainConst::CONTENT00202,

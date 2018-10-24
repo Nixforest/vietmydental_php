@@ -64,7 +64,7 @@ class HrWorkPlans extends BaseActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('notify, date_from, date_to', 'required'),
+            array('date_from, date_to', 'required'),
             array('role_id, status', 'numerical', 'integerOnly' => true),
             array('approved', 'length', 'max' => 11),
             array('created_by', 'length', 'max' => 10),

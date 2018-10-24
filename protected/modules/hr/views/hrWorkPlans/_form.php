@@ -46,6 +46,11 @@
                 $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_BACK_END);
             }
         }
+        if ($model->isNewRecord) {
+            $date = '';
+        } else if ($model->approved == CommonProcess::getCurrentUserId()) {
+            $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_BACK_END);
+        }
         $this->widget('DatePickerWidget', array(
             'model' => $model,
             'field' => 'approved_date',

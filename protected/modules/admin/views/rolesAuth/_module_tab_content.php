@@ -4,6 +4,7 @@
 /* @var $mUser Users */
 ?>
 
+<div style="border: 2px solid black; border-radius: 5px;">
 <?php
 //echo $module[DomainConst::KEY_ALIAS];
 $arrayTabs = array();
@@ -38,3 +39,5 @@ $this->widget('bootstrap.widgets.TbTabs', array(
     'tabs' => $arrayTabs,
         )
 );
+?>
+</div>
