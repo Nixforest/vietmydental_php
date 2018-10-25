@@ -663,6 +663,43 @@ class CommonProcess {
     public static function convertDateBackEnd($date) {
         return CommonProcess::convertDateTime($date, DomainConst::DATE_FORMAT_DB, DomainConst::DATE_FORMAT_BACK_END);
     }
+    
+    /**
+     * Get list all of week days name
+     * @return Array List all of week days name
+     */
+    public static function getListWeekDayName() {
+        return array('CN', 'T2', 'T3', 'T4','T5','T6', 'T7');
+    }
+    
+    /**
+     * Get weekday
+     * @param Int $idx Index of date
+     * @return string Name of weekday
+     */
+    public static function getWeekDay($idx) {
+        $retVal = '';
+        if (isset(self::getListWeekDayName()[$idx])) {
+            return self::getListWeekDayName()[$idx];
+        }
+        return $retVal;
+    }
+    
+    /**
+     * Check a weekday is a weekend or not
+     * @param type $wd
+     * @return boolean
+     */
+    public static function isWeekend($wd) {
+        $retVal = false;
+        if ($wd == 'CN') {
+            return true;
+        }
+        if (($wd == 'T7') && !Settings::isWorkingOnSaturday()) {
+            return true;
+        }
+        return $retVal;
+    }
             
     //-----------------------------------------------------
     // -- Date time process

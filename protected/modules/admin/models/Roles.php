@@ -12,10 +12,11 @@
  * @property integer $status            Status
  *
  * The followings are the available model relations:
- * @property HrWorkShifts[]                     $rWorkShifts        Array work shifts belong to this role
- * @property HrWorkPlans[]                      $rWorkPlans         Array work plans belong to this role
- * @property HrParameters[]                     $rParameters        Array parameters belong to this role
- * @property HrCoefficients[]                   $rCoefficients      Array coefficients belong to this role
+ * @property HrWorkShifts[]             $rWorkShifts        Array work shifts belong to this role
+ * @property HrWorkPlans[]              $rWorkPlans         Array work plans belong to this role
+ * @property HrParameters[]             $rParameters        Array parameters belong to this role
+ * @property HrCoefficients[]           $rCoefficients      Array coefficients belong to this role
+ * @property Users[]                    $rUser             Array users belong to this role
  */
 class Roles extends BaseActiveRecord {
     //-----------------------------------------------------
@@ -255,7 +256,7 @@ class Roles extends BaseActiveRecord {
     /**
      * Get role by name
      * @param type $role_name
-     * @return Role object
+     * @return Roles
      */
     public static function getRoleByName($role_name) {
         return self::model()->find('LOWER(role_name)="' . strtolower($role_name) . '"');

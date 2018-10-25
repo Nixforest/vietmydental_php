@@ -255,6 +255,17 @@ class HrWorkPlans extends BaseActiveRecord {
         return '';
     }
     
+    /**
+     * Get user array
+     * @return Users[] List users
+     */
+    public function getUserArray() {
+        if (isset($this->rRole->rUser)) {
+            return $this->rRole->rUser;
+        }
+        return array();
+    }
+    
     //-----------------------------------------------------
     // Static methods
     //-----------------------------------------------------

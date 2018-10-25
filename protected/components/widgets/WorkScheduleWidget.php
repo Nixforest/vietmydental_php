@@ -7,28 +7,39 @@ class WorkScheduleWidget extends CWidget {
     //-----------------------------------------------------
     // Properties
     //-----------------------------------------------------
-    /** Model object */
+    /**
+     * Model of work plan
+     * @var HrWorkPlans 
+     */
     public $model;
-    /** Date field name */
-    public $field;
-    /** Current value */
-    public $value;
-    /** Is readonly */
-    public $isReadOnly = true;
-    /** Format */
-    public $format      = DomainConst::DATE_FORMAT_2;
+    /**
+     * List of employees
+     * @var Users[] 
+     */
+    public $arrEmployee;
+    /**
+     * Id of role
+     * @var Int 
+     */
+    public $role_id;
 
+    /**
+     * Run method
+     */
     public function run() {
-        $readOnly = '';
-        if ($this->isReadOnly) {
-            $readOnly = 'readonly';
+        $roleName = '';
+        if (isset(Roles::getRoleArrayForSalary()[$this->role_id])) {
+            $roleName = Roles::getRoleArrayForSalary()[$this->role_id];
         }
-        $this->render('datePicker/view', array(
-            'model' => $this->model,
-            'field' => $this->field,
-            'value' => $this->value,
-            'isReadOnly'    => $readOnly,
-            'format'        => $this->format,
+        $mRole = Roles::model()->findByPk($this->role_id);
+        $arrWorkShifts = array();
+        if ($mRole) {
+            $arrWorkShifts = $mRole->rWorkShifts;
+        }
+        $this->render('workSchedule/view', array(
+            'model'             => $this->model,
+            'arrEmployee'       => $this->arrEmployee,
+            'arrWorkShifts'     => $arrWorkShifts,
         ));
     }
 

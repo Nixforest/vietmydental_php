@@ -188,7 +188,7 @@ function fnIsEmptySearchArray(_array) {
             return true;
         }
     }
-    
+
     return retVal;
 }
 
@@ -382,22 +382,22 @@ function fnFormatNumber(number) {
     });
     return formatter.format(number);
 }
-function fnNumberOnly(){
+function fnNumberOnly() {
     $(".number_only").on('keydown', function (e) {
         // Allow: backspace, delete, tab, escape, enter and .
         if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
-             // Allow: Ctrl+A, Command+A
-            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) || 
-             // Allow: home, end, left, right, down, up
-            (e.keyCode >= 35 && e.keyCode <= 40)) {
-                 // let it happen, don't do anything
-                 return;
-        }
-        // Ensure that it is a number and stop the keypress
-        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-            e.preventDefault();
-        }
-    });
+                // Allow: Ctrl+A, Command+A
+                        (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+                        // Allow: home, end, left, right, down, up
+                                (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
 }
 //-- BUG0045-IMT  (DuongNV 201807) Format currency when input
 
@@ -406,19 +406,21 @@ function printDiv(id_element, cssLink = '') {
     var divToPrint = document.getElementById(id_element);
     var title = 'Print';
     var css = '';
-    if(cssLink != ''){
+    if (cssLink != '') {
         css = "<link rel='stylesheet' href='" + cssLink + "' type='text/css' media='print'/>";
     }
-    var newWin = window.open('','Print-Window');
+    var newWin = window.open('', 'Print-Window');
     newWin.document.open();
-    newWin.document.write('<html><title>'+title+'</title>'+css+'<body onload="window.print()" style="font-size:77%;">'+divToPrint.innerHTML+'</body></html>');
+    newWin.document.write('<html><title>' + title + '</title>' + css + '<body onload="window.print()" style="font-size:77%;">' + divToPrint.innerHTML + '</body></html>');
     newWin.document.close();
-    setTimeout(function(){newWin.close();},10);
+    setTimeout(function () {
+        newWin.close();
+    }, 10);
 }
 
-function bindPrint(classBtn, idToPrint, cssLink = ''){
-    $('#'+idToPrint).hide();
-    $('.'+classBtn).on('click', function(){
+function bindPrint(classBtn, idToPrint, cssLink = '') {
+    $('#' + idToPrint).hide();
+    $('.' + classBtn).on('click', function () {
         printDiv(idToPrint, cssLink);
     });
 }
@@ -428,19 +430,19 @@ function bindPrint(classBtn, idToPrint, cssLink = ''){
 /* @todo: next cell or prev cell
  * @params: dir (direction) = 1 (next), != 1 (previous)
  */
-function gotoCell(currentSelectedElm, dir = 1){
+function gotoCell(currentSelectedElm, dir = 1) {
     var initIndex = currentSelectedElm.children().last().index();
     var limit = 0, step = -1;
-    if(dir == 1){
+    if (dir == 1) {
         limit = initIndex;
         initIndex = 0;
         step = 1;
     }
-    if(currentSelectedElm.find('td.selected').length == 0){ // cell not select
+    if (currentSelectedElm.find('td.selected').length == 0) { // cell not select
         currentSelectedElm.children().eq(initIndex).addClass('selected');
     } else { // cell selected
         indexCell = currentSelectedElm.find('td.selected').index();
-        if( indexCell != limit ){ // Not final cell
+        if (indexCell != limit) { // Not final cell
             currentSelectedElm.children().eq(indexCell).removeClass('selected');
             indexCell += step;
             currentSelectedElm.children().eq(indexCell).addClass('selected');
@@ -452,16 +454,16 @@ function gotoCell(currentSelectedElm, dir = 1){
 /* @todo: next row or prev row
  * @params: dir (direction) = 1 (next), != 1 (previous)
  */
-function gotoRow(currentSelectedElm, dir = 1, indexCell = ''){
+function gotoRow(currentSelectedElm, dir = 1, indexCell = '') {
     currentSelectedElm.removeClass('selected');
     currentSelectedElm.find('td.selected').removeClass('selected'); // Remove selected cell
-    if(dir == 1){
+    if (dir == 1) {
         currentSelectedElm = currentSelectedElm.next();
     } else {
         currentSelectedElm = currentSelectedElm.prev();
     }
     currentSelectedElm.addClass('selected');
-    if(indexCell !== ''){
+    if (indexCell !== '') {
         currentSelectedElm.find('td').eq(indexCell).addClass('selected');
     }
     return currentSelectedElm;
@@ -470,7 +472,7 @@ function gotoRow(currentSelectedElm, dir = 1, indexCell = ''){
 /* 
  * @todo: bind click event to tr
  */
-function bindClickRow(){
+function bindClickRow() {
     $('table.table-select tr').on('click', function (event) {
         //Remove another selected row
         var anotherSelected = $('body').find('table.table-select tr.selected');
@@ -481,7 +483,7 @@ function bindClickRow(){
         if ($(this).hasClass('selected')) { // Not select
             currentSelectedElm = '';
             $(event.target).removeClass('selected');
-            
+
         } else { // Selected
             currentSelectedElm = $(this);
             currentSelectedElm.find('td.selected').removeClass('selected');
@@ -494,7 +496,7 @@ function bindClickRow(){
 /* 
  * @todo: bind can select row to table.table-select
  */
-function bindSelectRow(){
+function bindSelectRow() {
     currentSelectedElm = '';
     indexCell = 0;
     bindClickRow();
@@ -502,21 +504,221 @@ function bindSelectRow(){
         switch (event.which) {
             case 37: // Left arrow 
                 indexCell = gotoCell(currentSelectedElm, -1);
-                event.preventDefault();break;
+                event.preventDefault();
+                break;
             case 38: // Up arrow 
                 if (typeof currentSelectedElm.prev()[0] != 'undefined') {
                     currentSelectedElm = gotoRow(currentSelectedElm, -1, indexCell);
                 }
-                event.preventDefault();break;
+                event.preventDefault();
+                break;
             case 39: // Right arrow 
                 indexCell = gotoCell(currentSelectedElm, 1); // Next cell
-                event.preventDefault();break;
+                event.preventDefault();
+                break;
             case 40: // Down arrow 
                 if (typeof currentSelectedElm.next()[0] != 'undefined') {
                     currentSelectedElm = gotoRow(currentSelectedElm, 1, indexCell);
                 }
-                event.preventDefault();break;
+                event.preventDefault();
+                break;
         }
     });
 }
 //-- BUG0062-IMT (DuongNV 20180910) fix bug select row
+
+//-----------------------------------------------------
+// Handle dragndrop
+//-----------------------------------------------------
+/**
+ * Handle allow drop on target element
+ * @param {Events} ev Event param
+ */
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+/**
+ * Handle drag source element
+ * @param {Events} ev
+ * @param {type} element
+ * @param {String} field
+ * @param {String} toClass
+ */
+function drag(ev, element, field, toClass) {
+    if ($(element).hasClass('alreadyIn')) {
+        toClass = '';
+    }
+    // lấy id của phần tử đang drag và gán vào biến source
+    ev.originalEvent.dataTransfer.setData("source", $(ev.target).text());
+    //lấy id của phần tử đang drag và gán vào biến data_id
+    ev.originalEvent.dataTransfer.setData("data_id", $(ev.target).data(field));
+    ev.originalEvent.dataTransfer.setData("toClass", toClass);
+}
+
+/**
+ * Drag work_shift
+ * @param {Events} ev Event param
+ * @param {type} element
+ * @param {type} field
+ * @param {type} toClass
+ * @returns {undefined}
+ */
+function wsdrag(ev, element, field, toClass) {
+    $(element).attr('id', 'dragging'); //element is $(this)
+    $(element).parent().attr('id', 'dragging_container');
+    ev.originalEvent.dataTransfer.setData("color_class", $(ev.target).attr('class'));
+    ev.originalEvent.dataTransfer.setData("data_id", $(ev.target).data('shift_id'));
+    ev.originalEvent.dataTransfer.setData("data_name", $(ev.target).data('shift_name'));
+    ev.originalEvent.dataTransfer.setData("toClass", toClass);
+}
+
+/**
+ * 
+ * @param {type} ev
+ * @param {type} element
+ * @param {type} toClass
+ * @param {type} format
+ * @param {type} autoIncrease
+ * @returns {undefined}
+ */
+function drop(ev, element, toClass, format, autoIncrease) {
+    var ts = $(element).children("span").length + 1;
+    ev.preventDefault();
+    var elmData = ev.originalEvent.dataTransfer.getData('source');//lấy giá trị biến source và gán vào biến elm_id
+    var dropAreaClass = ev.originalEvent.dataTransfer.getData('toClass');
+    var data_id = ev.originalEvent.dataTransfer.getData('data_id');
+    if (dropAreaClass !== toClass)
+        return;
+    if (elmData === "")
+        return;
+    $selector = 'span[data-id=' + data_id + ']';
+    if ($(element).find($selector).length <= 0) {
+        currentTrDrop = $(element).data('current');
+        $(element).append("<span class='btnDefault' data-id=" + data_id + ">" + format + ts + ": " + elmData + "<input class='display_none' name='HrFunctions[function][" + currentTrDrop + "][" + format + "][]' value ='" + data_id + "'></span>");
+    }
+
+    if (!elmData) {
+        return
+    }
+    $(".dropErr").text("");
+}
+
+// Workschedule drop
+function wsdrop(ev, element, toClass, format, autoIncrease) {
+    var ts = $(element).children("span").length + 1;
+    ev.preventDefault();
+    var color_class = ev.originalEvent.dataTransfer.getData('color_class');//lấy giá trị biến source và gán vào biến elm_id
+    var dropAreaClass = ev.originalEvent.dataTransfer.getData('toClass');
+    var data_shift_id = ev.originalEvent.dataTransfer.getData('data_id');
+    var data_shift_name = ev.originalEvent.dataTransfer.getData('data_name');
+    var data_date = $(ev.target).data('date');
+    var data_employee = $(ev.target).data('employee');
+    //swap if a drag b
+    if ($('#dragging').hasClass('alreadyIn')) { // #dragging is element which being dragging
+        $('#dragging').remove();
+        $(element).children().clone().appendTo('#dragging_container'); // #dragging is element contain #dragging
+        var oldShift = $('#dragging_container').children('.shift_cell').data('shift_id');
+        var oldDate = $('#dragging_container').data('date');
+        var oldEmp = $('#dragging_container').data('employee');
+        $('#dragging_container').children('.shift_cell').attr('data-date', oldDate);
+        $('#dragging_container').children('.shift_cell').attr('data-employee', oldEmp);
+        var aOldData = [oldShift, oldDate, oldEmp];
+        var oldData = JSON.stringify(aOldData);
+        $('#dragging_container').find("input[name='HrWorkSchedule[data][]']").val(oldData).removeClass('unmodify');
+    } else {
+        $('#dragging').removeAttr('id');
+    }
+    $('#dragging_container').removeAttr('id');
+
+    var pos = color_class.search("shift_color");
+    var color_class = color_class.substring(pos, pos + 14);
+
+//        if(dropAreaClass !== toClass) return;
+    if (color_class === "")
+        return;
+    $selector = 'span[data-id=' + data_shift_id + ']';
+    if ($(element).find($selector).length <= 0) {
+        $(element).empty();
+        currentTrDrop = $(element).data('current');
+        var aData = [data_shift_id, data_date, data_employee];
+        var data = JSON.stringify(aData);
+        var html_epd = "<div class='shift_container shift_cell " + color_class +
+//                "' data-shift_id=" + data_shift_id + " data-shift_name='" + data_shift_name + "' data-date=" + data_date + " data-employee=" + data_employee + ">" + data_shift_name +
+                "' data-shift_id=" + data_shift_id + " data-shift_name='" + data_shift_name + "' data-date=" + data_date + " data-employee=" + data_employee + ">" + "x" +
+                "<input type='hidden' name='HrWorkSchedule[data][]' value ='" + data + "'>" +
+                "</div>";
+        $(element).append(html_epd);
+    }
+
+    if (!color_class) {
+        return
+    }
+    $(".dropErr").text("");
+}
+
+//drag phần từ trong ô ra ngoài thì xóa phần tử đó (ko áp dụng cho ô input)
+function dropOutsideToDelete() {
+    $(document).on("dragend", ".alreadyIn", function (event) {
+        //var mouse = (typeof event === 'undefined') ?   MouseEvent : event;
+        $parent = $(this).parent();
+        if (event.originalEvent.dataTransfer.dropEffect === 'none') {
+            $('#dragging_container').removeAttr('id');
+            $(this).remove();
+        }
+        $i = 1;
+        $parent.find('.alreadyIn').each(function () {
+            $(this).html($(this).html().replace(/\d+/, $i++));
+        });
+    });
+}
+
+function initDrag(fromClass, toClass) {
+    $("." + fromClass).addClass("dragItem");
+    $(document).on("mousedown", ".alreadyIn, ." + fromClass, function () {
+        $("." + fromClass).attr("draggable", "true");
+        $(".alreadyIn").attr("draggable", "true");
+    })
+    //kéo phần từ qua vùng cho phép drop thì hiện dấu cho phép drop
+    $(document).on("dragover", "." + toClass, function (event) {
+        allowDrop(event);
+    });
+}
+
+/*allowDrag("fromClass", "toClass", "field", "data format", "auto increase")
+ * field: "id", "class", "text" (default), "data-*" (vd: "data-value")
+ * data format là ký tự dc thêm vào đầu đoạn text của phần tử drag
+ * auto inscrease = true(default) or false    
+ * function drag từ fromClass đến toClass và tên trường (id, class, text, data-*)
+ */
+function allowDrag(fromClass, toClass, field = "id", format = "", autoIncrease = "false") {
+    initDrag(fromClass, toClass);
+    $(document).on("dragstart", ".alreadyIn, ." + fromClass, function (event) {
+        drag(event, this, field, toClass);
+    });
+    $(document).on("drop", "." + toClass, function (event) {
+        if ($(this).hasClass(toClass)) {
+            $("." + toClass).addClass("dragTarget");
+            drop(event, this, toClass, format, autoIncrease);
+            $(this).children().addClass("alreadyIn"); //dấu hiệu thêm class alreadyIn để phân biệt cái nào đã được drop vào rồi
+        }
+    });
+    dropOutsideToDelete();
+}
+
+//Workschedule 
+function wsallowDrag(fromClass, toClass, field = "id", format = "", autoIncrease = "false") {
+    initDrag(fromClass, toClass);
+    $(document).on("dragstart", ".alreadyIn, ." + fromClass, function (event) {
+        wsdrag(event, this, field, toClass);
+    });
+    $(document).on("drop", "." + toClass, function (event) {
+        if ($(this).hasClass(toClass)) {
+            $("." + toClass).addClass("dragTarget");
+            wsdrop(event, this, toClass, format, autoIncrease);
+            $(this).children().addClass("alreadyIn"); //dấu hiệu thêm class alreadyIn để phân biệt cái nào đã được drop vào rồi
+        }
+    });
+    //drag phần từ trong ô ra ngoài thì xóa phần tử đó (ko áp dụng cho ô input)
+    dropOutsideToDelete();
+}//--END DRAG n DROP
