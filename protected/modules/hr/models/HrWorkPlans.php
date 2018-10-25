@@ -125,8 +125,10 @@ class HrWorkPlans extends BaseActiveRecord {
         $criteria->compare('approved_date', $this->approved_date, true);
         $criteria->compare('notify', $this->notify, true);
         $criteria->compare('role_id', $this->role_id);
-        $criteria->compare('date_from', $this->date_from, true);
-        $criteria->compare('date_to', $this->date_to, true);
+        $date = CommonProcess::convertDateTime($this->date_from, DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_DB);
+        $criteria->compare('date_from', $date, true);
+        $date = CommonProcess::convertDateTime($this->date_to, DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_DB);
+        $criteria->compare('date_to', $date, true);
         $criteria->compare('status', $this->status);
         $criteria->compare('created_date', $this->created_date, true);
         $criteria->compare('created_by', $this->created_by, true);
@@ -264,6 +266,22 @@ class HrWorkPlans extends BaseActiveRecord {
             return $this->rRole->rUser;
         }
         return array();
+    }
+    
+    /**
+     * Get from date
+     * @return String Date from value as Back-end format
+     */
+    public function getFromDate() {
+        return CommonProcess::convertDateBackEnd($this->date_from);
+    }
+    
+    /**
+     * Get to date
+     * @return String Date to value as Back-end format
+     */
+    public function getToDate() {
+        return CommonProcess::convertDateBackEnd($this->date_to);
     }
     
     //-----------------------------------------------------

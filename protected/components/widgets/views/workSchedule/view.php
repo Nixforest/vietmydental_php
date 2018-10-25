@@ -3,11 +3,6 @@
 /* @var $arrEmployee Users[] */
 /* @var $arrWorkShifts HrWorkShifts[] */
 
-//$css = Yii::app()->theme->baseUrl . '/js/bootstrap-multiselect-master/css/bootstrap-3.1.1.min.css';
-//Yii::app()->clientScript->registerCssFile($css);
-$scriptUrl = Yii::app()->theme->baseUrl . '/js/bootstrap-multiselect-master/js/bootstrap-3.1.1.min.js';
-Yii::app()->clientScript->registerScriptFile($scriptUrl);
-
 // Init code    
 $colorIdx       = 1;
 $employeeIdx    = 1;

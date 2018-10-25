@@ -35,10 +35,12 @@ $('.search-form form').submit(function(){
 </div><!-- search-form -->
 
 <?php
-$this->widget('zii.widgets.grid.CGridView', array(
-    'id' => 'hr-work-schedules-grid',
-    'dataProvider' => $model->search(),
-    'filter' => $model,
+$this->widget('BaseGridView', array(
+    'id'                => 'hr-work-schedules-grid',
+    'dataProvider'      => $model->search(),
+    'filter'            => $model,
+    'datePickers'       => array('work_day'),
+    'afterAjaxUpdate'   => 'reinstallDatePicker',
     'columns' => array(
         array(
             'header' => DomainConst::CONTENT00034,
@@ -47,7 +49,25 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'headerHtmlOptions' => array('width' => '30px', 'style' => 'text-align:center;'),
             'htmlOptions' => array('style' => 'text-align:center;')
         ),
-        'work_day',
+        array(
+            'name'      => 'work_day',
+            'value'     => '$data->getWorkDay()',
+            'filter'    => $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+                'model'     => $model,
+                'attribute' => 'work_day',
+                'language'  =>'en-GB',
+                'htmlOptions'   => array(
+                    'id'    => 'work_day',
+                ),
+                'defaultOptions'    => array(
+                    'showAnim'      => 'slide',
+                    'dateFormat'    => DomainConst::DATE_FORMAT_2,
+                    'changeMonth'   => true,
+                    'changeYear'    => true,
+                    'showButtonPanel'=>true,
+                ),
+            ), true),
+        ),
         array(
             'name' => 'work_shift_id',
             'value' => '$data->getWorkShift()',

@@ -116,7 +116,8 @@ class HrWorkSchedules extends BaseActiveRecord {
         $criteria = new CDbCriteria;
 
         $criteria->compare('id', $this->id, true);
-        $criteria->compare('work_day', $this->work_day, true);
+        $date = CommonProcess::convertDateTime($this->work_day, DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_DB);
+        $criteria->compare('work_day', $date, true);
         $criteria->compare('work_shift_id', $this->work_shift_id);
         $criteria->compare('work_plan_id', $this->work_plan_id);
         $criteria->compare('employee_id', $this->employee_id, true);
@@ -211,6 +212,14 @@ class HrWorkSchedules extends BaseActiveRecord {
             return $this->rUser->getFullName();
         }
         return '';
+    }
+    
+    /**
+     * Get work date
+     * @return String Date work value as Back-end format
+     */
+    public function getWorkDay() {
+        return CommonProcess::convertDateBackEnd($this->work_day);
     }
     
     //-----------------------------------------------------
