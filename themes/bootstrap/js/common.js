@@ -1,3 +1,5 @@
+/* global Intl */
+
 /**
  * Remove sign of string
  * @param {String} str String to remove sign
@@ -155,7 +157,7 @@ function fnHandleTextChange(_url, outputId, _titleId, _titleVal) {
     $('.text-change').on('change keypress paste focus textInput input', function () {
         var val = $(this).val();
         console.log($(this).attr('id'));
-        if (val != $(this).attr('oldval')) {
+        if (val !== $(this).attr('oldval')) {
             $(this).attr('oldval', val);
             checkLength($(this).val());
         }
@@ -196,6 +198,8 @@ function fnIsEmptySearchArray(_array) {
  * Search customer reception
  * @param {String} _url Search url
  * @param {String} outputId Id of output DOM
+ * @param {String} _titleId Id of title DOM
+ * @param {String} _titleVal Value of title DOM
  */
 function fnSearchCustomerReception(_url, outputId, _titleId, _titleVal) {
     var val = $('.text-change').val();
@@ -212,7 +216,7 @@ function fnSearchCustomerReception(_url, outputId, _titleId, _titleVal) {
                 $(outputId).html(data['rightContent']);
                 // Change title
                 $(_titleId).html(_titleVal);
-                if (data['count'] != 0) {
+                if (data['count'] !== 0) {
                     // Hide create customer button
                     $('.info-content .info-result #create_customer').css({display: "none"});
                 } else {
@@ -365,7 +369,7 @@ function fnFormatCurrency(price) {
     var formatter = new Intl.NumberFormat('de-DE', {
         style: 'currency',
         currency: 'VND',
-        minimumFractionDigits: 0,
+        minimumFractionDigits: 0
         // the default value for minimumFractionDigits depends on the currency
         // and is usually already 2
     });
@@ -378,7 +382,7 @@ function fnUpdateValue(_input, _label) {
 //++ BUG0045-IMT  (DuongNV 201807) Format currency when input
 function fnFormatNumber(number) {
     var formatter = new Intl.NumberFormat('en-US', {
-        minimumFractionDigits: 0,
+        minimumFractionDigits: 0
     });
     return formatter.format(number);
 }
@@ -406,7 +410,7 @@ function printDiv(id_element, cssLink = '') {
     var divToPrint = document.getElementById(id_element);
     var title = 'Print';
     var css = '';
-    if (cssLink != '') {
+    if (cssLink !== '') {
         css = "<link rel='stylesheet' href='" + cssLink + "' type='text/css' media='print'/>";
     }
     var newWin = window.open('', 'Print-Window');
@@ -433,16 +437,16 @@ function bindPrint(classBtn, idToPrint, cssLink = '') {
 function gotoCell(currentSelectedElm, dir = 1) {
     var initIndex = currentSelectedElm.children().last().index();
     var limit = 0, step = -1;
-    if (dir == 1) {
+    if (dir === 1) {
         limit = initIndex;
         initIndex = 0;
         step = 1;
     }
-    if (currentSelectedElm.find('td.selected').length == 0) { // cell not select
+    if (currentSelectedElm.find('td.selected').length === 0) { // cell not select
         currentSelectedElm.children().eq(initIndex).addClass('selected');
     } else { // cell selected
         indexCell = currentSelectedElm.find('td.selected').index();
-        if (indexCell != limit) { // Not final cell
+        if (indexCell !== limit) { // Not final cell
             currentSelectedElm.children().eq(indexCell).removeClass('selected');
             indexCell += step;
             currentSelectedElm.children().eq(indexCell).addClass('selected');
@@ -457,7 +461,7 @@ function gotoCell(currentSelectedElm, dir = 1) {
 function gotoRow(currentSelectedElm, dir = 1, indexCell = '') {
     currentSelectedElm.removeClass('selected');
     currentSelectedElm.find('td.selected').removeClass('selected'); // Remove selected cell
-    if (dir == 1) {
+    if (dir === 1) {
         currentSelectedElm = currentSelectedElm.next();
     } else {
         currentSelectedElm = currentSelectedElm.prev();
@@ -476,7 +480,7 @@ function bindClickRow() {
     $('table.table-select tr').on('click', function (event) {
         //Remove another selected row
         var anotherSelected = $('body').find('table.table-select tr.selected');
-        if (anotherSelected.length != 0) {
+        if (anotherSelected.length !== 0) {
             anotherSelected.removeClass('selected');
             anotherSelected.find('td.selected').removeClass('selected');
         } //End remove
@@ -507,7 +511,7 @@ function bindSelectRow() {
                 event.preventDefault();
                 break;
             case 38: // Up arrow 
-                if (typeof currentSelectedElm.prev()[0] != 'undefined') {
+                if (typeof currentSelectedElm.prev()[0] !== 'undefined') {
                     currentSelectedElm = gotoRow(currentSelectedElm, -1, indexCell);
                 }
                 event.preventDefault();
@@ -517,7 +521,7 @@ function bindSelectRow() {
                 event.preventDefault();
                 break;
             case 40: // Down arrow 
-                if (typeof currentSelectedElm.next()[0] != 'undefined') {
+                if (typeof currentSelectedElm.next()[0] !== 'undefined') {
                     currentSelectedElm = gotoRow(currentSelectedElm, 1, indexCell);
                 }
                 event.preventDefault();
@@ -567,7 +571,8 @@ function drag(ev, element, field, toClass) {
 function wsdrag(ev, element, field, toClass) {
     $(element).attr('id', 'dragging'); //element is $(this)
     $(element).parent().attr('id', 'dragging_container');
-    ev.originalEvent.dataTransfer.setData("color_class", $(ev.target).attr('class'));
+//    ev.originalEvent.dataTransfer.setData("color_class", $(ev.target).attr('class'));
+    ev.originalEvent.dataTransfer.setData("color", $(ev.target).data('shift_color'));
     ev.originalEvent.dataTransfer.setData("data_id", $(ev.target).data('shift_id'));
     ev.originalEvent.dataTransfer.setData("data_name", $(ev.target).data('shift_name'));
     ev.originalEvent.dataTransfer.setData("toClass", toClass);
@@ -599,7 +604,7 @@ function drop(ev, element, toClass, format, autoIncrease) {
     }
 
     if (!elmData) {
-        return
+        return;
     }
     $(".dropErr").text("");
 }
@@ -609,23 +614,24 @@ function wsdrop(ev, element, toClass, format, autoIncrease) {
     var ts = $(element).children("span").length + 1;
     ev.preventDefault();
     var color_class = ev.originalEvent.dataTransfer.getData('color_class');//lấy giá trị biến source và gán vào biến elm_id
+    var color = ev.originalEvent.dataTransfer.getData('color');
     var dropAreaClass = ev.originalEvent.dataTransfer.getData('toClass');
     var data_shift_id = ev.originalEvent.dataTransfer.getData('data_id');
     var data_shift_name = ev.originalEvent.dataTransfer.getData('data_name');
     var data_date = $(ev.target).data('date');
-    var data_employee = $(ev.target).data('employee');
+    var data_employee = $(ev.target).data('id');
     //swap if a drag b
     if ($('#dragging').hasClass('alreadyIn')) { // #dragging is element which being dragging
         $('#dragging').remove();
         $(element).children().clone().appendTo('#dragging_container'); // #dragging is element contain #dragging
         var oldShift = $('#dragging_container').children('.shift_cell').data('shift_id');
         var oldDate = $('#dragging_container').data('date');
-        var oldEmp = $('#dragging_container').data('employee');
+        var oldEmp = $('#dragging_container').data('id');
         $('#dragging_container').children('.shift_cell').attr('data-date', oldDate);
-        $('#dragging_container').children('.shift_cell').attr('data-employee', oldEmp);
+        $('#dragging_container').children('.shift_cell').attr('data-id', oldEmp);
         var aOldData = [oldShift, oldDate, oldEmp];
         var oldData = JSON.stringify(aOldData);
-        $('#dragging_container').find("input[name='HrWorkSchedule[data][]']").val(oldData).removeClass('unmodify');
+        $('#dragging_container').find("input[name='HrWorkSchedules[data][]']").val(oldData).removeClass('unmodify');
     } else {
         $('#dragging').removeAttr('id');
     }
@@ -635,24 +641,32 @@ function wsdrop(ev, element, toClass, format, autoIncrease) {
     var color_class = color_class.substring(pos, pos + 14);
 
 //        if(dropAreaClass !== toClass) return;
-    if (color_class === "")
+//    if (color_class === "")
+    if (color === "") {
         return;
+    }
     $selector = 'span[data-id=' + data_shift_id + ']';
     if ($(element).find($selector).length <= 0) {
         $(element).empty();
         currentTrDrop = $(element).data('current');
         var aData = [data_shift_id, data_date, data_employee];
         var data = JSON.stringify(aData);
-        var html_epd = "<div class='shift_container shift_cell " + color_class +
-//                "' data-shift_id=" + data_shift_id + " data-shift_name='" + data_shift_name + "' data-date=" + data_date + " data-employee=" + data_employee + ">" + data_shift_name +
-                "' data-shift_id=" + data_shift_id + " data-shift_name='" + data_shift_name + "' data-date=" + data_date + " data-employee=" + data_employee + ">" + "x" +
-                "<input type='hidden' name='HrWorkSchedule[data][]' value ='" + data + "'>" +
+//        var html_epd = "<div class='shift_container shift_cell " + color_class +
+        var html_epd = "<div class='shift_container shift_cell "
+                + "' data-shift_id='" + data_shift_id
+                + "' data-shift_name='" + data_shift_name
+                + "' data-date='" + data_date
+                + "' data-id='" + data_employee
+                + "' data-shift_color='" + color
+                + "' style='background-color: " + color + "'>&nbsp;" +
+                "<input type='hidden' name='HrWorkSchedules[data][]' value ='" + data + "'>" +
                 "</div>";
         $(element).append(html_epd);
     }
 
-    if (!color_class) {
-        return
+//    if (!color_class) {
+    if (!color) {
+        return;
     }
     $(".dropErr").text("");
 }
@@ -673,12 +687,17 @@ function dropOutsideToDelete() {
     });
 }
 
+/**
+ * Init before drag
+ * @param {String} fromClass    Workshift container class
+ * @param {String} toClass      Table cell container class
+ */
 function initDrag(fromClass, toClass) {
     $("." + fromClass).addClass("dragItem");
     $(document).on("mousedown", ".alreadyIn, ." + fromClass, function () {
         $("." + fromClass).attr("draggable", "true");
         $(".alreadyIn").attr("draggable", "true");
-    })
+    });
     //kéo phần từ qua vùng cho phép drop thì hiện dấu cho phép drop
     $(document).on("dragover", "." + toClass, function (event) {
         allowDrop(event);
@@ -706,8 +725,17 @@ function allowDrag(fromClass, toClass, field = "id", format = "", autoIncrease =
     dropOutsideToDelete();
 }
 
-//Workschedule 
+/**
+ * Handle dragndrop on work schedule
+ * @param {String} fromClass    Workshift container class
+ * @param {String} toClass      Table cell container class
+ * @param {String} field        Field to transder
+ * @param {type} format
+ * @param {type} autoIncrease
+ * @returns {undefined}
+ */ 
 function wsallowDrag(fromClass, toClass, field = "id", format = "", autoIncrease = "false") {
+    // Init before drag
     initDrag(fromClass, toClass);
     $(document).on("dragstart", ".alreadyIn, ." + fromClass, function (event) {
         wsdrag(event, this, field, toClass);

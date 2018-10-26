@@ -13,8 +13,38 @@ class HrWorkPlansController extends HrController {
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
+        $this->layout = '//layouts/column1';
+        $model = $this->loadModel($id);
+        if (isset($_POST['HrWorkSchedules']['data'])) {
+            $data = $_POST['HrWorkSchedules']['data'];
+            $arrUserId = $model->getUserIdArray();
+            $criteria = new CDbCriteria();
+            $criteria->addInCondition('employee_id', $arrUserId);
+            $criteria->addBetweenCondition('work_day', $model->date_from, $model->date_to);
+            $rowDeleted = HrWorkSchedules::model()->deleteAll($criteria);
+            Loggers::info('Deleted', $rowDeleted, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            foreach ($data as $item) {
+                $item = str_replace('[', '', $item);
+                $item = str_replace(']', '', $item);
+                $arrData = explode(',', $item);
+                Loggers::info('List data', CommonProcess::json_encode_unicode($arrData), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                if (count($arrData) == 3) {
+                    $workSchedule = new HrWorkSchedules('create');
+                    $workSchedule->work_day = CommonProcess::convertDateTime($arrData[1],
+                            DomainConst::DATE_FORMAT_10, DomainConst::DATE_FORMAT_DB);
+                    $workSchedule->work_shift_id    = str_replace("\"", '', $arrData[0]);
+                    $workSchedule->work_plan_id     = $model->id;
+                    $workSchedule->employee_id      = $arrData[2];
+                    if ($workSchedule->save()) {
+                        Loggers::info('Save schedule success', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                    } else {
+                        Loggers::error('Save failed', CommonProcess::json_encode_unicode($workSchedule->getErrors()), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                    }
+                }
+            }
+        }
         $this->render('view', array(
-            'model' => $this->loadModel($id),
+            'model' => $model,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }

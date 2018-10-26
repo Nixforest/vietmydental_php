@@ -70,7 +70,7 @@ $this->widget('BaseGridView', array(
         ),
         array(
             'name' => 'work_shift_id',
-            'value' => '$data->getWorkShift()',
+            'value' => '$data->getWorkShiftName()',
         ),
         array(
             'name' => 'work_plan_id',

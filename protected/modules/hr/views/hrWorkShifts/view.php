@@ -30,6 +30,11 @@ $this->widget('zii.widgets.CDetailView', array(
         ),
         'factor',
         array(
+            'name' => 'color',
+            'value' => '<span style="background-color: ' . $model->getColorValue() . ';">' . $model->getColorValue() . '</span>',
+            'type'  => 'html',
+        ),
+        array(
             'name' => 'status',
             'value' => $model->getStatus(),
         ),

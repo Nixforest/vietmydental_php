@@ -372,4 +372,50 @@ class EmailHandler {
         Loggers::info('Sent email', $email,
                 __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
     }
+    
+    /**
+     * Send email to inform Working plan was created
+     * @param HrWorkPlans   $mPlan Plan information
+     * @param Users         $mUser User need to sending
+     */
+    public static function sendReqApprovedWorkPlan($mPlan, $mUser) {
+        $email      = $mUser->getEmail();
+        $fullName   = $mUser->getFullName();
+        $link       = Yii::app()->createAbsoluteUrl("hr/hrWorkPlans/view", array(
+                            'id'    => $mPlan->id,
+                        ));
+        $content    = "Xin chào: $fullName."
+                       . "<br>Thông báo có Kế hoạch làm việc vừa được tạo."
+                       . "<br>Vui lòng truy cập vào link bên dưới để xem thông tin chi tiết:"
+                       . "<br>$link";
+        $adminEmail = Settings::getItemValue(Settings::KEY_ADMIN_EMAIL);
+        $subject    = Settings::getItemValue(Settings::KEY_EMAIL_MAIN_SUBJECT);
+        EmailHandler::sendEmailOnce($email, $adminEmail, $subject, $content);
+        
+        Loggers::info('Sent email', $email,
+                __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+    }
+    
+    /**
+     * Send email about Working plan was updated by approver
+     * @param HrWorkPlans   $mPlan Plan information
+     * @param Users $mUser Model user of creator
+     */
+    public static function sendApprovedWorkPlan($mPlan, $mUser) {
+        $email      = $mUser->getEmail();
+        $fullName   = $mUser->getFullName();
+        $link       = Yii::app()->createAbsoluteUrl("hr/hrWorkPlan/view", array(
+                            'id'    => $mPlan->id,
+                        ));
+        $content    = "Xin chào: $fullName."
+                       . "<br>Thông báo Kế hoạch làm việc đã được cập nhật. "
+                       . "<br>Vui lòng truy cập vào link bên dưới để xem thông tin chi tiết:"
+                       . "<br>$link";
+        $adminEmail = Settings::getItemValue(Settings::KEY_ADMIN_EMAIL);
+        $subject    = Settings::getItemValue(Settings::KEY_EMAIL_MAIN_SUBJECT);
+        EmailHandler::sendEmailOnce($email, $adminEmail, $subject, $content);
+        
+        Loggers::info('Sent email', $email,
+                __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+    }
 }

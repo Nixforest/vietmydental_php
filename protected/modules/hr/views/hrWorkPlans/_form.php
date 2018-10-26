@@ -117,7 +117,7 @@
 
     <div class="row" style="<?php echo (($model->isNewRecord) ? "display: none;" : ""); ?>">
         <?php echo $form->labelEx($model, 'status'); ?>
-        <?php echo $form->dropdownlist($model, 'status', HrWorkShifts::getArrayStatus()); ?>
+        <?php echo $form->dropdownlist($model, 'status', HrWorkPlans::getArrayStatus()); ?>
         <?php echo $form->error($model, 'status'); ?>
     </div>
 

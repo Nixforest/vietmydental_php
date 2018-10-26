@@ -2,7 +2,7 @@
 /* @var $this HrWorkPlansController */
 /* @var $model HrWorkPlans */
 
-$this->createMenu('view', $model);
+$this->createMenu('viewAll', $model);
 
 //Yii::app()->clientScript->registerScript('search', "
 //$('.search-button').click(function(){

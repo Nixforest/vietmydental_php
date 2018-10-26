@@ -66,6 +66,13 @@ $this->widget('zii.widgets.grid.CGridView', array(
         ),
         'factor',
         array(
+            'class'                 => 'DataColumn',
+            'name'                  => 'color',
+            'value'                 => '$data->getColorValue()',
+            'evaluateHtmlOptions'   => true,
+            'htmlOptions'           => array('style' => '"background-color: {$data->getColorValue()};"')
+        ),
+        array(
             'name' => 'status',
             'value' => '$data->getStatus()',
         ),

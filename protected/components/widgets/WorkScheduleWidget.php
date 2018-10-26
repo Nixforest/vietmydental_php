@@ -26,7 +26,7 @@ class WorkScheduleWidget extends CWidget {
      * Flag check can update work schedule
      * @var Boolean 
      */
-    public $canUpdate;
+    public $canUpdate = true;
 
     /**
      * Run method

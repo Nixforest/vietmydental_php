@@ -28,7 +28,9 @@ $form = $this->beginWidget('CActiveForm', array(
             <li class="shift_container shift_color_<?php echo $colorIdx++; ?>"
                 data-shift_name="<?php echo $shiftName; ?>"
                 data-shift_id="<?php echo $workShift->id; ?>"
-                draggable="true">
+                data-shift_color="<?php echo $workShift->getColorValue(); ?>"
+                draggable="true"
+                style="background-color: <?php echo $workShift->getColorValue(); ?>;">
                 <?php echo $shiftInfo; ?>
             </li>
             <?php endforeach; ?>
@@ -36,6 +38,7 @@ $form = $this->beginWidget('CActiveForm', array(
     </div>
     <div class="row">
         <div class="col-md-12">
+            <!-- Table work schedule -->
             <table id="tbl_work_schedule" class="table_work_schedule table-bordered" align="center">
                 <thead>
                     <tr>
@@ -60,12 +63,41 @@ $form = $this->beginWidget('CActiveForm', array(
                         foreach ($period as $dt) :
                             $date   = $dt->format(DomainConst::DATE_FORMAT_10);
                             $wd     = CommonProcess::getWeekDay($dt->format('w'));
+                            if ($canUpdate) {
+                                $arrStatus = array(
+                                    HrWorkSchedules::STATUS_ACTIVE,
+                                    HrWorkSchedules::STATUS_APPROVED,
+                                );
+                            } else {
+                                $arrStatus = array(
+                                    HrWorkSchedules::STATUS_APPROVED,
+                                );
+                            }
+                            $mWorkShift = HrWorkSchedules::getWorkShift($employee->id, $dt->format(DomainConst::DATE_FORMAT_DB), $arrStatus);
+                            
                         ?>
                         <td class="cell_container <?php echo CommonProcess::isWeekend($wd) ? 'weekend' : ''; ?>"
                             data-date="<?php echo $date; ?>"
                             data-id="<?php echo $employee->id; ?>">
-                            <?php echo ''; ?>
-                        </th>
+                            <?php
+                            if ($mWorkShift != NULL) :
+                                $inputValue = "[$mWorkShift->id,$date,$employee->id]";
+                            ?>
+                            <div class="shift_container shift_cell alreadyIn"
+                                 data-shift_id="<?php echo $mWorkShift->id; ?>"
+                                 data-shift_name="<?php echo $mWorkShift->name; ?>"
+                                 data-shift_color="<?php echo $mWorkShift->getColorValue(); ?>"
+                                 data-date="<?php echo $date; ?>"
+                                 data-id="<?php echo $employee->id; ?>"
+                                 draggable="true"
+                                 style="background-color: <?php echo $mWorkShift->getColorValue(); ?>;">
+                                <?php echo DomainConst::SPACE; ?>
+                                <input type="hidden" name="HrWorkSchedules[data][]" value="<?php echo $inputValue; ?>">
+                            </div>
+                            <?php
+                            endif;
+                            ?>
+                        </td>
                         <?php endforeach; ?>
                     </tr>
                     <?php endforeach; ?>

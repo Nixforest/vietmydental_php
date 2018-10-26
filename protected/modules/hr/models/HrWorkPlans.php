@@ -197,6 +197,38 @@ class HrWorkPlans extends BaseActiveRecord {
         return $retVal;
     }
     
+    /**
+     * Override afterSave method
+     */
+    protected function afterSave() {
+        if (isset($this->rWorkSchedules)) {
+            foreach ($this->rWorkSchedules as $workSchedule) {
+                switch ($this->status) {
+                    case self::STATUS_INACTIVE:
+                        $workSchedule->status = HrWorkSchedules::STATUS_INACTIVE;
+                        break;
+                    case self::STATUS_ACTIVE:
+                        $workSchedule->status = HrWorkSchedules::STATUS_ACTIVE;
+                        break;
+                    case self::STATUS_APPROVED:
+                        $workSchedule->status = HrWorkSchedules::STATUS_APPROVED;
+                        break;
+                    case self::STATUS_CANCEL:
+                        $workSchedule->status = HrWorkSchedules::STATUS_CANCEL;
+                        break;
+
+                    default:
+                        $workSchedule->status = HrWorkSchedules::STATUS_ACTIVE;
+                        break;
+                }
+                $workSchedule->save();
+            }
+        }
+        
+        // Send email inform
+        $this->sendEmail();
+    }  
+    
     //-----------------------------------------------------
     // Utility methods
     //-----------------------------------------------------
@@ -229,6 +261,17 @@ class HrWorkPlans extends BaseActiveRecord {
     public function getApproverName() {
         if (isset($this->rApproved)) {
             return $this->rApproved->getFullName();
+        }
+        return '';
+    }
+    
+    /**
+     * Get approver email
+     * @return string Email of approver
+     */
+    public function getApproverEmail() {
+        if (isset($this->rApproved)) {
+            return $this->rApproved->getEmail();
         }
         return '';
     }
@@ -281,6 +324,20 @@ class HrWorkPlans extends BaseActiveRecord {
     }
     
     /**
+     * Get user_id array
+     * @return String[] List users
+     */
+    public function getUserIdArray() {
+        $retVal = array();
+        if (isset($this->rRole->rUser)) {
+            foreach ($this->rRole->rUser as $user) {
+                $retVal[] = $user->id;
+            }
+        }
+        return $retVal;
+    }
+    
+    /**
      * Get from date
      * @return String Date from value as Back-end format
      */
@@ -296,6 +353,44 @@ class HrWorkPlans extends BaseActiveRecord {
         return CommonProcess::convertDateBackEnd($this->date_to);
     }
     
+    /**
+     * Send email inform for user
+     */
+    public function sendEmail() {
+        $userId = CommonProcess::getCurrentUserId();
+        if (Roles::isAdminRole()) {
+            // Update from administrator
+            // Do nothing
+        } else {
+            switch ($userId) {
+                case $this->approved:
+                    case self::STATUS_APPROVED:
+                    case self::STATUS_CANCEL:
+                    case self::STATUS_REQUIRED_UPDATE:
+                        // Send email
+                        EmailHandler::sendApprovedWorkPlan($this, $this->rCreatedBy);
+                    break;
+                case $this->created_by:         // Current user is creator
+                    // Send email to approver
+                    switch ($this->status) {
+                        case self::STATUS_APPROVED:
+                            if (isset($this->rApproved)) {
+                                // Send email
+                                EmailHandler::sendReqApprovedWorkPlan($this, $this->rApproved);
+                            }
+                            break;
+
+                        default:
+                            break;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+    
     //-----------------------------------------------------
     // Static methods
     //-----------------------------------------------------
@@ -306,7 +401,7 @@ class HrWorkPlans extends BaseActiveRecord {
     public static function getArrayStatus() {
         return array(
             self::STATUS_INACTIVE           => DomainConst::CONTENT00408,
-            self::STATUS_ACTIVE             => DomainConst::CONTENT00407,
+            self::STATUS_ACTIVE             => DomainConst::CONTENT00539,
             self::STATUS_APPROVED           => DomainConst::CONTENT00476,
             self::STATUS_CANCEL             => DomainConst::CONTENT00477,
             self::STATUS_REQUIRED_UPDATE    => DomainConst::CONTENT00478,
@@ -340,7 +435,7 @@ class HrWorkPlans extends BaseActiveRecord {
             'order' => 'id ASC',
         ));
         foreach ($models as $model) {
-            if ($model->status == DomainConst::DEFAULT_STATUS_ACTIVE) {
+            if ($model->status != self::STATUS_INACTIVE) {
                 $_items[$model->id] = $model->getRoleName() . ' [' . $model->date_from . ' -> ' . $model->date_to . ']';
             }
         }
