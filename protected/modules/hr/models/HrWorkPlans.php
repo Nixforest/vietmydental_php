@@ -50,6 +50,11 @@ class HrWorkPlans extends BaseActiveRecord {
      * @var String 
      */
     public $month;
+    /**
+     * Id of agent, use when search
+     * @var Int 
+     */
+    public $agent_id;
 
     /**
      * Returns the static model of the specified AR class.
@@ -119,6 +124,7 @@ class HrWorkPlans extends BaseActiveRecord {
             'created_by'    => DomainConst::CONTENT00054,
             'department_id' => DomainConst::CONTENT00529,
             'month'         => DomainConst::CONTENT00470,
+            'agent_id'      => DomainConst::CONTENT00199,
         );
     }
 
@@ -317,10 +323,34 @@ class HrWorkPlans extends BaseActiveRecord {
      * @return Users[] List users
      */
     public function getUserArray() {
+        $arrUser = array();
         if (isset($this->rRole->rUser)) {
-            return $this->rRole->rUser;
+            $arrUser = $this->rRole->rUser;
+        } else {
+            $arrUser = Roles::getUserModelArrayForSalary();
         }
-        return array();
+        // Search by department
+        $retVal = $arrUser;
+        if (!empty($this->department_id)) {
+            $retVal = array();
+            foreach ($arrUser as $user) {
+                if ($user->department_id == $this->department_id) {
+                    $retVal[] = $user;
+                }
+            }
+        }
+        // Search by agent
+        $arrUser = $retVal;
+        if (!empty($this->agent_id)) {
+            $retVal = array();
+            foreach ($arrUser as $user) {
+                if ($user->isBelongAgent($this->agent_id)) {
+                    $retVal[] = $user;
+                }
+            }
+        }
+        
+        return $retVal;
     }
     
     /**
@@ -329,10 +359,8 @@ class HrWorkPlans extends BaseActiveRecord {
      */
     public function getUserIdArray() {
         $retVal = array();
-        if (isset($this->rRole->rUser)) {
-            foreach ($this->rRole->rUser as $user) {
-                $retVal[] = $user->id;
-            }
+        foreach ($this->getUserArray() as $user) {
+            $retVal[] = $user->id;
         }
         return $retVal;
     }

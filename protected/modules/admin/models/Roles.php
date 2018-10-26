@@ -337,7 +337,7 @@ class Roles extends BaseActiveRecord {
 
     /**
      * Get role array for salary calculating
-     * @return Roles List roles model
+     * @return Roles[] List roles model
      */
     public static function getRoleModelArrayForSalary() {
         $_items = array();
@@ -351,6 +351,22 @@ class Roles extends BaseActiveRecord {
             }
         }
         return $_items;
+    }
+    
+    /**
+     * Get list users for salary calculating
+     * @return Users[] List user
+     */
+    public static function getUserModelArrayForSalary() {
+        $retVal = array();
+        foreach (self::getRoleModelArrayForSalary() as $role) {
+            if (isset($role->rUser)) {
+                foreach ($role->rUser as $user) {
+                    $retVal[] = $user;
+                }
+            }
+        }
+        return $retVal;
     }
     
     /**

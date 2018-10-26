@@ -20,7 +20,7 @@
         </div>
         <div class="col-md-6">
             <?php echo $form->labelEx($model, 'department_id'); ?>
-            <?php echo $form->dropdownlist($model, 'department_id', Departments::loadItems()); ?>
+            <?php echo $form->dropdownlist($model, 'department_id', Departments::loadItems(true)); ?>
         </div>
     </div>
 
@@ -41,6 +41,10 @@
                 'format'        => DomainConst::DATE_FORMAT_14,
             ));
             ?>
+        </div>
+        <div class="col-md-6">
+            <?php echo $form->labelEx($model, 'agent_id'); ?>
+            <?php echo $form->dropdownlist($model, 'agent_id', Agents::loadItems(true)); ?>
         </div>
     </div>
 
