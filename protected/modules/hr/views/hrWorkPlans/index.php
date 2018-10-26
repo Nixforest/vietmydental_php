@@ -25,7 +25,7 @@ $('.search-form form').submit(function(){
     or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
 </p>
 
-<?php echo CHtml::link('Advanced Search', '#', array('class' => 'search-button')); ?>
+<?php echo CHtml::link(DomainConst::CONTENT00073, '#', array('class' => 'search-button')); ?>
 <div class="search-form" style="display:none">
     <?php
     $this->renderPartial('_search', array(
@@ -35,10 +35,12 @@ $('.search-form form').submit(function(){
 </div><!-- search-form -->
 
 <?php
-$this->widget('zii.widgets.grid.CGridView', array(
-    'id' => 'hr-work-plans-grid',
-    'dataProvider' => $model->search(),
-    'filter' => $model,
+$this->widget('BaseGridView', array(
+    'id'                => 'hr-work-plans-grid',
+    'dataProvider'      => $model->search(),
+    'filter'            => $model,
+    'datePickers'       => array('date_from', 'date_to'),
+    'afterAjaxUpdate'   => 'reinstallDatePicker',
     'columns' => array(
         array(
             'header' => DomainConst::CONTENT00034,
@@ -54,11 +56,48 @@ $this->widget('zii.widgets.grid.CGridView', array(
         'approved_date',
         'notify',
         array(
-            'name' => 'role_id',
-            'value' => '$data->getRoleName()',
+            'name'      => 'role_id',
+            'value'     => '$data->getRoleName()',
+            'filter'    => Roles::getRoleArrayForSalary(),
         ),
-        'date_from',
-        'date_to',
+        array(
+            'name'      => 'date_from',
+            'value'     => '$data->getFromDate()',
+            'filter'    => $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+                'model'     => $model,
+                'attribute' => 'date_from',
+                'language'  =>'en-GB',
+                'htmlOptions'   => array(
+                    'id'    => 'date_from',
+                ),
+                'defaultOptions'    => array(
+                    'showAnim'      => 'slide',
+                    'dateFormat'    => DomainConst::DATE_FORMAT_2,
+                    'changeMonth'   => true,
+                    'changeYear'    => true,
+                    'showButtonPanel'=>true,
+                ),
+            ), true),
+        ),
+        array(
+            'name'      => 'date_to',
+            'value'     => '$data->getToDate()',
+            'filter'    => $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+                'model'     => $model,
+                'attribute' => 'date_to',
+                'language'  =>'en-GB',
+                'htmlOptions'   => array(
+                    'id'    => 'date_to',
+                ),
+                'defaultOptions'    => array(
+                    'showAnim'      => 'slide',
+                    'dateFormat'    => DomainConst::DATE_FORMAT_2,
+                    'changeMonth'   => true,
+                    'changeYear'    => true,
+                    'showButtonPanel'=>true,
+                ),
+            ), true),
+        ),
         array(
             'name' => 'status',
             'value' => '$data->getStatus()',

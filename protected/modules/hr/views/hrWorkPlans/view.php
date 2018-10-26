@@ -5,7 +5,7 @@
 $this->createMenu('view', $model);
 ?>
 
-<h1><?php echo $this->pageTitle . ' ' . $model->id; ?></h1>
+<h1><?php echo $this->pageTitle; ?></h1>
 
 <?php
 $this->widget('zii.widgets.CDetailView', array(
@@ -35,3 +35,13 @@ $this->widget('zii.widgets.CDetailView', array(
     ),
 ));
 ?>
+<div id="work_schedule">
+    <h2><?php echo DomainConst::CONTENT00011 ?></h2>
+    <?php
+        $this->widget('WorkScheduleWidget', array(
+            'model'         => $model,
+            'arrEmployee'   => $model->getUserArray(),
+            'role_id'       => $model->role_id,
+        ));
+    ?>
+</div>

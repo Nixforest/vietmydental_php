@@ -944,6 +944,21 @@ class Users extends BaseActiveRecord {
     }
     
     /**
+     * Check if user is belong to agent
+     * @param String $agentId Id of agent
+     * @return boolean True if user is belong to agent, false otherwise
+     */
+    public function isBelongAgent($agentId) {
+        foreach ($this->rAgents as $agent) {
+            if ($agent->id == $agentId) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
      * Handle change format of data before save
      */
     public function handleBeforeSave() {

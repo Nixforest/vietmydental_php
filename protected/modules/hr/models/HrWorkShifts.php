@@ -11,6 +11,7 @@
  * @property integer $role_id       Id of role
  * @property integer $type          Type of role
  * @property double $factor         Factor
+ * @property string $color          Color when show work shift
  * @property integer $status        Status
  * @property string $created_date   Created date
  * @property string $created_by     Created by
@@ -66,11 +67,12 @@ class HrWorkShifts extends BaseActiveRecord {
             array('from_id, to_id, role_id, type, status', 'numerical', 'integerOnly' => true),
             array('factor', 'numerical'),
             array('name', 'length', 'max' => 255),
+            array('color', 'length', 'max'=>6),
             array('created_by', 'length', 'max' => 10),
             array('created_date', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, name, from_id, to_id, role_id, type, factor, status, created_date, created_by', 'safe', 'on' => 'search'),
+            array('id, name, from_id, to_id, role_id, type, factor, status, created_date, created_by, color', 'safe', 'on' => 'search'),
         );
     }
 
@@ -108,6 +110,7 @@ class HrWorkShifts extends BaseActiveRecord {
             'role_id'       => DomainConst::CONTENT00488,
             'type'          => DomainConst::CONTENT00076,
             'factor'        => DomainConst::CONTENT00481,
+            'color'         => DomainConst::CONTENT00543,
             'status'        => DomainConst::CONTENT00026,
             'created_date'  => DomainConst::CONTENT00010,
             'created_by'    => DomainConst::CONTENT00054,
@@ -227,6 +230,25 @@ class HrWorkShifts extends BaseActiveRecord {
     public function getRoleName() {
         if (isset($this->rRole)) {
             return $this->rRole->role_short_name;
+        }
+        return '';
+    }
+    
+    /**
+     * Get information of work shift
+     * @return String [name: from - to]
+     */
+    public function getInfo() {
+        return $this->name . ': ' . $this->getFromTime() . ' - ' . $this->getToTime();
+    }
+    
+    /**
+     * Get color value (as hex)
+     * @return string Color value as hex (Ex: #AABBCC)
+     */
+    public function getColorValue() {
+        if (isset($this->color)) {
+            return '#' . $this->color;
         }
         return '';
     }

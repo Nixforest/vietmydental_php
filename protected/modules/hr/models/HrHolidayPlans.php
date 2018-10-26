@@ -166,6 +166,21 @@ class HrHolidayPlans extends BaseActiveRecord {
         }
         // Send email inform
         $this->sendEmail();
+    }  
+    /**
+     * Override before delete method
+     * @return Parent result
+     */
+    protected function beforeDelete() {
+        $retVal = parent::beforeDelete();
+        // Check foreign key in table hr_holidays
+        $arrHolidays = $this->getHolidaysBelongTo();
+        if (!empty($arrHolidays)) {
+            Loggers::error(DomainConst::CONTENT00214, 'Can not delete', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            $this->addErrorMessage(DomainConst::CONTENT00542);
+            return false;
+        }
+        return $retVal;
     }
     
     //-----------------------------------------------------

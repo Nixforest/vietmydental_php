@@ -1,0 +1,78 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Oct 24, 2018, 11:15:11 PM
+    Author     : nguyenpt
+*/
+
+.work_shift .shift_container {
+    padding: 5px;
+    margin-right: 5px;
+}
+.shift_color_1 {
+    background: #ffa185;
+}
+.shift_color_2 {
+    background: #f1b806
+}
+
+.shift_color_3 {
+    background: #92f58e
+}
+
+.shift_color_4 {
+    background: #e8e8e8
+}
+
+.shift_color_5 {
+    background: #fffbb7
+}
+
+.shift_color_6 {
+    background: #1ac5c5
+}
+
+.shift_color_7 {
+    background: #b1a6d4
+}
+
+.shift_color_8 {
+    background: #fdc9c9
+}
+
+.shift_color_9 {
+    background: #fbff00
+}
+
+.shift_color_10 {
+    background: #60b535
+}
+
+.shift_color_11 {
+    background: #7c9eff
+}
+
+.shift_color_12 {
+    background: #bbb13c
+}
+.shift_container {
+    display: inline-block;
+    padding: 5px;
+    margin-top: 5px;
+}
+.work_shift {
+    padding: 12px 0px 5px 0px;
+    list-style-type: none;
+}
+.weekend {
+    background: #cecece;
+}
+
+div.search-form {
+    padding: 10px;
+    margin: 10px 0;
+    background: #eee;
+}

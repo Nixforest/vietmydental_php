@@ -9,17 +9,6 @@ class HrHolidayPlansController extends HrController {
     public $layout = '//layouts/column2';
 
     /**
-     * Displays a particular model.
-     * @param integer $id the ID of the model to be displayed
-     */
-    public function actionView($id) {
-        $this->render('view', array(
-            'model' => $this->loadModel($id),
-            DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
-        ));
-    }
-
-    /**
      * Creates a new model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
@@ -64,20 +53,6 @@ class HrHolidayPlansController extends HrController {
             'model' => $model,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
-    }
-
-    /**
-     * Deletes a particular model.
-     * If deletion is successful, the browser will be redirected to the 'admin' page.
-     * @param integer $id the ID of the model to be deleted
-     */
-    public function actionDelete($id) {
-        $this->loadModel($id)->delete();
-
-        // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-        if (!isset($_GET['ajax'])) {
-            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-        }
     }
 
     /**

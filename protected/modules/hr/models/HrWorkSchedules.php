@@ -29,6 +29,8 @@ class HrWorkSchedules extends BaseActiveRecord {
     const STATUS_ACTIVE                 = 1;
     /** Approved */
     const STATUS_APPROVED               = 2;
+    /** Cancel */
+    const STATUS_CANCEL                 = 3;
     
     //-----------------------------------------------------
     // Properties
@@ -116,7 +118,8 @@ class HrWorkSchedules extends BaseActiveRecord {
         $criteria = new CDbCriteria;
 
         $criteria->compare('id', $this->id, true);
-        $criteria->compare('work_day', $this->work_day, true);
+        $date = CommonProcess::convertDateTime($this->work_day, DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_DB);
+        $criteria->compare('work_day', $date, true);
         $criteria->compare('work_shift_id', $this->work_shift_id);
         $criteria->compare('work_plan_id', $this->work_plan_id);
         $criteria->compare('employee_id', $this->employee_id, true);
@@ -141,9 +144,7 @@ class HrWorkSchedules extends BaseActiveRecord {
      * @return parent
      */
     protected function beforeSave() {
-        $date = $this->work_day;
-        $this->work_day = CommonProcess::convertDateTime($date,
-            DomainConst::DATE_FORMAT_BACK_END,
+        $this->formatDate('work_day', DomainConst::DATE_FORMAT_BACK_END,
             DomainConst::DATE_FORMAT_4);
         if ($this->isNewRecord) {
             $this->created_by = Yii::app()->user->id;
@@ -151,6 +152,28 @@ class HrWorkSchedules extends BaseActiveRecord {
             // Handle created date
             $this->created_date = CommonProcess::getCurrentDateTime();
         }
+        if ($this->status == self::STATUS_APPROVED
+                || $this->status == self::STATUS_ACTIVE) {
+            switch ($this->rWorkPlan->status) {
+                case HrWorkPlans::STATUS_INACTIVE:
+                    $this->status = self::STATUS_INACTIVE;
+                    break;
+                case HrWorkPlans::STATUS_ACTIVE:
+                    $this->status = self::STATUS_ACTIVE;
+                    break;
+                case HrWorkPlans::STATUS_APPROVED:
+                    $this->status = self::STATUS_APPROVED;
+                    break;
+                case HrWorkPlans::STATUS_CANCEL:
+                    $this->status = self::STATUS_CANCEL;
+                    break;
+
+                default:
+                    $this->status = self::STATUS_ACTIVE;
+                    break;
+            }
+        }
+        
         
         return parent::beforeSave();
     }
@@ -184,7 +207,7 @@ class HrWorkSchedules extends BaseActiveRecord {
      * Get work shift name
      * @return string Name of work shift
      */
-    public function getWorkShift() {
+    public function getWorkShiftName() {
         if (isset(HrWorkShifts::loadItems()[$this->work_shift_id])) {
             return HrWorkShifts::loadItems()[$this->work_shift_id];
         }
@@ -213,6 +236,22 @@ class HrWorkSchedules extends BaseActiveRecord {
         return '';
     }
     
+    /**
+     * Get work date
+     * @return String Date work value as Back-end format
+     */
+    public function getWorkDay() {
+        return CommonProcess::convertDateBackEnd($this->work_day);
+    }
+    
+    /**
+     * Check if model status is APPROVED
+     * @return boolean True if status is APPROVED, false otherwise
+     */
+    public function isApproved() {
+        return $this->status == self::STATUS_APPROVED;
+    }
+    
     //-----------------------------------------------------
     // Static methods
     //-----------------------------------------------------
@@ -223,9 +262,36 @@ class HrWorkSchedules extends BaseActiveRecord {
     public static function getArrayStatus() {
         return array(
             self::STATUS_INACTIVE           => DomainConst::CONTENT00408,
-            self::STATUS_ACTIVE             => DomainConst::CONTENT00407,
+            self::STATUS_ACTIVE             => DomainConst::CONTENT00539,
             self::STATUS_APPROVED           => DomainConst::CONTENT00476,
+            self::STATUS_CANCEL             => DomainConst::CONTENT00477,
         );
+    }
+    
+    /**
+     * Get work shift model
+     * @param String $user_id Id of user
+     * @param String $date Date value (format Y-m-d)
+     * @return HrWorkShifts Return model if found, NULL otherwise
+     */
+    public static function getWorkShift($user_id, $date, $arrStatus = array()) {
+        $criteria = new CDbCriteria();
+        $criteria->compare('t.work_day', $date, true);
+        $criteria->compare('t.employee_id', $user_id, true);
+        if (!empty($arrStatus)) {
+            $criteria->addInCondition('t.status', $arrStatus);
+        } else {
+            $criteria->addCondition('t.status != ' . self::STATUS_INACTIVE);
+        }
+        
+        $model = self::model()->find($criteria);
+        if ($model) {
+            Loggers::info('Found workshift', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            if ($model->isApproved()) {
+                return $model->rWorkShift;
+            }
+        }
+        return NULL;
     }
 
 }

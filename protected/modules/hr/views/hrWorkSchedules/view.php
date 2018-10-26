@@ -14,7 +14,7 @@ $this->widget('zii.widgets.CDetailView', array(
         'work_day',
         array(
             'name' => 'work_shift_id',
-            'value' => $model->getWorkShift(),
+            'value' => $model->getWorkShiftName(),
         ),
         array(
             'name' => 'work_plan_id',

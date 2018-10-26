@@ -65,12 +65,6 @@ class DomainConst {
     const SPLITTER_TYPE_MONEY                           = self::SPLITTER_TYPE_2;
     /** Html space */
     const SPACE                                         = '&nbsp;';
-    /** Date format main */
-    const DATE_FORMAT_VIEW                              = self::DATE_FORMAT_5;
-    /** Date format backend */
-    const DATE_FORMAT_BACK_END                          = self::DATE_FORMAT_3;
-    /** Date format db */
-    const DATE_FORMAT_DB                                = self::DATE_FORMAT_4;
     /** Date format */
     const DATE_FORMAT_1                                 = 'Y-m-d H:i:s';
     /** Date format */
@@ -111,6 +105,12 @@ class DomainConst {
     const DATE_FORMAT_3_NULL                            = '00/00/0000';
     /** Date default year value null */
     const DATE_DEFAULT_YEAR_NULL                        = '0000';
+    /** Date format main */
+    const DATE_FORMAT_VIEW                              = self::DATE_FORMAT_5;
+    /** Date format backend */
+    const DATE_FORMAT_BACK_END                          = self::DATE_FORMAT_3;
+    /** Date format db */
+    const DATE_FORMAT_DB                                = self::DATE_FORMAT_4;
     /** Date format */
     const DEFAULT_TIMEZONE                              = 'Asia/Ho_Chi_Minh';
     /** Default IP address */
@@ -1692,4 +1692,7 @@ class DomainConst {
     const CONTENT00538  = 'Theo ca';
     const CONTENT00539  = 'Chờ duyệt';
     const CONTENT00540  = 'Nhân viên xin nghỉ';
+    const CONTENT00541  = 'Ngày nghỉ lễ';
+    const CONTENT00542  = 'Không thể xoá do còn [' . self::CONTENT00541 . '] liên quan';
+    const CONTENT00543  = 'Màu hiển thị';
 }

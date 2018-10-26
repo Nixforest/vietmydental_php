@@ -12,10 +12,11 @@
  * @property integer $status            Status
  *
  * The followings are the available model relations:
- * @property HrWorkShifts[]                     $rWorkShifts        Array work shifts belong to this role
- * @property HrWorkPlans[]                      $rWorkPlans         Array work plans belong to this role
- * @property HrParameters[]                     $rParameters        Array parameters belong to this role
- * @property HrCoefficients[]                   $rCoefficients      Array coefficients belong to this role
+ * @property HrWorkShifts[]             $rWorkShifts        Array work shifts belong to this role
+ * @property HrWorkPlans[]              $rWorkPlans         Array work plans belong to this role
+ * @property HrParameters[]             $rParameters        Array parameters belong to this role
+ * @property HrCoefficients[]           $rCoefficients      Array coefficients belong to this role
+ * @property Users[]                    $rUser             Array users belong to this role
  */
 class Roles extends BaseActiveRecord {
     //-----------------------------------------------------
@@ -255,7 +256,7 @@ class Roles extends BaseActiveRecord {
     /**
      * Get role by name
      * @param type $role_name
-     * @return Role object
+     * @return Roles
      */
     public static function getRoleByName($role_name) {
         return self::model()->find('LOWER(role_name)="' . strtolower($role_name) . '"');
@@ -332,6 +333,40 @@ class Roles extends BaseActiveRecord {
             }
         }
         return $_items;
+    }
+
+    /**
+     * Get role array for salary calculating
+     * @return Roles[] List roles model
+     */
+    public static function getRoleModelArrayForSalary() {
+        $_items = array();
+        $_items[self::ROLE_ALL_ID] = DomainConst::CONTENT00409;
+        $models = self::model()->findAll(array(
+            'order' => 'id ASC',
+        ));
+        foreach ($models as $model) {
+            if (($model->status == DomainConst::DEFAULT_STATUS_ACTIVE) && in_array($model->role_name, self::$arrRolesStaff)) {
+                $_items[$model->id] = $model;
+            }
+        }
+        return $_items;
+    }
+    
+    /**
+     * Get list users for salary calculating
+     * @return Users[] List user
+     */
+    public static function getUserModelArrayForSalary() {
+        $retVal = array();
+        foreach (self::getRoleModelArrayForSalary() as $role) {
+            if (isset($role->rUser)) {
+                foreach ($role->rUser as $user) {
+                    $retVal[] = $user;
+                }
+            }
+        }
+        return $retVal;
     }
     
     /**

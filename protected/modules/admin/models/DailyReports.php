@@ -742,6 +742,7 @@ class DailyReports extends BaseActiveRecord {
         $createdBy  = '';
         $status     = self::STATUS_NOT_CREATED_YET . '';
         $statusStr  = self::getArrayStatus()[$status];
+        $approver   = '';
         
         if ($model) {       // Found
             $id         = $model->id;
@@ -750,6 +751,7 @@ class DailyReports extends BaseActiveRecord {
             $createdBy  = $model->getCreatedBy();
             $status     = $model->status . '';
             $statusStr  = self::getArrayStatus()[$status];
+            $approver   = $model->getApprove();
         } else {            // Not created yet
             $mAgent = Agents::model()->findByPk($agentId);
             if ($mAgent) {
@@ -761,12 +763,13 @@ class DailyReports extends BaseActiveRecord {
         $data[] = CommonProcess::createConfigJson(
                 DomainConst::ITEM_TOTAL, DomainConst::CONTENT00353, CommonProcess::formatCurrency($total));
         $data[] = CommonProcess::createConfigJson(
-                DomainConst::ITEM_RECEIPTIONIST, DomainConst::CONTENT00054, $createdBy);
+                DomainConst::ITEM_TYPE, DomainConst::CONTENT00054, $createdBy);
         $data[] = CommonProcess::createConfigJson(DomainConst::ITEM_STATUS, '', $status);
         $data[] = CommonProcess::createConfigJson(DomainConst::ITEM_STATUS_STR, DomainConst::CONTENT00026, $statusStr);
         $data[] = CommonProcess::createConfigJson(DomainConst::ITEM_AGENT_ID, '', $agentId);
         $data[] = CommonProcess::createConfigJson(
                 DomainConst::ITEM_AGENT, DomainConst::CONTENT00199, $agentName);
+        $data[] = CommonProcess::createConfigJson(DomainConst::ITEM_NAME, 'Người duyệt', $approver);
         return CommonProcess::createConfigJson($id,
                 $agentName, $data);
     }

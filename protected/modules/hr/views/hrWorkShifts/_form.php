@@ -52,6 +52,23 @@
         <?php echo $form->error($model, 'factor'); ?>
     </div>
 
+    <div class="row">
+        <?php echo $form->labelEx($model, 'color'); ?>
+        <?php
+        // echo $form->textField($model, 'color'); 
+        $this->widget('application.extensions.colorpicker.EColorPicker', array(
+            'name'      => 'HrWorkShifts[color]',
+            'mode'      => 'textfield',
+            'fade'      => false,
+            'slide'     => false,
+            'curtain'   => true,
+            'value'     => $model->color,
+        ));
+        ?>
+
+        <?php echo $form->error($model, 'color'); ?>
+    </div>
+
     <div class="row" style="<?php echo (($model->isNewRecord) ? "display: none;" : ""); ?>">
         <?php echo $form->labelEx($model, 'status'); ?>
         <?php echo $form->dropdownlist($model, 'status', HrWorkShifts::getArrayStatus()); ?>
@@ -59,9 +76,9 @@
     </div>
 
     <div class="row buttons">
-    <?php echo CHtml::submitButton($model->isNewRecord ? DomainConst::CONTENT00017 : DomainConst::CONTENT00377); ?>
+        <?php echo CHtml::submitButton($model->isNewRecord ? DomainConst::CONTENT00017 : DomainConst::CONTENT00377); ?>
     </div>
 
-<?php $this->endWidget(); ?>
+    <?php $this->endWidget(); ?>
 
 </div><!-- form -->
