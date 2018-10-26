@@ -334,6 +334,24 @@ class Roles extends BaseActiveRecord {
         }
         return $_items;
     }
+
+    /**
+     * Get role array for salary calculating
+     * @return Roles List roles model
+     */
+    public static function getRoleModelArrayForSalary() {
+        $_items = array();
+        $_items[self::ROLE_ALL_ID] = DomainConst::CONTENT00409;
+        $models = self::model()->findAll(array(
+            'order' => 'id ASC',
+        ));
+        foreach ($models as $model) {
+            if (($model->status == DomainConst::DEFAULT_STATUS_ACTIVE) && in_array($model->role_name, self::$arrRolesStaff)) {
+                $_items[$model->id] = $model;
+            }
+        }
+        return $_items;
+    }
     
     /**
      * Get working type array

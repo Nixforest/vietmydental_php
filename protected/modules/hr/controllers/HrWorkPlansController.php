@@ -18,6 +18,40 @@ class HrWorkPlansController extends HrController {
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }
+    
+    /**
+     * Display all working schedule in an only view
+     */
+    public function actionViewAll() {
+        $this->layout = '//layouts/column1';
+        $model = new HrWorkPlans;
+        $arrUsers = array();
+        if (Roles::isAdminRole()) {
+            foreach (Roles::getRoleModelArrayForSalary() as $role) {
+                if (isset($role->rUser)) {
+                    foreach ($role->rUser as $user) {
+                        $arrUsers[] = $user;
+                    }
+                }
+            }
+        } else {
+            // TODO: Implement for the other user
+        }
+        $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_DB);
+        if (filter_input(INPUT_GET, 'search')) {
+            $model->month = $_GET['HrWorkPlans']['month'];
+            $date = CommonProcess::convertDateTime($model->month,
+                    DomainConst::DATE_FORMAT_13, DomainConst::DATE_FORMAT_DB);
+        }
+        $model->date_from   = CommonProcess::getFirstDateOfMonth($date);
+        $model->date_to     = CommonProcess::getLastDateOfMonth($date);
+//            CommonProcess::dumpVariable($model->date_from);
+        $this->render('view_all', array(
+            'model'     => $model,
+            'arrUsers' => $arrUsers,
+            DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+        ));
+    }
 
     /**
      * Creates a new model.

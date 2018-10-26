@@ -70,3 +70,9 @@ and open the template in the editor.
 .weekend {
     background: #cecece;
 }
+
+div.search-form {
+    padding: 10px;
+    margin: 10px 0;
+    background: #eee;
+}

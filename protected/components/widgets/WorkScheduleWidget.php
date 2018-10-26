@@ -22,6 +22,11 @@ class WorkScheduleWidget extends CWidget {
      * @var Int 
      */
     public $role_id;
+    /**
+     * Flag check can update work schedule
+     * @var Boolean 
+     */
+    public $canUpdate;
 
     /**
      * Run method
@@ -36,10 +41,11 @@ class WorkScheduleWidget extends CWidget {
         if ($mRole) {
             $arrWorkShifts = $mRole->rWorkShifts;
         }
-        $this->render('workSchedule/view', array(
+        $this->render('workSchedule', array(
             'model'             => $this->model,
             'arrEmployee'       => $this->arrEmployee,
             'arrWorkShifts'     => $arrWorkShifts,
+            'canUpdate'         => $this->canUpdate,
         ));
     }
 

@@ -40,6 +40,16 @@ class HrWorkPlans extends BaseActiveRecord {
     // Properties
     //-----------------------------------------------------
     public $autocomplete_user;
+    /**
+     * Id of department, use when search
+     * @var Int 
+     */
+    public $department_id;
+    /**
+     * Month value, use when search
+     * @var String 
+     */
+    public $month;
 
     /**
      * Returns the static model of the specified AR class.
@@ -107,6 +117,8 @@ class HrWorkPlans extends BaseActiveRecord {
             'status'        => DomainConst::CONTENT00026,
             'created_date'  => DomainConst::CONTENT00010,
             'created_by'    => DomainConst::CONTENT00054,
+            'department_id' => DomainConst::CONTENT00529,
+            'month'         => DomainConst::CONTENT00470,
         );
     }
 
