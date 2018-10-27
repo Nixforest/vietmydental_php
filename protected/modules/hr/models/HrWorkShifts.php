@@ -238,7 +238,7 @@ class HrWorkShifts extends BaseActiveRecord {
      * Get information of work shift
      * @return String [name: from - to]
      */
-    public function getInfo() {
+    public function getDetailInfo() {
         return $this->name . ': ' . $this->getFromTime() . ' - ' . $this->getToTime();
     }
     

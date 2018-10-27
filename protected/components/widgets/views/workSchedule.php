@@ -23,7 +23,7 @@ $form = $this->beginWidget('CActiveForm', array(
             <?php foreach ($arrWorkShifts as $workShift) : ?>
             <?php
             $shiftName = $workShift->name;
-            $shiftInfo = $workShift->getInfo();
+            $shiftInfo = $workShift->getDetailInfo();
             ?>
             <li class="shift_container shift_color_<?php echo $colorIdx++; ?>"
                 data-shift_name="<?php echo $shiftName; ?>"

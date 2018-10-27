@@ -41,6 +41,14 @@ class WorkScheduleWidget extends CWidget {
         if ($mRole) {
             $arrWorkShifts = $mRole->rWorkShifts;
         }
+        $criteria = new CDbCriteria();
+        $criteria->compare('t.role_id', Roles::ROLE_ALL_ID);
+        $workShifts = HrWorkShifts::model()->findAll($criteria);
+        if ($workShifts) {
+            foreach ($workShifts as $value) {
+                $arrWorkShifts[] = $value;
+            }
+        }
         $this->render('workSchedule', array(
             'model'             => $this->model,
             'arrEmployee'       => $this->arrEmployee,
