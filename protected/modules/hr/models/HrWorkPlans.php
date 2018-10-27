@@ -11,6 +11,8 @@
  * @property integer $role_id               Id of role
  * @property string $date_from              Date from
  * @property string $date_to                Date to
+ * @property integer $department_id         Id of department
+ * @property string $agent_id               Id of agent
  * @property integer $status                Status
  * @property string $created_date           Created date
  * @property string $created_by             Created by
@@ -20,6 +22,8 @@
  * @property Users                      $rApproved                      User was approved
  * @property Roles                      $rRole                          Role this record belong to
  * @property HrWorkSchedules[]          $rWorkSchedules                 Work schedules belong this record
+ * @property Departments                $rDepartment                    Department belong to
+ * @property Agents                     $rAgent                         Agent belong to
  */
 class HrWorkPlans extends BaseActiveRecord {
     //-----------------------------------------------------
@@ -41,20 +45,10 @@ class HrWorkPlans extends BaseActiveRecord {
     //-----------------------------------------------------
     public $autocomplete_user;
     /**
-     * Id of department, use when search
-     * @var Int 
-     */
-    public $department_id;
-    /**
      * Month value, use when search
      * @var String 
      */
     public $month;
-    /**
-     * Id of agent, use when search
-     * @var Int 
-     */
-    public $agent_id;
 
     /**
      * Returns the static model of the specified AR class.
@@ -80,13 +74,13 @@ class HrWorkPlans extends BaseActiveRecord {
         // will receive user inputs.
         return array(
             array('date_from, date_to', 'required'),
-            array('role_id, status', 'numerical', 'integerOnly' => true),
-            array('approved', 'length', 'max' => 11),
+            array('role_id, department_id, status', 'numerical', 'integerOnly' => true),
+            array('approved, agent_id', 'length', 'max' => 11),
             array('created_by', 'length', 'max' => 10),
             array('approved_date, date_from, created_date', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, approved, approved_date, notify, role_id, date_from, date_to, status, created_date, created_by', 'safe', 'on' => 'search'),
+            array('id, approved, approved_date, notify, role_id, date_from, date_to, status, created_date, created_by, department_id, agent_id', 'safe', 'on' => 'search'),
         );
     }
 
@@ -103,6 +97,14 @@ class HrWorkPlans extends BaseActiveRecord {
             'rWorkSchedules' => array(
                 self::HAS_MANY, 'HrWorkSchedules', 'work_plan_id',
                 'on'    => 'status !=' . HrWorkSchedules::STATUS_INACTIVE,
+            ),
+            'rDepartment'   => array(
+                self::BELONGS_TO, 'Departments', 'department_id',
+                'on'    => 'status !=' . Departments::STATUS_INACTIVE,
+            ),
+            'rAgent'        => array(
+                self::BELONGS_TO, 'Agents', 'agent_id',
+                'on'    => 'status !=' . DomainConst::DEFAULT_STATUS_INACTIVE,
             ),
         );
     }
@@ -147,6 +149,8 @@ class HrWorkPlans extends BaseActiveRecord {
         $criteria->compare('date_from', $date, true);
         $date = CommonProcess::convertDateTime($this->date_to, DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_DB);
         $criteria->compare('date_to', $date, true);
+        $criteria->compare('department_id', $this->department_id, true);
+        $criteria->compare('agent_id', $this->agent_id, true);
         $criteria->compare('status', $this->status);
         $criteria->compare('created_date', $this->created_date, true);
         $criteria->compare('created_by', $this->created_by, true);
@@ -168,17 +172,11 @@ class HrWorkPlans extends BaseActiveRecord {
      * @return parent
      */
     protected function beforeSave() {
-        $approved_date = $this->approved_date;
-        $this->approved_date = CommonProcess::convertDateTimeToMySqlFormat(
-                $approved_date, DomainConst::DATE_FORMAT_BACK_END);
-        $date_from = $this->date_from;
-        $this->date_from = CommonProcess::convertDateTime($date_from,
-            DomainConst::DATE_FORMAT_BACK_END,
-            DomainConst::DATE_FORMAT_4);
-        $date_to = $this->date_to;
-        $this->date_to = CommonProcess::convertDateTime($date_to,
-            DomainConst::DATE_FORMAT_BACK_END,
-            DomainConst::DATE_FORMAT_4);
+        $this->formatDate('approved_date');
+        $this->formatDate('date_from', DomainConst::DATE_FORMAT_BACK_END,
+            DomainConst::DATE_FORMAT_DB);
+        $this->formatDate('date_to', DomainConst::DATE_FORMAT_BACK_END,
+            DomainConst::DATE_FORMAT_DB);
         if ($this->isNewRecord) {
             $this->created_by = Yii::app()->user->id;
             
@@ -417,6 +415,28 @@ class HrWorkPlans extends BaseActiveRecord {
                     break;
             }
         }
+    }
+    
+    /**
+     * Get department name
+     * @return string Name of department
+     */
+    public function getDepartmentName() {
+        if (isset($this->rDepartment)) {
+            return $this->rDepartment->name;
+        }
+        return '';
+    }
+    
+    /**
+     * Get agent name
+     * @return string Name of agent
+     */
+    public function getAgentName() {
+        if (isset($this->rAgent)) {
+            return $this->rAgent->name;
+        }
+        return '';
     }
     
     //-----------------------------------------------------

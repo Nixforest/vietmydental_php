@@ -139,9 +139,7 @@ class HrHolidayPlans extends BaseActiveRecord {
      * @return parent
      */
     protected function beforeSave() {
-        $date = $this->approved_date;
-        $this->approved_date = CommonProcess::convertDateTimeToMySqlFormat(
-                $date, DomainConst::DATE_FORMAT_BACK_END);
+        $this->formatDate('approved_date');
         if ($this->isNewRecord) {
             $this->created_by = Yii::app()->user->id;
             

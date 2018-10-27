@@ -115,6 +115,18 @@
         <?php echo $form->error($model, 'date_to'); ?>
     </div>
 
+    <div class="row">
+        <?php echo $form->labelEx($model, 'department_id'); ?>
+        <?php echo $form->dropdownlist($model, 'department_id', Departments::loadItems(true)); ?>
+        <?php echo $form->error($model, 'department_id'); ?>
+    </div>
+
+    <div class="row">
+        <?php echo $form->labelEx($model, 'agent_id'); ?>
+        <?php echo $form->dropdownlist($model, 'agent_id', Agents::loadItems(true)); ?>
+        <?php echo $form->error($model, 'agent_id'); ?>
+    </div>
+
     <div class="row" style="<?php echo (($model->isNewRecord) ? "display: none;" : ""); ?>">
         <?php echo $form->labelEx($model, 'status'); ?>
         <?php echo $form->dropdownlist($model, 'status', HrWorkPlans::getArrayStatus()); ?>

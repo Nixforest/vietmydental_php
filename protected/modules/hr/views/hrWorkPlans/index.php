@@ -99,6 +99,14 @@ $this->widget('BaseGridView', array(
             ), true),
         ),
         array(
+            'name' => 'department_id',
+            'value' => '$data->getDepartmentName()',
+        ),
+        array(
+            'name' => 'agent_id',
+            'value' => '$data->getAgentName()',
+        ),
+        array(
             'name' => 'status',
             'value' => '$data->getStatus()',
         ),
