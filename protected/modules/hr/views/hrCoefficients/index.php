@@ -47,11 +47,16 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'headerHtmlOptions' => array('width' => '30px', 'style' => 'text-align:center;'),
             'htmlOptions' => array('style' => 'text-align:center;')
         ),
-        array(
-            'name' => 'role_id',
-            'value' => '$data->getRoleName()',
-        ),
         'name',
+        array(
+            'header' => DomainConst::CONTENT00495,
+            'value' => '$data->getValue()',
+        ),
+        array(
+            'name'      => 'role_id',
+            'value'     => '$data->getRoleName()',
+            'filter'    => Roles::getRoleArrayForSalary(),
+        ),
         array(
             'name' => 'status',
             'value' => '$data->getStatus()',
