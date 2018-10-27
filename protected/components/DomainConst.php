@@ -1697,4 +1697,5 @@ class DomainConst {
     const CONTENT00542  = 'Không thể xoá do còn [' . self::CONTENT00541 . '] liên quan';
     const CONTENT00543  = 'Màu hiển thị';
     const CONTENT00544  = 'Các Giá trị cũ';
+    const CONTENT00545  = 'Tham số';
 }
