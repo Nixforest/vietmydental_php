@@ -24,6 +24,14 @@ $this->widget('zii.widgets.CDetailView', array(
         'date_from',
         'date_to',
         array(
+            'name' => 'department_id',
+            'value' => $model->getDepartmentName(),
+        ),
+        array(
+            'name' => 'agent_id',
+            'value' => $model->getAgentName(),
+        ),
+        array(
             'name' => 'status',
             'value' => $model->getStatus(),
         ),

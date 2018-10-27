@@ -251,7 +251,7 @@ class BaseActiveRecord extends CActiveRecord {
      * @param String $toFormat      Format date convert to
      */
     public function formatDate($field,
-            $fromFormat = DomainConst::DATE_FORMAT_3,
+            $fromFormat = DomainConst::DATE_FORMAT_BACK_END,
             $toFormat = DomainConst::DATE_FORMAT_1) {
         $date = $this->$field;
         $this->$field = CommonProcess::convertDateTime($date, $fromFormat, $toFormat);

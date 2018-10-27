@@ -152,9 +152,9 @@ class HrLeaves extends BaseActiveRecord {
      * @return parent
      */
     protected function beforeSave() {
-        $this->formatDate('approved_date', DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_1);
-        $this->formatDate('start_date');
-        $this->formatDate('end_date');
+        $this->formatDate('approved_date');
+        $this->formatDate('start_date', DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_DB);
+        $this->formatDate('end_date', DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_DB);
         if ($this->isNewRecord) {
             $this->created_by = CommonProcess::getCurrentUserId();
             
