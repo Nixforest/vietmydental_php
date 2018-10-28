@@ -262,5 +262,17 @@ class HrParameters extends BaseActiveRecord {
         }
         return $_items;
     }
+    
+    /**
+     * Load model
+     * @param String $role_id Id of role
+     * @return HrParameters[] List model
+     */
+    public static function loadModels($role_id) {
+        $models = self::model()->findAllByAttributes(array(
+            'role_id' => $role_id,
+        ));
+        return $models;
+    }
 
 }

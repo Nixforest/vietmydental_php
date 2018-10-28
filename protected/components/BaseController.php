@@ -35,6 +35,12 @@ class BaseController extends CController {
      * @var array context menu items. This property will be assigned to {@link CMenu::items}.
      */
     public $menu = array();
+    
+    /**
+     * Properties to set customize additional menu
+     * @var Array 
+     */
+    public $additionMenus = array();
 
     /**
      * @var array the breadcrumbs of the current page. The value of this property will
@@ -269,7 +275,7 @@ class BaseController extends CController {
     public function getLabel($action) {
         $icon = $this->getIcon($action);
         if (!empty($icon)) {
-            return '<img src="'.Yii::app()->theme->baseUrl . '/img/menu/' . $icon . '" style="margin-right: 5px;" />' . $this->getPageTitleByAction($action);
+            return '<img src="'.Yii::app()->theme->baseUrl . '/img/menu/' . $icon . '" style="margin-right: 5px; display: inline;" />' . $this->getPageTitleByAction($action);
         }
         
         return $this->getPageTitleByAction($action);

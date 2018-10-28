@@ -69,6 +69,30 @@ class HrFunctionsController extends HrController {
             $model->attributes = $_GET['HrFunctions'];
         }
 
+        $params = array();
+        $coefficients = array();
+        $itemOption = array(
+            'class'     => 'shift_container dragItem',
+            'draggable' => 'true',
+        );
+        foreach (HrParameters::loadModels($model->role_id) as $value) {
+            $params[] = array(
+                'label' => $value->getName(),
+                'url' => array('#'),
+                'itemOptions' => $itemOption,
+            );
+        }
+        foreach (HrCoefficients::loadModels($model->role_id) as $value) {
+            $coefficients[] = array(
+                'label' => $value->getName(),
+                'url' => array('#'),
+                'itemOptions' => $itemOption,
+            );
+        }
+        $this->additionMenus = array(
+            DomainConst::CONTENT00545   => $params,
+            DomainConst::CONTENT00496   => $coefficients,
+        );
         $this->render('create_setup', array(
             'model' => $model,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
