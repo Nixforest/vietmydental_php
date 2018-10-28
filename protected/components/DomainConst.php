@@ -1700,4 +1700,6 @@ class DomainConst {
     const CONTENT00545  = 'Tham số';
     const CONTENT00546  = 'Xem chi tiết';
     const CONTENT00547  = 'Tác vụ';
+    const CONTENT00548  = 'Sao chép';
+    const CONTENT00549  = 'Thêm dòng';
 }

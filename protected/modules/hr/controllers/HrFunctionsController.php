@@ -98,6 +98,42 @@ class HrFunctionsController extends HrController {
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }
+    
+    /**
+     * Create new row
+     */
+    public function actionAjaxCreateNewRow() {
+        // Create new model
+        $model = new HrFunctions('create');
+        $model->type_id = '1';
+        // Get role id from POST
+        if (!empty($_POST['role_id'])) {
+            $model->role_id = $_POST['role_id'];
+        }
+        // Get type id from POST
+        if (!empty($_POST['type_id'])) {
+            $model->type_id = $_POST['type_id'];
+        }
+        $model->name = 'Tên công thức';
+        $model->save();
+    }
+    
+    /**
+     * Action clone row
+     */
+    public function actionAjaxCloneRow() {
+        $id = '';
+        if (!empty($_POST['id'])) {
+            $id = $_POST['id'];
+        }
+        $model = $this->loadModel($id);
+        if ($model) {
+            $newModel = $model->cloneModel();
+            $newModel->save();
+            $newModel->cloneRelation($model, 'rParameters', OneMany::TYPE_FUNCTION_PARAMETER);
+            $newModel->cloneRelation($model, 'rCoefficients', OneMany::TYPE_FUNCTION_COEFFICIENT);
+        }
+    }
 
     /**
      * Creates a new model.
