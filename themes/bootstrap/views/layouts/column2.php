@@ -10,6 +10,7 @@
 				'items'=>$this->menu,
 				'htmlOptions'=>array('class'=>'sidebar'),
 //				'htmlOptions'=>array('class'=>'operations'),
+                            'encodeLabel'   => false,
 			));
 			$this->endWidget();
 		?>

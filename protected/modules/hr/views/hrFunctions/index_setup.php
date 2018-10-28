@@ -37,7 +37,6 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array('style' => 'text-align:center;')
         ),
         'name',
-//        'function',
         array(
             'name' => 'function',
             'value' => '$data->getUnderstandingFunction()',

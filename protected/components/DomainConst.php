@@ -1698,4 +1698,5 @@ class DomainConst {
     const CONTENT00543  = 'Màu hiển thị';
     const CONTENT00544  = 'Các Giá trị cũ';
     const CONTENT00545  = 'Tham số';
+    const CONTENT00546  = 'Xem chi tiết';
 }

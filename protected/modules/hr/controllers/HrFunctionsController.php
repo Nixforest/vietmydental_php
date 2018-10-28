@@ -18,16 +18,10 @@ class HrFunctionsController extends HrController {
         $listMenu = parent::createOperationMenu($action, $model);
         switch ($action) {
             case 'indexSetup':
-                $listMenu[] = array(
-                    'label' => $this->getPageTitleByAction('createSetup'),
-                    'url' => array('createSetup')
-                );
+                $listMenu[] = $this->createMenuItem('createSetup');
                 break;
             case 'createSetup':
-                $listMenu[] = array(
-                    'label' => $this->getPageTitleByAction('indexSetup'),
-                    'url' => array('indexSetup')
-                );
+                $listMenu[] = $this->createMenuItem('indexSetup');
                 break;
 
             default:

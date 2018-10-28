@@ -78,7 +78,7 @@ div.search-form {
 }
 .cell_container {
     font-size: 0.9em;
-    border: 1px white solid;
+    /*border: 1px white solid !important;*/
     padding: 0.3em;
     padding-left: 0.7em;
 }
@@ -89,4 +89,8 @@ div.search-form {
 td, th {
     display: table-cell;
     vertical-align: inherit;
+    /*border: 1px white solid;*/
+}
+.table_work_schedule {
+    background-color: #F8F8F8;
 }
