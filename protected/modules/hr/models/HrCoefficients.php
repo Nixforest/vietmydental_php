@@ -247,6 +247,14 @@ class HrCoefficients extends BaseActiveRecord {
         ));
     }
     
+    /**
+     * Get name
+     * @return String Name
+     */
+    public function getName() {
+        return $this->name;
+    }
+    
     //-----------------------------------------------------
     // Static methods
     //-----------------------------------------------------

@@ -7,6 +7,79 @@ class HrFunctionsController extends HrController {
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
     public $layout = '//layouts/column2';
+    
+    /**
+     * Override parent method
+     * @param String $action Action id
+     * @param HrFunctions $model Model object
+     * @return Array List menu
+     */
+    public function createOperationMenu($action, $model = NULL) {
+        $listMenu = parent::createOperationMenu($action, $model);
+        switch ($action) {
+            case 'indexSetup':
+                $listMenu[] = array(
+                    'label' => $this->getPageTitleByAction('createSetup'),
+                    'url' => array('createSetup')
+                );
+                break;
+            case 'createSetup':
+                $listMenu[] = array(
+                    'label' => $this->getPageTitleByAction('indexSetup'),
+                    'url' => array('indexSetup')
+                );
+                break;
+
+            default:
+                break;
+        }
+        foreach ($listMenu as $key => $value) {
+            if (!self::canAccessAction($value['url'][0], $this->listActionsCanAccess)) {
+                unset($listMenu[$key]);
+            }
+        }
+        return array_values($listMenu);
+    }
+    
+    /**
+     * Lists all models.
+     */
+    public function actionIndexSetup() {
+        $model = new HrFunctions('search');
+        $model->unsetAttributes();  // clear any default values
+        if (isset($_GET['HrFunctions'])) {
+            $model->attributes = $_GET['HrFunctions'];
+        }
+        if (filter_input(INPUT_GET, 'search')) {
+            $model->attributes = $_GET['HrFunctions'];
+        }
+
+        $this->render('index_setup', array(
+            'model' => $model,
+            DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+        ));
+    }
+
+    /**
+     * Creates a new model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     */
+    public function actionCreateSetup() {
+        $model = new HrFunctions('search');
+        $model->unsetAttributes();  // clear any default values
+
+        // Uncomment the following line if AJAX validation is needed
+        // $this->performAjaxValidation($model);
+
+        if (filter_input(INPUT_GET, 'search')) {
+            $model->attributes = $_GET['HrFunctions'];
+        }
+
+        $this->render('create_setup', array(
+            'model' => $model,
+            DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
+        ));
+    }
 
     /**
      * Creates a new model.

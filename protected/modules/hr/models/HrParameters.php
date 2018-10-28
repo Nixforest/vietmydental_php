@@ -199,6 +199,14 @@ class HrParameters extends BaseActiveRecord {
         return $retVal;
     }
     
+    /**
+     * Get name of parameter
+     * @return String Name of parameter
+     */
+    public function getName() {
+        return $this->name;
+    }
+    
     //-----------------------------------------------------
     // Static methods
     //-----------------------------------------------------

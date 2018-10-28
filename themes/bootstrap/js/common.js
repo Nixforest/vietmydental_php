@@ -632,6 +632,8 @@ function wsdrop(ev, element, toClass, format, autoIncrease) {
         var aOldData = [oldShift, oldDate, oldEmp];
         var oldData = JSON.stringify(aOldData);
         $('#dragging_container').find("input[name='HrWorkSchedules[data][]']").val(oldData).removeClass('unmodify');
+        
+        //$(ev.target).attr('style', 'background-color: ' + color);
     } else {
         $('#dragging').removeAttr('id');
     }
@@ -662,6 +664,7 @@ function wsdrop(ev, element, toClass, format, autoIncrease) {
                 "<input type='hidden' name='HrWorkSchedules[data][]' value ='" + data + "'>" +
                 "</div>";
         $(element).append(html_epd);
+        //$(ev.target).attr('style', 'background-color: ' + color);
     }
 
 //    if (!color_class) {

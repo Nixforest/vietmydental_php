@@ -27,7 +27,7 @@ $this->createMenu('viewAll', $model);
     ));
     ?>
 </div><!-- search-form -->
-<div id="work_schedule">
+<div id="work_schedule" class="grid-view">
     <?php
         $this->widget('WorkScheduleWidget', array(
             'model'         => $model,
