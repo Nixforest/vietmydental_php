@@ -15,8 +15,8 @@ $this->widget('zii.widgets.CDetailView', array(
             'name' => 'role_id',
             'value' => $model->getRoleName(),
         ),
-        'method',
         'name',
+        'method',
         array(
             'name' => 'status',
             'value' => $model->getStatus(),

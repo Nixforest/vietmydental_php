@@ -401,6 +401,73 @@ class HrFunctions extends BaseActiveRecord {
 
         return $total;
     }
+    
+    /**
+     * Get all parameters
+     * @return \CArrayDataProvider
+     */
+    public function getAllParameters() {
+        return new CArrayDataProvider($this->rParameters, array(
+            'id'    => 'hr_parameters',
+            'sort'  => array(
+                'attributes'    => HrParameters::model()->getTableSchema()->getColumnNames(),
+            ),
+            'pagination' => array(
+                'pageSize' => Settings::getListPageSize(),
+            ),
+        ));
+    }
+    
+    /**
+     * Get all coefficients
+     * @return \CArrayDataProvider
+     */
+    public function getAllCoefficients() {
+        return new CArrayDataProvider($this->rCoefficients, array(
+            'id'    => 'hr_coefficients',
+            'sort'  => array(
+                'attributes'    => HrCoefficients::model()->getTableSchema()->getColumnNames(),
+            ),
+            'pagination' => array(
+                'pageSize' => Settings::getListPageSize(),
+            ),
+        ));
+    }
+    
+    /**
+     * Get html element
+     * @param String $relation Name of relation
+     * @param String $class Name of class
+     * @return string Html formated
+     */
+    public function getElementHtml($relation, $class) {
+        $retVal = '';
+        $index = 1;
+        foreach ($this->$relation as $value) {
+            $retVal .= '<span class="btnDefault alreadyIn" data-id="' . $value->id . '" draggable="true">';
+            $retVal .=      $index++ . ': ' . $value->getName();
+            $retVal .= '<input class="display_none" name="HrFunctions[' . $this->id . '][' . $class . '][' . $value->id . ']" value="' . $value->id . '"/>';
+            $retVal .= '</span>';
+        }
+        
+        return $retVal;
+    }
+    
+    /**
+     * Get parameter html format
+     * @return string Html formated
+     */
+    public function getParametersHtml() {
+        return $this->getElementHtml('rParameters', 'param');
+    }
+    
+    /**
+     * Get coefficients html format
+     * @return string Html formated
+     */
+    public function getCoefficientsHtml() {
+        return $this->getElementHtml('rCoefficients', 'coeff');
+    }
 
     //-----------------------------------------------------
     // Static methods

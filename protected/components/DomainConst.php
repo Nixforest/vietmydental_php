@@ -62,6 +62,7 @@ class DomainConst {
     const SPLITTER_TYPE_1                               = ', ';
     const SPLITTER_TYPE_2                               = ',';
     const SPLITTER_TYPE_3                               = '-';
+    const SPLITTER_TYPE_4                               = '.';
     const SPLITTER_TYPE_MONEY                           = self::SPLITTER_TYPE_2;
     /** Html space */
     const SPACE                                         = '&nbsp;';
@@ -1695,4 +1696,10 @@ class DomainConst {
     const CONTENT00541  = 'Ngày nghỉ lễ';
     const CONTENT00542  = 'Không thể xoá do còn [' . self::CONTENT00541 . '] liên quan';
     const CONTENT00543  = 'Màu hiển thị';
+    const CONTENT00544  = 'Các Giá trị cũ';
+    const CONTENT00545  = 'Tham số';
+    const CONTENT00546  = 'Xem chi tiết';
+    const CONTENT00547  = 'Tác vụ';
+    const CONTENT00548  = 'Sao chép';
+    const CONTENT00549  = 'Thêm dòng';
 }

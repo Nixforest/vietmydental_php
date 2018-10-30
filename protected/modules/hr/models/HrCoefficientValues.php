@@ -185,7 +185,10 @@ class HrCoefficientValues extends BaseActiveRecord {
      * @return String Formated value
      */
     public function getValue() {
-        return $this->value;
+        if (strpos($this->value, DomainConst::SPLITTER_TYPE_4) != FALSE) {
+            return $this->value;
+        }
+        return CommonProcess::formatCurrency($this->value);
     }
     
     //-----------------------------------------------------

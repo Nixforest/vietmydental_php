@@ -13,6 +13,19 @@
  */
 class BaseController extends CController {
     /**
+     * List icon in menu
+     * @var Array 
+     */
+    private $arrIcon = array(
+        DomainConst::KEY_ACTION_INDEX   => 'index.png',
+        DomainConst::KEY_ACTION_VIEW    => 'view.png',
+        DomainConst::KEY_ACTION_CREATE  => 'create.png',
+        DomainConst::KEY_ACTION_UPDATE  => 'update.png',
+        DomainConst::KEY_ACTION_DELETE  => 'delete.png',
+        'createSetup'  => 'create.png',
+        'indexSetup'  => 'index.png',
+    );
+    /**
      * @var string the default layout for the controller view. Defaults to '//layouts/column1',
      * meaning using a single column layout. See 'protected/views/layouts/column1.php'.
      */
@@ -22,6 +35,12 @@ class BaseController extends CController {
      * @var array context menu items. This property will be assigned to {@link CMenu::items}.
      */
     public $menu = array();
+    
+    /**
+     * Properties to set customize additional menu
+     * @var Array 
+     */
+    public $additionMenus = array();
 
     /**
      * @var array the breadcrumbs of the current page. The value of this property will
@@ -189,6 +208,21 @@ class BaseController extends CController {
      * @return String Name of action
      */
     public function getPageTitleByAction($action) {
+        switch ($action) {
+            case DomainConst::KEY_ACTION_INDEX:
+                return DomainConst::CONTENT00021;
+            case DomainConst::KEY_ACTION_VIEW:
+                return DomainConst::CONTENT00546;
+            case DomainConst::KEY_ACTION_CREATE:
+                return DomainConst::CONTENT00017;
+            case DomainConst::KEY_ACTION_UPDATE:
+                return DomainConst::CONTENT00019;
+            case DomainConst::KEY_ACTION_DELETE:
+                return DomainConst::CONTENT00296;
+
+            default:
+                break;
+        }
         return ControllersActions::getActionNameByController(Yii::app()->controller->id, $action, $this->module);
     }
 
@@ -220,6 +254,51 @@ class BaseController extends CController {
         }
         return $retVal;
     }
+    
+    /**
+     * Get icon path
+     * @param String $action Action name
+     * @return string Icon path
+     */
+    public function getIcon($action) {
+        if (isset($this->arrIcon[$action])) {
+            return $this->arrIcon[$action];
+        }
+        return '';
+    }
+    
+    /**
+     * Get label string
+     * @param String $action Action name
+     * @return String Label string
+     */
+    public function getLabel($action) {
+        $icon = $this->getIcon($action);
+        if (!empty($icon)) {
+            return '<img src="'.Yii::app()->theme->baseUrl . '/img/menu/' . $icon . '" style="margin-right: 5px; display: inline;" />' . $this->getPageTitleByAction($action);
+        }
+        
+        return $this->getPageTitleByAction($action);
+    }
+    
+    /**
+     * Create menu item
+     * @param String $action Action name
+     * @return Array Menu item
+     */
+    public function createMenuItem($action, $id = '') {
+        $url = array($action);
+        if (!empty($id)) {
+            $url = array(
+                $action,
+                'id' => $id,
+            );
+        }
+        return array(
+            'label' => $this->getLabel($action),
+            'url' => $url,
+        );
+    }
 
     /**
      * Create operation Menu
@@ -229,58 +308,34 @@ class BaseController extends CController {
      */
     public function createOperationMenu($action, $model = NULL) {
         $listMenu = array();
-        $listMenu[] = array(
-            'label' => $this->getPageTitleByAction('index'),
-            'url' => array('index')
-        );
+        $listMenu[] = $this->createMenuItem('index');
         switch ($action) {
             case DomainConst::KEY_ACTION_INDEX:
-                $listMenu[] = array(
-                    'label' => $this->getPageTitleByAction('create'),
-                    'url' => array('create')
-                );
+                $listMenu[] = $this->createMenuItem('create');
                 break;
             case DomainConst::KEY_ACTION_CREATE:
                 break;
             case DomainConst::KEY_ACTION_UPDATE:
-                $listMenu[] = array(
-                    'label' => $this->getPageTitleByAction('create'),
-                    'url' => array('create')
-                );
+                $listMenu[] = $this->createMenuItem('create');
                 if ($model != NULL) {
-                    $listMenu[] = array(
-                        'label' => $this->getPageTitleByAction('view'),
-                        'url' => array(
-                            'view',
-                            'id' => $model->id
-                        ),
-                    );
+                    $listMenu[] = $this->createMenuItem('view', $model->id);
                 }
                 break;
             case DomainConst::KEY_ACTION_VIEW:
             case DomainConst::KEY_ACTION_RESET_PASSWORD:
-                $listMenu[] = array(
-                    'label' => $this->getPageTitleByAction('create'),
-                    'url' => array('create')
-                );
+                $listMenu[] = $this->createMenuItem('create');
                 if ($model != NULL) {
+                    $listMenu[] = $this->createMenuItem('update', $model->id);
                     $listMenu[] = array(
-                        'label' => $this->getPageTitleByAction('update'),
-                        'url' => array(
-                            'update',
-                            'id' => $model->id
-                        ),
-                    );
-                    $listMenu[] = array(
-                        'label' => $this->getPageTitleByAction('delete'),
-                        'url' => '#',
+                        'label' => $this->getLabel('delete'),
+                        'url' => array('delete'),
                         'linkOptions' => array(
                             'submit' => array(
                                 'delete',
                                 'id' => $model->id
                             ),
-                            'confirm' => DomainConst::CONTENT00038
-                        )
+                            'confirm' => DomainConst::CONTENT00038,
+                        ),
                     );
                 }
                 break;

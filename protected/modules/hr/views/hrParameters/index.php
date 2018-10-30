@@ -48,14 +48,16 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array('style' => 'text-align:center;')
         ),
         array(
-            'name' => 'role_id',
-            'value' => '$data->getRoleName()',
+            'name'      => 'role_id',
+            'value'     => '$data->getRoleName()',
+            'filter'    => Roles::getRoleArrayForSalary(),
         ),
-        'method',
         'name',
+        'method',
         array(
-            'name' => 'status',
-            'value' => '$data->getStatus()',
+            'name'      => 'status',
+            'value'     => '$data->getStatus()',
+            'visible'   => Roles::isAdminRole(),
         ),
         'created_date',
         array(

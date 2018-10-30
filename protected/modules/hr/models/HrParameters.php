@@ -199,6 +199,14 @@ class HrParameters extends BaseActiveRecord {
         return $retVal;
     }
     
+    /**
+     * Get name of parameter
+     * @return String Name of parameter
+     */
+    public function getName() {
+        return $this->name;
+    }
+    
     //-----------------------------------------------------
     // Static methods
     //-----------------------------------------------------
@@ -253,6 +261,18 @@ class HrParameters extends BaseActiveRecord {
             }
         }
         return $_items;
+    }
+    
+    /**
+     * Load model
+     * @param String $role_id Id of role
+     * @return HrParameters[] List model
+     */
+    public static function loadModels($role_id) {
+        $models = self::model()->findAllByAttributes(array(
+            'role_id' => $role_id,
+        ));
+        return $models;
     }
 
 }

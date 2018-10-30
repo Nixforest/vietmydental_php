@@ -72,6 +72,7 @@ class HrCoefficients extends BaseActiveRecord {
             'rValues'   => array(
                 self::HAS_MANY, 'HrCoefficientValues', 'coefficient_id',
                 'on'    => 'status !=' . HrCoefficientValues::STATUS_INACTIVE,
+                'order' => 'month desc',
             ),
             'rFunctions'    => array(
                 self::MANY_MANY, 'HrFunctions', 'one_many(many_id, one_id)',
@@ -159,6 +160,19 @@ class HrCoefficients extends BaseActiveRecord {
         return $retVal;
     }
     
+    /**
+     * Override afterSave method
+     */
+    protected function afterSave() {
+        // Update status of value records
+        if (isset($this->rValues)) {
+            foreach ($this->rValues as $value) {
+                $value->status = $this->status;
+                $value->save();
+            }
+        }
+    }
+    
     //-----------------------------------------------------
     // Utility methods
     //-----------------------------------------------------
@@ -201,9 +215,44 @@ class HrCoefficients extends BaseActiveRecord {
      * @param String $to    Date to
      * @return Float Value of coefficient
      */
-    public function getValue($from, $to) {
+    public function getValue($from = '', $to = '') {
+        if (empty($from) && empty($to)) {
+            if (isset($this->rValues) && (count($this->rValues) > 0)) {
+                return $this->rValues[0]->getValue();
+            }
+        }
+        if (empty($from)) {
+            $from = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_DB);
+        }
+        if (empty($to)) {
+            $to = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_DB);
+        }
         $retVal = 0;
         return $retVal;
+    }
+    
+    /**
+     * Get all values
+     * @return \CArrayDataProvider
+     */
+    public function getAllValues() {
+        return new CArrayDataProvider($this->rValues, array(
+            'id'    => 'hr_coefficients_values',
+            'sort'  => array(
+                'attributes'    => HrCoefficientValues::model()->getTableSchema()->getColumnNames(),
+            ),
+            'pagination' => array(
+                'pageSize' => Settings::getListPageSize(),
+            ),
+        ));
+    }
+    
+    /**
+     * Get name
+     * @return String Name
+     */
+    public function getName() {
+        return $this->name;
     }
     
     //-----------------------------------------------------
@@ -260,6 +309,18 @@ class HrCoefficients extends BaseActiveRecord {
             }
         }
         return $_items;
+    }
+    
+    /**
+     * Load model
+     * @param String $role_id Id of role
+     * @return HrParameters[] List model
+     */
+    public static function loadModels($role_id) {
+        $models = self::model()->findAllByAttributes(array(
+            'role_id' => $role_id,
+        ));
+        return $models;
     }
 
 }

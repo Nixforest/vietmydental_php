@@ -259,4 +259,40 @@ class BaseActiveRecord extends CActiveRecord {
             $this->$field = $date;
         }
     }
+    
+    /**
+     * Return new record with cloned attributes
+     *
+     * @param string $scenario
+     * @return static
+     */
+    public function cloneModel($scenario = 'insert')
+    {
+        /** @var \CActiveRecord $newModel */
+        $newModel = new static($scenario);
+        /** @var \CModel $this */
+        $newModel->setAttributes($this->getAttributes($this->getSafeAttributeNames()));
+        return $newModel;
+    }
+    /**
+     * Clone related records and attach to current model
+     *
+     * @param static $originModel   Model where to take original related data
+     * @param string $relationName  name of active relation to clone
+     * @param string $type          Type of relation
+     * @throws \CException
+     */
+    public function cloneRelation($originModel, $relationName, $type = '')
+    {
+        if (!isset($originModel[$relationName])) {
+            throw new \CException('Model ' . get_class($originModel) . ' has no relation ' . $relationName);
+        }
+        $relatedRecords = $originModel->$relationName;
+        Loggers::info('Count relation', count($relatedRecords), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        if (count($relatedRecords) > 0) {
+            foreach ($relatedRecords as $record) {
+                OneMany::insertOne($this->getField('id'), $record->getField('id'), $type);
+            }
+        }
+    }
 }

@@ -76,14 +76,15 @@ $form = $this->beginWidget('CActiveForm', array(
                             $mWorkShift = HrWorkSchedules::getWorkShift($employee->id, $dt->format(DomainConst::DATE_FORMAT_DB), $arrStatus);
                             
                         ?>
-                        <td class="cell_container <?php echo CommonProcess::isWeekend($wd) ? 'weekend' : ''; ?>"
+                        <td class="cell_container w-10 <?php echo CommonProcess::isWeekend($wd) ? 'weekend' : ''; ?> wstd"
                             data-date="<?php echo $date; ?>"
                             data-id="<?php echo $employee->id; ?>">
+                            <!--style="background-color: <?php // echo isset($mWorkShift) ? $mWorkShift->getColorValue() : ''; ?>;">-->
                             <?php
                             if ($mWorkShift != NULL) :
                                 $inputValue = "[$mWorkShift->id,$date,$employee->id]";
                             ?>
-                            <div class="shift_container shift_cell alreadyIn"
+                            <div class="shift_container shift_cell alreadyIn ws-div"
                                  data-shift_id="<?php echo $mWorkShift->id; ?>"
                                  data-shift_name="<?php echo $mWorkShift->name; ?>"
                                  data-shift_color="<?php echo $mWorkShift->getColorValue(); ?>"
@@ -115,3 +116,14 @@ $form = $this->beginWidget('CActiveForm', array(
         wsallowDrag("shift_container", "cell_container", "shift_id");
     });
 </script>
+<style>
+    .ws-div {
+        background-color: #00eb52;
+        width: 100%;
+        margin: 0;
+        height: 36px;
+    }
+    .wstd {
+        padding: 0px;
+    }
+</style>

@@ -600,7 +600,11 @@ function drop(ev, element, toClass, format, autoIncrease) {
     $selector = 'span[data-id=' + data_id + ']';
     if ($(element).find($selector).length <= 0) {
         currentTrDrop = $(element).data('current');
-        $(element).append("<span class='btnDefault' data-id=" + data_id + ">" + format + ts + ": " + elmData + "<input class='display_none' name='HrFunctions[function][" + currentTrDrop + "][" + format + "][]' value ='" + data_id + "'></span>");
+        var type = 'param';
+        if (toClass === 'fnc_coeff_container') {
+            type = 'coeff';
+        }
+        $(element).append("<span class='btnDefault' data-id=" + data_id + ">" + format + ts + ": " + elmData + "<input class='display_none' name='HrFunctions[" + currentTrDrop + "][" + type + "][" + data_id + "]' value ='" + data_id + "'></span>");
     }
 
     if (!elmData) {
@@ -632,6 +636,8 @@ function wsdrop(ev, element, toClass, format, autoIncrease) {
         var aOldData = [oldShift, oldDate, oldEmp];
         var oldData = JSON.stringify(aOldData);
         $('#dragging_container').find("input[name='HrWorkSchedules[data][]']").val(oldData).removeClass('unmodify');
+        
+        //$(ev.target).attr('style', 'background-color: ' + color);
     } else {
         $('#dragging').removeAttr('id');
     }
@@ -652,7 +658,7 @@ function wsdrop(ev, element, toClass, format, autoIncrease) {
         var aData = [data_shift_id, data_date, data_employee];
         var data = JSON.stringify(aData);
 //        var html_epd = "<div class='shift_container shift_cell " + color_class +
-        var html_epd = "<div class='shift_container shift_cell "
+        var html_epd = "<div class='shift_container shift_cell ws-div"
                 + "' data-shift_id='" + data_shift_id
                 + "' data-shift_name='" + data_shift_name
                 + "' data-date='" + data_date
@@ -662,6 +668,7 @@ function wsdrop(ev, element, toClass, format, autoIncrease) {
                 "<input type='hidden' name='HrWorkSchedules[data][]' value ='" + data + "'>" +
                 "</div>";
         $(element).append(html_epd);
+//        $(ev.target).attr('style', 'background-color: ' + color);
     }
 
 //    if (!color_class) {
