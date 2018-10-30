@@ -413,6 +413,14 @@ class CommonProcess {
     }
     
     /**
+     * Get value of money
+     * @return string Value of money
+     */
+    public static function getMoneyValue($money) {
+        return str_replace(DomainConst::SPLITTER_TYPE_2, '', $money);
+    }
+    
+    /**
      * Check if current user is admin
      * @return boolean True if role name of current user is ROLE_ADMIN, False otherwise
      */

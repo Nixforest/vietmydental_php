@@ -1702,4 +1702,7 @@ class DomainConst {
     const CONTENT00547  = 'Tác vụ';
     const CONTENT00548  = 'Sao chép';
     const CONTENT00549  = 'Thêm dòng';
+    const CONTENT00550  = 'Sản phẩm';
+    const CONTENT00551  = 'Không thể xoá do còn [' . self::CONTENT00550 . '] liên quan';
+    const CONTENT00552  = 'Kho hàng';
 }

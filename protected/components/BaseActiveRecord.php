@@ -295,4 +295,37 @@ class BaseActiveRecord extends CActiveRecord {
             }
         }
     }
+    /**
+     * Get created user
+     * @return string
+     */
+    public function getCreatedBy() {
+        if (isset($this->rCreatedBy)) {
+            return $this->rCreatedBy->getFullName();
+        }
+        return '';
+    }
+
+    /**
+     * @return array relational rules.
+     */
+    public function relations() {
+        // NOTE: you may need to adjust the relation name and the related
+        // class name for the relations automatically generated below.
+        return array(
+            'rCreatedBy' => array(self::BELONGS_TO, 'Users', 'created_by'),
+        );
+    }
+    
+    /**
+     * Get relation model's field name value
+     * @param String $relation Name of relation
+     * @return string Field name value
+     */
+    public function getRelationModelName($relation) {
+        if (isset($this->$relation->name)) {
+            return $this->$relation->name;
+        }
+        return '';
+    }
 }
