@@ -94,3 +94,18 @@ td, th {
 .table_work_schedule {
     background-color: #F8F8F8;
 }
+.table_work_schedule tbody tr td {
+    /*padding: 0px;*/
+}
+.w-0 {
+    width: 0px !important;
+}
+/*.dragItem, .btnDefault {*/
+.btnDefault {
+    background: #b3b1b1;
+    padding: 10px;
+    cursor: pointer;
+    margin: 1px;
+    display: inline-block;
+    border-radius: 35px;
+}

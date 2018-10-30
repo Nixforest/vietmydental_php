@@ -16,7 +16,7 @@ $('.search-button').click(function(){
 
 
 <?php echo CHtml::link(DomainConst::CONTENT00073, '#', array('class' => 'search-button')); ?>
-<!--<div class="search-form" style="<?php // echo (empty($model->role_id) && empty($model->type_id) ? '' : "display: none;");  ?>">-->
+<!--<div class="search-form" style="<?php // echo (empty($model->role_id) && empty($model->type_id) ? '' : "display: none;");       ?>">-->
 <div class="search-form">
     <?php
     $this->renderPartial('_search_setup', array(
@@ -38,7 +38,7 @@ $('.search-button').click(function(){
     $this->widget('zii.widgets.grid.CGridView', array(
         'id' => 'hr-functions-grid',
         'dataProvider' => $model->search(),
-	'selectableRows'=>1,
+        'selectableRows' => 1,
         'columns' => array(
             array(
                 'header' => DomainConst::CONTENT00034,
@@ -48,26 +48,63 @@ $('.search-button').click(function(){
                 'htmlOptions' => array('style' => 'text-align:center;')
             ),
             array(
-                'name' => 'name',
-                'value' => 'CHtml::activeTextField($data, "[$row]name")',
-                'type'  => 'raw',
+                'class'                 => 'DataColumn',
+                'header'                => DomainConst::CONTENT00545,
+                'value'                 => '$data->getParametersHtml()',
+                'type'                  => 'raw',
+                'evaluateHtmlOptions'   => true,
+                'htmlOptions'           => array(
+                    'class'         => '"fnc_param_container"',
+                    'data-current'  => '"{$data->id}"',
+                ),
+            ),
+            array(
+                'class'                 => 'DataColumn',
+                'header'                => DomainConst::CONTENT00496,
+                'value'                 => '$data->getCoefficientsHtml()',
+                'type'                  => 'raw',
+                'evaluateHtmlOptions'   => true,
+                'htmlOptions'           => array(
+                    'class'         => '"fnc_coeff_container"',
+                    'data-current'  => '"{$data->id}"',
+                ),
             ),
             array(
                 'name' => 'function',
-                'value' => 'CHtml::activeTextField($data, "[$row]function")',
-                'type'  => 'raw',
+                'value' => 'CHtml::activeTextArea($data, "[$data->id]function")',
+                'type' => 'raw',
             ),
             array(
-                'header' => DomainConst::CONTENT00545,
-                'value' => '',
+                'name' => 'name',
+                'value' => 'CHtml::activeTextField($data, "[$data->id]name")',
+                'type' => 'raw',
             ),
             array(
-                'header' => DomainConst::CONTENT00496,
-                'value' => '',
+                'name' => 'role_id',
+                'value' => 'CHtml::activeTextField($data, "[$data->id]role_id")',
+                'type' => 'raw',
+                'htmlOptions' => array(
+                    'style' => 'display:none;'
+                ),
+                'headerHtmlOptions' => array(
+                    'style' => 'display:none;'
+                ),
+            ),
+            array(
+                'name' => 'type_id',
+                'value' => 'CHtml::activeTextField($data, "[$data->id]type_id")',
+                'type' => 'raw',
+                'htmlOptions' => array(
+                    'style' => 'display:none;'
+                ),
+                'headerHtmlOptions' => array(
+                    'style' => 'display:none;'
+                ),
             ),
             array(
                 'name' => 'is_per_day',
-                'value' => '$data->isPerDayText()',
+                'value' => 'CHtml::activeCheckBox($data, "[$data->id]is_per_day")',
+                'type' => 'raw',
             ),
             array(
                 'header' => DomainConst::CONTENT00239,
@@ -82,35 +119,30 @@ $('.search-button').click(function(){
     <div class="row buttons">
         <?php echo CHtml::submitButton(DomainConst::CONTENT00377); ?>
         <?php
-        echo CHtml::ajaxSubmitButton(DomainConst::CONTENT00549,
-                Yii::app()->createUrl('hr/hrFunctions/ajaxCreateNewRow'),
-                array(
-                    'type'      => 'post',
-                    'success'   => 'js:reloadGrid',
-                    'update'    => '#data',
-                    'data'      => "js:{role_id: $('#HrFunctions_role_id').val(), type_id: $('#HrFunctions_type_id').val()}"
+        echo CHtml::ajaxSubmitButton(DomainConst::CONTENT00549, Yii::app()->createUrl('hr/hrFunctions/ajaxCreateNewRow'), array(
+            'type' => 'post',
+            'success' => 'js:reloadGrid',
+            'update' => '#data',
+            'data' => "js:{role_id: $('#HrFunctions_role_id').val(), type_id: $('#HrFunctions_type_id').val()}"
         ));
-        echo CHtml::ajaxSubmitButton(DomainConst::CONTENT00548,
-                Yii::app()->createUrl('hr/hrFunctions/ajaxCloneRow'),
-                array(
-                   'type'       =>'post',
-                   'data'       => "js:{id : $.fn.yiiGridView.getSelection('hr-functions-grid')}",
-                   'success'    => 'js:reloadGrid',
+        echo CHtml::ajaxSubmitButton(DomainConst::CONTENT00548, Yii::app()->createUrl('hr/hrFunctions/ajaxCloneRow'), array(
+            'type' => 'post',
+            'data' => "js:{id : $.fn.yiiGridView.getSelection('hr-functions-grid')}",
+            'success' => 'js:reloadGrid',
         ));
         ?>
     </div>
-    
-    
+
+
     <?php $this->endWidget(); ?>
 </div>
-
-<div id="for-link">
-<?php
-   
-?>
-<div>
 <script type="text/javascript">
-function reloadGrid(data) {
-    $.fn.yiiGridView.update('hr-functions-grid');
-}
+    function reloadGrid(data) {
+        $.fn.yiiGridView.update('hr-functions-grid');
+    }
+    
+    $(document).ready(function() {
+        allowDrag("param_container", "fnc_param_container", "id");
+        allowDrag("coeff_container", "fnc_coeff_container", "id");
+    });
 </script>

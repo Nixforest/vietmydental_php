@@ -31,7 +31,7 @@
 
     <div class="row" style="<?php echo (($model->isNewRecord) ? "display: none;" : ""); ?>">
         <?php echo $form->labelEx($model, 'status'); ?>
-        <?php echo $form->dropDownList($model, 'status', HrParameters::getArrayStatus()); ?>
+        <?php echo $form->dropDownList($model, 'status', HrCoefficients::getArrayStatus()); ?>
         <?php echo $form->error($model, 'status'); ?>
     </div>
 

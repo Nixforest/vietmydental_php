@@ -277,9 +277,9 @@ class BaseActiveRecord extends CActiveRecord {
     /**
      * Clone related records and attach to current model
      *
-     * @param static $originModel Model where to take original related data
-     * @param string $relationName name of active relation to clone
-     * @param string $relationQuery additional join query for relation
+     * @param static $originModel   Model where to take original related data
+     * @param string $relationName  name of active relation to clone
+     * @param string $type          Type of relation
      * @throws \CException
      */
     public function cloneRelation($originModel, $relationName, $type = '')

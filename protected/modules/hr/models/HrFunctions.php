@@ -433,6 +433,41 @@ class HrFunctions extends BaseActiveRecord {
             ),
         ));
     }
+    
+    /**
+     * Get html element
+     * @param String $relation Name of relation
+     * @param String $class Name of class
+     * @return string Html formated
+     */
+    public function getElementHtml($relation, $class) {
+        $retVal = '';
+        $index = 1;
+        foreach ($this->$relation as $value) {
+            $retVal .= '<span class="btnDefault alreadyIn" data-id="' . $value->id . '" draggable="true">';
+            $retVal .=      $index++ . ': ' . $value->getName();
+            $retVal .= '<input class="display_none" name="HrFunctions[' . $this->id . '][' . $class . '][' . $value->id . ']" value="' . $value->id . '"/>';
+            $retVal .= '</span>';
+        }
+        
+        return $retVal;
+    }
+    
+    /**
+     * Get parameter html format
+     * @return string Html formated
+     */
+    public function getParametersHtml() {
+        return $this->getElementHtml('rParameters', 'param');
+    }
+    
+    /**
+     * Get coefficients html format
+     * @return string Html formated
+     */
+    public function getCoefficientsHtml() {
+        return $this->getElementHtml('rCoefficients', 'coeff');
+    }
 
     //-----------------------------------------------------
     // Static methods

@@ -68,14 +68,41 @@ class HrFunctionsController extends HrController {
         if (filter_input(INPUT_GET, 'search')) {
             $model->attributes = $_GET['HrFunctions'];
         }
+        if (isset($_POST['HrFunctions'])) {
+            Loggers::info('Start submit data [POST]', CommonProcess::json_encode_unicode($_POST['HrFunctions']),
+                __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            foreach ($_POST['HrFunctions'] as $key => $function) {
+                $mFunction = $this->loadModel($key);
+                $mFunction->attributes = $function;
+                if ($mFunction->save()) {
+                    Loggers::info('Save function success', $mFunction->id,
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                    // Delete all relation param
+                    OneMany::deleteAllOldRecords($mFunction->id, OneMany::TYPE_FUNCTION_PARAMETER);
+                    OneMany::deleteAllOldRecords($mFunction->id, OneMany::TYPE_FUNCTION_COEFFICIENT);
+                    if (isset($function['param'])) {
+                        foreach ($function['param'] as $value) {
+                            OneMany::insertOne($mFunction->id, $value, OneMany::TYPE_FUNCTION_PARAMETER);
+                        }
+                    }
+                    if (isset($function['coeff'])) {
+                        foreach ($function['coeff'] as $value) {
+                            OneMany::insertOne($mFunction->id, $value, OneMany::TYPE_FUNCTION_COEFFICIENT);
+                        }
+                    }
+                }
+            }
+            
+        }
 
         $params = array();
         $coefficients = array();
         $itemOption = array(
-            'class'     => 'shift_container dragItem',
             'draggable' => 'true',
         );
         foreach (HrParameters::loadModels($model->role_id) as $value) {
+            $itemOption['class'] = 'param_container dragItem';
+            $itemOption['data-id'] = $value->id;
             $params[] = array(
                 'label' => $value->getName(),
                 'url' => array('#'),
@@ -83,6 +110,8 @@ class HrFunctionsController extends HrController {
             );
         }
         foreach (HrCoefficients::loadModels($model->role_id) as $value) {
+            $itemOption['class'] = 'coeff_container dragItem';
+            $itemOption['data-id'] = $value->id;
             $coefficients[] = array(
                 'label' => $value->getName(),
                 'url' => array('#'),
