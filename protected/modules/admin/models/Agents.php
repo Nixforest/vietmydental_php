@@ -91,6 +91,10 @@ class Agents extends BaseActiveRecord
                         self::HAS_MANY, 'MoneyAccount', 'agent_id',
                         'on'    => 'status != ' . DomainConst::DEFAULT_STATUS_INACTIVE,
                     ),
+                    'rUsers'    => array(
+                        self::MANY_MANY, 'Users', 'one_many(one_id, many_id)',
+                        'condition' => 'rUsers_rUsers.type=' . OneMany::TYPE_AGENT_USER,
+                    ),
 		);
 	}
 
