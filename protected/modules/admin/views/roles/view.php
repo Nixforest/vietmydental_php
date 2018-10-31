@@ -24,6 +24,10 @@ $this->widget('zii.widgets.CDetailView', array(
             'value' => $model->getWorkingType(),
         ),
         array(
+            'name' => 'isStaff',
+            'value' => $model->getIsStaff(),
+        ),
+        array(
             'name' => 'status',
             'type' => 'Status',
         ),

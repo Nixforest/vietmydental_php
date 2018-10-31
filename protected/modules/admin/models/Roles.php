@@ -9,6 +9,7 @@
  * @property string $role_short_name    Short name of role
  * @property integer $application_id    Id of application
  * @property integer $working_type      Type of working schedule
+ * @property integer $isStaff           Flag check if user is staff
  * @property integer $status            Status
  *
  * The followings are the available model relations:
@@ -76,6 +77,14 @@ class Roles extends BaseActiveRecord {
     const TYPE_SHIFT_WORK               =   '2';
     /** Other */
     const TYPE_OTHER                    =   '3';
+    
+    //-----------------------------------------------------
+    // Type of is staff flag
+    //-----------------------------------------------------
+    /** Staff user */
+    const IS_STAFF_TRUE                 =   '1';
+    /** Not staff user */
+    const IS_STAFF_OTHER                =   '2';
 
     /**
      * @return string the associated database table name
@@ -92,11 +101,11 @@ class Roles extends BaseActiveRecord {
         // will receive user inputs.
         return array(
             array('role_name, role_short_name, application_id', 'required'),
-            array('application_id, status, working_type', 'numerical', 'integerOnly' => true),
+            array('application_id, status, working_type, isStaff', 'numerical', 'integerOnly' => true),
             array('role_name, role_short_name', 'length', 'max' => 255),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, role_name, role_short_name, application_id, status, working_type', 'safe', 'on' => 'search'),
+            array('id, role_name, role_short_name, application_id, status, working_type, isStaff', 'safe', 'on' => 'search'),
         );
     }
 
@@ -141,6 +150,7 @@ class Roles extends BaseActiveRecord {
             'role_short_name'   => DomainConst::CONTENT00025,
             'application_id'    => 'Application',
             'working_type'      => DomainConst::CONTENT00536,
+            'isStaff'           => DomainConst::CONTENT00490,
             'status'            => DomainConst::CONTENT00026,
         );
     }
@@ -174,6 +184,7 @@ class Roles extends BaseActiveRecord {
         $criteria->compare('application_id', $this->application_id);
         $criteria->compare('status', $this->status);
         $criteria->compare('working_type', $this->working_type);
+        $criteria->compare('isStaff', $this->isStaff);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
@@ -227,6 +238,28 @@ class Roles extends BaseActiveRecord {
             return self::getArrayWorkingType()[$this->working_type];
         }
         return '';
+    }
+    
+    /**
+     * Get string is staff
+     * @return string Is staff string
+     */
+    public function getIsStaff() {
+        if (isset(self::getArrayIsStaff()[$this->isStaff])) {
+            return self::getArrayIsStaff()[$this->isStaff];
+        }
+        return '';
+    }
+    
+    /**
+     * Check if this role is staff role
+     * @return boolean True if is_staff flag is '1', false otherwise
+     */
+    public function isStaffRole() {
+        if ($this->isStaff == self::IS_STAFF_TRUE) {
+            return true;
+        }
+        return false;
     }
     
     //-----------------------------------------------------
@@ -285,10 +318,14 @@ class Roles extends BaseActiveRecord {
      * @return boolean True if role id is in array staff roles, False otherwise
      */
     public static function isStaff($roleId) {
-        foreach (self::$arrRolesStaff as $role_name) {
-            if (self::getRoleByName($role_name)->id == $roleId) {
-                return true;
-            }
+//        foreach (self::$arrRolesStaff as $role_name) {
+//            if (self::getRoleByName($role_name)->id == $roleId) {
+//                return true;
+//            }
+//        }
+        $model = self::model()->findByPk($roleId);
+        if ($model) {
+            return $model->isStaffRole();
         }
         return false;
     }
@@ -378,6 +415,17 @@ class Roles extends BaseActiveRecord {
             self::TYPE_OFFICE_HOURSE        => DomainConst::CONTENT00537,
             self::TYPE_SHIFT_WORK           => DomainConst::CONTENT00538,
             self::TYPE_OTHER                => DomainConst::CONTENT00031,
+        );
+    }
+    
+    /**
+     * Get array is staff
+     * @return Array Array is staff string
+     */
+    public static function getArrayIsStaff() {
+        return array(
+            self::IS_STAFF_TRUE     => DomainConst::CONTENT00490,
+            self::IS_STAFF_OTHER    => DomainConst::CONTENT00031,
         );
     }
 

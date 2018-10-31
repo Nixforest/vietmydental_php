@@ -816,7 +816,11 @@ class Users extends BaseActiveRecord {
      * @return True if user is staff, false otherwise
      */
     public function isStaff() {
-        return Roles::isStaff($this->role_id);
+//        return Roles::isStaff($this->role_id);
+        if (isset($this->rRole)) {
+            return $this->rRole->isStaffRole();
+        }
+        return false;
     }
     
     /**
