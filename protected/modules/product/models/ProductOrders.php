@@ -1,25 +1,28 @@
 <?php
 
 /**
- * This is the model class for table "product_store_cards".
+ * This is the model class for table "product_orders".
  *
- * The followings are the available columns in table 'product_store_cards':
+ * The followings are the available columns in table 'product_orders':
  * @property string $id             Id of record
- * @property string $input_date     Date input
- * @property integer $store_id      Id of store
- * @property integer $type_id       Id of type
- * @property integer $order_id      Id of order relate
+ * @property string $book_date      Book date
+ * @property string $payment_code   Payment code
+ * @property string $payment_date   Payment date
+ * @property string $order_date     Order date
+ * @property integer $customer_id   Id of customer
+ * @property integer $order_type    Type of order
+ * @property string $description    Description
+ * @property string $note           Note
  * @property integer $status        Status
  * @property string $created_date   Created date
  * @property string $created_by     Created by
  *
  * The followings are the available model relations:
  * @property Users                      $rCreatedBy                     User created this record
- * @property ProductStores              $rStore                         Store
- * @property ProductStoreCardTypes      $rType                          ProductStoreCardTypes
- * @property ProductStoreCardDetails[]  $rDetails                       List detail
+ * @property Customers                  $rCustomer                      Customer model
+ * @property ProductOrderDetails[]      $rDetails                       Order details
  */
-class ProductStoreCards extends BaseActiveRecord {
+class ProductOrders extends BaseActiveRecord {
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
@@ -27,11 +30,20 @@ class ProductStoreCards extends BaseActiveRecord {
     const STATUS_INACTIVE               = '0';
     /** Active */
     const STATUS_ACTIVE                 = '1';
+    /** Processing */
+    const STATUS_PROCESSING             = '2';
+    /** Completed */
+    const STATUS_COMPLETED              = '3';
+    
+    //-----------------------------------------------------
+    // Properties
+    //-----------------------------------------------------
+    public $autocomplete_name_customer;
 
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
-     * @return ProductStoreCards the static model class
+     * @return ProductOrders the static model class
      */
     public static function model($className = __CLASS__) {
         return parent::model($className);
@@ -41,7 +53,7 @@ class ProductStoreCards extends BaseActiveRecord {
      * @return string the associated database table name
      */
     public function tableName() {
-        return 'product_store_cards';
+        return 'product_orders';
     }
 
     /**
@@ -51,13 +63,13 @@ class ProductStoreCards extends BaseActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('store_id', 'required'),
-            array('store_id, type_id, order_id, status', 'numerical', 'integerOnly' => true),
+            array('customer_id, order_type, status', 'numerical', 'integerOnly' => true),
+            array('payment_code', 'length', 'max' => 30),
             array('created_by', 'length', 'max' => 10),
-            array('input_date, created_date', 'safe'),
+            array('book_date, payment_date, order_date, description, note, created_date', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, input_date, store_id, type_id, order_id, status, created_date, created_by', 'safe', 'on' => 'search'),
+            array('id, book_date, payment_code, payment_date, order_date, customer_id, order_type, description, note, status, created_date, created_by', 'safe', 'on' => 'search'),
         );
     }
 
@@ -68,19 +80,15 @@ class ProductStoreCards extends BaseActiveRecord {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         $parentRelation = parent::relations();
-        $parentRelation['rStore'] = array(
-            self::BELONGS_TO, 'ProductStores', 'store_id',
-            'on'    => 'status !=' . DomainConst::DEFAULT_STATUS_INACTIVE,
-        );
-        $parentRelation['rType'] = array(
-            self::BELONGS_TO, 'ProductStoreCardTypes', 'type_id',
+        $parentRelation['rCustomer'] = array(
+            self::BELONGS_TO, 'Customers', 'customer_id',
             'on'    => 'status !=' . DomainConst::DEFAULT_STATUS_INACTIVE,
         );
         $parentRelation['rDetails'] = array(
-            self::HAS_MANY, 'ProductStoreCardDetails', 'store_card_id',
+            self::HAS_MANY, 'ProductOrderDetails', 'order_id',
             'on'    => 'status !=' . DomainConst::DEFAULT_STATUS_INACTIVE,
-            
         );
+        
         return $parentRelation;
     }
 
@@ -89,10 +97,14 @@ class ProductStoreCards extends BaseActiveRecord {
      */
     public function attributeLabels() {
         $parentAttributeLabes               = parent::attributeLabels();
-        $parentAttributeLabes['input_date'] = DomainConst::CONTENT00074;
-        $parentAttributeLabes['store_id']   = DomainConst::CONTENT00552;
-        $parentAttributeLabes['type_id']    = DomainConst::CONTENT00076;
-        $parentAttributeLabes['order_id']   = DomainConst::CONTENT00077;
+        $parentAttributeLabes['book_date']      = DomainConst::CONTENT00084;
+        $parentAttributeLabes['payment_code']   = DomainConst::CONTENT00086;
+        $parentAttributeLabes['payment_date']   = DomainConst::CONTENT00087;
+        $parentAttributeLabes['order_date']     = DomainConst::CONTENT00085;
+        $parentAttributeLabes['customer_id']    = DomainConst::CONTENT00088;
+        $parentAttributeLabes['order_type']     = DomainConst::CONTENT00089;
+        $parentAttributeLabes['description']    = DomainConst::CONTENT00090;
+        $parentAttributeLabes['note']           = DomainConst::CONTENT00091;
         return $parentAttributeLabes;
     }
 
@@ -107,12 +119,17 @@ class ProductStoreCards extends BaseActiveRecord {
         $criteria = new CDbCriteria;
 
         $criteria->compare('id', $this->id, true);
-        $criteria->compare('input_date', $this->input_date, true);
-        $criteria->compare('store_id', $this->store_id);
-        $criteria->compare('type_id', $this->type_id);
-        $criteria->compare('order_id', $this->order_id);
+        $criteria->compare('book_date', $this->book_date, true);
+        $criteria->compare('payment_code', $this->payment_code, true);
+        $criteria->compare('payment_date', $this->payment_date, true);
+        $criteria->compare('order_date', $this->order_date, true);
+        $criteria->compare('customer_id', $this->customer_id);
+        $criteria->compare('order_type', $this->order_type);
+        $criteria->compare('description', $this->description, true);
+        $criteria->compare('note', $this->note, true);
         $criteria->compare('status', $this->status);
         $criteria->compare('created_date', $this->created_date, true);
+        $criteria->compare('created_by', $this->created_by, true);
         $criteria->compare('created_by', $this->created_by, true);
         $criteria->order = 'id desc';
 
@@ -132,7 +149,9 @@ class ProductStoreCards extends BaseActiveRecord {
      * @return parent
      */
     protected function beforeSave() {
-        $this->formatDate('input_date');
+        $this->formatDate('book_date');
+        $this->formatDate('payment_date');
+        $this->formatDate('order_date');
         if ($this->isNewRecord) {
             $this->created_by = Yii::app()->user->id;
             
@@ -173,27 +192,22 @@ class ProductStoreCards extends BaseActiveRecord {
     }
     
     /**
-     * Get store name
-     * @return String Store name
+     * Get customer name
+     * @return String Customer name
      */
-    public function getStore() {
-        return $this->getRelationModelName('rStore');
+    public function getCustomer() {
+        return $this->getRelationModelName('rCustomer');
     }
     
     /**
-     * Get type name
-     * @return String Type name
+     * Get type of order
+     * @return string Type of order
      */
     public function getType() {
-        return $this->getRelationModelName('rType');
-    }
-    
-    /**
-     * Get input date
-     * @return String Input date
-     */
-    public function getInputDate() {
-        return $this->input_date;
+        if (isset(CommonProcess::getTypeOfOrder()[$this->order_type])) {
+            return CommonProcess::getTypeOfOrder()[$this->order_type];
+        }
+        return '';
     }
     
     /**
@@ -201,7 +215,31 @@ class ProductStoreCards extends BaseActiveRecord {
      * @return String Name of store card
      */
     public function getName() {
-        return CommonProcess::generateID(DomainConst::STORE_CARD_ID_PREFIX, $this->id);
+        return CommonProcess::generateID(DomainConst::ORDER_ID_PREFIX, $this->id);
+    }
+    
+    /**
+     * Get value of book_date
+     * @return String Book date value
+     */
+    public function getBookDate() {
+        return CommonProcess::convertDateTime($this->book_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_BACK_END);
+    }
+    
+    /**
+     * Get value of payment_date
+     * @return String Payment date value
+     */
+    public function getPaymentDate() {
+        return CommonProcess::convertDateTime($this->payment_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_BACK_END);
+    }
+    
+    /**
+     * Get value of order_date
+     * @return String Order date value
+     */
+    public function getOrderDate() {
+        return CommonProcess::convertDateTime($this->order_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_BACK_END);
     }
     
     //-----------------------------------------------------
@@ -214,7 +252,9 @@ class ProductStoreCards extends BaseActiveRecord {
     public static function getArrayStatus() {
         return array(
             self::STATUS_INACTIVE       => DomainConst::CONTENT00408,
-            self::STATUS_ACTIVE         => DomainConst::CONTENT00407,
+            self::STATUS_ACTIVE         => DomainConst::CONTENT00402,
+            self::STATUS_PROCESSING     => DomainConst::CONTENT00555,
+            self::STATUS_COMPLETED      => DomainConst::CONTENT00204,
         );
     }
     

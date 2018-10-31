@@ -1,29 +1,28 @@
 <?php
-/* @var $this ProductStoreCardsController */
-/* @var $model ProductStoreCards */
+/* @var $this ProductStoreCardDetailsController */
+/* @var $model ProductStoreCardDetails */
 
 $this->createMenu('view', $model);
 ?>
 
-<h1><?php echo $this->pageTitle . ' ' . $model->getName(); ?></h1>
+<h1><?php echo $this->pageTitle . ' ' . $model->id; ?></h1>
 
 <?php
 $this->widget('zii.widgets.CDetailView', array(
     'data' => $model,
     'attributes' => array(
         array(
-            'name' => 'input_date',
-            'value' => $model->getInputDate(),
+            'name' => 'store_card_id',
+            'value' => $model->getStoreCard(),
         ),
         array(
-            'name' => 'store_id',
-            'value' => $model->getStore(),
+            'name' => 'product_id',
+            'value' => $model->getProduct(),
         ),
         array(
-            'name' => 'type_id',
-            'value' => $model->getType(),
+            'name' => 'qty',
+            'value' => $model->getQuantity(),
         ),
-        'order_id',
         array(
             'name' => 'status',
             'value' => $model->getStatus(),

@@ -58,7 +58,7 @@
 
     <div class="row" style="<?php echo (($model->isNewRecord) ? "display: none;" : ""); ?>">
         <?php echo $form->labelEx($model, 'status'); ?>
-        <?php echo $form->dropDownList($model, 'status', ProductStoresDetails::getArrayStatus()); ?>
+        <?php echo $form->dropDownList($model, 'status', ProductStoreCards::getArrayStatus()); ?>
         <?php echo $form->error($model, 'status'); ?>
     </div>
 

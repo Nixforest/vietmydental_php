@@ -1,6 +1,6 @@
 <?php
-/* @var $this ProductStoreCardsController */
-/* @var $model ProductStoreCards */
+/* @var $this ProductOrdersController */
+/* @var $model ProductOrders */
 
 $this->createMenu('update', $model);
 ?>

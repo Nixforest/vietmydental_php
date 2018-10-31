@@ -13,6 +13,26 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
 	'enableAjaxValidation'=>false,
 )); ?>
     
+
+<!--	<div class="row">
+		<?php echo $form->labelEx($model,'customer_id'); ?>
+		<?php echo $form->hiddenField($model, 'customer_id', array('class' => '')); ?>
+                <?php
+                    $custName = isset($model->rCustomer) ? $model->rCustomer->getAutoCompleteCustomerName() : '';
+                    $aData = array(
+                        'model'             => $model,
+                        'field_id'          => 'customer_id',
+                        'update_value'      => $custName,
+                        'ClassAdd'          => 'w-350',
+                        'url'               => Yii::app()->createAbsoluteUrl('admin/ajax/searchCustomer'),
+                        'field_autocomplete_name' => 'autocomplete_name_customer',
+                    );
+                    $this->widget('ext.AutocompleteExt.AutocompleteExt',
+                            array('data' => $aData));
+                ?>
+		<?php echo $form->error($model,'customer_id'); ?>
+	</div>-->
+    
 <div class="maincontent clearfix">
     <div class="left-page">
         <div class="title-1">

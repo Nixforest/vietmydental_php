@@ -431,6 +431,26 @@ class CommonProcess {
         return false;
     }
     
+    /**
+     * Get type of order: receipt and payment
+     * @param boolean $emptyOption Flag need add empty selection to return value
+     * @return array Array type of money
+     */
+    public static function getTypeOfOrder($emptyOption = false) {
+        if ($emptyOption) {
+            return array(
+                '' => '',
+                DomainConst::NUMBER_ONE_VALUE => 'Loại đơn hàng 1',
+                DomainConst::NUMBER_ZERO_VALUE => 'Loại đơn hàng 2'
+            );
+        } else {
+            return array(
+                DomainConst::NUMBER_ONE_VALUE => 'Loại đơn hàng 1',
+                DomainConst::NUMBER_ZERO_VALUE => 'Loại đơn hàng 2'
+            );
+        }
+    }
+    
     //-----------------------------------------------------
     // ++ Date time process
     //-----------------------------------------------------

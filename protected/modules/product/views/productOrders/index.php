@@ -1,6 +1,6 @@
 <?php
-/* @var $this ProductStoreCardsController */
-/* @var $model ProductStoreCards */
+/* @var $this ProductOrdersController */
+/* @var $model ProductOrders */
 
 $this->createMenu('index', $model);
 
@@ -10,7 +10,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#product-store-cards-grid').yiiGridView('update', {
+	$('#product-orders-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -36,7 +36,7 @@ $('.search-form form').submit(function(){
 
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
-    'id' => 'product-store-cards-grid',
+    'id' => 'product-orders-grid',
     'dataProvider' => $model->search(),
     'filter' => $model,
     'columns' => array(
@@ -52,18 +52,28 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '$data->getName()',
         ),
         array(
-            'name' => 'input_date',
-            'value' => '$data->getInputDate()',
+            'name' => 'book_date',
+            'value' => '$data->getBookDate()',
+        ),
+        'payment_code',
+        array(
+            'name' => 'payment_date',
+            'value' => '$data->getPaymentDate()',
         ),
         array(
-            'name' => 'store_id',
-            'value' => '$data->getStore()',
+            'name' => 'order_date',
+            'value' => '$data->getOrderDate()',
         ),
         array(
-            'name' => 'type_id',
+            'name' => 'customer_id',
+            'value' => '$data->getCustomer()',
+        ),
+        array(
+            'name' => 'order_type',
             'value' => '$data->getType()',
         ),
-        'order_id',
+        'description',
+        'note',
         array(
             'name' => 'status',
             'value' => '$data->getStatus()',

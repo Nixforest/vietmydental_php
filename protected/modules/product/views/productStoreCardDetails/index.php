@@ -1,6 +1,6 @@
 <?php
-/* @var $this ProductStoreCardsController */
-/* @var $model ProductStoreCards */
+/* @var $this ProductStoreCardDetailsController */
+/* @var $model ProductStoreCardDetails */
 
 $this->createMenu('index', $model);
 
@@ -10,7 +10,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#product-store-cards-grid').yiiGridView('update', {
+	$('#product-store-card-details-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -36,7 +36,7 @@ $('.search-form form').submit(function(){
 
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
-    'id' => 'product-store-cards-grid',
+    'id' => 'product-store-card-details-grid',
     'dataProvider' => $model->search(),
     'filter' => $model,
     'columns' => array(
@@ -48,22 +48,17 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array('style' => 'text-align:center;')
         ),
         array(
-            'name' => 'id',
-            'value' => '$data->getName()',
+            'name' => 'store_card_id',
+            'value' => '$data->getStoreCard()',
         ),
         array(
-            'name' => 'input_date',
-            'value' => '$data->getInputDate()',
+            'name' => 'product_id',
+            'value' => '$data->getProduct()',
         ),
         array(
-            'name' => 'store_id',
-            'value' => '$data->getStore()',
+            'name' => 'qty',
+            'value' => '$data->getQuantity()',
         ),
-        array(
-            'name' => 'type_id',
-            'value' => '$data->getType()',
-        ),
-        'order_id',
         array(
             'name' => 'status',
             'value' => '$data->getStatus()',

@@ -14,7 +14,9 @@ class ReceptionistController extends FrontController {
      * Handle receiving patient by phone.
      */
     public function actionReceivingPatientPhone() {
+        $medicalRecord = new MedicalRecords();
         $this->render('receivingPatientPhone', array(
+            'model' => $medicalRecord,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }

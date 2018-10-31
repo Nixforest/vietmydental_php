@@ -318,13 +318,24 @@ class BaseActiveRecord extends CActiveRecord {
     }
     
     /**
+     * Get name value
+     * @return String Name value
+     */
+    public function getName() {
+        if (isset($this->name)) {
+            return $this->name;
+        }
+        return '';
+    }
+    
+    /**
      * Get relation model's field name value
      * @param String $relation Name of relation
      * @return string Field name value
      */
     public function getRelationModelName($relation) {
-        if (isset($this->$relation->name)) {
-            return $this->$relation->name;
+        if (isset($this->$relation)) {
+            return $this->$relation->getName();
         }
         return '';
     }
