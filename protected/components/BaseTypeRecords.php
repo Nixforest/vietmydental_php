@@ -42,17 +42,6 @@ class BaseTypeRecords extends BaseActiveRecord {
     }
 
     /**
-     * @return array relational rules.
-     */
-    public function relations() {
-        // NOTE: you may need to adjust the relation name and the related
-        // class name for the relations automatically generated below.
-        return array(
-            'rCreatedBy' => array(self::BELONGS_TO, 'Users', 'created_by'),
-        );
-    }
-
-    /**
      * @return array customized attribute labels (name=>label)
      */
     public function attributeLabels() {

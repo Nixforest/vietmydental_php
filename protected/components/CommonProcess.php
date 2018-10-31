@@ -413,6 +413,14 @@ class CommonProcess {
     }
     
     /**
+     * Get value of money
+     * @return string Value of money
+     */
+    public static function getMoneyValue($money) {
+        return str_replace(DomainConst::SPLITTER_TYPE_2, '', $money);
+    }
+    
+    /**
      * Check if current user is admin
      * @return boolean True if role name of current user is ROLE_ADMIN, False otherwise
      */
@@ -421,6 +429,26 @@ class CommonProcess {
             return (Yii::app()->user->role_name == 'ROLE_ADMIN');
         }
         return false;
+    }
+    
+    /**
+     * Get type of order: receipt and payment
+     * @param boolean $emptyOption Flag need add empty selection to return value
+     * @return array Array type of money
+     */
+    public static function getTypeOfOrder($emptyOption = false) {
+        if ($emptyOption) {
+            return array(
+                '' => '',
+                DomainConst::NUMBER_ONE_VALUE => 'Loại đơn hàng 1',
+                DomainConst::NUMBER_ZERO_VALUE => 'Loại đơn hàng 2'
+            );
+        } else {
+            return array(
+                DomainConst::NUMBER_ONE_VALUE => 'Loại đơn hàng 1',
+                DomainConst::NUMBER_ZERO_VALUE => 'Loại đơn hàng 2'
+            );
+        }
     }
     
     //-----------------------------------------------------

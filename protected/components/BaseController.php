@@ -201,13 +201,13 @@ class BaseController extends CController {
         }
         return array();
     }
-
+    
     /**
-     * Get page title by action
+     * Label title
      * @param String $action Action id
      * @return String Name of action
      */
-    public function getPageTitleByAction($action) {
+    public function getLabelMenuTitle($action) {
         switch ($action) {
             case DomainConst::KEY_ACTION_INDEX:
                 return DomainConst::CONTENT00021;
@@ -223,7 +223,20 @@ class BaseController extends CController {
             default:
                 break;
         }
-        return ControllersActions::getActionNameByController(Yii::app()->controller->id, $action, $this->module);
+        return '';
+    }
+
+    /**
+     * Get page title by action
+     * @param String $action Action id
+     * @return String Name of action
+     */
+    public function getPageTitleByAction($action) {
+        $retVal = ControllersActions::getActionNameByController(Yii::app()->controller->id, $action, $this->module);
+        if (empty($retVal)) {
+            $retVal = $this->getLabelMenuTitle($action);
+        }
+        return $retVal;
     }
 
     /**
@@ -275,7 +288,9 @@ class BaseController extends CController {
     public function getLabel($action) {
         $icon = $this->getIcon($action);
         if (!empty($icon)) {
-            return '<img src="'.Yii::app()->theme->baseUrl . '/img/menu/' . $icon . '" style="margin-right: 5px; display: inline;" />' . $this->getPageTitleByAction($action);
+            return '<img src="'.Yii::app()->theme->baseUrl . '/img/menu/'
+                    . $icon . '" style="margin-right: 5px; display: inline;" />'
+                    . $this->getLabelMenuTitle($action);
         }
         
         return $this->getPageTitleByAction($action);

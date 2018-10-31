@@ -34,6 +34,7 @@ return array(
 //                'application.extensions.phpexcel.Classes.PHPExcel.*',
         'application.components.widgets.*',
         'application.modules.hr.models.*',
+        'application.modules.product.models.*',
         'bootstrap.helpers.*',
         'bootstrap.behaviors.TbWidget',
         'bootstrap.widgets.*',
@@ -46,10 +47,11 @@ return array(
             // If removed, Gii defaults to localhost only. Edit carefully to taste.
             'ipFilters' => array('127.0.0.1', '::1'),
         ),
-        'admin', // Admin module
-        'api', // API module
-        'front', // Front-end module
-        'hr',       // Hr module
+        'admin',        // Admin module
+        'api',          // API module
+        'front',        // Front-end module
+        'hr',           // Hr module
+        'product',      // Product module
     ),
     // application components
     'components' => array(

@@ -139,7 +139,7 @@ class Modules extends BaseActiveRecord
             $_items[""] = "";
         }
         $models = self::model()->findAll(array(
-            'order' => 'id ASC',
+            'order' => 'id DESC',
         ));
         foreach ($models as $model) {
             $_items[$model->id] = $model->name;

@@ -19,6 +19,7 @@ class Files extends CActiveRecord
     const TYPE_1_USER_AVATAR                        = 1;
     const TYPE_2_TREATMENT_SCHEDULE_DETAIL_XRAY     = 2;
     const TYPE_3_TREATMENT_SCHEDULE_REAL_IMG        = 3;
+    const TYPE_4_PRODUCT_IMAGE                      = 4;
     
     const ALLOW_IMAGE_FILE_TYPE         = 'jpg,jpeg,png';
     const ALLOW_DOCS_FILE_TYPE          = 'pdf,xls,xlsx,jpg,jpeg,png';
@@ -255,12 +256,12 @@ class Files extends CActiveRecord
      * @param type $mBelongTo
      * @param type $type
      */
-    public static function saveRecordFile($mBelongTo, $type) {
+    public static function saveRecordFile($mBelongTo, $type, $module = 'admin') {
         $className = get_class($mBelongTo);
-        $mBelongTo = BaseActiveRecord::loadModelByClass($mBelongTo->id, $className, 'admin');
+        $mBelongTo = BaseActiveRecord::loadModelByClass($mBelongTo->id, $className, $module);
         set_time_limit(7200);
         if (isset($_POST[$className][self::KEY_FILE_NAME]) && count($_POST[$className][self::KEY_FILE_NAME])) {
-            Loggers::info('Start save number of file', count($_POST[$className][self::KEY_FILE_NAME]),
+            Loggers::info('Start save number of file', CommonProcess::json_encode_unicode($_POST[$className][self::KEY_FILE_NAME]),
                     __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             foreach ($_POST[$className][self::KEY_FILE_NAME] as $key => $item) {
                 $mFile = new Files();
@@ -283,6 +284,8 @@ class Files extends CActiveRecord
                                 CommonProcess::json_encode_unicode($mFile->getErrors()),
                                 __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
                     }
+                } else {
+                    Loggers::info('File is null', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
                 }
             }
         }

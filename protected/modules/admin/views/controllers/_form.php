@@ -27,7 +27,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'module_id'); ?>
-                <?php echo $form->dropDownList($model, 'module_id', Modules::loadItems(true)); ?>
+                <?php echo $form->dropDownList($model, 'module_id', Modules::loadItems(false)); ?>
 		<?php echo $form->error($model,'module_id'); ?>
 	</div>
 
