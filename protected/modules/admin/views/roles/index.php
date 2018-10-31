@@ -76,9 +76,14 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'visible' => CommonProcess::isUserAdmin(),
         ),
         array(
-            'name'      => 'working_type',
-            'value'     => '$data->getWorkingType()',
-            'filter'    => Roles::getArrayWorkingType(),
+            'name' => 'working_type',
+            'value' => '$data->getWorkingType()',
+            'filter' => Roles::getArrayWorkingType(),
+        ),
+        array(
+            'name' => 'isStaff',
+            'value' => '$data->getIsStaff()',
+            'filter' => Roles::getArrayIsStaff(),
         ),
         array(
             'name' => 'status',

@@ -17,8 +17,7 @@
     ));
     ?>
 
-    <p class="note">Fields with <span class="required">*</span> are required.</p>
-
+    <?php echo DomainConst::CONTENT00081; ?>
     <?php echo $form->errorSummary($model); ?>
 
     <div class="row">
@@ -46,13 +45,19 @@
     </div>
 
     <div class="row">
+        <?php echo $form->labelEx($model, 'isStaff'); ?>
+        <?php echo $form->dropDownList($model, 'isStaff', Roles::getArrayIsStaff()); ?>
+        <?php echo $form->error($model, 'isStaff'); ?>
+    </div>
+
+    <div class="row" style="<?php echo (($model->isNewRecord) ? "display: none;" : ""); ?>">
         <?php echo $form->labelEx($model, 'status'); ?>
         <?php echo $form->dropDownList($model, 'status', CommonProcess::getDefaultStatus()); ?>
         <?php echo $form->error($model, 'status'); ?>
     </div>
 
     <div class="row buttons">
-        <?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+        <?php echo CHtml::submitButton($model->isNewRecord ? DomainConst::CONTENT00017 : DomainConst::CONTENT00377); ?>
     </div>
 
     <?php $this->endWidget(); ?>
