@@ -328,4 +328,18 @@ class BaseActiveRecord extends CActiveRecord {
         }
         return '';
     }
+
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels() {
+        return array(
+            'id'            => 'ID',
+            'name'          => DomainConst::CONTENT00042,
+            'description'   => DomainConst::CONTENT00062,
+            'status'        => DomainConst::CONTENT00026,
+            'created_date'  => DomainConst::CONTENT00010,
+            'created_by'    => DomainConst::CONTENT00054,
+        );
+    }
 }

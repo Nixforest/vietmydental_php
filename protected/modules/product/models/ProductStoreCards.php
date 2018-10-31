@@ -1,13 +1,14 @@
 <?php
 
 /**
- * This is the model class for table "product_stores_details".
+ * This is the model class for table "product_store_cards".
  *
- * The followings are the available columns in table 'product_stores_details':
+ * The followings are the available columns in table 'product_store_cards':
  * @property string $id             Id of record
+ * @property string $input_date     Date input
  * @property integer $store_id      Id of store
- * @property integer $product_id    Id of product
- * @property string $qty            Quantity
+ * @property integer $type_id       Id of type
+ * @property integer $order_id      Id of order relate
  * @property integer $status        Status
  * @property string $created_date   Created date
  * @property string $created_by     Created by
@@ -15,9 +16,9 @@
  * The followings are the available model relations:
  * @property Users                      $rCreatedBy                     User created this record
  * @property ProductStores              $rStore                         Store
- * @property Products                   $rProduct                       Product
+ * @property ProductStoreCardTypes      $rType                          ProductStoreCardTypes
  */
-class ProductStoresDetails extends BaseActiveRecord {
+class ProductStoreCards extends BaseActiveRecord {
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
@@ -29,7 +30,7 @@ class ProductStoresDetails extends BaseActiveRecord {
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
-     * @return ProductStoresDetails the static model class
+     * @return ProductStoreCards the static model class
      */
     public static function model($className = __CLASS__) {
         return parent::model($className);
@@ -39,7 +40,7 @@ class ProductStoresDetails extends BaseActiveRecord {
      * @return string the associated database table name
      */
     public function tableName() {
-        return 'product_stores_details';
+        return 'product_store_cards';
     }
 
     /**
@@ -49,14 +50,13 @@ class ProductStoresDetails extends BaseActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('store_id, product_id, qty', 'required'),
-            array('store_id, product_id, status', 'numerical', 'integerOnly' => true),
-            array('qty', 'length', 'max' => 11),
+            array('store_id', 'required'),
+            array('store_id, type_id, order_id, status', 'numerical', 'integerOnly' => true),
             array('created_by', 'length', 'max' => 10),
-            array('created_date', 'safe'),
+            array('input_date, created_date', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, store_id, product_id, qty, status, created_date, created_by', 'safe', 'on' => 'search'),
+            array('id, input_date, store_id, type_id, order_id, status, created_date, created_by', 'safe', 'on' => 'search'),
         );
     }
 
@@ -71,8 +71,8 @@ class ProductStoresDetails extends BaseActiveRecord {
             self::BELONGS_TO, 'ProductStores', 'store_id',
             'on'    => 'status !=' . DomainConst::DEFAULT_STATUS_INACTIVE,
         );
-        $parentRelation['rProduct'] = array(
-            self::BELONGS_TO, 'Products', 'product_id',
+        $parentRelation['rType'] = array(
+            self::BELONGS_TO, 'ProductStoreCardTypes', 'type_id',
             'on'    => 'status !=' . DomainConst::DEFAULT_STATUS_INACTIVE,
         );
         return $parentRelation;
@@ -82,15 +82,12 @@ class ProductStoresDetails extends BaseActiveRecord {
      * @return array customized attribute labels (name=>label)
      */
     public function attributeLabels() {
-        return array(
-            'id'            => 'ID',
-            'store_id'      => DomainConst::CONTENT00552,
-            'product_id'    => DomainConst::CONTENT00550,
-            'qty'           => DomainConst::CONTENT00083,
-            'status'        => DomainConst::CONTENT00026,
-            'created_date'  => DomainConst::CONTENT00010,
-            'created_by'    => DomainConst::CONTENT00054,
-        );
+        $parentAttributeLabes               = parent::attributeLabels();
+        $parentAttributeLabes['input_date'] = DomainConst::CONTENT00074;
+        $parentAttributeLabes['store_id']   = DomainConst::CONTENT00552;
+        $parentAttributeLabes['type_id']    = DomainConst::CONTENT00076;
+        $parentAttributeLabes['order_id']   = DomainConst::CONTENT00077;
+        return $parentAttributeLabes;
     }
 
     /**
@@ -104,9 +101,10 @@ class ProductStoresDetails extends BaseActiveRecord {
         $criteria = new CDbCriteria;
 
         $criteria->compare('id', $this->id, true);
+        $criteria->compare('input_date', $this->input_date, true);
         $criteria->compare('store_id', $this->store_id);
-        $criteria->compare('product_id', $this->product_id);
-        $criteria->compare('qty', $this->qty, true);
+        $criteria->compare('type_id', $this->type_id);
+        $criteria->compare('order_id', $this->order_id);
         $criteria->compare('status', $this->status);
         $criteria->compare('created_date', $this->created_date, true);
         $criteria->compare('created_by', $this->created_by, true);
@@ -119,7 +117,6 @@ class ProductStoresDetails extends BaseActiveRecord {
             ),
         ));
     }
-
     //-----------------------------------------------------
     // Parent methods
     //-----------------------------------------------------
@@ -128,15 +125,24 @@ class ProductStoresDetails extends BaseActiveRecord {
      * @return parent
      */
     protected function beforeSave() {
+        $this->formatDate('input_date');
         if ($this->isNewRecord) {
             $this->created_by = Yii::app()->user->id;
             
             // Handle created date
             $this->created_date = CommonProcess::getCurrentDateTime();
         }
-        $this->qty = CommonProcess::getMoneyValue($this->qty);
         
         return parent::beforeSave();
+    }
+    
+    /**
+     * Override before delete method
+     * @return Parent result
+     */
+    protected function beforeDelete() {
+        $retVal = parent::beforeDelete();
+        return $retVal;
     }
     
     //-----------------------------------------------------
@@ -162,19 +168,19 @@ class ProductStoresDetails extends BaseActiveRecord {
     }
     
     /**
-     * Get product name
-     * @return String Name of product
+     * Get type name
+     * @return String Type name
      */
-    public function getProduct() {
-        return $this->getRelationModelName('rProduct');
+    public function getType() {
+        return $this->getRelationModelName('rType');
     }
     
     /**
-     * Get quantity
-     * @return Number Quantity value
+     * Get input date
+     * @return String Input date
      */
-    public function getQuantity() {
-        return $this->qty;
+    public function getInputDate() {
+        return $this->input_date;
     }
     
     //-----------------------------------------------------
@@ -190,4 +196,5 @@ class ProductStoresDetails extends BaseActiveRecord {
             self::STATUS_ACTIVE         => DomainConst::CONTENT00407,
         );
     }
+
 }

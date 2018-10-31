@@ -16,6 +16,7 @@
  * @property Users                      $rCreatedBy                     User created this record
  * @property ProductStoreCardTypes      $rParent                        Parent type
  * @property ProductStoreCardTypes[]    $rChildren                      Children type
+ * @property ProductStoreCards[]        $rStoreCards                    List store card
  */
 class ProductStoreCardTypes extends BaseTypeRecords {
 
@@ -69,6 +70,10 @@ class ProductStoreCardTypes extends BaseTypeRecords {
             self::HAS_MANY, 'ProductStoreCardTypes', 'parent_id',
             'on'    => 'status !=' . self::STATUS_INACTIVE,
         );
+        $parentRelation['rStoreCards']   = array(
+            self::HAS_MANY, 'ProductStoreCards', 'type_id',
+            'on'    => 'status !=' . self::STATUS_INACTIVE,
+        );
         return $parentRelation;
     }
 
@@ -118,6 +123,12 @@ class ProductStoreCardTypes extends BaseTypeRecords {
      */
     protected function beforeDelete() {
         $retVal = parent::beforeDelete();
+        // Check foreign table
+        if (!empty($this->rStoreCards)) {
+            Loggers::error(DomainConst::CONTENT00214, 'Can not delete', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            $this->addErrorMessage(DomainConst::CONTENT00554);
+            return false;
+        }
         return $retVal;
     }
     
