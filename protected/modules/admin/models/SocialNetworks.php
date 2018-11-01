@@ -20,6 +20,8 @@ class SocialNetworks extends BaseActiveRecord
     const TYPE_USER                 = DomainConst::NUMBER_ONE_VALUE;
     /** 1 [customer] has many [social network] */
     const TYPE_CUSTOMER             = DomainConst::NUMBER_TWO_VALUE;
+    /** 1 [temporary patient] has many [social network] */
+    const TYPE_TEMP_PATIENT         = '3';
     //-----------------------------------------------------
     // Type of network
     //-----------------------------------------------------

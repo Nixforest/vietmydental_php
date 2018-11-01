@@ -1708,4 +1708,6 @@ class DomainConst {
     const CONTENT00553  = 'Thẻ kho';
     const CONTENT00554  = 'Không thể xoá do còn [' . self::CONTENT00553 . '] liên quan';
     const CONTENT00555  = 'Đang xử lý';
+    const CONTENT00556  = 'Đã tiếp nhận';
+    const CONTENT00557  = 'Lễ tân tiếp nhận';
 }

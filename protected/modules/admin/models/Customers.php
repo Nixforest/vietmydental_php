@@ -33,7 +33,19 @@
  * @property MedicalRecords         $rMedicalRecord     Medical record
  */
 class Customers extends BaseActiveRecord {
+    //-----------------------------------------------------
+    // Constants
+    //-----------------------------------------------------
+    /** Inactive */
+    const STATUS_INACTIVE               = '0';
+    /** Active */
+    const STATUS_ACTIVE                 = '1';
+    /** New */
+    const STATUS_NEW                    = '2';
 
+    //-----------------------------------------------------
+    // Properties
+    //-----------------------------------------------------
     public $autocomplete_name_user;
     public $autocomplete_name_street;
     public $agent;

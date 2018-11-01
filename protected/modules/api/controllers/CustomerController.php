@@ -971,6 +971,32 @@ class CustomerController extends APIController
     }
     
     /**
+     * 
+     */
+    public function actionMakeSchedule() {
+        try {
+            $result = ApiModule::$defaultFailedResponse;
+            // Check format of request
+            $this->checkRequest();
+            // Parse json
+            $root = json_decode(filter_input(INPUT_POST, DomainConst::KEY_ROOT_REQUEST));
+            // Check required parameters
+            $this->checkRequiredParam($root, array(
+                DomainConst::KEY_NAME,
+                DomainConst::KEY_PHONE,
+                DomainConst::KEY_DATE,
+                DomainConst::KEY_CONTENT
+            ));
+            $result = ApiModule::$defaultSuccessResponse;
+            $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00194;
+            ApiModule::sendResponse($result, $this);
+        } catch (Exception $ex) {
+            Loggers::error(DomainConst::CONTENT00214, $ex->getMessage(), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            ApiModule::catchError($ex, $this);
+        }
+    }
+    
+    /**
      * P0020_CreateReceipt_API
      * Create new receipt for customer
      * - url:   api/customer/createReceipt
