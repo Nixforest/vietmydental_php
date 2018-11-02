@@ -971,7 +971,14 @@ class CustomerController extends APIController
     }
     
     /**
-     * 
+     * P0024_MakeSchedule_API
+     * Create temporary patient
+     * - url:   api/customer/makeSchedule
+     * - parameter:
+     *  + name:             Name of patient
+     *  + phone:            Phone of patient
+     *  + date:             Date (format: yyyy-mm-dd)
+     *  + content:          Content
      */
     public function actionMakeSchedule() {
         try {
@@ -987,8 +994,12 @@ class CustomerController extends APIController
                 DomainConst::KEY_DATE,
                 DomainConst::KEY_CONTENT
             ));
-            $result = ApiModule::$defaultSuccessResponse;
-            $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00194;
+            if (TemporaryPatients::createFromAPI($root)) {
+                $result = ApiModule::$defaultSuccessResponse;
+                $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00194;
+            } else {
+                $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00214;
+            }
             ApiModule::sendResponse($result, $this);
         } catch (Exception $ex) {
             Loggers::error(DomainConst::CONTENT00214, $ex->getMessage(), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');

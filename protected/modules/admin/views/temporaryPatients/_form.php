@@ -96,10 +96,15 @@
     </div>
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <?php echo $form->labelEx($model, 'content'); ?>
             <?php echo $form->textArea($model, 'content', array('rows' => 6, 'cols' => 50)); ?>
             <?php echo $form->error($model, 'content'); ?>
+        </div>
+        <div class="col-md-6">
+            <?php echo $form->labelEx($model, 'agent_id'); ?>
+            <?php echo $form->dropDownList($model, 'agent_id', Agents::loadItems(true)); ?>
+            <?php echo $form->error($model, 'agent_id'); ?>
         </div>
     </div>
     

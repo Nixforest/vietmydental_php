@@ -37,6 +37,10 @@ $this->widget('zii.widgets.CDetailView', array(
             'value' => $model->getReceptionist(),
         ),
         array(
+            'name' => 'agent_id',
+            'value' => $model->getAgent(),
+        ),
+        array(
             'name' => 'status',
             'value' => $model->getStatus(),
         ),

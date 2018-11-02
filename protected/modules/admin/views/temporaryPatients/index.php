@@ -73,6 +73,10 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '$data->getReceptionist()',
         ),
         array(
+            'name' => 'agent_id',
+            'value' => '$data->getAgent()',
+        ),
+        array(
             'name' => 'status',
             'value' => '$data->getStatus()',
         ),
