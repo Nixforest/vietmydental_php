@@ -1072,6 +1072,41 @@ class CustomerController extends APIController
                 . CommonProcess::json_encode_unicode($model->getErrors());
         ApiModule::sendResponse($result, $this);
     }
+    
+    /**
+     * P0023_GetCustomerByQRCode_API
+     * Create new receipt for customer
+     * - url:   api/customer/getByQRCode
+     * - parameter:
+     *  + token:            Token
+     *  + qr:               QR code
+     * 
+     */
+    public function actionGetByQRCode() {
+        try {
+            $result = ApiModule::$defaultFailedResponse;
+            // Check format of request
+            $this->checkRequest();
+            // Parse json
+            $root = json_decode(filter_input(INPUT_POST, DomainConst::KEY_ROOT_REQUEST));
+            // Check required parameters
+            $this->checkRequiredParam($root, array(
+                DomainConst::KEY_TOKEN,
+                DomainConst::KEY_QR,
+            ));
+            // Get user
+            $mUser          = $this->getUserByToken($result, $root->token);
+            
+            $customer       = ReferCodes::getCustomerByQRCode($root->qr);
+            if ($customer != NULL) {
+                CreateResponse::customerViewResp($mUser, $customer, $this);
+            }
+            $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00214;
+            ApiModule::sendResponse($result, $this);
+        } catch (Exception $exc) {
+            ApiModule::catchError($exc, $this);
+        }
+    }
 
     // Uncomment the following methods and override them if needed
 	/*

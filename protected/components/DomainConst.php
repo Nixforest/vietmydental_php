@@ -391,6 +391,8 @@ class DomainConst {
     const KEY_WARD_LIST                     = 'ward_list';
     /** Detail id */
     const KEY_DETAIL_ID                     = 'detail_id';
+    /** QR code */
+    const KEY_QR                            = 'qr';
     /** details */
     const KEY_DETAILS                       = 'details';
     /** Model uphold */

@@ -4,114 +4,110 @@
  * This is the model class for table "refer_codes".
  *
  * The followings are the available columns in table 'refer_codes':
- * @property string $id
- * @property string $code
- * @property string $object_id
- * @property integer $status
- * @property integer $type
+ * @property string $id             Id of record
+ * @property string $code           Code
+ * @property string $object_id      Id of object
+ * @property integer $status        Status
+ * @property integer $type          Type of code
+ * 
+ * The followings are the available model relations:
+ * @property Customers              $rCustomer              Customer model
  */
-class ReferCodes extends BaseActiveRecord
-{
+class ReferCodes extends BaseActiveRecord {
+
     //-----------------------------------------------------
     // Type of relation
     //-----------------------------------------------------
     const TYPE_NOT_SELECTED_YET     = DomainConst::NUMBER_ZERO_VALUE;
     const TYPE_PRINTED              = DomainConst::NUMBER_TWO_VALUE;
+
     /** 1 [customer] has 1 [refer code] */
     const TYPE_CUSTOMER             = DomainConst::NUMBER_ONE_VALUE;
-	/**
-	 * Returns the static model of the specified AR class.
-	 * @param string $className active record class name.
-	 * @return ReferCodes the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
 
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return 'refer_codes';
-	}
+    /**
+     * Returns the static model of the specified AR class.
+     * @param string $className active record class name.
+     * @return ReferCodes the static model class
+     */
+    public static function model($className = __CLASS__) {
+        return parent::model($className);
+    }
 
-	/**
-	 * @return array validation rules for model attributes.
-	 */
-	public function rules()
-	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-			array('code, type', 'required'),
-			array('status, type', 'numerical', 'integerOnly'=>true),
-			array('object_id', 'length', 'max'=>11),
-			array('code', 'length', 'max'=>32),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('id, code, object_id, status, type', 'safe', 'on'=>'search'),
-		);
-	}
+    /**
+     * @return string the associated database table name
+     */
+    public function tableName() {
+        return 'refer_codes';
+    }
 
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-//                    'rCustomer' => array(
-//                        self::HAS_ONE, 'Customers', 'object_id',
-////                        'on' => 'type = ' . self::TYPE_CUSTOMER,
-//                    ),
-                    'rCustomer' => array(
-                        self::BELONGS_TO, 'Customers', 'object_id',
-                    ),
-		);
-	}
+    /**
+     * @return array validation rules for model attributes.
+     */
+    public function rules() {
+        // NOTE: you should only define rules for those attributes that
+        // will receive user inputs.
+        return array(
+            array('code, type', 'required'),
+            array('status, type', 'numerical', 'integerOnly' => true),
+            array('object_id', 'length', 'max' => 11),
+            array('code', 'length', 'max' => 32),
+            // The following rule is used by search().
+            // Please remove those attributes that should not be searched.
+            array('id, code, object_id, status, type', 'safe', 'on' => 'search'),
+        );
+    }
 
-	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return array(
-			'id' => 'ID',
-			'code' => 'Code',
-			'object_id' => 'Object',
-			'status' => 'Status',
-			'type' => 'Type',
-		);
-	}
+    /**
+     * @return array relational rules.
+     */
+    public function relations() {
+        // NOTE: you may need to adjust the relation name and the related
+        // class name for the relations automatically generated below.
+        return array(
+            'rCustomer' => array(
+                self::BELONGS_TO, 'Customers', 'object_id',
+//                'on'    => 'type = ' . self::TYPE_CUSTOMER,
+            ),
+        );
+    }
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels() {
+        return array(
+            'id' => 'ID',
+            'code' => 'Code',
+            'object_id' => 'Object',
+            'status' => 'Status',
+            'type' => 'Type',
+        );
+    }
 
-		$criteria=new CDbCriteria;
+    /**
+     * Retrieves a list of models based on the current search/filter conditions.
+     * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+     */
+    public function search() {
+        // Warning: Please modify the following code to remove attributes that
+        // should not be searched.
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('code',$this->code,true);
-		$criteria->compare('object_id',$this->object_id,true);
-		$criteria->compare('status',$this->status);
-		$criteria->compare('type',$this->type);
-                $criteria->order = 'id DESC';
+        $criteria = new CDbCriteria;
 
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-                        'pagination' => array(
-                            'pageSize' => Settings::getListPageSize(),
-                        ),
-		));
-	}
+        $criteria->compare('id', $this->id, true);
+        $criteria->compare('code', $this->code, true);
+        $criteria->compare('object_id', $this->object_id, true);
+        $criteria->compare('status', $this->status);
+        $criteria->compare('type', $this->type);
+        $criteria->order = 'id DESC';
+
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+            'pagination' => array(
+                'pageSize' => Settings::getListPageSize(),
+            ),
+        ));
+    }
 
     //-----------------------------------------------------
     // Utility methods
@@ -123,7 +119,7 @@ class ReferCodes extends BaseActiveRecord
     public function getId() {
         return CommonProcess::generateID(DomainConst::REFER_CODE_ID_PREFIX, $this->id);
     }
-    
+
     /**
      * Generate url of this refer code
      * @return String
@@ -158,12 +154,12 @@ class ReferCodes extends BaseActiveRecord
      */
     public static function insertOne($code, $object_id, $type) {
         $model = new ReferCodes();
-        $model->code        = $code;
-        $model->object_id   = $object_id;
-        $model->type        = $type;
+        $model->code = $code;
+        $model->object_id = $object_id;
+        $model->type = $type;
         $model->save();
     }
-    
+
     /**
      * Connect an object with and Code value
      * @param String $code      Code value
@@ -191,4 +187,22 @@ class ReferCodes extends BaseActiveRecord
             throw new Exception(DomainConst::CONTENT00269);
         }
     }
+
+    /**
+     * Get customer object by qr code
+     * @param String $code QR code
+     * @return Customers Model customer
+     */
+    public static function getCustomerByQRCode($code) {
+        $model = self::model()->findByAttributes(array(
+            'code' => $code,
+        ));
+        if ($model) {
+            if (isset($model->rCustomer)) {
+                return $model->rCustomer;
+            }
+        }
+        return NULL;
+    }
+
 }

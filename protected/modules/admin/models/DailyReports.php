@@ -668,6 +668,9 @@ class DailyReports extends BaseActiveRecord {
             } else {
                 // Return first report status
                 $retVal = $models[0]->status;
+                if ($retVal == self::STATUS_NEW) {
+                    $retVal = self::STATUS_NOT_CREATED_YET;
+                }
             }
 //            $retVal = self::STATUS_CONFIRM;
         } else {
