@@ -57,6 +57,8 @@ class Settings extends BaseActiveRecord {
     const KEY_HR_WORK_ON_SATURDAY               = 'HR_WORK_ON_SATURDAY';
     /** Key number of off day per month (with workshift role) */
     const KEY_HR_WORKSHIFT_OFF_DAY_PER_MONTH    = 'HR_WORKSHIFT_OFF_DAY_PER_MONTH';
+    /** Key setting of source information: Website */
+    const KEY_SOURCE_INFO_WEBSITE               = 'SOURCE_INFO_WEBSITE';
 
     /* --- App settings --- */
     /** Key Mobile application version iOS */

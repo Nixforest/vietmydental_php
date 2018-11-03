@@ -501,6 +501,14 @@ class Users extends BaseActiveRecord {
 
         return $retVal;
     }
+    
+    /**
+     * Get name of user
+     * @return String Name of user
+     */
+    public function getName() {
+        return $this->getFullName();
+    }
 
     /**
      * Get name of agent
