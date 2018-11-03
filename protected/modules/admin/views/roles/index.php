@@ -95,7 +95,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'header' => DomainConst::CONTENT00239,
             'class' => 'CButtonColumn',
             'template' => $this->createActionButtons(),
-            'visible' => CommonProcess::isUserAdmin(),
+//            'visible' => CommonProcess::isUserAdmin(),
         ),
 //		array(
 //			'class'=>'CButtonColumn',

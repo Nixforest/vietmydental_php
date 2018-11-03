@@ -223,7 +223,7 @@ class BaseController extends CController {
             default:
                 break;
         }
-        return '';
+        return $this->getPageTitleByAction($action);
     }
 
     /**

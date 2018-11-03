@@ -1136,7 +1136,11 @@ class CustomerController extends APIController
             
             $customer       = ReferCodes::getCustomerByQRCode($root->qr);
             if ($customer != NULL) {
-                CreateResponse::customerViewResp($mUser, $customer, $this);
+//                CreateResponse::customerViewResp($mUser, $customer, $this);
+                $result = ApiModule::$defaultSuccessResponse;
+                $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00194;
+                $result[DomainConst::KEY_DATA] = $customer->id;
+                ApiModule::sendResponse($result, $this);
             }
             $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00214;
             ApiModule::sendResponse($result, $this);
