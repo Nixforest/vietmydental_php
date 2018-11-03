@@ -49,6 +49,8 @@ class APIController extends CController {
         $method = filter_input(INPUT_SERVER, 'REQUEST_METHOD');
         if ($method == 'POST') {    // Force to developer only use POST method when call API
             if (empty(filter_input(INPUT_POST, DomainConst::KEY_ROOT_REQUEST))) {
+                Loggers::info('Data receive', CommonProcess::json_encode_unicode($_POST),
+                        __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
                 $result = ApiModule::$defaultFailedResponse;
                 $result[DomainConst::KEY_MESSAGE] = ApiModule::RESP_MSG_MISS_ROOT;
                 ApiModule::sendResponse($result, $this);

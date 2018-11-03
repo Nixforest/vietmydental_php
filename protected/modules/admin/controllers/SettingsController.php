@@ -95,6 +95,13 @@ class SettingsController extends AdminController {
                 Settings::KEY_SMS_SEND_ALARM_SCHEDULE,
             ),
         ),
+        // SMS type send
+        Settings::KEY_API_SETTINGS => array(
+            DomainConst::KEY_ALIAS => 'Cài đặt API',
+            DomainConst::KEY_CHILDREN => array(
+                Settings::KEY_WORDPRESS_API_TOKEN,
+            ),
+        ),
             // TODO: Add more group here
     );
 

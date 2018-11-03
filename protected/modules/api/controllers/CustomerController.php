@@ -983,22 +983,26 @@ class CustomerController extends APIController
     public function actionMakeSchedule() {
         try {
             $result = ApiModule::$defaultFailedResponse;
-            // Check format of request
-            $this->checkRequest();
-            // Parse json
-            $root = json_decode(filter_input(INPUT_POST, DomainConst::KEY_ROOT_REQUEST));
+            $root = json_decode(CommonProcess::json_encode_unicode($_POST));
             // Check required parameters
             $this->checkRequiredParam($root, array(
+                DomainConst::KEY_TOKEN,
                 DomainConst::KEY_NAME,
                 DomainConst::KEY_PHONE,
                 DomainConst::KEY_DATE,
                 DomainConst::KEY_CONTENT
             ));
-            if (TemporaryPatients::createFromAPI($root)) {
-                $result = ApiModule::$defaultSuccessResponse;
-                $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00194;
+            // Check valid token
+            if (Settings::isValidTokenWordpressAPI($root->{DomainConst::KEY_TOKEN})) {
+                if (TemporaryPatients::createFromAPI($root)) {
+                    // Create patient success
+                    $result = ApiModule::$defaultSuccessResponse;
+                    $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00194;
+                } else {
+                    $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00214;
+                }
             } else {
-                $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00214;
+                $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00558;
             }
             ApiModule::sendResponse($result, $this);
         } catch (Exception $ex) {

@@ -30,6 +30,9 @@ class Settings extends BaseActiveRecord {
     /** Key SMS setting */
     const KEY_SMS_SETTING_SENDS                 = 'sms_setting_sends';
 
+    /** Key API setting */
+    const KEY_API_SETTINGS                      = 'api_settings';
+
     /* --- General settings --- */
     /** Key website title */
     const KEY_TITLE                             = 'WEBSITE_TITLE';
@@ -140,6 +143,10 @@ class Settings extends BaseActiveRecord {
 
     /** Key SMS type send: alarm schedule */
     const KEY_SMS_SEND_ALARM_SCHEDULE           = 'SMS_SEND_ALARM_SCHEDULE';
+    
+    /* --- API settings --- */
+    /** Key Wordpress api token */
+    const KEY_WORDPRESS_API_TOKEN               = 'WORDPRESS_API_TOKEN';
     //-----------------------------------------------------
     // -- Define keys
     //-----------------------------------------------------
@@ -518,6 +525,15 @@ class Settings extends BaseActiveRecord {
      */
     public static function isWorkingOnSaturday() {
         return self::getItemValue(self::KEY_HR_WORK_ON_SATURDAY, 0);
+    }
+    
+    /**
+     * Check if Wordpress api token is valid
+     * @param String $token Token value
+     * @return True if token is valid, False otherwise
+     */
+    public static function isValidTokenWordpressAPI($token) {
+        return (Settings::getItemValue(Settings::KEY_WORDPRESS_API_TOKEN) == $token);
     }
 
 }
