@@ -289,7 +289,7 @@ class BaseController extends CController {
         $icon = $this->getIcon($action);
         if (!empty($icon)) {
             return '<img src="'.Yii::app()->theme->baseUrl . '/img/menu/'
-                    . $icon . '" style="margin-right: 5px; display: inline;" />'
+                    . $icon . '" class="img_menu"/>'
                     . $this->getLabelMenuTitle($action);
         }
         

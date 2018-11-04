@@ -109,3 +109,8 @@ td, th {
     display: inline-block;
     border-radius: 35px;
 }
+
+.img_menu {
+    float: left;
+    margin-right: 5px;
+}
