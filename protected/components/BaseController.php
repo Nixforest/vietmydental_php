@@ -22,8 +22,8 @@ class BaseController extends CController {
         DomainConst::KEY_ACTION_CREATE  => 'create.png',
         DomainConst::KEY_ACTION_UPDATE  => 'update.png',
         DomainConst::KEY_ACTION_DELETE  => 'delete.png',
-        'createSetup'  => 'create.png',
-        'indexSetup'  => 'index.png',
+        'createSetup'                   => 'create.png',
+        'indexSetup'                    => 'index.png',
     );
     /**
      * @var string the default layout for the controller view. Defaults to '//layouts/column1',
@@ -223,7 +223,7 @@ class BaseController extends CController {
             default:
                 break;
         }
-        return $this->getPageTitleByAction($action);
+        return $this->pageTitle;
     }
 
     /**
@@ -232,10 +232,9 @@ class BaseController extends CController {
      * @return String Name of action
      */
     public function getPageTitleByAction($action) {
+        Loggers::info('Get page title', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        // Get name of action from database
         $retVal = ControllersActions::getActionNameByController(Yii::app()->controller->id, $action, $this->module);
-        if (empty($retVal)) {
-            $retVal = $this->getLabelMenuTitle($action);
-        }
         return $retVal;
     }
 
@@ -281,11 +280,12 @@ class BaseController extends CController {
     }
     
     /**
-     * Get label string
+     * Get label string as html format
      * @param String $action Action name
-     * @return String Label string
+     * @return String Label string as html format
      */
     public function getLabel($action) {
+        // Get icon by action
         $icon = $this->getIcon($action);
         if (!empty($icon)) {
             return '<img src="'.Yii::app()->theme->baseUrl . '/img/menu/'
@@ -293,7 +293,7 @@ class BaseController extends CController {
                     . $this->getLabelMenuTitle($action);
         }
         
-        return $this->getPageTitleByAction($action);
+        return $this->pageTitle;
     }
     
     /**
