@@ -118,10 +118,8 @@ class HrFunctionsController extends HrController {
                 'itemOptions' => $itemOption,
             );
         }
-        $this->additionMenus = array(
-            DomainConst::CONTENT00545   => $params,
-            DomainConst::CONTENT00496   => $coefficients,
-        );
+        $this->additionMenus[DomainConst::CONTENT00545] = $params;
+        $this->additionMenus[DomainConst::CONTENT00496] = $coefficients;
         $this->render('create_setup', array(
             'model' => $model,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,

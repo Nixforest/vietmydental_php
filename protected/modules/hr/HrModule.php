@@ -11,7 +11,7 @@
  *
  * @author nguyenpt
  */
-class HrModule extends CWebModule {
+class HrModule extends BaseModule {
 
     public function init() {
         // this method is called when the module is being created
@@ -27,6 +27,17 @@ class HrModule extends CWebModule {
         if (parent::beforeControllerAction($controller, $action)) {
             // this method is called before any module controller action is performed
             // you may place customized code here
+            $listMenu = array();
+            $listMenu[] = self::createAdditionMenuItem($controller->module, 'hrHolidays', 'index');
+            $listMenu[] = self::createAdditionMenuItem($controller->module, 'hrWorkPlans', 'viewAll');
+            $listMenu[] = self::createAdditionMenuItem($controller->module, 'hrLeaves', 'index');
+            $listMenu[] = self::createAdditionMenuItem($controller->module, 'hrParameters', 'index');
+            $listMenu[] = self::createAdditionMenuItem($controller->module, 'hrCoefficients', 'index');
+            $listMenu[] = self::createAdditionMenuItem($controller->module, 'hrFunctions', 'indexSetup');
+            $listMenu[] = self::createAdditionMenuItem($controller->module, 'hrFunctions', 'createSetup');
+            $listMenu[] = self::createAdditionMenuItem($controller->module, 'hrSalaryReports', 'index');
+            
+            $controller->moduleMenus[DomainConst::CONTENT00559] = $listMenu;
             return true;
         } else {
             return false;

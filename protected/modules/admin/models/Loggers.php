@@ -181,6 +181,14 @@ class Loggers extends BaseActiveRecord {
         $micro = sprintf("%06d", ($t - floor($t)) * 1000000);
         return $micro;
     }
+    
+    /**
+     * Put log in code with no message
+     * @param String $category Position
+     */
+    public static function infoHere($category) {
+        self::info('', '', $category);
+    }
 
     /**
      * Log info
