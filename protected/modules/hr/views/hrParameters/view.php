@@ -19,7 +19,8 @@ $this->widget('zii.widgets.CDetailView', array(
         'method',
         array(
             'name' => 'status',
-            'value' => $model->getStatus(),
+            'value' => '<span style="color: ' . $model->getColorStatus() . ';">' . $model->getStatus() . '</span>',
+            'type'  => 'html',
         ),
         'created_date',
         array(

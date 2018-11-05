@@ -13,9 +13,9 @@
         ));
         $this->endWidget();
         ?>
-        <div class="module_menu">
+        <div class="addition_menu">
             <?php
-            foreach ($this->moduleMenus as $key => $menu) {
+            foreach ($this->additionMenus as $key => $menu) {
                 $this->beginWidget('zii.widgets.CPortlet', array(
                     'title' => $key,
                     'hideOnEmpty' => false,
@@ -29,9 +29,9 @@
             }
             ?>
         </div>
-        <div class="addition_menu">
+        <div class="module_menu">
             <?php
-            foreach ($this->additionMenus as $key => $menu) {
+            foreach ($this->moduleMenus as $key => $menu) {
                 $this->beginWidget('zii.widgets.CPortlet', array(
                     'title' => $key,
                     'hideOnEmpty' => false,

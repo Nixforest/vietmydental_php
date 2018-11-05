@@ -100,7 +100,7 @@ class HrFunctionsController extends HrController {
         $itemOption = array(
             'draggable' => 'true',
         );
-        foreach (HrParameters::loadModels($model->role_id) as $value) {
+        foreach (HrParameters::getArrayByRole($model->role_id) as $value) {
             $itemOption['class'] = 'param_container dragItem';
             $itemOption['data-id'] = $value->id;
             $params[] = array(
@@ -109,7 +109,7 @@ class HrFunctionsController extends HrController {
                 'itemOptions' => $itemOption,
             );
         }
-        foreach (HrCoefficients::loadModels($model->role_id) as $value) {
+        foreach (HrCoefficients::getArrayByRole($model->role_id) as $value) {
             $itemOption['class'] = 'coeff_container dragItem';
             $itemOption['data-id'] = $value->id;
             $coefficients[] = array(

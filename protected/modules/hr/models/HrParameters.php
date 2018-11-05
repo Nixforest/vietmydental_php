@@ -25,6 +25,8 @@ class HrParameters extends BaseActiveRecord {
     const STATUS_INACTIVE               = 0;
     /** Active */
     const STATUS_ACTIVE                 = 1;
+    /** Active */
+    const STATUS_NOT_EXIST              = 2;
 
     /**
      * Returns the static model of the specified AR class.
@@ -166,10 +168,56 @@ class HrParameters extends BaseActiveRecord {
     }
     
     /**
+     * Handle save model
+     */
+    public function handleSave() {
+        if ($this->save()) {
+            Loggers::info('Update status success', $this->status,
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        } else {
+            Loggers::error('Update status failed', CommonProcess::json_encode_unicode($this->getErrors()),
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        }
+    }
+    
+    /**
+     * Check status of method
+     */
+    public function checkStatus() {
+        if (!self::checkMethodExist(HrModule::USER_CLASS_NAME, 'hr', $this->method)) {
+            // Method is not exist
+            if ($this->status != self::STATUS_NOT_EXIST) {
+                $this->status = self::STATUS_NOT_EXIST;
+                $this->handleSave();
+            }
+        } else {
+            // Method is exist
+            if ($this->status != self::STATUS_ACTIVE) {
+                $this->status = self::STATUS_ACTIVE;
+                $this->handleSave();
+            }
+        }
+    }
+    
+    /**
+     * Get color of status text
+     * @return String 'red' if status is NOT EXIST, 'black' otherwise
+     */
+    public function getColorStatus() {
+        $this->checkStatus();
+        if ($this->status == self::STATUS_NOT_EXIST) {
+            return 'red';
+        }
+        return 'black';
+    }
+    
+    /**
      * Return status string
      * @return string Status value as string
      */
     public function getStatus() {
+        $this->checkStatus();
+        
         if (isset(self::getArrayStatus()[$this->status])) {
             return self::getArrayStatus()[$this->status];
         }
@@ -218,6 +266,7 @@ class HrParameters extends BaseActiveRecord {
         return array(
             self::STATUS_INACTIVE       => DomainConst::CONTENT00408,
             self::STATUS_ACTIVE         => DomainConst::CONTENT00407,
+            self::STATUS_NOT_EXIST      => DomainConst::CONTENT00560,
         );
     }
     
@@ -233,12 +282,15 @@ class HrParameters extends BaseActiveRecord {
             if ($mRole) {
                 $retVal = $mRole->rParameters;
             }
-        } else {
-            $retVal = self::model()->findAll(array(
-                'condition' => 'role_id =' . Roles::ROLE_ALL_ID,
-            ));
         }
-        
+        $arrModel = self::model()->findAll(array(
+            'condition' => 'role_id =' . Roles::ROLE_ALL_ID,
+        ));
+        if ($arrModel) {
+            foreach ($arrModel as $value) {
+                $retVal[] = $value;
+            }
+        }
         return $retVal;
     }
     

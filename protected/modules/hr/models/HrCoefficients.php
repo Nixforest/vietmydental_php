@@ -281,10 +281,14 @@ class HrCoefficients extends BaseActiveRecord {
             if ($mRole) {
                 $retVal = $mRole->rCoefficients;
             }
-        } else {
-            $retVal = self::model()->findAll(array(
-                'condition' => 'role_id =' . Roles::ROLE_ALL_ID,
-            ));
+        }
+        $arrModel = self::model()->findAll(array(
+            'condition' => 'role_id =' . Roles::ROLE_ALL_ID,
+        ));
+        if ($arrModel) {
+            foreach ($arrModel as $value) {
+                $retVal[] = $value;
+            }
         }
         
         return $retVal;

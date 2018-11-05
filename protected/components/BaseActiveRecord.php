@@ -123,48 +123,6 @@ class BaseActiveRecord extends CActiveRecord {
     }
     
     /**
-     * Check model
-     * @param String $className Name of class
-     * @param String $moduleName Name of module
-     * @return Model object
-     * @throws CHttpException
-     */
-    public static function checkModel($className, $moduleName) {
-        $path = DirectoryHandler::getRootPath() . "/protected/modules/$moduleName/models/$className.php";
-        Loggers::info('File path', $path, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-        if (!is_file($path)) {
-            $cUid = Yii::app()->user->id;
-            Yii::log("Class $ClassName Uid : $cUid Lỗi model không tồn tại. Important to review this error. User có thể đã chỉnh URL");
-            throw new CHttpException(404, 'The requested page does not exist.');
-        }
-        return $model = call_user_func(array($className, 'model'));
-    }
-    
-    /**
-     * Load model by class name
-     * @param type $id
-     * @param type $className
-     * @param type $moduleName
-     * @return type
-     * @throws CHttpException
-     */
-    public static function loadModelByClass($id, $className, $moduleName) {
-        try {
-            $modelObj = self::checkModel($className, $moduleName);
-            $model = $modelObj->findByPk($id);
-            if ($model === NULL) {
-                $cUid = Yii::app()->user->id;
-                Yii::log("Class $ClassName Uid : $cUid Model Bị NULL trong hàm loadModelByClass dùng hàm call_user_func.");
-                throw new CHttpException(404, 'The requested page does not exist.');
-            }
-            return $model;
-        } catch (Exception $exc) {
-            Yii::log("Exception " . print_r($e, true), 'error');
-            throw new CHttpException("Exception " . print_r($e, true));
-        }
-    }
-    
-    /**
      * Get total value
      * @param type $records
      * @param type $column
@@ -352,5 +310,72 @@ class BaseActiveRecord extends CActiveRecord {
             'created_date'  => DomainConst::CONTENT00010,
             'created_by'    => DomainConst::CONTENT00054,
         );
+    }
+
+    //-----------------------------------------------------
+    // Static methods
+    //-----------------------------------------------------
+    /**
+     * Load model by class name
+     * @param type $id
+     * @param type $className
+     * @param type $moduleName
+     * @return type
+     * @throws CHttpException
+     */
+    public static function loadModelByClass($id, $className, $moduleName) {
+        try {
+            $modelObj = self::checkModel($className, $moduleName);
+            $model = $modelObj->findByPk($id);
+            if ($model === NULL) {
+                $cUid = Yii::app()->user->id;
+                Yii::log("Class $className Uid : $cUid Model Bị NULL trong hàm loadModelByClass dùng hàm call_user_func.");
+                throw new CHttpException(404, 'The requested page does not exist.');
+            }
+            return $model;
+        } catch (Exception $e) {
+            Yii::log("Exception " . print_r($e, true), 'error');
+            throw new CHttpException("Exception " . print_r($e, true));
+        }
+    }
+    
+    /**
+     * Check model
+     * @param String $className Name of class
+     * @param String $moduleName Name of module
+     * @return Model object
+     * @throws CHttpException
+     */
+    public static function checkModel($className, $moduleName) {
+        $path = DirectoryHandler::getRootPath() . "/protected/modules/$moduleName/models/$className.php";
+        Loggers::info('File path', $path, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        if (!is_file($path)) {
+            $cUid = Yii::app()->user->id;
+            Yii::log("Class $className Uid : $cUid Lỗi model không tồn tại. Important to review this error. User có thể đã chỉnh URL");
+            throw new CHttpException(404, 'The requested page does not exist.');
+        }
+        return $model = call_user_func(array($className, 'model'));
+    }
+    
+    /**
+     * Check if method is exist
+     * @param String $className Name of class
+     * @param String $moduleName Name of module
+     * @param String $method Name of method
+     * @return boolean True if object contain method, false otherwise
+     */
+    public static function checkMethodExist($className, $moduleName, $method) {
+        try {
+            // Try to check model of class name is exist
+            self::checkModel($className, $moduleName);
+            // Get model object
+            $modelObj = new $className();
+            if (method_exists($modelObj, $method)) {
+                return true;
+            }
+        } catch (Exception $exc) {
+            Loggers::error('Exception', $exc->getMessage(), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        }
+        return false;
     }
 }

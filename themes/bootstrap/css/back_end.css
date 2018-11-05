@@ -114,3 +114,15 @@ td, th {
     float: left;
     margin-right: 5px;
 }
+div.addition_menu {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1 !important;
+    background-color: #0288a7;
+}
+.param_container {
+    /*background-color: #b3b1b1 !important;*/
+    color: white !important;
+    margin: 10px;
+}

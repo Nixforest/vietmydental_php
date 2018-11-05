@@ -1714,4 +1714,5 @@ class DomainConst {
     const CONTENT00557  = 'Lễ tân tiếp nhận';
     const CONTENT00558  = 'Token không hợp lệ';
     const CONTENT00559  = 'Nhân sự';
+    const CONTENT00560  = 'Chưa hiện thực hoá';
 }

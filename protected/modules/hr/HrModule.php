@@ -12,6 +12,8 @@
  * @author nguyenpt
  */
 class HrModule extends BaseModule {
+    /** User class name */
+    const USER_CLASS_NAME           = 'UserHrs';
 
     public function init() {
         // this method is called when the module is being created
