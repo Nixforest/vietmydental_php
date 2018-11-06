@@ -100,7 +100,7 @@ class HrFunctionsController extends HrController {
         $itemOption = array(
             'draggable' => 'true',
         );
-        foreach (HrParameters::loadModels($model->role_id) as $value) {
+        foreach (HrParameters::getArrayByRole($model->role_id) as $value) {
             $itemOption['class'] = 'param_container dragItem';
             $itemOption['data-id'] = $value->id;
             $params[] = array(
@@ -109,7 +109,7 @@ class HrFunctionsController extends HrController {
                 'itemOptions' => $itemOption,
             );
         }
-        foreach (HrCoefficients::loadModels($model->role_id) as $value) {
+        foreach (HrCoefficients::getArrayByRole($model->role_id) as $value) {
             $itemOption['class'] = 'coeff_container dragItem';
             $itemOption['data-id'] = $value->id;
             $coefficients[] = array(
@@ -118,10 +118,8 @@ class HrFunctionsController extends HrController {
                 'itemOptions' => $itemOption,
             );
         }
-        $this->additionMenus = array(
-            DomainConst::CONTENT00545   => $params,
-            DomainConst::CONTENT00496   => $coefficients,
-        );
+        $this->additionMenus[DomainConst::CONTENT00545] = $params;
+        $this->additionMenus[DomainConst::CONTENT00496] = $coefficients;
         $this->render('create_setup', array(
             'model' => $model,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,

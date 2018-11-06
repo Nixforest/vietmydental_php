@@ -13,9 +13,25 @@
         ));
         $this->endWidget();
         ?>
-        <div>
+        <div class="addition_menu">
             <?php
             foreach ($this->additionMenus as $key => $menu) {
+                $this->beginWidget('zii.widgets.CPortlet', array(
+                    'title' => $key,
+                    'hideOnEmpty' => false,
+                ));
+                $this->widget('zii.widgets.CMenu', array(
+                    'items' => $menu,
+                    'htmlOptions' => array('class' => 'sidebar'),
+                    'encodeLabel' => false,
+                ));
+                $this->endWidget();
+            }
+            ?>
+        </div>
+        <div class="module_menu">
+            <?php
+            foreach ($this->moduleMenus as $key => $menu) {
                 $this->beginWidget('zii.widgets.CPortlet', array(
                     'title' => $key,
                     'hideOnEmpty' => false,

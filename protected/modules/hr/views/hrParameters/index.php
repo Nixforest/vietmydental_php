@@ -55,9 +55,11 @@ $this->widget('zii.widgets.grid.CGridView', array(
         'name',
         'method',
         array(
-            'name'      => 'status',
-            'value'     => '$data->getStatus()',
-            'visible'   => Roles::isAdminRole(),
+            'class'                 => 'DataColumn',
+            'name'                  => 'status',
+            'value'                 => '$data->getStatus()',
+            'evaluateHtmlOptions'   => true,
+            'htmlOptions'           => array('style' => '"color: {$data->getColorStatus()};"')
         ),
         'created_date',
         array(

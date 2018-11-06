@@ -41,6 +41,12 @@ class BaseController extends CController {
      * @var Array 
      */
     public $additionMenus = array();
+    
+    /**
+     * Properties to set customize module menu
+     * @var Array 
+     */
+    public $moduleMenus = array();
 
     /**
      * @var array the breadcrumbs of the current page. The value of this property will
