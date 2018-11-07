@@ -230,4 +230,18 @@ class SMSHandler {
                     __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         }
     }
+    
+    /**
+     * Send SMS OTP
+     * @param String $phone Phone number
+     * @param String $otp OTP
+     */
+    public static function sendSMSOTP($phone, $otp) {
+        Loggers::info('Prepare to send sms', '',
+                        __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        $dateTime = CommonProcess::getCurrentDateTime();
+        $msg = 'Mã OTP là ' . $otp . '. Đây là mật khẩu để bạn đăng nhập VietMy Dental.'
+                . 'Vì lý do bảo mật đừng bao giờ chia sẻ mật khẩu này.';
+        self::sendSMSSchedule('OTP', $phone, $msg, '', 'OTP', $dateTime);
+    }
 }

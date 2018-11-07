@@ -21,8 +21,8 @@ class ProductsController extends ProductController {
         if (isset($_POST['Products'])) {
             $model->attributes = $_POST['Products'];
             if ($model->save()) {
-                Files::deleteFileInUpdateNotIn($model, Files::TYPE_4_PRODUCT_IMAGE, true);
-                Files::saveRecordFile($model, Files::TYPE_4_PRODUCT_IMAGE);
+//                Files::deleteFileInUpdateNotIn($model, Files::TYPE_4_PRODUCT_IMAGE, true);
+//                Files::saveRecordFile($model, Files::TYPE_4_PRODUCT_IMAGE);
                 $this->redirect(array('view', 'id' => $model->id));
             }
         }
@@ -49,8 +49,8 @@ class ProductsController extends ProductController {
             $model->attributes = $_POST['Products'];
             Loggers::info('Attributes', $model->price, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             if ($model->save()) {
-                Files::deleteFileInUpdateNotIn($model, Files::TYPE_4_PRODUCT_IMAGE, true);
-                Files::saveRecordFile($model, Files::TYPE_4_PRODUCT_IMAGE, $this->module);
+//                Files::deleteFileInUpdateNotIn($model, Files::TYPE_4_PRODUCT_IMAGE, true);
+//                Files::saveRecordFile($model, Files::TYPE_4_PRODUCT_IMAGE, $this->module);
                 $this->redirect(array('view', 'id' => $model->id));
             }
         }

@@ -62,6 +62,8 @@ class Settings extends BaseActiveRecord {
     const KEY_HR_WORKSHIFT_OFF_DAY_PER_MONTH    = 'HR_WORKSHIFT_OFF_DAY_PER_MONTH';
     /** Key setting of source information: Website */
     const KEY_SOURCE_INFO_WEBSITE               = 'SOURCE_INFO_WEBSITE';
+    /** Key setting of OTP: limit time */
+    const KEY_OTP_LIMIT_TIME                    = 'OTP_LIMIT_TIME';
 
     /* --- App settings --- */
     /** Key Mobile application version iOS */
@@ -534,6 +536,14 @@ class Settings extends BaseActiveRecord {
      */
     public static function isValidTokenWordpressAPI($token) {
         return (Settings::getItemValue(Settings::KEY_WORDPRESS_API_TOKEN) == $token);
+    }
+    
+    /**
+     * Get OTP limit time
+     * @return Number Number of second
+     */
+    public static function getOTPLimitTime() {
+        return self::getItemValue(self::KEY_OTP_LIMIT_TIME, 120);
     }
 
 }

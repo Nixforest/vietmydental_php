@@ -31,6 +31,7 @@ class SettingsController extends AdminController {
                 Settings::KEY_HR_WORK_ON_SATURDAY,
                 Settings::KEY_HR_WORKSHIFT_OFF_DAY_PER_MONTH,
                 Settings::KEY_SOURCE_INFO_WEBSITE,
+                Settings::KEY_OTP_LIMIT_TIME,
             /** Test */
 //                    Settings::KEY_APP_MOBILE_VERSION_IOS,
 //                    Settings::KEY_ADMIN_EMAIL,

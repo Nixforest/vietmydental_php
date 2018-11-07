@@ -259,4 +259,6 @@
     $arrParams = HrParameters::getArrayByRole(5);
     CommonProcess::echoTest('Role all: ', count($arrParams));
     CommonProcess::echoTest('Role all: ', $arrParams[0]->name);
+    $mUser = Users::getUserByUsername('0976994876');
+    CommonProcess::echoTest("User: ", isset($mUser) ? $mUser->getFullName() : 'Không tìm thấy');
 ?>

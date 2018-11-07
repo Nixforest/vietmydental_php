@@ -311,7 +311,7 @@ class BaseActiveRecord extends CActiveRecord {
             'created_by'    => DomainConst::CONTENT00054,
         );
     }
-
+    
     //-----------------------------------------------------
     // Static methods
     //-----------------------------------------------------
