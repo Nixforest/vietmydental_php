@@ -24,7 +24,7 @@
     ?>
     <div class="row">
         <div class="col-md-3">
-            <label for="<?php echo $id; ?>"><?php echo $description; ?></label>
+            <label for="<?php echo $id; ?>" style="text-align: right;"><?php echo $description; ?></label>
         </div>
         <div class="col-md-3">
             <?php if(in_array($child, $aTypeView['CheckBox'])): ?>

@@ -183,7 +183,20 @@ class ApiSigninRequests extends BaseActiveRecord {
         $criteria->compare('code', $code, true);
         $model = self::model()->find($criteria);
         if ($model) {
-            return true;
+            // Check otp limit time
+            $currentTime = CommonProcess::getCurrentDateTime();
+            Loggers::info('Current', $currentTime, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            $createdTime = $model->created_date;
+            Loggers::info('Created', $createdTime, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            $timeFirst  = strtotime($currentTime);
+            $timeSecond = strtotime($createdTime);
+            $diff = $timeFirst - $timeSecond;
+            Loggers::info('Difference time', $diff, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            $limit = Settings::getOTPLimitTime();
+            if ($limit >= $diff) {
+                return true;
+            }
+            
         }
         return false;
     }

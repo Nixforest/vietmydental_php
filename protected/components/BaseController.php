@@ -238,7 +238,6 @@ class BaseController extends CController {
      * @return String Name of action
      */
     public function getPageTitleByAction($action) {
-        Loggers::info('Get page title', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         // Get name of action from database
         $retVal = ControllersActions::getActionNameByController(Yii::app()->controller->id, $action, $this->module);
         return $retVal;
