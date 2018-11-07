@@ -242,6 +242,7 @@ class SMSHandler {
         $dateTime = CommonProcess::getCurrentDateTime();
         $msg = 'Mã OTP là ' . $otp . '. Đây là mật khẩu để bạn đăng nhập VietMy Dental.'
                 . 'Vì lý do bảo mật đừng bao giờ chia sẻ mật khẩu này.';
-        self::sendSMSSchedule('OTP', $phone, $msg, '', 'OTP', $dateTime);
+//        self::sendSMSSchedule('OTP', $phone, $msg, '', 'OTP', $dateTime);
+        self::sendSMSOnce($phone, $msg);
     }
 }
