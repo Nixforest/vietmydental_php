@@ -193,6 +193,8 @@ class DomainConst {
     const KEY_USERNAME                      = 'username';
     /** Password */
     const KEY_PASSWORD                      = 'password';
+    /** OTP */
+    const KEY_OTP                           = 'otp';
     /** GCM device token */
     const KEY_GCM_DEVICE_TOKEN              = 'gcm_device_token';
     /** APNS device token */
@@ -1715,4 +1717,8 @@ class DomainConst {
     const CONTENT00558  = 'Token không hợp lệ';
     const CONTENT00559  = 'Nhân sự';
     const CONTENT00560  = 'Chưa hiện thực hoá';
+    const CONTENT00561  = 'Mã OTP';
+    const CONTENT00562  = 'Khách hàng đã xác nhận mã pin';
+    const CONTENT00563  = 'Mã OTP không hợp lệ';
+    const CONTENT00564  = 'Bệnh nhân không hợp lệ';
 }

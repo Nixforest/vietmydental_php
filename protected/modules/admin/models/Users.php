@@ -357,7 +357,12 @@ class Users extends BaseActiveRecord {
                             $this->password_hash, $this->temp_password);
 
             // Handle username
-            $this->username = self::generateUsername($this->first_name);
+            if ($this->role_id == Roles::getRoleByName(Roles::ROLE_CUSTOMER)->id) {
+                // Do nothing
+            } else {
+                $this->username = self::generateUsername($this->first_name);
+            }
+            
             // Handle created by
             if (empty($this->created_by)) {
                 $this->created_by = $userId;
@@ -1208,6 +1213,30 @@ class Users extends BaseActiveRecord {
         }
         
         return $retVal;
+    }
+    
+    /**
+     * Create new customer user from phone
+     * @param String $phone Phone number
+     */
+    public static function createNewCustomerUser($phone) {
+        $model = new Users('create');
+        $model->username        = $phone;
+        $model->phone           = $phone;
+        $model->role_id         = Roles::getRoleByName(Roles::ROLE_CUSTOMER)->id;
+        $model->temp_password   = CommonProcess::generateTempPassword();
+        $model->password_hash   = $model->temp_password;
+        $model->ip_address      = CommonProcess::getUserIP();
+        $model->application_id  = 1;
+        $model->created_date    = CommonProcess::getCurrentDateTimeWithMySqlFormat();
+        
+        if ($model->save()) {
+            Loggers::info('Save success', $model->id, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            return $model;
+        } else {
+            Loggers::error('Save failed', CommonProcess::json_encode_unicode($model->getErrors()), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        }
+        return NULL;
     }
 
 }

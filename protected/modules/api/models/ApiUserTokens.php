@@ -215,6 +215,21 @@ class ApiUserTokens extends BaseActiveRecord
             ApiModule::sendResponse($result, $objController);
         }
     }
+    /**
+     * Check login is valid
+     * @param DefaultController $objController
+     * @param Users $mUser
+     * @param Array $result
+     */
+    public static function validateCustomerLogin($objController, $mUser, $result) {
+        if (!$mUser) {  // User not exist
+            $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00183;
+            ApiModule::sendResponse($result, $objController);
+        } else if ($mUser->status == DomainConst::DEFAULT_STATUS_INACTIVE) {  // Inactive user
+            $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00183;
+            ApiModule::sendResponse($result, $objController);
+        }
+    }
     
     public static function makeNewTokenSaveData($mUser, $token, $gcm, $apns, $type) {
         $mUserToken = new ApiUserTokens('makeNewToken');

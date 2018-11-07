@@ -276,4 +276,80 @@ class DefaultController extends APIController
             ApiModule::sendResponse($result, $this);
         }
     }
+    
+    /**
+     * P0025_CustomerLogin_API
+     * Login system
+     * - url:  api/default/loginCustomer
+     * - parameter:
+     *  + phone: Phone number
+     */
+    public function actionLoginCustomer() {
+        try {
+            $result = ApiModule::$defaultFailedResponse;
+            // Check format of request
+            $this->checkRequest();
+            // Parse json
+            $root = json_decode(filter_input(INPUT_POST, DomainConst::KEY_ROOT_REQUEST));
+            // Check required parameters
+            $this->checkRequiredParam($root, array(
+                DomainConst::KEY_PHONE
+            ));
+            $model = ApiSigninRequests::createNew($root->{DomainConst::KEY_PHONE});
+            if ($model != NULL) {
+                // Send OTP sms
+                SMSHandler::sendSMSOTP($model->phone, $model->code);
+                $result = ApiModule::$defaultSuccessResponse;
+                $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00194;
+                ApiModule::sendResponse($result, $this);
+            } else {
+                $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00214;
+                ApiModule::sendResponse($result, $this);
+            }
+        } catch (Exception $exc) {
+            ApiModule::catchError($exc, $this);
+        }
+    }
+    
+    /**
+     * P0026_CustomerLoginConfirm_API
+     * Login system
+     * - url:  api/default/loginCustomerConfirm
+     * - parameter:
+     *  + phone: Phone number
+     *  + otp: OTP code
+     */
+    public function actionLoginCustomerConfirm() {
+        try {
+            $result = ApiModule::$defaultFailedResponse;
+            // Check format of request
+            $this->checkRequest();
+            // Parse json
+            $root = json_decode(filter_input(INPUT_POST, DomainConst::KEY_ROOT_REQUEST));
+            // Check required parameters
+            $this->checkRequiredParam($root, array(
+                DomainConst::KEY_PHONE,
+                DomainConst::KEY_OTP
+            ));
+            $phone = $root->{DomainConst::KEY_PHONE};
+            $otp = $root->{DomainConst::KEY_OTP};
+            // Validate phone and otp
+            if (!ApiSigninRequests::validateOTP($phone, $otp)) {
+                $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00563;
+                ApiModule::sendResponse($result, $this);
+            }
+            // Get user login
+            $mUser = $this->getUserModel($root->{DomainConst::KEY_PHONE});
+            if (!isset($mUser)) {
+                Loggers::info('User not found', $phone, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                // Not found user
+                $mUser = Users::createNewCustomerUser($root->{DomainConst::KEY_PHONE});
+            }
+            ApiUserTokens::validateCustomerLogin($this, $mUser, $result);
+            $mUserToken = ApiUserTokens::makeNewToken($mUser, $root);
+            CreateResponse::loginResponse($mUserToken->token, $mUser, $this);
+        } catch (Exception $exc) {
+            ApiModule::catchError($exc, $this);
+        }
+    }
 }
