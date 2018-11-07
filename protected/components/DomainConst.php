@@ -1718,7 +1718,7 @@ class DomainConst {
     const CONTENT00559  = 'Nhân sự';
     const CONTENT00560  = 'Chưa hiện thực hoá';
     const CONTENT00561  = 'Mã OTP';
-    const CONTENT00562  = 'Khách hàng đã xác nhận mã pin';
+    const CONTENT00562  = 'Khách hàng đã xác nhận mã OTP thành công';
     const CONTENT00563  = 'Mã OTP không hợp lệ';
     const CONTENT00564  = 'Bệnh nhân không hợp lệ';
 }

@@ -160,6 +160,7 @@ class ApiSigninRequests extends BaseActiveRecord {
         $model = new ApiSigninRequests();
         $model->phone = $phone;
         $model->code = CommonProcess::randString(4, '0123456789');
+//        $model->code = '1111';
         if ($model->save()) {
             Loggers::info('Create success', $model->id,
                     __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
@@ -181,6 +182,7 @@ class ApiSigninRequests extends BaseActiveRecord {
         $criteria = new CDbCriteria();
         $criteria->compare('phone', $phone, true);
         $criteria->compare('code', $code, true);
+        $criteria->order = 'id desc';
         $model = self::model()->find($criteria);
         if ($model) {
             // Check otp limit time
@@ -194,6 +196,8 @@ class ApiSigninRequests extends BaseActiveRecord {
             Loggers::info('Difference time', $diff, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             $limit = Settings::getOTPLimitTime();
             if ($limit >= $diff) {
+                $model->status = self::STATUS_CONFIRMED;
+                $model->save();
                 return true;
             }
             
