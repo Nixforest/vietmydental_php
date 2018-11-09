@@ -306,5 +306,32 @@ class TemporaryPatients extends BaseActiveRecord {
         }
         return false;
     }
+    /**
+     * Create model from API (Mobile app) call
+     * @param Json $root Json object
+     * @param String $customerId Id of customer
+     */
+    public static function createFromAPIApp($root, $customerId = '') {
+        $model = new TemporaryPatients('create') ;
+        $model->name        = CommonProcess::getValueFromJson($root, DomainConst::KEY_NAME);
+        $model->phone       = CommonProcess::getValueFromJson($root, DomainConst::KEY_PHONE);
+        $model->content     = CommonProcess::getValueFromJson($root, DomainConst::KEY_CONTENT);
+        $model->book_date   = CommonProcess::getValueFromJson($root, DomainConst::KEY_DATE);
+        $model->source_id   = Settings::getItemValue(Settings::KEY_SOURCE_INFO_APP);
+        $model->customer_id = $customerId;
+        if ($model->save()) {
+            if (isset($root->email)) {
+                SocialNetworks::insertOne($root->email, $model->id,
+                        SocialNetworks::TYPE_TEMP_PATIENT, SocialNetworks::TYPE_NETWORK_EMAIL);
+            }
+            Loggers::info('Create temporary patient success', $model->id,
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            return true;
+        } else {
+            Loggers::info('Create temporary patient failed', CommonProcess::json_encode_unicode($model->getErrors()),
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        }
+        return false;
+    }
 
 }

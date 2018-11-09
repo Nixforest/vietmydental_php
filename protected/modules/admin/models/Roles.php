@@ -256,7 +256,7 @@ class Roles extends BaseActiveRecord {
      * @return boolean True if role is customer role, False otherwise
      */
     public function isCustomerRole() {
-        if ($this->role_short_name == self::ROLE_CUSTOMER) {
+        if ($this->role_name == self::ROLE_CUSTOMER) {
             return true;
         }
         return false;

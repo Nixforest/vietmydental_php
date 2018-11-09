@@ -62,6 +62,8 @@ class Settings extends BaseActiveRecord {
     const KEY_HR_WORKSHIFT_OFF_DAY_PER_MONTH    = 'HR_WORKSHIFT_OFF_DAY_PER_MONTH';
     /** Key setting of source information: Website */
     const KEY_SOURCE_INFO_WEBSITE               = 'SOURCE_INFO_WEBSITE';
+    /** Key setting of source information: App */
+    const KEY_SOURCE_INFO_APP                   = 'SOURCE_INFO_APP';
     /** Key setting of OTP: limit time */
     const KEY_OTP_LIMIT_TIME                    = 'OTP_LIMIT_TIME';
 
