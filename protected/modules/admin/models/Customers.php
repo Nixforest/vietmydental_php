@@ -1377,4 +1377,21 @@ class Customers extends BaseActiveRecord {
     }
 
     //-- BUG0068-IMT (DuongNV 20183108) Add customer info in receipt screen
+    
+    /**
+     * Check if a user id is a valid patient (customer has medical record)
+     * @param String $userId Id of user
+     * @return String Id of customer, empty if customer not found
+     */
+    public static function isValidPatient($userId) {
+        $model = self::model()->findByAttributes(array(
+            'user_id'   => $userId,
+        ));
+        if ($model) {
+            if (isset($model->rMedicalRecord)) {
+                return $model->id;
+            }
+        }
+        return '';
+    }
 }

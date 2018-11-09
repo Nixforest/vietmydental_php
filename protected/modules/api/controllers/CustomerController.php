@@ -997,7 +997,7 @@ class CustomerController extends APIController
                 if (TemporaryPatients::createFromAPI($root)) {
                     // Create patient success
                     $result = ApiModule::$defaultSuccessResponse;
-                    $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00194;
+                    $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00205;
                 } else {
                     $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00214;
                 }
@@ -1152,31 +1152,54 @@ class CustomerController extends APIController
             ApiModule::catchError($exc, $this);
         }
     }
-
-    // Uncomment the following methods and override them if needed
-	/*
-	public function filters()
-	{
-		// return the filter configuration for this controller, e.g.:
-		return array(
-			'inlineFilterName',
-			array(
-				'class'=>'path.to.FilterClass',
-				'propertyName'=>'propertyValue',
-			),
-		);
-	}
-
-	public function actions()
-	{
-		// return external action classes, e.g.:
-		return array(
-			'action1'=>'path.to.ActionClass',
-			'action2'=>array(
-				'class'=>'path.to.AnotherActionClass',
-				'propertyName'=>'propertyValue',
-			),
-		);
-	}
-	*/
+    
+    /**
+     * P0027_MakeScheduleApp_API
+     * Make schedule for customer (from mobile app)
+     * - url:   api/customer/makeScheduleApp
+     * - parameter:
+     *  + token:            Token
+     *  + name:             Name of patient
+     *  + phone:            Phone of patient
+     *  + date:             Date (format: yyyy-mm-dd)
+     *  + content:          Content
+     * 
+     */
+    public function actionMakeScheduleApp() {
+        try {
+            $result = ApiModule::$defaultFailedResponse;
+            // Check format of request
+            $this->checkRequest();
+            // Parse json
+            $root = json_decode(filter_input(INPUT_POST, DomainConst::KEY_ROOT_REQUEST));
+            // Check required parameters
+            $this->checkRequiredParam($root, array(
+                DomainConst::KEY_TOKEN,
+                DomainConst::KEY_NAME,
+                DomainConst::KEY_PHONE,
+                DomainConst::KEY_DATE,
+                DomainConst::KEY_CONTENT,
+            ));
+            // Get user
+            $mUser          = $this->getUserByToken($result, $root->token);
+            // Check if user is a customer
+            if ($mUser->isCustomer()) {
+                // Check if Customer user is a valid Patient
+                $customerId = Customers::isValidPatient($mUser->id);
+                // New patient -> Add to temporary patient table
+                if (TemporaryPatients::createFromAPIApp($root, $customerId)) {
+                    // Create patient success
+                    $result = ApiModule::$defaultSuccessResponse;
+                    $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00205;
+                } else {
+                    $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00214;
+                }
+            } else {
+                $result[DomainConst::KEY_MESSAGE] = DomainConst::CONTENT00564;
+            }
+            ApiModule::sendResponse($result, $this);
+        } catch (Exception $exc) {
+            ApiModule::catchError($exc, $this);
+        }
+    }
 }
