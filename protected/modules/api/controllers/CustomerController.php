@@ -985,13 +985,13 @@ class CustomerController extends APIController
             $result = ApiModule::$defaultFailedResponse;
             $root = json_decode(CommonProcess::json_encode_unicode($_POST));
             // Check required parameters
-            $this->checkRequiredParam($root, array(
-                DomainConst::KEY_TOKEN,
-                DomainConst::KEY_NAME,
-                DomainConst::KEY_PHONE,
-                DomainConst::KEY_DATE,
-                DomainConst::KEY_CONTENT
-            ));
+//            $this->checkRequiredParam($root, array(
+//                DomainConst::KEY_TOKEN,
+//                DomainConst::KEY_NAME,
+//                DomainConst::KEY_PHONE,
+//                DomainConst::KEY_DATE,
+//                DomainConst::KEY_CONTENT
+//            ));
             // Check valid token
             if (Settings::isValidTokenWordpressAPI($root->{DomainConst::KEY_TOKEN})) {
                 if (TemporaryPatients::createFromAPI($root)) {
