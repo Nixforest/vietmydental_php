@@ -162,6 +162,8 @@ class Settings extends BaseActiveRecord {
     const KEY_LOG_USER_ACTIVITY                 = 'USER_ACTIVITY_LOG';
     /** Key General log */
     const KEY_LOG_GENERAL                       = 'GENERAL_LOG';
+    /** Key General log */
+    const KEY_LOG_ACTIVE_RECORD                 = 'LOG_ACTIVE_RECORD';
     //-----------------------------------------------------
     // -- Define keys
     //-----------------------------------------------------
@@ -583,6 +585,15 @@ class Settings extends BaseActiveRecord {
      */
     public static function canLogApiRequest() {
         return (self::getItemValue(self::KEY_LOG_API_REQUEST, DomainConst::NUMBER_ZERO_VALUE)
+                == DomainConst::NUMBER_ONE_VALUE);
+    }
+    
+    /**
+     * Check can log active record update
+     * @return boolean True if setting is ON, false otherwise
+     */
+    public static function canLogActiveRecordUpdate() {
+        return (self::getItemValue(self::KEY_LOG_ACTIVE_RECORD, DomainConst::NUMBER_ZERO_VALUE)
                 == DomainConst::NUMBER_ONE_VALUE);
     }
 }

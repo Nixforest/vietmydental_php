@@ -111,6 +111,7 @@ class SettingsController extends AdminController {
                 Settings::KEY_LOG_API_REQUEST,
                 Settings::KEY_LOG_GENERAL,
                 Settings::KEY_LOG_USER_ACTIVITY,
+                Settings::KEY_LOG_ACTIVE_RECORD,
             ),
         ),
             // TODO: Add more group here
@@ -132,6 +133,7 @@ class SettingsController extends AdminController {
             Settings::KEY_LOG_API_REQUEST,
             Settings::KEY_LOG_GENERAL,
             Settings::KEY_LOG_USER_ACTIVITY,
+            Settings::KEY_LOG_ACTIVE_RECORD,
         ],
         //TODO: Add more type input here
     ];
