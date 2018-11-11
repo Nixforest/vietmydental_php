@@ -104,6 +104,15 @@ class SettingsController extends AdminController {
                 Settings::KEY_WORDPRESS_API_TOKEN,
             ),
         ),
+        // Logger
+        Settings::KEY_LOGGER_SETTINGS => array(
+            DomainConst::KEY_ALIAS => 'Logger',
+            DomainConst::KEY_CHILDREN => array(
+                Settings::KEY_LOG_API_REQUEST,
+                Settings::KEY_LOG_GENERAL,
+                Settings::KEY_LOG_USER_ACTIVITY,
+            ),
+        ),
             // TODO: Add more group here
     );
 
@@ -120,6 +129,9 @@ class SettingsController extends AdminController {
             //TODO: Add more checkbook here
             Settings::KEY_SMS_SEND_ALARM_SCHEDULE,
             Settings::KEY_HR_WORK_ON_SATURDAY,
+            Settings::KEY_LOG_API_REQUEST,
+            Settings::KEY_LOG_GENERAL,
+            Settings::KEY_LOG_USER_ACTIVITY,
         ],
         //TODO: Add more type input here
     ];

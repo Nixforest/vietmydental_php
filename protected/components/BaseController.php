@@ -87,6 +87,15 @@ class BaseController extends CController {
     }
 
     //-----------------------------------------------------
+    // Parent methods
+    //-----------------------------------------------------
+    protected function afterAction($action) {
+        if (Settings::canLogUserActivity()) {
+            UserActivities::insertOne($this->module);
+        }
+    }
+
+    //-----------------------------------------------------
     // Utility methods
     //-----------------------------------------------------
     /**

@@ -33,6 +33,9 @@ class Settings extends BaseActiveRecord {
     /** Key API setting */
     const KEY_API_SETTINGS                      = 'api_settings';
 
+    /** Key Logger setting */
+    const KEY_LOGGER_SETTINGS                   = 'logger_settings';
+
     /* --- General settings --- */
     /** Key website title */
     const KEY_TITLE                             = 'WEBSITE_TITLE';
@@ -151,6 +154,14 @@ class Settings extends BaseActiveRecord {
     /* --- API settings --- */
     /** Key Wordpress api token */
     const KEY_WORDPRESS_API_TOKEN               = 'WORDPRESS_API_TOKEN';
+
+    /* --- Logger settings --- */
+    /** Key API request log */
+    const KEY_LOG_API_REQUEST                   = 'API_REQUEST_LOG';
+    /** Key User activity log */
+    const KEY_LOG_USER_ACTIVITY                 = 'USER_ACTIVITY_LOG';
+    /** Key General log */
+    const KEY_LOG_GENERAL                       = 'GENERAL_LOG';
     //-----------------------------------------------------
     // -- Define keys
     //-----------------------------------------------------
@@ -548,4 +559,30 @@ class Settings extends BaseActiveRecord {
         return self::getItemValue(self::KEY_OTP_LIMIT_TIME, 120);
     }
 
+    /**
+     * Check can log user activity
+     * @return boolean True if setting is ON, false otherwise
+     */
+    public static function canLogUserActivity() {
+        return (self::getItemValue(self::KEY_LOG_USER_ACTIVITY, DomainConst::NUMBER_ZERO_VALUE)
+                == DomainConst::NUMBER_ONE_VALUE);
+    }
+    
+    /**
+     * Check can log general log
+     * @return boolean True if setting is ON, false otherwise
+     */
+    public static function canLogGeneral() {
+        return (self::getItemValue(self::KEY_LOG_GENERAL, DomainConst::NUMBER_ZERO_VALUE)
+                == DomainConst::NUMBER_ONE_VALUE);
+    }
+    
+    /**
+     * Check can log api request
+     * @return boolean True if setting is ON, false otherwise
+     */
+    public static function canLogApiRequest() {
+        return (self::getItemValue(self::KEY_LOG_API_REQUEST, DomainConst::NUMBER_ZERO_VALUE)
+                == DomainConst::NUMBER_ONE_VALUE);
+    }
 }
