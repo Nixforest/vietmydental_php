@@ -386,11 +386,16 @@ class AjaxController extends AdminController
                         $agentId = $keywordArr["customer_find_agent"];
                     }
                     $models = Customers::model()->findAll($criteria);
+                    $modelIdArr = array();
+                    foreach ($models as $value) {
+                        $modelIdArr[] = $value->id;
+                    }
 
                     $medicalRecords = $this->findCustomerByRecordNumber($keyword);
                     foreach ($medicalRecords as $record) {
                         if (isset($record->rCustomer)) {
-                            if (!in_array($record->rCustomer, $models)) {
+//                            if (!in_array($record->rCustomer, $models)) {
+                            if (!in_array($record->rCustomer->id, $modelIdArr)) {
                                 array_push($models, $record->rCustomer);
                             }
                         }
