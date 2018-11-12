@@ -10,3 +10,4 @@ themes/classic/views/
 /db/
 /upload/admin/
 /upload/all_file/
+/protected/config/info.php
