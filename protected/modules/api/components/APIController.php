@@ -43,7 +43,7 @@ class APIController extends CController {
      * Check request.
      */
     public function checkRequest() {
-        if (YII_DEBUG) {
+        if (Settings::canLogApiRequest()) {
             $this->writeRequestLog();
         }
         $method = filter_input(INPUT_SERVER, 'REQUEST_METHOD');

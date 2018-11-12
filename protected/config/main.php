@@ -33,6 +33,7 @@ return array(
         'application.extensions.phpexcel.Classes.*',
 //                'application.extensions.phpexcel.Classes.PHPExcel.*',
         'application.components.widgets.*',
+        'application.behaviors.ActiveRecordLogableBehavior',
         'application.modules.hr.models.*',
         'application.modules.product.models.*',
         'bootstrap.helpers.*',

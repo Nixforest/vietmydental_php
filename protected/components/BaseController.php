@@ -87,6 +87,18 @@ class BaseController extends CController {
     }
 
     //-----------------------------------------------------
+    // Parent methods
+    //-----------------------------------------------------
+    protected function afterAction($action) {
+        if (Settings::canLogUserActivity()) {
+            UserActivities::insertOne($this->module);
+        }
+        PageCounts::updateView($this->module,
+                isset(Yii::app()->controller->id) ? Yii::app()->controller->id : '',
+                $action->id);
+    }
+
+    //-----------------------------------------------------
     // Utility methods
     //-----------------------------------------------------
     /**

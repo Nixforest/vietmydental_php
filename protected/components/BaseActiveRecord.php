@@ -89,6 +89,14 @@ class BaseActiveRecord extends CActiveRecord {
         }
     }
     
+    public function behaviors() {
+        return array(
+            // Classname => path to Class
+            'ActiveRecordLogableBehavior' =>
+            'application.behaviors.ActiveRecordLogableBehavior',
+        );
+    }
+
     /**
      * Check if id is exist
      * @param String $id Id value
