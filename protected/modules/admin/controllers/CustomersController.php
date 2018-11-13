@@ -80,9 +80,10 @@ class CustomersController extends AdminController
                                 OneMany::insertOne($selectedAgent, $model->id, OneMany::TYPE_AGENT_CUSTOMER);
                                 $referCode = $_POST['Customers']['referCode'];
                                 // Handle save refer code
-                                if (!empty($referCode)) {
-                                    ReferCodes::connect($referCode, $model->id, ReferCodes::TYPE_CUSTOMER);
-                                }
+//                                if (!empty($referCode)) {
+//                                    ReferCodes::connect($referCode, $model->id, ReferCodes::TYPE_CUSTOMER);
+//                                }
+                                $model->updateReferCode($referCode);
                                 // Handle save social network information
                                 foreach (SocialNetworks::TYPE_NETWORKS as $key => $value) {
                                     $value = $_POST['Customers']["social_network_$key"];
@@ -127,9 +128,10 @@ class CustomersController extends AdminController
                                 OneMany::insertOne($selectedAgent, $model->id, OneMany::TYPE_AGENT_CUSTOMER);
                                 $referCode = $_POST['Customers']['referCode'];
                                 // Handle save refer code
-                                if (!empty($referCode)) {
-                                    ReferCodes::connect($referCode, $model->id, ReferCodes::TYPE_CUSTOMER);
-                                }
+//                                if (!empty($referCode)) {
+//                                    ReferCodes::connect($referCode, $model->id, ReferCodes::TYPE_CUSTOMER);
+//                                }
+                                $model->updateReferCode($referCode);
                                 // Handle save social network information
                                 SocialNetworks::deleteAllOldRecord($model->id, SocialNetworks::TYPE_CUSTOMER);
                                 foreach (SocialNetworks::TYPE_NETWORKS as $key => $value) {

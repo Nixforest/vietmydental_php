@@ -58,7 +58,7 @@ class CommonProcess {
         } else if (function_exists("openssl_random_pseudo_bytes")) {
             $bytes = openssl_random_pseudo_bytes(ceil($len / 2));
         } else {
-            $retVal = self::generateTempPassword();
+            return self::generateTempPassword();
         }
         
         $retVal = substr(bin2hex($bytes), 0, $len);
