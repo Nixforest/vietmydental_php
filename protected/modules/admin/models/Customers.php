@@ -31,6 +31,7 @@
  * @property Districts              $rDistrict          District of customer
  * @property Users                  $rCreatedBy         User created this record
  * @property MedicalRecords         $rMedicalRecord     Medical record
+ * @property ReferCodes             $rReferCode         Refer code model
  */
 class Customers extends BaseActiveRecord {
     //-----------------------------------------------------
@@ -119,7 +120,8 @@ class Customers extends BaseActiveRecord {
             ),
             'rReferCode' => array(
                 self::HAS_ONE, 'ReferCodes', 'object_id',
-                'on' => 'type = ' . ReferCodes::TYPE_CUSTOMER,
+                'on' => 'type = ' . ReferCodes::TYPE_CUSTOMER . ' AND status !=' . DomainConst::DEFAULT_STATUS_INACTIVE,
+                'order' => 'id desc',
             ),
             'rSocialNetwork' => array(
                 self::HAS_MANY, 'SocialNetworks', 'object_id',
@@ -1049,6 +1051,28 @@ class Customers extends BaseActiveRecord {
      */
     public function getCreatedBy() {
         return !empty($this->rCreatedBy) ? $this->rCreatedBy->getFullName() : '';
+    }
+    
+    /**
+     * Update refer code
+     * @param String $referCode Value of refer code
+     */
+    public function updateReferCode($referCode) {
+        if (empty($referCode)) {    // Empty
+            if (isset($this->rReferCode)) {
+                // Case need disconnect (user delete refer code)
+                ReferCodes::disconnect($this->rReferCode->code);
+            }
+        } else {    // Refer code not empty
+            if (isset($this->rReferCode)) {         // Customer was connected before
+                if ($this->rReferCode->code != $referCode) {    // User change refer code
+                    // Delete old
+                    ReferCodes::disconnect($this->rReferCode->code);
+                }
+            }
+            // Connect new
+            ReferCodes::connect($referCode, $this->id, ReferCodes::TYPE_CUSTOMER);
+        }
     }
 
     //-----------------------------------------------------
