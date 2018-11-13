@@ -14,21 +14,13 @@
  * @property Customers              $rCustomer              Customer model
  */
 class ReferCodes extends BaseActiveRecord {
-    //-----------------------------------------------------
-    // Constants
-    //-----------------------------------------------------
-    /** Inactive */
-    const STATUS_INACTIVE               = '0';
-    /** Active */
-    const STATUS_ACTIVE                 = '1';
-    /** Print */
-    const STATUS_PRINTED                = '2';
-    /** Connected */
-//    const STATUS_CONNECTED              = '3';
-    
+
     //-----------------------------------------------------
     // Type of relation
     //-----------------------------------------------------
+    const TYPE_NOT_SELECTED_YET     = DomainConst::NUMBER_ZERO_VALUE;
+    const TYPE_PRINTED              = DomainConst::NUMBER_TWO_VALUE;
+
     /** 1 [customer] has 1 [refer code] */
     const TYPE_CUSTOMER             = DomainConst::NUMBER_ONE_VALUE;
 
@@ -74,6 +66,7 @@ class ReferCodes extends BaseActiveRecord {
         return array(
             'rCustomer' => array(
                 self::BELONGS_TO, 'Customers', 'object_id',
+//                'on'    => 'type = ' . self::TYPE_CUSTOMER,
             ),
         );
     }
@@ -82,11 +75,13 @@ class ReferCodes extends BaseActiveRecord {
      * @return array customized attribute labels (name=>label)
      */
     public function attributeLabels() {
-        $label = parent::attributeLabels();
-        $label['code']      = 'Code';
-        $label['object_id'] = 'Object';
-        $label['type']      = DomainConst::CONTENT00568;
-        return $label;
+        return array(
+            'id' => 'ID',
+            'code' => 'Code',
+            'object_id' => 'Object',
+            'status' => 'Status',
+            'type' => 'Type',
+        );
     }
 
     /**
@@ -118,65 +113,34 @@ class ReferCodes extends BaseActiveRecord {
     // Utility methods
     //-----------------------------------------------------
     /**
+     * Get value of id
+     * @return String
+     */
+    public function getId() {
+        return CommonProcess::generateID(DomainConst::REFER_CODE_ID_PREFIX, $this->id);
+    }
+
+    /**
      * Generate url of this refer code
      * @return String
      */
     public function generateURL() {
-        $url = '';
-        switch ($this->type) {
-            case self::TYPE_CUSTOMER:
-                $url = Yii::app()->createAbsoluteUrl('front/customer/view', array(
-                    'code'    => $this->code,
-                ));
-                break;
-
-            default:
-                break;
-        }
-        return $url;
-    }
-    
-    /**
-     * Return status string
-     * @return string Status value as string
-     */
-    public function getStatus() {
-        if (isset(self::getArrayStatus()[$this->status])) {
-            return self::getArrayStatus()[$this->status];
-        }
-        return '';
-    }
-    
-    /**
-     * Return type string
-     * @return string Type value as string
-     */
-    public function getType() {
-        if (isset(self::getArrayType()[$this->type])) {
-            return self::getArrayType()[$this->type];
-        }
-        return '';
-    }
-    
-    /**
-     * Get object link
-     * @return type
-     */
-    public function getObject() {
-        $url = '';
-        $name = '';
-        switch ($this->type) {
-            case self::TYPE_CUSTOMER:
-                $url = Yii::app()->createAbsoluteUrl('admin/customers/view', array(
-                    'id'    => $this->object_id,
-                ));
-                $name = $this->rCustomer->getName();
-                break;
-
-            default:
-                break;
-        }
-        return '<a href="' . $url . '">' . $name . '</a>';
+//        $url = '';
+//        switch ($this->type) {
+//            case self::TYPE_CUSTOMER:
+//                $url = 'http://' . Settings::getDomain() . "/index.php/front/customer/view/code/" . $this->code;
+//
+//                break;
+//            case self::TYPE_NOT_SELECTED_YET:
+//                $url = 'http://' . Settings::getDomain() . "/index.php/front/customer/view/code/" . $this->code;
+//
+//                break;
+//
+//            default:
+//                $url = 'http://' . Settings::getDomain() . "/index.php/front/customer/view/code/" . $this->code;
+//                break;
+//        }
+        return CommonProcess::generateQRCodeURL($this->code);
     }
 
     //-----------------------------------------------------
@@ -189,16 +153,11 @@ class ReferCodes extends BaseActiveRecord {
      * @param String $type      Type of relation
      */
     public static function insertOne($code, $object_id, $type) {
-        $model              = new ReferCodes();
-        $model->code        = $code;
-        $model->object_id   = $object_id;
-        $model->type        = $type;
-        
-        if ($model->save()) {
-            Loggers::info('Create success', $model->id, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-        } else {
-            Loggers::error('Create failed', CommonProcess::json_encode_unicode($model->getErrors()), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-        }
+        $model = new ReferCodes();
+        $model->code = $code;
+        $model->object_id = $object_id;
+        $model->type = $type;
+        $model->save();
     }
 
     /**
@@ -213,16 +172,13 @@ class ReferCodes extends BaseActiveRecord {
         ));
         if ($model) {
             // Connect
-            if ($model->status == self::STATUS_PRINTED) {
-                // Case Refer code was printed
-                $model->object_id   = $object_id;
-                $model->type        = $type;
+            if ($model->type == self::TYPE_PRINTED) {
+                $model->object_id = $object_id;
+                $model->type = $type;
                 $model->save();
-            } else if ($model->status == self::STATUS_ACTIVE) {
-                // Case Refer code was not printed
+            } else if ($model->type == self::TYPE_NOT_SELECTED_YET) {
                 throw new Exception(DomainConst::CONTENT00299);
             } else if ($model->object_id == $object_id) {
-                // Connected before
                 return;
             } else {
                 throw new Exception(DomainConst::CONTENT00268);
@@ -247,28 +203,6 @@ class ReferCodes extends BaseActiveRecord {
             }
         }
         return NULL;
-    }
-    
-    /**
-     * Get status array
-     * @return Array Array status of record
-     */
-    public static function getArrayStatus() {
-        return array(
-            self::STATUS_INACTIVE       => DomainConst::CONTENT00408,
-            self::STATUS_ACTIVE         => DomainConst::CONTENT00567,
-            self::STATUS_PRINTED        => DomainConst::CONTENT00565,
-        );
-    }
-    
-    /**
-     * Get type array
-     * @return Array Array type of refer code
-     */
-    public static function getArrayType() {
-        return array(
-            self::TYPE_CUSTOMER       => DomainConst::CONTENT00135,
-        );
     }
 
 }

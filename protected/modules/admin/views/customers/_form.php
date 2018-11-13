@@ -207,7 +207,8 @@
             </div>
             <div class="col-md-6">
 		<?php echo $form->labelEx($model, 'referCode') ?>
-                <?php echo $form->hiddenField($model, 'referCode', array('class' => '')); ?>
+                <?php if (!isset($model->rReferCode)): ?>
+                    <?php echo $form->hiddenField($model, 'referCode', array('class' => '')); ?>
                     <?php
                         $referCode = isset($model->rReferCode) ? $model->rReferCode->code : '';
                         $aData = array(
@@ -218,12 +219,21 @@
                             'url'               => Yii::app()->createAbsoluteUrl('admin/ajax/searchReferCode'),
                             'field_autocomplete_name' => 'autocomplete_name_refercode',
                             'htmlOptions'=>array(
-//                                        'readonly'=>'readonly',
+                                        'readonly'=>'readonly',
                                     ),
                         );
                         $this->widget('ext.AutocompleteExt.AutocompleteExt',
                                 array('data' => $aData));
                     ?>
+                <?php else: ?>
+                    <?php
+                        $model->referCode = isset($model->rReferCode) ? $model->rReferCode->code : '';
+                        echo $form->textField($model,'referCode', array(
+                            'size'=>11,'maxlength'=>11,
+                            'readonly' => 'true',
+                        ));
+                    ?>
+                <?php endif; // end if ($model->isNewRecord) ?>
                 <?php echo $form->error($model,'referCode'); ?>
             </div>
         </div>
