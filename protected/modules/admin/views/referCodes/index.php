@@ -4,9 +4,13 @@
 
 $this->createMenu('index', $model);
 $this->menu[] = array(
-    'label' => $this->getPageTitleByAction('downloadExcel'),
+    'label' => $this->getPageTitleByAction('downloadExcel') . ': ' . Settings::getItemValue(Settings::KEY_NUM_QRCODE_DOWNLOAD_MAX) . ' mã',
     'url' => array('downloadExcel')
-    );
+);
+$this->menu[] = array(
+    'label' => $this->getPageTitleByAction('print'),
+    'url' => array('print')
+);
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
@@ -24,23 +28,25 @@ $('.search-form form').submit(function(){
 
 <h1><?php echo $this->pageTitle; ?></h1>
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'refer-codes-grid',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
-	'columns'=>array(
-                array(
-                    'header' => DomainConst::CONTENT00034,
-                    'type' => 'raw',
-                    'value' => '$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
-                    'headerHtmlOptions' => array('width' => '30px','style' => 'text-align:center;'),
-                    'htmlOptions' => array('style' => 'text-align:center;')
-                ),
-		'code',
-                array(
-                    'header' => DomainConst::CONTENT00271,
-                    'value' => '$data->generateURL()',
-                ),
+<?php
+$this->widget('zii.widgets.grid.CGridView', array(
+    'id' => 'refer-codes-grid',
+    'dataProvider' => $model->search(),
+    'filter' => $model,
+    'columns' => array(
+        array(
+            'header' => DomainConst::CONTENT00034,
+            'type' => 'raw',
+            'value' => '$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
+            'headerHtmlOptions' => array('width' => '30px', 'style' => 'text-align:center;'),
+            'htmlOptions' => array('style' => 'text-align:center;')
+        ),
+        'id',
+        'code',
+        array(
+            'header' => DomainConst::CONTENT00271,
+            'value' => '$data->generateURL()',
+        ),
 //                array(
 //                    'header' => DomainConst::CONTENT00271,
 //                    'value' => '$this->grid->controller->widget("application.extensions.qrcode.QRCodeGenerator",array(
@@ -55,13 +61,26 @@ $('.search-form form').submit(function(){
 //                    ), true)',
 //                    'type' => 'html',
 //                ),
-		'object_id',
-		'status',
-		'type',
-                array(
-                    'header' => DomainConst::CONTENT00239,
-                    'class'=>'CButtonColumn',
-                    'template'=> $this->createActionButtons()
-                ),
-	),
-)); ?>
+        array(
+            'name'  => 'object_id',
+            'value' => '$data->getObject()',
+            'type'  => 'html',
+        ),
+        array(
+            'name' => 'type',
+            'value' => '$data->getType()',
+            'filter'    => ReferCodes::getArrayType(),
+        ),
+        array(
+            'name' => 'status',
+            'value' => '$data->getStatus()',
+            'filter'    => ReferCodes::getArrayStatus(),
+        ),
+        array(
+            'header' => DomainConst::CONTENT00239,
+            'class' => 'CButtonColumn',
+            'template' => $this->createActionButtons()
+        ),
+    ),
+));
+?>

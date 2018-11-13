@@ -96,32 +96,22 @@
     <div class="row">
         <div class="col-md-6">
             <?php echo $form->labelEx($customer, 'referCode') ?>
-            <?php if (!isset($customer->rReferCode)): ?>
-                <?php echo $form->hiddenField($customer, 'referCode', array('class' => '')); ?>
-                <?php
-                    $referCode = isset($customer->rReferCode) ? $customer->rReferCode->code : '';
-                    $aData = array(
-                        'model'             => $customer,
-                        'field_id'          => 'referCode',
-                        'update_value'      => $referCode,
-                        'url'               => Yii::app()->createAbsoluteUrl('admin/ajax/searchReferCode'),
-                        'field_autocomplete_name' => 'autocomplete_name_refercode',
-                        'htmlOptions'=>array(
-                                    'readonly'=>'readonly',
-                                ),
-                    );
-                    $this->widget('ext.AutocompleteExt.AutocompleteExt',
-                            array('data' => $aData));
-                ?>
-            <?php else: ?>
-                <?php
-                    $customer->referCode = isset($customer->rReferCode) ? $customer->rReferCode->code : '';
-                    echo $form->textField($customer,'referCode', array(
-                        'size'=>11,'maxlength'=>11,
-                        'readonly' => 'true',
-                    ));
-                ?>
-            <?php endif; // end if ($model->isNewRecord) ?>
+            <?php echo $form->hiddenField($customer, 'referCode', array('class' => '')); ?>
+            <?php
+                $referCode = isset($customer->rReferCode) ? $customer->rReferCode->code : '';
+                $aData = array(
+                    'model'             => $customer,
+                    'field_id'          => 'referCode',
+                    'update_value'      => $referCode,
+                    'url'               => Yii::app()->createAbsoluteUrl('admin/ajax/searchReferCode'),
+                    'field_autocomplete_name' => 'autocomplete_name_refercode',
+                    'htmlOptions'=>array(
+                                'readonly'=>'readonly',
+                            ),
+                );
+                $this->widget('ext.AutocompleteExt.AutocompleteExt',
+                        array('data' => $aData));
+            ?>
             <?php echo $form->error($customer,'referCode'); ?>
         </div>
         <div class="col-md-6">
