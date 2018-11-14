@@ -53,7 +53,7 @@ class ActiveRecordLogs extends BaseActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('old_value, new_value', 'required'),
+            array('old_value, new_value', 'required', 'on' => 'update'),
             array('status', 'numerical', 'integerOnly' => true),
             array('description', 'length', 'max' => 255),
             array('action', 'length', 'max' => 20),

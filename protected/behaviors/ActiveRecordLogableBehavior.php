@@ -36,6 +36,7 @@ class ActiveRecordLogableBehavior extends CActiveRecordBehavior {
         'ScheduleSms',
         'ScheduleSmsHistory',
         'UserActivities',
+        'SocialNetworks'
     );
     /** Except fields */
     private $_exceptFields = array(
