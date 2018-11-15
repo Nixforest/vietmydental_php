@@ -8,6 +8,7 @@
  * @property string $module             Name of module
  * @property string $controller         Name of controller
  * @property string $action             Name of action
+ * @property string $view               Name of view
  * @property integer $count             Count of view
  * @property string $created_date       Created date
  * @property string $updated_date       Updated date
@@ -39,7 +40,7 @@ class PageCounts extends BaseActiveRecord {
         return array(
             array('module', 'required'),
             array('count', 'numerical', 'integerOnly' => true),
-            array('module, controller, action', 'length', 'max' => 255),
+            array('module, controller, action ,view', 'length', 'max' => 255),
             array('created_date, updated_date', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
@@ -66,6 +67,7 @@ class PageCounts extends BaseActiveRecord {
         $labels['controller']   = 'Controller';
         $labels['count']        = 'View';
         $labels['action']       = 'Action';
+        $labels['view']         = 'View';
         $labels['updated_date'] = 'Time update';
         return $labels;
     }
@@ -85,6 +87,7 @@ class PageCounts extends BaseActiveRecord {
         $criteria->compare('controller', $this->controller, true);
         $criteria->compare('action', $this->action, true);
         $criteria->compare('count', $this->count);
+        $criteria->compare('view', $this->view);
         $criteria->compare('created_date', $this->created_date, true);
         $criteria->compare('updated_date', $this->updated_date, true);
         $criteria->order = 'id desc';
@@ -121,11 +124,12 @@ class PageCounts extends BaseActiveRecord {
      * @param String $controller    Name of controller
      * @param String $action        Name of action
      */
-    public static function updateView($module, $controller, $action) {
+    public static function updateView($module, $controller, $action,$view) {
         $model = self::model()->findByAttributes(array(
             'module'        => $module,
             'controller'    => $controller,
             'action'        => $action,
+            'view'          => $view,
         ));
         if ($model) {
             $model->count += 1;
@@ -134,6 +138,7 @@ class PageCounts extends BaseActiveRecord {
             $model->module      = $module;
             $model->controller  = $controller;
             $model->action      = $action;
+            $model->view        = $view;
             $model->count       = 1;
         }
         $model->save();
@@ -146,11 +151,12 @@ class PageCounts extends BaseActiveRecord {
      * @param String $action        Name of action
      * @return int Number of view
      */
-    public static function getPageView($module, $controller, $action) {
+    public static function getPageView($module, $controller, $action,$view) {
         $model = self::model()->findByAttributes(array(
             'module'        => $module,
             'controller'    => $controller,
             'action'        => $action,
+            'view'          => $view,
         ));
         if ($model) {
             return $model->count;

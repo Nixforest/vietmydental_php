@@ -93,9 +93,13 @@ class BaseController extends CController {
         if (Settings::canLogUserActivity()) {
             UserActivities::insertOne($this->module);
         }
+
+        $viewFull = Yii::app()->request->getPathInfo();    
+        $view = substr($viewFull, strpos($viewFull, $action->id) + strlen($action->id) + 1);  
+
         PageCounts::updateView($this->module,
                 isset(Yii::app()->controller->id) ? Yii::app()->controller->id : '',
-                $action->id);
+                $action->id,$view);
     }
 
     //-----------------------------------------------------
