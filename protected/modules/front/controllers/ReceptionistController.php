@@ -27,6 +27,9 @@ class ReceptionistController extends FrontController {
     public function actionCreateCustomer() {
         $customer = new Customers();
         $medicalRecord = new MedicalRecords();
+        $record = MedicalRecords::getNextRecordNumber(CommonProcess::getCurrentAgentId());
+        Loggers::info('Record', $record, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        $medicalRecord->record_number = $record;
         $errMsg = '';
         if (isset($_POST['Customers'], $_POST['MedicalRecords'])) {
             $customer->attributes = $_POST['Customers'];
