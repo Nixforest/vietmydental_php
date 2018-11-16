@@ -30,3 +30,4 @@ class TestCommand extends CConsoleCommand {
         EmailHandler::mailsend('nixforest@live.com', 'nguyenpt@spj.vn', 'NguyenPT', 'Subject', 'Bory');
     }
 }
+// nghia test
