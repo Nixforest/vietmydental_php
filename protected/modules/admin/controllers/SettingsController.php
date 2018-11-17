@@ -114,6 +114,14 @@ class SettingsController extends AdminController {
                 Settings::KEY_LOG_ACTIVE_RECORD,
             ),
         ),
+        // Jr
+        Settings::KEY_HR_SETTINGS => array(
+            DomainConst::KEY_ALIAS => DomainConst::CONTENT00559,
+            DomainConst::KEY_CHILDREN => array(
+                Settings::KEY_SALARY_TYPE_TIMESHEET,
+                Settings::KEY_SALARY_TYPE_EFFICIENCY,
+            ),
+        ),
             // TODO: Add more group here
     );
 

@@ -29,6 +29,14 @@ class HrSalaryReportsController extends HrController {
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
 
+        if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
+            Loggers::info('Submit button was clicked', '',
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        }
+        if (filter_input(INPUT_POST, 'search')) {
+            Loggers::info('Search button was clicked', '',
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        }
         if (isset($_POST['HrSalaryReports'])) {
             $model->attributes = $_POST['HrSalaryReports'];
             if ($model->save()) {
@@ -52,16 +60,53 @@ class HrSalaryReportsController extends HrController {
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
-
-        if (isset($_POST['HrSalaryReports'])) {
-            $model->attributes = $_POST['HrSalaryReports'];
-            if ($model->save()) {
-                $this->redirect(array('view', 'id' => $model->id));
+        if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
+            Loggers::info('Submit button was clicked', '',
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            if (isset($_POST['HrSalaryReports'])) {
+                $model->attributes = $_POST['HrSalaryReports'];
+                if ($model->save()) {
+                    $this->redirect(array('view', 'id' => $model->id));
+                }
             }
         }
-
+        if (filter_input(INPUT_POST, 'search')) {
+            Loggers::info('Search button was clicked', '',
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            if (isset($_POST['HrSalaryReports'])) {
+                $model->attributes = $_POST['HrSalaryReports'];
+            }
+        }
+        
+        $dataColumn = array(
+            array(
+                'header' => DomainConst::CONTENT00034,
+                'type' => 'raw',
+                'value' => '$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
+                'headerHtmlOptions' => array('width' => '30px', 'style' => 'text-align:center;'),
+                'htmlOptions' => array('style' => 'text-align:center;')
+            ),
+            array(
+                'name' => DomainConst::CONTENT00490,
+                'value' => '$data->getFullName()',
+            ),
+            array(
+                'name' => DomainConst::CONTENT00046,
+                'value' => '$data->getRoleName()',
+            ),
+            array(
+                'name' => DomainConst::CONTENT00199,
+                'value' => '$data->getAgentName()',
+            ),
+            array(
+                'name' => DomainConst::CONTENT00525,
+                'value' => '$data->getDepartment()',
+            ),
+        );
+        
         $this->render('update', array(
-            'model' => $model,
+            'model'         => $model,
+            'dataColumn'    => $dataColumn,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }

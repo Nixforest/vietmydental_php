@@ -25,7 +25,7 @@
  * @property Departments                $rDepartment                    Department belong to
  * @property Agents                     $rAgent                         Agent belong to
  */
-class HrWorkPlans extends BaseActiveRecord {
+class HrWorkPlans extends HrActiveRecord {
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
@@ -113,21 +113,17 @@ class HrWorkPlans extends BaseActiveRecord {
      * @return array customized attribute labels (name=>label)
      */
     public function attributeLabels() {
-        return array(
-            'id'            => 'ID',
-            'approved'      => DomainConst::CONTENT00474,
-            'approved_date' => DomainConst::CONTENT00475,
-            'notify'        => DomainConst::CONTENT00091,
-            'role_id'       => DomainConst::CONTENT00488,
-            'date_from'     => DomainConst::CONTENT00486,
-            'date_to'       => DomainConst::CONTENT00487,
-            'status'        => DomainConst::CONTENT00026,
-            'created_date'  => DomainConst::CONTENT00010,
-            'created_by'    => DomainConst::CONTENT00054,
-            'department_id' => DomainConst::CONTENT00529,
-            'month'         => DomainConst::CONTENT00470,
-            'agent_id'      => DomainConst::CONTENT00199,
-        );
+        $labels = parent::attributeLabels();
+        $labels['approved']         = DomainConst::CONTENT00474;
+        $labels['approved_date']    = DomainConst::CONTENT00475;
+        $labels['notify']           = DomainConst::CONTENT00091;
+        $labels['role_id']          = DomainConst::CONTENT00488;
+        $labels['date_from']        = DomainConst::CONTENT00486;
+        $labels['date_to']          = DomainConst::CONTENT00487;
+        $labels['department_id']    = DomainConst::CONTENT00529;
+        $labels['month']            = DomainConst::CONTENT00470;
+        $labels['agent_id']         = DomainConst::CONTENT00199;
+        return $labels;
     }
 
     /**
@@ -237,17 +233,6 @@ class HrWorkPlans extends BaseActiveRecord {
     // Utility methods
     //-----------------------------------------------------
     /**
-     * Get created user
-     * @return string
-     */
-    public function getCreatedBy() {
-        if (isset($this->rCreatedBy)) {
-            return $this->rCreatedBy->getFullName();
-        }
-        return '';
-    }
-    
-    /**
      * Return status string
      * @return string Status value as string
      */
@@ -303,17 +288,6 @@ class HrWorkPlans extends BaseActiveRecord {
      */
     public function isApproved() {
         return ($this->status == self::STATUS_APPROVED);
-    }
-    
-    /**
-     * Get name of role
-     * @return string Name of role
-     */
-    public function getRoleName() {
-        if (isset($this->rRole)) {
-            return $this->rRole->role_short_name;
-        }
-        return '';
     }
     
     /**
@@ -437,6 +411,67 @@ class HrWorkPlans extends BaseActiveRecord {
             return $this->rAgent->name;
         }
         return '';
+    }
+    
+    /**
+     * Remove old work schedules
+     */
+    public function removeOldWorkSchedule() {
+        $arrUserId = $this->getUserIdArray();
+        $criteria = new CDbCriteria();
+        $criteria->addInCondition('employee_id', $arrUserId);
+        $criteria->addBetweenCondition('work_day', $this->date_from, $this->date_to);
+        $rowDeleted = HrWorkSchedules::model()->deleteAll($criteria);
+        Loggers::info('Deleted', $rowDeleted, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+    }
+    
+    /**
+     * Handle save work schedule
+     * @param Array $data Array data (from POST)
+     */
+    public function saveWorkSchedule($data) {
+        $this->removeOldWorkSchedule();
+        foreach ($data as $item) {
+            $item = trim($item, "[]");
+            $arrData = explode(',', $item);
+            if (count($arrData) == 3) {
+                $workSchedule = new HrWorkSchedules('create');
+                $workSchedule->work_day = CommonProcess::convertDateTime($arrData[1],
+                        DomainConst::DATE_FORMAT_10, DomainConst::DATE_FORMAT_DB);
+                $workSchedule->work_shift_id    = str_replace("\"", '', $arrData[0]);
+                $workSchedule->work_plan_id     = $this->id;
+                $workSchedule->employee_id      = $arrData[2];
+                if ($workSchedule->save()) {
+                } else {
+                    Loggers::error('Save failed', CommonProcess::json_encode_unicode($workSchedule->getErrors()),
+                            __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                }
+            } else {
+                Loggers::error('Data get from POST wrong format', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            }
+        }
+    }
+    
+    /**
+     * Auto create work schedule
+     */
+    public function autoCreateWorkSchedule() {
+        $fromDate       = $this->date_from;
+        $toDate         = $this->date_to;
+        $period         = CommonProcess::getDatePeriod($fromDate, $toDate);
+        $arrWorkShifts  = HrWorkShifts::getArrayByRole($this->role_id);
+        $arrUserId      = $this->getUserIdArray();
+        $this->removeOldWorkSchedule();
+        foreach ($period as $dt) {
+            $date       = $dt->format(DomainConst::DATE_FORMAT_DB);
+            $workShift = CommonProcess::getRandomElementInArray($arrWorkShifts);
+            if ($workShift != NULL) {
+                foreach ($arrUserId as $userId) {
+                    HrWorkSchedules::insertOne($date, $workShift->id, $this->id, $userId);
+                }
+            }
+            
+        }
     }
     
     //-----------------------------------------------------

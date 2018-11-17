@@ -14,6 +14,8 @@
  * @property string $approved       User approved
  * @property string $approved_date  Date approved
  * @property string $notify         Notify
+ * @property integer $department_id Id of department
+ * @property string $agent_id       Id of agent
  * @property integer $status        Status
  * @property string $created_date   Created date
  * @property string $created_by     Created by
@@ -23,8 +25,10 @@
  * @property Roles                      $rRole                          Role belong to
  * @property HrFunctionTypes            $rType                          HrFunctionTypes belong to
  * @property Users                      $rApproved                      User was approved
+ * @property Departments                $rDepartment                    Department belong to
+ * @property Agents                     $rAgent                         Agent belong to
  */
-class HrSalaryReports extends BaseActiveRecord {
+class HrSalaryReports extends HrActiveRecord {
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
@@ -43,6 +47,11 @@ class HrSalaryReports extends BaseActiveRecord {
     // Properties
     //-----------------------------------------------------
     public $autocomplete_user;
+    /**
+     * Month value, use when search
+     * @var String 
+     */
+    public $month;
 
     /**
      * Returns the static model of the specified AR class.
@@ -68,14 +77,14 @@ class HrSalaryReports extends BaseActiveRecord {
         // will receive user inputs.
         return array(
             array('name, type_id', 'required'),
-            array('role_id, type_id, status', 'numerical', 'integerOnly' => true),
+            array('role_id, department_id, type_id, status', 'numerical', 'integerOnly' => true),
             array('name', 'length', 'max' => 255),
-            array('approved', 'length', 'max' => 11),
+            array('approved, agent_id', 'length', 'max' => 11),
             array('created_by', 'length', 'max' => 10),
             array('start_date, end_date, data, approved_date, created_date', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, name, start_date, end_date, role_id, type_id, data, approved, approved_date, notify, status, created_date, created_by', 'safe', 'on' => 'search'),
+            array('id, name, start_date, end_date, role_id, type_id, data, approved, approved_date, notify, status, created_date, created_by, department_id, agent_id', 'safe', 'on' => 'search'),
         );
     }
 
@@ -96,6 +105,14 @@ class HrSalaryReports extends BaseActiveRecord {
                 self::BELONGS_TO, 'Users', 'approved',
                 'on'    => 'status !=' . DomainConst::DEFAULT_STATUS_INACTIVE,
             ),
+            'rDepartment'   => array(
+                self::BELONGS_TO, 'Departments', 'department_id',
+                'on'    => 'status !=' . Departments::STATUS_INACTIVE,
+            ),
+            'rAgent'        => array(
+                self::BELONGS_TO, 'Agents', 'agent_id',
+                'on'    => 'status !=' . DomainConst::DEFAULT_STATUS_INACTIVE,
+            ),
         );
     }
 
@@ -103,21 +120,20 @@ class HrSalaryReports extends BaseActiveRecord {
      * @return array customized attribute labels (name=>label)
      */
     public function attributeLabels() {
-        return array(
-            'id'            => 'ID',
-            'name'          => DomainConst::CONTENT00042,
-            'start_date'    => DomainConst::CONTENT00139,
-            'end_date'      => DomainConst::CONTENT00140,
-            'role_id'       => DomainConst::CONTENT00488,
-            'type_id'       => DomainConst::CONTENT00502,
-            'data'          => 'Data',
-            'approved'      => DomainConst::CONTENT00474,
-            'approved_date' => DomainConst::CONTENT00475,
-            'notify'        => DomainConst::CONTENT00091,
-            'status'        => DomainConst::CONTENT00026,
-            'created_date'  => DomainConst::CONTENT00010,
-            'created_by'    => DomainConst::CONTENT00054,
-        );
+        $labels = parent::attributeLabels();
+        $labels['name']             = DomainConst::CONTENT00042;
+        $labels['start_date']       = DomainConst::CONTENT00139;
+        $labels['end_date']         = DomainConst::CONTENT00140;
+        $labels['role_id']          = DomainConst::CONTENT00488;
+        $labels['type_id']          = DomainConst::CONTENT00502;
+        $labels['data']             = 'Data';
+        $labels['approved']         = DomainConst::CONTENT00474;
+        $labels['approved_date']    = DomainConst::CONTENT00475;
+        $labels['notify']           = DomainConst::CONTENT00091;
+        $labels['department_id']    = DomainConst::CONTENT00529;
+        $labels['agent_id']         = DomainConst::CONTENT00199;
+        $labels['month']            = DomainConst::CONTENT00470;
+        return $labels;
     }
 
     /**
@@ -140,6 +156,8 @@ class HrSalaryReports extends BaseActiveRecord {
         $criteria->compare('approved', $this->approved, true);
         $criteria->compare('approved_date', $this->approved_date, true);
         $criteria->compare('notify', $this->notify, true);
+        $criteria->compare('department_id', $this->department_id, true);
+        $criteria->compare('agent_id', $this->agent_id, true);
         $criteria->compare('status', $this->status);
         $criteria->compare('created_date', $this->created_date, true);
         $criteria->compare('created_by', $this->created_by, true);
@@ -178,17 +196,6 @@ class HrSalaryReports extends BaseActiveRecord {
     // Utility methods
     //-----------------------------------------------------
     /**
-     * Get created user
-     * @return string
-     */
-    public function getCreatedBy() {
-        if (isset($this->rCreatedBy)) {
-            return $this->rCreatedBy->getFullName();
-        }
-        return '';
-    }
-    
-    /**
      * Return status string
      * @return string Status value as string
      */
@@ -226,17 +233,6 @@ class HrSalaryReports extends BaseActiveRecord {
     public function isApproved() {
         return ($this->status == self::STATUS_APPROVED);
     }
-
-    /**
-     * Get name of role
-     * @return string Name of role
-     */
-    public function getRoleName() {
-        if (isset(Roles::getRoleArrayForSalary()[$this->role_id])) {
-            return Roles::getRoleArrayForSalary()[$this->role_id];
-        }
-        return '';
-    }
     
     /**
      * Get type
@@ -244,6 +240,60 @@ class HrSalaryReports extends BaseActiveRecord {
      */
     public function getType() {
         return isset($this->rType) ? $this->rType->name : '';
+    }
+    
+    /**
+     * Get department name
+     * @return string Name of department
+     */
+    public function getDepartmentName() {
+        if (isset($this->rDepartment)) {
+            return $this->rDepartment->name;
+        }
+        return '';
+    }
+    
+    /**
+     * Get agent name
+     * @return string Name of agent
+     */
+    public function getAgentName() {
+        if (isset($this->rAgent)) {
+            return $this->rAgent->name;
+        }
+        return '';
+    }
+    
+    /**
+     * Get all values
+     * @return \CArrayDataProvider
+     */
+    public function getUserArrayProvider() {
+        return new CArrayDataProvider($this->getUserArray(), array(
+            'id'    => 'users',
+            'sort'  => array(
+                'attributes'    => Users::model()->getTableSchema()->getColumnNames(),
+            ),
+            'pagination' => array(
+                'pageSize' => Settings::getListPageSize(),
+            ),
+        ));
+    }
+    
+    public function loadReportColumn() {
+        switch ($this->type_id) {
+            case Settings::getSalaryTimesheetId():
+
+
+                break;
+            case Settings::getSalaryEfficiencyId():
+
+
+                break;
+
+            default:
+                break;
+        }
     }
     
     //-----------------------------------------------------

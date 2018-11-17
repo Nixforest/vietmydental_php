@@ -17,7 +17,7 @@ $form = $this->beginWidget('CActiveForm', array(
     'id'    => 'work_schedule_form',
 ));
 ?>
-    <div class="row">
+    <div class="row" align="center">
         <ul class="work_shift">
             <!-- Show all work_shift -->
             <?php foreach ($arrWorkShifts as $workShift) : ?>
@@ -107,7 +107,14 @@ $form = $this->beginWidget('CActiveForm', array(
         </div>
     </div>
     <div class="row buttons" style="<?php echo $canUpdate ? '' : 'display: none;' ?>">
-        <?php echo CHtml::submitButton(DomainConst::CONTENT00377); ?>
+        <?php echo CHtml::submitButton(DomainConst::CONTENT00377, array(
+            'name'  => 'save',
+            'style' => 'margin: 10px; background: teal; align: center;',
+        )); ?>
+        <?php echo CHtml::submitButton(DomainConst::CONTENT00570, array(
+            'name'  => 'auto_create',
+            'style' => 'margin: 10px; background: teal; align: center;',
+        )); ?>
     </div>
 <?php $this->endWidget(); ?>
 </div>  <!-- Close <div class="wide form"> -->

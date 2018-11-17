@@ -1407,6 +1407,19 @@ class CommonProcess {
     }
     
     /**
+     * Get random element in array
+     * @param Array $array Array models
+     * @return Model Model object
+     */
+    public static function getRandomElementInArray($array) {
+        if (!empty($array)) {
+            $count = count($array);
+            return array_values($array)[mt_rand(0, $count - 1)];
+        }
+        return NULL;
+    }
+    
+    /**
      * Echo test string
      * @param String $message Message
      * @param String $data Data

@@ -66,6 +66,14 @@ $this->widget('zii.widgets.grid.CGridView', array(
         'approved_date',
         'notify',
         array(
+            'name' => 'department_id',
+            'value' => '$data->getDepartmentName()',
+        ),
+        array(
+            'name' => 'agent_id',
+            'value' => '$data->getAgentName()',
+        ),
+        array(
             'name' => 'status',
             'value' => '$data->getStatus()',
         ),

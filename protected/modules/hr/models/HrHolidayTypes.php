@@ -16,7 +16,7 @@
  * @property Users                  $rCreatedBy     User created this record
  * @property Users                  $rUser          User was related with this record
  */
-class HrHolidayTypes extends BaseActiveRecord {
+class HrHolidayTypes extends HrActiveRecord {
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
@@ -134,17 +134,6 @@ class HrHolidayTypes extends BaseActiveRecord {
     //-----------------------------------------------------
     // Utility methods
     //-----------------------------------------------------
-    /**
-     * Get created user
-     * @return string
-     */
-    public function getCreatedBy() {
-        if (isset($this->rCreatedBy)) {
-            return $this->rCreatedBy->getFullName();
-        }
-        return '';
-    }
-    
     /**
      * Return status string
      * @return string Status value as string
