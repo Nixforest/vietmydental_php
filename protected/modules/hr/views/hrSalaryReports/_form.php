@@ -47,7 +47,7 @@
             if (!isset($model->start_date)) {
                 $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3);
             } else {
-                $date = CommonProcess::convertDateTime($model->start_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_3);
+                $date = CommonProcess::convertDateTime($model->start_date, DomainConst::DATE_FORMAT_DB, DomainConst::DATE_FORMAT_3);
                 if (empty($date)) {
                     $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3);
                 }
@@ -66,7 +66,7 @@
             if (!isset($model->end_date)) {
                 $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3);
             } else {
-                $date = CommonProcess::convertDateTime($model->end_date, DomainConst::DATE_FORMAT_1, DomainConst::DATE_FORMAT_3);
+                $date = CommonProcess::convertDateTime($model->end_date, DomainConst::DATE_FORMAT_DB, DomainConst::DATE_FORMAT_3);
                 if (empty($date)) {
                     $date = CommonProcess::getCurrentDateTime(DomainConst::DATE_FORMAT_3);
                 }

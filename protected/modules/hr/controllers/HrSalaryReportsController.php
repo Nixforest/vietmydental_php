@@ -66,7 +66,7 @@ class HrSalaryReportsController extends HrController {
             if (isset($_POST['HrSalaryReports'])) {
                 $model->attributes = $_POST['HrSalaryReports'];
                 if ($model->save()) {
-                    $this->redirect(array('view', 'id' => $model->id));
+//                    $this->redirect(array('view', 'id' => $model->id));
                 }
             }
         }
@@ -103,6 +103,9 @@ class HrSalaryReportsController extends HrController {
                 'value' => '$data->getDepartment()',
             ),
         );
+        foreach ($model->loadReportColumn() as $value) {
+            $dataColumn[] = $value;
+        }
         
         $this->render('update', array(
             'model'         => $model,

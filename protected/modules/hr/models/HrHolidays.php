@@ -253,7 +253,10 @@ class HrHolidays extends HrActiveRecord {
     public static function isHoliday($date) {
         $criteria = new CDbCriteria();
         $criteria->compare('t.date', $date);
-        return self::model()->count($criteria);
+        if (self::model()->count($criteria) > 0) {
+            return true;
+        }
+        return false;
     }
     
     /**

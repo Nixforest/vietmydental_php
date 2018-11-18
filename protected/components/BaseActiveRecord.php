@@ -386,4 +386,15 @@ class BaseActiveRecord extends CActiveRecord {
         }
         return false;
     }
+    
+    /**
+     * BLACK MAGIC: change class of object
+     * @param Object $object Model
+     * @param String $new_class Class name
+     * @return Object New class object
+     */
+    public static function change_class($object, $new_class) {
+        preg_match('~^O:[0-9]+:"[^"]+":(.+)$~', serialize($object), $matches);
+        return unserialize(sprintf('O:%s:"%s":%s', strlen($new_class), $new_class, $matches[1]));
+    }
 }

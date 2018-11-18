@@ -64,7 +64,12 @@ class HrActiveRecord extends BaseActiveRecord {
                 }
             }
         }
-        
-        return $retVal;
+        $arrUserHrs = array();
+        foreach ($retVal as $user) {
+            $userHr = UserHrs::change_class($user, 'UserHrs');
+            $arrUserHrs[] = $userHr;
+            
+        }
+        return $arrUserHrs;
     }
 }

@@ -111,4 +111,33 @@ class UserHrs extends Users {
     public function getWorkingRecord($from = '', $to = '') {
         return 0;
     }
+    /**
+     * Check if a date is working date (HrWorkSchedules)
+     * @param String $date Date value (format is DATE_FORMAT_4 - 'Y-m-d')
+     * @return int  0 - Date is not working date (not scheduled)
+     *              1 - Date is a working date (scheduled)
+     */
+    public function isWorkingDate($date) {
+        Loggers::info('Date', $date, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        $criteria = new CDbCriteria; 
+        $criteria->compare('employee_id', $this->id);
+        $criteria->compare('work_day', $date);
+        $model = HrWorkSchedules::model()->findAll($criteria);
+        $retVal = empty($model) ? 0 : 1;
+        return $retVal;
+    }
+
+    /**
+     * Check if a date is holiday date (HrHolidays)
+     * @param String $date Date value (format is DATE_FORMAT_4 - 'Y-m-d')
+     * @return int  0 - Date is not holiday date
+     *              1 - Date is a holiday date
+     */
+    public function isHolidayDate($date) {
+        $retVal = 0;
+        if(HrHolidays::isHoliday($date)){
+            $retVal = 1;
+        }
+        return $retVal;
+    }
 }
