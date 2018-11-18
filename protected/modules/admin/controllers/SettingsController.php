@@ -120,6 +120,7 @@ class SettingsController extends AdminController {
             DomainConst::KEY_CHILDREN => array(
                 Settings::KEY_SALARY_TYPE_TIMESHEET,
                 Settings::KEY_SALARY_TYPE_EFFICIENCY,
+                Settings::KEY_HOLIDAY_COMPENSATORY,
             ),
         ),
             // TODO: Add more group here

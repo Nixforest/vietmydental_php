@@ -43,9 +43,11 @@ class HrSalaryReportsController extends HrController {
                 $this->redirect(array('view', 'id' => $model->id));
             }
         }
+        $dataColumn = array();
 
         $this->render('create', array(
             'model' => $model,
+            'dataColumn'    => $dataColumn,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
     }
@@ -99,11 +101,12 @@ class HrSalaryReportsController extends HrController {
                 'value' => '$data->getAgentName()',
             ),
             array(
-                'name' => DomainConst::CONTENT00525,
-                'value' => '$data->getDepartment()',
+                'name'      => DomainConst::CONTENT00525,
+                'value'     => '$data->getDepartment()',
+                'visible'   => false,
             ),
         );
-        foreach ($model->loadReportColumn() as $value) {
+        foreach ($this->loadReportColumn($model) as $value) {
             $dataColumn[] = $value;
         }
         
@@ -112,6 +115,44 @@ class HrSalaryReportsController extends HrController {
             'dataColumn'    => $dataColumn,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
+    }
+    
+    /**
+     * Load report column base on type of salary
+     * @return array Array data
+     */
+    public function loadReportColumn($model) {
+        $retVal = array();
+        switch ($model->type_id) {
+            case Settings::getSalaryTimesheetId():
+                $fromDate       = $model->start_date;
+                $toDate         = $model->end_date;
+                $period         = CommonProcess::getDatePeriod($fromDate, $toDate);
+                foreach ($period as $dt) {
+                    $date       = $dt->format('d');
+                    $wd         = CommonProcess::getWeekDay($dt->format('w'));
+                    $columnName = $date . '<br>' . $wd;
+                    $fullDate   = $dt->format(DomainConst::DATE_FORMAT_DB);
+                    $retVal[] = array(
+                        'name'  => $columnName,
+                        'value' => '$data->getTimesheetValueCell(\'' . $fullDate . '\')',
+                    );
+                }
+                // Total
+                $retVal[] = array(
+                    'name'  => DomainConst::CONTENT00571,
+                    'value' => '$data->getTimesheetValueTotal(\'' . $fromDate . '\',\'' . $toDate . '\')',
+                );
+                break;
+            case Settings::getSalaryEfficiencyId():
+
+
+                break;
+
+            default:
+                break;
+        }
+        return $retVal;
     }
 
     /**

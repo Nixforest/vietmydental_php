@@ -280,40 +280,6 @@ class HrSalaryReports extends HrActiveRecord {
         ));
     }
     
-    /**
-     * Load report column base on type of salary
-     * @return array Array data
-     */
-    public function loadReportColumn() {
-        $retVal = array();
-        switch ($this->type_id) {
-            case Settings::getSalaryTimesheetId():
-                $fromDate       = $this->start_date;
-                $toDate         = $this->end_date;
-                $period         = CommonProcess::getDatePeriod($fromDate, $toDate);
-                foreach ($period as $dt) {
-                    $date       = $dt->format('d');
-                    $wd         = CommonProcess::getWeekDay($dt->format('w'));
-                    $columnName = $date . '<br>' . $wd;
-                    $fullDate   = $dt->format(DomainConst::DATE_FORMAT_DB);
-                    Loggers::info('Fulldate', $fullDate, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-                    $retVal[] = array(
-                        'name'  => $columnName,
-                        'value' => '$data->isWorkingDate(\'' . $fullDate . '\')',
-                    );
-                }
-                break;
-            case Settings::getSalaryEfficiencyId():
-
-
-                break;
-
-            default:
-                break;
-        }
-        return $retVal;
-    }
-    
     //-----------------------------------------------------
     // Static methods
     //-----------------------------------------------------

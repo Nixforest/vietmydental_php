@@ -175,6 +175,8 @@ class Settings extends BaseActiveRecord {
     const KEY_SALARY_TYPE_EFFICIENCY            = 'KEY_SALARY_TYPE_EFFICIENCY';
     /** Key Salary type: Salary */
     const KEY_SALARY_TYPE_SALARY                = 'KEY_SALARY_TYPE_SALARY';
+    /** Key Holiday type: Compensatory */
+    const KEY_HOLIDAY_COMPENSATORY              = 'HOLIDAY_COMPENSATORY';
     //-----------------------------------------------------
     // -- Define keys
     //-----------------------------------------------------
@@ -622,5 +624,13 @@ class Settings extends BaseActiveRecord {
      */
     public static function getSalaryEfficiencyId() {
         return self::getItemValue(self::KEY_SALARY_TYPE_EFFICIENCY, '');
+    }
+    
+    /**
+     * Get Holiday compensatory id
+     * @return String Id of Holiday compensatory type
+     */
+    public static function getHolidayCompensatoryId() {
+        return self::getItemValue(self::KEY_HOLIDAY_COMPENSATORY, '');
     }
 }

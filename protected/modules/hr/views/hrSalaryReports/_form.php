@@ -143,7 +143,7 @@
         </div>
     </div>
     <div>
-        <h1><?php echo DomainConst::CONTENT00337; ?></h1>
+        <h1><?php echo DomainConst::CONTENT00011; ?></h1>
         <?php
         $this->widget('zii.widgets.grid.CGridView', array(
             'id' => 'hr-users-grid',
