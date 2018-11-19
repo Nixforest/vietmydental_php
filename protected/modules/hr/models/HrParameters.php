@@ -17,7 +17,7 @@
  * @property Roles                      $rRole                          Role belong to
  * @property HrFunctions[]              $rFunctions                     List functions which using this parameter
  */
-class HrParameters extends BaseActiveRecord {
+class HrParameters extends HrActiveRecord {
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
@@ -157,17 +157,6 @@ class HrParameters extends BaseActiveRecord {
     // Utility methods
     //-----------------------------------------------------
     /**
-     * Get created user
-     * @return string
-     */
-    public function getCreatedBy() {
-        if (isset($this->rCreatedBy)) {
-            return $this->rCreatedBy->getFullName();
-        }
-        return '';
-    }
-    
-    /**
      * Handle save model
      */
     public function handleSave() {
@@ -225,17 +214,6 @@ class HrParameters extends BaseActiveRecord {
     }
     
     /**
-     * Get name of role
-     * @return string Name of role
-     */
-    public function getRoleName() {
-        if (isset(Roles::getRoleArrayForSalary()[$this->role_id])) {
-            return Roles::getRoleArrayForSalary()[$this->role_id];
-        }
-        return '';
-    }
-    
-    /**
      * Get value of parameter
      * @param String $from  Date from
      * @param String $to    Date to
@@ -245,6 +223,17 @@ class HrParameters extends BaseActiveRecord {
     public function getValue($from, $to, $mUser) {
         $retVal = $mUser->{$this->method}($from, $to);
         return $retVal;
+    }
+    
+    /**
+     * Get value of parameter
+     * @param String $from  Date from
+     * @param String $to    Date to
+     * @param Model $mUser  User model
+     * @return String Value of parameter was formated
+     */
+    public function getFormatedValue($from, $to, $mUser) {
+        return CommonProcess::formatCurrency($this->getValue($from, $to, $mUser));
     }
     
     /**

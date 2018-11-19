@@ -16,7 +16,7 @@
  * @property HrFunctions[]              $rFunctions                     List functions
  * @property HrSalaryReports[]          $rSalaryReports                 List salary reports
  */
-class HrFunctionTypes extends BaseActiveRecord {
+class HrFunctionTypes extends HrActiveRecord {
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
@@ -160,17 +160,6 @@ class HrFunctionTypes extends BaseActiveRecord {
     //-----------------------------------------------------
     // Utility methods
     //-----------------------------------------------------
-    /**
-     * Get created user
-     * @return string
-     */
-    public function getCreatedBy() {
-        if (isset($this->rCreatedBy)) {
-            return $this->rCreatedBy->getFullName();
-        }
-        return '';
-    }
-    
     /**
      * Return status string
      * @return string Status value as string

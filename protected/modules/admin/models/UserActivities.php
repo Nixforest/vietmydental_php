@@ -180,9 +180,7 @@ class UserActivities extends BaseActiveRecord {
         if (($module == 'admin') && ($model->controller == 'userActivities') && ($model->action == 'index')) {
             return;
         }
-        if ($model->save()) {
-            Loggers::info('Create success', $model->id, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-        } else {
+        if (!$model->save()) {
             Loggers::error('Create failed', CommonProcess::json_encode_unicode($model->getErrors()),
                     __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         }

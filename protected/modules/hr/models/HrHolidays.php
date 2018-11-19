@@ -18,7 +18,7 @@
  * @property Users                      $rCreatedBy                     User created this record
  * @property HrHolidayTypes             $rType                          Type of holiday
  */
-class HrHolidays extends BaseActiveRecord {
+class HrHolidays extends HrActiveRecord {
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
@@ -153,17 +153,6 @@ class HrHolidays extends BaseActiveRecord {
     // Utility methods
     //-----------------------------------------------------
     /**
-     * Get created user
-     * @return string
-     */
-    public function getCreatedBy() {
-        if (isset($this->rCreatedBy)) {
-            return $this->rCreatedBy->getFullName();
-        }
-        return '';
-    }
-    
-    /**
      * Return status string
      * @return string Status value as string
      */
@@ -264,7 +253,10 @@ class HrHolidays extends BaseActiveRecord {
     public static function isHoliday($date) {
         $criteria = new CDbCriteria();
         $criteria->compare('t.date', $date);
-        return self::model()->count($criteria);
+        if (self::model()->count($criteria) > 0) {
+            return true;
+        }
+        return false;
     }
     
     /**

@@ -35,6 +35,7 @@ return array(
         'application.components.widgets.*',
         'application.behaviors.ActiveRecordLogableBehavior',
         'application.modules.hr.models.*',
+        'application.modules.hr.components.*',
         'application.modules.product.models.*',
         'bootstrap.helpers.*',
         'bootstrap.behaviors.TbWidget',

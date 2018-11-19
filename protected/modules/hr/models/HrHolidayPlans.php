@@ -16,7 +16,7 @@
  * @property Users                      $rCreatedBy                     User created this record
  * @property Users                      $rApproved                      User was approved
  */
-class HrHolidayPlans extends BaseActiveRecord {
+class HrHolidayPlans extends HrActiveRecord {
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
@@ -191,17 +191,6 @@ class HrHolidayPlans extends BaseActiveRecord {
     public function getApproverName() {
         if (isset($this->rApproved)) {
             return $this->rApproved->getFullName();
-        }
-        return '';
-    }
-    
-    /**
-     * Get created user
-     * @return string
-     */
-    public function getCreatedBy() {
-        if (isset($this->rCreatedBy)) {
-            return $this->rCreatedBy->getFullName();
         }
         return '';
     }

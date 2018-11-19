@@ -21,7 +21,7 @@
  * @property HrParameters[]             $rParameters                    List parameters belong to
  * @property HrCoefficients[]           $rCoefficients                  List coefficients belong to
  */
-class HrFunctions extends BaseActiveRecord {
+class HrFunctions extends HrActiveRecord {
 
     //-----------------------------------------------------
     // Constants
@@ -188,34 +188,12 @@ class HrFunctions extends BaseActiveRecord {
     // Utility methods
     //-----------------------------------------------------
     /**
-     * Get created user
-     * @return string
-     */
-    public function getCreatedBy() {
-        if (isset($this->rCreatedBy)) {
-            return $this->rCreatedBy->getFullName();
-        }
-        return '';
-    }
-
-    /**
      * Return status string
      * @return string Status value as string
      */
     public function getStatus() {
         if (isset(self::getArrayStatus()[$this->status])) {
             return self::getArrayStatus()[$this->status];
-        }
-        return '';
-    }
-
-    /**
-     * Get name of role
-     * @return string Name of role
-     */
-    public function getRoleName() {
-        if (isset(Roles::getRoleArrayForSalary()[$this->role_id])) {
-            return Roles::getRoleArrayForSalary()[$this->role_id];
         }
         return '';
     }
@@ -235,6 +213,15 @@ class HrFunctions extends BaseActiveRecord {
             $retVal = $this->getCountValue($from, $to, $mUser);
         }
         return $retVal;
+    }
+    /**
+     * Get value of function
+     * @param String $from  Date from
+     * @param String $to    Date to
+     * @return String Value of function was formated
+     */
+    public function getFormatedValue($from, $to, $mUser) {
+        return CommonProcess::formatCurrency($this->getValue($from, $to, $mUser));
     }
 
     /**
@@ -306,7 +293,7 @@ class HrFunctions extends BaseActiveRecord {
     /**
      * Get parameter model by index
      * @param Int $index Index of parameter
-     * @return Paramter model if exist, NULL otherwise
+     * @return HrParameters Object model if exist, NULL otherwise
      */
     public function getParamModel($index) {
         if ($index <= 0) {
@@ -323,7 +310,7 @@ class HrFunctions extends BaseActiveRecord {
     /**
      * Get coefficient model by index
      * @param Int $index Index of coefficient
-     * @return Coefficient model if exist, NULL otherwise
+     * @return HrCoefficients Object model if exist, NULL otherwise
      */
     public function getCoefficientModel($index) {
         if ($index <= 0) {
@@ -347,7 +334,7 @@ class HrFunctions extends BaseActiveRecord {
     public function convertFunctionToValue($from, $to, $mUser) {
         $arrValues = array();
         // Get list variable
-        $arrVariables = $this->getArrayVariablesName();
+        $arrVariables = $this->getArrVariablesName();
         // List list value of parameter
         foreach ($arrVariables as $value) {
             $model = NULL;
@@ -355,21 +342,18 @@ class HrFunctions extends BaseActiveRecord {
                 $index = str_replace(self::KEYWORD_PARAM, '', $value);
                 $model = $this->getParamModel($index);
                 if (isset($model)) {
-                    // Save list using parameter in current user
-                    if (!in_array($model, $mUser->usingParam)) {
-                        $mUser->usingParam[] = $model;
-                    }
-
                     $arrValues[$value] = $model->getValue($from, $to, $mUser);
                 }
             } else if (strpos($value, self::KEYWORD_COEFFICIENT) !== false) {
                 $index = str_replace(self::KEYWORD_COEFFICIENT, '', $value);
                 $model = $this->getCoefficientModel($index);
                 if (isset($model)) {
-                    $arrValues[$value] = $model->getValue($from, $to);
+                    $arrValues[$value] = $model->getValue();
                 }
             }
         }
+        
+        Loggers::info('Values', CommonProcess::json_encode_unicode($arrValues), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         $function = self::normalizationFunction($this->function, 'retVal');
         foreach ($arrValues as $key => $value) {
             $function = str_replace($key, $value, $function);
@@ -612,6 +596,7 @@ class HrFunctions extends BaseActiveRecord {
             throw new Exception(DomainConst::CONTENT00214);
         });
         try {
+            Loggers::info('Function', $function, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             eval($function);
         } catch (Exception $ex) {
             $visibleFunc = str_replace('$retVal = ', "", $function);
@@ -632,6 +617,65 @@ class HrFunctions extends BaseActiveRecord {
             self::FUNCTION_TYPE_COUNT   => DomainConst::CONTENT00512,
             self::FUNCTION_TYPE_RANGE   => DomainConst::CONTENT00513,
         );
+    }
+    
+    /**
+     * Get list function
+     * @param HrSalaryReport $report Model salary report
+     * @return HrFunctions[] List functions
+     */
+    public static function getListFunctions($report) {
+        $criteria = new CDbCriteria();
+        $criteria->compare('role_id', $report->role_id);
+        $criteria->compare('type_id', $report->type_id);
+        $criteria->addCondition('status !=' . DomainConst::DEFAULT_STATUS_INACTIVE);
+        return self::model()->findAll($criteria);
+    }
+    
+    /**
+     * Get list parameters
+     * @param HrSalaryReport $report Model salary report
+     * @return HrParameters[] List of parameters
+     */
+    public static function getListParameters($report) {
+        $retVal = array();
+        $mFunctions = self::getListFunctions($report);
+        if ($mFunctions) {
+            foreach ($mFunctions as $function) {
+                if (isset($function->rParameters)) {
+                    foreach ($function->rParameters as $param) {
+                        if (!in_array($param->id, array_keys($retVal))) {
+                            $retVal[$param->id] = $param;
+                        }
+                    }
+                }
+                
+            }
+        }
+        return $retVal;
+    }
+    
+    /**
+     * Get list coefficients
+     * @param HrSalaryReport $report Model salary report
+     * @return HrCoefficients[] List of coefficients name
+     */
+    public static function getListCoefficients($report) {
+        $retVal = array();
+        $mFunctions = self::getListFunctions($report);
+        if ($mFunctions) {
+            foreach ($mFunctions as $function) {
+                if (isset($function->rCoefficients)) {
+                    foreach ($function->rCoefficients as $coef) {
+                        if (!in_array($coef->id, array_keys($retVal))) {
+                            $retVal[$coef->id] = $coef;
+                        }
+                    }
+                }
+                
+            }
+        }
+        return $retVal;
     }
 
 }

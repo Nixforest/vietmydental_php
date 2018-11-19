@@ -593,10 +593,13 @@ function drop(ev, element, toClass, format, autoIncrease) {
     var elmData = ev.originalEvent.dataTransfer.getData('source');//lấy giá trị biến source và gán vào biến elm_id
     var dropAreaClass = ev.originalEvent.dataTransfer.getData('toClass');
     var data_id = ev.originalEvent.dataTransfer.getData('data_id');
-    if (dropAreaClass !== toClass)
+    if (dropAreaClass !== toClass) {
         return;
-    if (elmData === "")
+    }
+    if (elmData === "") {
         return;
+    }
+
     $selector = 'span[data-id=' + data_id + ']';
     if ($(element).find($selector).length <= 0) {
         currentTrDrop = $(element).data('current');

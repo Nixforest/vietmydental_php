@@ -17,7 +17,7 @@
  * @property HrCoefficientValues[]      $rValues                        Values of coefficient
  * @property HrFunctions[]              $rFunctions                     List functions which using this coefficient
  */
-class HrCoefficients extends BaseActiveRecord {
+class HrCoefficients extends HrActiveRecord {
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
@@ -177,34 +177,12 @@ class HrCoefficients extends BaseActiveRecord {
     // Utility methods
     //-----------------------------------------------------
     /**
-     * Get created user
-     * @return string
-     */
-    public function getCreatedBy() {
-        if (isset($this->rCreatedBy)) {
-            return $this->rCreatedBy->getFullName();
-        }
-        return '';
-    }
-    
-    /**
      * Return status string
      * @return string Status value as string
      */
     public function getStatus() {
         if (isset(self::getArrayStatus()[$this->status])) {
             return self::getArrayStatus()[$this->status];
-        }
-        return '';
-    }
-    
-    /**
-     * Get name of role
-     * @return string Name of role
-     */
-    public function getRoleName() {
-        if (isset(Roles::getRoleArrayForSalary()[$this->role_id])) {
-            return Roles::getRoleArrayForSalary()[$this->role_id];
         }
         return '';
     }
@@ -231,6 +209,17 @@ class HrCoefficients extends BaseActiveRecord {
         return $retVal;
     }
     
+    /**
+     * Get formated value
+     * @param String $from  Date from
+     * @param String $to    Date to
+     * @return String Value of coefficient was formated
+     */
+    public function getFormatedValue($from = '', $to = '') {
+        return CommonProcess::formatCurrency($this->getValue($from, $to));
+    }
+
+
     /**
      * Get all values
      * @return \CArrayDataProvider

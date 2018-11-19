@@ -36,6 +36,9 @@ class Settings extends BaseActiveRecord {
     /** Key Logger setting */
     const KEY_LOGGER_SETTINGS                   = 'logger_settings';
 
+    /** Key Human resource setting */
+    const KEY_HR_SETTINGS                       = 'hr_settings';
+
     /* --- General settings --- */
     /** Key website title */
     const KEY_TITLE                             = 'WEBSITE_TITLE';
@@ -164,6 +167,16 @@ class Settings extends BaseActiveRecord {
     const KEY_LOG_GENERAL                       = 'GENERAL_LOG';
     /** Key General log */
     const KEY_LOG_ACTIVE_RECORD                 = 'LOG_ACTIVE_RECORD';
+    
+    /* --- Human resource settings --- */
+    /** Key Salary type: Timesheet */
+    const KEY_SALARY_TYPE_TIMESHEET             = 'KEY_SALARY_TYPE_TIMESHEET';
+    /** Key Salary type: Efficiency */
+    const KEY_SALARY_TYPE_EFFICIENCY            = 'KEY_SALARY_TYPE_EFFICIENCY';
+    /** Key Salary type: Salary */
+    const KEY_SALARY_TYPE_SALARY                = 'KEY_SALARY_TYPE_SALARY';
+    /** Key Holiday type: Compensatory */
+    const KEY_HOLIDAY_COMPENSATORY              = 'HOLIDAY_COMPENSATORY';
     //-----------------------------------------------------
     // -- Define keys
     //-----------------------------------------------------
@@ -595,5 +608,29 @@ class Settings extends BaseActiveRecord {
     public static function canLogActiveRecordUpdate() {
         return (self::getItemValue(self::KEY_LOG_ACTIVE_RECORD, DomainConst::NUMBER_ZERO_VALUE)
                 == DomainConst::NUMBER_ONE_VALUE);
+    }
+    
+    /**
+     * Get Timesheet salary type id
+     * @return String Id of Timesheet salary type
+     */
+    public static function getSalaryTimesheetId() {
+        return self::getItemValue(self::KEY_SALARY_TYPE_TIMESHEET, '');
+    }
+    
+    /**
+     * Get Efficiency salary type id
+     * @return String Id of Efficiency salary type
+     */
+    public static function getSalaryEfficiencyId() {
+        return self::getItemValue(self::KEY_SALARY_TYPE_EFFICIENCY, '');
+    }
+    
+    /**
+     * Get Holiday compensatory id
+     * @return String Id of Holiday compensatory type
+     */
+    public static function getHolidayCompensatoryId() {
+        return self::getItemValue(self::KEY_HOLIDAY_COMPENSATORY, '');
     }
 }

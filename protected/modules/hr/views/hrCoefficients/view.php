@@ -41,7 +41,7 @@ $this->widget('zii.widgets.CDetailView', array(
     $this->widget('zii.widgets.grid.CGridView', array(
         'id' => 'hr-coefficient-values-grid',
         'dataProvider' => $mValue->search(),
-//        'dataProvider' => $model->getAllValues(),
+        'dataProvider' => $model->getAllValues(),
         'filter' => $mValue,
         'columns' => array(
             array(

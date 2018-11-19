@@ -19,7 +19,7 @@
  * @property Users                      $rCreatedBy                     User created this record
  * @property Users                      $rUser                          User was related with this record
  */
-class HrDebts extends BaseActiveRecord {
+class HrDebts extends HrActiveRecord {
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
@@ -188,17 +188,6 @@ class HrDebts extends BaseActiveRecord {
         $retVal = '';
         
         return $retVal;
-    }
-    
-    /**
-     * Get created user
-     * @return string
-     */
-    public function getCreatedBy() {
-        if (isset($this->rCreatedBy)) {
-            return $this->rCreatedBy->getFullName();
-        }
-        return '';
     }
     
     /**

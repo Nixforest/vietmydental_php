@@ -1726,4 +1726,7 @@ class DomainConst {
     const CONTENT00567  = 'Chưa in';
     const CONTENT00568  = 'Phân loại';
     const CONTENT00569  = 'Đã gắn';
+    const CONTENT00570  = 'Sắp lịch tự động';
+    const CONTENT00571  = 'Tổng công (ngày)';
+    const CONTENT00572  = 'Tính lại';
 }
