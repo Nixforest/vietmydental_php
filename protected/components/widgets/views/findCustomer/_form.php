@@ -8,12 +8,19 @@
         </form>
     </div>
 
-    <div class="title-2" id="adv-search-btn" data-toggle="collapse" data-target="#advance-search-ctn">
+    <div class="title-2" id="adv-search-btn" data-toggle="collapse" data-target="#advance-search-ctn" aria-expanded="true">
         <?php echo DomainConst::CONTENT00073; ?>
         <i class="glyphicon glyphicon-chevron-down"></i>
     </div>
-    <div class="box-search collapse" id="advance-search-ctn" style="text-align: center;">
-        <form style="width: 350px; margin: auto; height: 185px;">
+    <div class="box-search collapse in" id="advance-search-ctn" style="text-align: center;">
+        <form style="width: 350px; margin: auto; height: 235px;">
+            <div class="form-ctn">
+                <i class="left-input-icon glyphicon glyphicon-file" style="position: relative; right: 150px; top: 30px;"></i>
+                <i class="clr-txt-btn as-area glyphicon glyphicon-remove" style="position: relative; left: 150px; top: 30px;color:red;"></i>
+                <input type="text" class="form-control text-change" placeholder="<?php echo DomainConst::CONTENT00277?>"
+                   id="customer_find_record_number">
+            </div>
+            
             <div class="form-ctn">
                 <i class="left-input-icon glyphicon glyphicon-search" style="position: relative; right: 150px; top: 30px;"></i>
                 <i class="clr-txt-btn as-area glyphicon glyphicon-remove" style="position: relative; left: 150px; top: 30px;color:red;"></i>
@@ -27,17 +34,24 @@
                 <input type="text" class="form-control text-change" placeholder="<?php echo DomainConst::CONTENT00045?>"
                    id="customer_find_address">
             </div>
+            
+            <div class="form-ctn" style="display:none;">
+                <i class="left-input-icon" style="position: relative; right: 150px; top: 30px;"></i>
+                <i class="clr-txt-btn as-area glyphicon glyphicon-remove" style="position: relative; left: 150px; top: 30px;color:red;"></i>
+                <input type="text" class="form-control text-change" id="pages" value="1" type="number">
+            </div>
+            
 
             <div class="form-ctn">
                 <i class="left-input-icon glyphicon glyphicon-map-marker" style="right:160px; top: 30px;"></i>
                 <select id="customer_find_agent" class="form-control" name="customer_find[agent]" style="width: 350px!important; color: #277aff;">
                     <?php
-                    $html = '<option value="" style="color: black">' . DomainConst::CONTENT00385 . '</option>';
+                    $html = '<option value="" style="color: black" selected>' . DomainConst::CONTENT00385 . '</option>';
                     foreach (Agents::loadItems() as $key => $agent) {
                         $selected = '';
-                        if ($key == CommonProcess::getCurrentAgentId()) {
-                            $selected = ' selected';
-                        }
+//                        if ($key == CommonProcess::getCurrentAgentId()) {
+//                            $selected = ' selected';
+//                        }
                         $html .= '<option value="' . $key . '"  style="color: black"' . $selected . '>' . $agent . '</option>';
                     }
                     echo $html;
@@ -61,12 +75,14 @@
                 ));
             ?>
         </div>
-        <div class="content"></div>
+        <div class="content">
+        </div>
     </div>
 </div>
 
 <script>
     $(function(){
+       
         fnHandleTextChange(
                 "<?php echo Yii::app()->createAbsoluteUrl('admin/ajax/searchCustomerReception'); ?>",
                 "#right-content",
@@ -109,7 +125,10 @@
         if(isHidden){
             $('#customer_find_phone').val('');
             $('#customer_find_address').val('');
+            $('#customer_find_record_number').val('');
+            $('#pages').val('');
 //            $('#customer_find_agent option').eq(0).attr('selected','selectd');
         }
     });
+    
 </script>
