@@ -303,6 +303,7 @@ class AjaxController extends AdminController
      * Search customer for receptionist
      */
     public function actionSearchCustomerReception() {
+        $mMedicalRecords = new MedicalRecords();
 	if (isset($_GET[AjaxController::KEY_AJAX]) && $_GET[AjaxController::KEY_AJAX] == 1) {
             if (isset($_GET[AjaxController::KEY_TERM])) {
 //                $keyword = trim($_GET[AjaxController::KEY_TERM]);
@@ -313,7 +314,7 @@ class AjaxController extends AdminController
                 }
                 $arrKeyword = explode(",", $keyword);
                 $models = array();
-                $limit = 100;
+                $limit = 10;
                 if (is_array($arrKeyword) && count($arrKeyword) > 1) {
                     Loggers::info('Search 1', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
                     // Loop for all keyword
@@ -328,37 +329,24 @@ class AjaxController extends AdminController
                     $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
                     if (isset($keywordArr["customer_find_phone"])) {
                         $phone = $keywordArr["customer_find_phone"];
-                        $criteria->addCondition("t.phone like'%$phone%'");
+                        $criteria->compare('t.phone',$phone, true);
                     }
                     if (isset($keywordArr["customer_find_address"])) {
                         $address = $keywordArr["customer_find_address"];
-                        $criteria->addCondition("t.address like'%$address%'");
+                        $criteria->compare('t.address',$address,true);
                     }
                     $agentId = '';
                     if (isset($keywordArr["customer_find_agent"])) {
                         $agentId = $keywordArr["customer_find_agent"];
                     }
-                    
+                    //[BUG0149] NGHIAPT 15-11-18
+                    if (!empty($keywordArr["customer_find_record_number"])) {
+                        $record_number = $keywordArr["customer_find_record_number"];
+                        $aCondition = $mMedicalRecords->getArrayCustomerIdByRecord($record_number);
+                        $criteria->addInCondition("t.id",$aCondition);
+                    }
                     $models = Customers::model()->findAll($criteria);
 
-                    $medicalRecords = $this->findCustomerByRecordNumber($keyword);
-                    foreach ($medicalRecords as $record) {
-                        if (isset($record->rCustomer)) {
-                            if (!in_array($record->rCustomer, $models)) {
-                                array_push($models, $record->rCustomer);
-                            }
-                        }
-                    }
-                    // Search by agent
-//                    if (!empty($agentId)) {
-//                        $result = array();
-//                        foreach ($models as $model) {
-//                            if ($model->getAgentId() == $agentId) {
-//                                $result[] = $model;
-//                            }
-//                        }
-//                        $models = $result;
-//                    }
                     $models = $this->searchAndSortByAgent($models, $agentId);
                 } else {
                     Loggers::info('Search 2', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
@@ -366,57 +354,76 @@ class AjaxController extends AdminController
 //                    $criteria->addCondition("t.name like '%$keyword%' or t.phone like '%$keyword%'");
 //                    $criteria->addCondition("t.name like '%$keyword%' or t.phone like '%$keyword%' or YEAR(t.date_of_birth) like '%$keyword%' or t.year_of_birth like '%$keyword%'");
                     $criteria->limit = $limit;
-    //                $criteria->compare("t.status", DomainConst::DEFAULT_STATUS_ACTIVE);
+//                    $criteria->compare("t.status", DomainConst::DEFAULT_STATUS_ACTIVE);
                     $criteria->addCondition('t.status!=' . DomainConst::DEFAULT_STATUS_INACTIVE);
-                    if (isset($keywordArr["customer_find"])) {
+                    if (!empty($keywordArr["customer_find"])) {
                         $name = $keywordArr["customer_find"];
 //                        $criteria->addCondition("t.name like'%$name%' or t.phone like '%$name%'");
                         $criteria->addCondition("t.name like'%$name%' or t.phone like '%$name%' or t.address like '%$name%'");
                     }
-                    if (isset($keywordArr["customer_find_phone"])) {
+                    if (!empty($keywordArr["customer_find_phone"])) {
                         $phone = $keywordArr["customer_find_phone"];
-                        $criteria->addCondition("t.phone like'%$phone%'");
+                        $criteria->compare('t.phone',$phone, true);
                     }
-                    if (isset($keywordArr["customer_find_address"])) {
+                    if (!empty($keywordArr["customer_find_address"])) {
                         $address = $keywordArr["customer_find_address"];
-                        $criteria->addCondition("t.address like'%$address%'");
+                        $criteria->compare('t.address',$address,true);
                     }
                     $agentId = '';
-                    if (isset($keywordArr["customer_find_agent"])) {
+                    if (!empty($keywordArr["customer_find_agent"])) {
                         $agentId = $keywordArr["customer_find_agent"];
                     }
+                    //[BUG0149] NGHIAPT 15-11-18
+                    $mMedicalRecords = new MedicalRecords();
+                    if (!empty($keywordArr["customer_find_record_number"])) {
+                        $record_number = $keywordArr["customer_find_record_number"];
+                        $aCondition = $mMedicalRecords->getArrayCustomerIdByRecord($record_number);
+                        $criteria->addInCondition("t.id",$aCondition);
+                    }
+                    // not run
+//                    if (isset($keywordArr["customer_find_record_number"])) {
+//                        $record_number = $keywordArr["customer_find_record_number"];
+//                        $criteria->with         = ['rMedicalRecord'];
+//                        $criteria->together     = true;
+//                        $criteria->compare('rMedicalRecord.record_number', $record_number,true); 
+//                    }
+                    //
+                    $current_page = ($keywordArr["pages"]) ? $keywordArr["pages"] : 1 ;
+                    $total_records = Customers::model()->count($criteria);
+                    $total_page = ceil($total_records / $limit);
+                    if ($current_page > $total_page){
+                        $current_page = $total_page;
+                    }
+                    if ($current_page < 1){
+                        $current_page = 1;
+                    }
+                    $start = ($current_page - 1) * $limit;
+                    $criteria->offset = $start;
+                    if( $start+$limit < $total_records){
+                         $criteria->limit = $limit;
+                    }else{
+                         $criteria->limit = $total_records;
+                    }
+//                    $criteria->limit = $limit;
                     $models = Customers::model()->findAll($criteria);
+                    
                     $modelIdArr = array();
                     foreach ($models as $value) {
                         $modelIdArr[] = $value->id;
                     }
 
-                    $medicalRecords = $this->findCustomerByRecordNumber($keyword);
-                    foreach ($medicalRecords as $record) {
-                        if (isset($record->rCustomer)) {
-//                            if (!in_array($record->rCustomer, $models)) {
-                            if (!in_array($record->rCustomer->id, $modelIdArr)) {
-                                array_push($models, $record->rCustomer);
-                            }
-                        }
-                    }
-                    // Search by agent
-//                    if (!empty($agentId)) {
-//                        $result = array();
-//                        foreach ($models as $model) {
-//                            if ($model->getAgentId() == $agentId) {
-//                                $result[] = $model;
-//                            }
-//                        }
-//                        $models = $result;
-//                    }
                     $models = $this->searchAndSortByAgent($models, $agentId);
                 }
                 //++ BUG0037_1-IMT  (DuongNV 201807) Update UI schedule
 //                $retVal = '<div class="scroll-table">';
                 $retVal = '<div>';
+                if( $start+$limit < $total_records){
+                    $retVal .= ($start+1).'-'.($start+$limit).' of '.$total_records;
+                }else{
+                    $criteria->offset = $total_records;
+                    $retVal .= ($start+1).'-'.($total_records).' of '.$total_records;
+                }
                 $infoSchedule = '';
-                
                 $retVal .= '<table id="customer-info" class="table table-striped lp-table">';
                 //-- BUG0037_1-IMT  (DuongNV 201807) Update UI schedule
                 $retVal .=      '<thead>';
@@ -429,9 +436,12 @@ class AjaxController extends AdminController
                 $retVal .=      '</thead>';
                 $retVal .=      '<tbody>';
                 
-                if (count($models)) {
-                    foreach ($models as $model) {
+
+                    
+                if( $start+$limit < $total_records){
+                    for($i = 0 ;$i < $limit ; $i++) {
                         $recordNumber = '';
+                        $model = $models[$i];
                         if (isset($model->rMedicalRecord)) {
                             $recordNumber = $model->rMedicalRecord->record_number;
                         }
@@ -442,12 +452,40 @@ class AjaxController extends AdminController
                         $retVal .= '<td>' . $model->getAgentName() . '<br>' . $model->address . '</td>';
                         $retVal .= '</tr>';
                     }
-                } else {
-                    
+                }else{
+                    for($i = 0 ;$i < $total_records%$limit ; $i++) {
+                        $recordNumber = '';
+                        $model = $models[$i];
+                        if (isset($model->rMedicalRecord)) {
+                            $recordNumber = $model->rMedicalRecord->record_number;
+                        }
+                        $retVal .= '<tr id="' . $model->id . '" class="customer-info-tr">';
+                        $retVal .= '<td>' . $model->name . '</td>';
+                        $retVal .= '<td>' . $model->phone . '<br>' . HtmlHandler::formatRecordNumber($recordNumber) . '</td>';
+                        $retVal .= '<td>' . $model->getBirthday() . '</td>';
+                        $retVal .= '<td>' . $model->getAgentName() . '<br>' . $model->address . '</td>';
+                        $retVal .= '</tr>';
+                    }
                 }
+                
                 $retVal .=          '</tbody>';
                 $retVal .=      '</table>';
                 $retVal .= '</div>';
+                if( $start+$limit < $total_records){
+                    $retVal .= ($start+1).'-'.($start+$limit).' of '.$total_records;
+                }else{
+                    $criteria->offset = $total_records;
+                    $retVal .= ($start+1).'-'.($total_records).' of '.$total_records;
+                }
+//                $retVal .= '<ul class="pagination">';
+//                
+//                $retVal .=   '<li id="top-pagination" onclick="top()" ><a><<</a></li>';
+//                $retVal .=   '<li id="back-pagination"><a><</a></li>';
+//                $retVal .=   '<li id="next-pagination"><a>></a></li>';
+//                $retVal .=   '<li id="end-pagination" value="'.$total_page.'"><a>>></a></li>';
+//                $retVal .=   '</ul>';
+                
+                
                 $json = CJavaScript::jsonEncode(array(
                     'rightContent'  => $retVal,
                     'count' => count($models),
@@ -458,7 +496,6 @@ class AjaxController extends AdminController
             }
         }
     }
-    
     /**
      * Get customer information.
      */
