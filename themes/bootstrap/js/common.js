@@ -163,7 +163,7 @@ function fnHandleTextChange(_url, outputId, _titleId, _titleVal) {
         }
     });
 }
-var SEARCH_CUSTOMER_KEYS = ["customer_find", "customer_find_phone", "customer_find_address", "customer_find_agent"];
+var SEARCH_CUSTOMER_KEYS = ["customer_find", "customer_find_phone", "customer_find_address", "customer_find_agent","customer_find_record_number","pages"];
 
 /**
  * Get search array value
@@ -593,13 +593,10 @@ function drop(ev, element, toClass, format, autoIncrease) {
     var elmData = ev.originalEvent.dataTransfer.getData('source');//lấy giá trị biến source và gán vào biến elm_id
     var dropAreaClass = ev.originalEvent.dataTransfer.getData('toClass');
     var data_id = ev.originalEvent.dataTransfer.getData('data_id');
-    if (dropAreaClass !== toClass) {
+    if (dropAreaClass !== toClass)
         return;
-    }
-    if (elmData === "") {
+    if (elmData === "")
         return;
-    }
-
     $selector = 'span[data-id=' + data_id + ']';
     if ($(element).find($selector).length <= 0) {
         currentTrDrop = $(element).data('current');
