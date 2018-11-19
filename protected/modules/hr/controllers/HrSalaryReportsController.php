@@ -127,18 +127,20 @@ class HrSalaryReportsController extends HrController {
      * @param HrSalaryReports $model Report model
      */
     public function saveData($model) {
+        // Update format of date
         $model->formatDate('start_date', DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_4);
         $model->formatDate('end_date', DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_4);
-        $data = array();
+        $fromDate       = $model->start_date;
+        $toDate         = $model->end_date;
+        $data = array();            // Data
         switch ($model->type_id) {
-            case Settings::getSalaryTimesheetId():
+            case Settings::getSalaryTimesheetId():          // Timesheet calculate
+                // Create header row
                 $header = array(
                     DomainConst::CONTENT00490,
                     DomainConst::CONTENT00046,
                     DomainConst::CONTENT00199,
                 );
-                $fromDate       = $model->start_date;
-                $toDate         = $model->end_date;
                 $period         = CommonProcess::getDatePeriod($fromDate, $toDate);
                 foreach ($period as $dt) {
                     $date       = $dt->format('d');
@@ -146,33 +148,74 @@ class HrSalaryReportsController extends HrController {
                     $columnName = $date . '<br>' . $wd;
                     $header[]   = $columnName;
                 }
+                // Total column header
                 $header[]   = DomainConst::CONTENT00571;
                 $data[DomainConst::NUMBER_ZERO_VALUE] = $header;
                 
+                // Create multi-user row
                 foreach ($model->getUserArray() as $user) {
                     $userData = array(
                         $user->getFullName(),
                         $user->getRoleName(),
                         $user->getAgentName(),
                     );
+                    // Loop date by date
                     foreach ($period as $dt) {
                         $fullDate   = $dt->format(DomainConst::DATE_FORMAT_DB);
                         $userData[] = $user->getTimesheetValueCell($fullDate, false);
                     }
+                    // Total column value
                     $userData[] = $user->getTimesheetValueTotal($fromDate, $toDate);
                     $data[$user->id]    = $userData;
                 }
                 break;
                 
-            case Settings::getSalaryEfficiencyId():
-                foreach ($model->getUserArray() as $user) {
-                   $userData = array(
-                       $user->getFullName(),
-                       $user->getRoleName(),
-                       $user->getAgentName(),
-                   );
+            case Settings::getSalaryEfficiencyId():             // Efficiency calculate
+                $arrFunc = HrFunctions::getListFunctions($model);
+                $arrParams = HrFunctions::getListParameters($model);
+                $arrCoeffs = HrFunctions::getListCoefficients($model);
+                // Create header row
+                $header = array(
+                    DomainConst::CONTENT00490,
+                    DomainConst::CONTENT00046,
+                    DomainConst::CONTENT00199,
+                );
+                
+                foreach ($arrParams as $param) {
+                    $header[] = $param->getName();
                 }
-                $data[$user->id]    = $userData;
+                foreach ($arrCoeffs as $coeff) {
+                    $header[] = $coeff->getName();
+                }
+                foreach ($arrFunc as $func) {
+                    $header[] = $func->getName();
+                }
+                $header[]   = DomainConst::CONTENT00254;
+                $data[DomainConst::NUMBER_ZERO_VALUE] = $header;
+                
+                // Create multi-user row
+                Loggers::info('Count user', count($model->getUserArray()), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+                foreach ($model->getUserArray() as $user) {
+                    $userData = array(
+                        $user->getFullName(),
+                        $user->getRoleName(),
+                        $user->getAgentName(),
+                    );
+                    foreach ($arrParams as $param) {
+                        $userData[] = $param->getValue($fromDate, $toDate, $user);
+                    }
+                    foreach ($arrCoeffs as $coeff) {
+                        $userData[] = $coeff->getValue();
+                    }
+                    $total = 0;
+                    foreach ($arrFunc as $func) {
+                        $funcVal = $func->getValue($fromDate, $toDate, $user);
+                        $userData[] = $funcVal;
+                        $total += $funcVal;
+                    }
+                    $userData[] = $total;
+                    $data[$user->id] = $userData;
+                }
                 break;
 
             default:

@@ -90,7 +90,7 @@ class UserHrs extends Users {
      * @return Number       Revenue of agent value
      */
     public function getAgentRevenue($from = '', $to = '') {
-        return 0;
+        return 31000000;
     }
     
     /**

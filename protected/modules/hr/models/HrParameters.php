@@ -226,6 +226,17 @@ class HrParameters extends HrActiveRecord {
     }
     
     /**
+     * Get value of parameter
+     * @param String $from  Date from
+     * @param String $to    Date to
+     * @param Model $mUser  User model
+     * @return String Value of parameter was formated
+     */
+    public function getFormatedValue($from, $to, $mUser) {
+        return CommonProcess::formatCurrency($this->getValue($from, $to, $mUser));
+    }
+    
+    /**
      * Get name of parameter
      * @return String Name of parameter
      */

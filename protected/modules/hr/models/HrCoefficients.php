@@ -210,6 +210,17 @@ class HrCoefficients extends HrActiveRecord {
     }
     
     /**
+     * Get formated value
+     * @param String $from  Date from
+     * @param String $to    Date to
+     * @return String Value of coefficient was formated
+     */
+    public function getFormatedValue($from = '', $to = '') {
+        return CommonProcess::formatCurrency($this->getValue($from, $to));
+    }
+
+
+    /**
      * Get all values
      * @return \CArrayDataProvider
      */

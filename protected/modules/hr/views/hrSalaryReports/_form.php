@@ -192,7 +192,7 @@
                     <tr class="<?php echo (($idx % 2) == 0) ? 'even' : 'odd'; ?>">
                         <td style="text-align:center;"><?php echo $idx++; ?></td>
                         <?php foreach ($row as $cell): ?>
-                            <td><?php echo $cell; ?></td>
+                        <td><?php echo is_numeric($cell) ? CommonProcess::formatCurrency($cell) : $cell; ?></td>
                         <?php endforeach; ?>
                     <?php endforeach; ?>
                 </tbody>
