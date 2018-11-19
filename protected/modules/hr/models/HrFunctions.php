@@ -602,7 +602,7 @@ class HrFunctions extends HrActiveRecord {
             $visibleFunc = str_replace('$retVal = ', "", $function);
             $visibleFunc = str_replace(';', "", $visibleFunc);
             Loggers::error(DomainConst::CONTENT00214, $ex->getMessage(), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-            Loggers::error("Có lỗi chia cho 0!", $this->name . html_entity_decode('\n') . $visibleFunc, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            Loggers::error("Có lỗi chia cho 0!", $function . html_entity_decode('\n') . $visibleFunc, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         }
         restore_error_handler();
         return $retVal;

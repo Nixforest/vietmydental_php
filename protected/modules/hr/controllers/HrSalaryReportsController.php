@@ -162,7 +162,7 @@ class HrSalaryReportsController extends HrController {
                     // Loop date by date
                     foreach ($period as $dt) {
                         $fullDate   = $dt->format(DomainConst::DATE_FORMAT_DB);
-                        $userData[] = $user->getTimesheetValueCell($fullDate, false);
+                        $userData[] = $user->getTimesheetValueCell($fullDate);
                     }
                     // Total column value
                     $userData[] = $user->getTimesheetValueTotal($fromDate, $toDate);
