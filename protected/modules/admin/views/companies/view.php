@@ -73,7 +73,6 @@
 *, *:before, *:after {
     box-sizing: border-box;
 }
-
 </style>
 <!-- Adding start by ThangTGM 18112018 -->
 

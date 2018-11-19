@@ -20,7 +20,6 @@ class CompaniesController extends AdminController {
             //$treeHR .= $this->printDepartmentChart($treeHR, 0);
             $treeHR .= "</ul>";
             $treeHR .= "</div>";
-
         // Adding end
         $this->render('view', array(
             'model' => $this->loadModel($id),
