@@ -13,6 +13,15 @@ class CompaniesController extends AdminController {
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
+        // Adding start ThangTGM 18112018
+            $treeHR = ""; // Load mảng phòng ban
+            $treeHR = "<div class='tree'>";
+            $treeHR .= "<ul>";
+            //$treeHR .= $this->printDepartmentChart($treeHR, 0);
+            $treeHR .= "</ul>";
+            $treeHR .= "</div>";
+
+        // Adding end
         $this->render('view', array(
             'model' => $this->loadModel($id),
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
@@ -108,4 +117,37 @@ class CompaniesController extends AdminController {
         }
     }
 
+    /*
+
+    */
+    public function printDepartmentChart($list, $parent_id){
+        $result = "";
+        foreach($list as $item){
+            if($item['parent_id'] == $parent_id){
+                if($this->hasChild($list,  $item['id'])){
+                    $result .= "<li><span data-id='".$item['id']."' parent-id='".$item['parent_id']."'><i class='node fa fa-minus-square'></i> ". $item['name'] ."</span>";
+                    $result .= "<ul>";
+                    $result .= $this->printDepartmentChart($list, $item['id']);
+                    $result .= "</ul>";
+                }
+                else {
+                    $result .= "<li><span data-id='".$item['id']."' parent-id='".$item['parent_id']."'>". $item['name'] ."</span>";
+                }
+                $result .= "</li>";
+            }
+        }
+        return $result;
+    }
+
+    /*
+
+    */
+    public function hasChild($list, $parent_id){
+        foreach($list as $item){
+            if($item['parent_id'] == $parent_id){
+                return true;
+            }
+        }
+        return false;
+    }
 }
