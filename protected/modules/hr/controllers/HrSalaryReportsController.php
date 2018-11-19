@@ -32,15 +32,12 @@ class HrSalaryReportsController extends HrController {
         if (filter_input(INPUT_POST, DomainConst::KEY_SUBMIT)) {
             Loggers::info('Submit button was clicked', '',
                     __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-        }
-        if (filter_input(INPUT_POST, 'search')) {
-            Loggers::info('Search button was clicked', '',
-                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
-        }
-        if (isset($_POST['HrSalaryReports'])) {
-            $model->attributes = $_POST['HrSalaryReports'];
-            if ($model->save()) {
-                $this->redirect(array('view', 'id' => $model->id));
+            if (isset($_POST['HrSalaryReports'])) {
+                $model->attributes = $_POST['HrSalaryReports'];
+                $this->saveData($model);
+                if ($model->save()) {
+                    $this->redirect(array('update', 'id' => $model->id));
+                }
             }
         }
         $dataColumn = array();

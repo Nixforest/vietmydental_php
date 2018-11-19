@@ -144,6 +144,7 @@
         <?php
             $this->widget('SearchUserForSalaryWidget', array(
                 'model'         => $model,
+                'canSearch'     => false,
             ));
         ?>
         </div>
@@ -153,7 +154,7 @@
         <?php
             $isDataExist = !empty($model->data);
         ?>
-        <div style="<?php echo $isDataExist ? 'display: none;' : ''; ?>">
+        <div style="<?php echo $isDataExist ? 'display: none;' : ''; ?>" class="grid-container">
             <?php
             $this->widget('zii.widgets.grid.CGridView', array(
                 'id' => 'hr-users-grid',
@@ -163,7 +164,7 @@
             ?>
         </div>
         <?php if ($isDataExist) : ?>
-        <div id="hr-users-grid" class="grid-view">
+        <div id="hr-users-grid" class="grid-view grid-container">
             <div class="summary">Displaying 1-2 of 2 results.</div>
             <table class="items">
                 <thead>

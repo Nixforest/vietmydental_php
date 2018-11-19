@@ -21,11 +21,17 @@ class SearchUserForSalaryWidget extends CWidget {
      */
     public $model;
     /**
+     * Flag can search
+     * @var boolean 
+     */
+    public $canSearch = true;
+    /**
      * Run method
      */
     public function run() {
         $this->render('searchUserForSalary', array(
             'model'     => $this->model,
+            'canSearch' => $this->canSearch,
         ));
     }
 }

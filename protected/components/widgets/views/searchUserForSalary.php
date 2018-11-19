@@ -1,6 +1,7 @@
 <?php
 /* @var $model HrWorkPlans */
 /* @var $form CActiveForm */
+/* @var $canSearch boolean */
 ?>
 
 <div class="wide form">
@@ -46,7 +47,7 @@
         </div>
     </div>
 
-    <div class="row buttons">
+    <div class="row buttons" style="<?php echo !$canSearch ? 'display: none;' : '' ?>">
         <?php echo CHtml::submitButton('Search', array(
             'name'  => 'search',
             'style' => 'margin: 10px 10px 10px 154px; background: teal',
