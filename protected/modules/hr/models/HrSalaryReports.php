@@ -268,7 +268,18 @@ class HrSalaryReports extends HrActiveRecord {
      * Get all values
      * @return \CArrayDataProvider
      */
-    public function getUserArrayProvider() {
+    public function getUserArrayProvider($isEmpty = false) {
+        if ($isEmpty) {
+            return new CArrayDataProvider(array(), array(
+                'id'    => 'users',
+                'sort'  => array(
+                    'attributes'    => UserHrs::model()->getTableSchema()->getColumnNames(),
+                ),
+                'pagination' => array(
+                    'pageSize' => Settings::getListPageSize(),
+                ),
+            ));
+        }
         return new CArrayDataProvider($this->getUserArray(), array(
             'id'    => 'users',
             'sort'  => array(

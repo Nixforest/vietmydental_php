@@ -58,7 +58,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'name' => 'type_id',
             'value' => '$data->getType()',
         ),
-        'data',
+//        'data',
         array(
             'name' => 'approved',
             'value' => '$data->getApproverName()',

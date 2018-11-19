@@ -67,16 +67,24 @@ class HrSalaryReportsController extends HrController {
                     __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             if (isset($_POST['HrSalaryReports'])) {
                 $model->attributes = $_POST['HrSalaryReports'];
+                $this->saveData($model);
                 if ($model->save()) {
 //                    $this->redirect(array('view', 'id' => $model->id));
                 }
             }
         }
-        if (filter_input(INPUT_POST, 'search')) {
-            Loggers::info('Search button was clicked', '',
+        if (filter_input(INPUT_POST, 'recalculate')) {
+            Loggers::info('Re-calculate button was clicked', '',
                     __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             if (isset($_POST['HrSalaryReports'])) {
                 $model->attributes = $_POST['HrSalaryReports'];
+                $model->formatDate('start_date', DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_4);
+                $model->formatDate('end_date', DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_4);
+                $model->data = '';
+                $this->saveData($model);
+                if ($model->save()) {
+                    
+                }
             }
         }
         
@@ -115,6 +123,54 @@ class HrSalaryReportsController extends HrController {
             'dataColumn'    => $dataColumn,
             DomainConst::KEY_ACTIONS => $this->listActionsCanAccess,
         ));
+    }
+    
+    /**
+     * Save data
+     * @param HrSalaryReports $model Report model
+     */
+    public function saveData($model) {
+        $model->formatDate('start_date', DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_4);
+        $model->formatDate('end_date', DomainConst::DATE_FORMAT_BACK_END, DomainConst::DATE_FORMAT_4);
+        $data = array();
+        switch ($model->type_id) {
+            case Settings::getSalaryTimesheetId():
+                $header = array(
+                    DomainConst::CONTENT00490,
+                    DomainConst::CONTENT00046,
+                    DomainConst::CONTENT00199,
+                );
+                $fromDate       = $model->start_date;
+                $toDate         = $model->end_date;
+                $period         = CommonProcess::getDatePeriod($fromDate, $toDate);
+                foreach ($period as $dt) {
+                    $date       = $dt->format('d');
+                    $wd         = CommonProcess::getWeekDay($dt->format('w'));
+                    $columnName = $date . '<br>' . $wd;
+                    $header[]   = $columnName;
+                }
+                $header[]   = DomainConst::CONTENT00571;
+                $data[DomainConst::NUMBER_ZERO_VALUE] = $header;
+                
+                foreach ($model->getUserArray() as $user) {
+                    $userData = array(
+                        $user->getFullName(),
+                        $user->getRoleName(),
+                        $user->getAgentName(),
+                    );
+                    foreach ($period as $dt) {
+                        $fullDate   = $dt->format(DomainConst::DATE_FORMAT_DB);
+                        $userData[] = $user->getTimesheetValueCell($fullDate, false);
+                    }
+                    $userData[] = $user->getTimesheetValueTotal($fromDate, $toDate);
+                    $data[$user->id]    = $userData;
+                }
+                break;
+
+            default:
+                break;
+        }
+        $model->data = CommonProcess::json_encode_unicode($data);
     }
     
     /**

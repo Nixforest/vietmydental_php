@@ -26,7 +26,7 @@ class UserHrs extends Users {
      */
     public function saveData($key, $value) {
         $this->data[$key] = $value;
-        CookieHandler::saveCookie($key, $value);
+//        CookieHandler::saveCookie($key, $value);
     }
     
     /**
@@ -35,7 +35,8 @@ class UserHrs extends Users {
      * @return string Value of data
      */
     public function getDataValue($key) {
-        $value = CookieHandler::getCookieValue($key);
+//        $value = CookieHandler::getCookieValue($key);
+        $value = '';
         if (empty($value)) {
             $value = isset($this->data[$key]) ? $this->data[$key] : '';
         }
@@ -252,15 +253,16 @@ class UserHrs extends Users {
                 $retVal += $value;
             }
         }
-        return $retVal;
+        return $retVal . '';
     }
     
     /**
      * Get Timesheet value to show on gridview
      * @param String $date Date value (format is DATE_FORMAT_4 - 'Y-m-d')
+     * @param Booeean $isText Flag check return value is text or real value
      * @return string Value of cell text
      */
-    public function getTimesheetValueCell($date) {
+    public function getTimesheetValueCell($date, $isText = true) {
         $cellValue  = '';
         $cellText   = '';
         $this->getTimesheetValue($date, $cellValue, $cellText);
@@ -285,7 +287,10 @@ class UserHrs extends Users {
 
                 break;
         }
-        return $cellText;
+        if ($isText) {
+            return $cellText;
+        }
+        return $cellValue;
     }
     
     /**

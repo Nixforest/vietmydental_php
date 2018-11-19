@@ -13,10 +13,16 @@
     ));
     ?>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <?php // echo CHtml::submitButton($model->isNewRecord ? DomainConst::CONTENT00017 : DomainConst::CONTENT00377); ?>
             <?php echo CHtml::submitButton($model->isNewRecord ? DomainConst::CONTENT00017 : DomainConst::CONTENT00377, array(
                 'name'  => 'submit',
+                'style' => 'margin: 10px 10px 10px 154px; background: teal',
+            )); ?>
+        </div>
+        <div class="col-md-6">
+            <?php echo CHtml::submitButton(DomainConst::CONTENT00572, array(
+                'name'  => 'recalculate',
                 'style' => 'margin: 10px 10px 10px 154px; background: teal',
             )); ?>
         </div>
@@ -145,13 +151,53 @@
     <div>
         <h1><?php echo DomainConst::CONTENT00011; ?></h1>
         <?php
-        $this->widget('zii.widgets.grid.CGridView', array(
-            'id' => 'hr-users-grid',
-            'dataProvider' => $model->getUserArrayProvider(),
-//            'filter' => $model,
-            'columns' => $dataColumn,
-            ));
+            $isDataExist = !empty($model->data);
         ?>
+        <div style="<?php echo $isDataExist ? 'display: none;' : ''; ?>">
+            <?php
+            $this->widget('zii.widgets.grid.CGridView', array(
+                'id' => 'hr-users-grid',
+                'dataProvider' => $model->getUserArrayProvider($isDataExist),
+                'columns' => $dataColumn,
+                ));
+            ?>
+        </div>
+        <?php if ($isDataExist) : ?>
+        <div id="hr-users-grid" class="grid-view">
+            <div class="summary">Displaying 1-2 of 2 results.</div>
+            <table class="items">
+                <thead>
+                    <tr>
+                        <?php
+                        $data = json_decode($model->data);
+                        $arrHeader = array();
+                        if (isset($data->{DomainConst::NUMBER_ZERO_VALUE})) {
+                            $arrHeader = $data->{DomainConst::NUMBER_ZERO_VALUE};
+                        }
+                        ?>
+                        <th width="30px" style="text-align:center;" id="hr-users-grid_c0">#</th>
+                        <?php foreach ($arrHeader as $column): ?>
+                            <th id="hr-users-grid_c1"><?php echo $column; ?></th>
+                        <?php endforeach; ?>
+                </thead>
+                <tbody>
+                    <?php
+                    $idx = 1;
+                    ?>
+                    <?php foreach ($data as $row_key => $row): ?>
+                    <?php if ($row_key == DomainConst::NUMBER_ZERO_VALUE) : ?>
+                    <?php continue; ?>
+                    <?php endif; ?>
+                    <tr class="<?php echo (($idx % 2) == 0) ? 'even' : 'odd'; ?>">
+                        <td style="text-align:center;"><?php echo $idx++; ?></td>
+                        <?php foreach ($row as $cell): ?>
+                            <td><?php echo $cell; ?></td>
+                        <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <?php endif; ?>
     </div>
 
     <?php $this->endWidget(); ?>

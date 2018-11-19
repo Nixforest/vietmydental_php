@@ -36,7 +36,7 @@ class HrActiveRecord extends BaseActiveRecord {
     
     /**
      * Get user array
-     * @return Users[] List users
+     * @return UserHrs[] List users
      */
     public function getUserArray() {
         if (isset($this->rRole->rUser)) {
