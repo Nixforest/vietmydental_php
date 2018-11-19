@@ -1390,6 +1390,28 @@ class CommonProcess {
     public static function getSessionId() {
         return Yii::app()->getSession()->getSessionId();
     }
+    
+    /**
+     * Get random element in array
+     * @param Array $array Array models
+     * @return Model Model object
+     */
+    public static function getRandomElementInArray($array) {
+        if (!empty($array)) {
+            $count = count($array);
+            return array_values($array)[mt_rand(0, $count - 1)];
+        }
+        return NULL;
+    }
+    
+    /**
+     * Format currency round
+     * @param String $money Money value
+     * @return String Value of money after round
+     */
+    public static function formatCurrencyRound($money) {
+        return number_format((double) $money, 0);
+    }
 
     /**
      * Echo test string
@@ -1404,19 +1426,6 @@ class CommonProcess {
             echo '<b>' . $message . '</b>' . '<i>' . $data . '</i>';
         }
         echo '<br/>';
-    }
-    
-    /**
-     * Get random element in array
-     * @param Array $array Array models
-     * @return Model Model object
-     */
-    public static function getRandomElementInArray($array) {
-        if (!empty($array)) {
-            $count = count($array);
-            return array_values($array)[mt_rand(0, $count - 1)];
-        }
-        return NULL;
     }
     
     /**

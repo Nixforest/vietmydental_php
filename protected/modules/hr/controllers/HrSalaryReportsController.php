@@ -163,6 +163,17 @@ class HrSalaryReportsController extends HrController {
                     $data[$user->id]    = $userData;
                 }
                 break;
+                
+            case Settings::getSalaryEfficiencyId():
+                foreach ($model->getUserArray() as $user) {
+                   $userData = array(
+                       $user->getFullName(),
+                       $user->getRoleName(),
+                       $user->getAgentName(),
+                   );
+                }
+                $data[$user->id]    = $userData;
+                break;
 
             default:
                 break;

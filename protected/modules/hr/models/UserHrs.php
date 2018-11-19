@@ -339,4 +339,34 @@ class UserHrs extends Users {
                 break;
         }
     }
+    
+    /**
+     * Get value by functions
+     * @param Array $listFunc List function
+     * @param Array $retVal Output value
+     */
+    public function getValueByFunctions($listFunc, &$retVal) {
+        $tempValue      = 0;
+        $sumValue       = 0;
+        $from           = $this->hrFrom;
+        $to             = $this->hrTo;
+        $arrFunctionVal = [];
+        foreach ($listFunc as $function) {
+            $tempValue = $function->getValue($from, $to, $this);
+            $arrFunctionVal[] = CommmonProcess::formatCurrencyRound($tempValue);
+            $sumValue += $tempValue;
+        }
+        // Params value
+        foreach ($this->usingParam as $param) {
+            $retVal[] = CommmonProcess::formatCurrencyRound($param->getValue($from, $to, $this));
+        }
+        if (!empty($arrFunctionVal)) {
+            foreach ($arrFunctionVal as $value) {
+                $retVal[] = $value;
+            }
+        } else {
+            $retVal[] = 0;
+        }
+        
+    }
 }
