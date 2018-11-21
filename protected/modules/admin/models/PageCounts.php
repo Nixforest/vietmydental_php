@@ -40,7 +40,7 @@ class PageCounts extends BaseActiveRecord {
         return array(
             array('module', 'required'),
             array('count', 'numerical', 'integerOnly' => true),
-            array('module, controller, action ,view', 'length', 'max' => 255),
+            array('module, controller, action, view', 'length', 'max' => 255),
             array('created_date, updated_date', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
@@ -65,7 +65,7 @@ class PageCounts extends BaseActiveRecord {
         $labels = parent::attributeLabels();
         $labels['module']       = 'Module';
         $labels['controller']   = 'Controller';
-        $labels['count']        = 'View';
+        $labels['count']        = 'Number of view';
         $labels['action']       = 'Action';
         $labels['view']         = 'View';
         $labels['updated_date'] = 'Time update';
@@ -123,8 +123,9 @@ class PageCounts extends BaseActiveRecord {
      * @param String $module        Name of module
      * @param String $controller    Name of controller
      * @param String $action        Name of action
+     * @param String $view          Name of view
      */
-    public static function updateView($module, $controller, $action,$view) {
+    public static function updateView($module, $controller, $action, $view) {
         $model = self::model()->findByAttributes(array(
             'module'        => $module,
             'controller'    => $controller,
@@ -149,9 +150,10 @@ class PageCounts extends BaseActiveRecord {
      * @param String $module        Name of module
      * @param String $controller    Name of controller
      * @param String $action        Name of action
+     * @param String $view          Name of view
      * @return int Number of view
      */
-    public static function getPageView($module, $controller, $action,$view) {
+    public static function getPageView($module, $controller, $action, $view) {
         $model = self::model()->findByAttributes(array(
             'module'        => $module,
             'controller'    => $controller,

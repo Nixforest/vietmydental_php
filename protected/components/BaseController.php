@@ -99,7 +99,7 @@ class BaseController extends CController {
 
         PageCounts::updateView($this->module,
                 isset(Yii::app()->controller->id) ? Yii::app()->controller->id : '',
-                $action->id,$view);
+                $action->id, $view);
     }
 
     //-----------------------------------------------------
