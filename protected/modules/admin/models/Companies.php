@@ -17,6 +17,7 @@
  * The followings are the available model relations:
  * @property Users                      $rCreatedBy                     User created this record
  * @property Users                      $rDirector                      Director
+ * @property Departments[]              $rDepartments                   List departments belong
  */
 class Companies extends BaseActiveRecord {
     //-----------------------------------------------------
@@ -77,7 +78,11 @@ class Companies extends BaseActiveRecord {
             'rCreatedBy' => array(self::BELONGS_TO, 'Users', 'created_by'),
             'rDirector' => array(
                 self::BELONGS_TO, 'Users', 'director',
-                'on'    => 'status !=' . DomainConst::NUMBER_ZERO_VALUE,
+                'on'    => 'status !=' . DomainConst::DEFAULT_STATUS_INACTIVE,
+            ),
+            'rDepartments'  => array(
+                self::HAS_MANY, 'Departments', 'company_id',
+                'on'    => 'status !=' . DomainConst::DEFAULT_STATUS_INACTIVE,
             ),
         );
     }
@@ -192,6 +197,37 @@ class Companies extends BaseActiveRecord {
         return '';
     }
     
+    /**
+     * Get list departments
+     * @return Departments[] List departments
+     */
+    public function getListDepartments() {
+        if (isset($this->rDepartments)) {
+            return $this->rDepartments;
+        }
+        return array();
+    }
+    
+    /**
+     * Get tree data
+     * @return TreeElement Model of tree element
+     */
+    public function getTreeData() {
+        $child = array();
+        foreach ($this->getListDepartments() as $department) {
+            $child[] = $department->getTreeData();
+        }
+        return TreeElement::create($this->id, $this->getName(), $child);
+    }
+    
+    /**
+     * Get html tree data
+     * @return String Html string
+     */
+    public function getHtmlTreeData() {
+        return $this->getTreeData()->getHtmlTree();
+    }
+    
     //-----------------------------------------------------
     // Static methods
     //-----------------------------------------------------
@@ -225,6 +261,20 @@ class Companies extends BaseActiveRecord {
             }
         }
         return $_items;
+    }
+    
+    /**
+     * Load array models
+     * @return Companies[] Array models
+     */
+    public static function loadArrModels() {
+        return self::model()->findAll(array(
+            'condition' => 'status !=:c',
+            'order' => 'id ASC',
+            'params'    => array(
+                ':c'    => DomainConst::DEFAULT_STATUS_INACTIVE,
+            ),
+        ));
     }
 
 }

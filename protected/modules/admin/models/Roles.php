@@ -10,6 +10,7 @@
  * @property integer $application_id    Id of application
  * @property integer $working_type      Type of working schedule
  * @property integer $isStaff           Flag check if user is staff
+ * @property integer $weight            Weight of role
  * @property integer $status            Status
  *
  * The followings are the available model relations:
@@ -101,11 +102,11 @@ class Roles extends BaseActiveRecord {
         // will receive user inputs.
         return array(
             array('role_name, role_short_name, application_id', 'required'),
-            array('application_id, status, working_type, isStaff', 'numerical', 'integerOnly' => true),
+            array('application_id, status, working_type, isStaff, weight', 'numerical', 'integerOnly' => true),
             array('role_name, role_short_name', 'length', 'max' => 255),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, role_name, role_short_name, application_id, status, working_type, isStaff', 'safe', 'on' => 'search'),
+            array('id, role_name, role_short_name, application_id, status, working_type, isStaff, weight', 'safe', 'on' => 'search'),
         );
     }
 
@@ -151,6 +152,7 @@ class Roles extends BaseActiveRecord {
             'application_id'    => 'Application',
             'working_type'      => DomainConst::CONTENT00536,
             'isStaff'           => DomainConst::CONTENT00490,
+            'weight'            => DomainConst::CONTENT00565,
             'status'            => DomainConst::CONTENT00026,
         );
     }
@@ -185,6 +187,8 @@ class Roles extends BaseActiveRecord {
         $criteria->compare('status', $this->status);
         $criteria->compare('working_type', $this->working_type);
         $criteria->compare('isStaff', $this->isStaff);
+        $criteria->compare('weight', $this->weight);
+        $criteria->order = 'weight asc';
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
@@ -438,6 +442,32 @@ class Roles extends BaseActiveRecord {
             self::IS_STAFF_TRUE     => DomainConst::CONTENT00490,
             self::IS_STAFF_OTHER    => DomainConst::CONTENT00031,
         );
+    }
+    
+    /**
+     * Sort array of users by role's weight
+     * Selection Sort algorithm
+     * @param Users[] $arrUsers Array of users need to sort
+     * @return Users[] Array of users after sorted
+     */
+    public static function sortArrUsersByRoleWeight($arrUsers) {
+        $retVal = array_values($arrUsers);
+        $count = count($arrUsers);
+        for ($ii = 0; $ii < ($count - 1); $ii++) {
+            // Find min element
+            $min = $ii;
+            for ($jj = $ii + 1; $jj < $count; $jj++) {
+                if ($retVal[$jj]->getRoleWeight() < $retVal[$min]) {
+                    $min = $jj;
+                }
+            }
+            // Found min element => Swap element [min] and element [ii]
+            $temp = $retVal[$ii];
+            $retVal[$ii] = $retVal[$min];
+            $retVal[$min] = $temp;
+            
+        }
+        return $retVal;
     }
 
 }

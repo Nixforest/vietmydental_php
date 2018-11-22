@@ -50,6 +50,12 @@
         <?php echo $form->error($model, 'isStaff'); ?>
     </div>
 
+    <div class="row">
+        <?php echo $form->labelEx($model, 'weight'); ?>
+        <?php echo $form->textField($model,'weight'); ?>
+        <?php echo $form->error($model, 'weight'); ?>
+    </div>
+
     <div class="row" style="<?php echo (($model->isNewRecord) ? "display: none;" : ""); ?>">
         <?php echo $form->labelEx($model, 'status'); ?>
         <?php echo $form->dropDownList($model, 'status', CommonProcess::getDefaultStatus()); ?>

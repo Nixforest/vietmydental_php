@@ -20,6 +20,7 @@
  * @property Companies                  $rCompany                       Company model
  * @property Users                      $rManager                       Manager
  * @property Users                      $rSubManager                    Sub manager
+ * @property Users[]                    $rUsers                         List users belong
  */
 class Departments extends BaseActiveRecord {
     //-----------------------------------------------------
@@ -94,6 +95,10 @@ class Departments extends BaseActiveRecord {
             'rSubManager'  => array(
                 self::BELONGS_TO, 'Users', 'sub_manager',
                 'on'    => 'status !=' . DomainConst::DEFAULT_STATUS_INACTIVE,
+            ),
+            'rUsers'  => array(
+                self::HAS_MANY, 'Users', 'department_id',
+                'on'    => 'status !=' . DomainConst::NUMBER_ZERO_VALUE,
             ),
         );
     }
@@ -239,6 +244,30 @@ class Departments extends BaseActiveRecord {
      */
     public function getFullName() {
         return DomainConst::CONTENT00530 . ' ' . $this->name . ' - ' . $this->getCompany();
+    }
+    
+    /**
+     * Get list users
+     * @return Users[] List users
+     */
+    public function getListUsers() {
+        if (isset($this->rUsers)) {
+            return Roles::sortArrUsersByRoleWeight($this->rUsers);
+        }
+        return array();
+    }
+    
+    /**
+     * Get tree data
+     * @return TreeElement Model of tree element
+     */
+    public function getTreeData() {
+        $child = array();
+        foreach ($this->getListUsers() as $user) {
+            $treeElement = TreeElement::create($user->id, $user->getFullName(), array());
+            $child[] = $treeElement;
+        }
+        return TreeElement::create($this->id, $this->getName(), $child);
     }
     
     //-----------------------------------------------------

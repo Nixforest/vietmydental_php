@@ -985,6 +985,17 @@ class Users extends BaseActiveRecord {
         $this->responsible_salary = str_replace(DomainConst::SPLITTER_TYPE_MONEY, '', $_POST['Users']['responsible_salary']);
         $this->subvention = str_replace(DomainConst::SPLITTER_TYPE_MONEY, '', $_POST['Users']['subvention']);
     }
+    
+    /**
+     * Get role's weight of user
+     * @return int Value of role's weight
+     */
+    public function getRoleWeight() {
+        if (isset($this->rRole)) {
+            return $this->rRole->weight;
+        }
+        return 1000000;
+    }
 
     //-----------------------------------------------------
     // Static methods
