@@ -1721,6 +1721,14 @@ class DomainConst {
     const CONTENT00562  = 'Khách hàng đã xác nhận mã OTP thành công';
     const CONTENT00563  = 'Mã OTP không hợp lệ';
     const CONTENT00564  = 'Bệnh nhân không hợp lệ';
-    const CONTENT00565  = 'Trọng số';
-    const CONTENT00566  = 'Sơ đồ tổ chức';
+    const CONTENT00565  = 'Đã in';
+    const CONTENT00566  = 'Chưa gắn';
+    const CONTENT00567  = 'Chưa in';
+    const CONTENT00568  = 'Phân loại';
+    const CONTENT00569  = 'Đã gắn';
+    const CONTENT00570  = 'Sắp lịch tự động';
+    const CONTENT00571  = 'Tổng công (ngày)';
+    const CONTENT00572  = 'Tính lại';
+    const CONTENT00573  = 'Trọng số';
+    const CONTENT00574  = 'Sơ đồ tổ chức';
 }

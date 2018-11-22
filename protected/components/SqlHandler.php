@@ -59,4 +59,31 @@ class SqlHandler {
         return array();
     }
     
+    /**
+     * Get max record number
+     * @param String $agent_id Id of agent
+     * @return String Value of max record number
+     */
+    public static function getMaxRecordNumber($agent_id) {
+        $retVal = '';
+        try {
+            $type = OneMany::TYPE_AGENT_CUSTOMER;
+            $sql = "SELECT MAX(CAST(md.record_number AS INT)) as number
+                    FROM medical_records as md
+                    WHERE md.customer_id IN
+                        (SELECT c.id FROM customers as c
+                        INNER JOIN
+                        `one_many` as om
+                        ON om.many_id=c.id
+                        WHERE om.type=$type AND om.one_id=$agent_id)";
+            $result = Yii::app()->db->createCommand($sql)->queryAll();
+            if (isset($result[0]['number'])) {
+                $retVal = $result[0]['number'];
+            }
+        } catch (Exception $ex) {
+            Loggers::error(DomainConst::CONTENT00214, $ex->getMessage(), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        }
+        return $retVal;
+    }
+    
 }

@@ -386,11 +386,16 @@ class AjaxController extends AdminController
                         $agentId = $keywordArr["customer_find_agent"];
                     }
                     $models = Customers::model()->findAll($criteria);
+                    $modelIdArr = array();
+                    foreach ($models as $value) {
+                        $modelIdArr[] = $value->id;
+                    }
 
                     $medicalRecords = $this->findCustomerByRecordNumber($keyword);
                     foreach ($medicalRecords as $record) {
                         if (isset($record->rCustomer)) {
-                            if (!in_array($record->rCustomer, $models)) {
+//                            if (!in_array($record->rCustomer, $models)) {
+                            if (!in_array($record->rCustomer->id, $modelIdArr)) {
                                 array_push($models, $record->rCustomer);
                             }
                         }
@@ -537,7 +542,7 @@ class AjaxController extends AdminController
         }
         $criteria = new CDbCriteria();
         $criteria->addSearchCondition('t.code', trim($_GET['term']), true);  // true => LIKE '%...%'
-        $criteria->addCondition('t.type = ' . ReferCodes::TYPE_PRINTED);
+        $criteria->addCondition('t.status = ' . ReferCodes::STATUS_PRINTED);
         $criteria->limit = 20;
         $models = ReferCodes::model()->findAll($criteria);
         foreach ($models as $model) {

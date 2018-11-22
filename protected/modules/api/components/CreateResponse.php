@@ -45,6 +45,7 @@ class CreateResponse {
             DomainConst::KEY_AGENT_LIST         => $mUser->getAgentListJson(),
             Settings::KEY_APP_API_LIST_PAGE_SIZE    => Settings::getApiListPageSize(),
             DomainConst::KEY_DAILY_REPORT_STATUS    => DailyReports::getArrayStatusJson(),
+            DomainConst::KEY_CUSTOMER_ID            => Customers::isValidPatient($mUser->id),
             
         );
         ApiModule::sendResponse($result, $objController);

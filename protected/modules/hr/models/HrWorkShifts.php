@@ -23,7 +23,7 @@
  * @property ScheduleTimes              $rToTime                        Time to
  * @property HrWorkSchedules[]          $rWorkSchedules                 Work schedules belong this record
  */
-class HrWorkShifts extends BaseActiveRecord {
+class HrWorkShifts extends HrActiveRecord {
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
@@ -169,17 +169,6 @@ class HrWorkShifts extends BaseActiveRecord {
     // Utility methods
     //-----------------------------------------------------
     /**
-     * Get created user
-     * @return string
-     */
-    public function getCreatedBy() {
-        if (isset($this->rCreatedBy)) {
-            return $this->rCreatedBy->getFullName();
-        }
-        return '';
-    }
-    
-    /**
      * Return status string
      * @return string Status value as string
      */
@@ -219,17 +208,6 @@ class HrWorkShifts extends BaseActiveRecord {
     public function getToTime() {
         if (isset($this->rToTime)) {
             return $this->rToTime->name;
-        }
-        return '';
-    }
-    
-    /**
-     * Get name of role
-     * @return string Name of role
-     */
-    public function getRoleName() {
-        if (isset($this->rRole)) {
-            return $this->rRole->role_short_name;
         }
         return '';
     }
@@ -279,16 +257,28 @@ class HrWorkShifts extends BaseActiveRecord {
     }
     
     /**
-     * Get work shifts by role
+     * Get models by role
      * @param Int $roleId Id of role
-     * @return Array List of work shifts
+     * @return Array List of models
      */
-    public static function getWorkShiftsByRole($roleId) {
-        $mRole = Roles::model()->findByPk($roleId);
-        if ($mRole) {
-            return $mRole->rWorkShifts;
+    public static function getArrayByRole($roleId) {
+        $retVal = array();
+        if ($roleId != Roles::ROLE_ALL_ID) {
+            $mRole = Roles::model()->findByPk($roleId);
+            if ($mRole) {
+                $retVal = $mRole->rWorkShifts;
+            }
         }
-        return array();
+        $arrModel = self::model()->findAll(array(
+            'condition' => 'role_id =' . Roles::ROLE_ALL_ID,
+        ));
+        if ($arrModel) {
+            foreach ($arrModel as $value) {
+                $retVal[] = $value;
+            }
+        }
+        
+        return $retVal;
     }
     
     /**

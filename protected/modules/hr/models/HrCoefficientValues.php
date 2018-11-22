@@ -16,7 +16,7 @@
  * @property Users                      $rCreatedBy                     User created this record
  * @property HrCoefficients             $rCoefficient                   Coefficient model
  */
-class HrCoefficientValues extends BaseActiveRecord {
+class HrCoefficientValues extends HrActiveRecord {
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
@@ -140,17 +140,6 @@ class HrCoefficientValues extends BaseActiveRecord {
     // Utility methods
     //-----------------------------------------------------
     /**
-     * Get created user
-     * @return string
-     */
-    public function getCreatedBy() {
-        if (isset($this->rCreatedBy)) {
-            return $this->rCreatedBy->getFullName();
-        }
-        return '';
-    }
-    
-    /**
      * Get month value
      * @return String Month value in format 'm/Y'
      */
@@ -184,11 +173,19 @@ class HrCoefficientValues extends BaseActiveRecord {
      * Get value (as formated)
      * @return String Formated value
      */
-    public function getValue() {
+    public function getFormatedValue() {
         if (strpos($this->value, DomainConst::SPLITTER_TYPE_4) != FALSE) {
             return $this->value;
         }
         return CommonProcess::formatCurrency($this->value);
+    }
+    
+    /**
+     * Get value
+     * @return Number Value number
+     */
+    public function getValue() {
+        return $this->value;
     }
     
     //-----------------------------------------------------

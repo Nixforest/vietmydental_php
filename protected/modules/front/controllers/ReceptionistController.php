@@ -27,6 +27,9 @@ class ReceptionistController extends FrontController {
     public function actionCreateCustomer() {
         $customer = new Customers();
         $medicalRecord = new MedicalRecords();
+        $record = MedicalRecords::getNextRecordNumber(CommonProcess::getCurrentAgentId());
+        Loggers::info('Record', $record, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        $medicalRecord->record_number = $record;
         $errMsg = '';
         if (isset($_POST['Customers'], $_POST['MedicalRecords'])) {
             $customer->attributes = $_POST['Customers'];
@@ -37,6 +40,9 @@ class ReceptionistController extends FrontController {
                 OneMany::insertOne(
                         Yii::app()->user->agent_id,
                         $customer->id, OneMany::TYPE_AGENT_CUSTOMER);
+                $referCode = $_POST['Customers']['referCode'];
+                // Handle save refer code
+                $customer->updateReferCode($referCode);
                 // Handle save social network information
                 foreach (SocialNetworks::TYPE_NETWORKS as $key => $value) {
                     $value = $_POST['Customers']["social_network_$key"];
@@ -118,9 +124,10 @@ class ReceptionistController extends FrontController {
                 if ($customer->save()) {
                     $referCode = $_POST['Customers']['referCode'];
                     // Handle save refer code
-                    if (!empty($referCode)) {
-                        ReferCodes::connect($referCode, $customer->id, ReferCodes::TYPE_CUSTOMER);
-                    }
+//                    if (!empty($referCode)) {
+//                        ReferCodes::connect($referCode, $customer->id, ReferCodes::TYPE_CUSTOMER);
+//                    }
+                    $customer->updateReferCode($referCode);
                     // Handle save social network information
                     SocialNetworks::deleteAllOldRecord($customer->id, SocialNetworks::TYPE_CUSTOMER);
                     // Handle save social network information

@@ -21,7 +21,7 @@
  * @property Users                      $rUser                          User was related with this record
  * @property Users                      $rApprover                      User was approved this record
  */
-class HrLeaves extends BaseActiveRecord {
+class HrLeaves extends HrActiveRecord {
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
@@ -183,17 +183,6 @@ class HrLeaves extends BaseActiveRecord {
     public function getApproverName() {
         if (isset($this->rApprover)) {
             return $this->rApprover->getFullName();
-        }
-        return '';
-    }
-    
-    /**
-     * Get created user
-     * @return string
-     */
-    public function getCreatedBy() {
-        if (isset($this->rCreatedBy)) {
-            return $this->rCreatedBy->getFullName();
         }
         return '';
     }
@@ -383,6 +372,23 @@ class HrLeaves extends BaseActiveRecord {
                 $retVal[$key] = $value;
             }
         }
+        return $retVal;
+    }
+    
+   /**
+     * Check if a date is leave date
+     * @param String $date Date value (format is DATE_FORMAT_4 - 'Y-m-d')
+     * @return int  0 - Date is not leave date
+     *              1 - Date is a leave date
+     *              2 - Date is a leave date (without salary)
+     */
+    public static function isLeaveDay($userId, $date) {
+        $criteria = new CDbCriteria();
+        $criteria->compare('user_id', $userId);
+        $criteria->addCondition("t.start_date<=$date AND t.end_date>=$date");
+        $criteria->compare('status', self::STATUS_APPROVED);
+        $models = self::model()->findAll($criteria);
+        $retVal = empty($models) ? 0 : 1;
         return $retVal;
     }
 

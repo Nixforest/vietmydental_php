@@ -843,6 +843,18 @@ class Users extends BaseActiveRecord {
     public function isDoctor() {
         return Roles::isDoctorRole($this->role_id);
     }
+    
+    /**
+     * Check a user is customer
+     * @return boolean True if user role is CUSTOMER, false otherwise
+     */
+    public function isCustomer() {
+        if (isset($this->rRole)) {
+            Loggers::info('Role', $this->rRole->role_name, __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+            return $this->rRole->isCustomerRole();
+        }
+        return false;
+    }
 
     /**
      * Get place issue Identity info

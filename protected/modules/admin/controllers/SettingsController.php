@@ -31,6 +31,7 @@ class SettingsController extends AdminController {
                 Settings::KEY_HR_WORK_ON_SATURDAY,
                 Settings::KEY_HR_WORKSHIFT_OFF_DAY_PER_MONTH,
                 Settings::KEY_SOURCE_INFO_WEBSITE,
+                Settings::KEY_SOURCE_INFO_APP,
                 Settings::KEY_OTP_LIMIT_TIME,
             /** Test */
 //                    Settings::KEY_APP_MOBILE_VERSION_IOS,
@@ -103,6 +104,25 @@ class SettingsController extends AdminController {
                 Settings::KEY_WORDPRESS_API_TOKEN,
             ),
         ),
+        // Logger
+        Settings::KEY_LOGGER_SETTINGS => array(
+            DomainConst::KEY_ALIAS => 'Logger',
+            DomainConst::KEY_CHILDREN => array(
+                Settings::KEY_LOG_API_REQUEST,
+                Settings::KEY_LOG_GENERAL,
+                Settings::KEY_LOG_USER_ACTIVITY,
+                Settings::KEY_LOG_ACTIVE_RECORD,
+            ),
+        ),
+        // Jr
+        Settings::KEY_HR_SETTINGS => array(
+            DomainConst::KEY_ALIAS => DomainConst::CONTENT00559,
+            DomainConst::KEY_CHILDREN => array(
+                Settings::KEY_SALARY_TYPE_TIMESHEET,
+                Settings::KEY_SALARY_TYPE_EFFICIENCY,
+                Settings::KEY_HOLIDAY_COMPENSATORY,
+            ),
+        ),
             // TODO: Add more group here
     );
 
@@ -119,6 +139,10 @@ class SettingsController extends AdminController {
             //TODO: Add more checkbook here
             Settings::KEY_SMS_SEND_ALARM_SCHEDULE,
             Settings::KEY_HR_WORK_ON_SATURDAY,
+            Settings::KEY_LOG_API_REQUEST,
+            Settings::KEY_LOG_GENERAL,
+            Settings::KEY_LOG_USER_ACTIVITY,
+            Settings::KEY_LOG_ACTIVE_RECORD,
         ],
         //TODO: Add more type input here
     ];

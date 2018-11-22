@@ -33,6 +33,12 @@ class Settings extends BaseActiveRecord {
     /** Key API setting */
     const KEY_API_SETTINGS                      = 'api_settings';
 
+    /** Key Logger setting */
+    const KEY_LOGGER_SETTINGS                   = 'logger_settings';
+
+    /** Key Human resource setting */
+    const KEY_HR_SETTINGS                       = 'hr_settings';
+
     /* --- General settings --- */
     /** Key website title */
     const KEY_TITLE                             = 'WEBSITE_TITLE';
@@ -62,6 +68,8 @@ class Settings extends BaseActiveRecord {
     const KEY_HR_WORKSHIFT_OFF_DAY_PER_MONTH    = 'HR_WORKSHIFT_OFF_DAY_PER_MONTH';
     /** Key setting of source information: Website */
     const KEY_SOURCE_INFO_WEBSITE               = 'SOURCE_INFO_WEBSITE';
+    /** Key setting of source information: App */
+    const KEY_SOURCE_INFO_APP                   = 'SOURCE_INFO_APP';
     /** Key setting of OTP: limit time */
     const KEY_OTP_LIMIT_TIME                    = 'OTP_LIMIT_TIME';
 
@@ -149,6 +157,26 @@ class Settings extends BaseActiveRecord {
     /* --- API settings --- */
     /** Key Wordpress api token */
     const KEY_WORDPRESS_API_TOKEN               = 'WORDPRESS_API_TOKEN';
+
+    /* --- Logger settings --- */
+    /** Key API request log */
+    const KEY_LOG_API_REQUEST                   = 'API_REQUEST_LOG';
+    /** Key User activity log */
+    const KEY_LOG_USER_ACTIVITY                 = 'USER_ACTIVITY_LOG';
+    /** Key General log */
+    const KEY_LOG_GENERAL                       = 'GENERAL_LOG';
+    /** Key General log */
+    const KEY_LOG_ACTIVE_RECORD                 = 'LOG_ACTIVE_RECORD';
+    
+    /* --- Human resource settings --- */
+    /** Key Salary type: Timesheet */
+    const KEY_SALARY_TYPE_TIMESHEET             = 'KEY_SALARY_TYPE_TIMESHEET';
+    /** Key Salary type: Efficiency */
+    const KEY_SALARY_TYPE_EFFICIENCY            = 'KEY_SALARY_TYPE_EFFICIENCY';
+    /** Key Salary type: Salary */
+    const KEY_SALARY_TYPE_SALARY                = 'KEY_SALARY_TYPE_SALARY';
+    /** Key Holiday type: Compensatory */
+    const KEY_HOLIDAY_COMPENSATORY              = 'HOLIDAY_COMPENSATORY';
     //-----------------------------------------------------
     // -- Define keys
     //-----------------------------------------------------
@@ -546,4 +574,63 @@ class Settings extends BaseActiveRecord {
         return self::getItemValue(self::KEY_OTP_LIMIT_TIME, 120);
     }
 
+    /**
+     * Check can log user activity
+     * @return boolean True if setting is ON, false otherwise
+     */
+    public static function canLogUserActivity() {
+        return (self::getItemValue(self::KEY_LOG_USER_ACTIVITY, DomainConst::NUMBER_ZERO_VALUE)
+                == DomainConst::NUMBER_ONE_VALUE);
+    }
+    
+    /**
+     * Check can log general log
+     * @return boolean True if setting is ON, false otherwise
+     */
+    public static function canLogGeneral() {
+        return (self::getItemValue(self::KEY_LOG_GENERAL, DomainConst::NUMBER_ZERO_VALUE)
+                == DomainConst::NUMBER_ONE_VALUE);
+    }
+    
+    /**
+     * Check can log api request
+     * @return boolean True if setting is ON, false otherwise
+     */
+    public static function canLogApiRequest() {
+        return (self::getItemValue(self::KEY_LOG_API_REQUEST, DomainConst::NUMBER_ZERO_VALUE)
+                == DomainConst::NUMBER_ONE_VALUE);
+    }
+    
+    /**
+     * Check can log active record update
+     * @return boolean True if setting is ON, false otherwise
+     */
+    public static function canLogActiveRecordUpdate() {
+        return (self::getItemValue(self::KEY_LOG_ACTIVE_RECORD, DomainConst::NUMBER_ZERO_VALUE)
+                == DomainConst::NUMBER_ONE_VALUE);
+    }
+    
+    /**
+     * Get Timesheet salary type id
+     * @return String Id of Timesheet salary type
+     */
+    public static function getSalaryTimesheetId() {
+        return self::getItemValue(self::KEY_SALARY_TYPE_TIMESHEET, '');
+    }
+    
+    /**
+     * Get Efficiency salary type id
+     * @return String Id of Efficiency salary type
+     */
+    public static function getSalaryEfficiencyId() {
+        return self::getItemValue(self::KEY_SALARY_TYPE_EFFICIENCY, '');
+    }
+    
+    /**
+     * Get Holiday compensatory id
+     * @return String Id of Holiday compensatory type
+     */
+    public static function getHolidayCompensatoryId() {
+        return self::getItemValue(self::KEY_HOLIDAY_COMPENSATORY, '');
+    }
 }

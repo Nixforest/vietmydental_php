@@ -100,9 +100,12 @@ class ExcelHandler {
      */
     public static function saveQRCode($referCodes) {
         foreach ($referCodes as $item) {
-            $imgName = Yii::getPathOfAlias('webroot') . "/upload/qrcode/$item->code.png";
-            file_put_contents($imgName, fopen('https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' . $item->generateURL() . '&choe=UTF-8', 'r'));
-            $item->type = ReferCodes::TYPE_PRINTED;
+            $imgName = Yii::getPathOfAlias('webroot') . "/uploads/qrcode/$item->code.png";
+            file_put_contents($imgName,
+                    fopen('https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl='
+                            . $item->getCustomerQRCode() . '&choe=UTF-8', 'r'));
+            $item->status = ReferCodes::STATUS_PRINTED;
+            $item->type = ReferCodes::TYPE_CUSTOMER;
             $item->save();
         }
     }

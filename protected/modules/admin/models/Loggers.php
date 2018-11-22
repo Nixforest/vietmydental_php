@@ -165,6 +165,9 @@ class Loggers extends BaseActiveRecord {
         $model->level       = $level;
         $model->logtime     = self::getMicro();
         $model->category    = $category;
+        if (!Settings::canLogGeneral()) {
+            return;
+        }
         if ($model->save()) {
             
         } else {

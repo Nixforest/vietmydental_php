@@ -19,7 +19,7 @@
  * @property HrWorkShifts           $rWorkShift         Work shift model relate with this record
  * @property HrWorkPlans            $rWorkPlan          Work plan model relate with this record
  */
-class HrWorkSchedules extends BaseActiveRecord {
+class HrWorkSchedules extends HrActiveRecord {
     //-----------------------------------------------------
     // Constants
     //-----------------------------------------------------
@@ -182,17 +182,6 @@ class HrWorkSchedules extends BaseActiveRecord {
     // Utility methods
     //-----------------------------------------------------
     /**
-     * Get created user
-     * @return string
-     */
-    public function getCreatedBy() {
-        if (isset($this->rCreatedBy)) {
-            return $this->rCreatedBy->getFullName();
-        }
-        return '';
-    }
-    
-    /**
      * Return status string
      * @return string Status value as string
      */
@@ -286,12 +275,32 @@ class HrWorkSchedules extends BaseActiveRecord {
         
         $model = self::model()->find($criteria);
         if ($model) {
-            Loggers::info('Found workshift', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+//            Loggers::info('Found workshift', '', __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
             if ($model->isApproved()) {
                 return $model->rWorkShift;
             }
         }
         return NULL;
+    }
+    
+    /**
+     * Insert one record
+     * @param String $day       Work day value
+     * @param String $shift     Work shift id
+     * @param String $plan      Work plan id
+     * @param String $employee  Employee id
+     */
+    public static function insertOne($day, $shift, $plan, $employee) {
+        $model                  = new HrWorkSchedules('create');
+        $model->work_day        = $day;
+        $model->work_shift_id   = $shift;
+        $model->work_plan_id    = $plan;
+        $model->employee_id     = $employee;
+        if ($model->save()) {
+        } else {
+            Loggers::error('Save failed', CommonProcess::json_encode_unicode($model->getErrors()),
+                    __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
+        }
     }
 
 }

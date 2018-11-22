@@ -89,6 +89,14 @@ class BaseActiveRecord extends CActiveRecord {
         }
     }
     
+    public function behaviors() {
+        return array(
+            // Classname => path to Class
+            'ActiveRecordLogableBehavior' =>
+            'application.behaviors.ActiveRecordLogableBehavior',
+        );
+    }
+
     /**
      * Check if id is exist
      * @param String $id Id value
@@ -377,5 +385,16 @@ class BaseActiveRecord extends CActiveRecord {
             Loggers::error('Exception', $exc->getMessage(), __CLASS__ . '::' . __FUNCTION__ . '(' . __LINE__ . ')');
         }
         return false;
+    }
+    
+    /**
+     * BLACK MAGIC: change class of object
+     * @param Object $object Model
+     * @param String $new_class Class name
+     * @return Object New class object
+     */
+    public static function change_class($object, $new_class) {
+        preg_match('~^O:[0-9]+:"[^"]+":(.+)$~', serialize($object), $matches);
+        return unserialize(sprintf('O:%s:"%s":%s', strlen($new_class), $new_class, $matches[1]));
     }
 }

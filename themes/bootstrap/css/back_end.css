@@ -126,3 +126,7 @@ div.addition_menu {
     color: white !important;
     margin: 10px;
 }
+.grid-container {
+    max-width: 1260px; 
+    overflow: auto;
+}
