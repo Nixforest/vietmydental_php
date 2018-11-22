@@ -217,4 +217,14 @@ class MedicalRecords extends BaseActiveRecord {
         }
         return $retVal;
     }
+    /*
+     * [BUG0149] NghiaPT, Nov 14, 2018
+     * Function get array customer id by record number
+     */
+    public function getArrayCustomerIdByRecord($record_number){
+        $criteria = new CDbCriteria();
+        $criteria->compare('t.record_number', $record_number,true);    
+        $models = MedicalRecords::model()->findAll($criteria);
+        return CHtml::listData($models,'customer_id','customer_id');
+    }
 }

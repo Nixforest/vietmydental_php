@@ -104,10 +104,19 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
         </div>-->
     </div>
     <div class="right-page">
+        
         <div class="title-1" id="right_page_title">
         </div>
         <div class="info-content">
             <div id="right-content"></div>
+        </div>
+        <div>
+            <ul class="pagination">
+                <li id="top-pagination" onclick="" ><a><<</a></li>
+                <li id="back-pagination"><a><</a></li>
+                <li id="next-pagination"><a>></a></li>
+                <li id="end-pagination" value=""><a>>></a></li>
+            </ul>
         </div>
     </div>
 </div>
@@ -1011,4 +1020,23 @@ Yii::app()->clientScript->registerCssFile(Yii::app()->theme->baseUrl . '/css/col
         });
         return false;
     }
+    $( "#top-pagination" ).click(function() {
+        $("#pages").val(1).change(); 
+    });
+    $( "#back-pagination" ).click(function() {
+        let num = parseInt($("#pages").val());
+        var result = 1;
+        if(num > 1){
+            result =num-1;
+        }
+        $("#pages").val(result).change();
+    });
+    $( "#next-pagination" ).click(function() {
+        let num = parseInt($("#pages").val());
+        let result =num+1;
+        $("#pages").val(result).change();
+    });
+    $( "#end-pagination" ).click(function() {
+//        $("#pages").val(1000).change();
+    });
 </script>
