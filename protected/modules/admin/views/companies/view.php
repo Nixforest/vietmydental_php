@@ -31,25 +31,10 @@ $this->widget('zii.widgets.CDetailView', array(
     ),
 ));
 ?>
-<h2><?php echo DomainConst::CONTENT00566; ?></h2>
+<h2><?php echo DomainConst::CONTENT00574; ?></h2>
 <div class="x_content">
-    <!-- echo $treeHR -->
     <div class="tree">
         <?php echo $model->getHtmlTreeData(); ?>
-<!--        <ul>
-            <li class="parent_li"><span data-id="9" parent-id="0" descript="Thức ăn 2"><i class="node fa fa-minus-square"></i> Phòng ban A<br>NV 1 <br> NV 2</span>
-                <ul>
-                    <li class="parent_li"><span data-id="10" parent-id="9" descript="Thức uống"><i class="node fa fa-minus-square"></i> Phòng ban A.1<br>NV 1 <br> NV 2</span>
-                        <ul>
-                            <li><span data-id="12" parent-id="10" descript="">Phòng ban A.1.1</span></li>
-                        </ul>
-                    </li>
-                    <li><span data-id="11" parent-id="9" descript="asdasd">Phòng ban A.2</span></li>
-                </ul>
-            </li>-->
-<!--            <li><span data-id="13" parent-id="0" descript="asdasdasd">Phòng ban B</span></li>
-            <li><span data-id="14" parent-id="0" descript="asdasd">Phòng ban C</span></li>-->
-        <!--</ul>-->
     </div>
 </div>
 

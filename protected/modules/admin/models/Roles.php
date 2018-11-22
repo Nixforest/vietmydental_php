@@ -152,7 +152,7 @@ class Roles extends BaseActiveRecord {
             'application_id'    => 'Application',
             'working_type'      => DomainConst::CONTENT00536,
             'isStaff'           => DomainConst::CONTENT00490,
-            'weight'            => DomainConst::CONTENT00565,
+            'weight'            => DomainConst::CONTENT00573,
             'status'            => DomainConst::CONTENT00026,
         );
     }
