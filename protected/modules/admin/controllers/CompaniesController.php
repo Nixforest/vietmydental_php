@@ -107,5 +107,4 @@ class CompaniesController extends AdminController {
             Yii::app()->end();
         }
     }
-
 }

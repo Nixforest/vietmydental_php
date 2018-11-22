@@ -85,6 +85,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '$data->getIsStaff()',
             'filter' => Roles::getArrayIsStaff(),
         ),
+        'weight',
         array(
             'name' => 'status',
             'type' => 'Status',

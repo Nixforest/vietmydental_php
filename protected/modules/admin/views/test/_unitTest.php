@@ -1,11 +1,15 @@
 <?php
-/* @var $this StreetsController */
-/* @var $model Streets */
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 ?>
-
-<h1><?php echo $this->pageTitle; ?></h1>
 <?php
+$arrTabs = array(
+    'Companies' => '_companies',
+    'Department' => '_departments',
+);
 $arrayTabs = array();
 $isActive = true;
 foreach ($arrTabs as $key => $value) {
@@ -23,7 +27,3 @@ $this->widget('bootstrap.widgets.TbTabs', array(
         'tabs' => $arrayTabs,
     )
 );
-echo '<pre id="result" style="max-height: 1000px;">';
-print_r($result);
-echo '</pre>';
-?>

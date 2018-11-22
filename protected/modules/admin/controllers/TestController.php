@@ -14,6 +14,7 @@ class TestController extends AdminController {
     public function actionTest() {
         $this->pageTitle = 'Thử nghiệm các tính năng';
         $arrTabs = array(
+            'UnitTest'  => '_unitTest',
             'CSS'       => '_css',
             'SQL'       => '_sql',
             'Email'     => '_email',
@@ -109,5 +110,60 @@ class TestController extends AdminController {
             $retVal['Status'] = DailyReports::getArrayStatus()[DailyReports::STATUS_NOT_CREATED_YET];
         }
         return $retVal;
+    }
+    
+    public function actionCompanies() {
+        if (Yii::app()->request->isAjaxRequest) {
+            $data = isset($_POST['data']) ? $_POST['data'] : '';
+            switch ($data) {
+                case 'loadArrModels':
+                    $arrModels = Companies::{$data}();
+                    $retVal = '';
+                    foreach ($arrModels as $value) {
+                        $retVal .= $value->getName() . '<br>';
+                    }
+                    echo CJavaScript::jsonEncode(array(
+                        'data'  => $retVal,
+                    ));
+
+                    break;
+                case 'getListDepartments':
+                    $arrModels = Companies::model()->findByPk(1)->{$data}();
+                    $retVal = '';
+                    foreach ($arrModels as $value) {
+                        $retVal .= $value->getName() . '<br>';
+                    }
+                    echo CJavaScript::jsonEncode(array(
+                        'data'  => $retVal,
+                    ));
+                    break;
+
+                default:
+                    break;
+            }
+            Yii::app()->end();
+        }
+    }
+    
+    public function actionDepartments() {
+        if (Yii::app()->request->isAjaxRequest) {
+            $data = isset($_POST['data']) ? $_POST['data'] : '';
+            switch ($data) {
+                case 'getListUsers':
+                    $arrModels = Departments::model()->findByPk(1)->{$data}();
+                    $retVal = '';
+                    foreach ($arrModels as $value) {
+                        $retVal .= $value->getName() . '<br>';
+                    }
+                    echo CJavaScript::jsonEncode(array(
+                        'data'  => $retVal,
+                    ));
+                    break;
+
+                default:
+                    break;
+            }
+            Yii::app()->end();
+        }
     }
 }
